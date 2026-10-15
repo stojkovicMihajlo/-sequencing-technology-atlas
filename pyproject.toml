@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sequencing-technology-atlas"
+version = "0.1.0"
+description = "Source-grounded protocol extraction and technology-graph research harness"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.10,<3"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-asyncio>=0.24,<2"]
+
+[project.scripts]
+atlas-extract = "genomics_discovery.curation.workflow_extraction.__main__:main"
+atlas-match = "genomics_discovery.curation.workflow_matching.__main__:main"
+atlas-graph = "genomics_discovery.curation.technology_graph.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/genomics_discovery"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+pythonpath = [".", "src", "tests"]

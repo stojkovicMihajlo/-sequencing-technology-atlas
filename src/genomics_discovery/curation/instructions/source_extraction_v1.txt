@@ -1,0 +1,54 @@
+STATUS: Frozen extraction contract v1 for run01, authorized 2026-10-08. Coverage and validation are recorded separately; this does not claim completion of the atlas.
+PURPOSE: Produce an inspectable, source-faithful account of a published genomics method. This is extraction, not invention. The account must support later comparison and interface verification without asserting that extracted modules are interchangeable primitives.
+
+INPUTS
+You receive a method identifier, source leads and a source register. Existing atlas summaries are leads to check, not evidence. Obtain the original paper, its Methods, supplements, referenced protocol and relevant corrections where accessible. Record the inspected version and actual reading coverage. A paper-level citation or inherited review label cannot substitute for checking the supporting passage.
+
+1. DEFINE THE RECORD BEFORE EXTRACTING STEPS
+Identify one concrete implementation: paper/year, specimen and its initial state, intended biological property, attribution unit (sample/molecule/cell/location/etc.), directly recorded evidence, instrument output, and quantity inferred. State whether the record is a complete assay, a component method, a platform or a method family. Preserve the actual boundary of component methods; do not invent an upstream preparation or downstream sequencing workflow. Keep versions separate. Later companion protocols can supply a separately named implementation or explicitly attributed elaboration, not silently rewrite the original.
+
+2. EXTRACT ACTIONS BEFORE GROUPING THEM
+Read and record the reported actions in their actual dependency order, including sample preparation, retained fractions, branches, pooling, side products, controls and data processing. Name what is done and what it accomplishes. Preserve source-reported operational conditions; do not fill values from memory. Attach exact source locators. When a referred-to protocol is necessary, inspect it and record explicit modifications; otherwise mark that dependency unresolved.
+
+3. GROUP ACTIONS INTO MEANINGFUL MODULES
+A module is a coherent part of the workflow with a stated purpose and explicit material/data inputs and outputs. It may contain several reactions and ordered substeps. It is not necessarily one reaction, one reagent or one tube.
+Create a boundary where it helps expose a consequential change in molecular representation, selective enrichment, attribution, physical support/compartment, branching, or a critical downstream requirement. Do not create a separate module for every wash or incubation. Keep those as substeps unless they change an important interface. Conversely, do not hide distinct information-recording events or consequential handoffs inside a generic 'library preparation' module. Briefly explain each boundary. These are curatorial groupings, not proof of independent experimental separability.
+
+4. ACCOUNT FOR THESE FUNCTIONS WITHOUT IMPOSING A FIXED CHAIN
+The following is an open coverage checklist. For each item give module IDs, or an explicit applicability/gap status. It is not a required sequence, and one module may cover several functions; a function may appear repeatedly or across multiple branches.
+- Specimen preparation: what enters; what organization and properties survive or are lost.
+- Target discrimination or recording: what physical interaction, selection, label or signal makes the desired property observable.
+- Attribution: how evidence remains linked to its original unit; tags, compartments and external maps only when actually used.
+- Molecular selection: what is retained or excluded, by which criterion, and in which fraction.
+- Conversion, recovery and copying: changes of molecule type, purification, transfer, amplification and their order when present.
+- Readout-product construction: adapters, junctions, library/read architecture or another detectable product, if applicable.
+- Detection: the instrument and actual signal it acquires within this record's scope.
+- Decoding: how reads/signals and any auxiliary data become the claimed measurement, with stated inference assumptions.
+- Controls and quality checks: their location, what they assess and which decision or interpretation uses them.
+Do not require barcodes, UMIs, reverse transcription, amplification, fragmentation, spatial information, or a sequencing readout where absent. Add another function if necessary and explain it.
+
+5. REQUIRED MODULE FIELDS
+- ID and plain-language name.
+- Purpose and brief boundary rationale.
+- Input: material or data; relevant molecular state; physical support or compartment; attribution retained.
+- Ordered steps, including source-reported conditions at their relevant step.
+- Materials and equipment, with each item's role.
+- Output: exact retained product/fraction and relevant state; important discarded fraction when it explains selection.
+- Information effect: what is recorded, preserved, copied, selected, lost or subsequently inferred.
+- Dependencies and interfaces: upstream output consumed, downstream requirements, and source support for those requirements.
+- Source references: version, inspected file/URL and exact passage locator for the supported assertion.
+- Specific missing details, conflicts or unsupported interpretations, each attached to the affected field.
+Do not invent information to fill a required field. A structured gap is preferable to a guessed value. Preserve detailed steps beneath the module so the diagram does not erase them.
+
+6. PRESERVE WORKFLOW ROUTING
+Record material flow, information flow and control decisions separately. Distinguish a split, aliquot, copy, pool and alternative implementation. Show which branches rejoin and what each contributes. Display order alone does not establish a dependency. For a destructive quality-control aliquot, distinguish it from the remaining production material. Do not merge mutually exclusive library variants into one path.
+
+7. EVIDENCE AND GAP LABELS
+Applicability: present, explicitly absent/not applicable, optional, alternative, outside this record's scope, or unresolved. Absence must not be inferred merely from a failed search.
+Evidence: source-reported action/result, authors' explanation, curator interpretation, or unsupported transfer hypothesis. A reported joint demonstration does not prove each component separately.
+Gap reasons: not yet inspected; referenced source inaccessible; not specified in inspected sources; ambiguous/conflicting; or not yet extracted. Untested transfer to another context is a separate issue, not an extraction gap.
+For every gap state the affected field and why it matters. Never substitute generic warnings or boilerplate unknowns for extraction work.
+
+8. DELIVERABLE AND VERIFICATION
+Return the version-scoped assay record, module chain with substeps, typed connections, function-coverage map, source/read-coverage register and specific gap list. Declare architecture coverage separately from recipe coverage. A clear chain is not a bench-ready SOP, an execution record, or evidence that novel substitutions will work.
+An independent verifier checks each module against its passages, including negative/exception claims, retained fractions, ordering, version consistency, branches, readout and information attribution. The verifier records accepted, needs revision or unresolved source gap with reasons. Schema validity alone never constitutes scientific verification. Retain prompt version and input source hashes with extraction and verification records.

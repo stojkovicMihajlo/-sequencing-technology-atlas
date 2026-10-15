@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-15",
+  "python": "3.13.8",
+  "dependencies": {
+    "pydantic": "2.14.1",
+    "pytest": "9.1.1",
+    "pytest-asyncio": "1.4.0"
+  },
+  "tests": {
+    "tests": 868,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 43.239
+  },
+  "example_checks": [
+    "distributed file hashes",
+    "Workflow and WorkflowReview schemas",
+    "typed routes and one-module membership constraints",
+    "review-to-workflow canonical digest",
+    "complete unique review target accounting"
+  ],
+  "cli_smoke_checks": [
+    "atlas-extract --help",
+    "atlas-match --help",
+    "atlas-graph --help",
+    "python -m playground.workflow_graph_batch --help",
+    "python -m genomics_discovery.curation.workflow_followup --help"
+  ],
+  "inspection_examples": [
+    "o_tag_v1",
+    "o_shift"
+  ],
+  "model_calls_during_packaging": 0,
+  "source_support_revalidated": false,
+  "new_expert_review": false,
+  "notes": [
+    "Initial package missed four runtime text resources; added them unchanged and reran the suite.",
+    "A local macOS hidden flag on the generated editable-install .pth prevented imports; cleared the local flag and verified all entry points. This is an environment repair, not an extraction-code change.",
+    "Copied implementation and tests match provenance/code_snapshot.json hashes.",
+    "Authored documentation links checked; no absolute original home paths or credential-pattern matches found in distributed files."
+  ]
+}
