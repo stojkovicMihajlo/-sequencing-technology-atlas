@@ -6,6 +6,7 @@ From a checkout with `uv` installed:
 
 ```sh
 uv sync --python 3.13 --extra dev
+export PYTHONPATH="$PWD/src"
 uv run python scripts/check_example.py
 uv run python scripts/inspect_example.py --operation o_tag_v1
 uv run python scripts/inspect_example.py --operation o_shift --json
@@ -16,6 +17,9 @@ The check uses saved JSON and byte hashes. It makes no model calls and cannot
 independently revalidate source support without the original source packet/files.
 The inspector joins the operation to its module, input/output state descriptions,
 resources, typed edges and evidence, including evidence rationales.
+Keep the explicit `PYTHONPATH` setting for the commands below and run from the
+checkout root. This avoids relying on editable-install `.pth` processing, which
+was disabled by a hidden-file flag in the local macOS environment.
 
 ## Prepare a new source packet
 

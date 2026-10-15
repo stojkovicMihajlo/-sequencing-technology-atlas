@@ -26,6 +26,7 @@ From a checkout, using Python 3.13 and `uv`:
 
 ```sh
 uv sync --python 3.13 --extra dev
+export PYTHONPATH="$PWD/src"
 uv run python scripts/check_example.py
 uv run python scripts/inspect_example.py --operation o_tag_v1
 uv run pytest -q
@@ -34,6 +35,8 @@ uv run pytest -q
 These commands validate the distributed example's structure and archived review
 binding, display one operation with its module and typed connections, and run the
 software tests. They do not make model calls or re-review the paper.
+The explicit source path makes these checkout commands independent of editable-install
+path-file behavior. Run them from the repository root.
 
 The packaged snapshot passed **868 software tests** in a clean Python 3.13
 environment. See the [release checks](provenance/release_checks.json) for the exact

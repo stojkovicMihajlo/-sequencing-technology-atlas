@@ -36,8 +36,9 @@
   "new_expert_review": false,
   "notes": [
     "Initial package missed four runtime text resources; added them unchanged and reran the suite.",
-    "A local macOS hidden flag on the generated editable-install .pth prevented imports; cleared the local flag and verified all entry points. This is an environment repair, not an extraction-code change.",
     "Copied implementation and tests match provenance/code_snapshot.json hashes.",
-    "Authored documentation links checked; no absolute original home paths or credential-pattern matches found in distributed files."
-  ]
+    "Authored documentation links checked; no absolute original home paths or credential-pattern matches found in distributed files.",
+    "The local macOS environment ignores a hidden editable-install .pth file. Checkout instructions now set PYTHONPATH explicitly; exact uv run example and CLI commands passed with that setting. uv itself required unsandboxed execution because its macOS system-configuration initialization panics in the sandbox."
+  ],
+  "checkout_commands_verified_with": "PYTHONPATH set explicitly to checkout/src; uv run --locked --offline"
 }

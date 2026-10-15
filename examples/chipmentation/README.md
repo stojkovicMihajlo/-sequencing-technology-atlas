@@ -16,6 +16,7 @@ computational processing; they are not 47 consecutive laboratory actions.
 From the repository root:
 
 ```sh
+export PYTHONPATH="$PWD/src"
 uv run python scripts/check_example.py
 uv run python scripts/inspect_example.py --operation o_tag_v1
 uv run python scripts/inspect_example.py --operation o_shift --json
