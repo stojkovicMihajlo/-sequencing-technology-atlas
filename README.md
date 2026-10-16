@@ -17,6 +17,8 @@ extractions have model/source reviews rather than expert or experimental validat
 | How do the agents and Python code work together? | [Pipeline and code map](docs/PIPELINE.md) |
 | Can I inspect a real extraction? | [ChIPmentation example](examples/chipmentation/README.md) |
 | How do methods enter the larger graph? | [Graph layers and agent tools](docs/GRAPH.md) |
+| How can agents reuse operation/module labels? | [Shared concept registry](docs/CONCEPT_REGISTRY.md) |
+| Has label reuse actually run with models? | [Three live assignments and their outputs](examples/concept_registry/README.md) |
 | How do we run and evaluate the next batch? | [Runbook](docs/RUNBOOK.md) and [evaluation plan](docs/EVALUATION.md) |
 | Where did this code come from? | [Provenance and references](docs/PROVENANCE.md) |
 
@@ -42,6 +44,11 @@ The packaged snapshot passed **868 software tests** in a clean Python 3.13
 environment. See the [release checks](provenance/release_checks.json) for the exact
 checks and their limits.
 
+The subsequent label-registry update passes **895 software tests** and has a
+[three-job live pilot](examples/concept_registry/README.md). Its
+[check record](provenance/concept_registry_checks.json) separates software integrity
+from scientific accuracy, which has not been measured.
+
 ## The pipeline
 
 ```mermaid
@@ -61,6 +68,9 @@ flowchart TD
     J --> B[Combined atlas assembly]
     H[Existing historical claims] --> B
     M[Separately reviewed cross-protocol comparisons] --> B
+    J --> L[Label lookup, proposal and fresh source review]
+    L --> K[Shared concept registry]
+    K --> B
 ```
 
 The integrator writes the descriptions and declares the relationships. Python

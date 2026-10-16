@@ -11,6 +11,7 @@ reviewed comparisons. A common word such as "ligation" does not merge operations
 | History | `method_development` | Supported imported development claims; only this projection is treated as ancestry. |
 | Other atlas relations | Existing reuse, analogy and comparison claims | Retain their original claim type, provenance and review status. |
 | Cross-protocol comparisons | `shared_purpose`, `shared_mechanism` between contextual views | Local comparisons of selected operations and their interfaces; these are symmetric. |
+| Concept indexing (optional) | `instance_of_concept`, `selects_operation` | Reviewed membership in a defined concept; exact links to selected protocol operations. |
 
 An isolated method is valid. A workflow does not need a shared module or known
 predecessor to enter the atlas. Identical labels in different workflows retain

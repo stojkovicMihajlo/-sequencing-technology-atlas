@@ -95,7 +95,7 @@ def main():
         if name == "neighbors":
             cmd.add_argument(
                 "--layer",
-                choices=("history", "atlas_relations", "membership", "protocol", "cross_protocol"),
+                choices=("history", "atlas_relations", "membership", "protocol", "cross_protocol", "concept"),
             )
             cmd.add_argument("--direction", choices=("in", "out", "both"), default="both")
             cmd.add_argument("--offset", type=int, default=0)

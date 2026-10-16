@@ -14,6 +14,7 @@ complete or that model review establishes experimental correctness.
 | Machine checks | IDs, typed routes, exact quotation provenance, version bindings and review accounting | These establish integrity, not biochemical truth. |
 | Finding coverage | Records dispositions for known reader findings | Enabled per run; older runs retain their original criteria. |
 | Contextual comparisons | 8 records in the recorded local graph | Not an exhaustive pairwise survey or proof of interchangeability. |
+| Shared labels (2026-10-16 development) | Persistent registry and graph tools; three live jobs produced two definitions and three reviewed assignments | New-concept conflicts require reconciliation; abstraction level, retrieval recall and assignment precision are not yet measured. |
 | Graph assembly and tools | Versioned method subgraphs, typed layers, source lookup and contextual retrieval | Existing historical claims retain original support; assembly does not freshly audit them. |
 | Gap follow-up | Produces source/inspection/repair worklists | Does not automatically acquire and resolve all dependencies. |
 | Portability | Focused code snapshot, offline example and selected tests in this repository | Cached papers, old session archives and the full atlas are not distributed. |
@@ -26,6 +27,11 @@ Packaging verification: **868 tests passed** in the standalone environment; the
 archived-example integrity check, operation inspector and all documented CLI entry
 points started successfully. These are software checks. Source-support accuracy
 was not re-evaluated during repository preparation.
+
+The 2026-10-16 registry update passes **895 tests**. See the
+[live pilot](../examples/concept_registry/README.md) for the actual labels,
+decisions, sources and measured latency. Those jobs label selected existing
+operations; they do not increase the number of fully extracted workflows.
 
 ## Decisions before a large extraction job
 

@@ -35,8 +35,9 @@ def load_graph(path: Path) -> dict:
 
 
 def inspect(graph: dict, identifier: str) -> dict:
-    for name in ("comparisons", "historical_claims", "views", "workflows", "matching_reviews"):
-        if identifier in graph[name]:
+    for name in ("comparisons", "historical_claims", "views", "workflows", "matching_reviews",
+                 "concept_assignments"):
+        if identifier in graph.get(name, {}):
             record = graph[name][identifier]
             details = [
                 d
@@ -117,6 +118,7 @@ def neighbors(graph: dict, identifier: str, *, layer=None, direction="both", off
         "membership",
         "protocol",
         "cross_protocol",
+        "concept",
     }:
         raise ValueError("Unknown graph layer")
     matches = []

@@ -14,6 +14,12 @@ The repository adds orientation documents, an offline example inspector/checker,
 packaging and CI. New packaging adaptations are recorded in the release checks.
 Original archived workflow/review bytes in the example are preserved.
 
+Development after the initial `decde72` snapshot is tracked by this repository's
+Git history. The 2026-10-16 concept registry and its graph-query changes are new
+work here; `code_snapshot.json` continues to identify the original imported files,
+not assert that later modified files still have those original hashes. The registry
+reference audit and its limits are in [CONCEPT_REGISTRY.md](CONCEPT_REGISTRY.md).
+
 ## Scientific example
 
 The example describes the original ChIPmentation implementation:

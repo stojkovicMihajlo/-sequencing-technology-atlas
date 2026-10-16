@@ -1,0 +1,40 @@
+{
+  "format_version": "operation_concept_catalogue/1.0",
+  "registry_revision": "1bc81f8f2a17a84b1f4642b3cc72b28a2bfc83fd82532cd4abe69a7c5a94c9c3",
+  "concepts": {
+    "tn5_tagmentation_of_bead_bound_immunoprecipitated_chromatin": {
+      "definition": {
+        "id": "tn5_tagmentation_of_bead_bound_immunoprecipitated_chromatin",
+        "name": "Tn5 tagmentation of bead-bound immunoprecipitated chromatin",
+        "substrate": "Antibody-enriched chromatin retained on immunoprecipitation beads, before elution and crosslink reversal.",
+        "operation": "Fragment chromatin-associated DNA and introduce sequencing-adapter tags by Tn5 tagmentation directly in the retained bead-bound fraction.",
+        "physical_mechanism": "Hyperactive Tn5 transposase mediates simultaneous DNA fragmentation and adapter tagging on bead-bound immunoprecipitated chromatin.",
+        "mechanism_unknown_reason": null,
+        "output": "Bead-bound, antibody-enriched chromatin containing fragmented, sequencing-adapter-tagged DNA, before post-tagmentation washes, elution, crosslink reversal, and DNA purification.",
+        "information_effect": "Introduces sequencing-adapter tags into DNA already selected by antibody-directed enrichment; the tagged material retains that upstream target-enrichment provenance.",
+        "purpose": "Generate adapter-tagged ChIP DNA precursors for subsequent recovery and sequencing-library amplification.",
+        "context_requirements": "Chromatin remains immunoprecipitated and bead-bound during tagmentation, after removal of inhibitory ChIP-buffer components and before elution/crosslink reversal. The evidenced implementation uses Tris-washed beads and the Nextera DNA Sample Prep Kit Tagment DNA Enzyme in a Tris/MgCl2 reaction. Exact enzyme activity/concentration, loaded adapter strands, and resulting strand/end structures are unspecified."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [],
+      "scope_note": "Includes coupled DNA fragmentation and sequencing-adapter introduction by Tn5 directly on bead-bound, immunoprecipitated chromatin. Excludes tagmentation of purified ChIP DNA, tagmentation of unenriched intact chromatin for accessibility profiling, and conventional end-repair/A-tailing/adapter-ligation library preparation. The transformation ends before post-tagmentation washes, elution, crosslink reversal, DNA purification, nick translation, and PCR. It does not specify loaded transposon strands or exact covalent ends, or require universal protection against excessive tagmentation by chromatin proteins."
+    },
+    "tn5_tagmentation_of_native_nuclear_chromatin_for_accessibility_profiling": {
+      "definition": {
+        "id": "tn5_tagmentation_of_native_nuclear_chromatin_for_accessibility_profiling",
+        "name": "Tn5 tagmentation of native nuclear chromatin for accessibility profiling",
+        "substrate": "Native chromatin in unfixed eukaryotic nuclei, retaining the identity of the input cell population.",
+        "operation": "Simultaneously fragment chromatin-associated genomic DNA and introduce sequencing-adapter tags by Tn5 transposition directly in native nuclei, preferentially generating tagged fragments from accessible chromatin.",
+        "physical_mechanism": "Hyperactive Tn5 transposase loaded in vitro with sequencing adapters fragments DNA and integrates its adapter payload. Steric hindrance in less accessible chromatin makes transposition less probable, coupling fragment generation and adapter tagging to chromatin accessibility.",
+        "mechanism_unknown_reason": null,
+        "output": "A transposition reaction product containing genomic DNA fragments with integrated sequencing-adapter payload, preferentially derived from accessible native chromatin, before DNA purification and library amplification.",
+        "information_effect": "Encodes accessibility through preferential adapter-insertion positions and retains genomic sequence and fragment-span information for later sequencing. Sequence-dependent insertion preferences remain part of the measurement; fragment spans can support subsequent chromatin-structure interpretation.",
+        "purpose": "Generate adapter-tagged genomic fragments that carry chromatin-accessibility information into subsequent library amplification and sequencing.",
+        "context_requirements": "Requires unfixed nuclei retaining native chromatin accessibility and hyperactive Tn5 preloaded with sequencing adapters, acting before DNA purification. The evidenced standard implementation starts immediately after nuclei preparation and uses an Illumina transposase/TD-buffer reaction for 30 minutes at 37 °C. Reaction composition and input context require evidence for each implementation. TD-buffer composition, transposase stock activity/concentration, complete loaded-adapter sequences and terminal covalent structures are unspecified here."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [],
+      "scope_note": "Includes coupled DNA fragmentation and sequencing-adapter integration by adapter-loaded hyperactive Tn5 acting directly on native chromatin in unfixed nuclei for accessibility profiling. The unit starts with prepared nuclei and ends with the transposition reaction product. Excludes nuclei preparation, antibody-enriched bead-bound chromatin tagmentation, purified-DNA tagmentation, DNA purification, repair/fill-in, PCR, sequencing and computational accessibility or chromatin-structure inference. It does not specify exact adapter strands, terminal covalent chemistry, individual-library indices or a complete interchangeable reaction recipe; it does not require a purified-DNA control or a particular bias-correction procedure."
+    }
+  }
+}
