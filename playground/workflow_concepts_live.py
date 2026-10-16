@@ -1,4 +1,4 @@
-"""Label one source-bound operation group using lookup, proposal and fresh review.
+"""Review source support and vocabulary admission for one selection or a cohort.
 
 Only the host applies the reviewed assignment. Stale new-concept proposals stop
 for reconciliation; reviewed reuse of an unchanged definition may still commit.
@@ -13,50 +13,52 @@ from genomics_discovery.curation.codex_worker import (
     CodexWorker, DEFAULT_EFFORT, DEFAULT_MODEL, assess_archived_attempt,
 )
 from genomics_discovery.curation.operation_registry.__main__ import load_manifest
-from genomics_discovery.curation.operation_registry.models import Decision
-from genomics_discovery.curation.operation_registry.prompts import build_prompt
-from genomics_discovery.curation.operation_registry.store import (
-    Registry, catalogue, check_proposal,
+from genomics_discovery.curation.operation_registry.admission import (
+    VocabularyProposal, VocabularyReview, validate_decision, validate_batch,
 )
+from genomics_discovery.curation.operation_registry.prompts import build_prompt
+from genomics_discovery.curation.operation_registry.store import Registry, catalogue
 from genomics_discovery.curation.run_state import now, sha, write
 from genomics_discovery.curation.workflow_extraction.models import digest
-from genomics_discovery.curation.workflow_extraction.transformations import (
-    MembershipReview, load_occurrences, review_membership,
-)
+from genomics_discovery.curation.workflow_extraction.transformations import load_occurrences
 from playground.workflow_unit_review_inputs import review_view
 
 
-async def execute(manifest_path: Path, database: Path, run: Path, *, worker=None):
+async def execute(manifest_path: Path, database: Path, run: Path, *, worker=None, supplied_proposal=None):
     manifest_path, run = manifest_path.resolve(), run.resolve()
     registry = Registry(database)
     # Explicit initialization prevents a path typo from silently starting a new vocabulary.
     snapshot = catalogue(registry.snapshot())
     manifest = load_manifest(manifest_path)
-    if len(manifest) != 1:
-        raise ValueError("Each labeling job targets one connected operation selection")
+    if not manifest:
+        raise ValueError("A vocabulary job needs source-bound selections")
     occurrences, packets = load_occurrences(manifest)
-    occurrence = next(iter(occurrences.values()))
-    packet = Path(manifest[occurrence.id]["packet"])
+    packet_paths = {ident: Path(row["packet"]) for ident, row in manifest.items()}
     if run.exists():
         raise ValueError("Use a fresh run directory")
     run.mkdir(parents=True)
     write(run / "manifest.json", manifest)
     write(run / "registry.json", snapshot)
-    write(run / "occurrence_view.json", review_view(occurrence))
+    write(run / "selections.json", {ident: review_view(occ) for ident, occ in occurrences.items()})
     worker = worker or CodexWorker(web_search=False, network_access=False)
     if isinstance(worker, CodexWorker) and (worker.web_search or worker.network_access):
         raise ValueError("Labeling uses registered source packets")
     state = {"status": "running", "started_at": now(), "attempts": [],
              "model": getattr(worker, "model", DEFAULT_MODEL),
              "effort": getattr(worker, "effort", DEFAULT_EFFORT),
+             "proposal_origin": "supplied" if supplied_proposal else "native_compiler",
              "registry_revision": snapshot["registry_revision"]}
     write(run / "state.json", state)
     files = {manifest_path, run / "manifest.json", run / "registry.json",
-             run / "occurrence_view.json", Path(__file__).resolve()}
+             run / "selections.json", Path(__file__).resolve(),
+             Path(__file__).with_name("workflow_unit_review_inputs.py")}
     files.update(Path(p) for row in manifest.values() for p in row.values() if p)
     files.update(Path(s["original_path"]) for p in packets.values() for s in p["sources"])
     src = Path(__file__).resolve().parents[1] / "src" / "genomics_discovery"
     files.update(src.rglob("*.py"))
+    if supplied_proposal:
+        supplied_proposal = Path(supplied_proposal).resolve()
+        files.add(supplied_proposal)
     pins = {path: sha(path) for path in files}
     write(run / "bindings.json", {str(path): value for path, value in pins.items()})
 
@@ -71,7 +73,7 @@ async def execute(manifest_path: Path, database: Path, run: Path, *, worker=None
         attempt.mkdir()
         schema = model.model_json_schema()
         write(attempt / "schema.json", schema)
-        prompt = build_prompt(role, run, attempt, packet, proposal_hash=proposal_hash)
+        prompt = build_prompt(role, run, attempt, packet_paths, proposal_hash=proposal_hash)
         write(attempt / "instruction.json", {"prompt": prompt})
         for path in (attempt / "schema.json", attempt / "instruction.json"):
             pins[path] = sha(path)
@@ -117,33 +119,26 @@ async def execute(manifest_path: Path, database: Path, run: Path, *, worker=None
             write(run / "state.json", state)
 
     try:
-        decision = await stage("compiler", Decision)
-        write(run / "decision.json", decision.model_dump(mode="json"))
-        if decision.assignment is None:
-            state.update(status="abstained", explanation=decision.explanation)
-        else:
-            proposal = decision.assignment
-            # The worker cannot silently switch to another selection in the manifest.
-            if proposal.members[0].occurrence_id != occurrence.id:
-                raise ValueError("Proposal changed the requested occurrence")
-            lookups = check_proposal(snapshot, proposal, occurrences, packets)
-            write(run / "proposal.json", proposal.model_dump(mode="json"))
-            write(run / "lookup_results.json", lookups)
-            pins[run / "proposal.json"] = sha(run / "proposal.json")
-            review = await stage("reviewer", MembershipReview, digest(proposal))
-            write(run / "review.json", review.model_dump(mode="json"))
-            checked = review_membership(proposal, review, occurrences, packets)
-            state["membership_status"] = checked["status"]
-            if checked["status"] != "supported_membership_candidate":
-                state["status"] = checked["status"]
-            else:
-                check()
-                provenance = {"kind": "fresh_native_threads", "independent_execution_verified": True,
-                              "threads": [a["thread_id"] for a in state["attempts"]],
-                              "archive_paths": [a["attempt"] for a in state["attempts"]]}
-                state["commit"] = registry.apply(proposal, review, occurrences, packets,
-                                                  provenance=provenance)
-                state["status"] = "committed"
+        proposal = (VocabularyProposal.model_validate_json(supplied_proposal.read_bytes())
+                    if supplied_proposal else await stage("compiler", VocabularyProposal))
+        if set(occurrences) != {d.occurrence_id for d in proposal.decisions}:
+            raise ValueError("Proposal must account for every supplied selection exactly once")
+        lookups = [validate_decision(d, snapshot, occurrences, packets) for d in proposal.decisions]
+        write(run / "proposal.json", proposal.model_dump(mode="json"))
+        write(run / "lookup_results.json", lookups)
+        pins[run / "proposal.json"] = sha(run / "proposal.json")
+        review = await stage("reviewer", VocabularyReview, digest(proposal))
+        write(run / "review.json", review.model_dump(mode="json"))
+        validate_batch(proposal, review, snapshot, occurrences, packets)
+        check()
+        provenance = {"kind": "supplied_proposal_native_review" if supplied_proposal else "fresh_native_threads",
+                      "independent_execution_verified": supplied_proposal is None,
+                      "fresh_review_execution_verified": True,
+                      "threads": [a["thread_id"] for a in state["attempts"]],
+                      "archive_paths": [a["attempt"] for a in state["attempts"]]}
+        state["commit"] = registry.apply_batch(proposal, review, occurrences, packets, provenance=provenance)
+        state["status"] = ("committed" if any(r["status"] == "admit" for r in state["commit"]["outcomes"])
+                           else "completed_without_admission")
     except asyncio.CancelledError:
         state["status"] = "cancelled"
         raise
@@ -164,8 +159,10 @@ def main():
     parser.add_argument("run", type=Path)
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--effort", default=DEFAULT_EFFORT)
+    parser.add_argument("--proposal", type=Path, help="Review an externally supplied vocabulary proposal")
     args = parser.parse_args()
     result = asyncio.run(execute(args.manifest, args.database, args.run,
+        supplied_proposal=args.proposal,
         worker=CodexWorker(model=args.model, effort=args.effort, web_search=False, network_access=False)))
     print(json.dumps(result, indent=2))
 

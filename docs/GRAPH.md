@@ -11,12 +11,20 @@ reviewed comparisons. A common word such as "ligation" does not merge operations
 | History | `method_development` | Supported imported development claims; only this projection is treated as ancestry. |
 | Other atlas relations | Existing reuse, analogy and comparison claims | Retain their original claim type, provenance and review status. |
 | Cross-protocol comparisons | `shared_purpose`, `shared_mechanism` between contextual views | Local comparisons of selected operations and their interfaces; these are symmetric. |
-| Concept indexing (optional) | `instance_of_concept`, `selects_operation` | Reviewed membership in a defined concept; exact links to selected protocol operations. |
+| Concept indexing (optional) | `instance_of_concept`, `selects_operation` | Source-reviewed and utility-admitted membership in a defined concept; exact links to selected protocol operations. |
 
 An isolated method is valid. A workflow does not need a shared module or known
 predecessor to enter the atlas. Identical labels in different workflows retain
 different identities. A contextual view can include several connected operations
 and cross the original module boundaries.
+
+New concept projections include only admitted assignments. Earlier source-only
+entries remain readable as `legacy_unassessed`; they need an explicit admission
+review before inclusion in a new projection. `properties_only` and `provisional`
+decisions retain their selections and reasons without creating concept-membership
+edges. No original operation or local module is deleted by a label decision.
+See the [admission policy](CONCEPT_ADMISSION.md) and
+[tested graph navigation](../examples/concept_admission/README.md).
 
 ## Questions an agent can ask
 

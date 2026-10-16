@@ -1,0 +1,862 @@
+{
+  "date": "2026-10-16",
+  "test_design": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "arms": [
+      "forward",
+      "reverse"
+    ],
+    "same_inputs": [
+      "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+      "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+      "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+      "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7"
+    ],
+    "same_initial_registry": "empty in both arms",
+    "intervention": "reverse presentation order within one cohort; not sequential ingestion order",
+    "roles_per_arm": [
+      "compiler",
+      "fresh reviewer"
+    ],
+    "primary_diagnostics": [
+      "admitted co-membership pairs by occurrence IDs and relation",
+      "non-admission status per occurrence",
+      "boundary membership decisions per occurrence pair",
+      "source failures and invalid decisions",
+      "latency and usage"
+    ],
+    "interpretation": "One paired diagnostic, no gold semantic scores. Do not change prompts to force particular groupings after seeing outputs."
+  },
+  "arms": [
+    {
+      "arm": "forward",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "concepts": 2,
+      "assignments": 4,
+      "worker_seconds": 902.343,
+      "stages": [
+        {
+          "role": "compiler",
+          "elapsed_seconds": 434.15341566700954,
+          "usage": {
+            "input_tokens": 712751,
+            "cached_input_tokens": 637696,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 17328,
+            "reasoning_output_tokens": 5191
+          },
+          "artifact_sha256": "2d3d497e838ff0f90d5237e51d5623941c9affaed104fb334fa9815970b8bf41"
+        },
+        {
+          "role": "reviewer",
+          "elapsed_seconds": 468.1900472090347,
+          "usage": {
+            "input_tokens": 1358458,
+            "cached_input_tokens": 1257856,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 18361,
+            "reasoning_output_tokens": 5407
+          },
+          "artifact_sha256": "06b75790264bcc1373811cbd39a97aa64dbfa7f5a2ae15ae66da1b44a0f600bf"
+        }
+      ],
+      "decisions": [
+        {
+          "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+          "operation_ids": [
+            "o_tag_v1"
+          ],
+          "concept_id": "tn5_dna_fragmentation_adapter_tagging",
+          "status": "admit",
+          "source_status": "supported_membership_candidate",
+          "question": "Which selected transformations couple DNA fragmentation to sequencing-adapter tagging by Tn5, and within that set which use already fixed, antibody-enriched bead chromatin rather than native nuclei?",
+          "properties_to_preserve": [
+            "Input context: ChIP version 1, reported for H3K4me3/H3K27me3; 1% paraformaldehyde fixation for 5 minutes, with earlier sonication yielding predominantly 200–700 bp fragments. The selected reaction acts on an already fragmented, antibody-enriched substrate, not intact native nuclei (supplement p00039).",
+            "Version-specific interfaces: WBIII is the preceding LiCl wash; the subsequent post-tag wash is cold WBI. The tagmentation reaction is inserted before the protocol's final wash, elution and crosslink reversal (main p00016).",
+            "Selected action: Tn5 fragmentation and sequencing-adapter tagging on the retained, immunoprecipitated chromatin-bearing beads; preceding two cold 10 mM Tris-Cl pH 8.0 washes remove detergent, salts and EDTA (main p00016). Those washes are the input interface, not additional actions silently assigned to this occurrence.",
+            "Observed reaction: 30 μl of 10 mM Tris pH 8.0 and 5 mM MgCl2 with 1 μl Nextera DNA Sample Prep Kit Tagment DNA Enzyme; 37°C for 10 minutes in a thermocycler (main p00016). Product, amounts, buffer and incubation are use-specific observations, not required membership values.",
+            "Information effect: sequencing-adapter tags are introduced into the upstream antibody-enriched genomic DNA; the eventual distribution is interpreted with the immunoprecipitation target and preparation history. This operation does not itself add an antibody-identity barcode or establish an ATAC-equivalent accessibility estimand (main p00004; supplement p00005).",
+            "Output interface: tagmented material remains in the bead-associated chromatin workflow before version-specific post-tag washes, elution, crosslink reversal and DNA purification. Subsequent PCR-associated nick translation and amplification remain downstream operations (main p00016/p00018).",
+            "Uncertainty: the authors proposed chromatin-protein protection against excessive tagmentation; preserve it as a rationale rather than a universal causal guarantee. The reported robustness over a 25-fold transposase concentration range is an observation under their assessed metrics, not a membership threshold or substitution rule (main p00007).",
+            "Source limit: the reviewed passages establish Tn5, fragmentation, adapter tagging and later nick translation, but not the exact commercial transposome-loaded oligonucleotides, enzyme activity/concentration or complete covalent fragment-end intermediate. Custom downstream PCR primers do not by themselves identify the loaded Tn5 strands. Retain this uncertainty on the use."
+          ],
+          "decision_sha256": "d0a93f1d4e7d81a2b09a813471ea91b3e56fc36c6138d0c74eadf9d22130fe10",
+          "review_sha256": "0b6b73d76579af6c31d03eb323ad2b976b9db7902c51237919e97975b3767f77",
+          "boundary_examples": [
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+              "membership": "member",
+              "reason": "Version 1 applies the coupled Tn5 reaction to previously fixed, antibody-enriched bead-bound chromatin. Its bead and target context refine this use without defining a different fragmentation/tagging mechanism."
+            },
+            {
+              "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+              "membership": "member",
+              "reason": "The selected ATAC reaction uses adapter-loaded Tn5 to fragment/tag native nuclear DNA. Accessibility-dependent representation distinguishes its information effect from ChIPmentation while preserving the shared molecular mechanism."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+              "membership": "member",
+              "reason": "Version 2 supplies a different ChIP preparation and targets but enters the same reported bead-chromatin tagmentation reaction. Upstream RIPA-based handling and target choices are contextual properties."
+            },
+            {
+              "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+              "membership": "non_member",
+              "reason": "The supplied bulk_rt occurrence copies captured RNA into bead-associated cDNA and introduces a PCR handle by template switching. Sharing beads and a library-handle purpose does not satisfy Tn5-mediated DNA fragmentation/tagging. This verdict concerns the selected occurrence, not every operation elsewhere in the Drop-seq paper."
+            }
+          ],
+          "source_passages": [
+            [
+              "batch27_chipmentation_main",
+              "p00004"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00007"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00016"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00018"
+            ],
+            [
+              "chipmentation_original_supplement",
+              "p00005"
+            ],
+            [
+              "chipmentation_original_supplement",
+              "p00039"
+            ]
+          ],
+          "assignment_sha256": "4819801cfa2e7fd1098dd15f8cec3c3817f3db226e93911a8390a5cd436f1445"
+        },
+        {
+          "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+          "operation_ids": [
+            "transpose_base"
+          ],
+          "concept_id": "tn5_dna_fragmentation_adapter_tagging",
+          "status": "admit",
+          "source_status": "supported_membership_candidate",
+          "question": "Which protocol operations share the Tn5 fragmentation/adapter-tagging mechanism, and which of those encode native chromatin accessibility through insertion rather than starting from antibody-enriched material?",
+          "properties_to_preserve": [
+            "Input context: the selected standard 50,000-cell branch supplies an unfixed/native nuclear pellet after cold IGEPAL lysis and refrigerated centrifugation; retain population identity. It is not the bead-bound antibody-enriched input of the supplied ChIP uses (primary p00004/p00015).",
+            "Observed reaction: immediately after nuclei preparation, 25 μL 2x TD buffer, 2.5 μL Illumina transposase and 22.5 μL nuclease-free water; the 50 μL total is inferred by summing reported components. Incubation is 30 minutes at 37°C (primary p00016). These are properties of the selected standard reaction, not universal Tn5 doses, cell numbers or times.",
+            "Mechanism/output: adapter-loaded hyperactive Tn5 fragments nuclear chromatin and integrates its sequencing-adapter payload. The selected output is the transposition reaction product, before the separately described Qiagen Minelute purification (primary p00004/p00016).",
+            "Information effect: accessibility-dependent insertion preferentially generates amplifiable open-chromatin fragments; genomic sequence, insertion positions and resulting fragment spans remain available to later sequencing/analysis. This sampling meaning is retained alongside the shared Tn5 mechanism and must not be transferred to antibody-enriched ChIPmentation simply from common membership (primary p00004).",
+            "Sequence-bias qualification: Figure S4 reports no substantial difference in local nucleotide insertion preferences between the compared purified genomic DNA and human chromatin; this does not establish biological equivalence or unbiased insertion. Figure S5 reports a moderate ATAC peak-intensity association with sequence preference using a theoretical PWM and Adey-derived genomic comparator. Preserve these as source-specific comparisons, not universal correlations, a mandatory control, or a bias-correction step (supplement p00007/p00008).",
+            "Source limit: exact loaded adapter sequences, commercial enzyme activity and complete terminal covalent structures are not established by the reviewed passages. An adapter-tagged output is supported without asserting exact end chemistry or a full sequencing-ready library at this cut.",
+            "Scope of this use: the supplied transpose_base is the standard branch. No conditional low-cell reaction variant, prior cell-enrichment procedure or downstream PCR controller is added to the assignment by sharing the concept."
+          ],
+          "decision_sha256": "e9d72092e1827ebc56ae193b671997992000a1f7473e8951817b823a0fae8704",
+          "review_sha256": "744cc2a2e0a2434f1798844ead720769423366d2f8d7dba485652b5564921967",
+          "boundary_examples": [
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+              "membership": "member",
+              "reason": "Version 1 applies the coupled Tn5 reaction to previously fixed, antibody-enriched bead-bound chromatin. Its bead and target context refine this use without defining a different fragmentation/tagging mechanism."
+            },
+            {
+              "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+              "membership": "member",
+              "reason": "The selected ATAC reaction uses adapter-loaded Tn5 to fragment/tag native nuclear DNA. Accessibility-dependent representation distinguishes its information effect from ChIPmentation while preserving the shared molecular mechanism."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+              "membership": "member",
+              "reason": "Version 2 supplies a different ChIP preparation and targets but enters the same reported bead-chromatin tagmentation reaction. Upstream RIPA-based handling and target choices are contextual properties."
+            },
+            {
+              "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+              "membership": "non_member",
+              "reason": "The supplied bulk_rt occurrence copies captured RNA into bead-associated cDNA and introduces a PCR handle by template switching. Sharing beads and a library-handle purpose does not satisfy Tn5-mediated DNA fragmentation/tagging. This verdict concerns the selected occurrence, not every operation elsewhere in the Drop-seq paper."
+            }
+          ],
+          "source_passages": [
+            [
+              "buenrostro2013_primary",
+              "p00004"
+            ],
+            [
+              "buenrostro2013_primary",
+              "p00015"
+            ],
+            [
+              "buenrostro2013_primary",
+              "p00016"
+            ],
+            [
+              "buenrostro2013_primary",
+              "p00026"
+            ],
+            [
+              "buenrostro2013_primary",
+              "p00028"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00002"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00007"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00008"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00010"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00011"
+            ]
+          ],
+          "assignment_sha256": "552fe3d86e08ec31b7c153716223d211de33723808526dcf2b8ddf64f98aaa7d"
+        },
+        {
+          "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+          "operation_ids": [
+            "o_tag_v2"
+          ],
+          "concept_id": "tn5_dna_fragmentation_adapter_tagging",
+          "status": "admit",
+          "source_status": "supported_membership_candidate",
+          "question": "Does the version 2 selected reaction differ in its molecular transformation from version 1 and native-nucleus Tn5 tagging, or can its ChIP targets and RIPA-based interfaces be retrieved as contextual properties of one shared Tn5 operation?",
+          "properties_to_preserve": [
+            "Input context: ChIP version 2, reported for H3K4me1/H3K36me3/REST; 1% paraformaldehyde fixation for 10 minutes, RIPA-based lysis, and earlier sonication yielding predominantly 200–700 bp fragments. Preserve the histone/transcription-factor alternatives rather than choosing one target for the occurrence (supplement p00040).",
+            "Version-specific interfaces: RIPA-LiCl is the preceding LiCl wash; the subsequent post-tag wash is cold RIPA. The tagmentation reaction is inserted before the protocol's final wash, elution and crosslink reversal (main p00016).",
+            "Selected action: Tn5 fragmentation and sequencing-adapter tagging on the retained, immunoprecipitated chromatin-bearing beads; preceding two cold 10 mM Tris-Cl pH 8.0 washes remove detergent, salts and EDTA (main p00016). Those washes are the input interface, not additional actions silently assigned to this occurrence.",
+            "Observed reaction: 30 μl of 10 mM Tris pH 8.0 and 5 mM MgCl2 with 1 μl Nextera DNA Sample Prep Kit Tagment DNA Enzyme; 37°C for 10 minutes in a thermocycler (main p00016). Product, amounts, buffer and incubation are use-specific observations, not required membership values.",
+            "Information effect: sequencing-adapter tags are introduced into the upstream antibody-enriched genomic DNA; the eventual distribution is interpreted with the immunoprecipitation target and preparation history. This operation does not itself add an antibody-identity barcode or establish an ATAC-equivalent accessibility estimand (main p00004; supplement p00005).",
+            "Output interface: tagmented material remains in the bead-associated chromatin workflow before version-specific post-tag washes, elution, crosslink reversal and DNA purification. Subsequent PCR-associated nick translation and amplification remain downstream operations (main p00016/p00018).",
+            "Uncertainty: the authors proposed chromatin-protein protection against excessive tagmentation; preserve it as a rationale rather than a universal causal guarantee. The reported robustness over a 25-fold transposase concentration range is an observation under their assessed metrics, not a membership threshold or substitution rule (main p00007).",
+            "Source limit: the reviewed passages establish Tn5, fragmentation, adapter tagging and later nick translation, but not the exact commercial transposome-loaded oligonucleotides, enzyme activity/concentration or complete covalent fragment-end intermediate. Custom downstream PCR primers do not by themselves identify the loaded Tn5 strands. Retain this uncertainty on the use."
+          ],
+          "decision_sha256": "75677a48de0cfbca5cce626e80fa42f679f31286886b9a06c821e32f59750486",
+          "review_sha256": "148602375ab564e593d8e46368d5f63b52ed4db0e9a568efe3a424ebd9c61fb8",
+          "boundary_examples": [
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+              "membership": "member",
+              "reason": "Version 1 applies the coupled Tn5 reaction to previously fixed, antibody-enriched bead-bound chromatin. Its bead and target context refine this use without defining a different fragmentation/tagging mechanism."
+            },
+            {
+              "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+              "membership": "member",
+              "reason": "The selected ATAC reaction uses adapter-loaded Tn5 to fragment/tag native nuclear DNA. Accessibility-dependent representation distinguishes its information effect from ChIPmentation while preserving the shared molecular mechanism."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+              "membership": "member",
+              "reason": "Version 2 supplies a different ChIP preparation and targets but enters the same reported bead-chromatin tagmentation reaction. Upstream RIPA-based handling and target choices are contextual properties."
+            },
+            {
+              "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+              "membership": "non_member",
+              "reason": "The supplied bulk_rt occurrence copies captured RNA into bead-associated cDNA and introduces a PCR handle by template switching. Sharing beads and a library-handle purpose does not satisfy Tn5-mediated DNA fragmentation/tagging. This verdict concerns the selected occurrence, not every operation elsewhere in the Drop-seq paper."
+            }
+          ],
+          "source_passages": [
+            [
+              "batch27_chipmentation_main",
+              "p00004"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00007"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00016"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00018"
+            ],
+            [
+              "chipmentation_original_supplement",
+              "p00005"
+            ],
+            [
+              "chipmentation_original_supplement",
+              "p00040"
+            ]
+          ],
+          "assignment_sha256": "2d6c65dfb561c8745f3a731e6c2e139996e3cd2ca64e92653005d631ff6677cd"
+        },
+        {
+          "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+          "operation_ids": [
+            "bulk_rt"
+          ],
+          "concept_id": "reverse_transcription_template_switch_pcr_handle",
+          "status": "admit",
+          "source_status": "supported_membership_candidate",
+          "question": "Which transformations convert RNA into primer-associated cDNA while adding the opposite PCR handle by template switching, rather than fragmenting/tagging pre-existing DNA, and which preserve pre-existing cell/UMI primer identity after pooled bead recovery?",
+          "properties_to_preserve": [
+            "Input/context: recovered, washed bead pellet after droplet breakage and aqueous recovery, carrying captured polyadenylated mRNA on bead-attached oligo-dT primers. This is bulk post-recovery RT, not an in-droplet RT step. The pellet is not demonstrated to be a purified subset of occupied cell-positive beads (primary p00010; supplement p00006).",
+            "Primer information: pre-existing constant amplification/sequencing handle, cell barcode, UMI and oligo-dT are parts of the bead-attached primer. Their retention in the covalent extension product is inferred from extension of that original primer together with the reported stable STAMP output; RT does not synthesize a fresh random cell barcode or UMI (primary p00006/p00010).",
+            "Observed assembly: up to 90,000 recovered beads in 200 μL RT mix with 1x Maxima RT buffer, 4% Ficoll PM-400, 1 mM dNTPs, 1 U/μL RNase inhibitor, 2.5 μM Template_Switch_Oligo and 10 U/μL Maxima H− RT. Retain reagent/vendor identities on this use; no brand, volume or bead count is a universal class requirement (supplement p00006/p00007).",
+            "Observed program: 30 minutes at room temperature followed by 90 minutes at 42°C; room temperature is not replaced by an invented numeric value (supplement p00007).",
+            "Connected actions/output: primer extension copies captured RNA into covalent, stable bead-associated cDNA STAMPs, and template switching introduces the distal PCR handle. The output retains the support association and original primer tags rather than being purified free cDNA or a completed sequencing library (primary p00010/p00085).",
+            "Template-switch oligo is AAGCAGTGGTATCAACGCAGAGTGAATrGrGrG in source notation. Preserve SeqA/SeqB capture-primer alternatives as per-use designs; their exact sequences are given in Table S6, without selecting one or changing the shared concept (supplement p00029).",
+            "Downstream interfaces: post-RT washes, exonuclease I treatment and subsequent cDNA PCR are separate. Later Nextera XT treatment in the same paper is also a separate operation and is not assigned to this selected bulk_rt occurrence (supplement p00007).",
+            "Uncertainty/limits: the reported qualitative RNA-copying/template-switch mechanism supports the definition, but does not establish a full terminal nucleotide-by-nucleotide reaction path, universal full-length transcript recovery, template-switch yield or quantitative molecule-recovery efficiency. Preserve the RNA capture/provenance and inferred primer-tag retention without adding unreported production-path RNase treatment or borrowing the separate synthetic-RNA validation route."
+          ],
+          "decision_sha256": "eaa0ca5112e5a648881448536e20ae50db8f8e2ea7304fc34490b8efb577e8e6",
+          "review_sha256": "e010052a563d18313e2b17de2298ae9659dc61733f07920bae44876321827a71",
+          "boundary_examples": [
+            {
+              "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+              "membership": "member",
+              "reason": "The selected recovered-bead reaction explicitly combines bulk RNA reverse transcription with template-switch PCR-handle installation and produces covalent stable STAMPs. Its support and pre-existing cell/UMI primer tags are per-use context."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+              "membership": "non_member",
+              "reason": "The actual version 1 occurrence introduces adapters by tagmentation of bead-bound chromatin. It fragments/tags DNA rather than performing the required RNA-to-cDNA/template-switch transformation; bead attachment alone does not establish membership."
+            },
+            {
+              "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+              "membership": "non_member",
+              "reason": "The actual ATAC occurrence fragments and tags genomic DNA through adapter-loaded Tn5 transposition in native nuclei, rather than copying RNA and adding a PCR handle by template switching."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+              "membership": "non_member",
+              "reason": "The actual version 2 occurrence supplies fixed, enriched bead-chromatin to the reported Tn5 tagmentation reaction. Its adapter-tag output does not meet the RNA copying/template-switch membership conditions."
+            }
+          ],
+          "source_passages": [
+            [
+              "macosko2015_primary",
+              "p00006"
+            ],
+            [
+              "macosko2015_primary",
+              "p00010"
+            ],
+            [
+              "macosko2015_primary",
+              "p00085"
+            ],
+            [
+              "macosko2015_supplement",
+              "p00006"
+            ],
+            [
+              "macosko2015_supplement",
+              "p00007"
+            ],
+            [
+              "macosko2015_supplement",
+              "p00029"
+            ]
+          ],
+          "assignment_sha256": "68e0afc7c0e17168f567240da6897eab40e3f1f732236e820b102674c7ceedce"
+        }
+      ]
+    },
+    {
+      "arm": "reverse",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh",
+      "concepts": 2,
+      "assignments": 4,
+      "worker_seconds": 785.806,
+      "stages": [
+        {
+          "role": "compiler",
+          "elapsed_seconds": 335.9043292919523,
+          "usage": {
+            "input_tokens": 699264,
+            "cached_input_tokens": 627840,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 14453,
+            "reasoning_output_tokens": 3053
+          },
+          "artifact_sha256": "e450d0813890d08af5949d98b4b345bcb225fd499a8825f0d83f36bc01ce6c5d"
+        },
+        {
+          "role": "reviewer",
+          "elapsed_seconds": 449.90174962498713,
+          "usage": {
+            "input_tokens": 1848348,
+            "cached_input_tokens": 1741568,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 18331,
+            "reasoning_output_tokens": 4855
+          },
+          "artifact_sha256": "5fe38ed0a5a7ecc8897e13807328066e5dda24c23cec0a42103064714ebcaea7"
+        }
+      ],
+      "decisions": [
+        {
+          "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+          "operation_ids": [
+            "bulk_rt"
+          ],
+          "concept_id": "reverse_transcription_with_template_switch_handle",
+          "status": "admit",
+          "source_status": "supported_membership_candidate",
+          "question": "Which selected transformations copy primed RNA into cDNA and introduce a downstream amplification handle by template switching, and how do their supports and pre-existing identity tags affect the resulting information?",
+          "properties_to_preserve": [
+            "Input: washed recovered mRNA-bound capture beads after emulsion breakage, pooled for bulk RT. Recovery is not a new cell-selection gate, and RNA occupancy of every recovered bead is not asserted (primary p00010; supplement p00006).",
+            "Output: covalent stable bead-associated cDNA STAMPs before post-RT washes/exonuclease I and before cDNA PCR. Primer-derived constant handle, cell barcode and UMI retention is inferred from the input primer layout and its extension, whereas template-switch introduction of the downstream PCR handle is reported (primary p00006/p00010/p00085).",
+            "Captured polyadenylated RNA and bead-attached oligo-dT priming are the observed substrate/priming implementation. Bulk reaction after droplet recovery is a use property, not a required compartment for the concept.",
+            "Observed mixture: up to 90,000 beads in 200 μL; 1x Maxima RT buffer, 4% Ficoll PM-400, 1 mM dNTPs, 1 U/μL Lucigen RNase inhibitor, 2.5 μM Template_Switch_Oligo and 10 U/μL Maxima H- RT; 30 min room temperature then 90 min at 42 °C (supplement p00006/p00007). Brands and catalogue references remain in the source evidence and selected record.",
+            "Template_Switch_Oligo AAGCAGTGGTATCAACGCAGAGTGAATrGrGrG and the SeqA/SeqB bead-primer alternatives are retained in source notation (supplement p00029). The concept does not select one bead variant or infer unreported bond chemistry.",
+            "Information effect: stable RNA-derived cDNA preserves the pre-existing cell/molecule association for later cell-associated gene/UMI counting; no new cell identity or UMI is claimed to be generated by this RT step. The later sequencing/counting output is downstream (primary p00010/p00085).",
+            "Uncertainty: these passages support RT and template switching at the stated transformation level, without proving every terminal intermediate, complete transcript copying or per-molecule success. No RNase-removal operation is imported. The downstream Template_Switch_PCR versus TSO_PCR naming difference is retained as an unresolved alias, outside this selected transformation (supplement p00007/p00029)."
+          ],
+          "decision_sha256": "a6cbab217a7acec8305b8d655fe0d70a57237a823634281057b488a49b43c59f",
+          "review_sha256": "894c9745b01ae13d27297381d2595ee9402a87236e0082b3851dc7161a4415bf",
+          "boundary_examples": [
+            {
+              "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+              "membership": "member",
+              "reason": "The selected recovered-bead reaction copies captured RNA into stable cDNA and adds a downstream PCR handle through template switching."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+              "membership": "non_member",
+              "reason": "Version 2 treats fixed, previously immunoprecipitated bead-bound chromatin by Tn5 tagmentation. Its adapter addition does not copy RNA or use reverse-transcription template switching."
+            },
+            {
+              "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+              "membership": "non_member",
+              "reason": "The standard ATAC reaction fragments and adapter-tags genomic DNA with Tn5. A common downstream sequencing purpose does not satisfy the RNA-to-cDNA/template-switch conditions."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+              "membership": "non_member",
+              "reason": "Version 1 also adds adapters by on-bead chromatin tagmentation. Bead attachment is shared with Drop-seq but is insufficient for membership in the RNA-to-cDNA transformation."
+            }
+          ],
+          "source_passages": [
+            [
+              "macosko2015_primary",
+              "p00006"
+            ],
+            [
+              "macosko2015_primary",
+              "p00010"
+            ],
+            [
+              "macosko2015_primary",
+              "p00085"
+            ],
+            [
+              "macosko2015_supplement",
+              "p00006"
+            ],
+            [
+              "macosko2015_supplement",
+              "p00007"
+            ],
+            [
+              "macosko2015_supplement",
+              "p00029"
+            ]
+          ],
+          "assignment_sha256": "032a95736a443e4d099575b0390cd02f108bf23c29c5157c4fc1357ea6d830a7"
+        },
+        {
+          "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+          "operation_ids": [
+            "o_tag_v2"
+          ],
+          "concept_id": "tn5_fragmentation_adapter_tagging",
+          "status": "admit",
+          "source_status": "supported_membership_candidate",
+          "question": "Which operations couple Tn5 fragmentation to sequencing-adapter transfer, and which of those act on previously immunoprecipitated chromatin rather than unfixed nuclei to support target-enrichment versus accessibility comparisons?",
+          "properties_to_preserve": [
+            "Input: fixed, sonicated, antibody-enriched chromatin still bound to magnetic Protein A/G beads, after the branch's LiCl wash and two cold 10 mM Tris-Cl pH 8.0 washes to remove detergent, salts and EDTA. Prior antibody selection is not performed by the selected tagmentation step (main p00016; supplement p00039/p00040).",
+            "Observed reaction: resuspend beads in the reported 30 μl buffer containing 10 mM Tris pH 8.0 and 5 mM MgCl2, with 1 μl Tagment DNA Enzyme from Nextera DNA Sample Prep Kit; 10 min at 37°C in a thermocycler. The kit, amount, support and conditions remain use properties (main p00016).",
+            "Output: Tn5-fragmented, adapter-tagged DNA remains in the bead-bound chromatin preparation at the selected interface; not yet eluted, reverse-crosslinked, purified or amplified. Downstream version-specific detergent washes and final wash/elution/crosslink reversal/purification remain connected but distinct operations (main p00016; supplement p00005).",
+            "Information effect: adapter entry points are introduced into previously immunoprecipitated genomic DNA for later target-associated chromatin profiling. Tagmentation neither establishes an accessibility-only assay nor introduces cell barcodes or UMIs in this selected reaction (main p00004/p00016).",
+            "Authors' protection rationale: chromatin proteins may protect against excessive tagmentation. The reported 25-fold transposase-concentration robustness is a protocol-level observation; neither universal protein protection nor experimental interchangeability with ATAC-seq follows (main p00007).",
+            "Uncertainty: the inspected reaction and schematic establish named-kit Tn5 fragmentation/tagging but do not specify enzyme stock activity/concentration, loaded transposon oligo sequences, full covalent end structures or every downstream repair intermediate. PCR primer inventory is not evidence of loaded Tn5 payload identity.",
+            "Version 2 identity and observed target alternatives: H3K4me1, H3K36me3 and REST; 1% paraformaldehyde for 10 min in up to 1.5 ml PBS. The upstream RIPA preparation uses 30 min sonication to predominantly 200–700 bp chromatin, and antibody is conjugated to blocked Protein A/G beads before lysate incubation (supplement p00040). These identify this input history and do not restrict shared mechanism membership.",
+            "Version 2 interfaces: RIPA-LiCl before the common Tris washes; twice 150 μl cold RIPA immediately after tagmentation, then the final TE wash and subsequent elution/crosslink reversal. The source's version 2 RIPA-LiCl wash count and full TE formulation are not supplied in the inspected preparation paragraph; keep them unknown instead of inferring neighboring-buffer defaults (main p00016; supplement p00040)."
+          ],
+          "decision_sha256": "59bb211f6d6654910aa31ba6072e46d3748f2b2a33aa8cdb6345a662a72539cd",
+          "review_sha256": "17da576319e7a169442e7d3bbf38db433ebbb2ded8565f13722dba0a4b234bb9",
+          "boundary_examples": [
+            {
+              "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+              "membership": "non_member",
+              "reason": "This selected Drop-seq operation copies RNA and introduces a PCR handle by template switching; the paper's later Nextera XT cDNA tagmentation is outside this supplied occurrence."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+              "membership": "member",
+              "reason": "Version 2 performs Tn5 fragmentation/adapter tagging on fixed, previously antibody-enriched bead-bound chromatin before elution or crosslink reversal. These context properties distinguish its readout but do not change the required mechanism."
+            },
+            {
+              "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+              "membership": "member",
+              "reason": "Adapter-loaded Tn5 fragments and tags DNA in unfixed nuclei. The accessibility-dependent representation distinguishes this use from ChIPmentation without requiring a separate mechanism category."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+              "membership": "member",
+              "reason": "Version 1 uses the same reported on-bead tagmentation reaction after a different ChIP preparation. Different histone targets, fixation history and wash buffers remain properties."
+            }
+          ],
+          "source_passages": [
+            [
+              "batch27_chipmentation_main",
+              "p00004"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00007"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00016"
+            ],
+            [
+              "chipmentation_original_supplement",
+              "p00005"
+            ],
+            [
+              "chipmentation_original_supplement",
+              "p00040"
+            ]
+          ],
+          "assignment_sha256": "eaa1dbc8b87e551a88351246aa53512d7b87aea210c8346dc08503f1f03a9a16"
+        },
+        {
+          "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+          "operation_ids": [
+            "transpose_base"
+          ],
+          "concept_id": "tn5_fragmentation_adapter_tagging",
+          "status": "admit",
+          "source_status": "supported_membership_candidate",
+          "question": "Which operations use the Tn5 fragmentation/tagging mechanism, and within them which use unfixed nuclei and accessibility-dependent representation rather than prior antibody enrichment?",
+          "properties_to_preserve": [
+            "Input: native/unfixed nuclei from the standard 50,000-cell preparation, with selected cell population retained; cold IGEPAL lysis followed by nuclei pelleting at 500 × g for 10 min in a refrigerated centrifuge. No prior immunoprecipitation or bead support is part of this selected interface (primary p00004/p00015).",
+            "Observed standard mix immediately after nuclei preparation: 25 μL 2x TD buffer, 2.5 μL Illumina transposase, 22.5 μL nuclease-free water; 50 μL total inferred by summing components. Incubate 30 min at 37 °C (primary p00016). The distinct low-cell branch is not silently folded into this occurrence.",
+            "Output: genomic DNA fragments bearing the introduced adapter payload in the reaction preparation, before the separate Qiagen Minelute cleanup and subsequent PCR. Exact terminal structures are not specified by these reaction passages (primary p00004/p00016/p00017).",
+            "Information effect: accessible sites are preferentially converted into adapter-tagged, amplifiable fragments; genomic sequence and fragment location/span can later be read. The use represents chromatin accessibility and steric accessibility, rather than antibody-selected target abundance (primary p00004).",
+            "Sequence-preference qualification: Figure S4 reports no substantial difference in local insertion preferences between purified genomic DNA and human chromatin. Figure S5 reports moderate correlation of ATAC peak intensity with Tn5 sequence preference, using a theoretical PWM-derived score and Adey et al. genomic data. These are comparison-specific observations, not absence of bias, a universal correlation, equivalent substrates, or a required control/correction route (supplement p00007/p00008).",
+            "Uncertainty: TD-buffer internals, enzyme stock activity/concentration, complete loaded adapter strands and covalent end intermediates are not specified in the inspected reaction description. The later PCR starts with a reported 72°C incubation; assigning a particular fill-in/repair mechanism to it or relabeling PCR oligos as loaded Tn5 strands is not established by these passages (primary p00016/p00017)."
+          ],
+          "decision_sha256": "157fda38ae29d4a34d0e51b6e474a4adb925b3fc84b890bea87cc1bcc9b52e84",
+          "review_sha256": "ba3f52652ada1faabed656f5fcbf170b555d1b230ef16076b8b95f986c78762f",
+          "boundary_examples": [
+            {
+              "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+              "membership": "non_member",
+              "reason": "This selected Drop-seq operation copies RNA and introduces a PCR handle by template switching; the paper's later Nextera XT cDNA tagmentation is outside this supplied occurrence."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+              "membership": "member",
+              "reason": "Version 2 performs Tn5 fragmentation/adapter tagging on fixed, previously antibody-enriched bead-bound chromatin before elution or crosslink reversal. These context properties distinguish its readout but do not change the required mechanism."
+            },
+            {
+              "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+              "membership": "member",
+              "reason": "Adapter-loaded Tn5 fragments and tags DNA in unfixed nuclei. The accessibility-dependent representation distinguishes this use from ChIPmentation without requiring a separate mechanism category."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+              "membership": "member",
+              "reason": "Version 1 uses the same reported on-bead tagmentation reaction after a different ChIP preparation. Different histone targets, fixation history and wash buffers remain properties."
+            }
+          ],
+          "source_passages": [
+            [
+              "buenrostro2013_primary",
+              "p00004"
+            ],
+            [
+              "buenrostro2013_primary",
+              "p00015"
+            ],
+            [
+              "buenrostro2013_primary",
+              "p00016"
+            ],
+            [
+              "buenrostro2013_primary",
+              "p00017"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00002"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00007"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00008"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00010"
+            ],
+            [
+              "buenrostro2013_supplement",
+              "p00011"
+            ]
+          ],
+          "assignment_sha256": "1b1f4e3957fa9323b54454c09845118a413be1868cf4321d093331e43f41a596"
+        },
+        {
+          "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+          "operation_ids": [
+            "o_tag_v1"
+          ],
+          "concept_id": "tn5_fragmentation_adapter_tagging",
+          "status": "admit",
+          "source_status": "supported_membership_candidate",
+          "question": "Which operations couple Tn5 fragmentation to adapter transfer, and how do the two ChIP preparation branches change the input history and interfaces while preserving that mechanism?",
+          "properties_to_preserve": [
+            "Input: fixed, sonicated, antibody-enriched chromatin still bound to magnetic Protein A/G beads, after the branch's LiCl wash and two cold 10 mM Tris-Cl pH 8.0 washes to remove detergent, salts and EDTA. Prior antibody selection is not performed by the selected tagmentation step (main p00016; supplement p00039/p00040).",
+            "Observed reaction: resuspend beads in the reported 30 μl buffer containing 10 mM Tris pH 8.0 and 5 mM MgCl2, with 1 μl Tagment DNA Enzyme from Nextera DNA Sample Prep Kit; 10 min at 37°C in a thermocycler. The kit, amount, support and conditions remain use properties (main p00016).",
+            "Output: Tn5-fragmented, adapter-tagged DNA remains in the bead-bound chromatin preparation at the selected interface; not yet eluted, reverse-crosslinked, purified or amplified. Downstream version-specific detergent washes and final wash/elution/crosslink reversal/purification remain connected but distinct operations (main p00016; supplement p00005).",
+            "Information effect: adapter entry points are introduced into previously immunoprecipitated genomic DNA for later target-associated chromatin profiling. Tagmentation neither establishes an accessibility-only assay nor introduces cell barcodes or UMIs in this selected reaction (main p00004/p00016).",
+            "Authors' protection rationale: chromatin proteins may protect against excessive tagmentation. The reported 25-fold transposase-concentration robustness is a protocol-level observation; neither universal protein protection nor experimental interchangeability with ATAC-seq follows (main p00007).",
+            "Uncertainty: the inspected reaction and schematic establish named-kit Tn5 fragmentation/tagging but do not specify enzyme stock activity/concentration, loaded transposon oligo sequences, full covalent end structures or every downstream repair intermediate. PCR primer inventory is not evidence of loaded Tn5 payload identity.",
+            "Version 1 identity and observed target alternatives: H3K4me3 and H3K27me3; 1% paraformaldehyde for 5 min in up to 1 ml PBS. The upstream preparation uses isolated nuclei and 12 min sonication to predominantly 200–700 bp chromatin; antibody incubation precedes Protein A/G bead capture (supplement p00039). These identify this input history and do not restrict shared mechanism membership.",
+            "Version 1 interfaces: WBIII before the common Tris washes; twice 150 μl cold WBI immediately after tagmentation, then final WBIV washes, elution and crosslink reversal. Protein A versus G remains antibody-dependent; a universal assignment is not established (main p00016; supplement p00039)."
+          ],
+          "decision_sha256": "fb9425b032f21c2990a7a41e3dc7cf5b59938441cc70b771e33c9e56f67c212a",
+          "review_sha256": "7d85f6a523eaf5b834e5c70c5a14f7fd120908f33f60ef6f65138a3391e14df5",
+          "boundary_examples": [
+            {
+              "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+              "membership": "non_member",
+              "reason": "This selected Drop-seq operation copies RNA and introduces a PCR handle by template switching; the paper's later Nextera XT cDNA tagmentation is outside this supplied occurrence."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+              "membership": "member",
+              "reason": "Version 2 performs Tn5 fragmentation/adapter tagging on fixed, previously antibody-enriched bead-bound chromatin before elution or crosslink reversal. These context properties distinguish its readout but do not change the required mechanism."
+            },
+            {
+              "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+              "membership": "member",
+              "reason": "Adapter-loaded Tn5 fragments and tags DNA in unfixed nuclei. The accessibility-dependent representation distinguishes this use from ChIPmentation without requiring a separate mechanism category."
+            },
+            {
+              "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+              "membership": "member",
+              "reason": "Version 1 uses the same reported on-bead tagmentation reaction after a different ChIP preparation. Different histone targets, fixation history and wash buffers remain properties."
+            }
+          ],
+          "source_passages": [
+            [
+              "batch27_chipmentation_main",
+              "p00004"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00007"
+            ],
+            [
+              "batch27_chipmentation_main",
+              "p00016"
+            ],
+            [
+              "chipmentation_original_supplement",
+              "p00005"
+            ],
+            [
+              "chipmentation_original_supplement",
+              "p00039"
+            ]
+          ],
+          "assignment_sha256": "4009133122005a2d89ef27cf08119166837b825491de0af9cf6e41e751aefda7"
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "selections": 4,
+    "admitted_concepts": [
+      2,
+      2
+    ],
+    "status_agreement": {
+      "agree": 4,
+      "compared": 4
+    },
+    "shared_pairs": [
+      3,
+      3
+    ],
+    "shared_pair_jaccard": 1.0,
+    "shared_pair_disagreements": [],
+    "boundary_agreement": {
+      "agree": 12,
+      "compared": 12
+    },
+    "status_by_selection": [
+      {
+        "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+        "forward": "admit",
+        "reverse": "admit"
+      },
+      {
+        "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+        "forward": "admit",
+        "reverse": "admit"
+      },
+      {
+        "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+        "forward": "admit",
+        "reverse": "admit"
+      },
+      {
+        "occurrence_id": "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7",
+        "forward": "admit",
+        "reverse": "admit"
+      }
+    ],
+    "limits": [
+      "Presentation-order diagnostic on one fixed cohort, not sequential ingestion or a robustness estimate.",
+      "Co-membership agreement ignores names but does not establish equivalent definitions outside this cohort.",
+      "No human gold labels, scientific-accuracy score, retrieval-benefit claim or invention metric."
+    ]
+  },
+  "redundancy_control": {
+    "authorship": "Supplied negative-test proposal, not a new compiler output. Expected verdict was withheld from the reviewer prompt; model-facing paths were neutral.",
+    "source_definition_origin": "The earlier ChIPmentation-specific definition, applied to the third protocol variant; the admitted broader Tn5 concept was present.",
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "source_verdict": "supported",
+    "vocabulary_verdict": "properties_only",
+    "existing_plus_filters_sufficient": true,
+    "review_rationale": "The retrieval/comparison question is useful: which coupled Tn5 fragmentation/adapter-tagging reactions operate on previously antibody-enriched chromatin retained on beads, rather than another substrate presentation? However, the already admitted tn5_fragmentation_adapter_tagging definition explicitly covers prior enrichment, native/fixed state and bead-bound presentation as per-use properties, and its scope explicitly includes the ChIPmentation reaction. Its required mechanism, post-transposition output interface and qualified information effect fit this selected operation without broadening the definition or combining different physical mechanisms. Selection search for 'antibody enriched bead Tn5 tagmentation' in operations returned this sole supplied occurrence; property searches for 'enriched chromatin beads' in inputs and 'antibody enriched tags' in information_effects also returned it. The input and information-effect records therefore already expose the predicates needed for the proposed filter alternative; search hits were checked against the reopened source passages rather than treated as proof. Reuse of the existing concept plus these filters answers the question. The proposal's assertion that filters are insufficient rests only on making upstream enrichment more explicit in a name; it identifies no consequential distinction lost when those properties and their provenance are preserved. Bead-bound immunoprecipitated input and the pre-elution output make the proposed descriptive boundary clear, and the recipe is largely distinguished from membership, but the new ID unnecessarily elevates prior selection and physical presentation into a separate shared-mechanism category. Preserve antibody target and enrichment provenance, fixation and prior sonication, bead support/retention, reaction position before elution and crosslink reversal, input/output states and information meaning, Tris washes, reaction composition/volume, enzyme kit and amount, equipment, time/temperature, and the unspecified loaded strands/end chemistry on this individual use. Buffer/kit details and the authors' protection hypothesis do not become universal requirements. The sole actual boundary example is supported; no negative example is invented. This is a properties-only judgment on the proposed narrower label, with reuse of the existing admitted mechanism recommended; it asserts neither assay equivalence nor experimental substitution.",
+    "worker_seconds": 131.53,
+    "catalogue_unchanged": true,
+    "assignments_unchanged": true,
+    "retained_new_decisions": 1,
+    "review_sha256": "85a113a3f8bc829512dc32985b8e002d68f769428cb4e00fd802f9163e2f79f3"
+  },
+  "property_lookup_probe": {
+    "policy": "Intersection of all-term lexical property matches; no shared concept labels used. Expected sets are author-checked examples, not independent expert gold.",
+    "results": [
+      {
+        "question": "Find selected Tn5 fragmentation/adapter-insertion operations",
+        "filters": [
+          {
+            "field": "operations",
+            "query": "Tn5"
+          }
+        ],
+        "expected": [
+          "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+          "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240",
+          "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a"
+        ],
+        "retrieved": [
+          "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+          "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+          "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240"
+        ],
+        "missing": [],
+        "extra": [],
+        "exact_expected_set": true
+      },
+      {
+        "question": "Find selected Tn5 operations whose input is bead-bound",
+        "filters": [
+          {
+            "field": "operations",
+            "query": "Tn5"
+          },
+          {
+            "field": "inputs",
+            "query": "bead"
+          }
+        ],
+        "expected": [
+          "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+          "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240"
+        ],
+        "retrieved": [],
+        "missing": [
+          "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+          "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240"
+        ],
+        "extra": [],
+        "exact_expected_set": false
+      },
+      {
+        "question": "Find selected reverse-transcription/template-switching operations",
+        "filters": [
+          {
+            "field": "operations",
+            "query": "template switch"
+          }
+        ],
+        "expected": [
+          "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7"
+        ],
+        "retrieved": [
+          "drop_seq_macosko_2015:e7b018c5b7efa2b4f2c96b4ea670cdcf8cf9f2efe05f5d45c0341623fbfecf4a:adbb6b3eaf1cc7d95aa906bd392f425de5ff3b36c9f94fd56f3bbc0447120ed7"
+        ],
+        "missing": [],
+        "extra": [],
+        "exact_expected_set": true
+      }
+    ]
+  },
+  "property_lookup_followup": {
+    "reason": "Initial literal bead lookup missed plural beads. Added general opt-in trailing-* prefix matching after freezing the live pilot; this change is not present in either live arm.",
+    "filters": [
+      {
+        "field": "operations",
+        "query": "Tn5"
+      },
+      {
+        "field": "inputs",
+        "query": "bead*"
+      }
+    ],
+    "retrieved": [
+      "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+      "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240"
+    ],
+    "expected": [
+      "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+      "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:a28c914a02fc629207f83feea4999d0a79a97d8db200d241112e18a0956cc240"
+    ],
+    "exact_expected_set": true
+  },
+  "software_tests": {
+    "passed": 913,
+    "failed": 0,
+    "seconds": 40.82
+  },
+  "graph_checks": {
+    "tn5_concept_neighbors": 3,
+    "original_operation_and_module_navigation_verified": true,
+    "nodes": 1752,
+    "edges": 3975
+  },
+  "limits": [
+    "Four single-operation selections from three methods; no claim about multi-operation granularity or full-atlas scaling.",
+    "One paired presentation-order diagnostic, not a randomized robustness estimate or sequential-ingestion experiment.",
+    "No expert scientific gold, proof of necessary categories, or measured benefit to invention.",
+    "Both policy and cohort processing differ from the earlier pilot; this is not an isolated ablation of either.",
+    "Prefix lookup and supplied-proposal support were added after the paired implementation was frozen; the paired arms used identical earlier code and prompts.",
+    "Complete source packets, exact rendered prompts, native execution archives and the integrated graph remain local; public outputs omit copied source passages."
+  ]
+}

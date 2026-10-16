@@ -3,6 +3,10 @@
 Decision recorded 2026-10-16. This is an indexing layer after extraction: the
 source protocol still determines the operations and their local module boundaries.
 
+The subsequent [admission policy](CONCEPT_ADMISSION.md) separates factual support
+from the usefulness of creating a shared concept. Current writes require both.
+The first three-job pilot predates this policy and is retained as historical evidence.
+
 ## Contract and alternatives
 
 A concept has a stable ID, preferred name, alternative names, a full transformation
@@ -14,7 +18,9 @@ one documented use. We do not require that two existing technologies share it.
 The host must preserve source/review bindings, reject stale registry updates and
 prevent an existing ID from silently acquiring a different definition. Search
 returns candidates, not an identity judgment. An agent proposes reuse or a new
-definition and a separate source review assesses the proposed membership.
+definition and a separate reviewer assesses both source membership and catalogue
+utility. Properties-only and provisional decisions retain the selected operation
+without adding a shared concept.
 
 Rejected alternatives: same string means same operation (polysemy and context
 loss); independently invented tags in every extraction (duplicates and drift);
@@ -57,6 +63,10 @@ The code is in `src/genomics_discovery/curation/operation_registry/`:
 
 - `models.py`: one source-bound assignment, existing definition fields, aliases,
   scope note, reuse/new decision, and a declared search history.
+- `admission.py`: competency question, property-filter alternative, example
+  boundaries, revision requests and separate source/utility judgments.
+- `commit.py`: atomic cohort commits; only decisions passing both gates add labels.
+  All decisions, including non-admissions, retain their source-bound selections.
 - `store.py`: candidate lookup, immutable definitions, reviewed uses, and SQLite
   transactions. The host reruns recorded queries; agent-authored hit lists are not
   accepted. This verifies query results, not the agent's reasoning or search recall.
@@ -64,12 +74,16 @@ The code is in `src/genomics_discovery/curation/operation_registry/`:
 - `integrity.py`: detect changed archived definitions, selections or reviews before
   reading/exporting the registry. This checks bindings, not fresh scientific support.
 - `__main__.py`: JSON-producing tools for agents and the host.
+- `selections.py`: bounded access and field-specific search across the actual
+  selected operations; properties can be retrieved without shared labels.
 - `graph.py`: join label selections to existing graph nodes by workflow/source
   hashes and operation IDs. No connections are inferred from display names.
 - `playground/workflow_concepts_live.py`: a compiler session followed by a fresh
   reviewer session, using the existing native worker and archive checks. Only the
-  host commits a supported result. Abstentions and failed reviews remain in the
-  run directory. No automatic retries or modification of protocols occurs.
+  host commits admitted assignments. All valid decisions remain in the registry
+  ledger; incomplete/invalid attempts remain in the run directory. No automatic
+  retries or modification of protocols occurs. One job can consider a cohort of
+  selections together, using the same frozen catalogue throughout.
 
 The shared catalogue contains definitions and aliases only, not accumulated
 papers, extracted operations, or previous reviewer opinions. Sources are reopened
@@ -93,18 +107,20 @@ uv run atlas-concepts snapshot runs/concepts.sqlite > outputs/catalogue.json
 uv run atlas-concepts lookup outputs/catalogue.json 'substrate transformation output'
 uv run atlas-concepts inspect outputs/catalogue.json CONCEPT_ID
 uv run atlas-concepts uses runs/concepts.sqlite CONCEPT_ID --offset 0 --limit 10
+uv run atlas-concepts decisions runs/concepts.sqlite --status provisional
 ```
 
 `prepare` accepts several operation IDs, or `--module MODULE_ID` to select that
 module's operations. The selection must have real material/data/control connectivity;
 sharing a module name or reported precedence does not establish one transformation.
-Each job addresses one selection and assigns at most one concept. A later job can
-assign a different concept to the same selection. Extraction itself does not
+Each job makes one decision per supplied selection and assigns at most one concept
+to each. A later job can assign a different concept to the same selection. Combine
+prepared manifest entries to consider a cohort in one job. Extraction itself does not
 consult the registry, so existing labels cannot silently determine what is extracted.
 
 `reuse` copies the existing definition, aliases, scope and relation unchanged.
 `new` proposes a full definition and explains the distinction from inspected
-candidates. A fresh source review must support either assignment. One documented
+candidates. A fresh source review and utility review must support either assignment. One documented
 use can establish the initial entry; this does not demonstrate reuse elsewhere.
 An operation whose input cannot be stated remains outside this whole-transformation
 index without becoming an invalid protocol record.
@@ -117,7 +133,9 @@ return multiple candidates. Different concepts can overlap.
 
 ## Parallel jobs and graph integration
 
-SQLite serializes host writes. Creating a concept against an outdated snapshot
+SQLite serializes host writes. Within a cohort, identical new definitions can be
+assigned to several selections in one atomic commit. Conflicting definitions or
+duplicate proposed concepts roll back the whole commit. Creating a concept against an outdated snapshot
 stops for reconciliation; it cannot overwrite another agent's entry. Reviewed
 reuse can commit after unrelated additions if the referenced definition is still
 identical. Its original review binding remains visible. Conflicting new-concept
@@ -140,17 +158,19 @@ All assigned workflow/source versions must exist exactly in the target atlas.
 The original atlas stays unchanged; output pins the database and base atlas.
 Changing either invalidates that assembled version until explicitly rebuilt.
 
-Manual `apply` accepts reviewer artifacts with source/binding validation but cannot
+Manual `apply` now requires `--admission-decision` and `--admission-review` as well
+as the original source review. `apply-vocabulary` accepts an entire cohort proposal
+and review. Both perform source/binding/utility-gate validation but cannot
 prove a separate agent authored them. Such commits are marked accordingly. The
 live driver checks distinct completed native threads and records archive paths.
 Neither path establishes scientific correctness by itself.
 
 ## Pilot and remaining decisions
 
-The [three-job live pilot](../examples/concept_registry/README.md) created two
+The initial [three-job live pilot](../examples/concept_registry/README.md) created two
 contextual definitions and reused one on a second protocol variant. The results
 include actual definitions, source identities, review rationales and latency.
-All 895 software tests pass, including 27 new registry/driver checks.
+Its implementation passed 895 software tests, including 27 registry/driver checks.
 
 This establishes working lookup, reviewed assignment and graph navigation. It
 does not establish the best abstraction level. Definitions that are too narrow
@@ -165,3 +185,9 @@ snapshot growth, new-concept reconciliation and selection of which operation
 groups to label remain scale-up work. A label registry does not itself choose the
 most informative groups. The live driver records file/code/artifact bindings and
 exact prompts; these are local archives, not automatically portable replay bundles.
+
+Legacy entries remain readable and are explicitly `legacy_unassessed` for utility.
+New graph projections include only admitted assignments. Re-reviewing a legacy use
+creates a new record with an explicit predecessor link; original evidence and
+reviews remain unchanged. Changing a concept's definition requires a new ID and
+fresh membership review; a revision request alone changes nothing.

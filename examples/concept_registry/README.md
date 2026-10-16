@@ -1,5 +1,10 @@
 # Three live label assignments
 
+This is the initial source-membership pilot. It predates the separate
+[concept-admission policy](../../docs/CONCEPT_ADMISSION.md); its entries are now
+treated as `legacy_unassessed` for catalogue usefulness. The historical results
+below remain unchanged and are not retroactively claimed to pass the new policy.
+
 On 2026-10-16, three jobs ran with `gpt-6.1-sol`, `xhigh`. Each job used a compiler
 and a separate fresh source reviewer. The jobs started from existing protocol
 extractions, not raw papers. All three proposed assignments passed review and the

@@ -1,0 +1,48 @@
+{
+  "format_version": "operation_concept_catalogue/1.0",
+  "registry_revision": "56c26556b16269d351c7a72ec225a1de1a51f6402785d945ad7472f29f656baa",
+  "concepts": {
+    "reverse_transcription_with_template_switch_handle": {
+      "definition": {
+        "id": "reverse_transcription_with_template_switch_handle",
+        "name": "Reverse transcription with template-switch amplification-handle addition",
+        "substrate": "RNA hybridized to an extendable DNA primer, supplied with a template-switch oligonucleotide.",
+        "operation": "Extend the DNA primer by reverse transcription of RNA and use template switching to introduce a downstream amplification handle into the resulting cDNA.",
+        "physical_mechanism": "RNA-templated DNA synthesis extends the primer; reverse-transcription-associated template switching introduces sequence supplied by a template-switch oligonucleotide into the cDNA product. The definition does not specify unreported terminal nucleotide chemistry.",
+        "mechanism_unknown_reason": null,
+        "output": "Primer-derived cDNA bearing a template-switch-introduced downstream amplification handle and retaining the pre-existing primer sequence.",
+        "information_effect": "Converts RNA sequence into a stable DNA copy suitable for subsequent amplification and adds an amplification address. Pre-existing primer identity elements are carried into the extension product when present; cell barcodes and UMIs are contextual features, not universal requirements.",
+        "purpose": "Create amplification-addressable cDNA from primed RNA.",
+        "context_requirements": "Requires primed RNA, reverse-transcription activity and a template-switch oligonucleotide used to introduce the amplification handle. Both RNA-to-cDNA conversion and template-switch handle addition must be supported. Bead attachment, oligo-dT priming, prior droplet capture, pooling, barcode layout, enzyme brand and incubation recipe are recorded per use."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [
+        "RT with template switching"
+      ],
+      "scope_note": "Membership requires the connected RNA-to-cDNA and template-switch amplification-handle transformation. The original operation remains intact as one selected occurrence. Bead capture, barcode synthesis, washes, exonuclease I treatment and later PCR are distinct adjacent operations. The category can retrieve the mechanism without requiring Drop-seq's beads, barcodes or bulk workflow. Adapter addition by DNA tagmentation is outside this definition. A shared mechanism does not establish substitution, ancestry, novelty or an executable reaction recipe."
+    },
+    "tn5_fragmentation_adapter_tagging": {
+      "definition": {
+        "id": "tn5_fragmentation_adapter_tagging",
+        "name": "Tn5-mediated DNA fragmentation and adapter tagging",
+        "substrate": "DNA exposed to sequencing-adapter-loaded Tn5, with chromatin state, prior enrichment and physical presentation recorded for each use.",
+        "operation": "Fragment DNA and introduce sequencing-adapter tags in the same Tn5 tagmentation reaction.",
+        "physical_mechanism": "Adapter-loaded hyperactive Tn5 transposase couples DNA fragmentation to transposase-mediated integration of its adapter payload. The shared mechanism is specified at this level; exact loaded strands and covalent end intermediates remain use-specific unknowns where not established.",
+        "mechanism_unknown_reason": null,
+        "output": "DNA fragments bearing introduced sequencing-adapter sequence at the post-transposition interface, before downstream purification, deproteinization or amplification.",
+        "information_effect": "Introduces adapter-associated entry points for downstream amplification and genomic sequencing while retaining genomic sequence and fragment-position/span information. Representation of genomic regions depends on substrate accessibility and any prior enrichment; a biological readout is not specified by mechanism membership alone.",
+        "purpose": "Generate adapter-tagged DNA fragments for sequencing-library preparation and the use-specific genomic or chromatin readout.",
+        "context_requirements": "Requires a DNA substrate, sequencing-adapter-loaded Tn5 and compatible reaction conditions. Native or fixed state, nuclear or bead-bound presentation, prior selection, and intended readout must remain properties of each use. No particular antibody, support, kit, concentration, buffer, time or temperature is a universal membership requirement."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [
+        "Tn5 tagmentation"
+      ],
+      "scope_note": "Membership requires coupled DNA fragmentation and sequencing-adapter tagging by adapter-loaded Tn5. ATAC-seq's accessibility-dependent nuclear reaction and ChIPmentation's reaction on previously immunoprecipitated bead-bound chromatin are contextual uses of this mechanism. Retain their different selection basis and information meaning as properties. Preceding nuclei preparation or ChIP, subsequent washes/elution/crosslink reversal, purification, fill-in and PCR are outside the selected reaction. Reverse transcription/template switching and separate adapter ligation are outside this definition. Shared mechanism establishes neither assay equivalence, experimental substitution, ancestry, literature novelty nor a complete reaction recipe."
+    }
+  },
+  "admission_status": {
+    "reverse_transcription_with_template_switch_handle": "admitted",
+    "tn5_fragmentation_adapter_tagging": "admitted"
+  }
+}

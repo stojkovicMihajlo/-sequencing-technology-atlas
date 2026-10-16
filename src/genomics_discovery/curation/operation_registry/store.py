@@ -28,7 +28,11 @@ def revision(snapshot: dict) -> str:
 def catalogue(snapshot: dict) -> dict:
     """Expose definitions for lookup, not accumulated cuts, quotes or review opinions."""
     return {"format_version": "operation_concept_catalogue/1.0",
-            "registry_revision": digest(snapshot), "concepts": snapshot["concepts"]}
+            "registry_revision": digest(snapshot), "concepts": snapshot["concepts"],
+            "admission_status": {cid: ("admitted" if any(
+                r["concept_id"] == cid and r.get("admission_decision_sha256")
+                for r in snapshot["assignments"].values()) else "legacy_unassessed")
+                for cid in snapshot["concepts"]}}
 
 
 def search(snapshot: dict, query: str, *, limit: int = 10) -> dict:
@@ -45,6 +49,7 @@ def search(snapshot: dict, query: str, *, limit: int = 10) -> dict:
         exact = normalized_label(query) in {normalized_label(s) for s in labels}
         if matched or exact:
             hits.append({"concept_id": cid, "concept": concept, "exact_label_hit": exact,
+                         "admission_status": snapshot.get("admission_status", {}).get(cid, "unassessed"),
                          "matched_terms": sorted(matched), "score": len(matched) / len(terms)})
     hits.sort(key=lambda h: (-int(h["exact_label_hit"]), -h["score"], h["concept_id"]))
     return {"registry_revision": revision(snapshot), "query": query, "hits": hits[:limit],
@@ -105,45 +110,25 @@ class Registry:
         validate_snapshot(value)
         return value
 
-    def apply(self, proposal: Assignment, review: MembershipReview, occurrences: dict,
-              packets: dict, *, provenance: dict | None = None) -> dict:
-        """Caller must first rebuild occurrences from sources using load_occurrences.
+    def apply_batch(self, proposal, review, occurrences, packets, *, provenance=None):
+        from .commit import commit_batch
+        return commit_batch(self.path, proposal, review, occurrences, packets, provenance)
 
-        Validated reviewer JSON is not proof of reviewer independence. The live driver
-        records and verifies distinct native threads; manual callers remain explicit.
-        """
-        checked = review_membership(proposal, review, occurrences, packets)
-        if checked["status"] != "supported_membership_candidate":
-            raise ValueError(f"Membership was not supported: {checked['status']}")
-        # Do not create an empty database as a side effect of a mistaken path.
-        with sqlite3.connect(self.path.as_uri() + "?mode=rw", uri=True, timeout=30) as db:
-            db.execute("BEGIN IMMEDIATE")
-            snapshot = json.loads(db.execute("SELECT payload FROM registry WHERE id=1").fetchone()[0])
-            validate_snapshot(snapshot)
-            commit_base_revision = digest(snapshot)
-            # A reviewed use of an unchanged concept survives unrelated concurrent additions.
-            # New concepts still require reconciliation against the current vocabulary.
-            lookups = check_proposal(snapshot, proposal, occurrences, packets, allow_stale_reuse=True)
-            member = proposal.members[0]
-            if any(row["concept_id"] == proposal.definition.id and
-                   row["occurrence_sha256"] == member.occurrence_sha256
-                   for row in snapshot["assignments"].values()):
-                raise ValueError("This exact occurrence already has this concept")
-            snapshot["concepts"][proposal.definition.id] = proposal.concept()
-            key = digest(proposal)
-            snapshot["assignments"][key] = {
-                "concept_id": proposal.definition.id,
-                "occurrence_sha256": member.occurrence_sha256,
-                "occurrence": occurrences[member.occurrence_id].model_dump(mode="json"),
-                "proposal": proposal.model_dump(mode="json"),
-                "review": review.model_dump(mode="json"), "review_sha256": digest(review),
-                "commit_base_revision": commit_base_revision,
-                "lookup_results": lookups, "review_execution": provenance or {
-                    "kind": "supplied_review_artifact", "independent_execution_verified": False},
-            }
-            db.execute("UPDATE registry SET payload=? WHERE id=1", (json.dumps(snapshot),))
-        return {"assignment_id": key, "concept_id": proposal.definition.id,
-                "registry_revision": digest(snapshot), "boundary": BOUNDARY}
+    def apply(self, proposal: Assignment, review: MembershipReview, occurrences: dict,
+              packets: dict, *, admission_decision=None, admission_review=None, provenance=None):
+        """Single-assignment adapter. New writes require a bound usefulness review."""
+        from .admission import VocabularyProposal, VocabularyReview
+        if admission_decision is None or admission_review is None:
+            raise ValueError("Source review alone cannot admit a label; provide an admission decision/review")
+        if admission_decision.assignment != proposal or admission_review.source_review != review:
+            raise ValueError("Admission and source artifacts disagree")
+        batch = VocabularyProposal(decisions=(admission_decision,))
+        checked = VocabularyReview(proposal_sha256=digest(batch), reviews=(admission_review,))
+        selected = {proposal.members[0].occurrence_id: occurrences[proposal.members[0].occurrence_id]}
+        # Other selections may serve as boundary examples; use the batch entry point for a cohort.
+        result = self.apply_batch(batch, checked, selected, packets, provenance=provenance)
+        outcome = result["outcomes"][0]
+        return {**result, **outcome}
 
 
 def uses(snapshot: dict, concept_id: str, *, offset: int = 0, limit: int = 10) -> dict:
@@ -160,6 +145,7 @@ def uses(snapshot: dict, concept_id: str, *, offset: int = 0, limit: int = 10) -
                      "operation_ids": [op["id"] for op in occurrence["operations"]],
                      "inputs": occurrence["inputs"], "outputs": occurrence["outputs"],
                      "workflow_review_status": occurrence["workflow_review_status"],
+                     "admission_status": "admitted" if row.get("admission_decision_sha256") else "legacy_unassessed",
                      "review_sha256": row["review_sha256"]})
     end = offset + limit
     return {"concept": concept, "uses": rows[offset:end], "total": len(rows),
@@ -170,10 +156,13 @@ def graph_overlay(snapshot: dict) -> dict:
     """A separate overlay; the exact source selections remain intact."""
     validate_snapshot(snapshot)
     nodes, edges = {}, []
-    for cid, concept in snapshot["concepts"].items():
+    admitted = {key: row for key, row in snapshot["assignments"].items()
+                if row.get("admission_decision_sha256")}
+    for cid in {row["concept_id"] for row in admitted.values()}:
+        concept = snapshot["concepts"][cid]
         key = "concept:" + cid
         nodes[key] = {"id": key, "kind": "operation_concept", "record": concept}
-    for ident, row in snapshot["assignments"].items():
+    for ident, row in admitted.items():
         occurrence = row["occurrence"]
         key = "selection:" + row["occurrence_sha256"]
         nodes[key] = {"id": key, "kind": "protocol_selection", "method_id": occurrence["method_id"],

@@ -11,6 +11,8 @@ from genomics_discovery.curation.workflow_extraction.transformations import (
 )
 
 from .models import Assignment, Decision
+from .admission import (LabelDecision, AdmissionReview, VocabularyProposal, VocabularyReview,
+                        validate_decision, validate_batch)
 from .store import Registry, catalogue, check_proposal, graph_overlay, revision, search, uses
 
 
@@ -34,6 +36,14 @@ def main():
     p.add_argument("query")
     p.add_argument("--offset", type=int, default=0)
     p.add_argument("--limit", type=int, default=10)
+    p = commands.add_parser("decisions")
+    p.add_argument("database", type=Path)
+    p.add_argument("--offset", type=int, default=0)
+    p.add_argument("--limit", type=int, default=10)
+    p.add_argument("--status")
+    p = commands.add_parser("decision")
+    p.add_argument("database", type=Path)
+    p.add_argument("identifier")
     p = commands.add_parser("attach")
     p.add_argument("database", type=Path)
     p.add_argument("atlas", type=Path)
@@ -44,7 +54,19 @@ def main():
         if name == "lookup":
             p.add_argument("--limit", type=int, default=10)
     p = commands.add_parser("schema")
-    p.add_argument("kind", choices=("decision", "assignment", "review"))
+    p.add_argument("kind", choices=("decision", "assignment", "review", "vocabulary", "vocabulary-review"))
+    p = commands.add_parser("selections")
+    p.add_argument("views", type=Path)
+    p.add_argument("action", choices=("list", "inspect", "find"))
+    p.add_argument("query", nargs="?")
+    p.add_argument("--field")
+    p.add_argument("--limit", type=int, default=10)
+    for name in ("check-vocabulary", "apply-vocabulary"):
+        p = commands.add_parser(name)
+        p.add_argument("registry", type=Path)
+        p.add_argument("proposal", type=Path)
+        p.add_argument("manifest", type=Path)
+        p.add_argument("--review", type=Path, required=name == "apply-vocabulary")
     p = commands.add_parser("prepare")
     p.add_argument("workflow", type=Path)
     p.add_argument("packet", type=Path)
@@ -62,10 +84,44 @@ def main():
     p.add_argument("proposal", type=Path)
     p.add_argument("review", type=Path)
     p.add_argument("manifest", type=Path)
+    p.add_argument("--admission-decision", type=Path, required=True)
+    p.add_argument("--admission-review", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "schema":
         result = {"decision": Decision, "assignment": Assignment,
-                  "review": MembershipReview}[args.kind].model_json_schema()
+                  "review": MembershipReview, "vocabulary": VocabularyProposal,
+                  "vocabulary-review": VocabularyReview}[args.kind].model_json_schema()
+    elif args.command == "selections":
+        from .selections import FIELDS, find_selections, list_selections
+        views = json.loads(args.views.read_text())
+        if args.action == "list":
+            result = list_selections(views)
+        elif args.action == "find":
+            result = find_selections(views, args.query or "", field=args.field, limit=args.limit)
+        else:
+            view = views[args.query]
+            if args.field and args.field not in FIELDS:
+                raise ValueError("Unknown selection field")
+            result = {args.field: view["record"][args.field]} if args.field else view
+    elif args.command in {"check-vocabulary", "apply-vocabulary"}:
+        occurrences, packets = load_occurrences(load_manifest(args.manifest))
+        proposal = VocabularyProposal.model_validate_json(args.proposal.read_bytes())
+        snapshot = (Registry(args.registry).snapshot() if args.command == "apply-vocabulary"
+                    else json.loads(args.registry.read_text()))
+        if args.command == "apply-vocabulary":
+            result = Registry(args.registry).apply_batch(proposal, VocabularyReview.model_validate_json(
+                args.review.read_bytes()), occurrences, packets)
+        elif args.review:
+            result = {"integrity": "valid", "outcomes": validate_batch(proposal,
+                VocabularyReview.model_validate_json(args.review.read_bytes()), snapshot, occurrences, packets)}
+        else:
+            if set(occurrences) != {d.occurrence_id for d in proposal.decisions}:
+                raise ValueError("Every selection needs a decision")
+            result = {"integrity": "valid", "proposal_sha256": digest(proposal),
+                      "decisions": [{"occurrence_id": d.occurrence_id, "decision_sha256": digest(d),
+                                     "assignment_sha256": digest(d.assignment) if d.assignment else None}
+                                    for d in proposal.decisions], "lookups":
+                      [validate_decision(d, snapshot, occurrences, packets) for d in proposal.decisions]}
     elif args.command in {"init", "snapshot", "export-graph"}:
         registry = Registry(args.database)
         snapshot = registry.initialize() if args.command == "init" else registry.snapshot()
@@ -89,13 +145,30 @@ def main():
     elif args.command == "uses":
         result = uses(Registry(args.database).snapshot(), args.query,
                       offset=args.offset, limit=args.limit)
+    elif args.command in {"decisions", "decision"}:
+        records = Registry(args.database).snapshot().get("decisions", {})
+        if args.command == "decision":
+            result = records[args.identifier]
+        else:
+            if args.offset < 0 or args.limit < 1:
+                raise ValueError("Use a nonnegative offset and positive limit")
+            rows = [{"decision_id": ident, "occurrence_id": row["decision"]["occurrence_id"],
+                     "status": row["outcome"]["status"], "question": row["decision"]["case"]["question"],
+                     "reason": row["review"]["rationale"],
+                     "revision_requests": row["decision"]["case"]["revision_requests"]}
+                    for ident, row in records.items()
+                    if not args.status or row["outcome"]["status"] == args.status]
+            end = args.offset + args.limit
+            result = {"decisions": rows[args.offset:end], "total": len(rows),
+                      "next_offset": end if end < len(rows) else None}
     elif args.command in {"lookup", "inspect"}:
         snapshot = json.loads(args.snapshot.read_text())
         if args.command == "lookup":
             result = search(snapshot, args.query, limit=args.limit)
         elif args.command == "inspect":
             result = {"registry_revision": revision(snapshot),
-                      "concept": snapshot["concepts"][args.query]}
+                      "concept": snapshot["concepts"][args.query],
+                      "admission_status": snapshot.get("admission_status", {}).get(args.query, "unassessed")}
     elif args.command == "prepare":
         workflow = Workflow.model_validate_json(args.workflow.read_bytes())
         operation_ids = list(args.operation_ids)
@@ -121,7 +194,9 @@ def main():
         proposal = Assignment.model_validate_json(args.proposal.read_bytes())
         if args.command == "apply":
             result = Registry(args.database).apply(proposal,
-                MembershipReview.model_validate_json(args.review.read_bytes()), occurrences, packets)
+                MembershipReview.model_validate_json(args.review.read_bytes()), occurrences, packets,
+                admission_decision=LabelDecision.model_validate_json(args.admission_decision.read_bytes()),
+                admission_review=AdmissionReview.model_validate_json(args.admission_review.read_bytes()))
         else:
             snapshot = json.loads(args.snapshot.read_text())
             lookups = check_proposal(snapshot, proposal, occurrences, packets)

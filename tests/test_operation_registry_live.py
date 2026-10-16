@@ -5,10 +5,12 @@ from dataclasses import asdict
 
 import pytest
 from test_workflow_transformations import cases as cases
-from test_operation_registry import assignment, review
+from test_operation_registry import assignment, review, decision_for, admission_for
 
 from genomics_discovery.curation.codex_worker import WorkerResult
 from genomics_discovery.curation.operation_registry.models import Assignment
+from genomics_discovery.curation.operation_registry.admission import VocabularyProposal, VocabularyReview
+from genomics_discovery.curation.workflow_extraction.models import digest
 from genomics_discovery.curation.operation_registry.store import Registry
 from playground.workflow_concepts_live import execute
 
@@ -24,11 +26,17 @@ class WorkerFixture:
         self.calls += 1
         if self.calls == 1:
             proposal = assignment(self.cases, self.snapshot)
-            document = {"assignment": None if self.fault == "abstain" else proposal.model_dump(mode="json"),
-                        "explanation": "Fixture outcome"}
+            decision = decision_for(proposal)
+            if self.fault == "abstain":
+                decision = decision.model_copy(update={"assignment": None})
+            document = VocabularyProposal(decisions=(decision,)).model_dump(mode="json")
         else:
-            proposal = Assignment.model_validate_json((path.parent / "proposal.json").read_bytes())
-            document = review(proposal, self.cases, self.verdict).model_dump(mode="json")
+            batch = VocabularyProposal.model_validate_json((path.parent / "proposal.json").read_bytes())
+            decision = batch.decisions[0]
+            source_review = review(decision.assignment, self.cases, self.verdict) if decision.assignment else None
+            checked = admission_for(decision, source_review,
+                                    "admit" if decision.assignment else "provisional")
+            document = VocabularyReview(proposal_sha256=digest(batch), reviews=(checked,)).model_dump(mode="json")
         (path / "artifact.json").write_text(json.dumps(document))
         (path / "prompt.txt").write_text(prompt if self.fault != "prompt" else "Wrong prompt")
         thread = "same" if self.fault == "thread" else f"thread-{self.calls}"
@@ -64,7 +72,7 @@ async def test_two_fresh_threads_commit_and_withhold_old_reviews(cases, tmp_path
     assert len({a["thread_id"] for a in result["attempts"]}) == 2
     row = next(iter(registry.snapshot()["assignments"].values()))
     assert row["review_execution"]["independent_execution_verified"]
-    visible = json.loads((tmp_path / "run/occurrence_view.json").read_text())
+    visible = next(iter(json.loads((tmp_path / "run/selections.json").read_text()).values()))
     assert "selected_checks" not in visible["record"]
     catalog = json.loads((tmp_path / "run/registry.json").read_text())
     assert "assignments" not in catalog
@@ -90,13 +98,31 @@ async def test_scientific_negatives_recorded_without_commit(cases, tmp_path, ver
     manifest, registry = prepare(cases, tmp_path)
     result = await execute(manifest, registry.path, tmp_path / "run",
                            worker=WorkerFixture(cases, registry.snapshot(), verdict=verdict))
-    assert result["status"] in {"needs_revision", "research_needed"}
+    assert result["status"] == "completed_without_admission"
+    assert result["commit"]["outcomes"][0]["status"] in {"needs_revision", "research_needed"}
     assert not registry.snapshot()["concepts"]
 
 
-async def test_explicit_abstention_stops_before_review(cases, tmp_path):
+async def test_unclassified_selection_is_reviewed_and_retained(cases, tmp_path):
     manifest, registry = prepare(cases, tmp_path)
     worker = WorkerFixture(cases, registry.snapshot(), fault="abstain")
     result = await execute(manifest, registry.path, tmp_path / "run", worker=worker)
-    assert result["status"] == "abstained" and worker.calls == 1
+    assert result["status"] == "completed_without_admission" and worker.calls == 2
     assert not registry.snapshot()["concepts"]
+    assert len(registry.snapshot()["decisions"]) == 1
+
+
+async def test_supplied_proposal_has_one_fresh_review_and_explicit_provenance(cases, tmp_path):
+    manifest, registry = prepare(cases, tmp_path)
+    decision = decision_for(assignment(cases, registry.snapshot()))
+    proposal = tmp_path / 'supplied.json'
+    proposal.write_text(VocabularyProposal(decisions=(decision,)).model_dump_json())
+    worker = WorkerFixture(cases, registry.snapshot())
+    worker.calls = 1  # Exercise the fixture's reviewer branch; there is no compiler execution.
+    result = await execute(manifest, registry.path, tmp_path / 'run', worker=worker, supplied_proposal=proposal)
+    assert result['proposal_origin'] == 'supplied' and len(result['attempts']) == 1
+    assert result['attempts'][0]['role'] == 'reviewer'
+    provenance = next(iter(registry.snapshot()['assignments'].values()))['review_execution']
+    assert provenance['kind'] == 'supplied_proposal_native_review'
+    assert not provenance['independent_execution_verified']
+    assert provenance['fresh_review_execution_verified']

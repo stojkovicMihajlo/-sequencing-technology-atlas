@@ -5,7 +5,7 @@ from copy import deepcopy
 from genomics_discovery.curation.technology_graph.assembly import node_id, summarize
 from genomics_discovery.curation.workflow_extraction.models import digest
 
-from .store import BOUNDARY, graph_overlay
+from .store import BOUNDARY, catalogue, graph_overlay
 
 
 def attach_to_graph(graph: dict, snapshot: dict) -> dict:
@@ -42,6 +42,7 @@ def attach_to_graph(graph: dict, snapshot: dict) -> dict:
     result["nodes"].extend(overlay["nodes"])
     result["edges"].extend([*overlay["edges"], *edges])
     result["concept_registry"] = {"revision": digest(snapshot), "concepts": snapshot["concepts"],
+                                  "admission_status": catalogue(snapshot)["admission_status"],
                                   "boundary": BOUNDARY}
     result["concept_assignments"] = deepcopy(snapshot["assignments"])
     result["statistics"] = summarize(result)

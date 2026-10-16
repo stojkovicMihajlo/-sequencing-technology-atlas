@@ -20,6 +20,14 @@ work here; `code_snapshot.json` continues to identify the original imported file
 not assert that later modified files still have those original hashes. The registry
 reference audit and its limits are in [CONCEPT_REGISTRY.md](CONCEPT_REGISTRY.md).
 
+The subsequent [admission policy](CONCEPT_ADMISSION.md) records the ontology-design
+and code audit behind separate source-support and category-usefulness decisions.
+The [pilot report](../examples/concept_admission/README.md) distinguishes the two
+model-generated proposals from an externally supplied redundant-label control.
+It also identifies a lexical-search correction made after the paired runs were
+frozen. Full native archives and paper packets remain local; the public report
+contains model outputs, source identifiers, hashes and limits, without full papers.
+
 ## Scientific example
 
 The example describes the original ChIPmentation implementation:

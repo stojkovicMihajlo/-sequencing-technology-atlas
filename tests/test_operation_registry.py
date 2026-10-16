@@ -8,6 +8,9 @@ from pydantic import ValidationError
 from test_workflow_transformations import cases as cases, candidate_for, review_for
 
 from genomics_discovery.curation.operation_registry.models import Assignment
+from genomics_discovery.curation.operation_registry.admission import (
+    AdmissionCase, AdmissionReview, BoundaryExample, LabelDecision,
+)
 from genomics_discovery.curation.operation_registry.store import (
     Registry, catalogue, check_proposal, graph_overlay, search, uses,
 )
@@ -39,6 +42,33 @@ def review(proposal, cases, verdict="supported"):
     return MembershipReview.model_validate(obj)
 
 
+def decision_for(proposal):
+    ident = proposal.members[0].occurrence_id
+    return LabelDecision(occurrence_id=ident, assignment=proposal, explanation="Synthetic fixture",
+        case=AdmissionCase(question="Find the fixture's coupled insertion and repair transformation",
+            existing_concept_ids=(), existing_plus_filters="Fixture: no equivalent definition",
+            filters_sufficient=False, lost_distinction_if_merged="Fixture difference in physical transformation",
+            properties_to_preserve=("Exact reaction conditions stay on each use",),
+            boundary_examples=(BoundaryExample(occurrence_id=ident, membership="member", reason="Fixture",
+                                               evidence=proposal.members[0].evidence),)))
+
+
+def admission_for(decision, source_review, verdict="admit"):
+    return AdmissionReview(decision_sha256=digest(decision), source_review=source_review,
+        vocabulary_verdict=verdict, question_useful=True, boundary_clear=True,
+        context_properties_separated=True, existing_plus_filters_sufficient=False,
+        rationale="Synthetic approval for testing software controls, not scientific validation")
+
+
+def commit(registry, proposal, checked, occurrences, packets):
+    decision = decision_for(proposal)
+    result = Registry.apply(registry, proposal, checked, occurrences, packets,
+        admission_decision=decision, admission_review=admission_for(decision, checked))
+    if result["status"] != "admit":
+        raise ValueError("Membership was not supported")
+    return result
+
+
 @pytest.fixture
 def registry(tmp_path):
     result = Registry(tmp_path / "concepts.sqlite")
@@ -49,11 +79,11 @@ def registry(tmp_path):
 def test_create_lookup_and_reuse_preserve_two_contexts(cases, registry):
     before = digest(cases[2][0])
     first = assignment(cases, registry.snapshot())
-    registry.apply(first, review(first, cases), *cases[:2])
+    commit(registry, first, review(first, cases), *cases[:2])
     result = search(registry.snapshot(), "ADAPTER FRAGMENT PREPARATION")
     assert result["hits"][0]["exact_label_hit"]
     second = assignment(cases, registry.snapshot(), index=1, decision="reuse")
-    registry.apply(second, review(second, cases), *cases[:2])
+    commit(registry, second, review(second, cases), *cases[:2])
     snapshot = registry.snapshot()
     assert len(snapshot["concepts"]) == 1 and len(snapshot["assignments"]) == 2
     records = uses(snapshot, first.definition.id)["uses"]
@@ -69,17 +99,17 @@ def test_create_lookup_and_reuse_preserve_two_contexts(cases, registry):
 def test_recorded_commit_base_is_the_actual_previous_registry(cases, registry):
     before = registry.snapshot()
     proposal = assignment(cases, before)
-    registry.apply(proposal, review(proposal, cases), *cases[:2])
+    commit(registry, proposal, review(proposal, cases), *cases[:2])
     assert registry.snapshot()["assignments"][digest(proposal)]["commit_base_revision"] == digest(before)
 
 
 def test_catalogue_withholds_accumulated_evidence_and_uses_are_paginated(cases, registry):
     first = assignment(cases, registry.snapshot())
-    registry.apply(first, review(first, cases), *cases[:2])
+    commit(registry, first, review(first, cases), *cases[:2])
     second = assignment(cases, registry.snapshot(), index=1, decision="reuse")
-    registry.apply(second, review(second, cases), *cases[:2])
+    commit(registry, second, review(second, cases), *cases[:2])
     visible = catalogue(registry.snapshot())
-    assert "assignments" not in visible and "checks" not in json.dumps(visible)
+    assert "assignments" not in visible and "decisions" not in visible and "checks" not in json.dumps(visible)
     first_page = uses(registry.snapshot(), first.definition.id, limit=1)
     second_page = uses(registry.snapshot(), first.definition.id, offset=first_page["next_offset"], limit=1)
     assert first_page["total"] == 2 and second_page["next_offset"] is None
@@ -89,7 +119,7 @@ def test_catalogue_withholds_accumulated_evidence_and_uses_are_paginated(cases, 
 def test_mutating_a_stored_definition_invalidates_the_registry(cases, registry):
     import sqlite3
     proposal = assignment(cases, registry.snapshot())
-    registry.apply(proposal, review(proposal, cases), *cases[:2])
+    commit(registry, proposal, review(proposal, cases), *cases[:2])
     snapshot = registry.snapshot()
     snapshot["concepts"][proposal.definition.id]["definition"]["output"] = "An unreviewed changed output"
     with sqlite3.connect(registry.path) as db:
@@ -101,7 +131,7 @@ def test_mutating_a_stored_definition_invalidates_the_registry(cases, registry):
 @pytest.mark.parametrize("field", ["proposal", "occurrence", "review"])
 def test_changed_archived_records_cannot_be_exported(cases, registry, field):
     proposal = assignment(cases, registry.snapshot())
-    registry.apply(proposal, review(proposal, cases), *cases[:2])
+    commit(registry, proposal, review(proposal, cases), *cases[:2])
     snapshot = registry.snapshot()
     row = snapshot["assignments"][digest(proposal)]
     if field == "proposal":
@@ -119,8 +149,9 @@ def test_negative_review_cannot_create_a_concept(cases, registry, verdict):
     proposal = assignment(cases, registry.snapshot())
     before = registry.snapshot()
     with pytest.raises(ValueError, match="not supported"):
-        registry.apply(proposal, review(proposal, cases, verdict), *cases[:2])
-    assert registry.snapshot() == before
+        commit(registry, proposal, review(proposal, cases, verdict), *cases[:2])
+    assert registry.snapshot()["concepts"] == before["concepts"]
+    assert registry.snapshot()["assignments"] == before["assignments"]
 
 
 def test_concurrent_new_proposals_cannot_overwrite_each_other(cases, registry):
@@ -128,7 +159,7 @@ def test_concurrent_new_proposals_cannot_overwrite_each_other(cases, registry):
     proposals = [assignment(cases, snapshot, index=i) for i in (0, 1)]
     def apply(proposal):
         try:
-            return registry.apply(proposal, review(proposal, cases), *cases[:2])
+            return commit(registry, proposal, review(proposal, cases), *cases[:2])
         except ValueError as exc:
             return str(exc)
     with ThreadPoolExecutor(max_workers=2) as pool:
@@ -141,7 +172,7 @@ def test_concurrent_new_proposals_cannot_overwrite_each_other(cases, registry):
 @pytest.mark.parametrize("field,value", [("output", "RNA, not DNA"), ("name", "Changed label")])
 def test_reuse_cannot_redefine_concept(cases, registry, field, value):
     first = assignment(cases, registry.snapshot())
-    registry.apply(first, review(first, cases), *cases[:2])
+    commit(registry, first, review(first, cases), *cases[:2])
     data = assignment(cases, registry.snapshot(), index=1, decision="reuse").model_dump(mode="json")
     data["definition"][field] = value
     changed = Assignment.model_validate(data)
@@ -151,7 +182,7 @@ def test_reuse_cannot_redefine_concept(cases, registry, field, value):
 
 def test_new_same_label_requires_disambiguation_and_alias_hit_never_assigns(cases, registry):
     first = assignment(cases, registry.snapshot())
-    registry.apply(first, review(first, cases), *cases[:2])
+    commit(registry, first, review(first, cases), *cases[:2])
     data = assignment(cases, registry.snapshot(), index=1).model_dump(mode="json")
     data["definition"]["id"] = "different-transformation"
     data["definition"]["output"] = "A genuinely different output in this synthetic test"
@@ -159,7 +190,7 @@ def test_new_same_label_requires_disambiguation_and_alias_hit_never_assigns(case
         check_proposal(registry.snapshot(), Assignment.model_validate(data), *cases[:2])
     data["definition"]["name"] = "Qualified different transformation"
     second = Assignment.model_validate(data)
-    registry.apply(second, review(second, cases), *cases[:2])
+    commit(registry, second, review(second, cases), *cases[:2])
     before = registry.snapshot()
     hits = search(before, first.aliases[0])["hits"]
     assert sum(h["exact_label_hit"] for h in hits) == 2
@@ -168,12 +199,12 @@ def test_new_same_label_requires_disambiguation_and_alias_hit_never_assigns(case
 
 def test_one_selection_can_have_multiple_labels(cases, registry):
     first = assignment(cases, registry.snapshot())
-    registry.apply(first, review(first, cases), *cases[:2])
+    commit(registry, first, review(first, cases), *cases[:2])
     data = assignment(cases, registry.snapshot(), relation="shared_purpose").model_dump(mode="json")
     data["definition"]["id"] = "prepare-dna-readout"
     data["definition"]["name"] = "Prepare DNA for readout"
     second = Assignment.model_validate(data)
-    registry.apply(second, review(second, cases), *cases[:2])
+    commit(registry, second, review(second, cases), *cases[:2])
     overlay = graph_overlay(registry.snapshot())
     assert len({e["source"] for e in overlay["edges"]}) == 1
     assert len({e["target"] for e in overlay["edges"]}) == 2
@@ -189,7 +220,7 @@ def test_forged_quote_and_stale_review_rejected(cases, registry):
     data = proposal.model_dump(mode="json")
     data["distinction"] = "Changed after review"
     with pytest.raises(ValueError, match="exact candidate"):
-        registry.apply(Assignment.model_validate(data), old_review, *cases[:2])
+        commit(registry, Assignment.model_validate(data), old_review, *cases[:2])
 
 
 def test_incomplete_review_and_changed_occurrence_rejected(cases, registry):
@@ -197,7 +228,7 @@ def test_incomplete_review_and_changed_occurrence_rejected(cases, registry):
     data = review(proposal, cases).model_dump(mode="json")
     data["checks"] = []
     with pytest.raises(ValueError, match="exactly one check"):
-        registry.apply(proposal, MembershipReview.model_validate(data), *cases[:2])
+        commit(registry, proposal, MembershipReview.model_validate(data), *cases[:2])
     data = proposal.model_dump(mode="json")
     data["members"][0]["occurrence_sha256"] = "0" * 64
     with pytest.raises(ValueError, match="Stale occurrence"):
@@ -214,14 +245,14 @@ def test_alias_schema_and_unknown_reuse(cases, registry):
 
 def test_unrelated_additions_do_not_force_repeated_review_for_reuse(cases, registry):
     first = assignment(cases, registry.snapshot())
-    registry.apply(first, review(first, cases), *cases[:2])
+    commit(registry, first, review(first, cases), *cases[:2])
     reused = assignment(cases, registry.snapshot(), index=1, decision="reuse")
     old_review = review(reused, cases)
     data = assignment(cases, registry.snapshot(), relation="shared_purpose").model_dump(mode="json")
     data["definition"]["id"] = "a-different-purpose-index"
     other = Assignment.model_validate(data)
-    registry.apply(other, review(other, cases), *cases[:2])
-    registry.apply(reused, old_review, *cases[:2])
+    commit(registry, other, review(other, cases), *cases[:2])
+    commit(registry, reused, old_review, *cases[:2])
     assert len(registry.snapshot()["assignments"]) == 3
 
 
@@ -230,7 +261,7 @@ def test_atlas_integration_joins_exact_nodes_and_retains_module_membership(cases
     from genomics_discovery.curation.technology_graph.assembly import node_id
     from genomics_discovery.curation.technology_graph.queries import neighbors, inspect
     proposal = assignment(cases, registry.snapshot())
-    registry.apply(proposal, review(proposal, cases), *cases[:2])
+    commit(registry, proposal, review(proposal, cases), *cases[:2])
     occurrence = cases[0][proposal.members[0].occurrence_id]
     w = cases[2][0]
     graph = {"workflows": {"workflow:example": {"workflow_sha256": digest(w),

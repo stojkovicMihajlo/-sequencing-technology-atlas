@@ -18,7 +18,8 @@ extractions have model/source reviews rather than expert or experimental validat
 | Can I inspect a real extraction? | [ChIPmentation example](examples/chipmentation/README.md) |
 | How do methods enter the larger graph? | [Graph layers and agent tools](docs/GRAPH.md) |
 | How can agents reuse operation/module labels? | [Shared concept registry](docs/CONCEPT_REGISTRY.md) |
-| Has label reuse actually run with models? | [Three live assignments and their outputs](examples/concept_registry/README.md) |
+| How do we decide whether a shared label is useful? | [Admission policy, fields and reference audit](docs/CONCEPT_ADMISSION.md) |
+| Has label admission actually run with models? | [Paired cohort test and redundant-label control](examples/concept_admission/README.md) |
 | How do we run and evaluate the next batch? | [Runbook](docs/RUNBOOK.md) and [evaluation plan](docs/EVALUATION.md) |
 | Where did this code come from? | [Provenance and references](docs/PROVENANCE.md) |
 
@@ -44,10 +45,13 @@ The packaged snapshot passed **868 software tests** in a clean Python 3.13
 environment. See the [release checks](provenance/release_checks.json) for the exact
 checks and their limits.
 
-The subsequent label-registry update passes **895 software tests** and has a
-[three-job live pilot](examples/concept_registry/README.md). Its
-[check record](provenance/concept_registry_checks.json) separates software integrity
-from scientific accuracy, which has not been measured.
+The current concept-admission update passes **913 software tests**. A
+[paired cohort test and redundant-label control](examples/concept_admission/README.md)
+exercise separate source-support and category-usefulness decisions. The
+[check record](provenance/concept_admission_checks.json) distinguishes software
+integrity and observed model behavior from scientific accuracy, which has not been
+measured. The [earlier source-only pilot](examples/concept_registry/README.md)
+remains available with its original results.
 
 ## The pipeline
 
@@ -68,7 +72,7 @@ flowchart TD
     J --> B[Combined atlas assembly]
     H[Existing historical claims] --> B
     M[Separately reviewed cross-protocol comparisons] --> B
-    J --> L[Label lookup, proposal and fresh source review]
+    J --> L[Property lookup, concept proposal and source/utility review]
     L --> K[Shared concept registry]
     K --> B
 ```
