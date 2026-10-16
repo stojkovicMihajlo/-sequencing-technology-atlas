@@ -57,9 +57,10 @@ def main():
     p.add_argument("kind", choices=("decision", "assignment", "review", "vocabulary", "vocabulary-review"))
     p = commands.add_parser("selections")
     p.add_argument("views", type=Path)
-    p.add_argument("action", choices=("list", "inspect", "find"))
+    p.add_argument("action", choices=("list", "overview", "inspect", "find"))
     p.add_argument("query", nargs="?")
     p.add_argument("--field")
+    p.add_argument("--pointer", help="Exact JSON Pointer into the original selection view (inspect only)")
     p.add_argument("--limit", type=int, default=10)
     for name in ("check-vocabulary", "apply-vocabulary"):
         p = commands.add_parser(name)
@@ -93,16 +94,27 @@ def main():
                   "vocabulary-review": VocabularyReview}[args.kind].model_json_schema()
     elif args.command == "selections":
         from .selections import FIELDS, find_selections, list_selections
+        from .selection_views import selection_overview, inspect_pointer
+        if args.pointer is not None and (args.action != "inspect" or args.field):
+            raise ValueError("Use --pointer only with inspect, without --field")
+        if args.action in {"inspect", "overview"} and not args.query:
+            raise ValueError("Supply an occurrence ID")
         views = json.loads(args.views.read_text())
         if args.action == "list":
             result = list_selections(views)
         elif args.action == "find":
             result = find_selections(views, args.query or "", field=args.field, limit=args.limit)
+        elif args.action == "overview":
+            if args.field:
+                raise ValueError("Use inspect --field for a single field")
+            result = selection_overview(views[args.query])
         else:
             view = views[args.query]
             if args.field and args.field not in FIELDS:
                 raise ValueError("Unknown selection field")
-            result = {args.field: view["record"][args.field]} if args.field else view
+            result = ({"occurrence_sha256": view["occurrence_sha256"], "pointer": args.pointer,
+                       "value": inspect_pointer(view, args.pointer)} if args.pointer is not None
+                      else {args.field: view["record"][args.field]} if args.field else view)
     elif args.command in {"check-vocabulary", "apply-vocabulary"}:
         occurrences, packets = load_occurrences(load_manifest(args.manifest))
         proposal = VocabularyProposal.model_validate_json(args.proposal.read_bytes())

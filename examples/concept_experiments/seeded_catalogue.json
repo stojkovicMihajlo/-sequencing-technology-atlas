@@ -1,0 +1,88 @@
+{
+  "format_version": "operation_concept_catalogue/1.0",
+  "registry_revision": "d342652c1e57d951973487607e7623eda8c1d04aaec44ce2c348ba1e6a79a654",
+  "concepts": {
+    "tn5_dna_fragmentation_adapter_tagging": {
+      "definition": {
+        "id": "tn5_dna_fragmentation_adapter_tagging",
+        "name": "Tn5-mediated DNA fragmentation and adapter tagging",
+        "substrate": "DNA-containing material accessible to adapter-loaded Tn5, including DNA in chromatin; material state and prior enrichment are retained on each use.",
+        "operation": "Couple DNA fragmentation with introduction of sequencing-adapter tags in a Tn5 transposition reaction.",
+        "physical_mechanism": "Adapter-loaded hyperactive Tn5 transposase fragments substrate DNA and integrates its adapter payload at insertion sites.",
+        "mechanism_unknown_reason": null,
+        "output": "Tagmented DNA-containing material carrying sequencing-adapter tags, at the reaction-product stage before separately required purification, end completion or PCR; support and protein association are retained as per-use properties.",
+        "information_effect": "Adds sequencing-adapter sequence at fragmentation/insertion sites while retaining substrate-derived DNA sequence and fragment information for downstream readout. Which genomic regions are represented and what their representation means depend on upstream selection and substrate accessibility, recorded on each use.",
+        "purpose": "Generate adapter-tagged DNA fragments for subsequent sequencing-library preparation.",
+        "context_requirements": "Requires DNA, an adapter-loaded Tn5 preparation and conditions permitting the coupled transposition/tagging reaction. Native versus fixed chromatin, prior antibody enrichment, bead attachment, enzyme product, buffer, dose, duration and downstream readout are contextual properties rather than universal membership conditions."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [
+        "Tn5 tagmentation"
+      ],
+      "scope_note": "A shared-mechanism concept requiring both DNA fragmentation and sequencing-adapter introduction by Tn5. It spans the supplied native-nuclear and immunoprecipitated bead-chromatin implementations without making either the defining substrate. The assigned transformation ends at tagmented material; later washes, crosslink reversal, DNA purification, end completion and amplification remain separate interfaces. RNA reverse transcription with template-switch handle introduction does not meet this mechanism. Membership establishes neither experimental substitution, shared ancestry, literature novelty nor a complete reaction recipe."
+    },
+    "reverse_transcription_template_switch_pcr_handle": {
+      "definition": {
+        "id": "reverse_transcription_template_switch_pcr_handle",
+        "name": "Reverse transcription with template-switch addition of a PCR handle",
+        "substrate": "RNA annealed to an extendable DNA primer, with a compatible template-switch oligonucleotide supplied.",
+        "operation": "Extend the primer to synthesize cDNA from RNA and use template switching to introduce a distal PCR handle in the connected reverse-transcription transformation.",
+        "physical_mechanism": "Reverse-transcriptase-mediated RNA-templated DNA synthesis coupled to switching to the supplied oligonucleotide template to introduce the distal amplification handle. This is a qualitative mechanism; exact terminal nucleotide and strand intermediates are not specified by the definition.",
+        "mechanism_unknown_reason": null,
+        "output": "Primer-derived cDNA-bearing material with the initiating primer sequence retained and a template-switch-derived distal PCR handle, before separate primer cleanup or PCR; any primer attachment to a support is retained.",
+        "information_effect": "Copies RNA sequence into DNA and adds the opposite amplification handle. Pre-existing primer tags remain associated through primer extension; their identity and biological provenance are per-use properties.",
+        "purpose": "Convert captured RNA into cDNA with handles for subsequent amplification and sequencing-library preparation.",
+        "context_requirements": "Requires an RNA-primed reverse-transcription system and compatible template-switch oligonucleotide that together yield the distal PCR-handle output. Bead attachment, oligo-dT priming, cellular barcodes, UMIs, bulk execution, enzyme brand, reaction composition and incubation program are contextual implementation properties, not universal membership conditions."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [
+        "Template-switching reverse transcription"
+      ],
+      "scope_note": "A shared-mechanism concept for the connected RNA-to-cDNA synthesis and template-switch PCR-handle installation, with both actions and their output required for membership. Generic RNA capture, reverse transcription lacking established template switching, Tn5 DNA fragmentation/tagging, and downstream PCR are outside this definition. It is not specific to a bead brand, barcode design or bulk/droplet location. The supplied singleton supports this coherent comparison category; further memberships require their own evidence. Shared mechanism establishes neither experimental substitution, ancestry, novelty nor a complete reaction recipe."
+    },
+    "ligase_attachment_of_provenance_barcode_to_dna": {
+      "definition": {
+        "id": "ligase_attachment_of_provenance_barcode_to_dna",
+        "name": "Ligase-mediated attachment of a provenance barcode to DNA",
+        "substrate": "DNA-containing analyte-derived material and a pre-synthesized DNA oligonucleotide carrying an assigned origin barcode, with termini compatible with ligation directly or through a splint.",
+        "operation": "Deliver the barcode oligonucleotide to its designated DNA population and covalently attach it by ligation, retaining already incorporated tags. Addressing and alignment stages within the connected transformation are included when present.",
+        "physical_mechanism": "A DNA ligase joins pre-existing DNA termini in an aligned nucleic-acid complex rather than copying the barcode from a template or installing it by transposition. Complementary fragment ends or a separate splint can supply alignment; exact strand intermediates and end completion remain per-use details.",
+        "mechanism_unknown_reason": null,
+        "output": "DNA-derived products bearing a covalently attached synthetic origin barcode, in the retained reaction material or support. Separate recovery, amplification and sequencing are downstream interfaces.",
+        "information_effect": "Associates analyte sequence with the known input population or physical location receiving the barcode, enabling origin attribution after pooling. A provenance code identifies the labeled population, not necessarily a cell or one original molecule; additional UMI, primer and affinity sequences retain their distinct roles.",
+        "purpose": "Encode provenance on existing DNA products by attaching a designed barcode for subsequent sequence-based retrieval.",
+        "context_requirements": "Requires pre-existing DNA, a supplied DNA oligonucleotide whose code is assigned to an input population or delivery location, compatible ligase/end chemistry, and controlled code-to-population association. Genomic versus RNA/ADT-derived DNA, overhang versus splint alignment, supports, tissue geometry, barcode length, extra UMIs or affinity tags, enzyme brand and incubation are contextual properties."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [
+        "Ligation-based DNA provenance tagging"
+      ],
+      "scope_note": "Requires both DNA-ligase-mediated covalent attachment and an assigned provenance barcode in the product. It covers the connected delivery/attachment transformation, including physical addressing when needed, without requiring a finished sequencing library. Sample identity versus spatial address remains a per-use property; tissue supports and restriction ends do not define separate concepts. Copying a handle by reverse transcription, Tn5 fragmentation/tagging, a fixed structural linker lacking an origin-code role, and joining two endogenous analyte segments to record their association do not satisfy this definition. Shared mechanism establishes neither experimental substitution, ancestry, literature novelty nor a full reaction recipe."
+    },
+    "covalent_recording_of_nucleic_acid_association": {
+      "definition": {
+        "id": "covalent_recording_of_nucleic_acid_association",
+        "name": "Covalent recording of nucleic-acid partner association",
+        "substrate": "Nucleic-acid segments in an experimentally constrained, physically associated preparation whose proximity or structural association is to be read out, together with compatible ligation reagents and any required linker oligonucleotides.",
+        "operation": "Convert the preserved association into a covalent connection between analyte-derived segments by ligation, directly or through a linker. Include connected adaptor installation and end activation when needed to reach this output; retain control bypasses and side products as distinct per-use routes.",
+        "physical_mechanism": "Nucleic-acid ligases catalyze covalent joining of termini. Direct joining of prepared DNA ends and staged RNA-adaptor attachment, end activation and linker-mediated RNA joining are distinct implementations of this shared purpose, with their own enzymes and end chemistry.",
+        "mechanism_unknown_reason": null,
+        "output": "Reaction material containing covalently linked pairs of analyte-derived nucleic-acid segments that can carry both segment identities into downstream sequence readout, alongside unjoined or other products. Native complexes and support associations remain as reported at the selected boundary.",
+        "information_effect": "Carries two analyte-segment identities together for inference of their prior physical association. Chromatin proximity versus protein-bound RNA duplex association, direct versus linker-marked junctions, and background joining remain contextual; a linkage alone does not establish a base pair, direct contact or unbiased recovery.",
+        "purpose": "Make prior spatial or structural association between nucleic-acid segments recoverable as paired sequence identities.",
+        "context_requirements": "Requires physical association constrained before joining and a productive ligation route retaining both analyte segments. Crosslinking, bound proteins, DNA/RNA identity, direct versus bridged junctions, supports, end activation, prior biotin marking and downstream interpretation are per-use properties. Co-occurrence of two synthetic address codes on one analyte is insufficient."
+      },
+      "relation": "shared_purpose",
+      "aliases": [
+        "Ligation-based encoding of nucleic-acid associations"
+      ],
+      "scope_note": "This is a shared-purpose relation between whole transformations with a productive association-recording route. Direct blunt-end DNA ligation and staged RNA-linker joining are not asserted to share the same detailed mechanism or biological observable. Connected adaptor installation and activation remain actual operations, and control branches that bypass final joining retain their own endpoints. Outputs need only contain linked analyte pairs; uniform recovery, exclusive hybrid products and perfect specificity are not membership requirements. Attaching a synthetic provenance code to a single analyte is outside this definition. Membership establishes neither experimental substitution, ancestry, novelty nor a full reaction recipe."
+    }
+  },
+  "admission_status": {
+    "tn5_dna_fragmentation_adapter_tagging": "admitted",
+    "reverse_transcription_template_switch_pcr_handle": "admitted",
+    "ligase_attachment_of_provenance_barcode_to_dna": "admitted",
+    "covalent_recording_of_nucleic_acid_association": "admitted"
+  }
+}

@@ -98,3 +98,12 @@ review. Distinguish operational failure, unsupported content, missing known find
 and unavailable sources. A missing dependency requires source acquisition and a new
 bound packet; repeating an unchanged frozen packet cannot supply it. A model-supported
 result with gaps remains scoped to what was actually supported.
+
+## Replaying a subset of a vocabulary cohort
+
+A vocabulary decision's justification can depend on other selections even when
+its assignment has only one target. Preserve those comparison sources when
+replaying a decision. Removing other selections and boundary examples without
+rebasing the comparative assertions can legitimately produce a provisional result.
+Record externally supplied proposals as such, and distinguish source membership
+from category admission. See the [observed follow-up](../examples/concept_experiments/README.md).

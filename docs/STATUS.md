@@ -29,7 +29,7 @@ archived-example integrity check, operation inspector and all documented CLI ent
 points started successfully. These are software checks. Source-support accuracy
 was not re-evaluated during repository preparation.
 
-The current update passes **913 tests**. See the
+The initial admission update passed **913 tests**. See the
 [admission pilot](../examples/concept_admission/README.md) for actual categories,
 decisions, source references and latency. Two presentation orders produced the
 same two groups from four selections. A separate reviewer accepted the evidence
@@ -37,6 +37,14 @@ for a narrower label but declined the category because existing properties were
 sufficient. These jobs label selected existing operations; they do not increase
 the number of fully extracted workflows. Earlier source-only assignments remain
 archived as `legacy_unassessed`, rather than silently inheriting admission.
+
+The subsequent [six-selection experiments](../examples/concept_experiments/README.md)
+completed both main arms and retained differences in category admission and edge
+type. A wrong whole-unit assignment was rejected in two live scope controls.
+The harness now offers smaller navigation views and exact field access, and its
+coverage check distinguishes selected claims from inherited parent-workflow notes.
+**928 software tests pass.** These changes do not establish optimal categories,
+scientific accuracy or a measured latency improvement.
 
 ## Decisions before a large extraction job
 

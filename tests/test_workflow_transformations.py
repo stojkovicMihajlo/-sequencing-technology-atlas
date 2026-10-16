@@ -548,7 +548,7 @@ def test_native_prompt_provides_complete_definition_and_independent_review_paths
         )
 
 
-@pytest.mark.parametrize("claim", ["route", "internal_state", "gap_resolution"])
+@pytest.mark.parametrize("claim", ["route", "internal_state", "cited_context", "parent_context"])
 def test_supported_membership_inspects_each_distinct_whole_cut_claim(cases, claim):
     occurrences, packets, workflows = cases
     original_id = next(iter(occurrences))
@@ -557,7 +557,8 @@ def test_supported_membership_inspects_each_distinct_whole_cut_claim(cases, clai
     original = Path(old_packet["sources"][0]["original_path"])
     text = {"route": "The analytical aliquot is not returned to the production library.",
             "internal_state": "Tagged DNA retains adapter-bearing sequence before repair.",
-            "gap_resolution": "The exact molecular nick structure is outside this declared unit."
+            "cited_context": "The exact molecular nick structure is outside this declared unit.",
+            "parent_context": "Downstream study-specific analysis is outside this declared unit."
             }[claim]
     original.write_text(original.read_text() + "\n\n" + text)
     source = old_packet["sources"][0]
@@ -592,6 +593,10 @@ def test_supported_membership_inspects_each_distinct_whole_cut_claim(cases, clai
     updated_occurrences[rebuilt.id], updated_packets[rebuilt.id] = rebuilt, packet
     updated = updated_occurrences, updated_packets, workflows
     candidate = candidate_for(updated)
+    if claim == "cited_context":
+        data = candidate.model_dump(mode="json")
+        next(m for m in data["members"] if m["occurrence_id"] == rebuilt.id)["evidence"].append(evidence)
+        candidate = MembershipCandidate.model_validate(data)
     complete_review = review_for(candidate, updated)
     assert validate_membership_review(complete_review, candidate,
                                       updated_occurrences, updated_packets) == []
@@ -603,7 +608,17 @@ def test_supported_membership_inspects_each_distinct_whole_cut_claim(cases, clai
                                    if item["passage_id"] != passage["passage_id"]]
     review = MembershipReview.model_validate(review_raw)
     errors = validate_membership_review(review, candidate, updated_occurrences, updated_packets)
-    assert any("Supported membership lacks evidence" in error for error in errors), errors
+    if claim == "parent_context":
+        assert errors == []
+        assert rebuilt.gap_resolutions == workflow.gap_resolutions
+        invalid = rebuilt.model_dump(mode="json")
+        invalid["gap_resolutions"][0]["evidence"][0]["quote"] = "Fabricated note absent from the source"
+        bad_occurrences = {**updated_occurrences, rebuilt.id: type(rebuilt).model_validate(invalid)}
+        assert any("quote is not present" in e for e in
+                   validate_membership_review(review, candidate, bad_occurrences, updated_packets))
+    else:
+        assert any("Supported membership lacks evidence" in error for error in errors), errors
+        assert any("source alternatives" in error for error in errors)
 
 
 def test_review_record_roundtrips_full_membership_evidence_checks_and_status(cases):

@@ -28,6 +28,12 @@ It also identifies a lexical-search correction made after the paired runs were
 frozen. Full native archives and paper packets remain local; the public report
 contains model outputs, source identifiers, hashes and limits, without full papers.
 
+The [follow-up experiments](../examples/concept_experiments/README.md) distinguish
+three frozen implementations: the initial six-selection arms, the navigation
+follow-up, and the inherited-context coverage correction. The main arms retained
+their original rules and outputs. Edited-review probes are identified separately
+and are never presented as fresh model judgments or committed assignments.
+
 ## Scientific example
 
 The example describes the original ChIPmentation implementation:

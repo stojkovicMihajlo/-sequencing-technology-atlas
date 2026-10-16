@@ -261,13 +261,25 @@ def validate_membership_review(review: MembershipReview, candidate: MembershipCa
             errors.append(f"Review cites uninspected passages: {check.occurrence_id}")
         if check.verdict == "supported" and check.occurrence_id in occurrences:
             occurrence = occurrences[check.occurrence_id]
-            claims = [members[check.occurrence_id], *occurrence.inputs, *occurrence.outputs,
-                      *occurrence.internal_states, *occurrence.operations, *occurrence.requirements,
-                      *occurrence.flows, *occurrence.gap_resolutions]
-            if any(not cited & {(ev.source_id, ev.passage_id) for ev in claim.evidence}
-                   for claim in claims):
-                errors.append("Supported membership lacks evidence for a retained whole-cut claim: "
-                              f"{check.occurrence_id}")
+            member = members[check.occurrence_id]
+            member_refs = {(ev.source_id, ev.passage_id) for ev in member.evidence}
+            claims = [("candidate member", member)]
+            for field in ("inputs", "outputs", "internal_states", "operations", "requirements", "flows"):
+                claims.extend((f"/record/{field}/{i}", claim)
+                              for i, claim in enumerate(getattr(occurrence, field)))
+            # These notes are copied from the entire parent workflow and lack
+            # operation targets. Do not require downstream-analysis evidence for
+            # an unrelated physical reaction. Notes used by the candidate remain
+            # coverage obligations; all inherited quotes still pass integrity checks.
+            claims.extend((f"/record/gap_resolutions/{i}", resolution)
+                          for i, resolution in enumerate(occurrence.gap_resolutions)
+                          if member_refs & {(ev.source_id, ev.passage_id) for ev in resolution.evidence})
+            for location, claim in claims:
+                references = {(ev.source_id, ev.passage_id) for ev in claim.evidence}
+                if not cited & references:
+                    errors.append("Supported membership lacks evidence for a retained whole-cut claim: "
+                                  f"{check.occurrence_id} at {location}; source alternatives: "
+                                  + ", ".join(f"{sid}/{pid}" for sid, pid in sorted(references)))
     return errors
 
 
@@ -347,6 +359,9 @@ explicit unknown, output, information effect, resource/context requirements, sid
 branches and unresolved facts. A workflow or unit can remain unaccepted even when
 a local comparison is supported. Broad words such as ligation, barcoding, copying,
 library preparation or RNA capture alone never establish the same transformation.
+unresolved and gap_resolutions include parent-workflow context: assess relevance
+to the selection, and cite relied-on notes in member evidence. Do not import
+unrelated parent claims or disregard relevant uncertainty.
 Shared purpose and shared physical mechanism are different claims. Preserve input
 and context differences; never infer substitution, transfer compatibility, ancestry
 or a transitive correspondence. Packet quote matching establishes provenance only.

@@ -3,7 +3,8 @@
 import json
 import re
 
-FIELDS = ("operations", "inputs", "outputs", "information_effects", "requirements", "flows", "unresolved")
+FIELDS = ("operations", "inputs", "outputs", "internal_states", "external_operations",
+          "information_effects", "requirements", "flows", "unresolved", "gap_resolutions")
 
 
 def list_selections(views):

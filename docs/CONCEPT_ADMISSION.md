@@ -94,6 +94,8 @@ are diagnostics; expert and broader held-out evaluation remain necessary.
 ```sh
 export PYTHONPATH="$PWD/src"
 uv run atlas-concepts selections RUN/selections.json list
+uv run atlas-concepts selections RUN/selections.json overview OCCURRENCE_ID
+uv run atlas-concepts selections RUN/selections.json inspect OCCURRENCE_ID --pointer /record/operations/0/evidence
 uv run atlas-concepts selections RUN/selections.json find 'bead*' --field inputs
 uv run atlas-concepts decisions runs/concepts.sqlite --status properties_only
 uv run atlas-concepts decision runs/concepts.sqlite DECISION_HASH
@@ -104,11 +106,35 @@ Selection search returns lexical candidates. `*` explicitly requests prefix
 matching; it does not infer synonyms or biochemical equivalence. Empty literal
 results must not be treated as evidence that a category is needed.
 
+Start with `overview` for a selected unit. It returns the selection hash and all
+non-evidence scientific fields unchanged, including internal states and connected
+operations. Repeated evidence lists are replaced by exact locations, source/passage
+references, counts and support types. Quotations and rationales remain available
+verbatim through `inspect --pointer`; they are not summarized by another model.
+This view is for navigation, not a substitute for reading source support.
+
+Pointers follow the JSON-string form of [RFC 6901](https://www.rfc-editor.org/rfc/rfc6901),
+including escaped object keys and zero-based array indices. Invalid or nonexistent
+locations fail explicitly; no fuzzy field matching is performed. The existing
+`workflow_extraction read-batch` command can reopen several identified source
+passages together. Neither tool changes the evidence or the admission criteria.
+
 The existing native driver accepts one or several prepared selections in its
 manifest. It uses two sessions for the cohort: compiler, then fresh reviewer.
 Scientific evidence and property data remain attached to exact workflow/source
 versions. No universal module taxonomy, label-count quota, automatic relabeling,
 or automatic inheritance of memberships is introduced.
+
+`unresolved` and `gap_resolutions` contain inherited parent-workflow context; they
+are not automatically claims about every selected operation. Citation-coverage
+checks apply to the proposed member and selected states, operations, resources and
+flows. A parent resolution is additionally covered when its source references
+are used in the member's evidence. All inherited source quotations still undergo
+integrity checks. The reviewer must assess relevance, cite relied-on context and
+retain consequential uncertainty. Missing-coverage diagnostics identify the record
+location and source alternatives. This distinction arose from the
+[six-selection experiments](../examples/concept_experiments/README.md), where a
+ligation review was incorrectly forced to cite an unrelated analysis-scope note.
 
 For a controlled test or an externally prepared proposal, the driver also accepts
 `--proposal path/to/proposal.json`. It runs only the fresh reviewer and records

@@ -1,0 +1,88 @@
+{
+  "format_version": "operation_concept_catalogue/1.0",
+  "registry_revision": "903780c0e22660cb8712b076d2e2ed647c57bc0aacf70f21b103cacefa029613",
+  "concepts": {
+    "template_switching_reverse_transcription": {
+      "definition": {
+        "id": "template_switching_reverse_transcription",
+        "name": "Template-switching reverse transcription",
+        "substrate": "Primed RNA in an RNA-containing reaction, together with a reverse transcriptase, nucleotides and a template-switching oligonucleotide.",
+        "operation": "Synthesize first-strand cDNA from RNA and perform template switching to introduce an oligonucleotide-derived terminal sequence into the cDNA synthesis product.",
+        "physical_mechanism": "Reverse-transcriptase-mediated copying of RNA coupled to use of a template-switching oligonucleotide as a further synthesis template. This describes the enzyme/template transition; an exact terminal nucleotide structure or complete strand-level reaction is not required or inferred.",
+        "mechanism_unknown_reason": null,
+        "output": "A first-strand cDNA/template-switch reaction carrying RNA-derived sequence and a template-switch-derived handle suitable for the stated downstream amplification route.",
+        "information_effect": "Transfers RNA sequence into cDNA and adds a synthetic amplification handle associated with RNA-end capture. Full-length recovery of every RNA, strand retention and original-molecule identity are separate properties requiring evidence.",
+        "purpose": "Make RNA-derived cDNA accessible to subsequent amplification through template switching.",
+        "context_requirements": "Membership requires RNA-to-cDNA synthesis coupled to template switching within the represented transformation. Priming strategy, RNA-input scale, oligonucleotide modifications, incubation conditions and purification choices remain contextual properties."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [
+        "template-switch-coupled cDNA synthesis"
+      ],
+      "scope_note": "Requires the coupled RNA-copying and template-switch transition, not just installation of a synthetic handle. Does not require single-cell input, the Smart-seq2 brand, an LNA base or a particular cleanup policy. The selected 2013 product's exact end chemistry is unresolved. A shared-mechanism relation at this granularity establishes neither experimental substitution, ancestry, literature novelty nor a complete reaction recipe."
+    },
+    "transposase_adaptor_insertion_with_polymerase_repair": {
+      "definition": {
+        "id": "transposase_adaptor_insertion_with_polymerase_repair",
+        "name": "Transposase adaptor insertion followed by polymerase repair",
+        "substrate": "Prepared double-stranded DNA and transposase complexes loaded with synthetic sequencing-adaptor oligonucleotides.",
+        "operation": "Fragment DNA while transferring adaptor sequences to the fragments by transposition, then process the resulting adaptor-bearing intermediate with DNA polymerase to reach the stated repaired-library boundary.",
+        "physical_mechanism": "Transposase-catalyzed fragmentation and adaptor end joining, followed by polymerase-mediated end processing reported here as nick translation. Exact offset, short-strand fate, transposase release and residual covalent discontinuities are not specified by this mechanism-level category.",
+        "mechanism_unknown_reason": null,
+        "output": "Adaptor-bearing DNA fragment library after the represented polymerase repair step; the actual use must state what sequencing compatibility is reported and what strand structure remains unknown.",
+        "information_effect": "Preserves genomic insert sequence within newly delimited fragments and installs sequencing-access domains. Fragment boundaries and any insertion/representation bias are contextual; this operation does not itself record a pre-existing pairwise interaction or establish a provenance barcode.",
+        "purpose": "Convert DNA into adaptor-bearing fragments with the polymerase processing needed for the reported library endpoint.",
+        "context_requirements": "Membership requires both coupled transposase fragmentation/adaptor transfer and polymerase processing of that intermediate. Prepared transposomes are an input; their assembly and downstream cleanup/readout are separate boundaries. Adaptor brand, species, sample mass, temperature and whether a larger workflow later uses PCR do not define membership."
+      },
+      "relation": "shared_mechanism",
+      "aliases": [
+        "tagmentation with polymerase repair"
+      ],
+      "scope_note": "A composite transformation with two required stages: transposition-based fragmentation/adaptor installation, followed by polymerase processing of that intermediate. The intermediate alone must not be described as the final repaired library. The connected stages are admitted together because the retrieval question concerns the completed material interface, not because they share a local module. The observed NoPCR route and resources remain properties. Shared mechanism does not establish substitution, ancestry, novelty, complete sealing or an executable recipe."
+    },
+    "provenance_barcode_installation_by_ligation": {
+      "definition": {
+        "id": "provenance_barcode_installation_by_ligation",
+        "name": "Provenance-barcode installation by ligation",
+        "substrate": "Analyte-derived DNA or a DNA carrier already linked to analyte sequence, plus a barcode-bearing oligonucleotide assigned to a known sample, spatial region or other handling unit.",
+        "operation": "Covalently attach the barcode-bearing oligonucleotide to the analyte-linked DNA by ligation while the barcode-to-origin assignment is maintained.",
+        "physical_mechanism": "DNA-ligase-mediated nucleic-acid end joining. End alignment can use an existing compatible overhang or a complementary splint; those implementations and end chemistries remain distinct properties.",
+        "mechanism_unknown_reason": null,
+        "output": "Analyte-linked DNA carrying the ligated provenance barcode and any accompanying amplification, affinity or molecule-label domains.",
+        "information_effect": "Encodes the origin unit handled during labeling as a sequence associated with the analyte, permitting later attribution after pooling or recovery. The code identifies that unit; finer identities and additional UMI interpretation require separate evidence.",
+        "purpose": "Preserve sample or spatial provenance through subsequent library handling and sequencing.",
+        "context_requirements": "Membership requires a provenance code carried by the ligated oligonucleotide, a maintained physical barcode-to-origin assignment during joining, and a covalent analyte-linked output. A generic primer site, affinity mark or constant arm-separator alone is insufficient. Sample versus pixel, material support, end geometry, UMI, barcode length and delivery apparatus are contextual properties."
+      },
+      "relation": "shared_purpose",
+      "aliases": [
+        "ligation-based provenance barcoding"
+      ],
+      "scope_note": "A shared-purpose category for ligating provenance-bearing oligonucleotides to analyte-linked DNA. One code can identify a sample/pool; a second code can complete a spatial coordinate. These are distinct attribution units within the category, not interchangeable experiments. UMI and affinity/primer domains are optional co-carried properties. Constant joining adaptors and biotin alone are not provenance barcodes. No claim of ancestry, novelty, experimental substitution or complete recipe follows."
+    },
+    "physical_association_recording_by_nucleic_acid_ligation": {
+      "definition": {
+        "id": "physical_association_recording_by_nucleic_acid_ligation",
+        "name": "Recording physical association by nucleic-acid ligation",
+        "substrate": "Nucleic-acid segments whose pre-existing physical association is retained in a chromatin or ribonucleoprotein preparation until joining, together with the required ligation reagents and any bridge adaptors.",
+        "operation": "Ligate the associated segments into a covalent joint construct, directly or through a linker. A contextual use can include connected adaptor attachment and terminal activation required before the segment-joining step.",
+        "physical_mechanism": "Enzymatic end joining either directly between DNA fragments or between RNA arms through an adaptor, with different ligases, end structures and preparative steps in the individual uses. The shared relation is the recording purpose; these implementations are not asserted to be one detailed mechanism.",
+        "mechanism_unknown_reason": null,
+        "output": "A product population containing covalent constructs that link two associated nucleic-acid regions for joint sequence readout; unjoined and other byproducts, and separately handled controls, remain properties of the actual use.",
+        "information_effect": "Converts a retained physical association into a sequence-readable linkage between regions. It does not by itself establish exact distance, base pairing, direct contact, universal true-positive status or a quantitative interaction probability.",
+        "purpose": "Record relationships between nucleic-acid regions for later paired-region interpretation.",
+        "context_requirements": "Membership requires that joining two analyte regions is used to record their prior physical association. Merely attaching a known barcode to each analyte in a shared region is insufficient. DNA versus RNA, fixation/capture, direct versus linker-mediated joining, ligases, dilution, support, bridge sequence, controls and downstream biological interpretation remain contextual."
+      },
+      "relation": "shared_purpose",
+      "aliases": [
+        "association-recording ligation"
+      ],
+      "scope_note": "A shared-purpose category spanning direct chromatin-fragment ligation and adaptor-mediated RNA-arm joining. Membership concerns the association-recording production path of a supplied selection; a control that omits joining stays a separate control and does not become a positive joining event. Connected attachment/activation operations remain explicit. Biological meaning and mechanism must be compared through use properties. No experimental substitution, common ancestry, literature novelty, complete reaction recipe or universal validity of joined pairs is implied."
+    }
+  },
+  "admission_status": {
+    "template_switching_reverse_transcription": "admitted",
+    "transposase_adaptor_insertion_with_polymerase_repair": "admitted",
+    "provenance_barcode_installation_by_ligation": "admitted",
+    "physical_association_recording_by_nucleic_acid_ligation": "admitted"
+  }
+}

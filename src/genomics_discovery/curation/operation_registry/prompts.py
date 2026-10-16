@@ -26,19 +26,32 @@ contain several connected operations. Existing local module boundaries do not
 force a shared concept or define its granularity.
 Bounded tools:
 {tool} selections {q(run / 'selections.json')} list
+{tool} selections {q(run / 'selections.json')} overview OCCURRENCE_ID
+Start with overview: it preserves all recorded scientific fields, intermediate
+states and occurrence_sha256, replacing repeated evidence text with exact locators.
+It is a navigation view, not source evidence. Fetch needed quotations/rationales:
+{tool} selections {q(run / 'selections.json')} inspect OCCURRENCE_ID --pointer /record/operations/0/evidence
 {tool} selections {q(run / 'selections.json')} inspect OCCURRENCE_ID --field operations
 {tool} selections {q(run / 'selections.json')} inspect OCCURRENCE_ID --field inputs
 {tool} selections {q(run / 'selections.json')} inspect OCCURRENCE_ID --field outputs
 {tool} selections {q(run / 'selections.json')} inspect OCCURRENCE_ID --field requirements
 {tool} selections {q(run / 'selections.json')} inspect OCCURRENCE_ID
 {tool} selections {q(run / 'selections.json')} find 'property terms' --field operations --limit 6
-Allowed fields: operations, inputs, outputs, information_effects, requirements, flows, unresolved.
-The complete view contains the exact occurrence_sha256 needed by an Assignment.
+Allowed fields: operations, inputs, outputs, internal_states, external_operations,
+information_effects, requirements, flows, unresolved, gap_resolutions.
+Use field/pointer access for detail; do not repeatedly dump a complete view when
+output is truncated. The original complete view remains available via inspect.
 Old reviewer judgments are withheld. Reopen sources; an extraction is not authority.
+unresolved and gap_resolutions are inherited parent-workflow context, not all
+claims about this selection. Assess their relevance. If a membership relies on
+a context note, cite its source in the member evidence and discuss its effect;
+do not ignore relevant uncertainty or automatically import unrelated analysis.
 {sources}
 {source} catalog PACKET --focus methods
 {source} search PACKET 'specific terms' --limit 6
 {source} read PACKET --source-id SOURCE_ID --passage-id PASSAGE_ID
+{source} read-batch PACKET --ref SOURCE_ID PASSAGE_ID --ref SOURCE_ID ANOTHER_PASSAGE_ID
+Batch already identified passages when useful; references must be exact.
 Do not repeatedly dump whole papers. Inspect passages needed for the whole selected
 transformation, including its interfaces, information effects and context.
 
