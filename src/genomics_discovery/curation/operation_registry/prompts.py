@@ -73,8 +73,20 @@ conditions, supports, reagent brands or workflow positions. Explain exceptions.
 Distinguish required membership conditions from observed implementation details.
 A definition still needs a whole transformation: input, action/mechanism or explicit
 unknown, output, information effect and context. A broad word alone is insufficient.
-Shared purpose and shared mechanism are distinct relations. Neither establishes
-experimental substitution, ancestry, literature novelty or a full reaction recipe.
+The relation states this concept's claim at its declared level of abstraction;
+it is not an exclusive taxonomy. shared_purpose asserts a common function or
+information outcome, without asserting that mechanisms are equal or different.
+shared_mechanism requires a named transformation mechanism that covers the entire
+selected unit, with its inputs, consequential actions and outputs accounted for.
+A common enzyme, reagent or verb does not establish that claim. State the level
+in the definition/scope_note and retain consequential implementation differences.
+The historical field name physical_mechanism also covers a computational mechanism
+for a data-only selection: explicitly describe the algorithm, without inventing a
+wet-lab reaction. For shared_purpose, no common mechanism need be asserted: use
+physical_mechanism=null and explain this in mechanism_unknown_reason. That does
+not mean each individual operation's mechanism is scientifically unknown.
+Neither relation establishes experimental substitution, ancestry, literature
+novelty or a full reaction recipe.
 
 Boundary examples must reference actual supplied occurrence IDs with member,
 non_member or unknown, a reason and exact evidence from that example's source packet.
@@ -111,12 +123,29 @@ structural errors, never alter evidence to make a scientific assertion pass.
     return common + f"""
 Read {run / 'proposal.json'}, not the compiler conversation. Write VocabularyReview
 to {attempt / 'artifact.json'}; proposal_sha256={proposal_hash}. Provide exactly
-one AdmissionReview per decision, binding its exact decision_sha256 (the check
-helper reports hashes when run without --review).
+one AdmissionReview per decision with format_version=concept_admission_review/2.0,
+binding its exact decision_sha256 (the check helper reports hashes when run
+without --review).
 For each proposed assignment return a source_review binding the exact Assignment
 hash, checking its sole member with supported/unsupported/unresolved, actual
 inspected passages, exact quotes and rationale. Cover the whole selected unit.
-For assignment=null return source_review=null.
+Also return definition_checks covering each definition field exactly once:
+substrate, operation, physical_mechanism, output, information_effect, purpose,
+context_requirements. Each check needs fields, verdict, rationale and evidence.
+Several fields may share one check only when the same evidence genuinely addresses
+each claim. Judge the actual field text against this selection's sources; a quote
+about the general topic is insufficient. Use supported/unsupported/unresolved;
+use not_asserted only for physical_mechanism=null, with empty evidence and a reason.
+Supported or contradicted claims need exact evidence from the source_review's
+declared inspected passages. For unresolved claims, cite relevant available text
+when useful; evidence may be empty if no relevant support was located. Explain
+the missing bridge within the declared inspected scope, never add an incidental
+citation merely to populate a field. An unresolved claim still prevents admission.
+Explain which claim the evidence supports, contradicts or leaves unresolved.
+Evidence of absence is limited to the inspected source scope, not all literature.
+An unsupported definition field blocks membership; an unresolved field requires
+research. Do not compensate for either with an approving overall rationale.
+For assignment=null return source_review=null and definition_checks=[].
 Independently judge vocabulary_verdict=admit, properties_only or provisional.
 Check question usefulness, boundary clarity, separation of contextual properties,
 and whether an existing concept plus filters suffices. Review ALL boundary-example

@@ -4,6 +4,23 @@ Decision recorded 2026-10-16, before implementation. The frozen development
 contract is archived with the pilot. This is an application-specific policy,
 not a claim to infer a uniquely correct biochemical taxonomy.
 
+The 2026-10-17 update adds [definition-specific review and admission consistency](BEHAVIOR_CONTRACT.md).
+New admissions require `concept_admission_review/2.0`; historical v1 results remain
+readable under their original contract. The definition's substrate, operation,
+mechanism, output, information effect, purpose and context each receive an explicit
+supported/unsupported/unresolved judgment. Several fields can share a check when
+the same evidence addresses them. A null mechanism is explicitly not asserted.
+An unresolved claim can have no quotation if the inspected sources lack relevant
+support; this blocks admission rather than forcing a filler citation.
+
+The host also rejects contradictory admitted member/non-member assertions for an
+identical concept definition, relation and operation selection, within a batch and
+against existing admitted records. Different relations, different operation cuts,
+unknowns and unadmitted judgments are not collapsed. This is a consistency check,
+not a mechanism for determining which conflicting scientific claim is correct.
+There is currently no automatic retraction/re-review path for earlier admitted
+errors; conflicts require explicit reconciliation before the next commit.
+
 ## Reference audit
 
 [Noy and McGuinness](https://protege.stanford.edu/publications/ontology_development/ontology101-noy-mcguinness.html)

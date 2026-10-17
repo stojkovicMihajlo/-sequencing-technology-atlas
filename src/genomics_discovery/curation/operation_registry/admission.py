@@ -2,7 +2,7 @@
 
 from typing import Annotated, Literal
 
-from pydantic import Field, model_validator
+from pydantic import Field, TypeAdapter, model_validator
 
 from genomics_discovery.core.artifacts import StrictModel
 from genomics_discovery.curation.workflow_extraction.models import Text, EvidenceSet, digest, validate_evidence
@@ -10,6 +10,7 @@ from genomics_discovery.curation.workflow_extraction.transformations import (
     Hash, MemberCheck, MembershipReview, review_membership,
 )
 from .models import Assignment
+from .definition_review import DefinitionCheck, validate_definition_review
 
 
 class BoundaryExample(StrictModel):
@@ -55,6 +56,16 @@ class AdmissionReview(StrictModel):
     boundary_checks: tuple[MemberCheck, ...] = ()
 
 
+class AdmissionReviewV2(AdmissionReview):
+    format_version: Literal["concept_admission_review/2.0"]
+    definition_checks: tuple[DefinitionCheck, ...]
+
+
+def load_admission_review(value):
+    """Read historical reviews unchanged; only V2 can authorize a new admission."""
+    return TypeAdapter(AdmissionReviewV2 | AdmissionReview).validate_python(value)
+
+
 class VocabularyProposal(StrictModel):
     decisions: Annotated[tuple[LabelDecision, ...], Field(min_length=1)]
 
@@ -67,7 +78,11 @@ class VocabularyProposal(StrictModel):
 
 class VocabularyReview(StrictModel):
     proposal_sha256: Hash
-    reviews: tuple[AdmissionReview, ...]
+    reviews: tuple[AdmissionReviewV2 | AdmissionReview, ...]
+
+
+class CurrentVocabularyReview(VocabularyReview):
+    reviews: tuple[AdmissionReviewV2, ...]
 
 
 def validate_decision(decision, snapshot, occurrences, packets):
@@ -100,6 +115,8 @@ def evaluate(decision, review, occurrences, packets):
     """Derive an outcome; no reviewer-supplied overall approval bypasses either gate."""
     if review.decision_sha256 != digest(decision):
         raise ValueError("Admission review does not bind the exact decision")
+    if not isinstance(review, AdmissionReviewV2):
+        raise ValueError("A new admission requires concept_admission_review/2.0; historical reviews remain readable")
     proposal = decision.assignment
     extra_examples = {e.occurrence_id: e for e in decision.case.boundary_examples
                       if e.occurrence_id != decision.occurrence_id}
@@ -122,6 +139,8 @@ def evaluate(decision, review, occurrences, packets):
             raise ValueError("Proposed assignment needs a source review")
         source_status = review_membership(proposal, review.source_review,
                                           occurrences, packets)["status"]
+    definition_status = validate_definition_review(
+        proposal, review.definition_checks, review.source_review, packets[decision.occurrence_id])
     if review.vocabulary_verdict == "admit":
         if not (review.question_useful and review.boundary_clear
                 and review.context_properties_separated):
@@ -135,7 +154,12 @@ def evaluate(decision, review, occurrences, packets):
         outcome = "provisional"
     if proposal is not None and source_status != "supported_membership_candidate":
         outcome = source_status
+    if definition_status == "needs_revision" or (
+        definition_status == "research_needed" and outcome != "needs_revision"
+    ):
+        outcome = definition_status
     return {"status": outcome, "source_status": source_status,
+            "definition_status": definition_status,
             "decision_sha256": digest(decision), "review_sha256": digest(review)}
 
 
@@ -152,4 +176,6 @@ def validate_batch(proposal, review, snapshot, occurrences, packets):
         lookups = validate_decision(decision, snapshot, occurrences, packets)
         outcomes.append({**evaluate(decision, checks[digest(decision)], occurrences, packets),
                          "lookup_results": lookups, "occurrence_id": decision.occurrence_id})
+    from .consistency import check_batch_consistency
+    check_batch_consistency(proposal, review, snapshot, outcomes)
     return outcomes

@@ -11,7 +11,8 @@ from genomics_discovery.curation.workflow_extraction.transformations import (
 )
 
 from .models import Assignment, Decision
-from .admission import (LabelDecision, AdmissionReview, VocabularyProposal, VocabularyReview,
+from .admission import (LabelDecision, AdmissionReviewV2, VocabularyProposal, VocabularyReview,
+                        CurrentVocabularyReview,
                         validate_decision, validate_batch)
 from .store import Registry, catalogue, check_proposal, graph_overlay, revision, search, uses
 
@@ -91,7 +92,7 @@ def main():
     if args.command == "schema":
         result = {"decision": Decision, "assignment": Assignment,
                   "review": MembershipReview, "vocabulary": VocabularyProposal,
-                  "vocabulary-review": VocabularyReview}[args.kind].model_json_schema()
+                  "vocabulary-review": CurrentVocabularyReview}[args.kind].model_json_schema()
     elif args.command == "selections":
         from .selections import FIELDS, find_selections, list_selections
         from .selection_views import selection_overview, inspect_pointer
@@ -208,7 +209,7 @@ def main():
             result = Registry(args.database).apply(proposal,
                 MembershipReview.model_validate_json(args.review.read_bytes()), occurrences, packets,
                 admission_decision=LabelDecision.model_validate_json(args.admission_decision.read_bytes()),
-                admission_review=AdmissionReview.model_validate_json(args.admission_review.read_bytes()))
+                admission_review=AdmissionReviewV2.model_validate_json(args.admission_review.read_bytes()))
         else:
             snapshot = json.loads(args.snapshot.read_text())
             lookups = check_proposal(snapshot, proposal, occurrences, packets)

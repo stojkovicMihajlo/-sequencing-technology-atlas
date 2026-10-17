@@ -43,6 +43,7 @@ def attach_to_graph(graph: dict, snapshot: dict) -> dict:
     result["edges"].extend([*overlay["edges"], *edges])
     result["concept_registry"] = {"revision": digest(snapshot), "concepts": snapshot["concepts"],
                                   "admission_status": catalogue(snapshot)["admission_status"],
+                                  "review_contracts": catalogue(snapshot)["review_contracts"],
                                   "boundary": BOUNDARY}
     result["concept_assignments"] = deepcopy(snapshot["assignments"])
     result["statistics"] = summarize(result)

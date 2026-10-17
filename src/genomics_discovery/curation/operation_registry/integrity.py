@@ -6,7 +6,8 @@ from genomics_discovery.curation.workflow_extraction.transformations import (
 )
 
 from .models import Assignment
-from .admission import AdmissionReview, LabelDecision
+from .admission import AdmissionReviewV2, LabelDecision, load_admission_review
+from .definition_review import definition_outcome
 
 FORMAT = "operation_concept_registry/1.0"
 
@@ -19,13 +20,19 @@ def validate_snapshot(snapshot: dict) -> None:
     seen_concepts, seen_uses = set(), {}
     for key, row in snapshot.get("decisions", {}).items():
         decision = LabelDecision.model_validate(row["decision"])
-        check = AdmissionReview.model_validate(row["review"])
+        check = load_admission_review(row["review"])
         occurrence = TransformationOccurrence.model_validate(row["occurrence"])
         if (key != digest(decision) or check.decision_sha256 != key
             or digest(check) != row["review_sha256"]
             or decision.occurrence_id != occurrence.id
             or digest(occurrence) != row["occurrence_sha256"]):
             raise ValueError("Stored admission decision/review binding differs")
+        if isinstance(check, AdmissionReviewV2):
+            status = definition_outcome(decision.assignment, check.definition_checks)
+            if row["outcome"].get("definition_status") != status:
+                raise ValueError("Stored definition outcome differs from its checks")
+            if row["outcome"]["status"] == "admit" and status != "supported_definition":
+                raise ValueError("Stored admission has unsupported definition claims")
     for key, row in snapshot["assignments"].items():
         proposal = Assignment.model_validate(row["proposal"])
         occurrence = TransformationOccurrence.model_validate(row["occurrence"])
@@ -47,7 +54,7 @@ def validate_snapshot(snapshot: dict) -> None:
             if admission is None:
                 raise ValueError("Stored assignment lacks its admission record")
             decision = LabelDecision.model_validate(admission["decision"])
-            check = AdmissionReview.model_validate(admission["review"])
+            check = load_admission_review(admission["review"])
             if (decision.assignment != proposal or check.source_review != review
                 or check.vocabulary_verdict != "admit" or admission["outcome"]["status"] != "admit"
                 or not (check.question_useful and check.boundary_clear and check.context_properties_separated)
@@ -73,3 +80,5 @@ def validate_snapshot(snapshot: dict) -> None:
             raise ValueError("Duplicate stored concept use without explicit supersession")
     if seen_concepts != snapshot["concepts"].keys():
         raise ValueError("Stored concept has no reviewed assignment")
+    from .consistency import check_snapshot_consistency
+    check_snapshot_consistency(snapshot)

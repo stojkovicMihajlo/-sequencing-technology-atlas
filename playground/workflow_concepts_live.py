@@ -14,7 +14,7 @@ from genomics_discovery.curation.codex_worker import (
 )
 from genomics_discovery.curation.operation_registry.__main__ import load_manifest
 from genomics_discovery.curation.operation_registry.admission import (
-    VocabularyProposal, VocabularyReview, validate_decision, validate_batch,
+    VocabularyProposal, CurrentVocabularyReview, validate_decision, validate_batch,
 )
 from genomics_discovery.curation.operation_registry.prompts import build_prompt
 from genomics_discovery.curation.operation_registry.store import Registry, catalogue
@@ -127,13 +127,15 @@ async def execute(manifest_path: Path, database: Path, run: Path, *, worker=None
         write(run / "proposal.json", proposal.model_dump(mode="json"))
         write(run / "lookup_results.json", lookups)
         pins[run / "proposal.json"] = sha(run / "proposal.json")
-        review = await stage("reviewer", VocabularyReview, digest(proposal))
+        review = await stage("reviewer", CurrentVocabularyReview, digest(proposal))
         write(run / "review.json", review.model_dump(mode="json"))
         validate_batch(proposal, review, snapshot, occurrences, packets)
         check()
         provenance = {"kind": "supplied_proposal_native_review" if supplied_proposal else "fresh_native_threads",
                       "independent_execution_verified": supplied_proposal is None,
                       "fresh_review_execution_verified": True,
+                      "source_inspection": "reviewer_declared_not_host_attested",
+                      "definition_review_contract": "concept_admission_review/2.0",
                       "threads": [a["thread_id"] for a in state["attempts"]],
                       "archive_paths": [a["attempt"] for a in state["attempts"]]}
         state["commit"] = registry.apply_batch(proposal, review, occurrences, packets, provenance=provenance)

@@ -1,0 +1,687 @@
+{
+  "date": "2026-10-17",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "arms": [
+    {
+      "arm": "controls",
+      "status": "committed",
+      "stages": [
+        {
+          "role": "reviewer",
+          "status": "complete",
+          "elapsed_seconds": 261.59899345901795,
+          "usage": {
+            "input_tokens": 760366,
+            "cached_input_tokens": 683648,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 16351,
+            "reasoning_output_tokens": 4930
+          },
+          "artifact_sha256": "151ebd1e20f717bdef5f7e2eaafe3e12d6ed02a140fb3588e77632806ce6d391",
+          "completed_commands": 24,
+          "nonzero_commands": 0,
+          "source_read_command_mentions": 3,
+          "archived_stdout_bytes": 245409,
+          "expectation_path_mentions_in_commands": [],
+          "limits": "Command mentions are trace diagnostics, not proof of reading, understanding, or OS-level blinding."
+        }
+      ],
+      "worker_seconds": 261.59899345901795,
+      "decisions": [
+        {
+          "occurrence_id": "tagmentation:99bb0477c9177bae280717c701b4f763e0362344b14bc780f3b5644dbb3343da:08d0745d8b4cd8a73f9d15379780d74af8a931f0854c860a258f9ec7904154e5",
+          "concept": "tn5_dna_fragmentation_adapter_tagging",
+          "relation": "shared_mechanism",
+          "assignment_decision": "reuse",
+          "outcome": "admit",
+          "source_status": "supported_membership_candidate",
+          "definition_status": "supported_definition",
+          "review_contract": "concept_admission_review/2.0",
+          "review_rationale": "The useful comparison question is which selected transformations couple DNA fragmentation and sequencing-adapter introduction through Tn5. The admitted tn5_dna_fragmentation_adapter_tagging definition covers this entire single-reaction unit; reuse plus genomic-DNA, NoPCR adapter-design and reaction-condition filters suffices. The cohort was considered together: the other tagmentation selection additionally performs polymerase nick translation, while the Smart-seq2 selection copies RNA and introduces a template-switch handle. A generic 'handle addition' merger would lose substrate, fragmentation and mechanism distinctions; equating this unit with the repaired library would lose its pre-repair endpoint. No narrower label for NoPCR adapters, HMW buffer, DNA species or incubation is warranted. Preserve prepared DNA species and 100/200 ng amount, Ez-Tn5-loaded NoPCR1/2 adapters with P1/P2 intent, 5 \u00b5l transposomes, HMW-buffer recipe, 55\u00b0C/5 min, the pre-nick-translation endpoint, size/coverage limitations and unresolved terminal chemistry on this use. Selection searches for ME-adapter output and nick translation demonstrate that these endpoint and reaction properties distinguish the supplied cuts. Only the target was proposed as a boundary example and it is source-supported. Admission here approves this reuse; it adds no new concept, recipe guarantee or unreviewed members.",
+          "definition_checks": [
+            {
+              "fields": [
+                "substrate"
+              ],
+              "verdict": "supported",
+              "rationale": "The target supplies previously prepared genomic DNA and adapter-loaded transposomes. This satisfies the definition's DNA-containing substrate condition without requiring chromatin. The broader permitted chromatin states are not asserted for this occurrence.",
+              "source_references": [
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            },
+            {
+              "fields": [
+                "operation"
+              ],
+              "verdict": "supported",
+              "rationale": "p00009 explicitly couples fragmentation and ME-adapter joining, and the NoPCR-specific payload is established in p00047. This accounts for the entire single selected action.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00047"
+              ]
+            },
+            {
+              "fields": [
+                "physical_mechanism"
+              ],
+              "verdict": "supported",
+              "rationale": "Hyperactive Tn5 integration is explicitly reported, and the selected preparation assembles Ez-Tn5 with annealed adapters. Together these support the named adapter-loaded Tn5 fragmentation/tagging mechanism, without a strand-resolved intermediate claim.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00047"
+              ]
+            },
+            {
+              "fields": [
+                "output"
+              ],
+              "verdict": "supported",
+              "rationale": "The definition's tagmented adapter-bearing reaction product before end completion matches this selection's endpoint. p00048 distinguishes the subsequent polymerase incubation and p00028 identifies its later Illumina-ready output. The definition does not claim that tagging alone completes every strand.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00028",
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            },
+            {
+              "fields": [
+                "information_effect"
+              ],
+              "verdict": "supported",
+              "rationale": "Joining the actual cluster-compatible payload to genomic fragments supports retained substrate-derived insert sequence plus added adapter information. p00033 directly qualifies size and representation: no universal insert size or bias-free output is supported. Upstream selection/accessibility is a per-use interpretation condition, not a claim that this genomic-DNA sample measures chromatin accessibility.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00033",
+                "adey2010:p00047"
+              ]
+            },
+            {
+              "fields": [
+                "purpose"
+              ],
+              "verdict": "supported",
+              "rationale": "The PCR-free route explicitly introduces cluster-formation adapter sequences during transposition for library construction, supporting the stated subsequent sequencing-library purpose.",
+              "source_references": [
+                "adey2010:p00028"
+              ]
+            },
+            {
+              "fields": [
+                "context_requirements"
+              ],
+              "verdict": "supported",
+              "rationale": "The actual DNA, preassembled adapter-loaded Tn5 and reported incubation support the necessary tagging conditions. DNA state, adapter implementation, quantities, commercial products and incubation values are observed properties; this source does not make them universal requirements or establish experimental substitution among states.",
+              "source_references": [
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            }
+          ]
+        },
+        {
+          "occurrence_id": "tagmentation:99bb0477c9177bae280717c701b4f763e0362344b14bc780f3b5644dbb3343da:9073789d5595d9bcdc138eed381c879043d868042b5303889ab0f2e17fbb2e19",
+          "concept": "tn5_dna_fragmentation_adapter_tagging",
+          "relation": "shared_mechanism",
+          "assignment_decision": "reuse",
+          "outcome": "needs_revision",
+          "source_status": "needs_revision",
+          "definition_status": "needs_revision",
+          "review_contract": "concept_admission_review/2.0",
+          "review_rationale": "The question of which transformations fragment DNA and introduce adapters through Tn5 is useful, but this proposal gives a component answer while claiming whole-unit shared_mechanism coverage. Existing tn5_dna_fragmentation_adapter_tagging plus substrate, adapter and temperature filters suffices for the Tn5 component only. Selection/property search for 'nick translation' returns the combined selection, and the original p00048/p00028 show that this property denotes an additional consequential polymerase action and an advanced product state. It cannot repair the existing concept's explicit pre-end-completion endpoint. Merging the complete cuts under that mechanism would lose the distinction between adapter-tagged intermediate and nick-translated, author-described Illumina-ready library, including its polymerase dependency. Preserve both actions, their order and tagmented internal state, NoPCR adapter domains, genomic-DNA amounts, 55\u00b0C/5 min tagging, FailSafe reagent additions and 72\u00b0C/5 min repair, unpurified final reaction, size/coverage qualifications and uncertain exact covalent structure. There is no need to mint a label for the FailSafe brand or specific temperatures. The target boundary-example claim that nick translation is merely a condition is unsupported and blocks admission. Retain this case provisionally for a properly scoped compound comparison or explicit component-level indexing; do not broaden the frozen definition, silently recut this occurrence or force the Tn5 and polymerase mechanisms into one mechanism. No revision request was supplied and this review makes no registry change.",
+          "definition_checks": [
+            {
+              "fields": [
+                "substrate"
+              ],
+              "verdict": "supported",
+              "rationale": "The combined unit begins with the same genomic DNA and adapter-loaded Tn5 inputs as the single reaction; the definition's initial-substrate condition is satisfied.",
+              "source_references": [
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            },
+            {
+              "fields": [
+                "operation"
+              ],
+              "verdict": "unsupported",
+              "rationale": "The definition describes only coupled Tn5 fragmentation and adapter introduction. The selected unit additionally performs a separate polymerase nick-translation action. The whole selected transformation is therefore not covered by the actual operation text.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00028",
+                "adey2010:p00048"
+              ]
+            },
+            {
+              "fields": [
+                "physical_mechanism"
+              ],
+              "verdict": "unsupported",
+              "rationale": "Adapter-loaded hyperactive Tn5 explains the first action but does not account for the later FailSafe DNA-polymerase incubation and repair output. A common initial Tn5 reaction is insufficient for the proposed whole-unit shared_mechanism claim.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00028",
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            },
+            {
+              "fields": [
+                "output"
+              ],
+              "verdict": "unsupported",
+              "rationale": "The definition explicitly ends before separately required end completion, whereas this selection ends after nick translation. p00028 states the consequential Illumina-ready outcome. This is a direct boundary mismatch, even though exact residual nick/covalent structure is not resolved.",
+              "source_references": [
+                "adey2010:p00028",
+                "adey2010:p00048"
+              ]
+            },
+            {
+              "fields": [
+                "information_effect"
+              ],
+              "verdict": "supported",
+              "rationale": "The asserted addition of adapter sequence and retention of genomic insert information remains true through the combined unit; no barcode, full sealing or unbiased sampling is asserted. This true information-level description does not account for the missing repair mechanism or repair-ready endpoint and cannot rescue those unsupported fields.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00028",
+                "adey2010:p00033",
+                "adey2010:p00047"
+              ]
+            },
+            {
+              "fields": [
+                "purpose"
+              ],
+              "verdict": "supported",
+              "rationale": "Both stages serve the reported PCR-free sequencing-library route, so the broad purpose of producing adapter-bearing fragments for sequencing preparation is supported. This purpose is less specific than the actual repaired endpoint and is not evidence of mechanism identity.",
+              "source_references": [
+                "adey2010:p00028"
+              ]
+            },
+            {
+              "fields": [
+                "context_requirements"
+              ],
+              "verdict": "supported",
+              "rationale": "DNA, adapter-loaded Tn5 and tagging-compatible conditions are actual necessary conditions for the initial action, and brands/doses/temperatures can remain properties. The text does not claim that these are a sufficient full recipe. It does not license treating the separately reported polymerase action as an incidental condition; that whole-unit failure is recorded under operation, physical_mechanism and output.",
+              "source_references": [
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            }
+          ]
+        },
+        {
+          "occurrence_id": "smart-seq2:e51f2b8c6e9389c8c31829fd6b4a9c7e174e9106d66c030c3307dcb0af34790b:7d7c748145a695d2d5b5d720df37eba8fd7b2200825e5fe3d276c922581f6032",
+          "concept": "template_switching_reverse_transcription",
+          "relation": "shared_mechanism",
+          "assignment_decision": "new",
+          "outcome": "needs_revision",
+          "source_status": "needs_revision",
+          "definition_status": "needs_revision",
+          "review_contract": "concept_admission_review/2.0",
+          "review_rationale": "The retrieval question of how a template-switch handle enters RNA-derived cDNA is useful. The admitted reverse_transcription_template_switch_pcr_handle already defines the connected RNA-copying and qualitative template-switch PCR-handle transformation, leaving exact terminal intermediates unspecified. The selection search for template switching identifies this supplied implementation; anchored priming, rGrG+G sequence/modifications, SuperScript II, dose, incubation and no-bead transfer distinguish it as properties. The proposed case itself says existing-plus-filters suffices and identifies no additional supported retrieval distinction. The actual new definition's RNA-ligase mechanism is unsupported, so it cannot establish a new mechanistic boundary or membership; its target example's valid RT/TSO facts do not entail that claim. Existing RT/template-switch reuse should be considered in a corrected proposal, rather than admitting this duplicate label or silently changing either definition. No supported consequential distinction is lost by that reuse; preserve RNA versus DNA substrate, RNA copying, template switching and the amplification-handle outcome so they remain distinct from Tn5 fragmentation/tagging. If a ligase-based handle-installation operation were later evidenced, its different mechanism would require its own assessment, not forced inclusion in an RT-synthesis class. Preserve single-cell-lysate versus total-RNA input, oligo-dT priming and sequence, TSO sequence/dose/LNA modification, first-strand reagent additions, RT schedule/inactivation, direct amplification interface, unresolved final single-cell volume and unreported exact end chemistry. No label for that brand/condition/cleanup combination is needed. Only the target was supplied as a boundary example, so no extra-example membership is conferred. There is no revision request to execute.",
+          "definition_checks": [
+            {
+              "fields": [
+                "substrate"
+              ],
+              "verdict": "supported",
+              "rationale": "The Methods describe total RNA or single-cell lysates primed with anchored oligo-dT and dNTPs, then supplied with SuperScript II and TSO. Tables 2/4 identify the actual selected TSO. These support the actual substrate text without importing the other tested TSOs.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "operation"
+              ],
+              "verdict": "supported",
+              "rationale": "The reported first-strand RT reaction, selected template-switch oligo and shared primer/TSO/ISPCR handle sequences support RNA-to-cDNA synthesis coupled to template-switch-derived sequence addition at this qualitative level. The handle interpretation is inferred from these sequences and downstream amplification, not proof of the separate ligase mechanism claim.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:picelli2013:p00032",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "physical_mechanism"
+              ],
+              "verdict": "unsupported",
+              "rationale": "The positive assertion of ATP-dependent RNA-ligase covalent joining, and its explicit exclusion of RT synthesis using the TSO, is not supported by this implementation's inspected Methods or tables. The original first-strand list reports SuperScript II and a TSO with dNTP/primer input and an RT program, not an RNA-ligase addition or ligase-mediated joining step. A TSO sequence and unreported exact terminal chemistry do not establish ligation. This verdict concerns evidentiary support within the inspected scope; it is not a claim that ligation chemistry is impossible in every protocol.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:picelli2013:p00032",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "output"
+              ],
+              "verdict": "supported",
+              "rationale": "Post-RT first-strand cDNA material and the selected direct-to-KAPA preamplification interface are supported. Primer, TSO and downstream ISPCR sequence correspondence supports the qualified handle-bearing product interpretation. No complete terminal covalent structure or universal full-length product is claimed by this output field.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00030",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "information_effect"
+              ],
+              "verdict": "supported",
+              "rationale": "RNA-derived cDNA synthesis plus a synthetic amplification handle is supported by the RT reaction and sequence correspondence. p00003 expressly associates template switching with RNA 5'-end capture. The field appropriately withholds universal full-length, strand and original-molecule guarantees; these are not established by the inspected passages.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00003",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table2:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "purpose"
+              ],
+              "verdict": "supported",
+              "rationale": "The selected TSO and downstream ISPCR/KAPA amplification interface support making RNA-derived cDNA accessible to amplification through template switching. The source reports a first-strand product and no intervening bead purification for Smart-seq2.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00030",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "context_requirements"
+              ],
+              "verdict": "supported",
+              "rationale": "The qualitative condition is coupled RNA copying and template switching, supported by the RT system and actual TSO. Primer choice, input scale, LNA modification, temperature program and cleanup choices are observed properties rather than universal category requirements. Exact final single-cell concentrations/volume are not established or required by this field.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00030",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:picelli2013:p00032",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            }
+          ]
+        }
+      ],
+      "original_graph_preserved": true,
+      "initial_definitions_preserved": true,
+      "new_admissions": 1,
+      "new_concepts": 0,
+      "projected_concept_edges": 5,
+      "projected_graph_reloaded": true
+    },
+    {
+      "arm": "natural",
+      "status": "committed",
+      "stages": [
+        {
+          "role": "compiler",
+          "status": "complete",
+          "elapsed_seconds": 344.43228695896687,
+          "usage": {
+            "input_tokens": 924434,
+            "cached_input_tokens": 840576,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 21664,
+            "reasoning_output_tokens": 6659
+          },
+          "artifact_sha256": "e3f12524c3f1ae132ce942444a2931e59373c955cc9922736a6beb3de074dd93",
+          "completed_commands": 48,
+          "nonzero_commands": 0,
+          "source_read_command_mentions": 6,
+          "archived_stdout_bytes": 280513,
+          "expectation_path_mentions_in_commands": [],
+          "limits": "Command mentions are trace diagnostics, not proof of reading, understanding, or OS-level blinding."
+        },
+        {
+          "role": "reviewer",
+          "status": "complete",
+          "elapsed_seconds": 360.89400033297716,
+          "usage": {
+            "input_tokens": 964850,
+            "cached_input_tokens": 872960,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 20599,
+            "reasoning_output_tokens": 6018
+          },
+          "artifact_sha256": "a2b9d6709c664dde838f3877c830bbf4b29e3033a93312cef17bc18092f6ca3c",
+          "completed_commands": 26,
+          "nonzero_commands": 0,
+          "source_read_command_mentions": 3,
+          "archived_stdout_bytes": 428304,
+          "expectation_path_mentions_in_commands": [],
+          "limits": "Command mentions are trace diagnostics, not proof of reading, understanding, or OS-level blinding."
+        }
+      ],
+      "worker_seconds": 705.326287291944,
+      "decisions": [
+        {
+          "occurrence_id": "tagmentation:99bb0477c9177bae280717c701b4f763e0362344b14bc780f3b5644dbb3343da:08d0745d8b4cd8a73f9d15379780d74af8a931f0854c860a258f9ec7904154e5",
+          "concept": "tn5_dna_fragmentation_adapter_tagging",
+          "relation": "shared_mechanism",
+          "assignment_decision": "reuse",
+          "outcome": "admit",
+          "source_status": "supported_membership_candidate",
+          "definition_status": "supported_definition",
+          "review_contract": "concept_admission_review/2.0",
+          "review_rationale": "The useful retrieval question is which whole transformations couple Tn5 fragmentation to sequencing-adapter introduction, with implementation comparisons by substrate, payload and product stage. Independent registry lookup returns the admitted tn5_dna_fragmentation_adapter_tagging definition unchanged in this reuse. Selection/property searches for DNA in operations return both tagmentation and Hi-C, whereas genomic in inputs returns this selection: substrate alone is insufficient, but the existing required coupled action plus prepared-genomic-DNA, NoPCR/P1/P2 and pre-nick-translation filters answers the question. No new genomic-DNA/PCR-free label is warranted. Merging into this existing concept loses no consequential distinction when these properties are retained; a generic joining/tagging category would lose fragmentation coupling and confuse synthetic-adapter installation with Hi-C proximity junctions or RNA-to-cDNA copying. Required membership is DNA plus loaded Tn5 performing both actions and yielding adapter-bearing fragments. Species, input amount, enzyme product, buffer, incubation, adapter sequence, route context and unresolved strand details remain on this use. The whole selected unit fits the qualitative shared_mechanism level; it does not establish substitution or a complete reaction recipe. All supplied boundary claims are supported. Historical chromatin examples in the immutable registry scope are not assigned or independently revalidated here.",
+          "definition_checks": [
+            {
+              "fields": [
+                "substrate"
+              ],
+              "verdict": "supported",
+              "rationale": "The actual input is previously prepared bacterial or human genomic DNA, satisfying the definition's DNA-containing substrate requirement. Accessibility is operationally supported by the reported reaction. The conditional chromatin/prior-enrichment language permits other contexts; it does not assert chromatin or enrichment for this member, and their historical implementations are outside this source review.",
+              "source_references": [
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            },
+            {
+              "fields": [
+                "operation"
+              ],
+              "verdict": "supported",
+              "rationale": "The source explicitly reports both fragmentation and ME-adapter joining, and the selected NoPCR route supplies cluster-compatible adapter domains. This supports the full coupled operation rather than a common enzyme or tagging verb alone.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            },
+            {
+              "fields": [
+                "physical_mechanism"
+              ],
+              "verdict": "supported",
+              "rationale": "The source identifies a hyperactive Tn5 derivative for synthetic-oligonucleotide integration and directly describes fragmentation with 5'-adapter joining. Upstream Ez-Tn5/adapter assembly connects that qualitative mechanism to this implementation. The field does not assert unreported strand offsets, gap sizes or end sealing.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00047"
+              ]
+            },
+            {
+              "fields": [
+                "output"
+              ],
+              "verdict": "supported",
+              "rationale": "The reported joining action gives adapter-bearing DNA fragments, with P1/P2 supplied by the selected adapters. Nick translation follows transposition, supporting the definition's reaction-product endpoint before separate completion or purification. The conditional support/protein-association clause does not assert beads or a resolved transposase-release state here.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00028",
+                "adey2010:p00047"
+              ]
+            },
+            {
+              "fields": [
+                "information_effect"
+              ],
+              "verdict": "supported",
+              "rationale": "Adapter addition is reported, and downstream genomic sequencing supports retention of substrate-derived sequence. Fragmentation/insertion positions are the qualitative molecular information carried, not a guarantee of exact original-molecule identity or unbiased representation. p00033 supports retaining region/size/representation context; the field's upstream-selection/accessibility qualification does not import an accessibility assay into this genomic-DNA use.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00028",
+                "adey2010:p00033",
+                "adey2010:p00047"
+              ]
+            },
+            {
+              "fields": [
+                "purpose"
+              ],
+              "verdict": "supported",
+              "rationale": "The NoPCR adapters are designed for Illumina cluster compatibility and lead, after separate nick translation, to sequencing libraries. This specifically supports generating adapter-tagged fragments for subsequent library preparation.",
+              "source_references": [
+                "adey2010:p00028",
+                "adey2010:p00047"
+              ]
+            },
+            {
+              "fields": [
+                "context_requirements"
+              ],
+              "verdict": "supported",
+              "rationale": "DNA, adapter-loaded Tn5 and an effective transposition reaction are evidenced here. The source's exact species, quantities, buffer and incubation instantiate those requirements without making them universal. The definition's native/fixed chromatin, enrichment and bead examples are contextual possibilities, not asserted features or requirements of this member.",
+              "source_references": [
+                "adey2010:p00009",
+                "adey2010:p00047",
+                "adey2010:p00048"
+              ]
+            }
+          ]
+        },
+        {
+          "occurrence_id": "smart-seq2:e51f2b8c6e9389c8c31829fd6b4a9c7e174e9106d66c030c3307dcb0af34790b:7d7c748145a695d2d5b5d720df37eba8fd7b2200825e5fe3d276c922581f6032",
+          "concept": "reverse_transcription_template_switch_pcr_handle",
+          "relation": "shared_mechanism",
+          "assignment_decision": "reuse",
+          "outcome": "admit",
+          "source_status": "supported_membership_candidate",
+          "definition_status": "supported_definition",
+          "review_contract": "concept_admission_review/2.0",
+          "review_rationale": "The useful question is which connected RNA-to-cDNA transformations also install a distal PCR handle by template switching, compared by priming, TSO chemistry, support and direct-to-PCR interface. The admitted reverse_transcription_template_switch_pcr_handle definition already covers this whole transformation and is reused unchanged. Selection searches for template in operations and RNA in inputs each retrieve this selection; source examination, rather than lexical retrieval, establishes the connected mechanism and handle output. Existing concept plus anchored oligo-dT, free reaction tube, rGrG+G, SuperScript II and no preamplification bead-cleanup filters is sufficient. No consequential distinction is lost by this reuse; a category for RT alone would lose the required handle installation, while generic tagging would erase RNA-to-DNA copying. An LNA/no-bead/single-cell category would package implementation properties. Required membership is compatible primed RNA, RT/template switching and the distal-handle output. Exact TSO sequence/modifications, reaction additions, incubation/inactivation, input alternatives, support, downstream PCR and final-volume uncertainty remain on the use. The qualitative shared_mechanism claim is supported with the handle interpretation explicitly inferred; it makes no strand-resolved or full-length-recovery guarantee. All supplied boundary claims are supported.",
+          "definition_checks": [
+            {
+              "fields": [
+                "substrate"
+              ],
+              "verdict": "supported",
+              "rationale": "The Methods specify total RNA or single-cell lysates mixed with anchored oligo-dT and then the first-strand mix; Table 4 selects the compatible TSO. An extendable primed-RNA substrate is inferred from this priming procedure and ensuing cDNA synthesis. This supports the actual substrate claim without importing bead capture or mixing the alternative inputs.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table4:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "operation"
+              ],
+              "verdict": "supported",
+              "rationale": "Both RT and template switching are explicitly named, and the TSO is supplied in the RT mix. The shared TSO/oligo-dT/ISPCR prefix with subsequent PCR supports installation of the distal amplification handle by inference. This evidence covers both connected actions and their output, not RT alone.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00005",
+                "smart-seq2:picelli2013:p00030",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table2:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "physical_mechanism"
+              ],
+              "verdict": "supported",
+              "rationale": "The first-strand RT enzyme, supplied TSO and reported template switching support RNA-templated DNA synthesis with a switch to the supplied oligonucleotide template. Copying the distal handle is a qualitative inference from the common sequences and later ISPCR use. The actual field expressly leaves exact terminal nucleotides and strand intermediates unspecified, consistent with this inspected evidence.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00005",
+                "smart-seq2:picelli2013:p00030",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table2:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "output"
+              ],
+              "verdict": "supported",
+              "rationale": "Primer-derived cDNA retaining the initiating sequence and the opposite TSO-derived handle is inferred from primer extension, reported template switching, matching sequence domains and later ISPCR. The Smart-seq2 table explicitly says no bead purification before preamplification; RT inactivation precedes that interface. The field's conditional support retention does not assert any bead attachment here.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00005",
+                "smart-seq2:picelli2013:p00030",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:picelli2013:p00032",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "information_effect"
+              ],
+              "verdict": "supported",
+              "rationale": "RT supports RNA-sequence copying; reported template switching plus the common oligo-dT/TSO/ISPCR sequence supports the opposite amplification handle. Retention of the initiating fixed sequence follows from primer extension. Its sequence is the observed tag here; the conditional language about pre-existing tags does not assert cellular barcodes, UMIs or original-molecule identity.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00005",
+                "smart-seq2:picelli2013:p00030",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table2:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "purpose"
+              ],
+              "verdict": "supported",
+              "rationale": "The RNA-containing input is converted to first-strand cDNA with the common amplification interface used in subsequent KAPA/ISPCR preamplification. This supports the stated conversion/amplification/library-preparation purpose. Captured RNA is instantiated by oligo-dT priming, without a support-attachment requirement or guaranteed full-length capture.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00005",
+                "smart-seq2:picelli2013:p00030",
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            },
+            {
+              "fields": [
+                "context_requirements"
+              ],
+              "verdict": "supported",
+              "rationale": "The required primed RNA, RT system and compatible TSO yielding the handle are supported. Selected oligo-dT, rGrG+G, enzyme/addition quantities, thermal program and omission of bead cleanup instantiate the definition while remaining implementation properties. Its listed barcode/UMI/support possibilities do not assert their presence here. The volume ambiguity does not establish incompatibility of the reported qualitative reaction.",
+              "source_references": [
+                "smart-seq2:picelli2013:p00031",
+                "smart-seq2:picelli2013:p00032",
+                "smart-seq2:table2:p00001",
+                "smart-seq2:table4:p00001"
+              ]
+            }
+          ]
+        },
+        {
+          "occurrence_id": "hi-c:87e494a2547dfb1e1c9f4a3fa175a2d5fb3efca26ba2aaebfe7f77142922665c:a18597452b91ebd15a0599d3adaf8912ad91bb0ac24bbe7b77c11a76f36c6d7a",
+          "concept": "crosslink_constrained_dna_proximity_ligation",
+          "relation": "shared_mechanism",
+          "assignment_decision": "new",
+          "outcome": "admit",
+          "source_status": "supported_membership_candidate",
+          "definition_status": "supported_definition",
+          "review_contract": "concept_admission_review/2.0",
+          "review_rationale": "The useful question is which transformations encode crosslink-stabilized chromatin associations by joining DNA fragment ends, then compare their prepared ends, labels and ligation conditions. Independent broad and targeted registry lookups return the admitted Tn5 fragmentation/adapter-tagging and RT/template-switch concepts, neither of which describes this transformation. Selection searches for DNA in operations retrieve both Hi-C and tagmentation; ligation in operations and biotin in inputs retrieve this selection. Thus properties can retrieve lexical neighbors, but adding crosslink/biotin/blunt-end filters to either existing definition cannot satisfy its required input-action-output contract. A new crosslink_constrained_dna_proximity_ligation category is useful even with one supplied member: it preserves creation of proximity-bearing fragment-fragment junctions, a distinction lost by merging with adapter insertion or RNA-to-cDNA handle installation. Crosslink-associated partner constraint and the proximity-recording output are required because they give the selected transformation its information meaning; they are not merely recipe decoration. HindIII, blunt ends, biotin, exact dilution, ligase brand/dose, buffer, scale and incubation remain per-use properties. The shared_mechanism level is qualitative ligase-mediated end joining under the retained chromatin constraint; it includes setup/transfer and joining and ends at the ligation mixture. It does not imply every junction is a true contact, substitution, ancestry or a complete recipe. All target and additional boundary claims are supported, and no registry revision request is made.",
+          "definition_checks": [
+            {
+              "fields": [
+                "substrate"
+              ],
+              "verdict": "supported",
+              "rationale": "Formaldehyde fixation, HindIII digestion and production-end fill-in establish DNA fragments retained in crosslinked chromatin with prepared ligatable ends. Crosslink reversal occurs afterward, confirming this substrate context at selected ligation. These are upstream preparations, not additional selected actions.",
+              "source_references": [
+                "hi-c-original2009:p00036",
+                "hi-c-original2009:p00038",
+                "hi-c-original2009:p00039",
+                "hi-c-original2009:p00040"
+              ]
+            },
+            {
+              "fields": [
+                "operation"
+              ],
+              "verdict": "supported",
+              "rationale": "p00039 explicitly transfers each digested chromatin mixture into the corresponding ligation mix and adds T4 ligase. The main text states dilution favors crosslinked-fragment ligation, and the figure caption reports chimeric molecules. Together these support the entire setup-plus-joining operation and association-recording output.",
+              "source_references": [
+                "hi-c-original2009:p00004",
+                "hi-c-original2009:p00009",
+                "hi-c-original2009:p00039"
+              ]
+            },
+            {
+              "fields": [
+                "physical_mechanism"
+              ],
+              "verdict": "supported",
+              "rationale": "Named T4 DNA ligase, prepared DNA ends and chimeric ligation products support covalent fragment-end joining at the claimed qualitative level. Retained crosslinks and the explicit dilution preference support the constrained encounter claim; upstream biotin and reported junction marking support conditional label retention. No individual-junction fidelity or detailed bond intermediate is claimed.",
+              "source_references": [
+                "hi-c-original2009:p00004",
+                "hi-c-original2009:p00009",
+                "hi-c-original2009:p00036",
+                "hi-c-original2009:p00039"
+              ]
+            },
+            {
+              "fields": [
+                "output"
+              ],
+              "verdict": "supported",
+              "rationale": "The figure caption describes chimeric DNA and the main text identifies biotin-marked junctions. Separate corresponding tubes and later proteinase-K/crosslink reversal establish a retained product mixture before purification/library conversion. Potentially chimeric does not assert that all molecules successfully ligated or that every product is a valid biological contact.",
+              "source_references": [
+                "hi-c-original2009:p00004",
+                "hi-c-original2009:p00009",
+                "hi-c-original2009:p00039",
+                "hi-c-original2009:p00040"
+              ]
+            },
+            {
+              "fields": [
+                "information_effect"
+              ],
+              "verdict": "supported",
+              "rationale": "The source assigns original spatial proximity to the joined fragments and states preferential ligation of crosslinked partners; downstream paired-end identification makes their junction identities sequenceable. The selected operation produces the molecular record. Later capture/readout remains outside it, so the definition appropriately makes no direct-distance, perfect-contact or contact-matrix claim.",
+              "source_references": [
+                "hi-c-original2009:p00004",
+                "hi-c-original2009:p00009"
+              ]
+            },
+            {
+              "fields": [
+                "purpose"
+              ],
+              "verdict": "supported",
+              "rationale": "The source's proximity-bearing ligation products are subsequently identified by paired-end sequencing. This directly supports creating molecular records of chromatin proximity for downstream joined-fragment identification.",
+              "source_references": [
+                "hi-c-original2009:p00004",
+                "hi-c-original2009:p00009"
+              ]
+            },
+            {
+              "fields": [
+                "context_requirements"
+              ],
+              "verdict": "supported",
+              "rationale": "Fixation, prepared fragment ends, retained crosslinks, dilute conditions and T4 ligase support all required conditions. Crosslink constraint and the information-bearing output are scientifically consequential membership conditions. The actual end/biotin/enzyme/recipe settings are explicitly documented implementation details; the NcoI comparison and HindIII-specific QC do not warrant transferring a detailed recipe or requiring biotin/HindIII universally.",
+              "source_references": [
+                "hi-c-original2009:p00004",
+                "hi-c-original2009:p00009",
+                "hi-c-original2009:p00036",
+                "hi-c-original2009:p00038",
+                "hi-c-original2009:p00039",
+                "hi-c-original2009:p00042"
+              ]
+            }
+          ]
+        }
+      ],
+      "original_graph_preserved": true,
+      "initial_definitions_preserved": true,
+      "new_admissions": 3,
+      "new_concepts": 1,
+      "projected_concept_edges": 7,
+      "projected_graph_reloaded": true
+    }
+  ],
+  "frozen_implementation_unchanged": true,
+  "interpretation": "Author-designed semantic controls and one natural cohort; not an accuracy or causal improvement estimate.",
+  "followup_limit": "The later unresolved-without-quote allowance and computational/purpose-null prompt clarifications are software-tested separately, not exercised by these frozen jobs."
+}

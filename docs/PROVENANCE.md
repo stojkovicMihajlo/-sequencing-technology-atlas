@@ -34,6 +34,13 @@ follow-up, and the inherited-context coverage correction. The main arms retained
 their original rules and outputs. Edited-review probes are identified separately
 and are never presented as fresh model judgments or committed assignments.
 
+The 2026-10-17 [definition-review contract](BEHAVIOR_CONTRACT.md) records the
+ALCE/PaperQA2 implementation audit and the limits of borrowing their evidence
+concepts. The [diagnostic report](../examples/behavior_contract/README.md) keeps
+author-injected faults separate from model-generated proposals. Frozen native
+runs precede two small follow-up clarifications in the current code; the report
+identifies that difference rather than presenting those changes as live-tested.
+
 ## Scientific example
 
 The example describes the original ChIPmentation implementation:

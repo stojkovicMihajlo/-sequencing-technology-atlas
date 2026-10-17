@@ -32,6 +32,12 @@ def catalogue(snapshot: dict) -> dict:
             "admission_status": {cid: ("admitted" if any(
                 r["concept_id"] == cid and r.get("admission_decision_sha256")
                 for r in snapshot["assignments"].values()) else "legacy_unassessed")
+                for cid in snapshot["concepts"]},
+            "review_contracts": {cid: sorted({snapshot.get("decisions", {}).get(
+                row.get("admission_decision_sha256"), {}).get("review", {}).get(
+                    "format_version", "concept_admission_review/1.0" if row.get(
+                        "admission_decision_sha256") else "source_only")
+                for row in snapshot["assignments"].values() if row["concept_id"] == cid})
                 for cid in snapshot["concepts"]}}
 
 
@@ -171,6 +177,8 @@ def graph_overlay(snapshot: dict) -> dict:
                       "operation_ids": [op["id"] for op in occurrence["operations"]]}
         edges.append({"source": key, "target": "concept:" + row["concept_id"],
                       "kind": "instance_of_concept", "basis": row["proposal"]["relation"],
-                      "assignment_id": ident, "review_sha256": row["review_sha256"]})
+                      "assignment_id": ident, "review_sha256": row["review_sha256"],
+                      "review_contract": snapshot["decisions"][row["admission_decision_sha256"]][
+                          "review"].get("format_version", "concept_admission_review/1.0")})
     return {"format_version": "operation_concept_overlay/1.0", "registry_revision": digest(snapshot),
             "nodes": list(nodes.values()), "edges": edges, "boundary": BOUNDARY}

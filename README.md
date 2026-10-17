@@ -19,6 +19,8 @@ extractions have model/source reviews rather than expert or experimental validat
 | How do methods enter the larger graph? | [Graph layers and agent tools](docs/GRAPH.md) |
 | How can agents reuse operation/module labels? | [Shared concept registry](docs/CONCEPT_REGISTRY.md) |
 | How do we decide whether a shared label is useful? | [Admission policy, fields and reference audit](docs/CONCEPT_ADMISSION.md) |
+| What prevents a plausible-looking definition from passing incomplete checks? | [Definition review and consistency contract](docs/BEHAVIOR_CONTRACT.md) |
+| Did those checks catch deliberately incorrect scientific claims? | [Definition-review diagnostics and ordinary grouping run](examples/behavior_contract/README.md) |
 | Has label admission actually run with models? | [Paired cohort test and redundant-label control](examples/concept_admission/README.md) |
 | What happened on new methods and harder boundaries? | [Six-selection experiments and harness corrections](examples/concept_experiments/README.md) |
 | How do we run and evaluate the next batch? | [Runbook](docs/RUNBOOK.md) and [evaluation plan](docs/EVALUATION.md) |
@@ -46,13 +48,18 @@ The packaged snapshot passed **868 software tests** in a clean Python 3.13
 environment. See the [release checks](provenance/release_checks.json) for the exact
 checks and their limits.
 
-The current update passes **928 software tests**. The
+The current update passes **964 software tests**. The
+[definition-review diagnostics](examples/behavior_contract/README.md) test
+unsupported claims attached to genuine quotations, whole-unit classification and
+contradictory membership assertions. The [current check record](provenance/behavior_contract_checks.json)
+separates software enforcement from observed model behavior; scientific accuracy
+has not been measured. Earlier
 [new-selection experiments](examples/concept_experiments/README.md) exposed a
 parent-context coverage bug and repeated large tool responses; the report records
 the corrections, controls and remaining differences in category granularity. A
 [paired cohort test and redundant-label control](examples/concept_admission/README.md)
 exercise separate source-support and category-usefulness decisions. The
-[current check record](provenance/concept_experiment_checks.json) distinguishes software
+[earlier check record](provenance/concept_experiment_checks.json) distinguishes software
 integrity and observed model behavior from scientific accuracy, which has not been
 measured. The [earlier source-only pilot](examples/concept_registry/README.md)
 remains available with its original results.

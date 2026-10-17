@@ -1,6 +1,6 @@
 # Status before large-scale extraction
 
-Atlas counts recorded on 2026-10-15; admission results updated 2026-10-16.
+Atlas counts recorded on 2026-10-15; admission results updated 2026-10-17.
 This is a development handoff, not a claim that the atlas is
 complete or that model review establishes experimental correctness.
 
@@ -45,6 +45,16 @@ The harness now offers smaller navigation views and exact field access, and its
 coverage check distinguishes selected claims from inherited parent-workflow notes.
 **928 software tests pass.** These changes do not establish optimal categories,
 scientific accuracy or a measured latency improvement.
+
+The latest [definition-review iteration](../examples/behavior_contract/README.md)
+requires explicit source judgments for the seven scientific definition fields and
+rejects conflicting accepted membership claims. New graph edges identify the v2
+review contract; historical edges keep their original status. **964 software tests
+pass.** The live diagnostics include deliberately incorrect claims with genuine
+citations and a separate compiler/reviewer run on existing protocol selections.
+These do not add new extracted workflows or revalidate the entire atlas. They also
+do not yet provide a normal retraction workflow for correcting earlier admitted
+scientific judgments.
 
 ## Decisions before a large extraction job
 

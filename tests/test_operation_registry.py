@@ -9,8 +9,9 @@ from test_workflow_transformations import cases as cases, candidate_for, review_
 
 from genomics_discovery.curation.operation_registry.models import Assignment
 from genomics_discovery.curation.operation_registry.admission import (
-    AdmissionCase, AdmissionReview, BoundaryExample, LabelDecision,
+    AdmissionCase, AdmissionReviewV2, BoundaryExample, LabelDecision,
 )
+from genomics_discovery.curation.operation_registry.definition_review import DefinitionCheck, DEFINITION_FIELDS
 from genomics_discovery.curation.operation_registry.store import (
     Registry, catalogue, check_proposal, graph_overlay, search, uses,
 )
@@ -54,7 +55,17 @@ def decision_for(proposal):
 
 
 def admission_for(decision, source_review, verdict="admit"):
-    return AdmissionReview(decision_sha256=digest(decision), source_review=source_review,
+    evidence = (source_review.checks[0].evidence if source_review and source_review.checks
+                else decision.assignment.members[0].evidence if decision.assignment else ())
+    checks = () if decision.assignment is None else tuple(
+        DefinitionCheck(fields=(field,), verdict="supported" if getattr(
+            decision.assignment.definition, field) is not None else "not_asserted",
+            rationale="Synthetic contract fixture, not a scientific entailment judgment",
+            evidence=evidence if getattr(
+                decision.assignment.definition, field) is not None else ())
+        for field in DEFINITION_FIELDS)
+    return AdmissionReviewV2(format_version="concept_admission_review/2.0",
+        definition_checks=checks, decision_sha256=digest(decision), source_review=source_review,
         vocabulary_verdict=verdict, question_useful=True, boundary_clear=True,
         context_properties_separated=True, existing_plus_filters_sufficient=False,
         rationale="Synthetic approval for testing software controls, not scientific validation")
