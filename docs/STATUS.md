@@ -58,6 +58,17 @@ scientific judgments.
 
 ## Decisions before a large extraction job
 
+The [shared-operation discovery update](SHARED_OPERATIONS.md) adds optional broad
+workflow-role questions, free/contextual lexical and local semantic retrieval, and
+a joined lookup of exact comparison scope and concept membership. **978 local
+software tests pass.** Across 14 positive directional searches, semantic retrieval
+found an operation in the stored counterpart region in 10 cases versus 9 for the
+original retriever. Direct shared-claim operation targets were found in 5 of 12
+eligible cases versus 3. [The full diagnostic](../examples/shared_operations/README.md)
+reports misses, query sensitivity, latency and its limited reference set. This
+does not add extracted workflows, role annotations or scientific edges. The
+semantic mode remains optional and is not a scientific admission rule.
+
 These are proposed release gates for discussion. Numerical acceptance thresholds
 must be fixed before the next held-out pilot; they have not yet been validated.
 

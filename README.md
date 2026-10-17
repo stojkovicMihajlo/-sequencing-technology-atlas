@@ -18,6 +18,7 @@ extractions have model/source reviews rather than expert or experimental validat
 | Can I inspect a real extraction? | [ChIPmentation example](examples/chipmentation/README.md) |
 | How do methods enter the larger graph? | [Graph layers and agent tools](docs/GRAPH.md) |
 | How can agents reuse operation/module labels? | [Shared concept registry](docs/CONCEPT_REGISTRY.md) |
+| How do we find common operations while preserving different assay architectures? | [Shared-operation discovery and broad workflow roles](docs/SHARED_OPERATIONS.md) |
 | How do we decide whether a shared label is useful? | [Admission policy, fields and reference audit](docs/CONCEPT_ADMISSION.md) |
 | What prevents a plausible-looking definition from passing incomplete checks? | [Definition review and consistency contract](docs/BEHAVIOR_CONTRACT.md) |
 | Did those checks catch deliberately incorrect scientific claims? | [Definition-review diagnostics and ordinary grouping run](examples/behavior_contract/README.md) |
@@ -48,7 +49,7 @@ The packaged snapshot passed **868 software tests** in a clean Python 3.13
 environment. See the [release checks](provenance/release_checks.json) for the exact
 checks and their limits.
 
-The current update passes **964 software tests**. The
+The definition-review update passed **964 software tests**. The
 [definition-review diagnostics](examples/behavior_contract/README.md) test
 unsupported claims attached to genuine quotations, whole-unit classification and
 contradictory membership assertions. The [current check record](provenance/behavior_contract_checks.json)
@@ -63,6 +64,13 @@ exercise separate source-support and category-usefulness decisions. The
 integrity and observed model behavior from scientific accuracy, which has not been
 measured. The [earlier source-only pilot](examples/concept_registry/README.md)
 remains available with its original results.
+
+The [shared-operation discovery update](docs/SHARED_OPERATIONS.md) passes **978
+local software tests**. It adds overlapping workflow search questions, optional
+local semantic retrieval and exact claim-scope lookup. The
+[real-atlas diagnostic](examples/shared_operations/README.md) reports modest
+retrieval gains alongside substantial misses; retrieval does not create
+scientific edges or automatically classify operations into roles.
 
 ## The pipeline
 

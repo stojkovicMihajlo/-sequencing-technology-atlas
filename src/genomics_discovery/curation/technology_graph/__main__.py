@@ -11,6 +11,7 @@ from genomics_discovery.curation.workflow_matching.models import QUESTIONS
 from .assembly import build_graph
 from .candidates import operation_candidates
 from .comparison_jobs import prepare_comparison
+from .discovery_cli import add_commands, dispatch
 from .planning import plan_comparisons
 from .queries import (
     ancestors,
@@ -29,6 +30,7 @@ from .queries import (
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
+    add_commands(sub)
     build = sub.add_parser("build")
     build.add_argument("--atlas", type=Path, required=True)
     build.add_argument("--bindings", type=Path, required=True)
@@ -122,7 +124,9 @@ def main():
             cmd.add_argument("--offset", type=int, default=0)
             cmd.add_argument("--limit", type=int, default=5)
     args = parser.parse_args()
-    if args.command == "prepare-comparison":
+    if args.command == "roles":
+        result = dispatch(args)
+    elif args.command == "prepare-comparison":
         result = prepare_comparison(
             args.graph, args.left_workflow, args.left_operation,
             args.right_workflow, args.right_operation, args.output,
@@ -155,7 +159,9 @@ def main():
         }
     else:
         graph = load_graph(args.graph)
-        if args.command == "stats":
+        if args.command in {"discover-operations", "correspondences"}:
+            result = dispatch(args, graph)
+        elif args.command == "stats":
             result = graph["statistics"]
         elif args.command == "candidates":
             result = operation_candidates(

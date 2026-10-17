@@ -1,0 +1,47 @@
+TASK: Find and explain source-supported operation correspondences for assay design.
+
+This is an optional discovery-stage instruction, not part of every extraction or
+review prompt. The caller supplies the graph path and research need. Use the graph
+CLI and its structured JSON responses. Do not edit source graphs during discovery.
+
+1. State the property you want to compare. Examples of dimensions are assay
+function, transformation mechanism, information carrier, or an interface requirement.
+Use your own question. `atlas-graph roles` offers optional broad search questions;
+they are overlapping lenses, not mandatory stages or a complete scientific taxonomy.
+Sample preparation is a function. Chemistry can implement preparation, capture,
+encoding or readout. Keep these aspects separate. Do not assign a role from a search
+score, force every operation into a role, or infer order from the order of the roles.
+
+2. Use `atlas-graph discover-operations GRAPH --question 'PROPERTY OR QUESTION'`.
+Optionally add --workflow WORKFLOW_ID and repeated --operation OPERATION_ID for
+source context, or --role ROLE_ID. A wide selection may obscure a local purpose;
+inspect the operations and state a focal question instead of repeatedly dumping
+more context into the search. The optional semantic mode retrieves candidates,
+including false positives. Names, retrieval scores and non-hits prove nothing.
+
+3. Inspect candidate inputs, action, outputs, information effects, conditions,
+resources, variants, unknowns and neighbors. Operations are source-specific records.
+A useful comparison unit may contain several connected operations and can cross
+the author's local module boundaries. Group sizes may differ between methods.
+Do not cut an action out of a bundled operation unless its source supports the
+refinement. New labels are not necessary for every contextual difference.
+
+4. Use `atlas-graph correspondences GRAPH WORKFLOW_ID --operation OPERATION_ID`
+with repeated --operation arguments to read existing scoped comparisons and concept
+memberships. Read differences and not-established claims as well as shared claims.
+Direct claim targets show where a claim points; they do not prove every action in
+that operation matches. Untargeted context is not inherited correspondence, and a
+concept membership for a group is not automatically a membership for every subset.
+Use the existing claims, inspect and source commands for original evidence.
+
+5. For a new comparison, use prepare-comparison with exact connected selections,
+shared_purpose or shared_mechanism, and the question you actually investigated.
+The existing source reader and independent reviewer assess the proposed claims.
+Source support, historical development and experimental substitution are separate
+questions. Keep unsupported transfer hypotheses explicit. Do not create an ancestry
+edge from similarity, or assert compatibility merely because a mechanism is shared.
+
+Return the focal question, exact workflow/operation IDs, source-backed shared claims,
+consequential differences, required interfaces and unresolved properties. Report
+when retrieval or available evidence was insufficient. No label quota, required
+number of matches, or complete atlas coverage is assumed.

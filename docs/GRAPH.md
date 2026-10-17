@@ -35,6 +35,8 @@ See the [admission policy](CONCEPT_ADMISSION.md) and
 | Read a full record | `inspect` | The actual record behind a returned ID. |
 | Reopen source support | `source` | Registered passage from the workflow's bound source packet. |
 | Find potentially comparable transformations | `candidates` or `search` | Retrieval candidates; no new scientific edges. |
+| Explore a broad assay function or a custom question | `roles`, `discover-operations` | Optional overlapping search questions and contextual lexical/semantic candidates; no automatic role assignments. |
+| Check the scope of known shared operations | `correspondences` | Exact claim targets, contextual coverage and optional concept memberships for a selected operation group. |
 | Prepare a precise comparison | `prepare-comparison` | Frozen selections and a question for the analyst/reviewer harness. |
 | Inspect known historical changes | `ancestors`, `plan`, `development` | Existing ancestry and scoped joins to protocol comparisons. |
 | Inspect what a comparison actually established | `comparisons`, `claims` | Positive, negative or unresolved scoped assertions and evidence. |
@@ -42,6 +44,8 @@ See the [admission policy](CONCEPT_ADMISSION.md) and
 Use `uv run atlas-graph --help` and each subcommand's `--help` for exact arguments.
 The full local atlas and its source files are required for these commands. The
 distributed example can be inspected offline with `scripts/inspect_example.py`.
+See [shared-operation discovery](SHARED_OPERATIONS.md) for the new tool contract,
+optional local embedding backend and empirical retrieval limits.
 
 ## Integration contract
 

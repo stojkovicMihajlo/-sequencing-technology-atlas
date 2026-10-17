@@ -41,6 +41,9 @@ All paths below are under `src/genomics_discovery/` unless otherwise stated.
 | Text/graph exports and operation query | [`curation/workflow_extraction/projection.py`](../src/genomics_discovery/curation/workflow_extraction/projection.py) |
 | Contextual protocol comparisons | [`curation/workflow_matching/`](../src/genomics_discovery/curation/workflow_matching/) |
 | Admission, atlas assembly and queries | [`curation/technology_graph/`](../src/genomics_discovery/curation/technology_graph/) |
+| Optional broad workflow search questions | [`curation/technology_graph/workflow_roles.py`](../src/genomics_discovery/curation/technology_graph/workflow_roles.py) |
+| Contextual lexical/semantic candidate retrieval | [`curation/technology_graph/discovery.py`](../src/genomics_discovery/curation/technology_graph/discovery.py), optional [`embeddings.py`](../src/genomics_discovery/curation/technology_graph/embeddings.py) |
+| Exact comparison scope and concept-membership lookup | [`curation/technology_graph/correspondences.py`](../src/genomics_discovery/curation/technology_graph/correspondences.py) |
 | Independent gap follow-up | [`curation/workflow_followup/`](../src/genomics_discovery/curation/workflow_followup/) |
 | Batch scheduling | [`playground/workflow_graph_batch.py`](../playground/workflow_graph_batch.py) |
 

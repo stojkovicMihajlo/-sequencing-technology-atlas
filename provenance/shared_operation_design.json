@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-17",
+  "status": "contract_recorded_before_implementation",
+  "input": "Existing version-bound workflow graphs, source-linked comparisons and optional concept memberships.",
+  "target": "Discover comparable connected units and expose the exact scope of already reviewed correspondences, while retaining broad open-ended workflow navigation.",
+  "invariants": [
+    "Never merge or relabel source operations during discovery.",
+    "Broad workflow roles are overlapping search lenses, not mutually exclusive scientific categories or a mandatory assay sequence.",
+    "Sample preparation is a workflow function; chemistry describes mechanisms that can act in several functions.",
+    "A search hit is not a role annotation, supported correspondence, compatibility claim or ancestry assertion.",
+    "Claim target coverage is syntactic scope, not proof of whole-transformation equivalence.",
+    "Existing accepted concept memberships and contextual comparisons retain distinct review scopes.",
+    "Free-text queries remain available outside the role vocabulary.",
+    "Embedding caches bind exact source-derived descriptions and model identity; rankings are not probabilities."
+  ],
+  "implementation_choices": [
+    "Reuse existing operation/state/group and comparison schemas.",
+    "Add one read-only correspondence lookup joining selected IDs to comparison claims and concept memberships.",
+    "Add field-specific lexical/optional local semantic retrieval, with recorded ranking configuration.",
+    "Separate focal search questions from long surrounding protocol context.",
+    "Keep the original candidate retriever as a baseline; do not force new rankings to reproduce previous examples."
+  ],
+  "evaluation": [
+    "Negative controls: name equality without evidence, partial route overlap, unknown properties, stale cache, contradictory source versions.",
+    "Compare retrieval against the existing model-reviewed comparisons; these are development diagnostics, not independent expert gold.",
+    "Report method-level and operation-level retrieval separately, grouping sensitivity and latency.",
+    "Run the full software suite and a real local embedding experiment before recommending a default."
+  ],
+  "references": [
+    {
+      "name": "ICoP",
+      "url": "https://www2.informatik.hu-berlin.de/~weidlima/pubs/weidlich_caise_2010_icop_framework.pdf",
+      "adapt": "Group-to-group contextual correspondences; bounded candidate generation.",
+      "reject": "Mandatory nonoverlap and pairwise-only evaluation as default scientific semantics."
+    },
+    {
+      "name": "EDC",
+      "url": "https://aclanthology.org/2024.emnlp-main.548/",
+      "implementation": "https://github.com/clear-nus/edc/blob/02aad17e2fc1e9845c84746b384e7fd3160edc1a/edc/schema_canonicalization.py",
+      "adapt": "Retrieve definitions semantically before judging equivalence.",
+      "reject": "Exact-label bypass, forced target-schema mapping, and treating retrieval as evidence."
+    },
+    {
+      "name": "Sentence-BERT",
+      "url": "https://aclanthology.org/D19-1410/",
+      "implementation": "https://github.com/huggingface/sentence-transformers/blob/f6922f0269426ab93efd9ac6d9c0da5cc207c1cb/sentence_transformers/util.py",
+      "adapt": "Cached independent embeddings and cosine candidate ranking; no calibrated scientific similarity claim."
+    },
+    {
+      "name": "LabOP",
+      "url": "https://jakebeal.github.io/Publications/JETC23-LabOP.pdf",
+      "adapt": "Keep reusable operation descriptions separate from particular protocol occurrences and execution evidence."
+    }
+  ],
+  "novelty_claim": "None. This is a task-specific implementation and evaluation of established representation and retrieval principles."
+}
