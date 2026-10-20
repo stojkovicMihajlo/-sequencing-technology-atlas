@@ -15,12 +15,12 @@ from genomics_discovery.curation.codex_worker import CodexWorker, assess_archive
 from genomics_discovery.curation.run_state import now, sha, write
 from genomics_discovery.curation.workflow_extraction.assemble import assemble_workflow
 from genomics_discovery.curation.workflow_extraction.models import (
-    Workflow, WorkflowDraft, digest, review_outcome, validate_evidence, validate_review,
+    Workflow, WorkflowDraft, WorkflowReview, digest, review_outcome, validate_evidence, validate_review,
 )
 from genomics_discovery.curation.workflow_extraction.projection import export_candidate
 from genomics_discovery.curation.workflow_extraction.sources import load_packet
 
-from .models import GraphReviewAssessmentV2, ProtocolReference, ReferenceReview
+from .models import GraphReviewAssessmentV2, ProtocolReference, ReferenceReview, parse_assessment
 from .prompts import DEFAULT_DIRECTORY, ROLES, build_prompt
 from .scoring import score_assessment
 from .validation import (
@@ -70,7 +70,8 @@ class CaseSession:
         self.prompts, self.used_threads = prompts, used_threads
         self.worker_factory, self.prepare_only = worker_factory, prepare_only
         self.state = {"case_id": row["case_id"], "status": "preparing", "stage": "source",
-                      "started_at": now(), "attempts": [], "repairs_used": 0, "boundary": BOUNDARY}
+                      "started_at": now(), "attempts": [], "repairs_used": 0,
+                      "graph_repairs_used": 0, "graph_rounds": [], "boundary": BOUNDARY}
 
     def persist(self):
         self.state["usage"] = _usage(self.state["attempts"])
@@ -100,6 +101,11 @@ class CaseSession:
         if "workflow" in inputs:
             workflow = Workflow.model_validate_json(Path(inputs["workflow"]).read_bytes())
             bindings["workflow_sha256"] = digest(workflow)
+        if role == "graph_constructor" and repair:
+            for field, parser in (("previous_artifact", WorkflowDraft.model_validate_json),
+                ("previous_workflow", Workflow.model_validate_json), ("previous_workflow_review", WorkflowReview.model_validate_json),
+                ("previous_assessment", parse_assessment), ("previous_scores", json.loads)):
+                bindings[field + "_sha256"] = digest(parser(Path(inputs[field]).read_bytes()))
         prompt = build_prompt(role, directory=self.prompts, attempt=attempt, schema=schema,
             packet=Path(self.row["packet"]), case_id=self.row["case_id"],
             metadata=json.dumps({key: self.packet[key] for key in
@@ -194,6 +200,82 @@ class CaseSession:
                               reference_annotation_status="model_reviewed_reference_candidate")
             return reference, reference_path
 
+    async def graph(self, reference, reference_path):
+        """One source-bound correction, followed by a new independent review."""
+        last = None
+        inputs = {"reference": reference_path}
+        try:
+            for number in (1, 2):
+                draft, draft_path = await self.stage("graph_constructor", inputs, repair=number == 2)
+                try:
+                    workflow = assemble_workflow(draft, require_bindings=True)
+                except ValueError as exc:
+                    raise DataIssue("graph_assembly", str(exc)) from exc
+                errors = validate_evidence(workflow, self.packet)
+                errors.extend(f"Workflow {field} differs from frozen packet" for field in
+                    ("method_id", "title", "scope", "variant") if getattr(workflow, field) != self.packet[field])
+                if errors:
+                    raise DataIssue("graph_integrity", "; ".join(errors))
+                directory = Path("graph_rounds") / f"{number:03d}"
+                workflow_path = self.freeze(directory / "workflow.json", workflow.model_dump(mode="json"))
+                combined, _ = await self.stage("graph_reviewer", {"reference": reference_path, "workflow": workflow_path})
+                errors = validate_review(combined.workflow_review, workflow, self.packet)
+                errors.extend(validate_assessment(combined.assessment, reference, workflow, self.packet))
+                if errors:
+                    raise DataIssue("graph_review_integrity", "; ".join(errors))
+                review_path = self.freeze(directory / "workflow_review.json", combined.workflow_review.model_dump(mode="json"))
+                assessment_path = self.freeze(directory / "assessment.json", combined.assessment.model_dump(mode="json"))
+                scores = score_assessment(combined.assessment, reference, workflow, self.packet)
+                scores_path = self.freeze(directory / "scores.json", scores)
+                outcome = review_outcome(combined.workflow_review, workflow)
+                critical = scores["obligation_coverage"]["critical_not_covered"]
+                unknowns = scores["unknown_preservation"]
+                revision = bool(unknowns["counts"]["reference_revision_needed"])
+                unsupported = [item.id for item in combined.assessment.factual_audits
+                               if item.verdict == "unsupported"]
+                status = ("reference_unknown_revision_needed" if revision else
+                    "factual_assertions_unsupported" if unsupported else
+                    "graph_needs_revision" if outcome == "needs_revision" else
+                    "graph_uncertain" if outcome != "supported" else
+                    "critical_obligations_not_covered" if critical else
+                    "reference_unknowns_not_retained" if unknowns["status"] not in {"retained", "not_applicable"}
+                    else "model_reviewed_reference_candidate")
+                self.state.update(status=status, workflow_review_outcome=outcome, critical_not_covered=critical,
+                    unsupported_factual_audit_ids=unsupported,
+                    unknown_preservation=unknowns["status"], unknowns_not_fully_retained=unknowns["not_fully_retained_ids"])
+                self.state["graph_rounds"].append({"round": number, "directory": str(self.run / directory),
+                    "status": status, "unsupported_factual_audit_ids": unsupported,
+                    "workflow_sha256": digest(workflow), "assessment_sha256": digest(combined.assessment),
+                    "workflow_review_sha256": digest(combined.workflow_review), "scores_sha256": digest(scores)})
+                last = workflow, combined, scores, number
+                self.persist()
+                # Unassessed alone is evaluator incompleteness, not a graph defect.
+                # A reference revision needs new adjudication, never a graph patch.
+                correctable = (bool(unsupported) or outcome == "needs_revision" or any(item.obligation_id in critical
+                    and item.outcome in {"missing", "partial"} for item in combined.assessment.obligations)
+                    or any(item.outcome in {"missing", "partial"} for item in combined.assessment.unknown_checks))
+                if number == 2 or revision or (outcome == "research_needed" and not unsupported) or not correctable:
+                    break
+                self.state["graph_repairs_used"] = 1
+                feedback = self.freeze("graph_correction_feedback.json", {"category": "graph_correction",
+                    "workflow_review_outcome": outcome, "critical_not_covered": critical,
+                    "unsupported_factual_audit_ids": unsupported,
+                    "unknown_preservation": unknowns,
+                    "instruction": "Assess the exact prior draft/workflow/review/assessment/scores against the unchanged sources and reference. Correct justified graph defects or remove/qualify unsupported claims. Preserve supported obligations and genuine uncertainty; do not invent missing facts or tailor the record for approval. One fresh independent graph review is required."})
+                inputs = {"reference": reference_path, "previous_artifact": draft_path,
+                    "previous_workflow": workflow_path, "previous_workflow_review": review_path,
+                    "previous_assessment": assessment_path, "previous_scores": scores_path, "feedback": feedback}
+        finally:
+            # Even a failed correction keeps the last fully reviewed negative
+            # round available to existing reporters; no canonical file is replaced.
+            if last is not None:
+                workflow, combined, scores, number = last
+                for name, value in (("workflow", workflow), ("workflow_review", combined.workflow_review),
+                        ("assessment", combined.assessment), ("scores", scores)):
+                    self.freeze(name + ".json", value if isinstance(value, dict) else value.model_dump(mode="json"))
+                self.state["selected_graph_round"] = number
+        return last
+
     async def execute(self):
         self.run.mkdir(parents=True, exist_ok=False)
         self.persist()
@@ -220,42 +302,8 @@ class CaseSession:
             if accepted is None:
                 return self.state
             reference, reference_path = accepted
-            draft, _ = await self.stage("graph_constructor", {"reference": reference_path})
-            try:
-                workflow = assemble_workflow(draft, require_bindings=True)
-            except ValueError as exc:
-                raise DataIssue("graph_assembly", str(exc)) from exc
-            errors = validate_evidence(workflow, self.packet)
-            errors.extend(f"Workflow {field} differs from frozen packet" for field in
-                ("method_id", "title", "scope", "variant")
-                if getattr(workflow, field) != self.packet[field])
-            if errors:
-                raise DataIssue("graph_integrity", "; ".join(errors))
-            workflow_path = self.freeze("workflow.json", workflow.model_dump(mode="json"))
-            combined, _ = await self.stage("graph_reviewer", {
-                "reference": reference_path, "workflow": workflow_path})
-            errors = validate_review(combined.workflow_review, workflow, self.packet)
-            errors.extend(validate_assessment(combined.assessment, reference, workflow, self.packet))
-            if errors:
-                raise DataIssue("graph_review_integrity", "; ".join(errors))
-            outcome = review_outcome(combined.workflow_review, workflow)
-            self.state["workflow_review_outcome"] = outcome
-            self.freeze("workflow_review.json", combined.workflow_review.model_dump(mode="json"))
-            self.freeze("assessment.json", combined.assessment.model_dump(mode="json"))
-            scores = score_assessment(combined.assessment, reference, workflow, self.packet)
-            self.freeze("scores.json", scores)
-            self.state["critical_not_covered"] = scores["obligation_coverage"]["critical_not_covered"]
-            unknowns = scores["unknown_preservation"]
-            self.state.update(unknown_preservation=unknowns["status"],
-                              unknowns_not_fully_retained=unknowns["not_fully_retained_ids"])
-            if outcome != "supported":
-                self.state["status"] = "graph_needs_revision" if outcome == "needs_revision" else "graph_uncertain"
-            elif self.state["critical_not_covered"]:
-                self.state["status"] = "critical_obligations_not_covered"
-            elif unknowns["status"] not in {"retained", "not_applicable"}:
-                self.state["status"] = ("reference_unknown_revision_needed" if
-                    unknowns["counts"]["reference_revision_needed"] else "reference_unknowns_not_retained")
-            else:
+            workflow, combined, _, _ = await self.graph(reference, reference_path)
+            if self.state["status"] == "model_reviewed_reference_candidate":
                 verify_pins(self.pins)
                 export_candidate(workflow, combined.workflow_review, self.packet, self.run / "projection")
                 for name in ("graph_candidate.json", "protocol.txt"):
@@ -297,7 +345,23 @@ async def run_batch(manifest_path, output, *, concurrency=4, case_ids=(), prepar
         raise ValueError("Manifest case IDs must be distinct safe path components")
     if set(case_ids) - set(ids):
         raise ValueError("Requested case IDs are absent from the manifest")
-    rows = [dict(row) for row in rows if not case_ids or row["case_id"] in case_ids]
+    rows = [dict(row) for row in rows]
+    report = manifest.get("source_report")
+    report_pins = {}
+    if report is not None:
+        if (not isinstance(report, dict) or not isinstance(report.get("path"), str)
+                or not re.fullmatch(r"[0-9a-f]{64}", str(report.get("sha256", "")))):
+            raise ValueError("Declared source report requires a path and file-byte SHA-256")
+        report_path = (manifest_path.parent / report["path"]).resolve()
+        report_pins[str(report_path)] = report["sha256"]
+        verify_pins(report_pins)
+        if any(not row.get("source_report") or
+               (manifest_path.parent / row["source_report"]).resolve() != report_path for row in rows):
+            raise ValueError("Each case source_report must match the globally bound source report")
+        report = {"path": str(report_path), "sha256": report["sha256"]}
+        for row in rows:
+            row["source_report"] = str(report_path)
+    rows = [row for row in rows if not case_ids or row["case_id"] in case_ids]
     for row in rows:
         if not isinstance(row.get("packet_sha256"), str) or not re.fullmatch(r"[0-9a-f]{64}", row["packet_sha256"]):
             raise ValueError("Each case requires a declared packet file-byte SHA-256")
@@ -309,12 +373,14 @@ async def run_batch(manifest_path, output, *, concurrency=4, case_ids=(), prepar
             Path(driver_path).resolve() if driver_path else root / "scripts/benchmark/run_reference_batch.py"]
     files = [manifest_path, *code, *(templates / name for name in ROLES.values())]
     pins = {str(path): sha(path) for path in files}
-    write(output / "manifest.json", {"cases": rows})
+    pins.update(report_pins)
+    write(output / "manifest.json", {"cases": rows, **({"source_report": report} if report is not None else {})})
     pins[str(output / "manifest.json")] = sha(output / "manifest.json")
     write(output / "bindings.json", pins)
     state = {"status": "running", "started_at": now(), "concurrency": concurrency,
              "model": "gpt-6.1-sol", "effort": "xhigh", "cases": {}, "boundary": BOUNDARY,
              "job_id": os.environ.get("SLURM_JOB_ID"), "prepare_only": prepare_only}
+    state["source_report_binding"] = "declared_sha256_verified" if report_pins else "legacy_unbound"
     write(output / "state.json", state)
     semaphore, used_threads = asyncio.Semaphore(concurrency), set()
 

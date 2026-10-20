@@ -262,6 +262,61 @@ def test_complete_declared_narrow_audit_never_yields_whole_graph_precision(tmp_p
     assert row["graph_unknown_preservation"] == "not_assessed"
 
 
+@pytest.mark.parametrize("verdict,eligible", [("unsupported", False), ("uncertain", True), ("unassessed", True)])
+def test_explicit_unsupported_audit_blocks_candidate_without_changing_obligation_counts(tmp_path, verdict, eligible):
+    phase = Phase(tmp_path)
+    folder = phase.case()
+    assessment = json.loads((folder / "assessment.json").read_bytes())
+    assessment["factual_audits"][0]["verdict"] = verdict
+    write(folder / "assessment.json", assessment)
+    phase.repin(folder)
+    result = phase.report()
+    row = result["cases"][0]
+    assert row["workflow_review"]["status"] == "model_review_supported"
+    assert row["obligations"]["status"] == "full"
+    assert row["obligations"]["counts"] == {"covered": 2, "missing": 0, "partial": 0, "unassessed": 0}
+    assert row["full_model_candidate_coverage"] is eligible
+    assert result["stage_counts"]["full_declared_candidate_coverage"] == int(eligible)
+    assert row["factual_audit"]["counts"] == {verdict: 1}
+    assert row["factual_audit"]["unsupported_factual_audit_ids"] == (["audit1"] if verdict == "unsupported" else [])
+    if verdict == "unsupported":
+        assert row["failures"]["graph"][0]["category"] == "factual_assertions_unsupported"
+
+
+@pytest.mark.parametrize("selected,repairs,status", [(1, 0, "first_pass"),
+    (2, 1, "after_one_data_correction"), (1, 1, "first_pass_retained_after_failed_correction")])
+def test_declared_graph_correction_history_and_round_hashes_are_visible(tmp_path, selected, repairs, status):
+    phase = Phase(tmp_path)
+    folder = phase.case()
+    state = json.loads((folder / "state.json").read_bytes())
+    rounds = [{"round": number, "status": "graph_needs_revision" if number == 1 and repairs else
+        "model_reviewed_reference_candidate", "workflow_sha256": str(number) * 64,
+        "workflow_review_sha256": "a" * 64, "assessment_sha256": "b" * 64, "scores_sha256": "c" * 64}
+        for number in range(1, selected + 1)]
+    state.update(graph_repairs_used=repairs, selected_graph_round=selected, graph_rounds=rounds)
+    write(folder / "state.json", state)
+    result = phase.report()
+    row = result["cases"][0]
+    assert row["graph_round_history_status"] == status
+    assert row["graph_repairs_used"] == repairs and row["selected_graph_round"] == selected
+    assert row["graph_rounds_count"] == len(rounds) and row["graph_rounds"] == rounds
+    assert row["selected_graph_round_hashes"]["workflow_sha256"] == str(selected) * 64
+    text = reporter.markdown(result)
+    assert status in text and str(selected) * 64 in text
+
+
+def test_legacy_graph_history_is_not_inferred_from_attempt_count(tmp_path):
+    phase = Phase(tmp_path)
+    folder = phase.case()
+    state = json.loads((folder / "state.json").read_bytes())
+    state["attempts"] = [{"role": "graph_constructor"}, {"role": "graph_reviewer"}] * 3
+    write(folder / "state.json", state)
+    row = phase.report()["cases"][0]
+    assert row["graph_round_history_status"] == "not_assessed"
+    assert row["graph_repairs_used"] is row["selected_graph_round"] is row["graph_rounds_count"] is None
+    assert row["graph_rounds"] is None and row["selected_graph_round_hashes"] == {}
+
+
 @pytest.mark.parametrize("use_module_gap_witnesses", [True, False])
 def test_benchmark_module_gap_targets_are_distinct_from_extraction_review_targets(
         tmp_path, use_module_gap_witnesses):

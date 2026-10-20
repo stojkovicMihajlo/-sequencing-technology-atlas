@@ -26,6 +26,8 @@ class FixturePool:
     def __init__(self, records, *, fault=None):
         self.workflow, self.packet, self.reference, self.review, self.assessment, self.source = records
         self.fault, self.calls, self.counts = fault, [], Counter()
+        self.correction_snapshot = None
+        self.projection_before_fresh_review = None
         raw = self.workflow.model_dump(mode="json")
         raw["unresolved"] = [{"id": "reference-" + item.id,
             "description": item.question + " " + item.consequence, "blocking": False,
@@ -70,6 +72,15 @@ class FixturePool:
                         document["obligation_checks"][0]["verdict"] = "uncertain"
                 elif role == "graph_constructor":
                     document = pool.draft.model_dump(mode="json")
+                    if round_number == 1 and pool.fault in {"graph_revision_once", "factual_unsupported_once"}:
+                        document["operations"][0]["action"] = "Discard all indexed-well attribution."
+                    if round_number == 2:
+                        prior = {name: Path(path) for name, path in re.findall(
+                            r"^(previous_\w+): (.+)$", prompt, re.MULTILINE)}
+                        case_root = attempt.parent.parent
+                        pool.correction_snapshot = {"pins": {str(path): sha(path) for path in prior.values()},
+                            "canonical_exists": (case_root / "workflow.json").exists(),
+                            "projection_exists": (case_root / "projection").exists()}
                     if pool.fault == "missing_bindings":
                         document["operations"][0]["input_bindings"] = None
                 else:
@@ -89,18 +100,34 @@ class FixturePool:
                         assessment.pop("unknown_checks")
                     elif pool.fault == "missing_unknown_check":
                         assessment["unknown_checks"] = []
-                    elif pool.fault == "unknown_partial":
+                    elif pool.fault == "unknown_partial" or (pool.fault == "unknown_partial_once" and round_number == 1):
                         assessment["unknown_checks"][0]["outcome"] = "partial"
                     elif pool.fault == "unknown_revision":
                         assessment["unknown_checks"][0].update(outcome="reference_revision_needed",
                             evidence=[reference.obligations[0].evidence[0].model_dump(mode="json")])
                     if pool.fault == "critical_unassessed":
                         assessment["obligations"][0].update(outcome="unassessed", targets=[], evidence=[])
+                    if pool.fault == "critical_partial_once" and round_number == 1:
+                        assessment["obligations"][0]["outcome"] = "partial"
                     if pool.fault == "noncritical_partial":
                         assessment["obligations"][1]["outcome"] = "partial"
                     review = make_review(workflow.model_dump(mode="json"), pool.packet)
-                    if pool.fault == "unsupported_graph":
+                    if pool.fault == "unsupported_graph" or (round_number == 1 and pool.fault in {
+                            "graph_revision_once", "graph_revision_then_uncertain", "graph_repair_missing_artifact"}):
                         review["checks"][0]["verdict"] = "unsupported"
+                    if pool.fault == "graph_uncertain" or (pool.fault == "graph_revision_then_uncertain" and round_number == 2):
+                        review["checks"][0]["verdict"] = "unresolved"
+                    audit_verdict = {"factual_unsupported_always": "unsupported",
+                        "factual_uncertain": "uncertain", "factual_unassessed": "unassessed"}.get(pool.fault)
+                    if pool.fault == "factual_unsupported_once":
+                        audit_verdict = "unsupported" if round_number == 1 else "supported"
+                    if audit_verdict:
+                        assessment["factual_audits"] = [{"id": "attribution_claim",
+                            "claim": workflow.operations[0].action, "targets": ["operation:separate"],
+                            "verdict": audit_verdict, "rationale": "Independent synthetic claim judgment.",
+                            "evidence": [reference.obligations[0].evidence[0].model_dump(mode="json")]}]
+                    if round_number == 2:
+                        pool.projection_before_fresh_review = (attempt.parent.parent / "projection").exists()
                     document = {"workflow_review": review, "assessment": assessment}
                 (attempt / "artifact.json").write_text(json.dumps(document))
                 (attempt / "prompt.txt").write_text(prompt)
@@ -119,6 +146,8 @@ class FixturePool:
                 if pool.fault == "mutate_original":
                     pool.source.write_text("Changed immutable original source.")
                 if pool.fault == "missing_artifact":
+                    (attempt / "artifact.json").unlink()
+                if pool.fault == "graph_repair_missing_artifact" and role == "graph_constructor" and round_number == 2:
                     (attempt / "artifact.json").unlink()
                 await asyncio.sleep(0)
                 return result
@@ -257,7 +286,7 @@ async def test_critical_or_scientific_graph_failure_withholds_positive_render(
     assert state["cases"]["fixture"]["status"] == status
     assert (output / "cases/fixture/scores.json").is_file()
     assert not (output / "cases/fixture/projection/protocol.txt").exists()
-    assert len(pool.calls) == 4
+    assert len(pool.calls) == (6 if fault == "unsupported_graph" else 4)
 
 
 async def test_noncritical_partial_is_visible_without_fabricating_full_coverage(records, tmp_path):
@@ -277,7 +306,7 @@ async def test_new_runs_require_v2_and_uncertainty_preservation_before_export(re
     state = await run_batch(manifest_for(records, tmp_path), output, worker_factory=pool.worker)
     case = state["cases"]["fixture"]
     assert case["status"] == status
-    assert len(pool.calls) == 4
+    assert len(pool.calls) == (6 if fault == "unknown_partial" else 4)
     assert not (output / "cases/fixture/projection/protocol.txt").exists()
     if fault in {"unknown_partial", "unknown_revision"}:
         scores = json.loads((output / "cases/fixture/scores.json").read_bytes())
@@ -318,3 +347,132 @@ async def test_native_execution_requires_slurm_and_does_not_resume(records, tmp_
     with pytest.raises(RuntimeError, match="Slurm"):
         await run_batch(manifest_for(records, tmp_path), output)
     assert not output.exists()
+
+
+@pytest.mark.parametrize("fault", ["graph_revision_once", "factual_unsupported_once",
+                                 "critical_partial_once", "unknown_partial_once"])
+async def test_one_graph_correction_preserves_negative_round_and_requires_fresh_review(records, tmp_path, fault):
+    pool = FixturePool(records, fault=fault)
+    output = tmp_path / "corrected"
+    state = await run_batch(manifest_for(records, tmp_path), output, worker_factory=pool.worker)
+    case, root = state["cases"]["fixture"], output / "cases/fixture"
+    assert case["status"] == "model_reviewed_reference_candidate"
+    assert case["graph_repairs_used"] == 1 and case["selected_graph_round"] == 2
+    assert len(pool.calls) == state["distinct_native_threads"] == 6
+    assert [row["role"] for row in case["attempts"] if row["data_repair"]] == ["graph_constructor"]
+    first, second = case["graph_rounds"]
+    assert first["status"] != "model_reviewed_reference_candidate"
+    assert second["status"] == "model_reviewed_reference_candidate"
+    snapshot = pool.correction_snapshot
+    assert not snapshot["canonical_exists"] and not snapshot["projection_exists"]
+    assert pool.projection_before_fresh_review is False
+    assert len(snapshot["pins"]) == 5
+    final_pins = json.loads((root / "bindings.json").read_bytes())
+    assert all(sha(Path(path)) == value == final_pins[path] for path, value in snapshot["pins"].items())
+    for number in (1, 2):
+        for name in ("workflow", "workflow_review", "assessment", "scores"):
+            path = root / f"graph_rounds/{number:03d}/{name}.json"
+            assert final_pins[str(path)] == sha(path)
+    assert json.loads((root / "workflow.json").read_bytes()) == json.loads(
+        (root / "graph_rounds/002/workflow.json").read_bytes())
+    repair_prompt, review_prompt = pool.calls[4][2], pool.calls[5][2]
+    repair_digests = json.loads((pool.calls[4][3] / "instruction.json").read_bytes())["canonical_object_digests"]
+    for name in ("previous_artifact", "previous_workflow", "previous_workflow_review", "previous_assessment", "previous_scores"):
+        path = Path(re.search(rf"^{name}: (.+)$", repair_prompt, re.MULTILINE)[1])
+        assert repair_digests[name + "_sha256"] == digest(json.loads(path.read_bytes()))
+    assert "previous_artifact:" not in review_prompt and "feedback:" not in review_prompt
+    assert str(root / "graph_rounds/002/workflow.json") in review_prompt
+    assert all(json.loads((call[3] / "instruction.json").read_bytes())["canonical_object_digests"][
+        "reference_sha256"] == case["reference_sha256"] for call in pool.calls[2:])
+    if fault in {"graph_revision_once", "factual_unsupported_once"}:
+        assert first["workflow_sha256"] != second["workflow_sha256"]
+        assert "Discard all indexed-well attribution" in (root / "graph_rounds/001/workflow.json").read_text()
+        assert "Discard all indexed-well attribution" not in (root / "workflow.json").read_text()
+    assert (root / "projection/graph_candidate.json").is_file()
+
+
+@pytest.mark.parametrize("fault,status,calls,selected", [
+    ("factual_unsupported_always", "factual_assertions_unsupported", 6, 2),
+    ("unsupported_graph", "graph_needs_revision", 6, 2),
+    ("graph_revision_then_uncertain", "graph_uncertain", 6, 2),
+    ("graph_repair_missing_artifact", "graph_constructor_failed", 5, 1),
+    ("graph_uncertain", "graph_uncertain", 4, 1)])
+async def test_failed_or_uncertain_graph_correction_never_exports_or_retries_again(records, tmp_path, fault, status, calls, selected):
+    pool = FixturePool(records, fault=fault)
+    output = tmp_path / "negative"
+    state = await run_batch(manifest_for(records, tmp_path), output, worker_factory=pool.worker)
+    case, root = state["cases"]["fixture"], output / "cases/fixture"
+    assert case["status"] == status and case["selected_graph_round"] == selected
+    assert len(pool.calls) == calls and case["graph_repairs_used"] <= 1
+    assert not (root / "projection").exists()
+    assert len(case["graph_rounds"]) == selected
+    for name in ("workflow", "workflow_review", "assessment", "scores"):
+        assert json.loads((root / f"{name}.json").read_bytes()) == json.loads(
+            (root / f"graph_rounds/{selected:03d}/{name}.json").read_bytes())
+    if fault == "factual_unsupported_always":
+        assert case["unsupported_factual_audit_ids"] == ["attribution_claim"]
+        scores = json.loads((root / "scores.json").read_bytes())
+        assert scores["obligation_coverage"]["strict_covered_fraction"] == 1
+        assert scores["factual_audit"]["counts"]["unsupported"] == 1
+        assert all(row["unsupported_factual_audit_ids"] == ["attribution_claim"] for row in case["graph_rounds"])
+
+
+@pytest.mark.parametrize("fault", ["factual_uncertain", "factual_unassessed"])
+async def test_undecided_factual_audits_do_not_become_negatives_or_trigger_correction(records, tmp_path, fault):
+    pool = FixturePool(records, fault=fault)
+    output = tmp_path / "undecided"
+    state = await run_batch(manifest_for(records, tmp_path), output, worker_factory=pool.worker)
+    case = state["cases"]["fixture"]
+    assert len(pool.calls) == 4 and case["graph_repairs_used"] == 0
+    assert case["status"] == "model_reviewed_reference_candidate"
+    assert case["unsupported_factual_audit_ids"] == []
+    scores = json.loads((output / "cases/fixture/scores.json").read_bytes())
+    assert scores["factual_audit"]["counts"]["unsupported"] == 0
+    assert scores["factual_audit"]["supported_claim_precision"] is None
+
+
+async def test_declared_source_report_is_bound_in_every_case_and_legacy_remains_unbound(records, tmp_path):
+    manifest = manifest_for(records, tmp_path, ids=("one", "two"))
+    document = json.loads(manifest.read_bytes())
+    report = tmp_path / "source_report.json"
+    report.write_text('{"cases": {"one": {}, "two": {}}}')
+    document["source_report"] = {"path": report.name, "sha256": sha(report)}
+    for row in document["cases"]:
+        row["source_report"] = report.name
+    manifest.write_text(json.dumps(document))
+    output = tmp_path / "bound"
+    state = await run_batch(manifest, output, prepare_only=True)
+    assert state["source_report_binding"] == "declared_sha256_verified"
+    for ident in ("one", "two"):
+        bindings = json.loads((output / f"cases/{ident}/bindings.json").read_bytes())
+        assert bindings[str(report)] == sha(report)
+    copied = json.loads((output / "manifest.json").read_bytes())
+    assert copied["source_report"]["path"] == str(report)
+    assert all(row["source_report"] == str(report) for row in copied["cases"])
+    document.pop("source_report")
+    manifest.write_text(json.dumps(document))
+    legacy = await run_batch(manifest, tmp_path / "legacy", prepare_only=True)
+    assert legacy["source_report_binding"] == "legacy_unbound"
+
+
+@pytest.mark.parametrize("defect", ["changed", "missing", "wrong_row", "unselected_wrong_row"])
+async def test_source_report_custody_failures_stop_before_any_native_call(records, tmp_path, defect):
+    manifest = manifest_for(records, tmp_path, ids=("one", "two"))
+    document = json.loads(manifest.read_bytes())
+    report = tmp_path / "source_report.json"
+    report.write_text('{"cases": {}}')
+    document["source_report"] = {"path": report.name, "sha256": sha(report)}
+    for row in document["cases"]:
+        row["source_report"] = report.name
+    if defect == "changed":
+        report.write_text('{"cases": {"changed": {}}}')
+    elif defect == "missing":
+        report.unlink()
+    else:
+        document["cases"][1 if defect == "unselected_wrong_row" else 0]["source_report"] = "other_report.json"
+    manifest.write_text(json.dumps(document))
+    output = tmp_path / "blocked"
+    pool = FixturePool(records)
+    with pytest.raises(ValueError, match="Frozen file changed|globally bound source report"):
+        await run_batch(manifest, output, case_ids=["one"], worker_factory=pool.worker)
+    assert not pool.calls and not output.exists()

@@ -72,6 +72,16 @@ preserve_phase "$ATLAS_PRIOR_REFERENCE_WORK" \
 
 cases="$ATLAS_REPOSITORY/benchmarks/protocol_graph_v1/cases.json"
 recipes="$ATLAS_REPOSITORY/benchmarks/protocol_graph_v1/source_recovery_20261020.json"
+if [[ -n "${ATLAS_BENCHMARK_SOURCE_BASE:-}" || -n "${ATLAS_BENCHMARK_SOURCE_OVERRIDES:-}" ]]; then
+    : "${ATLAS_BENCHMARK_SOURCE_BASE:?Prepared base source phase required}"
+    : "${ATLAS_BENCHMARK_SOURCE_OVERRIDES:?Exact registered source override manifest required}"
+    preserve_phase "$(dirname "$ATLAS_BENCHMARK_SOURCE_BASE")" "protocol-source-recovery-$SLURM_JOB_ID"
+    preserve_phase "$(dirname "$ATLAS_BENCHMARK_SOURCE_OVERRIDES")" "protocol-source-registration-$SLURM_JOB_ID"
+    "$ATLAS_ENV_DIR/bin/python" scripts/benchmark/apply_source_overrides.py \
+        --cases "$cases" --base-sources "$ATLAS_BENCHMARK_SOURCE_BASE" \
+        --overrides "$ATLAS_BENCHMARK_SOURCE_OVERRIDES" --output "$work/sources" \
+        > "$work/source-overrides.log" 2>&1
+else
 "$ATLAS_ENV_DIR/bin/python" scripts/benchmark/recheck_sources.py \
     --cases "$cases" --prior-sources "$ATLAS_PRIOR_REFERENCE_WORK/sources" \
     --output "$work/rechecked" > "$work/source-recheck.log" 2>&1
@@ -81,6 +91,7 @@ recipes="$ATLAS_REPOSITORY/benchmarks/protocol_graph_v1/source_recovery_20261020
 "$ATLAS_ENV_DIR/bin/python" scripts/benchmark/combine_sources.py \
     --cases "$cases" --rechecked "$work/rechecked" --recovered "$work/recovered" \
     --output "$work/sources" > "$work/source-combination.log" 2>&1
+fi
 
 # Keep per-case failures visible and still produce the remaining comparisons/report.
 reference_code=0

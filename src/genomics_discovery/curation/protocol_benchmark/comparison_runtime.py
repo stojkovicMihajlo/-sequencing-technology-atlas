@@ -152,6 +152,10 @@ def load_case(reference_run, case_id, *, case_definition=None):
     if reference_review_outcome(reference_review) != "supported_reference_candidate" or review_outcome(
             workflow_review, workflow) != "supported":
         raise StageFailure("source_review_gate", "Both source/reference and workflow reviews must be supported")
+    unsupported = [item.id for item in assessment.factual_audits if item.verdict == "unsupported"]
+    if unsupported:
+        raise StageFailure("unsupported_factual_audit", "An emitted assertion has an explicit unsupported factual audit: "
+            + ", ".join(unsupported))
     if any(item.outcome != "covered" for item in assessment.obligations):
         raise StageFailure("partial_reference", "Every required/critical obligation must be covered for whole-reference comparison")
     unknowns = unknown_preservation(assessment, reference)

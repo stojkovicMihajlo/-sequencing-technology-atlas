@@ -91,11 +91,15 @@ def verify_pdf_registration(source, case, expected, pin):
     if selection != registration["article_selection"]:
         raise ValueError("PDF article selection differs from registration")
     full_text = bound(directory / "full_pdf_text.txt").read_bytes().decode("utf-8")
-    decision = {key: value for key, value in selection.items() if key not in {"start_char", "end_char"}}
+    decision = pdf.selection_decision(selection)
     selected, prefix, suffix, replayed = pdf.select_article_text(full_text, decision)
     if (replayed != selection or bound(directory / "excluded_prefix.txt").read_bytes().decode("utf-8") != prefix
             or bound(directory / "excluded_suffix.txt").read_bytes().decode("utf-8") != suffix):
         raise ValueError("PDF text selection or retained exclusions differ")
+    if decision["kind"] == "exact_text_regions":
+        for name, expected_record in pdf.selected_region_artifacts(full_text, replayed).items():
+            if json.loads(bound(directory / name).read_bytes()) != expected_record:
+                raise ValueError(f"PDF selected-region map or exclusions differ: {name}")
     inspection_binding = selection["inspection_report"]
     inspection_path = bound(inspection_binding["path"], inspection_binding["sha256"])
     inspection = json.loads(inspection_path.read_bytes())
@@ -107,6 +111,8 @@ def verify_pdf_registration(source, case, expected, pin):
         inspected = Path(name)
         bound(inspected if inspected.is_absolute() else (inspection_path.parent / inspected).resolve(), expected_sha)
     evidence_binding = registration.get("identity_evidence")
+    if decision["kind"] == "exact_text_regions" and not evidence_binding:
+        raise ValueError("PDF selected regions require their inspected identity evidence")
     if evidence_binding:
         evidence = json.loads(bound(evidence_binding["path"], evidence_binding["sha256"]).read_bytes())
         if evidence != evidence_binding["record"]:
@@ -114,6 +120,9 @@ def verify_pdf_registration(source, case, expected, pin):
         check = pdf.verify_selected_pdf_text(full_text, identity, selection, evidence, original_sha256=files[str(original)])
         if check != registration["identity_check"] or "first_pages_check" in registration:
             raise ValueError("PDF selected-article identity check differs")
+        if decision["kind"] == "exact_text_regions":
+            pdf.verify_region_inspection(inspection, selection, full_text,
+                original_sha256=files[str(original)], pin=bound, identity_evidence=evidence)
         route = "registered_pdf_inspected_selected_article"
     else:
         check = pdf.verify_pdf_text(full_text, identity)

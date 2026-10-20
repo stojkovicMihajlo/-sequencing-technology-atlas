@@ -5,6 +5,12 @@ protocol. It does not require an extractor to choose our operation names, module
 boundaries or node counts. Initial references are model-authored candidates checked
 by another model; they are not expert-adjudicated gold.
 
+Here, independent model review means a fresh, separately archived native session
+with assigned source inputs. It does not establish statistical independence,
+eliminate shared model errors, or certify filesystem isolation from every other
+project file. The prompt forbids unlisted artifacts, and the native trace is
+retained; that instruction is not an access-control proof.
+
 ## Start with the scientific requirements
 
 In `references/cases/CASE/reference.json`, read `scope`, `variant` and

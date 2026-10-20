@@ -129,6 +129,34 @@ def verify_pdf_text(first_pages, identity):
     raise ValueError("First two PDF pages do not bind full publication title and exact DOI/PMID")
 
 
+REGION_DERIVED = ("start_char", "end_char", "start_page", "end_page", "selected_start_char", "selected_end_char")
+
+
+def selection_decision(selection):
+    """Remove only host-derived offsets; preserve every authored decision field."""
+    decision = {key: value for key, value in selection.items() if key not in {"start_char", "end_char"}}
+    if decision.get("kind") == "exact_text_regions":
+        decision["regions"] = [{key: value for key, value in row.items() if key not in REGION_DERIVED}
+                               for row in decision["regions"]]
+    return decision
+
+
+def selected_region_artifacts(text, selection):
+    """Exact source/selected map and complete complement, never purity inference."""
+    selected, _, _, record = select_article_text(text, selection_decision(selection))
+    excluded, cursor = [], 0
+    for row in record["regions"]:
+        if cursor < row["start_char"]:
+            excluded.append({"start_char": cursor, "end_char": row["start_char"], "text": text[cursor:row["start_char"]]})
+        cursor = row["end_char"]
+    if cursor < len(text):
+        excluded.append({"start_char": cursor, "end_char": len(text), "text": text[cursor:]})
+    return {"excluded_regions.json": {"source_text_sha256": record["source_text_sha256"], "regions": excluded},
+        "source_text_map.json": {"source_text_sha256": record["source_text_sha256"],
+            "selected_text_sha256": hashlib.sha256(selected.encode("utf-8")).hexdigest(), "joiner": "\n\n",
+            "regions": [{key: row[key] for key in REGION_DERIVED} for row in record["regions"]]}}
+
+
 def select_article_text(text, selection):
     """Apply an explicit source-preparer decision; never infer article boundaries.
 
@@ -147,6 +175,29 @@ def select_article_text(text, selection):
         if set(selection) != {"kind", "basis", "inspection_report"}:
             raise ValueError("Whole-document selection has unsupported fields")
         return text, "", "", {**selection, "start_char": 0, "end_char": len(text)}
+    if selection.get("kind") == "exact_text_regions":
+        if (set(selection) != {"kind", "basis", "inspection_report", "source_text_sha256", "regions"}
+                or selection["source_text_sha256"] != hashlib.sha256(text.encode("utf-8")).hexdigest()
+                or not isinstance(selection["regions"], list) or not selection["regions"]):
+            raise ValueError("Exact regions require the full source-text SHA256 and explicit regions")
+        rows, pieces, finish, selected_offset = [], [], 0, 0
+        for region in selection["regions"]:
+            if not isinstance(region, dict) or set(region) != {"start", "end"}:
+                raise ValueError("Each region requires exact start/end markers")
+            start, end = region["start"], region["end"]
+            if any(not isinstance(marker, str) or len(marker) < 12 or text.count(marker) != 1 for marker in (start, end)):
+                raise ValueError("Region markers must be exact and unique (at least 12 characters)")
+            begin, stop = text.index(start), text.index(end) + len(end)
+            if begin < finish or begin >= text.index(end):
+                raise ValueError("Regions must be ordered, nonoverlapping and nonempty")
+            piece = text[begin:stop]
+            selected_offset += 2 if pieces else 0
+            rows.append({**region, "start_char": begin, "end_char": stop,
+                "start_page": text[:begin].count("\f") + 1, "end_page": text[:stop-1].count("\f") + 1,
+                "selected_start_char": selected_offset, "selected_end_char": selected_offset + len(piece)})
+            pieces.append(piece); selected_offset += len(piece); finish = stop
+        return "\n\n".join(pieces), text[:rows[0]["start_char"]], text[finish:], {
+            **selection, "regions": rows, "start_char": rows[0]["start_char"], "end_char": finish}
     if selection.get("kind") != "exact_text_bounds" or set(selection) != {"kind", "basis", "start", "end", "inspection_report"}:
         raise ValueError("Expected explicit whole_document or exact_text_bounds selection")
     start, end = selection["start"], selection["end"]
@@ -167,19 +218,30 @@ def verify_selected_pdf_text(text, identity, selection, evidence, *, original_sh
     """
     required = {"format_version", "original_sha256", "inspection_report", "title_witness",
                 "identifier_witness", "identifier_context", "identifier_role", "basis"}
+    version = evidence.get("format_version") if isinstance(evidence, dict) else None
+    if version == "selected_article_identity/1.1":
+        required |= {"title_role", "title_page_image_sha256"}
     if (not isinstance(evidence, dict) or set(evidence) != required
-            or evidence["format_version"] != "selected_article_identity/1.0"
+            or version not in {"selected_article_identity/1.0", "selected_article_identity/1.1"}
             or evidence["original_sha256"] != original_sha256
             or evidence["identifier_role"] != "article_publication_identifier"
             or not isinstance(evidence["basis"], str) or len(evidence["basis"].strip()) < 20):
         raise ValueError("Explicit inspected article-identity evidence and original binding required")
-    decision = {k: v for k, v in selection.items() if k not in {"start_char", "end_char"}}
-    if decision.get("kind") != "exact_text_bounds":
+    decision = selection_decision(selection)
+    region_route = version == "selected_article_identity/1.1"
+    if decision.get("kind") != ("exact_text_regions" if region_route else "exact_text_bounds"):
         raise ValueError("Inspected identity route requires explicit exact article boundaries")
     if evidence["inspection_report"] != decision.get("inspection_report"):
         raise ValueError("Identity evidence and article selection must bind the same inspection")
     _, _, _, bounds = select_article_text(text, decision)
-    opening = text[bounds["start_char"]:bounds["start_char"] + 3000]
+    included = bounds["regions"] if region_route else [bounds]
+    if region_route and (evidence["title_role"] != "visually_inspected_article_header"
+            or not isinstance(evidence["title_page_image_sha256"], str)
+            or not re.fullmatch(r"[0-9a-f]{64}", evidence["title_page_image_sha256"])):
+        raise ValueError("Region identity requires an explicitly inspected article header and page-image pin")
+    opening = ("\n".join(text[row["start_char"]:row["end_char"]].split("\f", 1)[0]
+        for row in included if row["start_page"] == included[0]["start_page"]) if region_route
+        else text[bounds["start_char"]:bounds["start_char"] + 3000])
     if re.search(r"(?im)^\s*(?:correction|author correction|publisher correction|erratum|"
                  r"corrigendum|retraction|expression of concern)\b", opening):
         raise ValueError("Correction/retraction notice requires separate publication inspection")
@@ -188,7 +250,7 @@ def verify_selected_pdf_text(text, identity, selection, evidence, *, original_sh
         item = evidence[name]
         if (not isinstance(item, dict) or set(item) != {"start_char", "end_char", "quote", "page"}
                 or type(item["start_char"]) is not int or type(item["end_char"]) is not int
-                or not bounds["start_char"] <= item["start_char"] < item["end_char"] <= bounds["end_char"]
+                or not any(row["start_char"] <= item["start_char"] < item["end_char"] <= row["end_char"] for row in included)
                 or not isinstance(item["quote"], str)
                 or text[item["start_char"]:item["end_char"]] != item["quote"]
                 or type(item["page"]) is not int
@@ -200,7 +262,8 @@ def verify_selected_pdf_text(text, identity, selection, evidence, *, original_sh
     identifier = witness("identifier_witness")
     context = witness("identifier_context")
     if (_title(title["quote"]) != _title(identity["title"])
-            or title["start_char"] - bounds["start_char"] > 3000):
+            or (title["page"] != included[0]["start_page"] if region_route
+                else title["start_char"] - bounds["start_char"] > 3000)):
         raise ValueError("Inspected title must match the authoritative title at the article opening")
     line_start = text.rfind("\n", 0, title["start_char"]) + 1
     line_end = text.find("\n", title["end_char"])
@@ -223,12 +286,57 @@ def verify_selected_pdf_text(text, identity, selection, evidence, *, original_sh
         r"10\.\d{4,9}/[^\s<>\"']+", context["quote"], re.I)}
     if dois != {_doi(expected)}:
         raise ValueError("Inspected publication-identifier context has conflicting DOI identity")
-    return {"route": "inspected_selected_article", "title_witness": title,
+    result = {"route": "inspected_selected_article", "title_witness": title,
             "identifier_witness": identifier, "identifier_context": context,
             "identifier_role": evidence["identifier_role"], "basis": evidence["basis"],
             "boundary": "Exact selected-text/bibliography bindings plus an explicit inspected "
                         "publication-identifier interpretation; not automatic article purity, "
                         "visual comprehension or scientific completeness."}
+    if region_route:
+        result.update(title_role=evidence["title_role"], title_page_image_sha256=evidence["title_page_image_sha256"])
+    return result
+
+
+def verify_region_inspection(inspection, selection, text, *, original_sha256, pin, identity_evidence):
+    """Replay all declared rendered-page bindings; visual interpretation is asserted."""
+    decision = selection_decision(selection)
+    if (inspection.get("format_version") != "article_content_inspection/1.1"
+            or inspection.get("decision") != "select" or inspection.get("selected_reading_order") != "coherent"
+            or inspection.get("original_sha256") != original_sha256
+            or inspection.get("selection") != {k: v for k, v in decision.items() if k != "inspection_report"}):
+        raise ValueError("Region selection requires its exact explicit inspected decision")
+    source = inspection["source_text"]
+    if (source["sha256"] != decision["source_text_sha256"]
+            or pin(source["path"], source["sha256"]).read_text(encoding="utf-8") != text):
+        raise ValueError("Inspected source text differs from the full converted PDF")
+    binding = inspection["render_manifest"]
+    rendered = json.loads(pin(binding["path"], binding["sha256"]).read_bytes())
+    if rendered["original_sha256"] != original_sha256:
+        raise ValueError("Rendered page manifest belongs to another original PDF")
+    pin(rendered["original"], original_sha256)
+    source_pages = text.split("\f")
+    if source_pages[-1] == "":
+        source_pages.pop()
+    expected = set(range(1, len(source_pages) + 1))
+    pages, checks = rendered["pages"], inspection["pages"]
+    if (len(pages) != len(expected) or len(checks) != len(expected)
+            or {row["page"] for row in pages} != expected or {row["page"] for row in checks} != expected):
+        raise ValueError("Every original source page requires a unique render and inspection")
+    checked = {row["page"]: row for row in checks}
+    for row in pages:
+        check = checked[row["page"]]
+        image = pin(row["image"], row["image_sha256"])
+        if (row["text"] != source_pages[row["page"] - 1] or check["image_sha256"] != row["image_sha256"]
+                or image.read_bytes()[:8] != b"\x89PNG\r\n\x1a\n" or not check.get("observations")):
+            raise ValueError("Rendered source page/text/image differs from its inspected artifacts")
+    _, _, _, record = select_article_text(text, decision)
+    selected_pages = {number for row in record["regions"] for number in range(row["start_page"], row["end_page"] + 1)}
+    if any(checked[number].get("relationship") not in {"target_article", "mixed_articles"}
+           or checked[number].get("reading_order") not in {"coherent", "interleaved"} for number in selected_pages):
+        raise ValueError("Selected source pages cannot be foreign or unreadable")
+    first = record["regions"][0]["start_page"]
+    if identity_evidence["title_page_image_sha256"] != checked[first]["image_sha256"]:
+        raise ValueError("Article header is not bound to the first selected source-page image")
 
 
 def register_pdf(scope, original, original_sha256, public_url, output, *, fetch=download,
@@ -358,7 +466,7 @@ def register_pdf(scope, original, original_sha256, public_url, output, *, fetch=
     if sha(inspection_path) != inspection_pins[str(inspection_path)]:
         raise ValueError("Article inspection report changed")
     inspection = json.loads(inspection_path.read_bytes())
-    decision = {k:v for k,v in selection.items() if k not in {"inspection_report", "start_char", "end_char"}}
+    decision = {k:v for k,v in selection_decision(selection).items() if k != "inspection_report"}
     if (inspection.get("method_id") != scope.method_id or inspection.get("original_sha256") != original_sha256
             or inspection.get("selection") != decision):
         raise ValueError("Inspection report does not bind this article and exact selection")
@@ -371,6 +479,23 @@ def register_pdf(scope, original, original_sha256, public_url, output, *, fetch=
         if not isinstance(expected_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", expected_sha) or sha(path) != expected_sha:
             raise ValueError("Inspected article artifact differs from its bound bytes")
         inspection_pins[str(path)] = expected_sha
+    region_artifacts = {}
+    if selection["kind"] == "exact_text_regions":
+        if identity_binding is None:
+            raise ValueError("Region selection requires explicit selected-article identity1.1 evidence")
+
+        def inspected_pin(value, expected_sha):
+            path = Path(value)
+            path = path.resolve() if path.is_absolute() else (inspection_path.parent / path).resolve()
+            if inspection_pins.get(str(path)) != expected_sha:
+                raise ValueError("Region inspection artifact lacks its exact declared file pin")
+            return path
+
+        verify_region_inspection(inspection, selection, converted, original_sha256=original_sha256,
+            pin=inspected_pin, identity_evidence=identity_record)
+        region_artifacts = selected_region_artifacts(converted, selection)
+        for name, value in region_artifacts.items():
+            _write(output / name, value)
     for name, excluded in (("excluded_prefix.txt", prefix), ("excluded_suffix.txt", suffix)):
         with (output / name).open("x", encoding="utf-8") as handle:
             handle.write(excluded)
@@ -422,6 +547,7 @@ def register_pdf(scope, original, original_sha256, public_url, output, *, fetch=
              output / "packet.json", output / "registration.json",
              output / "full_pdf_text.txt", output / "excluded_prefix.txt", output / "excluded_suffix.txt",
              output / "article_selection.json",
+             *(output / name for name in region_artifacts),
              *(Path(item["snapshot"]) for item in implementation)]
     if identity_binding is not None:
         if sha(identity_binding["path"]) != identity_binding["sha256"]:

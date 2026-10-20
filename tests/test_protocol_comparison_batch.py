@@ -394,6 +394,40 @@ async def test_assessment_1_1_unknown_gate_precedes_comparison_calls(ready_run, 
         assert not result["benchmark_1_1_ready"] and result["benchmark_1_1_ready_pair_count"] == 0
 
 
+@pytest.mark.parametrize("version", ["legacy", "1.1"])
+@pytest.mark.parametrize("verdict", ["unsupported", "uncertain", "unassessed"])
+async def test_known_unsupported_factual_audit_withholds_before_calls_without_turning_uncertainty_false(
+        ready_run, tmp_path, version, verdict):
+    references, tasks, _, _, task = ready_run
+    directory = references / "cases/left"
+    if version == "1.1":
+        assessed_unknown(directory)
+    assessment_path = directory / "assessment.json"
+    assessment = json.loads(assessment_path.read_bytes())
+    reference = json.loads((directory / "reference.json").read_bytes())
+    assessment["factual_audits"] = [{"id": "emitted-extra-assertion", "claim": "An explicitly audited emitted assertion.",
+        "targets": ["operation:capture"], "verdict": verdict, "rationale": "Separate source-qualified factual judgment.",
+        "evidence": reference["obligations"][0]["evidence"]}]
+    write(assessment_path, assessment)
+    state = json.loads((directory / "state.json").read_bytes())
+    native_artifact = Path(state["attempts"][-1]["attempt"]) / "artifact.json"
+    archived = json.loads(native_artifact.read_bytes())
+    archived["assessment"] = assessment
+    write(native_artifact, archived)
+    pins = json.loads((directory / "bindings.json").read_bytes())
+    pins.update({str(assessment_path): sha(assessment_path), str(native_artifact): sha(native_artifact)})
+    write(directory / "bindings.json", pins)
+    pool = FixturePool(ready_run)
+    result = await run_comparison_batch(tasks, references, tmp_path / "factual-gate", worker_factory=pool.worker)
+    pair = result["pairs"][task.comparison_id]
+    if verdict == "unsupported":
+        assert pair["status"] == "withheld" and pool.calls == []
+        assert pair["withheld_cases"]["left"]["error_category"] == "unsupported_factual_audit"
+        assert "emitted-extra-assertion" in pair["withheld_cases"]["left"]["error"]
+    else:
+        assert pair["status"] == "supported_comparison_candidate" and len(pool.calls) == 2
+
+
 @pytest.mark.parametrize("field", ["method_id", "title", "scope", "variant", "pmid", "doi"])
 async def test_same_case_id_cannot_substitute_different_preregistered_method_or_publication(ready_run, tmp_path, field):
     references, tasks, _, _, task = ready_run

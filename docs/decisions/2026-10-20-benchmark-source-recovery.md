@@ -42,9 +42,10 @@ Original Spatial Transcriptomics has retained primary/supplement PDF candidates,
 but its primary's first page includes a preceding article. PDF text order mixes
 the articles and puts the target title after some of its own abstract/body.
 A title-start trim would lose real content; a wider contiguous trim would retain
-foreign content. The present selection API cannot faithfully express the needed
-regions. Keep this case withheld pending explicit inspected multi-region source
-curation, rather than weakening identity or purity guards.
+foreign content. The initial selection API could not faithfully express the needed
+regions. The [inspected-region extension](2026-10-20-inspected-source-regions.md)
+adds that representation without weakening the default guards; actual source
+registration remains a separate gate before this case can be admitted.
 
 The attempted public TUC-seq primary/supplement routes did not deliver full text.
 This is a limitation of checked acquisition routes, not a claim of global

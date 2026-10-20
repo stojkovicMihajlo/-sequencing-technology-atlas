@@ -245,6 +245,7 @@ def _factual_audit(assessment, workflow):
     judged = {target for row in rows if row.get("verdict") in {"supported", "unsupported"}
               for target in row.get("targets", [])}
     return {"denominator": len(rows), "counts": dict(counts), "declared_scope": declared,
+            "unsupported_factual_audit_ids": [row.get("id") for row in rows if row.get("verdict") == "unsupported"],
             "supported_claim_precision": None, "whole_graph_precision": "withheld",
             "declared_row_supported_fraction": counts["supported"] / len(rows) if rows else None,
             "workflow_target_count": len(targets) if isinstance(workflow, dict) else None,
@@ -254,6 +255,24 @@ def _factual_audit(assessment, workflow):
             "unjudged_target_count": len(targets - judged) if isinstance(workflow, dict) else None,
             "foreign_audit_target_ids": sorted(audited - targets),
             "boundary": "Whole-graph precision is withheld regardless of complete_declared. Fractions describe only declared audit rows; abstentions stay in the denominator. Unmatched outputs remain unjudged, never automatically false. These model judgments do not establish scientific accuracy."}
+
+
+def _graph_history(state):
+    """Render declared correction rounds; attempt counts do not establish history."""
+    rounds = state.get("graph_rounds")
+    repairs, selected = state.get("graph_repairs_used"), state.get("selected_graph_round")
+    recorded = isinstance(rounds, list) and type(repairs) is int
+    chosen = next((row for row in rounds if isinstance(row, dict) and row.get("round") == selected), {}) if recorded else {}
+    status = ("not_assessed" if not recorded else
+        "first_pass" if selected == 1 and repairs == 0 else
+        "after_one_data_correction" if selected == 2 and repairs == 1 else
+        "first_pass_retained_after_failed_correction" if selected == 1 and repairs == 1 else
+        "not_selected" if selected is None else "inconsistent_declared_history")
+    return {"graph_round_history_status": status, "graph_repairs_used": repairs,
+        "selected_graph_round": selected, "graph_rounds_count": len(rounds) if isinstance(rounds, list) else None,
+        "graph_rounds": rounds if isinstance(rounds, list) else None,
+        "selected_graph_round_hashes": {key: chosen[key] for key in
+            ("workflow_sha256", "workflow_review_sha256", "assessment_sha256", "scores_sha256") if key in chosen}}
 
 
 def _artifact(archive, case_dir, state, filename, role=None):
@@ -300,6 +319,7 @@ def _case(archive, design, source_rows, manifests):
     reference_review, workflow_review = _review(reference, review), _workflow_review(workflow, graph_review)
     obligations = _obligations(reference, assessment, workflow)
     unknowns = _unknown_preservation(reference, assessment, workflow, packet)
+    factual_audit = _factual_audit(assessment, workflow)
     bindings = archive.read(folder / "bindings.json") or {}
     pins = [archive.pin(path, expected, folder) for path, expected in bindings.items()]
     bad_pins = [row for row in [*pins, *packet_checks] if row["status"] in {
@@ -351,6 +371,10 @@ def _case(archive, design, source_rows, manifests):
     if unknowns["status"] in {"incomplete", "invalid_accounting"}:
         failures["graph"].append({"stage": "unknown_preservation", "category": unknowns["status"],
             "message": "Reference unknown preservation is incomplete or invalid in assessment 1.1."})
+    if factual_audit["unsupported_factual_audit_ids"]:
+        failures["graph"].append({"stage": "factual_audit", "category": "factual_assertions_unsupported",
+            "message": "Explicit unsupported factual-audit judgments block positive candidate coverage: "
+                + str(factual_audit["unsupported_factual_audit_ids"])})
     source_count = len(packet.get("sources", [])) if isinstance(packet, dict) else source.get("sources")
     supplement_count = sum(row.get("role") == "supplement" for row in packet.get("sources", [])) if (
         isinstance(packet, dict)) else source.get("supplement_count")
@@ -361,7 +385,8 @@ def _case(archive, design, source_rows, manifests):
         workflow_review["status"] == "model_review_supported" and obligations["status"] == "full" and
         not bad_pins and not metadata_conflicts and byte_verified and binding_checks and
         all(row["status"] == "matched" for row in binding_checks) and
-        unknowns["status"] not in {"incomplete", "invalid_accounting"})
+        unknowns["status"] not in {"incomplete", "invalid_accounting"} and
+        not factual_audit["unsupported_factual_audit_ids"])
     return {"case_id": cid, "method_id": mid, "family": design.get("family", "unspecified"),
         "split": design.get("split", "unspecified"), "title": design.get("title", cid),
         "source": {"status": source_status, "source_count": source_count,
@@ -371,13 +396,14 @@ def _case(archive, design, source_rows, manifests):
         "annotation": {"status": reference.get("annotation_status", "artifact_present") if isinstance(reference, dict)
             else "not_archived", "obligation_count": len(reference.get("obligations", [])) if isinstance(reference, dict) else None},
         "reference_review": reference_review, "workflow_review": workflow_review,
-        "obligations": obligations, "factual_audit": _factual_audit(assessment, workflow),
+        "obligations": obligations, "factual_audit": factual_audit,
         "unknowns": reference.get("unknowns", []) if isinstance(reference, dict) else None,
         "unresolved_reference_unknown_count": len(reference.get("unknowns", [])) if isinstance(reference, dict) else None,
         "graph_unknown_preservation": unknowns["status"], "unknown_preservation": unknowns,
         "source_coverage": reference.get("source_coverage", []) if isinstance(reference, dict) else None,
         "failures": failures, "recorded_runtime_status": state.get("status", "not_archived"),
         "recorded_stage": state.get("stage"), "repairs_used": state.get("repairs_used", 0),
+        **_graph_history(state),
         "attempt_records": state.get("attempts", []), "metadata_conflicts": metadata_conflicts,
         "artifact_pin_checks": pins, "archived_object_binding_checks": binding_checks,
         "archived_object_digests": {key: object_digest(value) if isinstance(value, dict) else None
@@ -621,6 +647,12 @@ def markdown(report):
             f"Required not fully covered: {obligations['required_not_fully_covered'] or 'none recorded'}.",
             f"Local essential artifact byte pins verified: {row['essential_artifact_bytes_verified']}; "
             f"manifest packet pins agree: {source['manifest_pins_agree']}."]
+        lines += ["", f"Declared graph history: {row['graph_round_history_status']}; "
+            f"data corrections used: {row['graph_repairs_used']}; reviewed rounds: {row['graph_rounds_count']}; "
+            f"selected round: {row['selected_graph_round']}. History is not inferred from native attempt counts."]
+        for graph_round in row["graph_rounds"] or []:
+            lines += [f"- Round {cell(graph_round.get('round'))}: {cell(graph_round.get('status'))}; "
+                f"declared canonical hashes: {cell({key: value for key, value in graph_round.items() if key.endswith('_sha256')})}."]
         for stage, failures in row["failures"].items():
             for failure in failures:
                 lines += ["", f"{stage} issue — {failure['stage']} / {failure['category']}: {failure['message']}"]
@@ -655,6 +687,7 @@ def markdown(report):
                   f"row verdict counts: {audit['counts']}; supported fraction of all declared rows: "
                   f"{audit['declared_row_supported_fraction']}. Unaudited targets: {audit['unaudited_target_count']}; "
                   f"targets without supported/unsupported judgment: {audit['unjudged_target_count']}. "
+                  f"Explicit unsupported audit IDs: {audit['unsupported_factual_audit_ids']}. "
                   "Whole-graph precision is withheld. These are recorded model judgments, not scientific accuracy."]
     lines += ["", "## Separate comparison coverage", ""]
     for row in report["comparisons"]["cases"]:

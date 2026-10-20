@@ -39,6 +39,26 @@ Initial annotations are **model-authored, independently model-reviewed reference
 candidates**, not human-validated ground truth. Graph construction from reference
 answers is a self-consistency check. It is not a blind harness benchmark result.
 
+```mermaid
+flowchart TD
+    S[Frozen source packet] --> A[Annotator: requirements and consequential unknowns]
+    A --> R[Fresh reference reviewer]
+    R -->|Supported candidate| G[Constructor: one acceptable protocol graph]
+    G --> V[Fresh graph reviewer and requirement assessment]
+    V -->|Correctable record defect| C[At most one graph correction]
+    C --> V2[Fresh review of corrected graph]
+    V -->|Passes stated gates| O[Reviewed graph candidate]
+    V2 -->|Passes same gates| O
+    O --> P[Separate pair annotation and fresh pair review]
+    V -->|Missing evidence or unresolved judgment| U[Withheld result and retained artifacts]
+    V2 -->|Still fails| U
+```
+
+Every graph round remains archived. Correction does not change the source packet,
+reference requirements or acceptance criteria. The report distinguishes the
+selected round and correction count instead of presenting a corrected result as
+first-pass success. See the [bounded correction decision](../../docs/decisions/2026-10-20-bounded-graph-correction.md).
+
 Schema/hash/quote checks do not establish entailment. See
 [the decisions and alternatives](../../docs/decisions/2026-10-20-protocol-reference-benchmark.md)
 and [primary paper/code audit](../../docs/benchmark/REFERENCE_AUDIT.md).
