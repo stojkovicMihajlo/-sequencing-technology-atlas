@@ -4,20 +4,23 @@ A research harness for turning published sequencing methods into source-linked
 protocol graphs, then connecting technologies through separately supported
 historical relationships and contextual protocol comparisons.
 
-**Current stage: Qiu Sherlock validation, 2026-10-19.**
-The inventory accounts for 201 methods. A completed three-method pilot produced
-106 operations and 246 protocol connections. The consolidated candidate passed
-1,524 software tests (7 skipped); its completion policy passed a two-case review
-control. A fresh shared-component matching test agreed with six predeclared
-development checks. A separate definition-targeted selector recovered two known
-component regions and an additional candidate, followed by fresh membership checks.
-A recovered scBS supplement also completed fresh extraction, repair, review and graph
-publication. Agents can query reviewed components inside larger workflow regions
-without labeling the entire region as equivalent.
-Earlier publications, including a 12-workflow graph with one freshly reviewed
-shared-mechanism comparison, remain preserved. Their copied status files do not
-establish active workers. The atlas is not yet fully decomposed, and model/source
-review is not experimental validation. See [current status](docs/STATUS.md) and
+**Current stage: shared-operation alignment development, 2026-10-20.**
+The inventory accounts for 201 methods; protocol decomposition remains partial.
+The new development checkpoint passed **1,589 software tests, 3 skipped**, plus six
+experiment-only subprocess checks. It adds source-bound comparison profiles and
+optional semantic registry retrieval while preserving each method's own graph.
+[Tool commands and limits](docs/COMPARISON_PROFILES.md),
+[18 design decisions](docs/decisions/2026-10-20-shared-operation-alignment.md), and
+[pinned reference implementations](docs/REFERENCE_IMPLEMENTATIONS.json) are tracked
+with the code. Similarity does not admit a shared component or a historical edge.
+
+The two-method native diagnostic is queued as Qiu Sherlock job **48601586** at the
+last recorded check. Its first dependency-install attempt failed before models;
+a separate embedding-only container adaptation is preserved. Native completion
+and scientific matching accuracy are not established by the software tests.
+The active default remains the earlier frozen `targeted_selection_18` runtime.
+Earlier extractions, graph publications and live controls remain preserved in
+[current status](docs/STATUS.md). See also
 [what extraction and matching must establish](docs/EXTRACTION_SCOPE_AND_MATCHING.md).
 
 ## Start here
