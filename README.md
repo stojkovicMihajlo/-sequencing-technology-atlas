@@ -19,15 +19,21 @@ by these software checks. See
 [the preregistered decisions](docs/decisions/2026-10-20-protocol-reference-benchmark.md).
 Source registration and a prepare-only run now pass for **9 methods covering all
 six sampling strata**. Three source-blocked cases remain in the denominator.
-Construction job **48625045** is running on Qiu CPU resources as of
-2026-10-20 11:29 UTC. Its frozen runtime includes explicit original-document access
-and source-ancestry preservation; the superseded queued job **48622574** was
-cancelled before model work. The new preparation/archive replay reports no
-unresolved declared source-provenance links. That checks custody, not the scientific
-fidelity of every transcription or assertion. The
-[current run receipt](provenance/protocol_benchmark_originals_submission_20261020.json)
-records exact inputs, software checks and remaining limits. See
-[the optional input contract](docs/benchmark/READING_A_CASE.md).
+Construction job **48625045** finished with scheduler state `FAILED`, exit `1:0`,
+after **04:28:38**. It produced nine annotations: seven passed reference review;
+six graphs remain `graph_uncertain`, two references need revision (Drop-seq and
+sci-RNA-seq), and the SPLiT-seq graph constructor ended in a transport timeout.
+All final target checks in the six reviewed graphs were marked supported, but
+blocking gaps prevent strict acceptance. There are **0 strictly accepted graphs
+and 0 annotated comparisons out of eight planned questions**. These are
+model-reviewed construction diagnostics, not expert gold or blind harness accuracy.
+The [completion audit](docs/benchmark/audits/20261020-nine-method-construction.md)
+and [completion receipt](provenance/protocol_reference_completion_20261020.json)
+separate retained uncertainty from unavailable source-packet replay in the original
+report. The run's frozen `7e670fd` runtime and historical artifacts remain unchanged;
+[the submission receipt](provenance/protocol_benchmark_originals_submission_20261020.json)
+records its inputs and software checks. See also
+[the optional original-document input contract](docs/benchmark/READING_A_CASE.md).
 
 The inventory accounts for 201 methods; protocol decomposition remains partial.
 The new development checkpoint passed **1,589 software tests, 3 skipped**, plus six

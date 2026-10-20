@@ -46,6 +46,17 @@ using frozen runtime `7e670fd`, receives these declarations where registered;
 absent declarations preserve legacy behavior, and malformed declarations fail
 instead of silently downgrading.
 
+Job `48625045` has now finished. Nine cases were annotated; seven references passed
+their model review. Six reviewed graphs remain `graph_uncertain` because blocking
+gaps survive, despite supported target checks and assessments recording covered
+requirements and retained reference unknowns. Drop-seq and sci-RNA-seq references
+need revision; the SPLiT-seq constructor timed out before a complete native turn.
+No graph passed strict acceptance and no pair question was annotated. See the
+[completion audit](audits/20261020-nine-method-construction.md) for the full
+12-case/eight-question denominators and the original report's packet-replay limit.
+Retaining an unknown is different from resolving it, and an unavailable replay
+input is different from a lost unknown or unsupported scientific assertion.
+
 `unknowns` records unresolved questions, their consequences, what was inspected,
 and what evidence could resolve them. It does not mean the authors demonstrated
 an impossibility. `admissible_decompositions` describes acceptable grouping/splitting
