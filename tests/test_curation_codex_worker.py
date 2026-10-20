@@ -570,6 +570,130 @@ async def test_finished_worker_stops_background_descendants(tmp_path, exit_code)
 
 @pytest.mark.asyncio
 @pytest.mark.skipif(os.name != "posix", reason="POSIX process-group isolation")
+@pytest.mark.parametrize("terminal_event,exit_code", [(True, 0), (False, 0), (True, 7)])
+async def test_exited_leader_with_inherited_stdout_is_drained_and_reaped(
+    tmp_path, monkeypatch, terminal_event, exit_code
+):
+    monkeypatch.setattr(codex_worker, "_SHUTDOWN_GRACE_SECONDS", 0.2)
+    attempt = tmp_path / "attempt"
+    descendant = (
+        "import json, pathlib, signal, time\n"
+        "signal.signal(signal.SIGTERM, signal.SIG_IGN)\n"
+        "print(json.dumps({'type': 'item.completed', 'item': "
+        "{'id': 'background-output', 'type': 'command_execution', 'exit_code': 0}}), flush=True)\n"
+        "for i in range(1000):\n"
+        " pathlib.Path('heartbeat').write_text(str(i))\n"
+        " time.sleep(.02)\n"
+    )
+    executable = fake_codex(
+        tmp_path,
+        "import subprocess\n"
+        "print(json.dumps({'type': 'thread.started', 'thread_id': 'inherited-pipe'}), flush=True)\n"
+        f"subprocess.Popen([sys.executable, '-c', {descendant!r}], "
+        "stdin=subprocess.DEVNULL, stdout=None, stderr=subprocess.DEVNULL)\n"
+        "while not pathlib.Path('heartbeat').exists(): time.sleep(.01)\n"
+        + ("print(json.dumps({'type': 'turn.completed', 'usage': {}}), flush=True)\n"
+           if terminal_event else "")
+        + "output.write_text('Leader finished')\n"
+        + f"sys.exit({exit_code})\n",
+    )
+    signals = []
+    real_killpg = os.killpg
+
+    def signal_group(pid, sig):
+        signals.append((pid, sig))
+        real_killpg(pid, sig)
+
+    monkeypatch.setattr(codex_worker.os, "killpg", signal_group)
+    try:
+        # This watchdog bounds the test only. The worker has no attempt deadline.
+        result = await asyncio.wait_for(
+            CodexWorker(executable, timeout_seconds=None).run("Task", attempt), timeout=5
+        )
+        pid = json.loads((attempt / "started.json").read_text())["pid"]
+        assert signals == [(pid, signal.SIGTERM), (pid, signal.SIGKILL)]
+        assert result.exit_code == exit_code
+        assert (result.error is None) == (terminal_event and exit_code == 0)
+        assert assess_archived_attempt(attempt).complete == (terminal_event and exit_code == 0)
+        if not terminal_event:
+            assert "completed turn" in result.error
+        assert "background-output" in (attempt / "events.jsonl").read_text()
+        heartbeat = (attempt / "heartbeat").read_text()
+        await asyncio.sleep(.1)
+        assert (attempt / "heartbeat").read_text() == heartbeat
+        with pytest.raises(ProcessLookupError):
+            os.kill(pid, 0)
+    finally:
+        # Failure/cancellation must not leave even this finite fake child alive.
+        started = attempt / "started.json"
+        if started.exists():
+            pid = json.loads(started.read_text())["process_group_id"]
+            try:
+                real_killpg(pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+
+
+@pytest.mark.asyncio
+@pytest.mark.skipif(os.name != "posix", reason="POSIX process-group isolation")
+@pytest.mark.parametrize("late_failure", ["read_error", "no_eof"])
+async def test_leader_exit_cannot_accept_a_completed_prefix_with_undrained_stdout(
+    tmp_path, monkeypatch, late_failure
+):
+    monkeypatch.setattr(codex_worker, "_SHUTDOWN_GRACE_SECONDS", 0.2)
+    executable = fake_codex(
+        tmp_path,
+        "print(json.dumps({'type': 'thread.started', 'thread_id': 'late-output'}), flush=True)\n"
+        "print(json.dumps({'type': 'turn.completed', 'usage': {}}), flush=True)\n"
+        "output.write_text('Completed prefix')\n",
+    )
+    real_spawn = asyncio.create_subprocess_exec
+    real_killpg = os.killpg
+    signals = []
+
+    async def spawn_with_late_read_failure(*args, **kwargs):
+        process = await real_spawn(*args, **kwargs)
+        original_stdout = process.stdout
+
+        class DelayedReader:
+            async def read(self, size):
+                data = await original_stdout.read(size)
+                if data:
+                    return data
+                # Expose a complete event prefix, then fail only after leader
+                # supervision has had time to enter its drain/cleanup path.
+                await asyncio.sleep(0.15)
+                if late_failure == "read_error":
+                    raise OSError("synthetic late read failure")
+                await asyncio.Event().wait()
+
+        process.stdout = DelayedReader()
+        return process
+
+    def signal_group(pid, sig):
+        signals.append((pid, sig))
+        real_killpg(pid, sig)
+
+    monkeypatch.setattr(codex_worker.asyncio, "create_subprocess_exec", spawn_with_late_read_failure)
+    monkeypatch.setattr(codex_worker.os, "killpg", signal_group)
+    attempt = tmp_path / "attempt"
+    result = await asyncio.wait_for(
+        CodexWorker(executable, timeout_seconds=None).run("Task", attempt), timeout=5
+    )
+    pid = json.loads((attempt / "started.json").read_text())["pid"]
+    assert signals == [(pid, signal.SIGTERM), (pid, signal.SIGKILL)]
+    assert result.error is not None
+    if late_failure == "no_eof":
+        assert "did not reach EOF" in result.error
+    else:
+        assert "OSError" in result.error
+    archived = json.loads((attempt / "result.json").read_text())
+    assert archived["error"] == result.error
+    assert not assess_archived_attempt(attempt).complete
+
+
+@pytest.mark.asyncio
+@pytest.mark.skipif(os.name != "posix", reason="POSIX process-group isolation")
 async def test_cancellation_reaps_process_and_archives_then_propagates(tmp_path):
     attempt = tmp_path / "attempt"
     executable = fake_codex(

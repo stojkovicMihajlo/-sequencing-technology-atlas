@@ -1,0 +1,100 @@
+{
+  "format_version": "native_transport_decision/1.0",
+  "date": "2026-10-20",
+  "recorded_at_utc": "2026-10-20T22:21:33.644749+00:00",
+  "status": "validated_in_working_repository",
+  "classification": "Incidental subprocess lifecycle correction; no scientific extraction, model or grounding algorithm change.",
+  "observed_trigger": {
+    "fixture": "Fake CLI exits with returncode 0 while a same-process-group descendant inherits stdout, ignores SIGTERM and continues a finite heartbeat.",
+    "before_fix": "With timeout_seconds=None the reaped leader had returncode 0, but the worker remained pending and result.json was absent after a 600 ms observation window, both with and without turn.completed. Supervised cancellation stopped the fake descendants.",
+    "control": "Redirecting descendant stdout to DEVNULL allowed normal completion and cleanup.",
+    "tested_python": "3.13.8",
+    "inference": "The source path has no finite bound when the descendant keeps stdout open indefinitely: finish_process awaited stdout EOF/process.wait together before invoking the cleanup that could stop that descendant.",
+    "existing_test_gap": "test_finished_worker_stops_background_descendants covered descendants with stdout/stderr redirected to DEVNULL, not inherited stdout."
+  },
+  "decision": {
+    "leader_exit_detection": "Observe public Process.returncode or completed I/O task; do not depend on stdout EOF or a previously awaiting Process.wait future to detect leader exit.",
+    "poll_interval_seconds": 0.05,
+    "cadence_boundary": "Observation latency only. A living CLI retains unlimited duration when timeout_seconds=None; no idle/reconnect deadline was added.",
+    "cleanup": "Retain shielded owned-process-group TERM/KILL cleanup; permit bounded output drain after KILL and make completed cleanup idempotent.",
+    "cleanup_grace_seconds_per_phase": 2.0,
+    "acceptance": "Validate only after cleanup. Forced-undrained stdout and late reader exceptions remain nonaccepting even if an earlier event prefix contains turn.completed.",
+    "preserved_contracts": [
+      "Explicit attempt timeout and cancellation behavior",
+      "Image-input integrity and exclusive attempt/archive creation",
+      "Existing managed policy, workspace sandbox and network/model flags",
+      "Exit-code, native event, final-message and archived transport checks"
+    ]
+  },
+  "rationale_sources": [
+    {
+      "url": "https://docs.python.org/3.12/library/asyncio-subprocess.html#asyncio.subprocess.Process.returncode",
+      "supports": "Public returncode is None while the process has not terminated; use it as the leader-exit observation."
+    },
+    {
+      "url": "https://docs.python.org/3.12/library/asyncio-subprocess.html#asyncio.subprocess.Process.communicate",
+      "supports": "Subprocess communication reads stdout/stderr until EOF; leader exit and pipe completion are distinct observations."
+    },
+    {
+      "path": "/opt/homebrew/Cellar/python@3.13/3.13.8/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_subprocess.py",
+      "sha256": "13628aa092b36c676ae4bfdebee418f8c75fa5c098be193ebfc7b12b92884629",
+      "python": "3.13.8",
+      "symbols": [
+        "BaseSubprocessTransport._process_exited",
+        "BaseSubprocessTransport._wait",
+        "BaseSubprocessTransport._try_finish",
+        "BaseSubprocessTransport._call_connection_lost"
+      ],
+      "observed": "In the inspected local CPython implementation, an already-pending wait future is resolved only after pipe disconnection. No private asyncio API is used by the fix."
+    }
+  ],
+  "changed_files": {
+    "src/genomics_discovery/curation/codex_worker.py": "3cb5cd045ecfda9ae1d12f4bb393171416db1cca1f23395a42f81f3c75279d27",
+    "tests/test_curation_codex_worker.py": "5cab7a9238250e27770705467cd78da30dc30abda59e7474a2ce3543e4c4ad25"
+  },
+  "regressions": {
+    "test_exited_leader_with_inherited_stdout_is_drained_and_reaped": [
+      "Completed turn and exit 0 accepts only after inherited-pipe drain and descendant cleanup",
+      "No completed turn remains nonaccepting",
+      "Nonzero leader exit remains nonaccepting"
+    ],
+    "test_leader_exit_cannot_accept_a_completed_prefix_with_undrained_stdout": [
+      "Late reader OSError remains nonaccepting",
+      "Missing EOF after bounded cleanup remains nonaccepting"
+    ],
+    "cleanup_assertion": "Exactly one TERM/KILL cleanup sequence; finite test watchdogs bound fixtures only."
+  },
+  "validation": {
+    "focused": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q -p no:cacheprovider tests/test_curation_codex_worker.py tests/test_workflow_extraction_runtime.py tests/test_extraction_batch.py",
+      "passed": 175,
+      "elapsed_seconds": 42.72
+    },
+    "full_local": {
+      "passed": 2145,
+      "skipped": 3,
+      "failures": 0,
+      "errors": 0,
+      "reported_elapsed_seconds": 210.11,
+      "junit_suite_seconds": 208.864,
+      "junit_path": "/private/tmp/atlas-leader-exit-full-tests.xml",
+      "junit_sha256": "ae59ca2377da106640af45ff953e89f1631cbe8ed237740e81195873a8bf7d59",
+      "verification": "JUnit XML counts and SHA checked independently; full-suite execution/result supplied by root agent."
+    },
+    "diff_check": "git diff --check passed",
+    "remote_python_3_12_validation": "Pending; not established by local Python 3.13 tests."
+  },
+  "limits": [
+    "Cleanup owns only the process group created for this attempt; it does not claim to reap descendants that leave that group or unrelated processes.",
+    "A genuinely living CLI can remain waiting for its provider indefinitely when the caller selects no attempt timeout.",
+    "Passing fake/process and software tests is not model correctness, scientific source support or production deployment validation."
+  ],
+  "active_run_separation": {
+    "job_id": "48677424",
+    "frozen_runtime_commit": "063c531",
+    "changed": false,
+    "ddrad_observation": "The initial missing-PID inference came from monitor output parsing. Root subsequently observed the original ddRAD integrator PID 230979 alive and then normally completed, with a new reviewer PID 39514 by 22:02:40 UTC. Reconnect diagnostics resolved in the original session without a host retry.",
+    "observation_provenance": "Corrected process/runtime observation supplied by root in this session; no independent SSH or scheduler inspection by this agent.",
+    "causal_boundary": "This latent inherited-stdout defect is not attributed as the cause of the ddRAD delay. No frozen source, provenance driver, native attempt or active-job artifact was modified."
+  }
+}

@@ -33,6 +33,7 @@ _ARCHIVES = (
 _PARENT_SESSION_ENV = {"CODEX_THREAD_ID", "CODEX_INTERNAL_ORIGINATOR_OVERRIDE"}
 _MAX_EVENT_BYTES = 8 * 1024 * 1024
 _SHUTDOWN_GRACE_SECONDS = 2.0
+_PROCESS_EXIT_POLL_SECONDS = 0.05
 _STREAM_ERROR = "Codex emitted error; see events.jsonl"
 _PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
@@ -352,6 +353,7 @@ class CodexWorker:
         exit_code = 1
         error: str | None = None
         cancelled = False
+        cleanup_complete = False
 
         def record_started() -> None:
             assert process is not None
@@ -417,6 +419,17 @@ class CodexWorker:
                         task.cancel()
                 await asyncio.gather(*tasks, return_exceptions=True)
 
+        async def wait_for_leader_or_completion() -> None:
+            assert process is not None and completion is not None
+            # A descendant can inherit stdout after its leader exits. Older
+            # asyncio Process.wait() futures can also await pipe disconnection.
+            # Public returncode detects leader exit without requiring EOF; this
+            # cadence is observation latency, never a deadline for a living CLI.
+            while process.returncode is None and not completion.done():
+                await asyncio.sleep(_PROCESS_EXIT_POLL_SECONDS)
+            if completion.done():
+                completion.result()  # Propagate I/O errors before normal validation.
+
         async def stop_process() -> None:
             if process is None:
                 return
@@ -440,6 +453,11 @@ class CodexWorker:
             # such children running simply because process.returncode is populated.
             send_signal(signal.SIGKILL)
             if completion is not None and not completion.done():
+                with contextlib.suppress(Exception):
+                    await asyncio.wait_for(
+                        asyncio.shield(completion), timeout=_SHUTDOWN_GRACE_SECONDS
+                    )
+            if completion is not None and not completion.done():
                 completion.cancel()
             if completion is not None:
                 await asyncio.gather(completion, return_exceptions=True)
@@ -447,7 +465,9 @@ class CodexWorker:
                 await asyncio.wait_for(process.wait(), timeout=_SHUTDOWN_GRACE_SECONDS)
 
         async def cleanup_process() -> None:
-            nonlocal cancelled
+            nonlocal cancelled, cleanup_complete
+            if cleanup_complete:
+                return
             # Cancellation can arrive while a timeout or other failure is already
             # reaping the process. Shield every cleanup path, then propagate only
             # after the child is reaped and the result archive has been written.
@@ -458,6 +478,7 @@ class CodexWorker:
                 except asyncio.CancelledError:
                     cancelled = True
             await cleanup
+            cleanup_complete = True
 
         with (attempt_dir / "events.jsonl").open("xb") as events_handle, (
             attempt_dir / "stderr.log"
@@ -494,13 +515,16 @@ class CodexWorker:
                     raise
                 record_started()
                 completion = asyncio.create_task(finish_process(events_handle))
-                await asyncio.wait_for(asyncio.shield(completion), timeout=self.timeout_seconds)
+                await asyncio.wait_for(wait_for_leader_or_completion(), timeout=self.timeout_seconds)
                 exit_code = process.returncode if process.returncode is not None else 1
-                # A completed CLI can leave background tool children whose streams
-                # were redirected. Release the slot only after its owned group is
-                # stopped, including on ordinary success or nonzero process exit.
+                # Drain stdout while stopping the owned group even when a child
+                # holds its pipe open. Validate only after this bounded cleanup.
                 await cleanup_process()
-                if exit_code:
+                if completion.cancelled():
+                    error = "Codex stdout did not reach EOF during process-group cleanup"
+                elif completion.exception() is not None:
+                    raise completion.exception()
+                elif exit_code:
                     error = f"Codex exited with code {exit_code}; see stderr.log and events.jsonl"
                 elif event_state.error:
                     error = event_state.error
