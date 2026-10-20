@@ -528,11 +528,16 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                    if require_source_coverage else {})})
         if outcome == "supported":
             export_candidate(workflow, review, packet, run)
-            outputs = (("graph_candidate", "graph_candidate.json"), ("protocol", "protocol.txt"))
+            outputs = (("graph_candidate", "graph_candidate.json"), ("protocol", "protocol.txt"),
+                       ("overview", "overview.json"), ("overview_text", "overview.txt"),
+                       ("overview_html", "overview.html"))
         elif review_outcome(review, workflow) != "supported":
             export_diagnostic(workflow, review, packet, run)
             outputs = (("graph_diagnostic", "graph_diagnostic.json"),
-                       ("protocol_diagnostic", "protocol_diagnostic.txt"))
+                       ("protocol_diagnostic", "protocol_diagnostic.txt"),
+                       ("overview_diagnostic", "overview_diagnostic.json"),
+                       ("overview_diagnostic_text", "overview_diagnostic.txt"),
+                       ("overview_diagnostic_html", "overview_diagnostic.html"))
         else:
             # A positive primary review cannot advertise coverage-rejected support.
             outputs = ()

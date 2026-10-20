@@ -7,6 +7,8 @@ computational processing; they are not 47 consecutive laboratory actions.
 
 | File | How to read it |
 | --- | --- |
+| [overview.html](overview.html) | Main reading view: Operations, qualified connections and expandable recipes/evidence. Open this local file in a browser. |
+| [overview.json](overview.json), [overview.txt](overview.txt) | The same declared structure, with State descriptions once and links to full records. |
 | [workflow.json](workflow.json) | Complete scientific record, including module membership, typed flows and nested evidence rationales. |
 | [review.json](review.json) | Separate record-by-record review bound to the workflow/source-packet hashes. |
 | [protocol.txt](protocol.txt) | Original text projection; `Step` means operation. Alternatives can interleave in the numbered display. |
@@ -45,3 +47,8 @@ confirms structure, record references, file integrity and the review's workflow
 fingerprint. Full source revalidation and original-run admission require the
 registered source packet, originals and native archives in the research workspace.
 The existing model verdict is not an independent human verification.
+
+The overview files are new deterministic projections of the unchanged archived
+workflow and review. Their [separate receipt](overview_manifest.json) records input,
+renderer and output hashes; the historical manifest and original files remain
+unchanged. The overview does not re-extract, merge or independently verify content.

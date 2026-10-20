@@ -40,6 +40,7 @@ anchoring and shared model errors remain risks.
 | `prompts.py` | Exact shared contract and the instructions for each reading perspective. |
 | `runtime.py` | Parallel reading, integration, fresh review, one repair and durable run status. |
 | `projection.py` | Readable protocol, typed graph candidate and operation-neighborhood queries. |
+| `overview.py`, `overview_html.py` | Main reading view; preserve declared structure and known review corrections while expanding recipes/evidence on demand. |
 | `inspection.py` | Display the complete candidate with repeated evidence objects stored once. |
 | `transformations.py` | Cut contextual operation units and check source-reviewed comparison memberships. |
 | `__main__.py` | CLI wiring for preparation, reading, checks, execution and queries. |

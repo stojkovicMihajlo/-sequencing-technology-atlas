@@ -76,6 +76,7 @@ Earlier extractions, graph publications and live controls remain preserved in
 | How are missing papers found and registered? | [Public source acquisition](docs/SOURCE_ACQUISITION.md) |
 | What have we built, and what remains undecided? | [Current status and pre-batch decisions](docs/STATUS.md) |
 | What exactly does an agent extract? | [Output fields and their connections](docs/OUTPUT_FORMAT.md) |
+| Can I read the structure before inspecting full recipes and evidence? | [Main overview and how to generate it](docs/OUTPUT_FORMAT.md) |
 | How will we assess extraction without requiring one exact graph? | [Protocol benchmark](benchmarks/protocol_graph_v1/README.md) and [reading one case](docs/benchmark/READING_A_CASE.md) |
 | Why can a valid citation still accompany an unsupported claim? | [Observed failures, source-entailment research and proposed controls](docs/decisions/2026-10-20-source-entailment-and-unsupported-additions.md) |
 | Did more explicit review instructions improve the controlled grounding test? | [Matched prompt experiment and exact outputs](examples/protocol_grounding_pilot/README.md) |

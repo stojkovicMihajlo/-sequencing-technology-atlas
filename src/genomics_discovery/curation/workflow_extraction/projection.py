@@ -169,8 +169,8 @@ def _protocol_text(workflow: Workflow, review: WorkflowReview, *, diagnostic: bo
              f"Model/source review outcome: {outcome} within the declared scope.",
              "This artifact does not establish human acceptance or experimental validation.",
              "Module boundaries are curator interpretations.",
-             "Step order displays the union of declared flow dependencies; equally ready "
-             "steps use ID order. This is not an execution schedule.",
+             "Operation display order follows the union of declared flow dependencies; "
+             "equally ready Operations use ID order. This is not an execution schedule.",
              "Optional and mutually exclusive inputs remain conditional alternatives, "
              "not cumulative execution requirements. Unspecified selection is not assumed required.", ""]
     for module in workflow.modules:
@@ -180,7 +180,9 @@ def _protocol_text(workflow: Workflow, review: WorkflowReview, *, diagnostic: bo
     for index, operation_id in enumerate(_ordered_operations(workflow), 1):
         query = query_workflow(workflow, operation_id)
         op = query["operation"]
-        lines.extend(["", f"Step {index} [{op['id']}]: {op['name']}"])
+        lines.extend(["", f"Operation {index} [{op['id']}]: {op['name']}"])
+        lines.append("  Module membership: " + ", ".join(
+            f"{module['id']} ({module['name']})" for module in query["modules"]))
         for group in query["input_groups"]:
             if group["selection"] == "alternative":
                 lines.append(f"  Input alternative group [{group['alternative_group']}]: "
@@ -309,6 +311,15 @@ def _export(workflow: Workflow, review: WorkflowReview, packet: dict, run: Path,
         json.dumps(graph, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     (run / ("protocol_diagnostic.txt" if diagnostic else "protocol.txt")).write_text(
         text, encoding="utf-8")
+    from .overview import overview_text, workflow_overview
+    from .overview_html import overview_html
+
+    stem = "overview_diagnostic" if diagnostic else "overview"
+    (run / f"{stem}.json").write_text(
+        json.dumps(workflow_overview(workflow, review=review), indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8")
+    (run / f"{stem}.txt").write_text(overview_text(workflow, review=review), encoding="utf-8")
+    (run / f"{stem}.html").write_text(overview_html(workflow, review=review), encoding="utf-8")
     return graph
 
 

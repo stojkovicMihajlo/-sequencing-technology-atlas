@@ -252,6 +252,13 @@ async def test_specialists_parallel_then_integration_and_fresh_source_review(sou
     assert graph["review"]["source_packet_sha256"] == graph["source_packet_sha256"]
     assert graph["scope"] == source_case[0]["scope"]
     assert "graph_candidate" in state["artifacts"] and "protocol" in state["artifacts"]
+    for key in ("overview", "overview_text", "overview_html"):
+        from hashlib import sha256
+
+        path = Path(state[key])
+        expected = sha256(path.read_bytes()).hexdigest()
+        assert state[key + "_sha256"] == expected
+        assert state["artifacts"][key] == {"path": str(path), "sha256": expected}
 
 
 async def test_baseline_has_no_readers(source_case, tmp_path):

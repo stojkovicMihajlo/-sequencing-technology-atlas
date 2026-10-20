@@ -1,0 +1,2519 @@
+{
+  "format_version": "workflow_overview/1.0",
+  "workflow_sha256": "451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83",
+  "review_context": {
+    "status": "archived_model_review",
+    "workflow_sha256": "451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83",
+    "review_sha256": "00988d3b326826846ef35444563c083c1d78a936e9b53c0b3fc656023b47e324",
+    "source_packet_sha256": "d152929a63d50096cdf0344fbd20b3c275060b8fe4a4a798e64d468607e422f8",
+    "outcome": "supported",
+    "nonpositive_checks": [],
+    "omissions": [],
+    "notes": [
+      "Independent source audit of the frozen original ChIPmentation general protocol: all 214 declared state, operation and flow targets were individually checked, including every attached operation resource. Review support is for each qualified source-described or explicitly inferred proposition, not a verification of historical execution or numerical figure reproduction.",
+      "Scope audit: all core Supplementary Note transformations from fixed cells through target capture, branch-specific washing, on-bead tagging, release/purification, analytical/production amplification, separation, sequencing, matched-background enrichment and FRiP are represented. Culturing/blood isolation precede the frozen cellular entry. Conventional ChIP library preparation, purified-DNA tagmentation and ATAC production recipes are contextual alternatives, not silently inherited.",
+      "CHEM-G01 was audited against the complete relevant Supplementary Note paragraphs and author insertion markers. The complete preparation route is available and represented. Remaining glycine dose/time, some volumes/numerical full-speed settings, TE formulation, Proteinase K stock and antibody-resin assignments are internal recipe limits, not missing consequential routes. CTCF is reported by volume; no unsupported mass conversion or contradiction is claimed.",
+      "CHEM-G02 and information:G04 were audited against main p00004/p00016/p00018, the on-bead schematic, PCR inventory/caption and dependency p00023. Named-kit tagging, nick translation and attributed coordinate rationale are supported; exact loaded strands, enzyme activity and full covalent intermediates are not supplied by PCR oligos. Their nonblocking classification is appropriate for the declared architecture and does not authorize a custom-transposase substitution.",
+      "CHEM-G03 and information:G01/G02 were audited against main p00018, the complete PCR inventory and dependency p00017. The original KAPA/aliquot/Cq architecture and custom primer menu are supported. Production DNA input/program, Cq conventions and general index/demultiplexing implementation remain unknown. Historical sample-index maps are not needed to describe this qualified general boundary.",
+      "CHEM-G04 was audited against main p00018 and the supplementary purification alternatives. Both size-selection ratios and the retained/discarded boundary are represented. The second-ratio volume reference and cleanup/recovery internals remain noncritical SOP limits; no bead arithmetic or unsupported lower cutoff is asserted.",
+      "CHEM-G05 and the IgG portion of information:G03 were audited against main p00020 and Table 2 p00004. A separate cellular IgG library, read processing and matched-background role are supported. Unknown isotype/mass, exact branch and matching execution remain explicit. These do not block the source-described control boundary; the candidate does not claim a fully specified or historically reconstructed control experiment.",
+      "CHEM-G06 and information:G05/G06 were audited against main p00018/p00020/p00021 and supplementary p00036. The platform, processing rules, qualitative consistency gate and inferred final QC boundary are supported; software/default realizations, QC/consistency numerical criteria, demultiplexing and facility loading internals remain unknown. Comparator Qubit measurements cannot fill these limits, and no adaptive loading/rerun controller is asserted.",
+      "The optional structural-analysis portion of information:G03 remains a qualified limitation outside the general enrichment route: main p00021 reports genomic-DNA background correction, motif windows and external dyad anchors, while main p00010/p00012 qualify sequence bias and target dependence. This supports the ledger exclusions without treating the correction rule as unavailable or making numerical-reproduction claims.",
+      "integrator_wash_counts was independently checked against supplement p00040 and author p00092/p00093: RIPA-LiCl count and TE formulation are not stated there. The known wash interface is present, so the retained nonblocking recipe gap is appropriate.",
+      "The candidate gap_resolutions array is empty, so there are no resolution:ROLE:GAP_ID targets to check. Its 13 explicit unresolved descriptions were examined directly as summarized above; no premise repair, unsupported compatibility claim or missing consequential interface was identified. An unavailable internal recipe is not treated as an architecture blocker.",
+      "The completion-ledger judgments are saved separately in coverage_review.json; original reader reports, prior reviews and other attempts were not scientific inputs."
+    ],
+    "boundary": "Existing bound model-review context only. The outcome uses the existing review rule; this projection verifies the workflow hash and unique exact target coverage only. It does not revalidate source-packet integrity, evidence or source verdicts without the packet. No fresh adjudication or acceptance is established."
+  },
+  "method_id": "chipmentation",
+  "title": "ChIPmentation: fast, robust, low-input ChIP-seq for histones and transcription factors.",
+  "scope": "Cells/chromatin through antibody-directed enrichment, tagmentation, library preparation, sequencing and enrichment interpretation; keep histone/transcription-factor alternatives explicit.",
+  "variant": "Schmidl2015_original_ChIPmentation",
+  "states": {
+    "s_cells": {
+      "kind": "material",
+      "description": "Cells entering one selected target-specific ChIP recipe. Cultured K562 cells and isolated PBMCs are reported study contexts, not universal input requirements. Demonstrated low-input profiles used 10,000 cells for H3K4me3/H3K27me3 and 100,000 for GATA1/CTCF; these are examples rather than universal minimums. Antibody quality limits feasibility and new antibodies/cell types may require ChIP optimization.",
+      "detail_pointer": "/states/0"
+    },
+    "d_cell_count": {
+      "kind": "data",
+      "description": "Reported cell-number measurement; no automatic adjustment or sequencing-based cell decoder is specified.",
+      "detail_pointer": "/states/1"
+    },
+    "s_fixed_v1": {
+      "kind": "material",
+      "description": "Washed fixed-cell pellet in alternative ChIP version 1 for H3K4me3 or H3K27me3; crosslinked chromatin retained in the cellular fraction.",
+      "detail_pointer": "/states/2"
+    },
+    "s_fixed_v2": {
+      "kind": "material",
+      "description": "Washed fixed-cell pellet in alternative ChIP version 2 for H3K4me1, H3K36me3 or REST; crosslinked chromatin retained in the cellular fraction.",
+      "detail_pointer": "/states/3"
+    },
+    "s_fixed_v3": {
+      "kind": "material",
+      "description": "Washed fixed-cell pellet in alternative ChIP version 3 for H3K27ac, PU.1, CTCF or GATA1; crosslinked chromatin retained in the cellular fraction.",
+      "detail_pointer": "/states/4"
+    },
+    "s_nuclei_v1": {
+      "kind": "material",
+      "description": "Version 1 retained nuclei pellet resuspended in Sonication Buffer; cytoplasmic lysis supernatant is discarded.",
+      "detail_pointer": "/states/5"
+    },
+    "s_lysis_discard_v1": {
+      "kind": "material",
+      "description": "Discarded version 1 cell-lysis supernatant after nuclei collection; not part of the chromatin library route.",
+      "detail_pointer": "/states/6"
+    },
+    "s_chromatin_v1": {
+      "kind": "material",
+      "description": "Clarified sonicated chromatin supernatant, alternative version 1; most fragments reported as 200–700 bp, prior to antibody capture.",
+      "detail_pointer": "/states/7"
+    },
+    "s_insoluble_v1": {
+      "kind": "material",
+      "description": "Pelleted insoluble fraction after version 1 chromatin clarification; excluded from the transferred supernatant.",
+      "detail_pointer": "/states/8"
+    },
+    "s_chromatin_v2": {
+      "kind": "material",
+      "description": "Clarified sonicated chromatin supernatant in alternative version 2, most fragments 200–700 bp; prior to capture.",
+      "detail_pointer": "/states/9"
+    },
+    "s_insoluble_v2": {
+      "kind": "material",
+      "description": "Insoluble pellet excluded when version 2 sonicated-chromatin supernatant is transferred.",
+      "detail_pointer": "/states/10"
+    },
+    "s_chromatin_v3": {
+      "kind": "material",
+      "description": "Clarified sonicated chromatin supernatant in alternative version 3, most fragments 200–700 bp; prior to capture.",
+      "detail_pointer": "/states/11"
+    },
+    "s_insoluble_v3": {
+      "kind": "material",
+      "description": "Insoluble pellet excluded when version 3 sonicated-chromatin supernatant is transferred.",
+      "detail_pointer": "/states/12"
+    },
+    "s_captured_v1": {
+      "kind": "material",
+      "description": "Alternative version 1 target-associated crosslinked chromatin captured on magnetic beads using one selected antibody (H3K4me3 or H3K27me3); target choices are not mixed.",
+      "detail_pointer": "/states/13"
+    },
+    "s_captured_v2": {
+      "kind": "material",
+      "description": "Alternative version 2 target-associated crosslinked chromatin captured on magnetic beads using one selected antibody (H3K4me1, H3K36me3 or REST); target choices are not mixed.",
+      "detail_pointer": "/states/14"
+    },
+    "s_captured_v3": {
+      "kind": "material",
+      "description": "Alternative version 3 target-associated crosslinked chromatin captured on magnetic beads using one selected antibody (H3K27ac, PU.1, CTCF or GATA1); target choices are not mixed.",
+      "detail_pointer": "/states/15"
+    },
+    "s_licl_v1": {
+      "kind": "material",
+      "description": "LiCl-washed target-enriched chromatin on beads, version 1; entry to ChIPmentation before the final conventional ChIP wash.",
+      "detail_pointer": "/states/16"
+    },
+    "s_prepared_v1": {
+      "kind": "material",
+      "description": "Version 1 enriched chromatin still on beads after two cold Tris washes removing inhibitory buffer components.",
+      "detail_pointer": "/states/17"
+    },
+    "s_tagged_v1": {
+      "kind": "material",
+      "description": "Version 1 target-enriched bead-bound chromatin with DNA fragmented and sequencing-adapter tagged by Tn5; prior to enzyme-removal washes and deproteinization. Exact commercial loaded strands/covalent intermediate are not specified.",
+      "detail_pointer": "/states/18"
+    },
+    "s_final_beads_v1": {
+      "kind": "material",
+      "description": "Version 1 tagmented target-associated chromatin retained on beads after reaction-liquid removal, two branch-specific washes and final ChIP washes; ready for elution.",
+      "detail_pointer": "/states/19"
+    },
+    "s_licl_v2": {
+      "kind": "material",
+      "description": "LiCl-washed target-enriched chromatin on beads, version 2; entry to ChIPmentation before the final conventional ChIP wash.",
+      "detail_pointer": "/states/20"
+    },
+    "s_prepared_v2": {
+      "kind": "material",
+      "description": "Version 2 enriched chromatin still on beads after two cold Tris washes removing inhibitory buffer components.",
+      "detail_pointer": "/states/21"
+    },
+    "s_tagged_v2": {
+      "kind": "material",
+      "description": "Version 2 target-enriched bead-bound chromatin with DNA fragmented and sequencing-adapter tagged by Tn5; prior to enzyme-removal washes and deproteinization. Exact commercial loaded strands/covalent intermediate are not specified.",
+      "detail_pointer": "/states/22"
+    },
+    "s_final_beads_v2": {
+      "kind": "material",
+      "description": "Version 2 tagmented target-associated chromatin retained on beads after reaction-liquid removal, two branch-specific washes and final ChIP washes; ready for elution.",
+      "detail_pointer": "/states/23"
+    },
+    "s_licl_v3": {
+      "kind": "material",
+      "description": "LiCl-washed target-enriched chromatin on beads, version 3; entry to ChIPmentation before the final conventional ChIP wash.",
+      "detail_pointer": "/states/24"
+    },
+    "s_prepared_v3": {
+      "kind": "material",
+      "description": "Version 3 enriched chromatin still on beads after two cold Tris washes removing inhibitory buffer components.",
+      "detail_pointer": "/states/25"
+    },
+    "s_tagged_v3": {
+      "kind": "material",
+      "description": "Version 3 target-enriched bead-bound chromatin with DNA fragmented and sequencing-adapter tagged by Tn5; prior to enzyme-removal washes and deproteinization. Exact commercial loaded strands/covalent intermediate are not specified.",
+      "detail_pointer": "/states/26"
+    },
+    "s_final_beads_v3": {
+      "kind": "material",
+      "description": "Version 3 tagmented target-associated chromatin retained on beads after reaction-liquid removal, two branch-specific washes and final ChIP washes; ready for elution.",
+      "detail_pointer": "/states/27"
+    },
+    "s_purified_tagged_dna": {
+      "kind": "material",
+      "description": "Purified, deproteinized, crosslink-reversed, adapter-tagged target-enriched DNA from one chosen ChIP version and purification alternative. This common interface represents alternatives, not physical pooling of versions. Antibody target and specimen attribution persist, while the target protein/beads are not the sequencing analyte.",
+      "detail_pointer": "/states/28"
+    },
+    "s_eluate_v1": {
+      "kind": "material",
+      "description": "Version 1 released adapter-tagged DNA eluate after Proteinase K/crosslink reversal; combined first and second extracts. Residual beads/protein are excluded by supernatant transfer (routing inference).",
+      "detail_pointer": "/states/29"
+    },
+    "s_eluate_v2": {
+      "kind": "material",
+      "description": "Version 2 released adapter-tagged DNA eluate after Proteinase K/crosslink reversal; first transferred eluate, no second extraction specified. Residual beads/protein are excluded by supernatant transfer (routing inference).",
+      "detail_pointer": "/states/30"
+    },
+    "s_eluate_v3": {
+      "kind": "material",
+      "description": "Version 3 released adapter-tagged DNA eluate after Proteinase K/crosslink reversal; combined first and second extracts. Residual beads/protein are excluded by supernatant transfer (routing inference).",
+      "detail_pointer": "/states/31"
+    },
+    "s_qpcr_aliquot": {
+      "kind": "material",
+      "description": "Physical 1 μl aliquot removed from purified tagged DNA for analytical qPCR; not a perfect copy of the retained library.",
+      "detail_pointer": "/states/32"
+    },
+    "s_retained_dna": {
+      "kind": "material",
+      "description": "Purified tagged DNA remaining after the 1 μl analytical aliquot is taken; supplies the separate production enrichment reaction. Its volume is not specified.",
+      "detail_pointer": "/states/33"
+    },
+    "d_cq": {
+      "kind": "data",
+      "description": "Analytical qPCR Cq readout used to choose production enrichment count N by rounding Cq upward. No absolute standards/threshold convention is specified.",
+      "detail_pointer": "/states/34"
+    },
+    "s_analytical_amplicons": {
+      "kind": "material",
+      "description": "Analytical qPCR amplicons from the 1 μl aliquot; no reported routing back into production library material.",
+      "detail_pointer": "/states/35"
+    },
+    "s_enriched_library": {
+      "kind": "material",
+      "description": "Production-PCR-enriched indexed sequencing library retaining selected genomic inserts, chosen primer design and antibody/specimen attribution; before size selection.",
+      "detail_pointer": "/states/36"
+    },
+    "s_size_supernatant": {
+      "kind": "material",
+      "description": "Retained DNA remaining in solution after 0.7:1 beads:sample exclusion of >600 bp fragments; first-supernatant retention is inferred from removal/recovery wording.",
+      "detail_pointer": "/states/37"
+    },
+    "s_long_fragment_discard": {
+      "kind": "material",
+      "description": "First bead-associated long-fragment fraction (>600 bp) excluded by 0.7:1 selection; inferred retained/discarded partition.",
+      "detail_pointer": "/states/38"
+    },
+    "s_final_library": {
+      "kind": "material",
+      "description": "Recovered size-selected, enriched indexed ChIPmentation library from the remaining-DNA fraction after second SPRI capture; final recovery internals and lower cutoff remain unspecified.",
+      "detail_pointer": "/states/39"
+    },
+    "d_final_qc": {
+      "kind": "data",
+      "description": "Final-library QC observation at a boundary mentioned in supplementary cost accounting; measured quantities, assay, standards and pass thresholds are unknown.",
+      "detail_pointer": "/states/40"
+    },
+    "d_reads": {
+      "kind": "data",
+      "description": "Sequence reads from size-selected indexed target libraries, preserving specimen/antibody/replicate attribution. Reported study formats include 50-base single-read and 100-base paired-end; neither format is a universal protocol requirement. Demultiplexing details remain unspecified.",
+      "detail_pointer": "/states/41"
+    },
+    "s_igg_specimen": {
+      "kind": "material",
+      "description": "Separate specimen for a matched IgG ChIPmentation background control, not target-IP material; matching criteria and ChIP branch are not specified.",
+      "detail_pointer": "/states/42"
+    },
+    "s_igg_library": {
+      "kind": "material",
+      "description": "Separate sequenceable IgG ChIPmentation control library at a reported preparation boundary; exact antibody amount/species, branch and preparation internals unknown.",
+      "detail_pointer": "/states/43"
+    },
+    "d_igg_reads": {
+      "kind": "data",
+      "description": "Reads from a separately sequenced IgG ChIPmentation library used as matched background; no physical mixing with target libraries is asserted.",
+      "detail_pointer": "/states/44"
+    },
+    "d_trimmed_reads": {
+      "kind": "data",
+      "description": "Adapter-trimmed target-library reads, retaining specimen, antibody and replicate identities.",
+      "detail_pointer": "/states/45"
+    },
+    "d_alignments": {
+      "kind": "data",
+      "description": "Target-library reads aligned to human hg19/GRCh37 with Bowtie2 --very-sensitive; multimapper reads handled according to aligner default.",
+      "detail_pointer": "/states/46"
+    },
+    "d_nonduplicate": {
+      "kind": "data",
+      "description": "Duplicate-marked/removed target alignments; nonduplicate reads are the default downstream data, retaining biological-replicate identity.",
+      "detail_pointer": "/states/47"
+    },
+    "d_igg_alignments": {
+      "kind": "data",
+      "description": "Processed matched IgG background alignments, with read trimming, human-reference alignment, duplicate removal and ChIPmentation center-coordinate offsets shared by reported processing; no exact matching/replicate pairing invented.",
+      "detail_pointer": "/states/48"
+    },
+    "d_transposition_coordinates": {
+      "kind": "data",
+      "description": "Target-library nonduplicate alignments with read-start coordinates represented as transposition centers (+4 bp plus, −5 bp minus). Retains genomic position/strand and target attribution. Insertion patterns alone do not guarantee TF footprints or direct nucleosome positioning; sequence bias and assay-specific reference anchors matter. The published nucleosome comparison used NucleoATAC dyads inferred from separate GM12878 ATAC-seq, rather than independently calling dyads from ChIPmentation.",
+      "detail_pointer": "/states/49"
+    },
+    "d_bigwig": {
+      "kind": "data",
+      "description": "Genomic target-enrichment browser track in bigWig, normalized to read count per base pair per million reads; relative signal, not absolute molecule quantitation or a spike-in calibrated output.",
+      "detail_pointer": "/states/50"
+    },
+    "d_replicate_peaks": {
+      "kind": "data",
+      "description": "Enrichment peaks called separately for each biological replicate using its matched IgG background; broad-mark flags restricted to H3K27me3/H3K36me3.",
+      "detail_pointer": "/states/51"
+    },
+    "d_replicate_consistency": {
+      "kind": "data",
+      "description": "Replicate-consistency assessment using overlap of peaks ranked by increasing q-value at top 1%, 2%, 5%, 10%, 25%, 50%, 100%; no numerical pass threshold or failure action specified.",
+      "detail_pointer": "/states/52"
+    },
+    "d_merged_alignments": {
+      "kind": "data",
+      "description": "Biological-replicate alignment data combined for downstream analysis after consistency was ensured, retaining target/library grouping; pooling is computational.",
+      "detail_pointer": "/states/53"
+    },
+    "d_merged_peaks": {
+      "kind": "data",
+      "description": "Target-associated enrichment peaks from merged biological-replicate data after consistency checking, called with the same MACS2 settings and matched IgG background.",
+      "detail_pointer": "/states/54"
+    },
+    "d_frip": {
+      "kind": "data",
+      "description": "Fraction of reads in peaks: nonduplicate reads overlapping called peaks of the same sample divided by total nonduplicate reads; enrichment signal-to-noise measurement without a stated acceptance threshold.",
+      "detail_pointer": "/states/55"
+    }
+  },
+  "operations": [
+    {
+      "id": "o_count",
+      "name": "Count cells",
+      "module_ids": [
+        "m_specimen"
+      ],
+      "inputs": [
+        "s_cells"
+      ],
+      "outputs": [
+        "d_cell_count"
+      ],
+      "detail_pointer": "/operations/0"
+    },
+    {
+      "id": "o_fix_v1",
+      "name": "Fix and collect cells: version 1",
+      "module_ids": [
+        "m_specimen"
+      ],
+      "inputs": [
+        "s_cells"
+      ],
+      "outputs": [
+        "s_fixed_v1"
+      ],
+      "detail_pointer": "/operations/1"
+    },
+    {
+      "id": "o_fix_v2",
+      "name": "Fix and collect cells: version 2",
+      "module_ids": [
+        "m_specimen"
+      ],
+      "inputs": [
+        "s_cells"
+      ],
+      "outputs": [
+        "s_fixed_v2"
+      ],
+      "detail_pointer": "/operations/2"
+    },
+    {
+      "id": "o_fix_v3",
+      "name": "Fix and collect cells: version 3",
+      "module_ids": [
+        "m_specimen"
+      ],
+      "inputs": [
+        "s_cells"
+      ],
+      "outputs": [
+        "s_fixed_v3"
+      ],
+      "detail_pointer": "/operations/3"
+    },
+    {
+      "id": "o_nuclei_v1",
+      "name": "Lyse cells and isolate nuclei: version 1",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_fixed_v1"
+      ],
+      "outputs": [
+        "s_nuclei_v1",
+        "s_lysis_discard_v1"
+      ],
+      "detail_pointer": "/operations/4"
+    },
+    {
+      "id": "o_shear_v1",
+      "name": "Sonicate and clarify chromatin: version 1",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_nuclei_v1"
+      ],
+      "outputs": [
+        "s_chromatin_v1",
+        "s_insoluble_v1"
+      ],
+      "detail_pointer": "/operations/5"
+    },
+    {
+      "id": "o_shear_v2",
+      "name": "Lyse, sonicate and clarify chromatin: version 2",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_fixed_v2"
+      ],
+      "outputs": [
+        "s_chromatin_v2",
+        "s_insoluble_v2"
+      ],
+      "detail_pointer": "/operations/6"
+    },
+    {
+      "id": "o_shear_v3",
+      "name": "Lyse, sonicate and clarify chromatin: version 3",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_fixed_v3"
+      ],
+      "outputs": [
+        "s_chromatin_v3",
+        "s_insoluble_v3"
+      ],
+      "detail_pointer": "/operations/7"
+    },
+    {
+      "id": "o_capture_v1",
+      "name": "Capture target chromatin: version 1",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_chromatin_v1"
+      ],
+      "outputs": [
+        "s_captured_v1"
+      ],
+      "detail_pointer": "/operations/8"
+    },
+    {
+      "id": "o_capture_v2",
+      "name": "Capture target chromatin: version 2",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_chromatin_v2"
+      ],
+      "outputs": [
+        "s_captured_v2"
+      ],
+      "detail_pointer": "/operations/9"
+    },
+    {
+      "id": "o_capture_v3",
+      "name": "Capture target chromatin: version 3",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_chromatin_v3"
+      ],
+      "outputs": [
+        "s_captured_v3"
+      ],
+      "detail_pointer": "/operations/10"
+    },
+    {
+      "id": "o_wash_v1",
+      "name": "Wash enriched beads through LiCl: version 1",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_captured_v1"
+      ],
+      "outputs": [
+        "s_licl_v1"
+      ],
+      "detail_pointer": "/operations/11"
+    },
+    {
+      "id": "o_pre_tag_v1",
+      "name": "Exchange bead wash buffer: version 1",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_licl_v1"
+      ],
+      "outputs": [
+        "s_prepared_v1"
+      ],
+      "detail_pointer": "/operations/12"
+    },
+    {
+      "id": "o_tag_v1",
+      "name": "Tagment enriched chromatin on beads: version 1",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_prepared_v1"
+      ],
+      "outputs": [
+        "s_tagged_v1"
+      ],
+      "detail_pointer": "/operations/13"
+    },
+    {
+      "id": "o_post_tag_v1",
+      "name": "Remove reaction and finish bead washes: version 1",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_tagged_v1"
+      ],
+      "outputs": [
+        "s_final_beads_v1"
+      ],
+      "detail_pointer": "/operations/14"
+    },
+    {
+      "id": "o_wash_v2",
+      "name": "Wash enriched beads through LiCl: version 2",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_captured_v2"
+      ],
+      "outputs": [
+        "s_licl_v2"
+      ],
+      "detail_pointer": "/operations/15"
+    },
+    {
+      "id": "o_pre_tag_v2",
+      "name": "Exchange bead wash buffer: version 2",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_licl_v2"
+      ],
+      "outputs": [
+        "s_prepared_v2"
+      ],
+      "detail_pointer": "/operations/16"
+    },
+    {
+      "id": "o_tag_v2",
+      "name": "Tagment enriched chromatin on beads: version 2",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_prepared_v2"
+      ],
+      "outputs": [
+        "s_tagged_v2"
+      ],
+      "detail_pointer": "/operations/17"
+    },
+    {
+      "id": "o_post_tag_v2",
+      "name": "Remove reaction and finish bead washes: version 2",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_tagged_v2"
+      ],
+      "outputs": [
+        "s_final_beads_v2"
+      ],
+      "detail_pointer": "/operations/18"
+    },
+    {
+      "id": "o_wash_v3",
+      "name": "Wash enriched beads through LiCl: version 3",
+      "module_ids": [
+        "m_capture"
+      ],
+      "inputs": [
+        "s_captured_v3"
+      ],
+      "outputs": [
+        "s_licl_v3"
+      ],
+      "detail_pointer": "/operations/19"
+    },
+    {
+      "id": "o_pre_tag_v3",
+      "name": "Exchange bead wash buffer: version 3",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_licl_v3"
+      ],
+      "outputs": [
+        "s_prepared_v3"
+      ],
+      "detail_pointer": "/operations/20"
+    },
+    {
+      "id": "o_tag_v3",
+      "name": "Tagment enriched chromatin on beads: version 3",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_prepared_v3"
+      ],
+      "outputs": [
+        "s_tagged_v3"
+      ],
+      "detail_pointer": "/operations/21"
+    },
+    {
+      "id": "o_post_tag_v3",
+      "name": "Remove reaction and finish bead washes: version 3",
+      "module_ids": [
+        "m_tagment"
+      ],
+      "inputs": [
+        "s_tagged_v3"
+      ],
+      "outputs": [
+        "s_final_beads_v3"
+      ],
+      "detail_pointer": "/operations/22"
+    },
+    {
+      "id": "o_release_v1",
+      "name": "Elute and reverse crosslinks: version 1",
+      "module_ids": [
+        "m_release"
+      ],
+      "inputs": [
+        "s_final_beads_v1"
+      ],
+      "outputs": [
+        "s_eluate_v1"
+      ],
+      "detail_pointer": "/operations/23"
+    },
+    {
+      "id": "o_release_v2",
+      "name": "Elute and reverse crosslinks: version 2",
+      "module_ids": [
+        "m_release"
+      ],
+      "inputs": [
+        "s_final_beads_v2"
+      ],
+      "outputs": [
+        "s_eluate_v2"
+      ],
+      "detail_pointer": "/operations/24"
+    },
+    {
+      "id": "o_release_v3",
+      "name": "Elute and reverse crosslinks: version 3",
+      "module_ids": [
+        "m_release"
+      ],
+      "inputs": [
+        "s_final_beads_v3"
+      ],
+      "outputs": [
+        "s_eluate_v3"
+      ],
+      "detail_pointer": "/operations/25"
+    },
+    {
+      "id": "o_purify_selected",
+      "name": "Purify the selected recipe eluate",
+      "module_ids": [
+        "m_release"
+      ],
+      "inputs": [
+        "s_eluate_v1",
+        "s_eluate_v2",
+        "s_eluate_v3"
+      ],
+      "outputs": [
+        "s_purified_tagged_dna"
+      ],
+      "detail_pointer": "/operations/26"
+    },
+    {
+      "id": "o_aliquot",
+      "name": "Take analytical library aliquot",
+      "module_ids": [
+        "m_library"
+      ],
+      "inputs": [
+        "s_purified_tagged_dna"
+      ],
+      "outputs": [
+        "s_qpcr_aliquot",
+        "s_retained_dna"
+      ],
+      "detail_pointer": "/operations/27"
+    },
+    {
+      "id": "o_qpcr",
+      "name": "Perform analytical nick translation and qPCR",
+      "module_ids": [
+        "m_library"
+      ],
+      "inputs": [
+        "s_qpcr_aliquot"
+      ],
+      "outputs": [
+        "d_cq",
+        "s_analytical_amplicons"
+      ],
+      "detail_pointer": "/operations/28"
+    },
+    {
+      "id": "o_pcr",
+      "name": "Enrich production library using measured Cq",
+      "module_ids": [
+        "m_library"
+      ],
+      "inputs": [
+        "s_retained_dna",
+        "d_cq"
+      ],
+      "outputs": [
+        "s_enriched_library"
+      ],
+      "detail_pointer": "/operations/29"
+    },
+    {
+      "id": "o_remove_long",
+      "name": "Remove long PCR fragments",
+      "module_ids": [
+        "m_library"
+      ],
+      "inputs": [
+        "s_enriched_library"
+      ],
+      "outputs": [
+        "s_size_supernatant",
+        "s_long_fragment_discard"
+      ],
+      "detail_pointer": "/operations/30"
+    },
+    {
+      "id": "o_recover_library",
+      "name": "Recover remaining DNA after size exclusion",
+      "module_ids": [
+        "m_library"
+      ],
+      "inputs": [
+        "s_size_supernatant"
+      ],
+      "outputs": [
+        "s_final_library"
+      ],
+      "detail_pointer": "/operations/31"
+    },
+    {
+      "id": "o_final_qc",
+      "name": "Inspect final library at reported QC boundary",
+      "module_ids": [
+        "m_library"
+      ],
+      "inputs": [
+        "s_final_library"
+      ],
+      "outputs": [
+        "d_final_qc"
+      ],
+      "detail_pointer": "/operations/32"
+    },
+    {
+      "id": "o_sequence",
+      "name": "Sequence enriched library",
+      "module_ids": [
+        "m_reads"
+      ],
+      "inputs": [
+        "s_final_library"
+      ],
+      "outputs": [
+        "d_reads"
+      ],
+      "detail_pointer": "/operations/33"
+    },
+    {
+      "id": "o_igg_boundary",
+      "name": "Prepare separate IgG control at supported boundary",
+      "module_ids": [
+        "m_reads"
+      ],
+      "inputs": [
+        "s_igg_specimen"
+      ],
+      "outputs": [
+        "s_igg_library"
+      ],
+      "detail_pointer": "/operations/34"
+    },
+    {
+      "id": "o_igg_sequence",
+      "name": "Sequence separate IgG control library",
+      "module_ids": [
+        "m_reads"
+      ],
+      "inputs": [
+        "s_igg_library"
+      ],
+      "outputs": [
+        "d_igg_reads"
+      ],
+      "detail_pointer": "/operations/35"
+    },
+    {
+      "id": "o_trim",
+      "name": "Trim sequence reads",
+      "module_ids": [
+        "m_reads"
+      ],
+      "inputs": [
+        "d_reads"
+      ],
+      "outputs": [
+        "d_trimmed_reads"
+      ],
+      "detail_pointer": "/operations/36"
+    },
+    {
+      "id": "o_align",
+      "name": "Align reads to human reference",
+      "module_ids": [
+        "m_reads"
+      ],
+      "inputs": [
+        "d_trimmed_reads"
+      ],
+      "outputs": [
+        "d_alignments"
+      ],
+      "detail_pointer": "/operations/37"
+    },
+    {
+      "id": "o_deduplicate",
+      "name": "Mark and remove duplicate reads",
+      "module_ids": [
+        "m_reads"
+      ],
+      "inputs": [
+        "d_alignments"
+      ],
+      "outputs": [
+        "d_nonduplicate"
+      ],
+      "detail_pointer": "/operations/38"
+    },
+    {
+      "id": "o_igg_process",
+      "name": "Process IgG background reads",
+      "module_ids": [
+        "m_reads"
+      ],
+      "inputs": [
+        "d_igg_reads"
+      ],
+      "outputs": [
+        "d_igg_alignments"
+      ],
+      "detail_pointer": "/operations/39"
+    },
+    {
+      "id": "o_shift",
+      "name": "Represent Tn5 transposition centers",
+      "module_ids": [
+        "m_reads"
+      ],
+      "inputs": [
+        "d_nonduplicate"
+      ],
+      "outputs": [
+        "d_transposition_coordinates"
+      ],
+      "detail_pointer": "/operations/40"
+    },
+    {
+      "id": "o_tracks",
+      "name": "Generate normalized genomic signal tracks",
+      "module_ids": [
+        "m_enrichment"
+      ],
+      "inputs": [
+        "d_transposition_coordinates"
+      ],
+      "outputs": [
+        "d_bigwig"
+      ],
+      "detail_pointer": "/operations/41"
+    },
+    {
+      "id": "o_peaks_replicate",
+      "name": "Call enrichment peaks per replicate",
+      "module_ids": [
+        "m_enrichment"
+      ],
+      "inputs": [
+        "d_transposition_coordinates",
+        "d_igg_alignments"
+      ],
+      "outputs": [
+        "d_replicate_peaks"
+      ],
+      "detail_pointer": "/operations/42"
+    },
+    {
+      "id": "o_check_replicates",
+      "name": "Assess replicate consistency",
+      "module_ids": [
+        "m_enrichment"
+      ],
+      "inputs": [
+        "d_replicate_peaks"
+      ],
+      "outputs": [
+        "d_replicate_consistency"
+      ],
+      "detail_pointer": "/operations/43"
+    },
+    {
+      "id": "o_merge_replicates",
+      "name": "Merge consistent biological-replicate data",
+      "module_ids": [
+        "m_enrichment"
+      ],
+      "inputs": [
+        "d_transposition_coordinates",
+        "d_replicate_consistency"
+      ],
+      "outputs": [
+        "d_merged_alignments"
+      ],
+      "detail_pointer": "/operations/44"
+    },
+    {
+      "id": "o_peaks_merged",
+      "name": "Call merged-replicate enrichment peaks",
+      "module_ids": [
+        "m_enrichment"
+      ],
+      "inputs": [
+        "d_merged_alignments",
+        "d_igg_alignments"
+      ],
+      "outputs": [
+        "d_merged_peaks"
+      ],
+      "detail_pointer": "/operations/45"
+    },
+    {
+      "id": "o_frip",
+      "name": "Measure enrichment signal-to-noise",
+      "module_ids": [
+        "m_enrichment"
+      ],
+      "inputs": [
+        "d_nonduplicate",
+        "d_replicate_peaks"
+      ],
+      "outputs": [
+        "d_frip"
+      ],
+      "detail_pointer": "/operations/46"
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_cq_controls_pcr",
+      "source": "o_qpcr",
+      "target": "o_pcr",
+      "kind": "control",
+      "basis": "Measured analytical Cq sets production N to the rounded-up value.",
+      "condition": "Use each library’s measured Cq; no additional acceptance threshold is specified.",
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/0"
+    },
+    {
+      "id": "f_qc_precedes_seq",
+      "source": "o_final_qc",
+      "target": "o_sequence",
+      "kind": "precedence",
+      "basis": "Supplementary cost note places final QC prior to sequencing; it supplies no loading controller.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/1"
+    },
+    {
+      "id": "f_consistency_controls_merge",
+      "source": "o_check_replicates",
+      "target": "o_merge_replicates",
+      "kind": "control",
+      "basis": "Source places downstream merged-biological-replicate calling after ensuring consistency.",
+      "condition": "Replicates judged consistent; no quantitative cutoff or failure action reported.",
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/2"
+    },
+    {
+      "id": "io:input:o_count:s_cells",
+      "source": "s_cells",
+      "target": "o_count",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_count; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/3"
+    },
+    {
+      "id": "io:output:o_count:d_cell_count",
+      "source": "o_count",
+      "target": "d_cell_count",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_count; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/4"
+    },
+    {
+      "id": "io:input:o_fix_v1:s_cells",
+      "source": "s_cells",
+      "target": "o_fix_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_fix_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/5"
+    },
+    {
+      "id": "io:output:o_fix_v1:s_fixed_v1",
+      "source": "o_fix_v1",
+      "target": "s_fixed_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_fix_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/6"
+    },
+    {
+      "id": "io:input:o_fix_v2:s_cells",
+      "source": "s_cells",
+      "target": "o_fix_v2",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_fix_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/7"
+    },
+    {
+      "id": "io:output:o_fix_v2:s_fixed_v2",
+      "source": "o_fix_v2",
+      "target": "s_fixed_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_fix_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/8"
+    },
+    {
+      "id": "io:input:o_fix_v3:s_cells",
+      "source": "s_cells",
+      "target": "o_fix_v3",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_fix_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/9"
+    },
+    {
+      "id": "io:output:o_fix_v3:s_fixed_v3",
+      "source": "o_fix_v3",
+      "target": "s_fixed_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_fix_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/10"
+    },
+    {
+      "id": "io:input:o_nuclei_v1:s_fixed_v1",
+      "source": "s_fixed_v1",
+      "target": "o_nuclei_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_nuclei_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/11"
+    },
+    {
+      "id": "io:output:o_nuclei_v1:s_nuclei_v1",
+      "source": "o_nuclei_v1",
+      "target": "s_nuclei_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_nuclei_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/12"
+    },
+    {
+      "id": "io:output:o_nuclei_v1:s_lysis_discard_v1",
+      "source": "o_nuclei_v1",
+      "target": "s_lysis_discard_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_nuclei_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/13"
+    },
+    {
+      "id": "io:input:o_shear_v1:s_nuclei_v1",
+      "source": "s_nuclei_v1",
+      "target": "o_shear_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_shear_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/14"
+    },
+    {
+      "id": "io:output:o_shear_v1:s_chromatin_v1",
+      "source": "o_shear_v1",
+      "target": "s_chromatin_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_shear_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/15"
+    },
+    {
+      "id": "io:output:o_shear_v1:s_insoluble_v1",
+      "source": "o_shear_v1",
+      "target": "s_insoluble_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_shear_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/16"
+    },
+    {
+      "id": "io:input:o_shear_v2:s_fixed_v2",
+      "source": "s_fixed_v2",
+      "target": "o_shear_v2",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_shear_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/17"
+    },
+    {
+      "id": "io:output:o_shear_v2:s_chromatin_v2",
+      "source": "o_shear_v2",
+      "target": "s_chromatin_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_shear_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/18"
+    },
+    {
+      "id": "io:output:o_shear_v2:s_insoluble_v2",
+      "source": "o_shear_v2",
+      "target": "s_insoluble_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_shear_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/19"
+    },
+    {
+      "id": "io:input:o_shear_v3:s_fixed_v3",
+      "source": "s_fixed_v3",
+      "target": "o_shear_v3",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_shear_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/20"
+    },
+    {
+      "id": "io:output:o_shear_v3:s_chromatin_v3",
+      "source": "o_shear_v3",
+      "target": "s_chromatin_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_shear_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/21"
+    },
+    {
+      "id": "io:output:o_shear_v3:s_insoluble_v3",
+      "source": "o_shear_v3",
+      "target": "s_insoluble_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_shear_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/22"
+    },
+    {
+      "id": "io:input:o_capture_v1:s_chromatin_v1",
+      "source": "s_chromatin_v1",
+      "target": "o_capture_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_capture_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/23"
+    },
+    {
+      "id": "io:output:o_capture_v1:s_captured_v1",
+      "source": "o_capture_v1",
+      "target": "s_captured_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_capture_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/24"
+    },
+    {
+      "id": "io:input:o_capture_v2:s_chromatin_v2",
+      "source": "s_chromatin_v2",
+      "target": "o_capture_v2",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_capture_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/25"
+    },
+    {
+      "id": "io:output:o_capture_v2:s_captured_v2",
+      "source": "o_capture_v2",
+      "target": "s_captured_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_capture_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/26"
+    },
+    {
+      "id": "io:input:o_capture_v3:s_chromatin_v3",
+      "source": "s_chromatin_v3",
+      "target": "o_capture_v3",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_capture_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/27"
+    },
+    {
+      "id": "io:output:o_capture_v3:s_captured_v3",
+      "source": "o_capture_v3",
+      "target": "s_captured_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_capture_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/28"
+    },
+    {
+      "id": "io:input:o_wash_v1:s_captured_v1",
+      "source": "s_captured_v1",
+      "target": "o_wash_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_wash_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/29"
+    },
+    {
+      "id": "io:output:o_wash_v1:s_licl_v1",
+      "source": "o_wash_v1",
+      "target": "s_licl_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_wash_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/30"
+    },
+    {
+      "id": "io:input:o_pre_tag_v1:s_licl_v1",
+      "source": "s_licl_v1",
+      "target": "o_pre_tag_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_pre_tag_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/31"
+    },
+    {
+      "id": "io:output:o_pre_tag_v1:s_prepared_v1",
+      "source": "o_pre_tag_v1",
+      "target": "s_prepared_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_pre_tag_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/32"
+    },
+    {
+      "id": "io:input:o_tag_v1:s_prepared_v1",
+      "source": "s_prepared_v1",
+      "target": "o_tag_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_tag_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/33"
+    },
+    {
+      "id": "io:output:o_tag_v1:s_tagged_v1",
+      "source": "o_tag_v1",
+      "target": "s_tagged_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_tag_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/34"
+    },
+    {
+      "id": "io:input:o_post_tag_v1:s_tagged_v1",
+      "source": "s_tagged_v1",
+      "target": "o_post_tag_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_post_tag_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/35"
+    },
+    {
+      "id": "io:output:o_post_tag_v1:s_final_beads_v1",
+      "source": "o_post_tag_v1",
+      "target": "s_final_beads_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_post_tag_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/36"
+    },
+    {
+      "id": "io:input:o_wash_v2:s_captured_v2",
+      "source": "s_captured_v2",
+      "target": "o_wash_v2",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_wash_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/37"
+    },
+    {
+      "id": "io:output:o_wash_v2:s_licl_v2",
+      "source": "o_wash_v2",
+      "target": "s_licl_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_wash_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/38"
+    },
+    {
+      "id": "io:input:o_pre_tag_v2:s_licl_v2",
+      "source": "s_licl_v2",
+      "target": "o_pre_tag_v2",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_pre_tag_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/39"
+    },
+    {
+      "id": "io:output:o_pre_tag_v2:s_prepared_v2",
+      "source": "o_pre_tag_v2",
+      "target": "s_prepared_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_pre_tag_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/40"
+    },
+    {
+      "id": "io:input:o_tag_v2:s_prepared_v2",
+      "source": "s_prepared_v2",
+      "target": "o_tag_v2",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_tag_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/41"
+    },
+    {
+      "id": "io:output:o_tag_v2:s_tagged_v2",
+      "source": "o_tag_v2",
+      "target": "s_tagged_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_tag_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/42"
+    },
+    {
+      "id": "io:input:o_post_tag_v2:s_tagged_v2",
+      "source": "s_tagged_v2",
+      "target": "o_post_tag_v2",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_post_tag_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/43"
+    },
+    {
+      "id": "io:output:o_post_tag_v2:s_final_beads_v2",
+      "source": "o_post_tag_v2",
+      "target": "s_final_beads_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_post_tag_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/44"
+    },
+    {
+      "id": "io:input:o_wash_v3:s_captured_v3",
+      "source": "s_captured_v3",
+      "target": "o_wash_v3",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_wash_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/45"
+    },
+    {
+      "id": "io:output:o_wash_v3:s_licl_v3",
+      "source": "o_wash_v3",
+      "target": "s_licl_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_wash_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/46"
+    },
+    {
+      "id": "io:input:o_pre_tag_v3:s_licl_v3",
+      "source": "s_licl_v3",
+      "target": "o_pre_tag_v3",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_pre_tag_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/47"
+    },
+    {
+      "id": "io:output:o_pre_tag_v3:s_prepared_v3",
+      "source": "o_pre_tag_v3",
+      "target": "s_prepared_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_pre_tag_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/48"
+    },
+    {
+      "id": "io:input:o_tag_v3:s_prepared_v3",
+      "source": "s_prepared_v3",
+      "target": "o_tag_v3",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_tag_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/49"
+    },
+    {
+      "id": "io:output:o_tag_v3:s_tagged_v3",
+      "source": "o_tag_v3",
+      "target": "s_tagged_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_tag_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/50"
+    },
+    {
+      "id": "io:input:o_post_tag_v3:s_tagged_v3",
+      "source": "s_tagged_v3",
+      "target": "o_post_tag_v3",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_post_tag_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/51"
+    },
+    {
+      "id": "io:output:o_post_tag_v3:s_final_beads_v3",
+      "source": "o_post_tag_v3",
+      "target": "s_final_beads_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_post_tag_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/52"
+    },
+    {
+      "id": "io:input:o_release_v1:s_final_beads_v1",
+      "source": "s_final_beads_v1",
+      "target": "o_release_v1",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_release_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/53"
+    },
+    {
+      "id": "io:output:o_release_v1:s_eluate_v1",
+      "source": "o_release_v1",
+      "target": "s_eluate_v1",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_release_v1; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/54"
+    },
+    {
+      "id": "io:input:o_release_v2:s_final_beads_v2",
+      "source": "s_final_beads_v2",
+      "target": "o_release_v2",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_release_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/55"
+    },
+    {
+      "id": "io:output:o_release_v2:s_eluate_v2",
+      "source": "o_release_v2",
+      "target": "s_eluate_v2",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_release_v2; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/56"
+    },
+    {
+      "id": "io:input:o_release_v3:s_final_beads_v3",
+      "source": "s_final_beads_v3",
+      "target": "o_release_v3",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_release_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/57"
+    },
+    {
+      "id": "io:output:o_release_v3:s_eluate_v3",
+      "source": "o_release_v3",
+      "target": "s_eluate_v3",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_release_v3; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/58"
+    },
+    {
+      "id": "io:input:o_purify_selected:s_eluate_v1",
+      "source": "s_eluate_v1",
+      "target": "o_purify_selected",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_purify_selected; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/59"
+    },
+    {
+      "id": "io:input:o_purify_selected:s_eluate_v2",
+      "source": "s_eluate_v2",
+      "target": "o_purify_selected",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_purify_selected; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/60"
+    },
+    {
+      "id": "io:input:o_purify_selected:s_eluate_v3",
+      "source": "s_eluate_v3",
+      "target": "o_purify_selected",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_purify_selected; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/61"
+    },
+    {
+      "id": "io:output:o_purify_selected:s_purified_tagged_dna",
+      "source": "o_purify_selected",
+      "target": "s_purified_tagged_dna",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_purify_selected; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/62"
+    },
+    {
+      "id": "io:input:o_aliquot:s_purified_tagged_dna",
+      "source": "s_purified_tagged_dna",
+      "target": "o_aliquot",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_aliquot; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/63"
+    },
+    {
+      "id": "io:output:o_aliquot:s_qpcr_aliquot",
+      "source": "o_aliquot",
+      "target": "s_qpcr_aliquot",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_aliquot; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/64"
+    },
+    {
+      "id": "io:output:o_aliquot:s_retained_dna",
+      "source": "o_aliquot",
+      "target": "s_retained_dna",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_aliquot; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/65"
+    },
+    {
+      "id": "io:input:o_qpcr:s_qpcr_aliquot",
+      "source": "s_qpcr_aliquot",
+      "target": "o_qpcr",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_qpcr; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/66"
+    },
+    {
+      "id": "io:output:o_qpcr:d_cq",
+      "source": "o_qpcr",
+      "target": "d_cq",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_qpcr; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/67"
+    },
+    {
+      "id": "io:output:o_qpcr:s_analytical_amplicons",
+      "source": "o_qpcr",
+      "target": "s_analytical_amplicons",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_qpcr; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/68"
+    },
+    {
+      "id": "io:input:o_pcr:s_retained_dna",
+      "source": "s_retained_dna",
+      "target": "o_pcr",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_pcr; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/69"
+    },
+    {
+      "id": "io:input:o_pcr:d_cq",
+      "source": "d_cq",
+      "target": "o_pcr",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_pcr; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/70"
+    },
+    {
+      "id": "io:output:o_pcr:s_enriched_library",
+      "source": "o_pcr",
+      "target": "s_enriched_library",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_pcr; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/71"
+    },
+    {
+      "id": "io:input:o_remove_long:s_enriched_library",
+      "source": "s_enriched_library",
+      "target": "o_remove_long",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_remove_long; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/72"
+    },
+    {
+      "id": "io:output:o_remove_long:s_size_supernatant",
+      "source": "o_remove_long",
+      "target": "s_size_supernatant",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_remove_long; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/73"
+    },
+    {
+      "id": "io:output:o_remove_long:s_long_fragment_discard",
+      "source": "o_remove_long",
+      "target": "s_long_fragment_discard",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_remove_long; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/74"
+    },
+    {
+      "id": "io:input:o_recover_library:s_size_supernatant",
+      "source": "s_size_supernatant",
+      "target": "o_recover_library",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_recover_library; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/75"
+    },
+    {
+      "id": "io:output:o_recover_library:s_final_library",
+      "source": "o_recover_library",
+      "target": "s_final_library",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_recover_library; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/76"
+    },
+    {
+      "id": "io:input:o_final_qc:s_final_library",
+      "source": "s_final_library",
+      "target": "o_final_qc",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_final_qc; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/77"
+    },
+    {
+      "id": "io:output:o_final_qc:d_final_qc",
+      "source": "o_final_qc",
+      "target": "d_final_qc",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_final_qc; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/78"
+    },
+    {
+      "id": "io:input:o_sequence:s_final_library",
+      "source": "s_final_library",
+      "target": "o_sequence",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_sequence; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/79"
+    },
+    {
+      "id": "io:output:o_sequence:d_reads",
+      "source": "o_sequence",
+      "target": "d_reads",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_sequence; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/80"
+    },
+    {
+      "id": "io:input:o_igg_boundary:s_igg_specimen",
+      "source": "s_igg_specimen",
+      "target": "o_igg_boundary",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_igg_boundary; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/81"
+    },
+    {
+      "id": "io:output:o_igg_boundary:s_igg_library",
+      "source": "o_igg_boundary",
+      "target": "s_igg_library",
+      "kind": "material_output",
+      "basis": "Explicit output state declared by operation o_igg_boundary; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/82"
+    },
+    {
+      "id": "io:input:o_igg_sequence:s_igg_library",
+      "source": "s_igg_library",
+      "target": "o_igg_sequence",
+      "kind": "material_input",
+      "basis": "Explicit input state declared by operation o_igg_sequence; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/83"
+    },
+    {
+      "id": "io:output:o_igg_sequence:d_igg_reads",
+      "source": "o_igg_sequence",
+      "target": "d_igg_reads",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_igg_sequence; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/84"
+    },
+    {
+      "id": "io:input:o_trim:d_reads",
+      "source": "d_reads",
+      "target": "o_trim",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_trim; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/85"
+    },
+    {
+      "id": "io:output:o_trim:d_trimmed_reads",
+      "source": "o_trim",
+      "target": "d_trimmed_reads",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_trim; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/86"
+    },
+    {
+      "id": "io:input:o_align:d_trimmed_reads",
+      "source": "d_trimmed_reads",
+      "target": "o_align",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_align; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/87"
+    },
+    {
+      "id": "io:output:o_align:d_alignments",
+      "source": "o_align",
+      "target": "d_alignments",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_align; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/88"
+    },
+    {
+      "id": "io:input:o_deduplicate:d_alignments",
+      "source": "d_alignments",
+      "target": "o_deduplicate",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_deduplicate; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/89"
+    },
+    {
+      "id": "io:output:o_deduplicate:d_nonduplicate",
+      "source": "o_deduplicate",
+      "target": "d_nonduplicate",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_deduplicate; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/90"
+    },
+    {
+      "id": "io:input:o_igg_process:d_igg_reads",
+      "source": "d_igg_reads",
+      "target": "o_igg_process",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_igg_process; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/91"
+    },
+    {
+      "id": "io:output:o_igg_process:d_igg_alignments",
+      "source": "o_igg_process",
+      "target": "d_igg_alignments",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_igg_process; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/92"
+    },
+    {
+      "id": "io:input:o_shift:d_nonduplicate",
+      "source": "d_nonduplicate",
+      "target": "o_shift",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_shift; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/93"
+    },
+    {
+      "id": "io:output:o_shift:d_transposition_coordinates",
+      "source": "o_shift",
+      "target": "d_transposition_coordinates",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_shift; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/94"
+    },
+    {
+      "id": "io:input:o_tracks:d_transposition_coordinates",
+      "source": "d_transposition_coordinates",
+      "target": "o_tracks",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_tracks; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/95"
+    },
+    {
+      "id": "io:output:o_tracks:d_bigwig",
+      "source": "o_tracks",
+      "target": "d_bigwig",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_tracks; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/96"
+    },
+    {
+      "id": "io:input:o_peaks_replicate:d_transposition_coordinates",
+      "source": "d_transposition_coordinates",
+      "target": "o_peaks_replicate",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_peaks_replicate; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/97"
+    },
+    {
+      "id": "io:input:o_peaks_replicate:d_igg_alignments",
+      "source": "d_igg_alignments",
+      "target": "o_peaks_replicate",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_peaks_replicate; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/98"
+    },
+    {
+      "id": "io:output:o_peaks_replicate:d_replicate_peaks",
+      "source": "o_peaks_replicate",
+      "target": "d_replicate_peaks",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_peaks_replicate; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/99"
+    },
+    {
+      "id": "io:input:o_check_replicates:d_replicate_peaks",
+      "source": "d_replicate_peaks",
+      "target": "o_check_replicates",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_check_replicates; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/100"
+    },
+    {
+      "id": "io:output:o_check_replicates:d_replicate_consistency",
+      "source": "o_check_replicates",
+      "target": "d_replicate_consistency",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_check_replicates; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/101"
+    },
+    {
+      "id": "io:input:o_merge_replicates:d_transposition_coordinates",
+      "source": "d_transposition_coordinates",
+      "target": "o_merge_replicates",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_merge_replicates; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/102"
+    },
+    {
+      "id": "io:input:o_merge_replicates:d_replicate_consistency",
+      "source": "d_replicate_consistency",
+      "target": "o_merge_replicates",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_merge_replicates; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/103"
+    },
+    {
+      "id": "io:output:o_merge_replicates:d_merged_alignments",
+      "source": "o_merge_replicates",
+      "target": "d_merged_alignments",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_merge_replicates; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/104"
+    },
+    {
+      "id": "io:input:o_peaks_merged:d_merged_alignments",
+      "source": "d_merged_alignments",
+      "target": "o_peaks_merged",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_peaks_merged; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/105"
+    },
+    {
+      "id": "io:input:o_peaks_merged:d_igg_alignments",
+      "source": "d_igg_alignments",
+      "target": "o_peaks_merged",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_peaks_merged; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/106"
+    },
+    {
+      "id": "io:output:o_peaks_merged:d_merged_peaks",
+      "source": "o_peaks_merged",
+      "target": "d_merged_peaks",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_peaks_merged; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/107"
+    },
+    {
+      "id": "io:input:o_frip:d_nonduplicate",
+      "source": "d_nonduplicate",
+      "target": "o_frip",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_frip; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/108"
+    },
+    {
+      "id": "io:input:o_frip:d_replicate_peaks",
+      "source": "d_replicate_peaks",
+      "target": "o_frip",
+      "kind": "data_input",
+      "basis": "Explicit input state declared by operation o_frip; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/109"
+    },
+    {
+      "id": "io:output:o_frip:d_frip",
+      "source": "o_frip",
+      "target": "d_frip",
+      "kind": "data_output",
+      "basis": "Explicit output state declared by operation o_frip; mechanically rendered from its I/O, not inferred from array order.",
+      "condition": null,
+      "association": null,
+      "selection": null,
+      "alternative_group": null,
+      "detail_pointer": "/flows/110"
+    }
+  ],
+  "modules": [
+    {
+      "id": "m_specimen",
+      "name": "Specimen quantity and selection of a ChIP alternative",
+      "operation_ids": [
+        "o_count",
+        "o_fix_v1",
+        "o_fix_v2",
+        "o_fix_v3"
+      ],
+      "boundary_rationale": "Starts at cellular specimens; one target/recipe is selected for a given library. Target-specific low-input demonstrations limit applicability, not universal cell minimums.",
+      "detail_pointer": "/modules/0"
+    },
+    {
+      "id": "m_capture",
+      "name": "Prepare and enrich target-associated chromatin",
+      "operation_ids": [
+        "o_nuclei_v1",
+        "o_shear_v1",
+        "o_shear_v2",
+        "o_shear_v3",
+        "o_capture_v1",
+        "o_capture_v2",
+        "o_capture_v3",
+        "o_wash_v1",
+        "o_wash_v2",
+        "o_wash_v3"
+      ],
+      "boundary_rationale": "Ends at LiCl-washed enriched chromatin on beads. Distinct lysis, sonication, antibody and wash recipes remain alternatives; no hybrid histone/TF recipe is formed.",
+      "detail_pointer": "/modules/1"
+    },
+    {
+      "id": "m_tagment",
+      "name": "Introduce sequencing-adapter tags before DNA release",
+      "operation_ids": [
+        "o_pre_tag_v1",
+        "o_tag_v1",
+        "o_post_tag_v1",
+        "o_pre_tag_v2",
+        "o_tag_v2",
+        "o_post_tag_v2",
+        "o_pre_tag_v3",
+        "o_tag_v3",
+        "o_post_tag_v3"
+      ],
+      "boundary_rationale": "Begins at enriched bead-bound chromatin and ends at washed tagmented chromatin, preserving branch-specific wash identities around the common tagmentation chemistry.",
+      "detail_pointer": "/modules/2"
+    },
+    {
+      "id": "m_release",
+      "name": "Release and purify target-attributed tagged DNA",
+      "operation_ids": [
+        "o_release_v1",
+        "o_release_v2",
+        "o_release_v3",
+        "o_purify_selected"
+      ],
+      "boundary_rationale": "Deproteinization/crosslink reversal changes the material from chromatin on beads to purified tagged DNA. Versions 1/3 re-extract; version 2 does not inherit that step. Alternative outputs converge without physical pooling.",
+      "detail_pointer": "/modules/3"
+    },
+    {
+      "id": "m_library",
+      "name": "Analytical aliquot and controlled production enrichment",
+      "operation_ids": [
+        "o_aliquot",
+        "o_qpcr",
+        "o_pcr",
+        "o_remove_long",
+        "o_recover_library",
+        "o_final_qc"
+      ],
+      "boundary_rationale": "Separates measurement material from production material; measured Cq controls production cycle count. Final size-selected library and incompletely specified QC bound sequencing entry.",
+      "detail_pointer": "/modules/4"
+    },
+    {
+      "id": "m_reads",
+      "name": "Sequence target and independent IgG libraries",
+      "operation_ids": [
+        "o_sequence",
+        "o_igg_boundary",
+        "o_igg_sequence",
+        "o_trim",
+        "o_align",
+        "o_deduplicate",
+        "o_igg_process",
+        "o_shift"
+      ],
+      "boundary_rationale": "Turns attributed physical libraries into processed target and background data. IgG preparation is a reported boundary with unknown internals, not an invented target-recipe assignment.",
+      "detail_pointer": "/modules/5"
+    },
+    {
+      "id": "m_enrichment",
+      "name": "Interpret relative genomic enrichment",
+      "operation_ids": [
+        "o_tracks",
+        "o_peaks_replicate",
+        "o_check_replicates",
+        "o_merge_replicates",
+        "o_peaks_merged",
+        "o_frip"
+      ],
+      "boundary_rationale": "Produces normalized genomic tracks, independently/background-called peaks, consistency-gated merged peaks and FRiP. Exploratory structural applications do not become required enrichment protocol steps.",
+      "detail_pointer": "/modules/6"
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "chemistry:CHEM-G01",
+      "description": "The draft CHEM-G01 pending-inspection blocker is resolved at the material-route level by Supplementary Note p00039/p00040/p00043/p00044 (CHEM-F03–F15) and at the primer-inventory level by cited ATAC-seq supplement p00001/p00002 (CHEM-F16–F17); it is not evidence that these operations are unavailable. Residual noncritical preparation-recipe limits in the inspected Supplementary Note: glycine concentration/amount and quench time, several lysis/resuspension volumes, numerical full-speed centrifugation settings, version 2 TE composition, Proteinase K stock activity/concentration, and antibody-specific Protein A/G choice are not given there. These restrict reproduction as a complete SOP, not the supported cells→fixed chromatin→enriched beads→purified tagged DNA route. CTCF is stated as 10 μl/IP, so its mass remains unknown. No contradictory execution is asserted.",
+      "blocking": false,
+      "next_evidence": "Original version-specific preparation SOP/reagent sheets supplying these missing quantities and antibody-resin assignments; for a chosen new specimen/target, validated ChIP optimization conditions. Preserve the source-supported boundaries meanwhile."
+    },
+    {
+      "id": "chemistry:CHEM-G02",
+      "description": "Exact molecular-end detail remains limited: main p00004/p00016/p00018 and supplement p00005 establish Tn5 fragmentation/adapter tagging and initial nick translation; the inspected ATAC-seq dependency and PCR oligo inventory do not specify the original kit’s enzyme activity/concentration, loaded transposon strand sequences, transferred strand ends or full covalent intermediate. PCR-primer sequences must not be relabelled as loaded Tn5 adapters. The named-kit tagmentation and amplification boundary is supported for frozen scope; a claim about exact end chemistry or a custom transposase substitution is not established.",
+      "blocking": false,
+      "next_evidence": "Contemporaneous Illumina Nextera DNA Sample Prep Kit loaded-adapter/enzyme technical documentation and a source linking its exact strand architecture to this original ChIPmentation variant; do not replace with later kit or remembered defaults."
+    },
+    {
+      "id": "chemistry:CHEM-G03",
+      "description": "Library-primer and amplification assignment limit: main p00018 links custom Nextera primers to the cited ATAC-seq source, whose table provides 25 oligo designs, but no general ChIPmentation sample-to-Ad2 map or index-read orientation is specified. Main p00018 explicitly gives the analytical qPCR thermal program and a separate production composition/Cq cycle rule; it does not independently state a complete final-PCR thermal program or volume of purified DNA transferred into that reaction. The ATAC dependency p00017 has a different preamplification/qPCR architecture and cannot silently fill these details. This does not block the general indexed-library amplification route or require historical sample reconstruction.",
+      "blocking": false,
+      "next_evidence": "Original ChIPmentation amplification/indexing SOP clarifying the production program, DNA input volume and primer-pair/index-read convention for a selected library design. Historical sample maps are needed only for claims about a particular executed sample."
+    },
+    {
+      "id": "chemistry:CHEM-G04",
+      "description": "SPRI internal detail limit: main p00018 reports 0.7:1 removal of >600 bp DNA followed by 2:1 recovery of remaining DNA, supporting first-supernatant/second-bead retention. It does not clarify whether the second ratio is an incremental addition or final total in the continued reaction, nor provide final bead washes/elution volume or a lower size bound. Supplementary Note purification alternatives likewise name AMPure/MinElute without full manufacturer internals. These are noncritical detail limits for the published separation boundary; no invented bead-volume arithmetic is claimed.",
+      "blocking": false,
+      "next_evidence": "Original two-step SPRI size-selection SOP defining the second ratio’s volume reference and final recovery, plus contemporaneous AMPure XP/MinElute instructions for explicitly delegated internal cleanup details."
+    },
+    {
+      "id": "chemistry:CHEM-G05",
+      "description": "Matched-control preparation boundary: main p00020 requires matched IgG background and Table 2 p00004 shows independent ChIPmentation IgG libraries, but the inspected target-antibody recipes do not specify IgG identity/mass or which of versions 1–3 generated each matched control. A separate sequenced control boundary and its data role are established; an exact control reaction or universal matching rule is not. This is nonblocking for the declared general protocol architecture but limits any claim about fully specified or historically executed control preparation.",
+      "blocking": false,
+      "next_evidence": "Original IgG-control SOP stating antibody species/isotype/catalogue/amount, ChIP preparation branch, specimen/input matching and control-library processing; exact pairing is required only if claiming a specific executed comparison."
+    },
+    {
+      "id": "chemistry:CHEM-G06",
+      "description": "Sequencing/interpretation internal settings: inspected main p00018/p00020/p00021 and Table 2 identify platform, read-format examples, alignment/peak-calling rules and enrichment readouts, but do not supply a general pooling/loading recipe, demultiplexing/index-mismatch settings, all software versions/default realizations, a numerical replicate-consistency decision threshold, or QC-triggered rerun rule. Qubit measurements in main p00017/p00019 concern other protocols; they cannot support a ChIPmentation loading controller. These details do not block the source-described sequencing→target-enrichment boundary; no exact numerical reproduction or adaptive loading behavior is claimed.",
+      "blocking": false,
+      "next_evidence": "Original facility library submission/loading and demultiplexing SOP, applicable software versions/commands and stated replicate/QC decision criteria if a reproducible numerical analysis or adaptive control claim is required. For general architecture, retain the reported boundaries and qualified rules."
+    },
+    {
+      "id": "information:G01",
+      "description": "Primer identity is resolved in I06. Remaining decoding detail is not specified in inspected ChIPmentation amplification/sequencing Methods or the delegated inventory: index choice for a library, pooling/index-read orientation and length, demultiplexing software and mismatch rules. The supported boundary is indexed library → sequence reads, not an executable demultiplexing protocol or cell/UMI decoder. This does not block the frozen general workflow; exact decoding execution remains unsupported.",
+      "blocking": false,
+      "next_evidence": "Original ChIPmentation indexing/sequencing instructions specifying index-read format, sample/index assignment rule and demultiplexing settings. A historical sample map is not required for the generic boundary."
+    },
+    {
+      "id": "information:G02",
+      "description": "I05 records the rounded-up-Cq rule, but the inspected amplification Methods do not state Cq fluorescence threshold/baseline conventions or an absolute standard curve, nor explicitly repeat a thermocycler program for the separate production reaction. The 24-cycle program is assigned to analytical qPCR, not asserted as the production program. These are noncritical detail limits for the source-described boundary, but prevent a fully executable amplification SOP or numerical calibration claim.",
+      "blocking": false,
+      "next_evidence": "Original-version amplification worksheet detailing Cq conventions and the production thermocycler program; calibration standards only if absolute quantitation is claimed."
+    },
+    {
+      "id": "information:G03",
+      "description": "I11 resolves matched-IgG background and separate IgG libraries; inspected target-antibody recipes do not identify IgG amount/species, exact preparation or matching criteria. I13 resolves a separate Nextera genomic-DNA bias reference, but its preparation and positional scaling before exponentiation are not specified in the bioinformatics paragraph. Keep these as control-data boundaries with unknown internals, not mixed spike-ins. This does not block qualified general enrichment or the documented optional correction rule; exact control execution/numerical reproduction is unsupported.",
+      "blocking": false,
+      "next_evidence": "Original matched-IgG and Nextera genomic-DNA control preparation instructions, plus the positional-background normalization specification if reproducing footprint correction."
+    },
+    {
+      "id": "information:G04",
+      "description": "Sources establish Tn5 adapter introduction, the dependency rationale of adapters inserted 9 bp apart, PCR nick translation and the custom amplification oligos. Inspected passages do not fully specify original commercial transposome-loaded oligos, strand-level covalent end structures or every fill-in intermediate. No detailed junction chemistry beyond reported changes is asserted. This is a noncritical internal-detail limit for the frozen architecture; the tagmentation-to-purified-library interface is supported.",
+      "blocking": false,
+      "next_evidence": "Original Nextera DNA Sample Prep chemistry documentation or an explicitly applicable molecular schematic identifying loaded adapter strands and post-insertion/repair products."
+    },
+    {
+      "id": "information:G05",
+      "description": "Replicate consistency precedes merging in I11, but the inspected processing paragraph supplies overlap metrics without a numerical acceptance cutoff or an action for failure. Preserve the reported gate without inventing a rerun decision, minimum FRiP, or adaptive sequencing-depth rule. This does not block the source-described peak-calling workflow.",
+      "blocking": false,
+      "next_evidence": "An original replicate-quality decision protocol specifying acceptance criteria and resulting actions if an operational controller is required."
+    },
+    {
+      "id": "information:G06",
+      "description": "I17 records a final pre-sequencing QC boundary mentioned in supplementary cost accounting. The inspected ChIPmentation amplification/sequencing paragraph and that cost note do not identify final concentration/size measurement methods, standards, pass thresholds or how measurements determine pooling/loading. Qubit and the >1,200 bp cut are assigned to the separate ATAC procedure in I16. This missing inspection recipe is noncritical for the general library-to-sequencing boundary; a specific quantitation or adaptive loading claim would be unsupported.",
+      "blocking": false,
+      "next_evidence": "Original-version ChIPmentation final-library QC and sequencing-submission instructions specifying measured quantities, instrument/assay, any calibrants and any actual pooling/loading decision rule."
+    },
+    {
+      "id": "integrator_wash_counts",
+      "description": "Version 2 RIPA-LiCl wash has no explicit count in inspected Supplementary Note p00040; do not infer two washes from neighboring buffers. Several branch-specific wash volumes are not separately repeated. The specified sequence through LiCl and return to final TE is supported, so this is a recipe-detail gap rather than a missing material route.",
+      "blocking": false,
+      "next_evidence": "Original version 2 wash worksheet specifying RIPA-LiCl count and per-buffer volumes."
+    }
+  ],
+  "gap_resolutions": [],
+  "details": {
+    "operation_query": [
+      "atlas-extract",
+      "query",
+      "WORKFLOW",
+      "OPERATION_ID"
+    ],
+    "pointer_basis": "JSON Pointers into the Workflow with the bound canonical hash.",
+    "modules": "Exact existing Module memberships, available as optional display groups."
+  },
+  "boundary": "Display of the bound Workflow, not renewed review, acceptance or execution readiness. No State, Operation or Flow records are merged or filtered. Listed operation order is stored order, not an execution schedule. Input/output lists are references: Flow selection, alternatives and conditions govern applicability; unspecified selection is not assumed required. No declared connection does not establish physical absence. Action text, resources, information effects and evidence are available in the exact workflow via detail pointers and operation queries; their omission here is not a claim that those details are absent."
+}

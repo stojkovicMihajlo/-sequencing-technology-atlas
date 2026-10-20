@@ -4,6 +4,24 @@ The authoritative scientific extraction is a JSON document. Its sentences are
 written by the agent inside named fields. Python creates `protocol.txt` by printing
 those existing fields under labels; it does not ask another model to summarize them.
 
+Start with **`overview.html`** to read the structure. It shows Operations and their
+typed material/data connections, with recipes and evidence expandable. State labels
+link to full descriptions. Modules are optional navigation groups. Large explicit
+alternative-input groups are folded for display; their choices and conditions are
+retained. No Operations or States are merged by this renderer.
+
+For an existing workflow, create a new reading view without a model call:
+
+```sh
+PYTHONPATH=src .venv/bin/python -m genomics_discovery.curation.workflow_extraction overview examples/chipmentation/workflow.json --format html --output /tmp/chipmentation-overview.html
+```
+
+Standalone `overview` is explicitly unreviewed. Batch exports include the exact
+existing review outcome, adverse checks and omissions; they do not perform a new
+review. Nonpositive exports use `overview_diagnostic.*`. A declared empty gap list
+does not hide known review corrections or prove completeness. Use `query WORKFLOW
+OPERATION_ID` for the full Operation and its connected records.
+
 ## Files in a current batch run
 
 The default is one source reader, one extractor and a fresh reviewer. A repair
@@ -19,6 +37,7 @@ the final artifacts; stage numbers are not a stable API.
 | `attempts/003_reviewer/artifact.json` | Source-review checks of the exact workflow version. |
 | `attempts/003_reviewer/source_coverage_review.json` | Where each source requirement is satisfied, missing, partial, uncertain or not applicable. |
 | `protocol.txt` | Readable projection of the same workflow and review. |
+| `overview.json`, `overview.txt`, `overview.html` | Main structure with exact State/Operation/Flow IDs, links to details, and bound existing review context. Recipes and evidence remain in the workflow. |
 | `graph_candidate.json` | Standalone graph projection with source/review records. |
 | `state.json`, `config.json` | Stage status, artifact paths, configuration, integrity bindings and usage. |
 | Stage `prompt.txt`, `events.jsonl`, `result.json` | Exact instructions, native session events and execution results. |
@@ -48,6 +67,13 @@ the material/data before or after an action. A module groups operation IDs; it d
 not itself perform an additional action. List order is storage order. Flows define
 the route. Repeated cycles are presently described inside an action because the
 workflow schema requires an acyclic graph.
+
+These are not progressively smaller biochemical levels. The Workflow is the whole
+method record; States and Operations describe its graph, Flows connect them, and
+Modules group Operations. Resources and evidence are attached records. Future
+extraction uses the [consequential-boundary rule](decisions/2026-10-20-workflow-granularity-and-overview.md)
+to avoid one-operation-per-motion and repeated recipe prose while preserving
+meaningful transformations, branches, identities and compatibility boundaries.
 
 Each operation must belong to exactly one module under the current schema. This is
 a representation choice, not a scientific claim about the only valid decomposition.

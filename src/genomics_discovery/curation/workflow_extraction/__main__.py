@@ -59,6 +59,11 @@ def main() -> None:
     query.add_argument("operation_id")
     inspect = commands.add_parser("inspect", help="Show a lossless candidate with shared evidence")
     inspect.add_argument("workflow", type=Path)
+    overview = commands.add_parser(
+        "overview", help="Read the main structure; recipe and evidence remain in the workflow")
+    overview.add_argument("workflow", type=Path)
+    overview.add_argument("--format", choices=("text", "json", "html"), default="text")
+    overview.add_argument("--output", type=Path, help="Create a new display file without overwriting")
     check = commands.add_parser(
         "check", help="Check structure and citations; no scientific verdict")
     check.add_argument("artifact", type=Path)
@@ -122,6 +127,25 @@ def main() -> None:
             from .models import Workflow
 
             result = inspection_view(Workflow.model_validate_json(args.workflow.read_bytes()))
+        elif args.command == "overview":
+            from .models import Workflow
+            from .overview import overview_text, workflow_overview
+
+            workflow = Workflow.model_validate_json(args.workflow.read_bytes())
+            if args.format == "html":
+                from .overview_html import overview_html
+
+                rendered = overview_html(workflow)
+            elif args.format == "json":
+                rendered = json.dumps(workflow_overview(workflow), indent=2, ensure_ascii=False) + "\n"
+            else:
+                rendered = overview_text(workflow)
+            if args.output:
+                with args.output.open("x", encoding="utf-8") as handle:
+                    handle.write(rendered)
+            else:
+                print(rendered, end="")
+            return
         elif args.command == "check":
             from .models import (
                 ReadingReport,

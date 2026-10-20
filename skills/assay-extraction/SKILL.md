@@ -48,6 +48,17 @@ interfaces. Explain each boundary. A module may contain several operations; two
 assays need not have the same modules. A shared word or reagent does not establish
 an equivalent transformation, compatibility or historical inheritance.
 
+Choose boundaries for scientific consequence. Keep an Operation/interface separate
+when combining it with its neighbors would hide a meaningful transformation,
+independently used fraction, selection, attribution, branch, compatibility boundary,
+information carrier, or measurement/control handoff. Routine handling can remain
+inside a composite Operation when those distinctions and conditions remain clear.
+A reagent addition, incubation or inventory alternative alone does not require a
+new node. Preserve exact recipes and oligos as attached resources and retain the
+selected identity where it matters; avoid copying the full recipe into actions,
+States and information effects. No node cap or universal module sequence applies.
+Reviewers use the same criterion and must not demand extra nodes just for detail.
+
 Distinguish assay instructions from experiments demonstrating performance. Preserve
 reported operating limits and biases as qualified context when relevant; do not
 turn every tested condition or inventory item into a mandatory reaction ingredient.

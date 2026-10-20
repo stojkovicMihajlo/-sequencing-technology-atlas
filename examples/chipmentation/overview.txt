@@ -1,0 +1,478 @@
+ChIPmentation: fast, robust, low-input ChIP-seq for histones and transcription factors.
+Method: chipmentation; variant: Schmidl2015_original_ChIPmentation
+Scope: Cells/chromatin through antibody-directed enrichment, tagmentation, library preparation, sequencing and enrichment interpretation; keep histone/transcription-factor alternatives explicit.
+Workflow SHA256: 451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83
+Display of the bound Workflow, not renewed review, acceptance or execution readiness. No State, Operation or Flow records are merged or filtered. Listed operation order is stored order, not an execution schedule. Input/output lists are references: Flow selection, alternatives and conditions govern applicability; unspecified selection is not assumed required. No declared connection does not establish physical absence. Action text, resources, information effects and evidence are available in the exact workflow via detail pointers and operation queries; their omission here is not a claim that those details are absent.
+
+Review context: archived_model_review; outcome: supported.
+Existing bound model-review context only. The outcome uses the existing review rule; this projection verifies the workflow hash and unique exact target coverage only. It does not revalidate source-packet integrity, evidence or source verdicts without the packet. No fresh adjudication or acceptance is established.
+Review SHA256: 00988d3b326826846ef35444563c083c1d78a936e9b53c0b3fc656023b47e324
+Review-declared source packet SHA256: d152929a63d50096cdf0344fbd20b3c275060b8fe4a4a798e64d468607e422f8
+Review note: Independent source audit of the frozen original ChIPmentation general protocol: all 214 declared state, operation and flow targets were individually checked, including every attached operation resource. Review support is for each qualified source-described or explicitly inferred proposition, not a verification of historical execution or numerical figure reproduction.
+Review note: Scope audit: all core Supplementary Note transformations from fixed cells through target capture, branch-specific washing, on-bead tagging, release/purification, analytical/production amplification, separation, sequencing, matched-background enrichment and FRiP are represented. Culturing/blood isolation precede the frozen cellular entry. Conventional ChIP library preparation, purified-DNA tagmentation and ATAC production recipes are contextual alternatives, not silently inherited.
+Review note: CHEM-G01 was audited against the complete relevant Supplementary Note paragraphs and author insertion markers. The complete preparation route is available and represented. Remaining glycine dose/time, some volumes/numerical full-speed settings, TE formulation, Proteinase K stock and antibody-resin assignments are internal recipe limits, not missing consequential routes. CTCF is reported by volume; no unsupported mass conversion or contradiction is claimed.
+Review note: CHEM-G02 and information:G04 were audited against main p00004/p00016/p00018, the on-bead schematic, PCR inventory/caption and dependency p00023. Named-kit tagging, nick translation and attributed coordinate rationale are supported; exact loaded strands, enzyme activity and full covalent intermediates are not supplied by PCR oligos. Their nonblocking classification is appropriate for the declared architecture and does not authorize a custom-transposase substitution.
+Review note: CHEM-G03 and information:G01/G02 were audited against main p00018, the complete PCR inventory and dependency p00017. The original KAPA/aliquot/Cq architecture and custom primer menu are supported. Production DNA input/program, Cq conventions and general index/demultiplexing implementation remain unknown. Historical sample-index maps are not needed to describe this qualified general boundary.
+Review note: CHEM-G04 was audited against main p00018 and the supplementary purification alternatives. Both size-selection ratios and the retained/discarded boundary are represented. The second-ratio volume reference and cleanup/recovery internals remain noncritical SOP limits; no bead arithmetic or unsupported lower cutoff is asserted.
+Review note: CHEM-G05 and the IgG portion of information:G03 were audited against main p00020 and Table 2 p00004. A separate cellular IgG library, read processing and matched-background role are supported. Unknown isotype/mass, exact branch and matching execution remain explicit. These do not block the source-described control boundary; the candidate does not claim a fully specified or historically reconstructed control experiment.
+Review note: CHEM-G06 and information:G05/G06 were audited against main p00018/p00020/p00021 and supplementary p00036. The platform, processing rules, qualitative consistency gate and inferred final QC boundary are supported; software/default realizations, QC/consistency numerical criteria, demultiplexing and facility loading internals remain unknown. Comparator Qubit measurements cannot fill these limits, and no adaptive loading/rerun controller is asserted.
+Review note: The optional structural-analysis portion of information:G03 remains a qualified limitation outside the general enrichment route: main p00021 reports genomic-DNA background correction, motif windows and external dyad anchors, while main p00010/p00012 qualify sequence bias and target dependence. This supports the ledger exclusions without treating the correction rule as unavailable or making numerical-reproduction claims.
+Review note: integrator_wash_counts was independently checked against supplement p00040 and author p00092/p00093: RIPA-LiCl count and TE formulation are not stated there. The known wash interface is present, so the retained nonblocking recipe gap is appropriate.
+Review note: The candidate gap_resolutions array is empty, so there are no resolution:ROLE:GAP_ID targets to check. Its 13 explicit unresolved descriptions were examined directly as summarized above; no premise repair, unsupported compatibility claim or missing consequential interface was identified. An unavailable internal recipe is not treated as an architecture blocker.
+Review note: The completion-ledger judgments are saved separately in coverage_review.json; original reader reports, prior reviews and other attempts were not scientific inputs.
+
+Operations (State IDs; selection is specified by the Flows):
+[o_count] Count cells
+  Inputs: s_cells
+  Outputs: d_cell_count
+[o_fix_v1] Fix and collect cells: version 1
+  Inputs: s_cells
+  Outputs: s_fixed_v1
+[o_fix_v2] Fix and collect cells: version 2
+  Inputs: s_cells
+  Outputs: s_fixed_v2
+[o_fix_v3] Fix and collect cells: version 3
+  Inputs: s_cells
+  Outputs: s_fixed_v3
+[o_nuclei_v1] Lyse cells and isolate nuclei: version 1
+  Inputs: s_fixed_v1
+  Outputs: s_nuclei_v1, s_lysis_discard_v1
+[o_shear_v1] Sonicate and clarify chromatin: version 1
+  Inputs: s_nuclei_v1
+  Outputs: s_chromatin_v1, s_insoluble_v1
+[o_shear_v2] Lyse, sonicate and clarify chromatin: version 2
+  Inputs: s_fixed_v2
+  Outputs: s_chromatin_v2, s_insoluble_v2
+[o_shear_v3] Lyse, sonicate and clarify chromatin: version 3
+  Inputs: s_fixed_v3
+  Outputs: s_chromatin_v3, s_insoluble_v3
+[o_capture_v1] Capture target chromatin: version 1
+  Inputs: s_chromatin_v1
+  Outputs: s_captured_v1
+[o_capture_v2] Capture target chromatin: version 2
+  Inputs: s_chromatin_v2
+  Outputs: s_captured_v2
+[o_capture_v3] Capture target chromatin: version 3
+  Inputs: s_chromatin_v3
+  Outputs: s_captured_v3
+[o_wash_v1] Wash enriched beads through LiCl: version 1
+  Inputs: s_captured_v1
+  Outputs: s_licl_v1
+[o_pre_tag_v1] Exchange bead wash buffer: version 1
+  Inputs: s_licl_v1
+  Outputs: s_prepared_v1
+[o_tag_v1] Tagment enriched chromatin on beads: version 1
+  Inputs: s_prepared_v1
+  Outputs: s_tagged_v1
+[o_post_tag_v1] Remove reaction and finish bead washes: version 1
+  Inputs: s_tagged_v1
+  Outputs: s_final_beads_v1
+[o_wash_v2] Wash enriched beads through LiCl: version 2
+  Inputs: s_captured_v2
+  Outputs: s_licl_v2
+[o_pre_tag_v2] Exchange bead wash buffer: version 2
+  Inputs: s_licl_v2
+  Outputs: s_prepared_v2
+[o_tag_v2] Tagment enriched chromatin on beads: version 2
+  Inputs: s_prepared_v2
+  Outputs: s_tagged_v2
+[o_post_tag_v2] Remove reaction and finish bead washes: version 2
+  Inputs: s_tagged_v2
+  Outputs: s_final_beads_v2
+[o_wash_v3] Wash enriched beads through LiCl: version 3
+  Inputs: s_captured_v3
+  Outputs: s_licl_v3
+[o_pre_tag_v3] Exchange bead wash buffer: version 3
+  Inputs: s_licl_v3
+  Outputs: s_prepared_v3
+[o_tag_v3] Tagment enriched chromatin on beads: version 3
+  Inputs: s_prepared_v3
+  Outputs: s_tagged_v3
+[o_post_tag_v3] Remove reaction and finish bead washes: version 3
+  Inputs: s_tagged_v3
+  Outputs: s_final_beads_v3
+[o_release_v1] Elute and reverse crosslinks: version 1
+  Inputs: s_final_beads_v1
+  Outputs: s_eluate_v1
+[o_release_v2] Elute and reverse crosslinks: version 2
+  Inputs: s_final_beads_v2
+  Outputs: s_eluate_v2
+[o_release_v3] Elute and reverse crosslinks: version 3
+  Inputs: s_final_beads_v3
+  Outputs: s_eluate_v3
+[o_purify_selected] Purify the selected recipe eluate
+  Inputs: s_eluate_v1, s_eluate_v2, s_eluate_v3
+  Outputs: s_purified_tagged_dna
+[o_aliquot] Take analytical library aliquot
+  Inputs: s_purified_tagged_dna
+  Outputs: s_qpcr_aliquot, s_retained_dna
+[o_qpcr] Perform analytical nick translation and qPCR
+  Inputs: s_qpcr_aliquot
+  Outputs: d_cq, s_analytical_amplicons
+[o_pcr] Enrich production library using measured Cq
+  Inputs: s_retained_dna, d_cq
+  Outputs: s_enriched_library
+[o_remove_long] Remove long PCR fragments
+  Inputs: s_enriched_library
+  Outputs: s_size_supernatant, s_long_fragment_discard
+[o_recover_library] Recover remaining DNA after size exclusion
+  Inputs: s_size_supernatant
+  Outputs: s_final_library
+[o_final_qc] Inspect final library at reported QC boundary
+  Inputs: s_final_library
+  Outputs: d_final_qc
+[o_sequence] Sequence enriched library
+  Inputs: s_final_library
+  Outputs: d_reads
+[o_igg_boundary] Prepare separate IgG control at supported boundary
+  Inputs: s_igg_specimen
+  Outputs: s_igg_library
+[o_igg_sequence] Sequence separate IgG control library
+  Inputs: s_igg_library
+  Outputs: d_igg_reads
+[o_trim] Trim sequence reads
+  Inputs: d_reads
+  Outputs: d_trimmed_reads
+[o_align] Align reads to human reference
+  Inputs: d_trimmed_reads
+  Outputs: d_alignments
+[o_deduplicate] Mark and remove duplicate reads
+  Inputs: d_alignments
+  Outputs: d_nonduplicate
+[o_igg_process] Process IgG background reads
+  Inputs: d_igg_reads
+  Outputs: d_igg_alignments
+[o_shift] Represent Tn5 transposition centers
+  Inputs: d_nonduplicate
+  Outputs: d_transposition_coordinates
+[o_tracks] Generate normalized genomic signal tracks
+  Inputs: d_transposition_coordinates
+  Outputs: d_bigwig
+[o_peaks_replicate] Call enrichment peaks per replicate
+  Inputs: d_transposition_coordinates, d_igg_alignments
+  Outputs: d_replicate_peaks
+[o_check_replicates] Assess replicate consistency
+  Inputs: d_replicate_peaks
+  Outputs: d_replicate_consistency
+[o_merge_replicates] Merge consistent biological-replicate data
+  Inputs: d_transposition_coordinates, d_replicate_consistency
+  Outputs: d_merged_alignments
+[o_peaks_merged] Call merged-replicate enrichment peaks
+  Inputs: d_merged_alignments, d_igg_alignments
+  Outputs: d_merged_peaks
+[o_frip] Measure enrichment signal-to-noise
+  Inputs: d_nonduplicate, d_replicate_peaks
+  Outputs: d_frip
+
+States (each material/data description appears once):
+[s_cells] (material) Cells entering one selected target-specific ChIP recipe. Cultured K562 cells and isolated PBMCs are reported study contexts, not universal input requirements. Demonstrated low-input profiles used 10,000 cells for H3K4me3/H3K27me3 and 100,000 for GATA1/CTCF; these are examples rather than universal minimums. Antibody quality limits feasibility and new antibodies/cell types may require ChIP optimization.
+[d_cell_count] (data) Reported cell-number measurement; no automatic adjustment or sequencing-based cell decoder is specified.
+[s_fixed_v1] (material) Washed fixed-cell pellet in alternative ChIP version 1 for H3K4me3 or H3K27me3; crosslinked chromatin retained in the cellular fraction.
+[s_fixed_v2] (material) Washed fixed-cell pellet in alternative ChIP version 2 for H3K4me1, H3K36me3 or REST; crosslinked chromatin retained in the cellular fraction.
+[s_fixed_v3] (material) Washed fixed-cell pellet in alternative ChIP version 3 for H3K27ac, PU.1, CTCF or GATA1; crosslinked chromatin retained in the cellular fraction.
+[s_nuclei_v1] (material) Version 1 retained nuclei pellet resuspended in Sonication Buffer; cytoplasmic lysis supernatant is discarded.
+[s_lysis_discard_v1] (material) Discarded version 1 cell-lysis supernatant after nuclei collection; not part of the chromatin library route.
+[s_chromatin_v1] (material) Clarified sonicated chromatin supernatant, alternative version 1; most fragments reported as 200–700 bp, prior to antibody capture.
+[s_insoluble_v1] (material) Pelleted insoluble fraction after version 1 chromatin clarification; excluded from the transferred supernatant.
+[s_chromatin_v2] (material) Clarified sonicated chromatin supernatant in alternative version 2, most fragments 200–700 bp; prior to capture.
+[s_insoluble_v2] (material) Insoluble pellet excluded when version 2 sonicated-chromatin supernatant is transferred.
+[s_chromatin_v3] (material) Clarified sonicated chromatin supernatant in alternative version 3, most fragments 200–700 bp; prior to capture.
+[s_insoluble_v3] (material) Insoluble pellet excluded when version 3 sonicated-chromatin supernatant is transferred.
+[s_captured_v1] (material) Alternative version 1 target-associated crosslinked chromatin captured on magnetic beads using one selected antibody (H3K4me3 or H3K27me3); target choices are not mixed.
+[s_captured_v2] (material) Alternative version 2 target-associated crosslinked chromatin captured on magnetic beads using one selected antibody (H3K4me1, H3K36me3 or REST); target choices are not mixed.
+[s_captured_v3] (material) Alternative version 3 target-associated crosslinked chromatin captured on magnetic beads using one selected antibody (H3K27ac, PU.1, CTCF or GATA1); target choices are not mixed.
+[s_licl_v1] (material) LiCl-washed target-enriched chromatin on beads, version 1; entry to ChIPmentation before the final conventional ChIP wash.
+[s_prepared_v1] (material) Version 1 enriched chromatin still on beads after two cold Tris washes removing inhibitory buffer components.
+[s_tagged_v1] (material) Version 1 target-enriched bead-bound chromatin with DNA fragmented and sequencing-adapter tagged by Tn5; prior to enzyme-removal washes and deproteinization. Exact commercial loaded strands/covalent intermediate are not specified.
+[s_final_beads_v1] (material) Version 1 tagmented target-associated chromatin retained on beads after reaction-liquid removal, two branch-specific washes and final ChIP washes; ready for elution.
+[s_licl_v2] (material) LiCl-washed target-enriched chromatin on beads, version 2; entry to ChIPmentation before the final conventional ChIP wash.
+[s_prepared_v2] (material) Version 2 enriched chromatin still on beads after two cold Tris washes removing inhibitory buffer components.
+[s_tagged_v2] (material) Version 2 target-enriched bead-bound chromatin with DNA fragmented and sequencing-adapter tagged by Tn5; prior to enzyme-removal washes and deproteinization. Exact commercial loaded strands/covalent intermediate are not specified.
+[s_final_beads_v2] (material) Version 2 tagmented target-associated chromatin retained on beads after reaction-liquid removal, two branch-specific washes and final ChIP washes; ready for elution.
+[s_licl_v3] (material) LiCl-washed target-enriched chromatin on beads, version 3; entry to ChIPmentation before the final conventional ChIP wash.
+[s_prepared_v3] (material) Version 3 enriched chromatin still on beads after two cold Tris washes removing inhibitory buffer components.
+[s_tagged_v3] (material) Version 3 target-enriched bead-bound chromatin with DNA fragmented and sequencing-adapter tagged by Tn5; prior to enzyme-removal washes and deproteinization. Exact commercial loaded strands/covalent intermediate are not specified.
+[s_final_beads_v3] (material) Version 3 tagmented target-associated chromatin retained on beads after reaction-liquid removal, two branch-specific washes and final ChIP washes; ready for elution.
+[s_purified_tagged_dna] (material) Purified, deproteinized, crosslink-reversed, adapter-tagged target-enriched DNA from one chosen ChIP version and purification alternative. This common interface represents alternatives, not physical pooling of versions. Antibody target and specimen attribution persist, while the target protein/beads are not the sequencing analyte.
+[s_eluate_v1] (material) Version 1 released adapter-tagged DNA eluate after Proteinase K/crosslink reversal; combined first and second extracts. Residual beads/protein are excluded by supernatant transfer (routing inference).
+[s_eluate_v2] (material) Version 2 released adapter-tagged DNA eluate after Proteinase K/crosslink reversal; first transferred eluate, no second extraction specified. Residual beads/protein are excluded by supernatant transfer (routing inference).
+[s_eluate_v3] (material) Version 3 released adapter-tagged DNA eluate after Proteinase K/crosslink reversal; combined first and second extracts. Residual beads/protein are excluded by supernatant transfer (routing inference).
+[s_qpcr_aliquot] (material) Physical 1 μl aliquot removed from purified tagged DNA for analytical qPCR; not a perfect copy of the retained library.
+[s_retained_dna] (material) Purified tagged DNA remaining after the 1 μl analytical aliquot is taken; supplies the separate production enrichment reaction. Its volume is not specified.
+[d_cq] (data) Analytical qPCR Cq readout used to choose production enrichment count N by rounding Cq upward. No absolute standards/threshold convention is specified.
+[s_analytical_amplicons] (material) Analytical qPCR amplicons from the 1 μl aliquot; no reported routing back into production library material.
+[s_enriched_library] (material) Production-PCR-enriched indexed sequencing library retaining selected genomic inserts, chosen primer design and antibody/specimen attribution; before size selection.
+[s_size_supernatant] (material) Retained DNA remaining in solution after 0.7:1 beads:sample exclusion of >600 bp fragments; first-supernatant retention is inferred from removal/recovery wording.
+[s_long_fragment_discard] (material) First bead-associated long-fragment fraction (>600 bp) excluded by 0.7:1 selection; inferred retained/discarded partition.
+[s_final_library] (material) Recovered size-selected, enriched indexed ChIPmentation library from the remaining-DNA fraction after second SPRI capture; final recovery internals and lower cutoff remain unspecified.
+[d_final_qc] (data) Final-library QC observation at a boundary mentioned in supplementary cost accounting; measured quantities, assay, standards and pass thresholds are unknown.
+[d_reads] (data) Sequence reads from size-selected indexed target libraries, preserving specimen/antibody/replicate attribution. Reported study formats include 50-base single-read and 100-base paired-end; neither format is a universal protocol requirement. Demultiplexing details remain unspecified.
+[s_igg_specimen] (material) Separate specimen for a matched IgG ChIPmentation background control, not target-IP material; matching criteria and ChIP branch are not specified.
+[s_igg_library] (material) Separate sequenceable IgG ChIPmentation control library at a reported preparation boundary; exact antibody amount/species, branch and preparation internals unknown.
+[d_igg_reads] (data) Reads from a separately sequenced IgG ChIPmentation library used as matched background; no physical mixing with target libraries is asserted.
+[d_trimmed_reads] (data) Adapter-trimmed target-library reads, retaining specimen, antibody and replicate identities.
+[d_alignments] (data) Target-library reads aligned to human hg19/GRCh37 with Bowtie2 --very-sensitive; multimapper reads handled according to aligner default.
+[d_nonduplicate] (data) Duplicate-marked/removed target alignments; nonduplicate reads are the default downstream data, retaining biological-replicate identity.
+[d_igg_alignments] (data) Processed matched IgG background alignments, with read trimming, human-reference alignment, duplicate removal and ChIPmentation center-coordinate offsets shared by reported processing; no exact matching/replicate pairing invented.
+[d_transposition_coordinates] (data) Target-library nonduplicate alignments with read-start coordinates represented as transposition centers (+4 bp plus, −5 bp minus). Retains genomic position/strand and target attribution. Insertion patterns alone do not guarantee TF footprints or direct nucleosome positioning; sequence bias and assay-specific reference anchors matter. The published nucleosome comparison used NucleoATAC dyads inferred from separate GM12878 ATAC-seq, rather than independently calling dyads from ChIPmentation.
+[d_bigwig] (data) Genomic target-enrichment browser track in bigWig, normalized to read count per base pair per million reads; relative signal, not absolute molecule quantitation or a spike-in calibrated output.
+[d_replicate_peaks] (data) Enrichment peaks called separately for each biological replicate using its matched IgG background; broad-mark flags restricted to H3K27me3/H3K36me3.
+[d_replicate_consistency] (data) Replicate-consistency assessment using overlap of peaks ranked by increasing q-value at top 1%, 2%, 5%, 10%, 25%, 50%, 100%; no numerical pass threshold or failure action specified.
+[d_merged_alignments] (data) Biological-replicate alignment data combined for downstream analysis after consistency was ensured, retaining target/library grouping; pooling is computational.
+[d_merged_peaks] (data) Target-associated enrichment peaks from merged biological-replicate data after consistency checking, called with the same MACS2 settings and matched IgG background.
+[d_frip] (data) Fraction of reads in peaks: nonduplicate reads overlapping called peaks of the same sample divided by total nonduplicate reads; enrichment signal-to-noise measurement without a stated acceptance threshold.
+
+Flows (exact declared relationships):
+[f_cq_controls_pcr] o_qpcr -> o_pcr (control); condition=Use each library’s measured Cq; no additional acceptance threshold is specified.
+  Basis: Measured analytical Cq sets production N to the rounded-up value.
+[f_qc_precedes_seq] o_final_qc -> o_sequence (precedence)
+  Basis: Supplementary cost note places final QC prior to sequencing; it supplies no loading controller.
+[f_consistency_controls_merge] o_check_replicates -> o_merge_replicates (control); condition=Replicates judged consistent; no quantitative cutoff or failure action reported.
+  Basis: Source places downstream merged-biological-replicate calling after ensuring consistency.
+[io:input:o_count:s_cells] s_cells -> o_count (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_count; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_count:d_cell_count] o_count -> d_cell_count (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_count; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_fix_v1:s_cells] s_cells -> o_fix_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_fix_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_fix_v1:s_fixed_v1] o_fix_v1 -> s_fixed_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_fix_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_fix_v2:s_cells] s_cells -> o_fix_v2 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_fix_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_fix_v2:s_fixed_v2] o_fix_v2 -> s_fixed_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_fix_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_fix_v3:s_cells] s_cells -> o_fix_v3 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_fix_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_fix_v3:s_fixed_v3] o_fix_v3 -> s_fixed_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_fix_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_nuclei_v1:s_fixed_v1] s_fixed_v1 -> o_nuclei_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_nuclei_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_nuclei_v1:s_nuclei_v1] o_nuclei_v1 -> s_nuclei_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_nuclei_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_nuclei_v1:s_lysis_discard_v1] o_nuclei_v1 -> s_lysis_discard_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_nuclei_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_shear_v1:s_nuclei_v1] s_nuclei_v1 -> o_shear_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_shear_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_shear_v1:s_chromatin_v1] o_shear_v1 -> s_chromatin_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_shear_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_shear_v1:s_insoluble_v1] o_shear_v1 -> s_insoluble_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_shear_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_shear_v2:s_fixed_v2] s_fixed_v2 -> o_shear_v2 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_shear_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_shear_v2:s_chromatin_v2] o_shear_v2 -> s_chromatin_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_shear_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_shear_v2:s_insoluble_v2] o_shear_v2 -> s_insoluble_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_shear_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_shear_v3:s_fixed_v3] s_fixed_v3 -> o_shear_v3 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_shear_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_shear_v3:s_chromatin_v3] o_shear_v3 -> s_chromatin_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_shear_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_shear_v3:s_insoluble_v3] o_shear_v3 -> s_insoluble_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_shear_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_capture_v1:s_chromatin_v1] s_chromatin_v1 -> o_capture_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_capture_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_capture_v1:s_captured_v1] o_capture_v1 -> s_captured_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_capture_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_capture_v2:s_chromatin_v2] s_chromatin_v2 -> o_capture_v2 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_capture_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_capture_v2:s_captured_v2] o_capture_v2 -> s_captured_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_capture_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_capture_v3:s_chromatin_v3] s_chromatin_v3 -> o_capture_v3 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_capture_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_capture_v3:s_captured_v3] o_capture_v3 -> s_captured_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_capture_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_wash_v1:s_captured_v1] s_captured_v1 -> o_wash_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_wash_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_wash_v1:s_licl_v1] o_wash_v1 -> s_licl_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_wash_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_pre_tag_v1:s_licl_v1] s_licl_v1 -> o_pre_tag_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_pre_tag_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_pre_tag_v1:s_prepared_v1] o_pre_tag_v1 -> s_prepared_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_pre_tag_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_tag_v1:s_prepared_v1] s_prepared_v1 -> o_tag_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_tag_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_tag_v1:s_tagged_v1] o_tag_v1 -> s_tagged_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_tag_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_post_tag_v1:s_tagged_v1] s_tagged_v1 -> o_post_tag_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_post_tag_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_post_tag_v1:s_final_beads_v1] o_post_tag_v1 -> s_final_beads_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_post_tag_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_wash_v2:s_captured_v2] s_captured_v2 -> o_wash_v2 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_wash_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_wash_v2:s_licl_v2] o_wash_v2 -> s_licl_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_wash_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_pre_tag_v2:s_licl_v2] s_licl_v2 -> o_pre_tag_v2 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_pre_tag_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_pre_tag_v2:s_prepared_v2] o_pre_tag_v2 -> s_prepared_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_pre_tag_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_tag_v2:s_prepared_v2] s_prepared_v2 -> o_tag_v2 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_tag_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_tag_v2:s_tagged_v2] o_tag_v2 -> s_tagged_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_tag_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_post_tag_v2:s_tagged_v2] s_tagged_v2 -> o_post_tag_v2 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_post_tag_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_post_tag_v2:s_final_beads_v2] o_post_tag_v2 -> s_final_beads_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_post_tag_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_wash_v3:s_captured_v3] s_captured_v3 -> o_wash_v3 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_wash_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_wash_v3:s_licl_v3] o_wash_v3 -> s_licl_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_wash_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_pre_tag_v3:s_licl_v3] s_licl_v3 -> o_pre_tag_v3 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_pre_tag_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_pre_tag_v3:s_prepared_v3] o_pre_tag_v3 -> s_prepared_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_pre_tag_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_tag_v3:s_prepared_v3] s_prepared_v3 -> o_tag_v3 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_tag_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_tag_v3:s_tagged_v3] o_tag_v3 -> s_tagged_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_tag_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_post_tag_v3:s_tagged_v3] s_tagged_v3 -> o_post_tag_v3 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_post_tag_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_post_tag_v3:s_final_beads_v3] o_post_tag_v3 -> s_final_beads_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_post_tag_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_release_v1:s_final_beads_v1] s_final_beads_v1 -> o_release_v1 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_release_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_release_v1:s_eluate_v1] o_release_v1 -> s_eluate_v1 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_release_v1; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_release_v2:s_final_beads_v2] s_final_beads_v2 -> o_release_v2 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_release_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_release_v2:s_eluate_v2] o_release_v2 -> s_eluate_v2 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_release_v2; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_release_v3:s_final_beads_v3] s_final_beads_v3 -> o_release_v3 (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_release_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_release_v3:s_eluate_v3] o_release_v3 -> s_eluate_v3 (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_release_v3; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_purify_selected:s_eluate_v1] s_eluate_v1 -> o_purify_selected (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_purify_selected; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_purify_selected:s_eluate_v2] s_eluate_v2 -> o_purify_selected (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_purify_selected; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_purify_selected:s_eluate_v3] s_eluate_v3 -> o_purify_selected (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_purify_selected; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_purify_selected:s_purified_tagged_dna] o_purify_selected -> s_purified_tagged_dna (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_purify_selected; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_aliquot:s_purified_tagged_dna] s_purified_tagged_dna -> o_aliquot (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_aliquot; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_aliquot:s_qpcr_aliquot] o_aliquot -> s_qpcr_aliquot (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_aliquot; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_aliquot:s_retained_dna] o_aliquot -> s_retained_dna (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_aliquot; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_qpcr:s_qpcr_aliquot] s_qpcr_aliquot -> o_qpcr (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_qpcr; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_qpcr:d_cq] o_qpcr -> d_cq (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_qpcr; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_qpcr:s_analytical_amplicons] o_qpcr -> s_analytical_amplicons (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_qpcr; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_pcr:s_retained_dna] s_retained_dna -> o_pcr (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_pcr; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_pcr:d_cq] d_cq -> o_pcr (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_pcr; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_pcr:s_enriched_library] o_pcr -> s_enriched_library (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_pcr; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_remove_long:s_enriched_library] s_enriched_library -> o_remove_long (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_remove_long; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_remove_long:s_size_supernatant] o_remove_long -> s_size_supernatant (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_remove_long; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_remove_long:s_long_fragment_discard] o_remove_long -> s_long_fragment_discard (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_remove_long; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_recover_library:s_size_supernatant] s_size_supernatant -> o_recover_library (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_recover_library; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_recover_library:s_final_library] o_recover_library -> s_final_library (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_recover_library; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_final_qc:s_final_library] s_final_library -> o_final_qc (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_final_qc; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_final_qc:d_final_qc] o_final_qc -> d_final_qc (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_final_qc; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_sequence:s_final_library] s_final_library -> o_sequence (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_sequence; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_sequence:d_reads] o_sequence -> d_reads (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_sequence; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_igg_boundary:s_igg_specimen] s_igg_specimen -> o_igg_boundary (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_igg_boundary; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_igg_boundary:s_igg_library] o_igg_boundary -> s_igg_library (material_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_igg_boundary; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_igg_sequence:s_igg_library] s_igg_library -> o_igg_sequence (material_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_igg_sequence; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_igg_sequence:d_igg_reads] o_igg_sequence -> d_igg_reads (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_igg_sequence; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_trim:d_reads] d_reads -> o_trim (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_trim; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_trim:d_trimmed_reads] o_trim -> d_trimmed_reads (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_trim; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_align:d_trimmed_reads] d_trimmed_reads -> o_align (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_align; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_align:d_alignments] o_align -> d_alignments (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_align; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_deduplicate:d_alignments] d_alignments -> o_deduplicate (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_deduplicate; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_deduplicate:d_nonduplicate] o_deduplicate -> d_nonduplicate (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_deduplicate; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_igg_process:d_igg_reads] d_igg_reads -> o_igg_process (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_igg_process; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_igg_process:d_igg_alignments] o_igg_process -> d_igg_alignments (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_igg_process; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_shift:d_nonduplicate] d_nonduplicate -> o_shift (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_shift; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_shift:d_transposition_coordinates] o_shift -> d_transposition_coordinates (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_shift; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_tracks:d_transposition_coordinates] d_transposition_coordinates -> o_tracks (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_tracks; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_tracks:d_bigwig] o_tracks -> d_bigwig (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_tracks; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_peaks_replicate:d_transposition_coordinates] d_transposition_coordinates -> o_peaks_replicate (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_peaks_replicate; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_peaks_replicate:d_igg_alignments] d_igg_alignments -> o_peaks_replicate (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_peaks_replicate; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_peaks_replicate:d_replicate_peaks] o_peaks_replicate -> d_replicate_peaks (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_peaks_replicate; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_check_replicates:d_replicate_peaks] d_replicate_peaks -> o_check_replicates (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_check_replicates; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_check_replicates:d_replicate_consistency] o_check_replicates -> d_replicate_consistency (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_check_replicates; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_merge_replicates:d_transposition_coordinates] d_transposition_coordinates -> o_merge_replicates (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_merge_replicates; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_merge_replicates:d_replicate_consistency] d_replicate_consistency -> o_merge_replicates (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_merge_replicates; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_merge_replicates:d_merged_alignments] o_merge_replicates -> d_merged_alignments (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_merge_replicates; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_peaks_merged:d_merged_alignments] d_merged_alignments -> o_peaks_merged (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_peaks_merged; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_peaks_merged:d_igg_alignments] d_igg_alignments -> o_peaks_merged (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_peaks_merged; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_peaks_merged:d_merged_peaks] o_peaks_merged -> d_merged_peaks (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_peaks_merged; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_frip:d_nonduplicate] d_nonduplicate -> o_frip (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_frip; mechanically rendered from its I/O, not inferred from array order.
+[io:input:o_frip:d_replicate_peaks] d_replicate_peaks -> o_frip (data_input); association=unspecified; selection=unspecified
+  Basis: Explicit input state declared by operation o_frip; mechanically rendered from its I/O, not inferred from array order.
+[io:output:o_frip:d_frip] o_frip -> d_frip (data_output); association=unspecified; selection=unspecified
+  Basis: Explicit output state declared by operation o_frip; mechanically rendered from its I/O, not inferred from array order.
+
+Unresolved qualifications:
+[chemistry:CHEM-G01] The draft CHEM-G01 pending-inspection blocker is resolved at the material-route level by Supplementary Note p00039/p00040/p00043/p00044 (CHEM-F03–F15) and at the primer-inventory level by cited ATAC-seq supplement p00001/p00002 (CHEM-F16–F17); it is not evidence that these operations are unavailable. Residual noncritical preparation-recipe limits in the inspected Supplementary Note: glycine concentration/amount and quench time, several lysis/resuspension volumes, numerical full-speed centrifugation settings, version 2 TE composition, Proteinase K stock activity/concentration, and antibody-specific Protein A/G choice are not given there. These restrict reproduction as a complete SOP, not the supported cells→fixed chromatin→enriched beads→purified tagged DNA route. CTCF is stated as 10 μl/IP, so its mass remains unknown. No contradictory execution is asserted. (blocking=False)
+  Next evidence: Original version-specific preparation SOP/reagent sheets supplying these missing quantities and antibody-resin assignments; for a chosen new specimen/target, validated ChIP optimization conditions. Preserve the source-supported boundaries meanwhile.
+[chemistry:CHEM-G02] Exact molecular-end detail remains limited: main p00004/p00016/p00018 and supplement p00005 establish Tn5 fragmentation/adapter tagging and initial nick translation; the inspected ATAC-seq dependency and PCR oligo inventory do not specify the original kit’s enzyme activity/concentration, loaded transposon strand sequences, transferred strand ends or full covalent intermediate. PCR-primer sequences must not be relabelled as loaded Tn5 adapters. The named-kit tagmentation and amplification boundary is supported for frozen scope; a claim about exact end chemistry or a custom transposase substitution is not established. (blocking=False)
+  Next evidence: Contemporaneous Illumina Nextera DNA Sample Prep Kit loaded-adapter/enzyme technical documentation and a source linking its exact strand architecture to this original ChIPmentation variant; do not replace with later kit or remembered defaults.
+[chemistry:CHEM-G03] Library-primer and amplification assignment limit: main p00018 links custom Nextera primers to the cited ATAC-seq source, whose table provides 25 oligo designs, but no general ChIPmentation sample-to-Ad2 map or index-read orientation is specified. Main p00018 explicitly gives the analytical qPCR thermal program and a separate production composition/Cq cycle rule; it does not independently state a complete final-PCR thermal program or volume of purified DNA transferred into that reaction. The ATAC dependency p00017 has a different preamplification/qPCR architecture and cannot silently fill these details. This does not block the general indexed-library amplification route or require historical sample reconstruction. (blocking=False)
+  Next evidence: Original ChIPmentation amplification/indexing SOP clarifying the production program, DNA input volume and primer-pair/index-read convention for a selected library design. Historical sample maps are needed only for claims about a particular executed sample.
+[chemistry:CHEM-G04] SPRI internal detail limit: main p00018 reports 0.7:1 removal of >600 bp DNA followed by 2:1 recovery of remaining DNA, supporting first-supernatant/second-bead retention. It does not clarify whether the second ratio is an incremental addition or final total in the continued reaction, nor provide final bead washes/elution volume or a lower size bound. Supplementary Note purification alternatives likewise name AMPure/MinElute without full manufacturer internals. These are noncritical detail limits for the published separation boundary; no invented bead-volume arithmetic is claimed. (blocking=False)
+  Next evidence: Original two-step SPRI size-selection SOP defining the second ratio’s volume reference and final recovery, plus contemporaneous AMPure XP/MinElute instructions for explicitly delegated internal cleanup details.
+[chemistry:CHEM-G05] Matched-control preparation boundary: main p00020 requires matched IgG background and Table 2 p00004 shows independent ChIPmentation IgG libraries, but the inspected target-antibody recipes do not specify IgG identity/mass or which of versions 1–3 generated each matched control. A separate sequenced control boundary and its data role are established; an exact control reaction or universal matching rule is not. This is nonblocking for the declared general protocol architecture but limits any claim about fully specified or historically executed control preparation. (blocking=False)
+  Next evidence: Original IgG-control SOP stating antibody species/isotype/catalogue/amount, ChIP preparation branch, specimen/input matching and control-library processing; exact pairing is required only if claiming a specific executed comparison.
+[chemistry:CHEM-G06] Sequencing/interpretation internal settings: inspected main p00018/p00020/p00021 and Table 2 identify platform, read-format examples, alignment/peak-calling rules and enrichment readouts, but do not supply a general pooling/loading recipe, demultiplexing/index-mismatch settings, all software versions/default realizations, a numerical replicate-consistency decision threshold, or QC-triggered rerun rule. Qubit measurements in main p00017/p00019 concern other protocols; they cannot support a ChIPmentation loading controller. These details do not block the source-described sequencing→target-enrichment boundary; no exact numerical reproduction or adaptive loading behavior is claimed. (blocking=False)
+  Next evidence: Original facility library submission/loading and demultiplexing SOP, applicable software versions/commands and stated replicate/QC decision criteria if a reproducible numerical analysis or adaptive control claim is required. For general architecture, retain the reported boundaries and qualified rules.
+[information:G01] Primer identity is resolved in I06. Remaining decoding detail is not specified in inspected ChIPmentation amplification/sequencing Methods or the delegated inventory: index choice for a library, pooling/index-read orientation and length, demultiplexing software and mismatch rules. The supported boundary is indexed library → sequence reads, not an executable demultiplexing protocol or cell/UMI decoder. This does not block the frozen general workflow; exact decoding execution remains unsupported. (blocking=False)
+  Next evidence: Original ChIPmentation indexing/sequencing instructions specifying index-read format, sample/index assignment rule and demultiplexing settings. A historical sample map is not required for the generic boundary.
+[information:G02] I05 records the rounded-up-Cq rule, but the inspected amplification Methods do not state Cq fluorescence threshold/baseline conventions or an absolute standard curve, nor explicitly repeat a thermocycler program for the separate production reaction. The 24-cycle program is assigned to analytical qPCR, not asserted as the production program. These are noncritical detail limits for the source-described boundary, but prevent a fully executable amplification SOP or numerical calibration claim. (blocking=False)
+  Next evidence: Original-version amplification worksheet detailing Cq conventions and the production thermocycler program; calibration standards only if absolute quantitation is claimed.
+[information:G03] I11 resolves matched-IgG background and separate IgG libraries; inspected target-antibody recipes do not identify IgG amount/species, exact preparation or matching criteria. I13 resolves a separate Nextera genomic-DNA bias reference, but its preparation and positional scaling before exponentiation are not specified in the bioinformatics paragraph. Keep these as control-data boundaries with unknown internals, not mixed spike-ins. This does not block qualified general enrichment or the documented optional correction rule; exact control execution/numerical reproduction is unsupported. (blocking=False)
+  Next evidence: Original matched-IgG and Nextera genomic-DNA control preparation instructions, plus the positional-background normalization specification if reproducing footprint correction.
+[information:G04] Sources establish Tn5 adapter introduction, the dependency rationale of adapters inserted 9 bp apart, PCR nick translation and the custom amplification oligos. Inspected passages do not fully specify original commercial transposome-loaded oligos, strand-level covalent end structures or every fill-in intermediate. No detailed junction chemistry beyond reported changes is asserted. This is a noncritical internal-detail limit for the frozen architecture; the tagmentation-to-purified-library interface is supported. (blocking=False)
+  Next evidence: Original Nextera DNA Sample Prep chemistry documentation or an explicitly applicable molecular schematic identifying loaded adapter strands and post-insertion/repair products.
+[information:G05] Replicate consistency precedes merging in I11, but the inspected processing paragraph supplies overlap metrics without a numerical acceptance cutoff or an action for failure. Preserve the reported gate without inventing a rerun decision, minimum FRiP, or adaptive sequencing-depth rule. This does not block the source-described peak-calling workflow. (blocking=False)
+  Next evidence: An original replicate-quality decision protocol specifying acceptance criteria and resulting actions if an operational controller is required.
+[information:G06] I17 records a final pre-sequencing QC boundary mentioned in supplementary cost accounting. The inspected ChIPmentation amplification/sequencing paragraph and that cost note do not identify final concentration/size measurement methods, standards, pass thresholds or how measurements determine pooling/loading. Qubit and the >1,200 bp cut are assigned to the separate ATAC procedure in I16. This missing inspection recipe is noncritical for the general library-to-sequencing boundary; a specific quantitation or adaptive loading claim would be unsupported. (blocking=False)
+  Next evidence: Original-version ChIPmentation final-library QC and sequencing-submission instructions specifying measured quantities, instrument/assay, any calibrants and any actual pooling/loading decision rule.
+[integrator_wash_counts] Version 2 RIPA-LiCl wash has no explicit count in inspected Supplementary Note p00040; do not infer two washes from neighboring buffers. Several branch-specific wash volumes are not separately repeated. The specified sequence through LiCl and return to final TE is supported, so this is a recipe-detail gap rather than a missing material route. (blocking=False)
+  Next evidence: Original version 2 wash worksheet specifying RIPA-LiCl count and per-buffer volumes.
+
+Details: atlas-extract query WORKFLOW OPERATION_ID
+Use this exact Workflow hash; JSON detail pointers resolve in that record. Existing Module groups are available in the JSON overview; they do not add transformations.

@@ -16,6 +16,11 @@ protocol's outputs. Experiments used to demonstrate, validate or apply an assay
 do not automatically belong to its general protocol; reconstruct those experiments
 only when the frozen scope explicitly includes them. Retain applicability limits
 in the relevant descriptions or gaps, and make uncertain workflow roles explicit.
+Study-specific pulse durations and characterization experiments do not automatically
+become separate main-route stages. Retain a duration/design distinction when it
+defines the measured cohort, attribution or estimator. Keep controls and calibration
+needed for the declared endpoint as explicit material/data dependencies; distinguish
+independent supporting validation without inventing a production or control route.
 
 Operations transform or inspect material/data; reagents, equipment, software and
 conditions are resources bound to the operations that use them. Capture actual
@@ -26,6 +31,12 @@ Distinguish a source's reagent/primer inventory from its assignment to a particu
 operation. A study-wide list does not establish that every listed item is required
 or combined in each reaction. Qualify available choices and uncertain assignments
 instead of silently turning an inventory into an operation's mandatory recipe.
+An inventory of reagent or primer alternatives need not create one headline State
+per choice unless an interface, route or consequential molecular identity needs
+that distinction. Preserve the exact oligos, conditions and source-qualified
+assignment in resources or the required interfaces; carry selected adapter/index
+identity through material and data where it matters. Do not combine alternatives
+into cumulative inputs or omit their sequences to make a smaller graph.
 Describe molecular changes explicitly where reported: fragment ends, covalent
 structure, adapter/barcode identity and the retained material after processing.
 States identify the actual specimen/fraction/library/data product and its stage,
@@ -41,13 +52,30 @@ assemblies are permitted. Distinct aliquots or routes can need distinct States
 even with identical composition. Barcoded molecules remain material; sequencing
 reads and derived matrices are data. Non-destructive inspection can produce data
 without consuming its material input.
-An Operation is a supported transformation, handling action or measurement, not
-necessarily one verb, sentence or elementary reaction. Use a separate intermediate
-when a source-supported handoff is needed to preserve consequential molecular
-identity, information, lineage or branch structure. Preserve coupled reactions and
-repeated programs at their supported resolution. Do not invent hidden intermediates
-to match another assay, or expand every routine motion into a separate Operation.
-Module names are local organization; do not force an existing shared vocabulary.
+An Operation is a supported transformation, handling unit or measurement, not
+necessarily one verb, sentence or elementary reaction. Separate Operations when
+needed to preserve a consequential transformation or material identity, retained
+fraction/selection, independently used interface, branch, attribution, or material,
+data or control handoff. Combine routine handling and coupled reactions when the
+intermediate has no needed independent use and the unit still states the supported
+transformations and conditions. A wash, incubation, reagent addition or changed
+recipe setting alone does not require another Operation or intermediate State.
+Do not hide a consequential mechanism or handoff inside one assay-sized Operation,
+or invent intermediates to match another assay. No node cap or universal module
+sequence is prescribed; fewer or more records are not themselves better capture.
+Modules group Operations; they do not add a further transformation or require a
+new material State at every module boundary. Names are local organization, not a
+required shared vocabulary.
+
+Assign facts to their relevant fields: action/mechanism to Operation.action;
+reagents, exact sequences, equipment and conditions to resources; consequential
+interface identity, retained fraction and branch to State.description; information
+change/retention to information_effect; exact associations and qualifications to
+bindings/Flows. Repeat only what is needed to keep a local claim intelligible,
+including state-critical identity and uncertainty. Do not copy a complete recipe
+or the same full prose into action, every State and information_effect. Evidence
+must still support each asserted record/association as required by the schema;
+shorter prose does not permit hidden mechanisms or unsupported certainty.
 
 An aliquot is a physical split with a retained fraction, not a perfect copy of
 the production material. Analytical amplification does not establish that its
@@ -94,6 +122,12 @@ reported, a false claim that an available fact is missing, or an omitted require
 transformation/interface still requires correction. Missing evidence essential to
 an asserted mechanism or interface remains a research blocker. An architecture
 record with allowed gaps does not authorize experimental transfer or execution.
+Review the same granularity choices: verify that a composite unit preserves the
+consequential transformations, interfaces, branches and dependencies; require a
+split only where a necessary distinction is lost. Do not demand routine-motion
+nodes, inventory States or duplicated recipe prose merely for a preferred layout.
+Conversely, compactness cannot excuse a missing mechanism, necessary control or
+calibration, selected identity, or an erased uncertainty qualification.
 
 Keep the level of each proposition explicit: a source-described procedure, an
 inferred boundary with unknown internals, or a claim about an executed experiment.
