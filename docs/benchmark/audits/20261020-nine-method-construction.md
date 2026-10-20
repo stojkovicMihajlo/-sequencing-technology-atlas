@@ -72,17 +72,27 @@ unknowns marked `retained`, with no recorded `missing`, `partial`, `unassessed` 
 Do not interpret this report limitation as evidence that the graphs lost their
 unknowns. A separate reporter correction will distinguish unavailable replay inputs
 from invalid accounting and use an explicit packet mapping for a new replay. The
-original report and native artifacts stay unchanged. Until that replay is recorded,
-the table above describes archived judgments rather than successful offline
-source-packet revalidation. Neither replay nor a quote match proves entailment.
+original report and native artifacts stay unchanged.
+
+Qiu job `48647536` subsequently produced that separate read-only replay, using an
+explicit list of nine case-bound packet paths and byte hashes. All six graphs now
+pass archived uncertainty accounting: **41/41 reference unknowns are retained**.
+The replay reports no changed inputs. Its report SHA256 is
+`a4073add9c7dbab9efee7c0b9990f8055ccf9ef1b7280b309f785a6022e0f729`;
+its exact path and pin checks are in the completion receipt. The original report
+is retained and strict acceptance remains zero. Neither replay nor a quote match
+proves source entailment.
 
 ## Preservation and authority
 
 The parent session reports a recovered durable archive with
-`declared_inputs_preserved` and **1,329 members**. The inspected report contains no
-result-archive path or SHA256, so those fields remain pending receipt verification
-in the completion record; this audit does not substitute a source-proof archive or
-runtime archive for the completed-result archive.
+`declared_inputs_preserved` and **1,329 members**. A subsequent light Qiu inspection
+read its durable checksum sidecar at
+`/home/groups/xiaojie/mstojkov/atlas-results/protocol-reference-recovered-48625045.tar.gz.sha256`:
+`295973049d603197bb0eb7fddf5b246ad62dd998493d8a7b550fb5cfdf7e2763`.
+The completion receipt records that exact result archive; this is not a substitute
+source-proof or runtime archive. This continuation read the checksum sidecar and
+did not rehash the archive on a login node.
 
 No production atlas default was promoted. These are model-authored, separately
 model-reviewed reference candidates, not human gold, experimental validation,

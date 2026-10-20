@@ -706,6 +706,47 @@ def test_all_v2_stages_with_retained_unknowns_still_are_not_scientific_gold(tmp_
     assert result["scientific_reference_completeness"] == "not_established"
 
 
+def test_dispositions_come_from_the_pinned_declared_source_report(tmp_path):
+    phase = Phase(tmp_path)
+    for index in range(12):
+        phase.case(index)
+        phase.v2(index)
+    for index in range(8):
+        phase.compare(index)
+    assert phase.report()["coverage_status"] == "all_designed_model_candidate_stages_recorded"
+    alternate = write(phase.work / "sources/different_source_report.json", {"cases": {
+        mid: {**row, "status": "source_acquisition_needed", "reason": "Declared source closure still missing."}
+        for mid, row in phase.sources.items()}})
+    manifest_path = phase.work / "sources/annotation_manifest.json"
+    manifest = json.loads(manifest_path.read_bytes())
+    manifest["source_report"] = {"path": str(alternate), "sha256": file_hash(alternate)}
+    write(manifest_path, manifest)
+    result = phase.report()
+    assert result["source_report_pin"]["status"] == "matched"
+    assert result["source_report_pin"]["local_path"] == str(alternate)
+    assert result["coverage_status"] == "pending_or_incomplete"
+    assert result["stage_counts"]["source_ready"] == 0
+    assert result["stage_counts"]["full_declared_candidate_coverage"] == 0
+    assert result["comparisons"]["reviewed_candidates_recorded"] == 0
+    assert all(row["source"]["status"] == "source_acquisition_needed" for row in result["cases"])
+    assert all(row["failures"]["source"][0]["category"] == "source_acquisition_needed" for row in result["cases"])
+
+
+@pytest.mark.parametrize("declaration", [{}, {"path": "/remote/unmapped/source_report.json", "sha256": "0" * 64}])
+def test_missing_or_unmapped_source_report_has_no_hardcoded_fallback(tmp_path, declaration):
+    phase = Phase(tmp_path)
+    phase.case()
+    phase.v2()
+    manifest_path = phase.work / "sources/annotation_manifest.json"
+    manifest = json.loads(manifest_path.read_bytes())
+    manifest["source_report"] = declaration
+    write(manifest_path, manifest)
+    result = phase.report()
+    assert result["stage_counts"]["source_ready"] == 0
+    assert result["cases"][0]["source"]["status"] == "source_report_pending_or_not_archived"
+    assert not result["cases"][0]["full_model_candidate_coverage"]
+
+
 def test_exact_generated_obligation_view_preserves_evidence_and_unknowns(tmp_path):
     phase = Phase(tmp_path)
     phase.case(partial=True)

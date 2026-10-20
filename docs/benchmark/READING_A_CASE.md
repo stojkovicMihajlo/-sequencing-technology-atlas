@@ -120,6 +120,24 @@ from the reference as errors or as verified facts.
    compatibility or development claim have support on the appropriate sides?
    Similarity does not prove historical descent or experimental interchangeability.
 
+The completed construction also exposes a fourth distinction for the next
+preregistered evaluation: **a faithful description versus readiness to execute a
+declared route**. A source-supported statement that a named kit transforms one
+material into another can be accurate while its internal recipe is unavailable.
+Likewise a graph can preserve a reported adaptive control and explicitly unknown
+threshold without specifying an executable decision rule. Neither case licenses
+inventing the missing details. A missing barcode-to-position dictionary still
+blocks a claim that spatial reads can actually be decoded.
+
+Unknowns should identify the exact operation/interface and endpoint they prevent
+us from specifying. A study's optional clustering analysis or calibration branch
+should be assessed at that branch's endpoint, rather than automatically becoming
+a prerequisite for describing the library-generation route. Mixed questions need
+source-first scope review; they cannot simply be deleted after seeing a failure.
+Current `blocking` flags and strict outcomes remain unchanged. The new optional
+field-review sidecar judges recorded descriptions and qualifications; it does not
+certify execution readiness or authorize graph publication by itself.
+
 The current graph constructor receives the reviewed reference requirements. Its
 score tests reference-set self-consistency. A future blind extraction run must
 receive only its permitted method/source inputs, without these reference answers.

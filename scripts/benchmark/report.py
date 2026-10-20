@@ -610,11 +610,16 @@ def build_report(design_path, work, *, comparisons_path=None, original_work_root
     if packet_map_record:
         archive.reads[packet_map_record["path"]] = packet_map_record["sha256"]
         archive.mapped_reads.add(packet_map_record["path"])
-    source_report = archive.read(archive.work / "sources/source_report.json") or {}
+    source_manifest = archive.read(archive.work / "sources/annotation_manifest.json") or {}
+    source_report_declaration = source_manifest.get("source_report", {})
+    # The displayed dispositions and the verified pin must name the same artifact.
+    # An absent/unmapped declaration never authorizes a hardcoded-report fallback.
+    source_report = archive.linked(source_report_declaration["path"], archive.work / "sources") if (
+        source_report_declaration.get("path")) else None
+    source_report = source_report or {}
     source_rows = {row.get("case_id"): row for row in _rows(source_report, "cases")}
     source_rows.update({row.get("method_id", key): row for key, row in
         source_report.get("cases", {}).items()})
-    source_manifest = archive.read(archive.work / "sources/annotation_manifest.json") or {}
     ref_manifest = archive.read(archive.work / "references/manifest.json") or {}
     manifests = [(_rows(source_manifest, "cases"), archive.work / "sources"),
                  (_rows(ref_manifest, "cases"), archive.work / "references")]
@@ -658,7 +663,6 @@ def build_report(design_path, work, *, comparisons_path=None, original_work_root
         "partially_assessed" if unknown_statuses - {"not_assessed"} else "not_assessed")
     comparisons_done = comparisons["designed_question_count"] == comparisons["denominator"] > 0 and comparisons[
         "reviewed_candidates_recorded"] == comparisons["denominator"]
-    source_report_declaration = source_manifest.get("source_report", {})
     source_report_pin = archive.pin(source_report_declaration["path"], source_report_declaration.get("sha256"),
         archive.work / "sources") if source_report_declaration.get("path") else {"status": "not_declared"}
     sessions = _sessions(archive, cases)
