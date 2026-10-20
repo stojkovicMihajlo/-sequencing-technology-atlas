@@ -40,9 +40,11 @@ existing `source_originals inspect` and `render` commands; rendered pages go onl
 into that agent's attempt directory. A consequential unit/glyph ambiguity needs
 an original-page check or an explicit unresolved qualification, rather than a
 correction based on plausibility. File availability or a render receipt still
-does not prove visual inspection or understanding. The frozen `8c93d08` run does
-not receive this later optional interface; absent declarations preserve legacy
-behavior, and malformed declarations fail instead of silently downgrading.
+does not prove visual inspection or understanding. The superseded `8c93d08`
+submission was cancelled before model work. Its replacement, job `48625045`
+using frozen runtime `7e670fd`, receives these declarations where registered;
+absent declarations preserve legacy behavior, and malformed declarations fail
+instead of silently downgrading.
 
 `unknowns` records unresolved questions, their consequences, what was inspected,
 and what evidence could resolve them. It does not mean the authors demonstrated
@@ -112,3 +114,30 @@ score tests reference-set self-consistency. A future blind extraction run must
 receive only its permitted method/source inputs, without these reference answers.
 Reserved families are excluded from future tuning; prior project/model exposure
 has not been ruled out.
+
+## Before adopting these references as a standard
+
+Check the necessity of each requirement before treating its omission as an
+extractor error. A source-supported fact must matter for the scoped transformation,
+handoff, attribution, decoding or a consequential alternative. Incidental study
+details, or a reviewer's preferred grouping, do not establish a missing assay fact.
+If necessary evidence was not inspected, use `unassessed`; if a necessary detail
+remains unresolved after scoped inspection, preserve an explicit consequential
+unknown. Neither permits an invented value.
+
+The current `query_cases` are questions and source-reviewed answers. The runtime
+does not yet execute them against the example graph. Requirement target mappings
+provide useful witnesses but are not a separately tested graph-navigation result.
+Before claiming the graphs are usable structural standards, inspect the terminal
+readout route, retained material route and consequential identity carrier using
+the existing questions and requirement IDs. Record exact State/Operation/Flow
+witnesses and any qualification, rather than accepting a matching phrase alone.
+
+The corresponding planned falsification controls are: a schema-valid graph missing
+a consequential connection; a QC/production route swap; and an admissible split or
+grouping alternative that preserves the interface. The first two should fail the
+affected question and the last should pass. These controls are not reported as
+executed scientific results. They require no new graph ontology. Any demonstrated
+representation failure should instead motivate a versioned change shared by the
+benchmark and production extraction/assembly/validation contracts; historical
+records must retain their original meaning and hashes.

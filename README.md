@@ -8,7 +8,8 @@ historical relationships and contextual protocol comparisons.
 The new [protocol reference benchmark](benchmarks/protocol_graph_v1/README.md)
 defines 12 cases across six technology strata, permits different valid graph
 decompositions, and separates source collection, extraction and cross-method claims.
-The latest curation runtime passed **1,976 software tests, 3 skipped** locally.
+The latest curation runtime passed **2,019 software tests, 3 skipped** locally
+and **2,014 tests, 8 skipped** on Qiu Linux.
 It preserves known requirements and consequential unknowns separately, archives
 every bounded graph-correction round, and blocks explicitly unsupported assertions
 from positive graph/comparison results. Initial Qiu CPU pilot **48612064** and
@@ -18,14 +19,15 @@ by these software checks. See
 [the preregistered decisions](docs/decisions/2026-10-20-protocol-reference-benchmark.md).
 Source registration and a prepare-only run now pass for **9 methods covering all
 six sampling strata**. Three source-blocked cases remain in the denominator.
-Expanded construction job **48622574** was submitted on Qiu CPU resources after
-the pilot; submission is not a completed scientific result. The
-[run receipt](provenance/protocol_benchmark_followup_20261020.json) records the exact
-frozen runtime, inputs, bounded corrections and preservation steps.
-Later development audit changes passed **1,998 software tests, 3 skipped**;
-they add explicit optional original-document access and strengthen failed-session
-and reporting checks. They do not modify the frozen native run or upgrade its
-scientific results. See [the optional input contract](docs/benchmark/READING_A_CASE.md).
+Construction job **48625045** is running on Qiu CPU resources as of
+2026-10-20 11:29 UTC. Its frozen runtime includes explicit original-document access
+and source-ancestry preservation; the superseded queued job **48622574** was
+cancelled before model work. The new preparation/archive replay reports no
+unresolved declared source-provenance links. That checks custody, not the scientific
+fidelity of every transcription or assertion. The
+[current run receipt](provenance/protocol_benchmark_originals_submission_20261020.json)
+records exact inputs, software checks and remaining limits. See
+[the optional input contract](docs/benchmark/READING_A_CASE.md).
 
 The inventory accounts for 201 methods; protocol decomposition remains partial.
 The new development checkpoint passed **1,589 software tests, 3 skipped**, plus six
