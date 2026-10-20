@@ -66,9 +66,27 @@ replays the ninth completed export. An
 reproduces the exact isolated graph hash: nine workflows, 223 Operations,
 310 States and 57 Modules, with no duplicate IDs or dangling edges.
 All 322 publication input hashes also match on Qiu. Its 98 older relationships
-are explicitly imported, not re-reviewed here. Shared-operation curation remains
-active; the completed ten-unit selection itself creates no links. The main atlas
-has not been replaced, and the positive review counts are not scientific accuracy.
+are explicitly imported, not re-reviewed here. The full experiment completed at
+**23:07 UTC on October 20**, about **127 minutes** after extraction began.
+Shared-operation curation admitted **nine selected units into five concepts**:
+two shared-purpose groups connect DBiT/DR/Drop/SPLiT and scBS/SLAM respectively;
+three mechanism concepts currently have only one method each. These are purpose
+comparisons, not evidence of common chemistry, interchangeability or ancestry.
+One proposed transcription-wave concept was withheld because the source did not
+establish its claim that missing/rejected calls are retained as outputs.
+The final isolated graph has 816 nodes and 1,551 edges. Initial unit discovery
+also missed both predeclared shared library-preparation span questions, so this
+does not establish comprehensive shared-mechanism discovery. The registry started
+empty; populated-registry retrieval recall was not tested.
+
+The [completion report](provenance/experiments/ten_method_overview_20261020/monitoring/completion_report.json)
+separates working gates from accepted wording errors, scope growth, selection
+coverage and latency. All available final inputs/results are archived outside
+scratch; 28 text-source records have undeclared/unlocated original-artifact lineage.
+These are not necessarily missing PDFs: two DBiT records are documented as code
+and plain TSV. The original custody labels and that distinction are preserved.
+The main atlas has not been replaced, and positive review counts are not
+scientific accuracy or a decision to deploy across the full atlas.
 The experiment tests the revised Operation-boundary
 instructions, new reading views, isolated graph publication and bounded open-unit
 selection/shared-operation admission. Exact source selection and launcher bytes

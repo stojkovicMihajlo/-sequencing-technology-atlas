@@ -1,0 +1,20 @@
+{
+  "format_version": "host_monitor_diagnostics/1.0",
+  "recorded_at_utc": "2026-10-20T22:51:59.850635+00:00",
+  "boundary": "Monitoring mistakes are separate from native-stage or main-batch failures. No frozen inputs were changed.",
+  "observations": [
+    {
+      "kind": "monitor_process_column_parsing",
+      "observation": "An earlier ps invocation on remote ps renamed a single PID column instead of selecting several columns, yielding false missing-row output in the monitor.",
+      "correction": "A later correctly formatted own-user ps showed the ddRAD CLI alive, followed by normal archived completion. No leader-exit hang was established for ddRAD."
+    },
+    {
+      "kind": "monitor_python_selection",
+      "observed_at_utc": "2026-10-20T22:48:08Z",
+      "allocation": 48677424,
+      "diagnostic_step": "48677424.5",
+      "observation": "The optional srun ps-inspection script used default Python3.6 and subprocess.check_output(text=True), causing TypeError.",
+      "correction": "Only that diagnostic step exited1. Main source compiler had already completed normally at22:47:27 and a fresh reviewer was running. No process-state conclusion is drawn from the failed diagnostic. Existing environment Python3.12 should be explicit in subsequent scripts."
+    }
+  ]
+}
