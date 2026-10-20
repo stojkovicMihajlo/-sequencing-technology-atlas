@@ -118,3 +118,41 @@ coverage fractions do not measure whole-source recall, and target-level audit
 coverage does not enumerate every factual clause. Current scoring explicitly
 withholds whole-graph precision
 ([scoring.py, lines 55–86](../../../src/genomics_discovery/curation/protocol_benchmark/scoring.py)).
+
+## Observed decomposition-contract ambiguity
+
+A later bounded observation examined only `admissible_decompositions` in the fresh
+DNase author artifact, followed by its review's decomposition checks. The locally
+received artifacts are under
+`technology_atlas/v2/work/benchmark_20261020/reference_observation_local_02/`:
+
+| Artifact | File SHA256 |
+| --- | --- |
+| `dnase_reference_author.json` | `991cf6800304bfb2d405226aab40846ade25fca383bff3aac75c62c1c760406a` |
+| `dnase_reference_review.json` | `5652714b283b6b8dc453c4ec2737b7d0bc4c1847360a2ee8f11950896b65700d` |
+
+The author candidate's `material-and-data-continuity` description permits its
+listed states to be attributes of transformations, without restricting that
+allowance to internal details that preserve required interfaces. The independent
+review marks all three decomposition descriptions `supported`; its rationale
+expressly approves “expressing states on transformations.” This demonstrates an
+ambiguity surviving the author-to-review boundary, rather than an author-only
+drafting issue. It does **not** demonstrate a missing path in an actual graph or
+adjudicate the publication's scientific facts.
+
+A broad reading could permit required interfaces to survive only in prose, despite
+the existing constructor/reviewer requirement for explicit States and typed Flows.
+A narrow reading remains compatible when supported internal attributes do not
+replace those interfaces. The minimal development correction clarifies that limit
+in both reference prompts: alternative grouping is permitted within the existing
+Workflow contract, but consequential required interfaces, branches, dependencies
+and distinct outputs retain explicit graph witnesses. It adds no fixed stage
+ontology, operation count or new scientific requirement.
+
+The native nine-case batch remains on frozen runtime
+`7e670fdc55b8ff5c81caf94ecae906920cfc6c6e`; its prompts and artifacts are unchanged.
+The clarification applies only to a future explicitly selected runtime. No native
+session was rerun, cancelled or edited for this audit or prompt correction.
+Its effect on native behavior is not yet tested. Word-presence checks cannot
+establish that a model preserves a relationship; the graph-witness and perturbation
+checks described in the benchmark audit remain necessary before adoption.
