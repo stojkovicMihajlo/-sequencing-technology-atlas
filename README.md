@@ -5,6 +5,15 @@ protocol graphs, then connecting technologies through separately supported
 historical relationships and contextual protocol comparisons.
 
 **Current stage: shared-operation alignment development, 2026-10-20.**
+The new [protocol reference benchmark](benchmarks/protocol_graph_v1/README.md)
+defines 12 cases across six technology strata, permits different valid graph
+decompositions, and separates source collection, extraction and cross-method claims.
+Its construction runtime passed **1,698 software tests, 3 skipped** locally.
+Qiu CPU job **48612064** is submitted for source collection and independent
+model-reviewed reference construction; no completed benchmark dataset or scientific
+accuracy result is claimed at this checkpoint. See
+[the preregistered decisions](docs/decisions/2026-10-20-protocol-reference-benchmark.md).
+
 The inventory accounts for 201 methods; protocol decomposition remains partial.
 The new development checkpoint passed **1,589 software tests, 3 skipped**, plus six
 experiment-only subprocess checks. It adds source-bound comparison profiles and
