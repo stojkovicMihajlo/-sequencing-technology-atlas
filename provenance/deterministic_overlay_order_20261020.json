@@ -1,0 +1,33 @@
+{
+  "format_version": "implementation_decision/1.0",
+  "recorded_at_utc": "2026-10-20T23:20:23.506428+00:00",
+  "problem": "Identical logical registry projections may receive different graph hashes and revision IDs when an unordered set determines concept-node array order. Assignment map insertion order also affects arrays despite dictionary-order-insensitive canonical snapshot digest.",
+  "observed_in": "Ten-method Qiu job 48677424, frozen runtime 063c531; independently replayed original final graph SHA 6b122a646db300655058e3c29140a62f15bc726b746fcfb61eb920ca853f3782 required original node ordering.",
+  "principle": "Serialization order is software bookkeeping, not a new scientific relationship. Logical registry identity should not depend on interpreter hash seed or map insertion order.",
+  "decision": "Sort concept IDs and admitted assignment IDs in graph_overlay; preserve selection operation order and all original payload content.",
+  "scope": "Development only. Do not rewrite frozen runtime or completed graph/registry/artifacts. Historical and future graph serialization hashes can differ intentionally.",
+  "files": [
+    "src/genomics_discovery/curation/operation_registry/store.py",
+    "tests/test_operation_registry.py"
+  ],
+  "verification": {
+    "source": "src/genomics_discovery/curation/operation_registry/store.py",
+    "change": "Sort admitted concept IDs and assignment IDs before emitting overlay. Frozen runtime, graph and registry remain unchanged.",
+    "regression": "Six fresh Python processes: seeds 0, 1, 42 and reversed logical snapshot maps; pre-fix regression fails, post-fix passes.",
+    "focused_tests": {
+      "passed": 77,
+      "seconds": 6.07
+    },
+    "full_local_tests": {
+      "passed": 2146,
+      "skipped": 3,
+      "seconds": 110.15
+    },
+    "remote_model_retest_claimed": false,
+    "python_version": "3.13.8"
+  },
+  "full_test_command": ".venv/bin/python -m pytest -q --junitxml=/private/tmp/atlas-overlay-order-20261020.xml",
+  "junit_sha256": "87e4ed977c0114c7d513e067299858ddea99c94476894053c3c9587ec857dc0a",
+  "risk": "No scientific payload or edge kind changes intended. This is not validation of membership entailment, retrieval recall or experimental compatibility.",
+  "live_artifact_replay": "provenance/validation/overlay_order_20261020/live_artifact_replay.json"
+}

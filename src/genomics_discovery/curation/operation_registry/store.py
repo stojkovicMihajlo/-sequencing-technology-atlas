@@ -167,11 +167,12 @@ def graph_overlay(snapshot: dict) -> dict:
     nodes, edges = {}, []
     admitted = {key: row for key, row in snapshot["assignments"].items()
                 if row.get("admission_decision_sha256")}
-    for cid in {row["concept_id"] for row in admitted.values()}:
+    for cid in sorted({row["concept_id"] for row in admitted.values()}):
         concept = snapshot["concepts"][cid]
         key = "concept:" + cid
         nodes[key] = {"id": key, "kind": "operation_concept", "record": concept}
-    for ident, row in admitted.items():
+    for ident in sorted(admitted):
+        row = admitted[ident]
         occurrence = row["occurrence"]
         key = "selection:" + row["occurrence_sha256"]
         nodes[key] = {"id": key, "kind": "protocol_selection", "method_id": occurrence["method_id"],

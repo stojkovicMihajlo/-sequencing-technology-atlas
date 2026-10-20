@@ -1,7 +1,11 @@
 """Registry integrity controls; synthetic positive reviews are not scientific validation."""
 
 import json
+import os
+import subprocess
+import sys
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
@@ -220,6 +224,40 @@ def test_one_selection_can_have_multiple_labels(cases, registry):
     overlay = graph_overlay(registry.snapshot())
     assert len({e["source"] for e in overlay["edges"]}) == 1
     assert len({e["target"] for e in overlay["edges"]}) == 2
+
+
+def test_graph_overlay_is_stable_across_snapshot_order_and_process_hash_seeds(cases, registry,
+                                                                            tmp_path):
+    first = assignment(cases, registry.snapshot())
+    commit(registry, first, review(first, cases), *cases[:2])
+    data = assignment(cases, registry.snapshot(), index=1,
+                      relation="shared_purpose").model_dump(mode="json")
+    data["definition"]["id"] = "a-prepare-dna-readout"
+    second = Assignment.model_validate(data)
+    commit(registry, second, review(second, cases), *cases[:2])
+    snapshot = registry.snapshot()
+    reversed_snapshot = {**snapshot, **{
+        field: dict(reversed(list(snapshot[field].items())))
+        for field in ("concepts", "assignments", "decisions")}}
+    assert digest(snapshot) == digest(reversed_snapshot)
+
+    overlay = graph_overlay(snapshot)
+    assert [n["id"] for n in overlay["nodes"] if n["kind"] == "operation_concept"] == [
+        "concept:" + cid for cid in sorted(snapshot["concepts"])]
+    assert [e["assignment_id"] for e in overlay["edges"]] == sorted(snapshot["assignments"])
+    expected = json.dumps(overlay, sort_keys=True) + "\n"
+    script = (
+        "import json, sys\n"
+        "from genomics_discovery.curation.operation_registry.store import graph_overlay\n"
+        "print(json.dumps(graph_overlay(json.load(sys.stdin)), sort_keys=True))\n"
+    )
+    for seed in ("0", "1", "42"):
+        for ordered_snapshot in (snapshot, reversed_snapshot):
+            result = subprocess.run([sys.executable, "-c", script],
+                input=json.dumps(ordered_snapshot), text=True, capture_output=True, check=True,
+                cwd=tmp_path, env={**os.environ, "PYTHONHASHSEED": seed,
+                    "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src")}, timeout=30)
+            assert result.stdout == expected
 
 
 def test_forged_quote_and_stale_review_rejected(cases, registry):
