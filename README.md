@@ -48,8 +48,15 @@ sidecar remains unpromoted.
 The inventory accounts for 201 methods; protocol decomposition remains partial.
 The [new ten-method extraction experiment](provenance/ten_method_overview_submission_20261020.json)
 was submitted as Qiu CPU job **48677424**, using frozen runtime `063c531`,
-`gpt-6.1-sol` and `xhigh`. Its last recorded scheduler observation is queued;
-no new extraction result is claimed yet. It tests the revised Operation-boundary
+`gpt-6.1-sol` and `xhigh`. At **21:41 UTC on October 20**, extraction was running:
+four methods were model-supported and six remained in drafting/review/correction.
+The [independent interim audit](provenance/experiments/ten_method_overview_20261020/monitoring/preliminary_findings.json)
+found an accepted ATAC source-attribution overstatement and a Drop-seq scope-expansion
+problem, alongside preserved material/identity boundaries and functioning correction
+gates. All four completed exports replay their review/coverage bindings and reading
+views; that does not establish every clause's scientific support. No new graph
+publication or shared-operation admission is established at this checkpoint.
+The experiment tests the revised Operation-boundary
 instructions, new reading views, isolated graph publication and bounded open-unit
 selection/shared-operation admission. Exact source selection and launcher bytes
 are recorded; prior workflows, reviews and source obligations are not supplied

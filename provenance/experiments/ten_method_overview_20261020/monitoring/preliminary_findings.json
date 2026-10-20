@@ -1,0 +1,54 @@
+{
+  "format_version": "ten_method_harness_findings/1.0",
+  "job_id": "48677424",
+  "snapshot_at_utc": "2026-10-20T21:35:10Z",
+  "snapshot_archive_sha256": "7029d8dba84435fc8a3d5a9356e445e62bd46bf35df6640402eb0d6362d82552",
+  "intake_methods": 10,
+  "status": "in_progress_not_final",
+  "harness_supported_methods_at_snapshot": ["atac-seq", "scbs-seq", "slam-seq", "split-seq"],
+  "production_promotion": false,
+  "findings": [
+    {
+      "id": "F01",
+      "status": "confirmed_source_attribution_overstatement_missed_by_review",
+      "method": "atac-seq",
+      "workflow_pointers": ["/operations/4/action", "/states/9/description"],
+      "review_targets": ["operation:split_for_monitoring", "state:retained_library"],
+      "source": "acquired_atac_documented_manuscript_html_80310c92:p00137",
+      "observation": "The operation says Do not return the analytical amplification product to the sequencing library, and the retained State asserts that analytical products are not returned. This is marked reported. The cited passage establishes aliquot withdrawal, analytical qPCR and additional cycles for the remaining reaction, but no categorical prohibition. The fresh reviewer supported both targets.",
+      "boundary": "A no-return graph route can be a defensible representation of the documented path; that does not make an unreported imperative a reported instruction. This is not evidence that material was returned, should be returned, or is chemically unable to return.",
+      "general_failure_mode": "An operation-level supporting quote and positive review can conceal an overstrong clause in the same operation or State.",
+      "current_disposition": "Preserve the frozen experiment and its false positive; no production replacement."
+    },
+    {
+      "id": "F02",
+      "status": "observed_scope_expansion_requires_final_revision_inspection",
+      "method": "drop-seq",
+      "observation": "The draft attributes independent capture-efficiency validation figures in a resource. The reviewer requests detailed ERCC and ddPCR validation branches, including historical estimator-domain and replicate details. The source supports those facts, but they are not necessarily calibration consumed by the native-cell count matrix.",
+      "general_failure_mode": "Descriptive performance evidence can cause reconstruction of historical validation experiments instead of the scoped general assay.",
+      "counterbalance": "The same review also requests genuinely relevant conditions, occupancy tradeoffs and expression-bias qualifications; these should not be dismissed with the scope issue."
+    },
+    {
+      "id": "F03",
+      "status": "demonstrated_record_revision_gate",
+      "method": "dbit-seq",
+      "observation": "The primary review requested manufacturer attribution and clarification of logical barcode-coordinate indexing. Despite supported target checks and nonblocking omission flags, revise_record triggered the bounded correction and a fresh review. The correction completed by this snapshot; its final review is pending.",
+      "general_strength": "A required record repair is not silently downgraded to an advisory merely because it does not invalidate the general assay."
+    }
+  ],
+  "strengths_to_retain": [
+    "Fresh candidate-blind source obligations followed by source-linked drafting and independent review",
+    "Frozen source/code/prompt/native-session bindings and explicit review/correction history",
+    "Consequential material splits, modality fractions, barcode identities and data-control handoffs preserved in the independently checked drafts",
+    "Unsupported or unavailable detail can remain explicit without inventing an internal kit recipe",
+    "Isolated publication and separate historical versus shared-operation relations"
+  ],
+  "latency": {
+    "source_obligation_stages_completed": 10,
+    "source_obligation_minutes_min_median_max": [7.13, 9.42, 16.03],
+    "draft_stages_in_first_audit": 8,
+    "draft_minutes_min_median_max": [10.89, 12.55, 14.79],
+    "boundary": "Incomplete-run sample; excludes unfinished drafts, final reviews, revisions and integration."
+  },
+  "audit_boundary": "Model-based scientific spot checks and mechanical integrity checks, not expert-adjudicated precision/recall or a claim that all accepted text is correct. Final ten-method outcomes and shared-operation integration are pending."
+}
