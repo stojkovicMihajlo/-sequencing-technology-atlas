@@ -6,6 +6,7 @@ import asyncio
 import json
 import os
 import signal
+import socket
 from datetime import datetime
 from pathlib import Path
 
@@ -55,6 +56,7 @@ async def test_native_worker_archives_flags_prompt_events_and_usage(tmp_path, mo
     monkeypatch.setenv("WORKER_TEST_SECRET", "not-in-command-or-result")
     monkeypatch.setenv("OPENAI_API_KEY", "test-key-never-archive")
     monkeypatch.delenv("CODEX_API_KEY", raising=False)
+    monkeypatch.setenv("SLURM_JOB_ID", "test-allocation-123")
     executable = fake_codex(
         tmp_path,
         "assert 'CODEX_THREAD_ID' not in os.environ\n"
@@ -64,6 +66,10 @@ async def test_native_worker_archives_flags_prompt_events_and_usage(tmp_path, mo
         "assert pathlib.Path.cwd() == output.parent\n"
         "assert args[0] == 'exec' and args[-1] == '-'\n"
         "assert args[args.index('--sandbox') + 1] == 'workspace-write'\n"
+        "assert 'approval_policy=\"on-request\"' in args\n"
+        "assert 'approvals_reviewer=\"auto_review\"' in args\n"
+        "assert '--dangerously-bypass-approvals-and-sandbox' not in args\n"
+        "assert 'danger-full-access' not in args\n"
         "assert args[args.index('--disable') + 1] == 'multi_agent'\n"
         "assert 'multi_agent_v2' in args\n"
         "assert '--ignore-user-config' in args and '--ephemeral' in args\n"
@@ -107,6 +113,8 @@ async def test_native_worker_archives_flags_prompt_events_and_usage(tmp_path, mo
     assert "not-in-command-or-result" not in (attempt / "result.json").read_text()
     assert not any("test-key-never-archive" in path.read_text() for path in attempt.iterdir())
     started = json.loads((attempt / "started.json").read_text())
+    assert started["hostname"] == socket.gethostname()
+    assert started["slurm_job_id"] == "test-allocation-123"
     assert started["pid"] > 0 and started["spawned"] is True
     assert datetime.fromisoformat(started["started_at"]).tzinfo is not None
     if os.name == "posix":

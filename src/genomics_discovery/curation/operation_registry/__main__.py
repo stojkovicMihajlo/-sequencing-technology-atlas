@@ -29,6 +29,16 @@ def load_manifest(path: Path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    p = commands.add_parser("in-region", help="Find recorded component witnesses inside a module or operation region")
+    p.add_argument("snapshot", type=Path)
+    p.add_argument("workflow", type=Path)
+    p.add_argument("operation_ids", nargs="*")
+    p.add_argument("--module")
+    p = commands.add_parser("queue")
+    p.add_argument("queue_args", nargs=argparse.REMAINDER)
+    p = commands.add_parser("migrate")
+    p.add_argument("source", type=Path)
+    p.add_argument("target", type=Path)
     for name in ("init", "snapshot", "export-graph"):
         p = commands.add_parser(name)
         p.add_argument("database", type=Path)
@@ -55,7 +65,15 @@ def main():
         if name == "lookup":
             p.add_argument("--limit", type=int, default=10)
     p = commands.add_parser("schema")
-    p.add_argument("kind", choices=("decision", "assignment", "review", "vocabulary", "vocabulary-review"))
+    p.add_argument("kind", choices=("decision", "assignment", "review", "vocabulary", "vocabulary-review", "matching", "comparison"))
+    p = commands.add_parser("matching-plan")
+    p.add_argument("snapshot", type=Path)
+    p.add_argument("manifest", type=Path)
+    p = commands.add_parser("check-matching")
+    p.add_argument("snapshot", type=Path)
+    p.add_argument("plan", type=Path)
+    p.add_argument("manifest", type=Path)
+    p.add_argument("report", type=Path, nargs="?")
     p = commands.add_parser("selections")
     p.add_argument("views", type=Path)
     p.add_argument("action", choices=("list", "overview", "inspect", "find"))
@@ -89,18 +107,48 @@ def main():
     p.add_argument("--admission-decision", type=Path, required=True)
     p.add_argument("--admission-review", type=Path, required=True)
     args = parser.parse_args()
-    if args.command == "schema":
+    if args.command == "in-region":
+        from .regions import components_in_region
+        result = components_in_region(json.loads(args.snapshot.read_text()),
+            Workflow.model_validate_json(args.workflow.read_bytes()), args.operation_ids, module=args.module)
+    elif args.command == "queue":
+        from .queue_cli import run
+        result = run(args.queue_args)
+    elif args.command == "migrate":
+        from .storage import migrate
+        result = migrate(args.source, args.target)
+    elif args.command == "schema":
+        from .frozen_matching import MatchingReport
+        from .definition_comparison import ComparisonReport
         result = {"decision": Decision, "assignment": Assignment,
                   "review": MembershipReview, "vocabulary": VocabularyProposal,
-                  "vocabulary-review": CurrentVocabularyReview}[args.kind].model_json_schema()
+                  "vocabulary-review": CurrentVocabularyReview,
+                  "matching": MatchingReport, "comparison": ComparisonReport}[args.kind].model_json_schema()
+    elif args.command in {"matching-plan", "check-matching"}:
+        from .frozen_matching import MatchingReport, make_plan, validate_report
+        snapshot = json.loads(args.snapshot.read_text())
+        occurrences, packets = load_occurrences(load_manifest(args.manifest))
+        plan = make_plan(snapshot, occurrences)
+        if args.command == "matching-plan":
+            result = plan
+        else:
+            if json.loads(args.plan.read_text()) != plan:
+                raise ValueError("Matching plan differs from frozen inputs")
+            result = {"plan_sha256": digest(plan), "pair_count": len(plan["pairs"])}
+            if args.report:
+                report = MatchingReport.model_validate_json(args.report.read_bytes())
+                result.update(integrity="valid", report_sha256=digest(report),
+                              outcomes=validate_report(report, plan, snapshot, occurrences, packets))
     elif args.command == "selections":
-        from .selections import FIELDS, find_selections, list_selections
+        from .selections import FIELDS, find_selections, list_selections, resolve_selection
         from .selection_views import selection_overview, inspect_pointer
         if args.pointer is not None and (args.action != "inspect" or args.field):
             raise ValueError("Use --pointer only with inspect, without --field")
         if args.action in {"inspect", "overview"} and not args.query:
             raise ValueError("Supply an occurrence ID")
         views = json.loads(args.views.read_text())
+        if args.action in {"inspect", "overview"}:
+            args.query = resolve_selection(views, args.query)
         if args.action == "list":
             result = list_selections(views)
         elif args.action == "find":

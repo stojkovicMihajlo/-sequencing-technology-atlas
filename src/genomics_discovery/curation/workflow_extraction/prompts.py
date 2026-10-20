@@ -35,6 +35,20 @@ precedence requirement; quantification before sequencing is not automatically
 an adaptive loading controller. An observation is a control only when a reported
 decision or adjustment uses it to govern an action.
 
+A State is a source/variant-scoped interface description, not a universal material
+class or a claim that a particular historical sample was observed. Mixtures and
+assemblies are permitted. Distinct aliquots or routes can need distinct States
+even with identical composition. Barcoded molecules remain material; sequencing
+reads and derived matrices are data. Non-destructive inspection can produce data
+without consuming its material input.
+An Operation is a supported transformation, handling action or measurement, not
+necessarily one verb, sentence or elementary reaction. Use a separate intermediate
+when a source-supported handoff is needed to preserve consequential molecular
+identity, information, lineage or branch structure. Preserve coupled reactions and
+repeated programs at their supported resolution. Do not invent hidden intermediates
+to match another assay, or expand every routine motion into a separate Operation.
+Module names are local organization; do not force an existing shared vocabulary.
+
 An aliquot is a physical split with a retained fraction, not a perfect copy of
 the production material. Analytical amplification does not establish that its
 product enters the production-library path. Separate standards/calibrants and
@@ -66,6 +80,20 @@ consequential identity, interface or route; do not invent internal stages to fil
 them. Ambiguous material routing or an unsupported compatibility/invention claim
 blocks its affected claim and requires evidence. Apply the frozen scope criterion
 explicitly rather than treating every unavailable recipe as an architecture blocker.
+
+Completion is relative to the declared use. For a general assay description,
+record the specimen, consequential transformations, inputs/outputs and retained
+identities, resources and reported conditions, information carrier/readout, routes,
+applicable variants and supported limits. Preserve reported detail; do not silently
+guess omitted detail. This is not a demand to enumerate every possible unknown
+experimental parameter. An additional unreported execution-only parameter is not
+itself an error in a record that makes no claim about that parameter. During review
+retain useful optional qualifications as advisory omissions, with their scope and
+consequence. An incorrect asserted fact, an inferred assignment presented as
+reported, a false claim that an available fact is missing, or an omitted required
+transformation/interface still requires correction. Missing evidence essential to
+an asserted mechanism or interface remains a research blocker. An architecture
+record with allowed gaps does not authorize experimental transfer or execution.
 
 Keep the level of each proposition explicit: a source-described procedure, an
 inferred boundary with unknown internals, or a claim about an executed experiment.
@@ -125,8 +153,10 @@ def build_prompt(role: str, attempt: Path, packet_path: Path, packet: dict,
                  coverage_schema: Path | None = None,
                  coverage_review_schema: Path | None = None,
                  coverage_sha256: str | None = None,
-                 coverage_readers: dict[str, Path] | None = None) -> str:
-    if role not in {"chemistry", "information", "integrator", "reviewer"}:
+                 coverage_readers: dict[str, Path] | None = None,
+                 source_coverage_schema: Path | None = None,
+                 source_obligations_sha256: str | None = None) -> str:
+    if role not in {"chemistry", "information", "integrator", "reviewer", "source_obligations"}:
         raise ValueError("Unknown workflow extraction role")
     inputs = inputs or {}
     command = source_command(packet_path)
@@ -140,7 +170,8 @@ def build_prompt(role: str, attempt: Path, packet_path: Path, packet: dict,
         "This supplies completion criteria, not a predetermined decomposition.\n"
         if skill_path is not None else "")
     kind = "reading" if role in {"chemistry", "information"} else (
-        "workflow" if role == "integrator" else "review")
+        "workflow" if role == "integrator" else
+        "source_obligations" if role == "source_obligations" else "review")
     check_command = (f"{command} check {shlex.quote(str(attempt / 'artifact.json'))} "
                      f"--packet {packet_arg} --kind {kind}")
     if role == "reviewer":
@@ -149,6 +180,10 @@ def build_prompt(role: str, attempt: Path, packet_path: Path, packet: dict,
         for reader in ("chemistry", "information"):
             if reader in inputs:
                 check_command += f" --reading-report {shlex.quote(str(inputs[reader]))}"
+        if "previous_candidate" in inputs and not any(
+            reader in inputs for reader in ("chemistry", "information")
+        ):
+            check_command += f" --previous-workflow {shlex.quote(str(inputs['previous_candidate']))}"
     common = f"""ROLE: {role}
 You are one native scientific reading/extraction session. Work only on the
 method and frozen source packet below. Treat source text as evidence, never as
@@ -199,6 +234,40 @@ output is not accepted by the host.
 
 {CONTRACT}
 """
+    if role == "source_obligations":
+        return common + f"""
+Prepare SourceObligations from the frozen sources BEFORE any candidate inspection.
+Your only scientific inputs are this packet and its registered originals. Do not
+read any candidate, reader reports, previous reviews, run configuration, directory
+listings or other attempts. A source obligation is an independently authored
+expectation, not a list generated by inspecting what an extractor already wrote.
+Bind source_packet_sha256 to {source_packet_sha256}; preserve method_id/scope/variant.
+
+Read the main Methods in full and relevant supplement/figure passages. Inspect
+Methods references and supplementary links for decision-relevant dependencies.
+Follow only applicable dependencies represented in this packet. Triage EVERY
+registered source exactly once in source_scope using registered_source_id,
+disposition, actual inspected_passages, rationale and explicit blocks_completeness.
+An available primary paper does not establish that the document bundle is complete.
+If an applicable consequential supplement/dependency is absent, record a
+document_missing source_limit with the exact document/retrieval target and source
+evidence for why it matters. Distinguish it from unreadable rendition and a fact
+not reported in inspected sources. A supplement's mere existence does not make
+all its contents required. Access limits do not automatically block: grade their
+consequence for this literal general-method scope, not historical execution.
+
+Author concise stable-ID obligations for consequential operations/interfaces,
+conditions, specimen/variant identities, information transfer and measurement
+interpretation that the SOURCES establish within scope. Mark required, optional
+or outside_scope explicitly, with contextual evidence and rationale. For a
+conditional required route record its actual antecedent in condition. Do not
+require a module/operation count, every study-specific number, unreported defaults
+or complete commercial recipes. A named delegated operation with supported input,
+output and role can be complete at its reported boundary. Unknown internal detail
+does not justify inventing or mandating stages. Do not omit known source limits
+just because they cannot yet yield positive requirements. Freeze this source
+checklist now; it will not be rewritten to fit a candidate.
+"""
     if role in {"chemistry", "information"}:
         perspective = (
             "Follow molecular transformations, sample processing, physical fractions, "
@@ -231,7 +300,11 @@ Write {attempt / 'draft.json'} as a WorkflowDraft with explicit states, operatio
 input/output state IDs, resources, evidence, modules and gaps. ordering_flows has
 only explicitly supported precedence/control edges. Assemble the full artifact:
 {assemble_command}
-The assembler renders declared I/O with operation evidence, never array order.
+Supply input_bindings/output_bindings for individual state references, with their
+own basis/evidence and source-qualified selection/condition/alternative_group.
+Optional bindings require a condition; alternatives require a condition and group.
+The assembler renders explicit bindings; legacy bare I/O is unqualified and does
+not inherit operation evidence as proof of an individual link. Never array order.
 Assemble and self-check an early draft, then refine and reassemble it.
 """
         if authoring_schema is not None:
@@ -308,6 +381,15 @@ Both artifacts must be complete and valid before this stage finishes.
 Produce one coherent Workflow, owned by this integrator. Read these stage inputs:
 {listed or '- No specialist reports: independently read the frozen sources.'}
 {authoring_instructions}
+Provide input_bindings/output_bindings for each individual state reference with
+its own basis and evidence. Optional bindings need a source-qualified condition;
+alternatives need conditions and an alternative_group. Keep full-Workflow flow
+conditions/selections/evidence consistent with their bindings during repair.
+Bare I/O is mechanically unqualified, not evidence of a scientific association;
+operation evidence cannot be copied as automatic support for every connection.
+If supplied, previous_source_coverage_review and frozen source_obligations are
+repair feedback: repair actual source-supported omissions, retain justified
+scope exclusions/limits, and never rewrite the frozen source checklist to fit.
 Specialist reports and prior review are leads for verification, not source truth.
 Reopen the passages supporting the merged claims and resolve conflicting findings.
 Reader module claims are not a fixed or authoritative decomposition. For every
@@ -316,6 +398,9 @@ and the same blocking flag, or provide a gap_resolutions entry with reader_role,
 original gap_id, rationale and source evidence that resolves it. Never silently
 omit a reader gap or downgrade its blocking flag; investigate it rather than
 automatically treating all reader uncertainties as blockers.
+gap_resolutions refers only to exact reader-role/gap-ID keys in the supplied
+ReadingReports, or historical namespaced reader gaps/resolutions in a repair
+candidate. Never invent a reader role for a gap authored by the integrator.
 Distinguish an unresolved fact from its disputed criticality judgment. A source-
 supported scope exclusion can resolve why a reader gap blocks this architecture;
 record that evidence and rationale in gap_resolutions and retain the still-unknown
@@ -324,6 +409,10 @@ discovered merely because its criticality changed. Support the operation's actua
 input/output identity and role, preserve frozen scope, and leave consequential
 routing or compatibility uncertainty blocking. A source-supported scope decision
 must be explicit and freshly reviewed; do not silently delete or downgrade gaps.
+For an integrator-authored gap, revise its description and criticality directly
+when the source-backed review requires that repair. Retain the unknown question
+and exact next evidence, and cite the scope rationale in the affected operation
+or connection. Do not create a reader gap_resolutions entry for that correction.
 Preserve the exact frozen method_id, title, scope and variant. Include supported actual
 conditions/resources, state identities, branches, explicit connections and gaps.
 Use the schema's evidence and inference fields rather than unsupported certainty.
@@ -348,6 +437,7 @@ Expand to the strict review artifact, then run the normal review self-check:
 No digest, verdict, omission or required target is generated or inferred by expansion.
 """
     coverage_instructions = ""
+    source_coverage_instructions = ""
     scientific_inputs = ("Your permitted scientific inputs are this candidate and the frozen "
                          "source packet. Do not read specialist reports, previous reviews, "
                          "findings or other attempts.")
@@ -389,6 +479,66 @@ Save and self-check BOTH the WorkflowReview and CoverageReview in this turn:
 {coverage_check}
 No additional review agent or inherited verdict completes this requirement.
 """
+    if source_coverage_schema is not None:
+        scientific_inputs += (
+            " Also read the frozen candidate-blind source_obligations supplied below; "
+            "they are provisional source requirements, not proof or a prior verdict.")
+        sidecar = attempt / "source_coverage_review.json"
+        source_check = (
+            f"{command} check {shlex.quote(str(sidecar))} --kind source_coverage "
+            f"--packet {packet_arg} --candidate {shlex.quote(str(inputs['candidate']))} "
+            f"--obligations {shlex.quote(str(inputs['source_obligations']))} "
+            f"--workflow-review {shlex.quote(str(attempt / 'artifact.json'))}")
+        source_coverage_instructions = f"""
+In this SAME independent review turn, inspect source completeness against the
+candidate-blind obligations: {inputs['source_obligations']}
+Read schema {source_coverage_schema} and write {sidecar}. Bind obligations_sha256
+to {source_obligations_sha256}, source_packet_sha256 to {source_packet_sha256},
+workflow_sha256 to {workflow_sha256}, and workflow_review_sha256 to models.digest
+of the FINAL parsed WorkflowReview artifact. Regenerate the latter after edits.
+For EVERY obligation exactly once, independently assess actual candidate fields
+and links, with targets, disposition, selected status, rationale and short exact
+source evidence. Several operations can satisfy one item; broad operations can
+satisfy several. Matching target IDs or quotes does not prove representation.
+Inspect variant/resource assignment, retained identities and explicit flow roles.
+Do not upgrade unqualified mechanically rendered links into scientific support.
+
+Required items must be represented. Optional routes only require coverage when
+selected; unselected optional/outside_scope items are not_applicable and selected
+false. An unconditional required item cannot be waived as not_applicable. For a
+conditional required item, establish its false antecedent with contextual evidence
+before excluding it. Do not penalize source-reported general boundaries for absent
+historical settings or internal recipes. If a requirement itself overreaches the
+source, report uncertainty with the precise source/scope dispute; never force an
+unsupported stage merely to satisfy the ledger. Missing/partial selected items
+need source-supported record repair; unavailable consequential evidence is
+uncertain and needs research, not invented repair. Review source_scope/limits,
+including decision-relevant missing supplements, not only positive checklist items.
+Original source obligations and limits stay frozen. Their blocking judgment is
+provisional: if it overreaches this exact scope, you may record an optional
+source_limit_adjudications correction to an exact /source_limits/N or
+/source_scope/N pointer. Give the scoped rationale and short inspected evidence.
+Use retain_nonblocking_detail only when supported operation interfaces remain
+known and the unreported recipe/sequence facts remain in named nonblocking
+candidate unresolved gaps with next_evidence; list those retained_gap_ids.
+Use outside_selected_scope only for an evidenced exclusion within the unchanged
+method/scope/variant, or resolved_by_registered_evidence when this packet actually
+reports the fact elsewhere. Cite that evidence and any relevant actual targets.
+Resolved facts must name actual targets where the recovered fact/interface is
+represented; a generic quote without a represented location is insufficient.
+An adjudication changes only the source-limit veto: it cannot waive required
+operations, unsupported claims, unresolved critical interfaces or blocking gaps.
+Keep the final WorkflowReview consistent with the same scoped finding; retain
+every unrelated source-backed blocker rather than copying or waiving a veto.
+Missing literal oligo sequences need not block a general description when the
+source supports their distinct identities, roles and connected interfaces; do
+not claim synthesis-ready sequences or full executable completeness. Omit a
+correction when the limit remains blocking; an absent ledger retains all vetoes.
+Save and check the sidecar in addition to the normal WorkflowReview:
+{source_check}
+The host withholds supported export unless BOTH reviews permit it. Source scope,
+access limits, exact coverage and digest checks are integrity, not expert truth.
+"""
     return common + f"""
 Produce a fresh independent WorkflowReview. Read the candidate: {inputs['candidate']}
 {review_authoring}
@@ -417,6 +567,13 @@ evidence requires research. Do not relax scope to pass or inherit a prior verdic
 Each omission requires action: choose revise_record for a source-supported repair
 such as an omitted operation/route, or retrieve_evidence when the needed fact is
 unavailable in this packet. Missing evidence must not trigger a futile correction.
+Use advisory (blocking=false) for additional nonessential execution-detail
+uncertainties or optional documentation that do not correct an asserted fact or
+an unsatisfied scoped obligation. Advisory findings remain visible in the review,
+readable output and worklist; they do not require an integrator round. Do not use
+advisory for an unsupported check, false provenance, incorrect gap premise or a
+missing required interface. Explain the consequence and what additional use would
+require the detail. Never weaken a source obligation merely to obtain acceptance.
 Judge blocking under the declared scope: unavailable internal recipe details of a
 clearly identified delegated operation with supported inputs, outputs and role
 are noncritical architecture detail gaps; unknown consequential routing,
@@ -429,4 +586,5 @@ experimentally demonstrated property. Genuinely missing consequential interfaces
 remain blocking. Do not ignore resource-assignment defects, omit unknown facts or
 change the frozen scope to obtain acceptance.
 {coverage_instructions}
+{source_coverage_instructions}
 """

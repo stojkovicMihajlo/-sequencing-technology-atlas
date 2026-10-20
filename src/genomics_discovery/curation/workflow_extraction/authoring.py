@@ -12,7 +12,11 @@ FORMAT = "workflow_authoring/1.0"
 
 
 def authoring_view(record: Workflow | WorkflowDraft | WorkflowReview) -> dict:
-    """Retain every scientific field; deduplicate only equal complete Evidence objects."""
+    """Retain bindings/route semantics; deduplicate only equal complete Evidence objects.
+
+    An operation citation and a per-I/O citation remain separate authored claims,
+    even when their Evidence objects happen to share a registry entry.
+    """
     kind = next((kind for kind, model in MODELS.items() if isinstance(record, model)), None)
     if kind is None:
         raise ValueError("Authoring requires a workflow, draft or review")

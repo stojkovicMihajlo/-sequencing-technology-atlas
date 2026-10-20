@@ -4,25 +4,28 @@ The authoritative scientific extraction is a JSON document. Its sentences are
 written by the agent inside named fields. Python creates `protocol.txt` by printing
 those existing fields under labels; it does not ask another model to summarize them.
 
-## Files in one run
+## Files in a current batch run
 
-The numbering below is from the distributed ChIPmentation run. Later repairs create
-additional attempt directories; read `state.json` to locate the final artifacts.
+The default is one source reader, one extractor and a fresh reviewer. A repair
+adds another extractor/reviewer pair. Always use the paths in `state.json` to find
+the final artifacts; stage numbers are not a stable API.
 
 | File | Contents / role |
 | --- | --- |
 | `source_packet.json` | Frozen scope, source identities, original-file hashes and registered passages. |
-| `attempts/001_chemistry/artifact.json` | Chemistry reader's findings and gaps. |
-| `attempts/002_information/artifact.json` | Information reader's findings and gaps. |
-| `attempts/003_integrator/authoring.json` | Compact structured draft; repeated evidence is stored once in a registry. |
-| `attempts/003_integrator/artifact.json` | Full workflow, including materialized input/output edges. |
-| `attempts/003_integrator/coverage.json` | Where each known reader finding was represented, excluded, or retained as a gap. |
-| `attempts/004_reviewer/artifact.json` | Source-review checks of the exact workflow version. |
-| `attempts/004_reviewer/coverage_review.json` | Review of the proposed finding dispositions. |
+| `attempts/001_source_obligations/artifact.json` | Source reader's requirements, source scope and missing-evidence judgments, written before seeing an extraction. |
+| `attempts/002_integrator/authoring.json` | Compact structured draft; repeated evidence is stored once in a registry. |
+| `attempts/002_integrator/artifact.json` | Full workflow, including materialized input/output edges. |
+| `attempts/003_reviewer/artifact.json` | Source-review checks of the exact workflow version. |
+| `attempts/003_reviewer/source_coverage_review.json` | Where each source requirement is satisfied, missing, partial, uncertain or not applicable. |
 | `protocol.txt` | Readable projection of the same workflow and review. |
 | `graph_candidate.json` | Standalone graph projection with source/review records. |
 | `state.json`, `config.json` | Stage status, artifact paths, configuration, integrity bindings and usage. |
 | Stage `prompt.txt`, `events.jsonl`, `result.json` | Exact instructions, native session events and execution results. |
+
+The distributed ChIPmentation example predates this default. Its separate chemistry
+and information readers and their finding-coverage files remain an optional mode;
+they are not extra mandatory stages in the current bulk run.
 
 ## The complete workflow record
 
@@ -32,9 +35,10 @@ Top-level fields: `format_version`, `method_id`, `title`, `scope`, `variant`,
 | Record | Fields |
 | --- | --- |
 | State | `id`, `kind` (`material` / `data`), `description`, `evidence` |
-| Operation | `id`, `name`, `action`, `inputs` (state IDs), `outputs` (state IDs), `resources`, `information_effect`, `evidence` |
+| Operation | `id`, `name`, `action`, `inputs` (state IDs), `outputs` (state IDs), `input_bindings`, `output_bindings`, `resources`, `information_effect`, `evidence` |
+| Input/output binding, nested in an operation | `state_id`, `basis`, `condition`, `selection` (`required` / `optional` / `alternative`), `alternative_group`, `evidence` |
 | Resource, nested in an operation | `kind` (`reagent` / `equipment` / `software` / `condition`), `description`, `evidence` |
-| Flow / connection | `id`, `source`, `target`, `kind`, `basis`, `condition`, `evidence` |
+| Flow / connection | `id`, `source`, `target`, `kind`, `basis`, `condition`, `evidence`, `association`, `selection`, `alternative_group` |
 | Module | `id`, `name`, `operation_ids`, `boundary_rationale` |
 | Gap | `id`, `description`, `blocking`, `next_evidence` |
 | Gap resolution | `reader_role`, `gap_id`, `rationale`, `evidence` |
@@ -63,9 +67,17 @@ flowchart LR
 ```
 
 The operation names `s_prepared_v1` in `inputs` and `s_tagged_v1` in `outputs`.
-The assembler uses those explicit IDs to make the two edges. It copies the
-operation's evidence onto these mechanical edges. It does not establish chemical
-compatibility by matching similar prose. Source review is still required.
+The assembler uses those explicit IDs to make the two edges. In this older example
+it copies the operation's evidence onto these mechanical edges. Current extractions
+must instead provide an explicit binding for every input and output, with evidence
+and a rationale supporting that particular association. The assembler copies those
+binding fields to the edge; it does not establish chemical compatibility by
+matching similar prose. New source review rejects bare mechanical associations.
+
+Required inputs are cumulative. Members of an `alternative_group` describe
+mutually exclusive routes, with conditions explaining the choice. For example,
+two alternative washes must not appear as two consecutive required washes.
+The conditions are source-qualified text, not executable laboratory instructions.
 
 Edge kinds are `material_input`, `material_output`, `data_input`, `data_output`,
 `precedence`, and `control`. The first four connect states and operations. The last
@@ -97,6 +109,22 @@ normalization. It does not prove entailment. Evidence attached to an operation i
 not an individual citation link for every sentence in `action` or `information_effect`.
 
 ## Reader and reviewer records
+
+The current source-reader record has `format_version`, `source_packet_sha256`,
+`method_id`, `scope`, `variant`, `source_scope`, `obligations` and `source_limits`.
+Each obligation has an ID, a requirement, required/optional/outside-scope status,
+an optional condition, a rationale and evidence. Each source limit records what
+is missing, its cause and consequence, whether it blocks the scope, the next
+evidence to obtain and citations. These are the reader's scientific judgments;
+Python only validates their structure and source bindings.
+
+The source-coverage review binds the exact source packet, source-reader record,
+workflow and primary review using four hashes. It lists inspected passages and
+one check per obligation, with disposition, selected route, workflow targets,
+rationale and evidence. Missing required operations cannot pass merely because
+the workflow's existing statements have good citations.
+
+The following reader format is used only by the optional specialist mode:
 
 A reader report has `role`, `inspected_passages`, `findings`, and `unresolved`.
 Each finding has `id`, `description`, and `evidence`.
@@ -132,5 +160,5 @@ to view an operation and its module together; JSON retains the complete record.
 
 Combined-atlas admission reads the underlying workflow JSON, review JSON and
 source packet named by the completed run. It also checks the runtime/archive and
-applicable finding-coverage bindings. It does not parse `protocol.txt` to recover
+applicable source-coverage and specialist finding-coverage bindings. It does not parse `protocol.txt` to recover
 the graph and does not require the standalone graph export.

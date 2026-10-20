@@ -53,10 +53,11 @@ def test_invalid_or_nonexistent_pointer_fails(pointer):
 def test_cli_overview_and_pointer_are_wired_to_original_record(cases, tmp_path, monkeypatch, capsys):
     from genomics_discovery.curation.operation_registry.__main__ import main
     occurrence = next(iter(cases[0].values()))
+    from genomics_discovery.curation.operation_registry.selections import selection_ref
     view = review_view(occurrence)
     path = tmp_path / 'views.json'
     path.write_text(json.dumps({occurrence.id: view}))
-    monkeypatch.setattr(sys, 'argv', ['atlas-concepts', 'selections', str(path), 'overview', occurrence.id])
+    monkeypatch.setattr(sys, 'argv', ['atlas-concepts', 'selections', str(path), 'overview', selection_ref(occurrence.id)])
     main()
     overview = json.loads(capsys.readouterr().out)
     pointer = overview['record']['operations'][0]['evidence']['pointer']

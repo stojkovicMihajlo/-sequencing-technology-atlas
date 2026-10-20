@@ -1,0 +1,723 @@
+{
+  "format_version": "reference_implementations/1.0",
+  "recorded_at": "2026-10-20",
+  "research_cutoff": "2026-10-19",
+  "decision_record": "docs/decisions/2026-10-20-shared-operation-alignment.md",
+  "scope": "Pinned evidence for shared-operation comparison profiles and optional definition candidate retrieval; not a benchmark reproduction or a legal compatibility determination.",
+  "path_semantics": {
+    "audit_and_internal_paths": "Relative to this project repository root. Audit records resolve to Git-visible provenance copies.",
+    "inspected_paths": "Relative to the pinned upstream repository root.",
+    "local_evidence_path": "Optional historical workspace location, relative to this project repository root; ../ paths are not required to read the Git-visible audit or follow pinned upstream URLs.",
+    "local_evidence_files": "Relative to that entry's local_evidence.path."
+  },
+  "provenance_policy": {
+    "external_implementation_source_copied": false,
+    "external_repository_vendored": false,
+    "model_pipelines_executed_for_reference_audit": false,
+    "license_observations_are_revision_specific": true,
+    "unlicensed_or_unclear_snapshots_are_reference_only": true,
+    "local_capture_hashes_identify_captured_bytes_not_original_git_blobs": true,
+    "paper_and_later_repository_behavior_must_be_distinguished": true,
+    "external_local_evidence_paths_are_optional": true
+  },
+  "audit_evidence": [
+    {
+      "path": "provenance/semantic_alignment_research_20261019/findings.txt",
+      "sha256": "72e7cbe15d68722511e839435439f7c4f03fc1ca7f47f42f15f2ee109d40e3a0"
+    },
+    {
+      "path": "provenance/semantic_alignment_research_20261019/local_code_audit.json",
+      "sha256": "a85d4fc98b491a314586b329f27b4f9b9992b1749b7ab0a223765642581eb22e"
+    },
+    {
+      "path": "provenance/semantic_alignment_research_20261019/design_decision.json",
+      "sha256": "c19fd15e2b847b1d001c443022bbed792cba11f2ad3743ca4dd15f3f203640c2"
+    },
+    {
+      "path": "provenance/semantic_alignment_research_20261019/human_nlp_sources.json",
+      "sha256": "c2d394db60b6b1c708e542d6ed0e79ace0e3d3998bf58ff697b6fc79c6f746a2"
+    },
+    {
+      "path": "provenance/semantic_alignment_research_20261019/cs_sources.json",
+      "sha256": "fff6939cdef7ba2a7dfcd4705336196e0183e658ef7580187cf1ace1bb0735f3"
+    },
+    {
+      "path": "provenance/semantic_alignment_research_20261019/root_repository_audit.json",
+      "sha256": "50f267de4727d7d38a081f2fbbf322be50c2444630315c1d1aa84539972f364f"
+    }
+  ],
+  "internal_reuse": [
+    {
+      "path": "src/genomics_discovery/curation/technology_graph/embeddings.py",
+      "symbols": [
+        "LocalEmbedder",
+        "EmbeddingCache"
+      ],
+      "decision": "Reuse existing optional local MiniLM adapter and content/model-bound cache; no new embedding infrastructure."
+    },
+    {
+      "path": "src/genomics_discovery/curation/technology_graph/discovery.py",
+      "symbols": [
+        "_lexical"
+      ],
+      "decision": "Reuse existing lexical ranking helper; combine lexical and semantic ranks rather than raw scores."
+    },
+    {
+      "path": "src/genomics_discovery/curation/operation_registry/candidate_index.py",
+      "symbols": [
+        "FIELDS",
+        "features",
+        "lookup_owners",
+        "SMALL_CATALOGUE"
+      ],
+      "decision": "Preserve overlapping lexical recall routes and exhaustive fallback at 64 distinct concept objects."
+    }
+  ],
+  "repositories": [
+    {
+      "id": "scion_icml2026",
+      "repository_url": "https://github.com/wandugu/paper_scion",
+      "commit": "cb77f824fcbd339c64aebcd7cb562b78a254e9a6",
+      "commit_url": "https://github.com/wandugu/paper_scion/tree/cb77f824fcbd339c64aebcd7cb562b78a254e9a6",
+      "paper_url": "https://proceedings.mlr.press/v306/hu26t.html",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/cs_sources.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "fff6939cdef7ba2a7dfcd4705336196e0183e658ef7580187cf1ace1bb0735f3"
+      },
+      "license": {
+        "identifier": "Apache-2.0",
+        "file_path_if_recorded": "LICENSE",
+        "license_file_found_in_inspected_snapshot": true,
+        "observation": "Apache-2.0; LICENSE inspected"
+      },
+      "inspected_paths": [
+        {
+          "path": "src/ontology_generate.py",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/ontology_generate.py"
+        },
+        {
+          "path": "src/utils/scion_candidates.py",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/utils/scion_candidates.py"
+        },
+        {
+          "path": "tests/test_ontology_generate_candidate_contract.py",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/tests/test_ontology_generate_candidate_contract.py"
+        },
+        {
+          "path": "tests/test_scion_candidates.py",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/tests/test_scion_candidates.py"
+        },
+        {
+          "path": "src/rebuttal/rebuttal_experiments.py",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/rebuttal/rebuttal_experiments.py"
+        },
+        {
+          "path": "src/rebuttal/scripts/E6_run_fusion_baselines.py",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/rebuttal/scripts/E6_run_fusion_baselines.py"
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/README.md"
+        },
+        {
+          "path": "README_zh.md",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/README_zh.md"
+        },
+        {
+          "path": "rebuttal/outputs/E0_deviations.md",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/rebuttal/outputs/E0_deviations.md"
+        },
+        {
+          "path": "rebuttal/outputs/E6_summary.md",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/rebuttal/outputs/E6_summary.md"
+        },
+        {
+          "path": "config/config.yaml",
+          "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/config/config.yaml"
+        }
+      ],
+      "decision": "ADAPT candidate/evidence boundaries, typed mapping outputs, conservative extensions; do not treat released approximate diagnostic rows as independently reproduced performance. Reimplement evidence validation for Operation contracts.",
+      "rejected_or_limited": [],
+      "implementation_findings": [
+        "src/utils/scion_candidates.py::_labels_match normalizes strings then accepts token overlap at least 0.75. constrain_ontology_to_candidates and constrain_events_to_candidates test label linkage rather than source entailment; event roles are pooled across the candidate package.",
+        "src/ontology_generate.py::merge_schema_payload (line 1510) uses exact-label/triple merge helpers. This inspected path is not a complete implementation of the paper's semantic alignment policy.",
+        "src/rebuttal/rebuttal_experiments.py::run_e6 (lines 1965-2070) emits literal fixed comparison rows and derives audit counts from those rows. It does not execute AML/LogMap/LLM matching in that function.",
+        "The authors disclose in rebuttal/outputs/E0_deviations.md: E6 uses a reproducible approximate implementation; paper Qwen/PPO artifacts and human annotation files are missing. README advertises E6 as a diagnostic/ablation runner. The observed helper cannot independently reproduce empirical fusion comparison; this is not evidence that the original paper study was fabricated."
+      ],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adapt_candidate_evidence_boundary",
+        "reject_label_linkage_as_entailment",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "partial_textual_capture_not_repository_clone",
+        "path": "../external/semantic_alignment_refs_20261019/scion_audit",
+        "source_manifest": "../external/semantic_alignment_refs_20261019/scion_audit/source_manifest.json",
+        "source_manifest_sha256": "aa2aa7cb9e3f022166b31497a18d5f1cb9144f73268455b9e7574bef50af09cd",
+        "files": [
+          {
+            "path": "LICENSE",
+            "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/LICENSE",
+            "github_blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "local_sha256": "c95bae1d1ce0235ecccd3560b772ec1efb97f348a79f0fbe0a634f0c2ccefe2c",
+            "capture_format": "UTF-8 text through GitHub connector; local file preserves fetched textual content, with patch serialization possibly normalizing final newline."
+          },
+          {
+            "path": "README.md",
+            "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/README.md",
+            "github_blob_sha": "9f91a0b56406e1ffff0a1ed2a54f894e7d7493d8",
+            "local_sha256": "8a76b7f25391c27a30d18b11669d183bf3ab31df88489db1ca38534a479ea648",
+            "capture_format": "UTF-8 text through GitHub connector; local file preserves fetched textual content, with patch serialization possibly normalizing final newline."
+          },
+          {
+            "path": "config/config.yaml",
+            "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/config/config.yaml",
+            "github_blob_sha": "e1bc1e88d604ef88d05b4e7f261ba549bc1c584d",
+            "local_sha256": "5d682b6471779f58f7fab847529fc450a644a646206146f9389c5c1f80755fbf",
+            "capture_format": "UTF-8 text through GitHub connector; local file preserves fetched textual content, with patch serialization possibly normalizing final newline."
+          },
+          {
+            "path": "rebuttal/outputs/E0_deviations.md",
+            "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/rebuttal/outputs/E0_deviations.md",
+            "github_blob_sha": "4f18c303757416372c92c55cc799e46e8af24cee",
+            "local_sha256": "fd6ad706a81d93eddd52e401cb50677cdb86a21a79d857c083a9d53fe4cf701c",
+            "capture_format": "UTF-8 text through GitHub connector; local file preserves fetched textual content, with patch serialization possibly normalizing final newline."
+          },
+          {
+            "path": "src/ontology_generate.py",
+            "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/ontology_generate.py",
+            "github_blob_sha": "5ce4e093f483c73247065372fe2d7ce3f84bf551",
+            "local_sha256": "a357661f5c572d675dd42e99d1cf862e3c0efeb0fdf7094f2f66a48659ef5d98",
+            "capture_format": "UTF-8 text through GitHub connector; local file preserves fetched textual content, with patch serialization possibly normalizing final newline."
+          },
+          {
+            "path": "src/rebuttal/rebuttal_experiments.py",
+            "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/rebuttal/rebuttal_experiments.py",
+            "github_blob_sha": "a195c53df96ab4b6ff910d19fbab438c90e9af27",
+            "local_sha256": "9c0721622684c6f935a5f93139948379edf737198712294699c025633a2f9c14",
+            "capture_format": "UTF-8 text through GitHub connector; local file preserves fetched textual content, with patch serialization possibly normalizing final newline."
+          },
+          {
+            "path": "src/rebuttal/scripts/E6_run_fusion_baselines.py",
+            "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/rebuttal/scripts/E6_run_fusion_baselines.py",
+            "github_blob_sha": "c35b90c9a765d1929def53d08151db94d66821bb",
+            "local_sha256": "4d2e2a85c500beb3012b777b4f0cf5534b48efeacc32f981541a6eed8b14c63e",
+            "capture_format": "UTF-8 text through GitHub connector; local file preserves fetched textual content, with patch serialization possibly normalizing final newline."
+          },
+          {
+            "path": "src/utils/scion_candidates.py",
+            "url": "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/utils/scion_candidates.py",
+            "github_blob_sha": "2e26d293915ac9d11f4696679c73f7f6ef865613",
+            "local_sha256": "4d6b2166f77996fc9cdfe9efde8378fcc62ab2d532a4a84767d872a35125e061",
+            "capture_format": "UTF-8 text through GitHub connector; local file preserves fetched textual content, with patch serialization possibly normalizing final newline."
+          }
+        ]
+      }
+    },
+    {
+      "id": "kggen_neurips2025",
+      "repository_url": "https://github.com/stair-lab/kg-gen",
+      "commit": "6259b4c71523ceae75dafb4acec2eb833bef8f8e",
+      "commit_url": "https://github.com/stair-lab/kg-gen/tree/6259b4c71523ceae75dafb4acec2eb833bef8f8e",
+      "paper_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/2b368455e832d2b1a60bcad8c4c6481f-Paper-Conference.pdf",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/cs_sources.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "fff6939cdef7ba2a7dfcd4705336196e0183e658ef7580187cf1ace1bb0735f3"
+      },
+      "license": {
+        "identifier": null,
+        "file_path_if_recorded": null,
+        "license_file_found_in_inspected_snapshot": false,
+        "observation": "README states MIT; no standalone root LICENSE in inspected tree. No source copied into project implementation."
+      },
+      "inspected_paths": [
+        {
+          "path": "src/kg_gen/steps/_3_deduplicate.py",
+          "url": "https://github.com/stair-lab/kg-gen/blob/6259b4c71523ceae75dafb4acec2eb833bef8f8e/src/kg_gen/steps/_3_deduplicate.py"
+        },
+        {
+          "path": "src/kg_gen/utils/deduplicate.py",
+          "url": "https://github.com/stair-lab/kg-gen/blob/6259b4c71523ceae75dafb4acec2eb833bef8f8e/src/kg_gen/utils/deduplicate.py"
+        },
+        {
+          "path": "src/kg_gen/utils/llm_deduplicate.py",
+          "url": "https://github.com/stair-lab/kg-gen/blob/6259b4c71523ceae75dafb4acec2eb833bef8f8e/src/kg_gen/utils/llm_deduplicate.py"
+        },
+        {
+          "path": "experiments/wikiqa/utils/cluster_and_deduplication.py",
+          "url": "https://github.com/stair-lab/kg-gen/blob/6259b4c71523ceae75dafb4acec2eb833bef8f8e/experiments/wikiqa/utils/cluster_and_deduplication.py"
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/stair-lab/kg-gen/blob/6259b4c71523ceae75dafb4acec2eb833bef8f8e/README.md"
+        }
+      ],
+      "decision": "ADAPT broad hybrid candidate retrieval followed by strict contextual judgment. REJECT automatic string/embedding collapse as authoritative identity and cluster boundaries as completeness guarantees.",
+      "rejected_or_limited": [],
+      "implementation_findings": [
+        "The inspected 2026 library code is later than the 2025 paper; do not attribute all current code choices to the published paper.",
+        "run_deduplication defaults FULL: SemHash threshold 0.95 collapse followed by LLM resolution. SemHash collapse is not evidence-backed semantic identity validation.",
+        "LLMDeduplicate encodes item labels; get_relevant_items combines raw 0.5 BM25 score + 0.5 cosine despite its rank-fusion docstring. Judge input includes item and label set, not structured facets or evidence.",
+        "LLMDeduplicate.cluster forms capacity-128 clusters; deduplicate_cluster retrieves top16 globally but filters actual duplicate merges to the current cluster, risking missed cross-cluster synonyms.",
+        "The WikiQA experiment helper uses the same raw-score hybrid and all-mpnet-base-v2 retrieval."
+      ],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adapt_principle",
+        "reject_or_limit_task_mismatched_behavior",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "audit_record_only",
+        "note": "No checkout or textual capture retained in this external evidence directory; inspect the pinned paths to repeat the audit."
+      }
+    },
+    {
+      "id": "magneto_pvldb2025",
+      "repository_url": "https://github.com/VIDA-NYU/magneto-matcher",
+      "commit": "6620623265fc7feac0f053996e62b68a13a72a57",
+      "commit_url": "https://github.com/VIDA-NYU/magneto-matcher/tree/6620623265fc7feac0f053996e62b68a13a72a57",
+      "paper_url": "https://www.vldb.org/pvldb/vol18/p2681-freire.pdf",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/cs_sources.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "fff6939cdef7ba2a7dfcd4705336196e0183e658ef7580187cf1ace1bb0735f3"
+      },
+      "license": {
+        "identifier": "Apache-2.0",
+        "file_path_if_recorded": "LICENSE",
+        "license_file_found_in_inspected_snapshot": true,
+        "observation": "Apache-2.0; LICENSE inspected"
+      },
+      "inspected_paths": [
+        {
+          "path": "algorithms/magneto/magneto/magneto.py",
+          "url": "https://github.com/VIDA-NYU/magneto-matcher/blob/6620623265fc7feac0f053996e62b68a13a72a57/algorithms/magneto/magneto/magneto.py"
+        },
+        {
+          "path": "algorithms/magneto/magneto/llm_reranker.py",
+          "url": "https://github.com/VIDA-NYU/magneto-matcher/blob/6620623265fc7feac0f053996e62b68a13a72a57/algorithms/magneto/magneto/llm_reranker.py"
+        },
+        {
+          "path": "algorithms/magneto/magneto/bp_reranker.py",
+          "url": "https://github.com/VIDA-NYU/magneto-matcher/blob/6620623265fc7feac0f053996e62b68a13a72a57/algorithms/magneto/magneto/bp_reranker.py"
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/VIDA-NYU/magneto-matcher/blob/6620623265fc7feac0f053996e62b68a13a72a57/LICENSE"
+        }
+      ],
+      "decision": "ADAPT retrieve/rerank architecture and context-rich serialization. REJECT column-similarity scores and one-to-one assignment as the Operation semantic contract.",
+      "rejected_or_limited": [],
+      "implementation_findings": [
+        "Magneto.DEFAULT_PARAMS uses topk20; default path enables bipartite reranker and disables GPT reranker. LLM reranking is an explicit configuration, not universal default behavior.",
+        "LLMReranker.rematch serializes column names and sample values, requests similarity scores, retries JSON parsing, and falls back to retriever scores if parsing fails. Those numbers are not calibrated operation-identity probabilities.",
+        "The optional bipartite assignment stage prioritizes one-to-one matches. This is unsuitable as a default operation bundle/subgraph alignment constraint."
+      ],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adapt_principle",
+        "reject_or_limit_task_mismatched_behavior",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "audit_record_only",
+        "note": "No checkout or textual capture retained in this external evidence directory; inspect the pinned paths to repeat the audit."
+      }
+    },
+    {
+      "id": "autoschemakg_acl2026",
+      "repository_url": "https://github.com/HKUST-KnowComp/AutoSchemaKG",
+      "commit": "d0a1666ae6621806faf814504c73678de4e809f2",
+      "commit_url": "https://github.com/HKUST-KnowComp/AutoSchemaKG/tree/d0a1666ae6621806faf814504c73678de4e809f2",
+      "paper_url": "https://aclanthology.org/2026.acl-long.942/",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/cs_sources.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "fff6939cdef7ba2a7dfcd4705336196e0183e658ef7580187cf1ace1bb0735f3"
+      },
+      "license": {
+        "identifier": "MIT",
+        "file_path_if_recorded": "LICENSE",
+        "license_file_found_in_inspected_snapshot": true,
+        "observation": "MIT; LICENSE inspected"
+      },
+      "inspected_paths": [
+        {
+          "path": "atlas_rag/kg_construction/concept_generation.py",
+          "url": "https://github.com/HKUST-KnowComp/AutoSchemaKG/blob/d0a1666ae6621806faf814504c73678de4e809f2/atlas_rag/kg_construction/concept_generation.py"
+        },
+        {
+          "path": "atlas_rag/kg_construction/concept_to_csv.py",
+          "url": "https://github.com/HKUST-KnowComp/AutoSchemaKG/blob/d0a1666ae6621806faf814504c73678de4e809f2/atlas_rag/kg_construction/concept_to_csv.py"
+        },
+        {
+          "path": "atlas_rag/llm_generator/prompt/triple_extraction_prompt.py",
+          "url": "https://github.com/HKUST-KnowComp/AutoSchemaKG/blob/d0a1666ae6621806faf814504c73678de4e809f2/atlas_rag/llm_generator/prompt/triple_extraction_prompt.py"
+        },
+        {
+          "path": "EvaluateKGC/SchemaQuality/eval.py",
+          "url": "https://github.com/HKUST-KnowComp/AutoSchemaKG/blob/d0a1666ae6621806faf814504c73678de4e809f2/EvaluateKGC/SchemaQuality/eval.py"
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/HKUST-KnowComp/AutoSchemaKG/blob/d0a1666ae6621806faf814504c73678de4e809f2/LICENSE"
+        }
+      ],
+      "decision": "ADAPT separate occurrence/event and concept layers with multiple explicitly typed abstraction links. REJECT interpreting concept conceptualizations as synonyms or headline schema similarity as safe-merge validation.",
+      "rejected_or_limited": [],
+      "implementation_findings": [
+        "generate_concept requests several abstract phrases; entity context samples up to one predecessor and one successor, while event/relation conceptualization gets their label without this neighbor context.",
+        "all_concept_triples_csv_to_csv uses exact concept-string set deduplication and SHA256 of concept text for IDs. This does not implement semantic synonym resolution of conceptual nodes.",
+        "The generated abstraction phrases include related concepts and multiple abstraction levels; they cannot all be treated as equivalent aliases."
+      ],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adapt_principle",
+        "reject_or_limit_task_mismatched_behavior",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "audit_record_only",
+        "note": "No checkout or textual capture retained in this external evidence directory; inspect the pinned paths to repeat the audit."
+      }
+    },
+    {
+      "id": "unifieddsi_tacl2026",
+      "repository_url": "https://github.com/emorynlp/UnifiedDSI",
+      "commit": "d5c85d0a7a90d7afba499a69b329460bc03b4574",
+      "commit_url": "https://github.com/emorynlp/UnifiedDSI/tree/d5c85d0a7a90d7afba499a69b329460bc03b4574",
+      "paper_url": "https://aclanthology.org/2026.tacl-1.5/",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/human_nlp_sources.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "c2d394db60b6b1c708e542d6ed0e79ace0e3d3998bf58ff697b6fc79c6f746a2"
+      },
+      "license": {
+        "identifier": null,
+        "file_path_if_recorded": null,
+        "license_file_found_in_inspected_snapshot": false,
+        "observation": "No license file found in inspected snapshot; no source copied into implementation."
+      },
+      "inspected_paths": [
+        {
+          "path": "src/dsi/llm_baseline_win.py",
+          "url": "https://github.com/emorynlp/UnifiedDSI/blob/d5c85d0a7a90d7afba499a69b329460bc03b4574/src/dsi/llm_baseline_win.py"
+        }
+      ],
+      "decision": "Reuse an evolving schema, discover new entries, reconcile, and remap earlier records.",
+      "rejected_or_limited": [
+        "Dialogue schemas differ from assay contracts; frequency pruning can lose rare valid mechanisms. Embedding-centroid alignment is not a dependable identity oracle."
+      ],
+      "implementation_findings": [],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adapt_principle",
+        "reject_or_limit_task_mismatched_behavior",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "audit_record_only",
+        "note": "No checkout or textual capture retained in this external evidence directory; inspect the pinned paths to repeat the audit."
+      }
+    },
+    {
+      "id": "logmap_llm_eacl2026",
+      "repository_url": "https://github.com/city-artificial-intelligence/logmap-llm",
+      "commit": "300c11710cc872144f87a45b6e9815e7e943215a",
+      "commit_url": "https://github.com/city-artificial-intelligence/logmap-llm/tree/300c11710cc872144f87a45b6e9815e7e943215a",
+      "paper_url": "https://aclanthology.org/2026.eacl-long.110/",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/human_nlp_sources.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "c2d394db60b6b1c708e542d6ed0e79ace0e3d3998bf58ff697b6fc79c6f746a2"
+      },
+      "license": {
+        "identifier": "Apache-2.0",
+        "file_path_if_recorded": null,
+        "license_file_found_in_inspected_snapshot": null,
+        "observation": "Apache-2.0 inspected."
+      },
+      "inspected_paths": [
+        {
+          "path": "oracle_prompt_building.py",
+          "url": "https://github.com/city-artificial-intelligence/logmap-llm/blob/300c11710cc872144f87a45b6e9815e7e943215a/oracle_prompt_building.py"
+        },
+        {
+          "path": "oracle_consultation.py",
+          "url": "https://github.com/city-artificial-intelligence/logmap-llm/blob/300c11710cc872144f87a45b6e9815e7e943215a/oracle_consultation.py"
+        }
+      ],
+      "decision": "Apply contextual verification selectively to uncertain candidate correspondences.",
+      "rejected_or_limited": [
+        "Equivalence-only evaluation; precision gains can cost recall; no real human evaluation in the reported comparison."
+      ],
+      "implementation_findings": [],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adapt_principle",
+        "reject_or_limit_task_mismatched_behavior",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "audit_record_only",
+        "note": "No checkout or textual capture retained in this external evidence directory; inspect the pinned paths to repeat the audit."
+      }
+    },
+    {
+      "id": "comem_coling2025",
+      "repository_url": "https://github.com/tshu-w/ComEM",
+      "commit": "5b43c5b820637bb3464454f179ce07d7a19dec60",
+      "commit_url": "https://github.com/tshu-w/ComEM/tree/5b43c5b820637bb3464454f179ce07d7a19dec60",
+      "paper_url": "https://aclanthology.org/2025.coling-main.8/",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/human_nlp_sources.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "c2d394db60b6b1c708e542d6ed0e79ace0e3d3998bf58ff697b6fc79c6f746a2"
+      },
+      "license": {
+        "identifier": null,
+        "file_path_if_recorded": null,
+        "license_file_found_in_inspected_snapshot": false,
+        "observation": "No license file found in inspected snapshot; no source copied into implementation."
+      },
+      "inspected_paths": [
+        {
+          "path": "src/compound.py",
+          "url": "https://github.com/tshu-w/ComEM/blob/5b43c5b820637bb3464454f179ce07d7a19dec60/src/compound.py"
+        },
+        {
+          "path": "src/selecting.py",
+          "url": "https://github.com/tshu-w/ComEM/blob/5b43c5b820637bb3464454f179ce07d7a19dec60/src/selecting.py"
+        }
+      ],
+      "decision": "Compare nearby candidates together; measure ordering effects and retrieval misses.",
+      "rejected_or_limited": [
+        "At-most-one-match assumption does not transfer to overlapping assay concepts or variable-granularity regions."
+      ],
+      "implementation_findings": [],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adapt_principle",
+        "reject_or_limit_task_mismatched_behavior",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "audit_record_only",
+        "note": "No checkout or textual capture retained in this external evidence directory; inspect the pinned paths to repeat the audit."
+      }
+    },
+    {
+      "id": "edc_emnlp2024",
+      "repository_url": "https://github.com/clear-nus/edc",
+      "commit": "02aad17e2fc1e9845c84746b384e7fd3160edc1a",
+      "commit_url": "https://github.com/clear-nus/edc/tree/02aad17e2fc1e9845c84746b384e7fd3160edc1a",
+      "paper_url": "https://aclanthology.org/2024.emnlp-main.548/",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/root_repository_audit.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "50f267de4727d7d38a081f2fbbf322be50c2444630315c1d1aa84539972f364f"
+      },
+      "license": {
+        "identifier": "MIT",
+        "file_path_if_recorded": "LICENSE",
+        "license_file_found_in_inspected_snapshot": true,
+        "observation": "MIT"
+      },
+      "inspected_paths": [
+        {
+          "path": "edc/schema_canonicalization.py",
+          "url": "https://github.com/clear-nus/edc/blob/02aad17e2fc1e9845c84746b384e7fd3160edc1a/edc/schema_canonicalization.py"
+        },
+        {
+          "path": "prompt_templates/sc_template.txt",
+          "url": "https://github.com/clear-nus/edc/blob/02aad17e2fc1e9845c84746b384e7fd3160edc1a/prompt_templates/sc_template.txt"
+        }
+      ],
+      "decision": "Definitions retrieve candidates for context-sensitive LLM selection including no match.",
+      "rejected_or_limited": [
+        "Exact relation-label equality bypasses verification (lines125-130). This does not establish same biochemical contract. Dot-product definition ranking is not scientific identity or calibrated compatibility."
+      ],
+      "implementation_findings": [],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adapt",
+        "reject_exact_label_bypass",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "git_checkout",
+        "path": "../external/semantic_alignment_refs_20261019/edc",
+        "head_verified": "02aad17e2fc1e9845c84746b384e7fd3160edc1a",
+        "files": [
+          {
+            "path": "edc/schema_canonicalization.py",
+            "sha256": "9b0551aa929513c49ae9716e9951aebbdc8fb50da180d445fa26a393794fde66"
+          },
+          {
+            "path": "prompt_templates/sc_template.txt",
+            "sha256": "1eac7a2c2c4fa352dbfc88ff9f1dde2153e753dc80a2e3706425b2702553a624"
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "b4c170a7aeb400a21e623df53c95e3dbaefaefafbc7704d8e3735e1efeadaca9"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wcso",
+      "repository_url": "https://github.com/BAMresearch/wcso",
+      "commit": "99bca12fd3984ed72e8f0a15996c04ff02146893",
+      "commit_url": "https://github.com/BAMresearch/wcso/tree/99bca12fd3984ed72e8f0a15996c04ff02146893",
+      "paper_url": "https://doi.org/10.1039/D6DD00058D",
+      "inspection_basis": {
+        "audit_record": "provenance/semantic_alignment_research_20261019/root_repository_audit.json",
+        "audit_date": "2026-10-19",
+        "scope": "Recorded read-only inspection; no external model pipeline executed",
+        "audit_record_sha256": "50f267de4727d7d38a081f2fbbf322be50c2444630315c1d1aa84539972f364f"
+      },
+      "license": {
+        "identifier": "CC-BY-4.0",
+        "file_path_if_recorded": "LICENSE.txt",
+        "license_file_found_in_inspected_snapshot": true,
+        "observation": "CC-BY-4.0 in repository LICENSE.txt"
+      },
+      "inspected_paths": [
+        {
+          "path": "README.md",
+          "url": "https://github.com/BAMresearch/wcso/blob/99bca12fd3984ed72e8f0a15996c04ff02146893/README.md"
+        },
+        {
+          "path": "docs/intro.md",
+          "url": "https://github.com/BAMresearch/wcso/blob/99bca12fd3984ed72e8f0a15996c04ff02146893/docs/intro.md"
+        },
+        {
+          "path": "docs/versions.md",
+          "url": "https://github.com/BAMresearch/wcso/blob/99bca12fd3984ed72e8f0a15996c04ff02146893/docs/versions.md"
+        },
+        {
+          "path": "LICENSE.txt",
+          "url": "https://github.com/BAMresearch/wcso/blob/99bca12fd3984ed72e8f0a15996c04ff02146893/LICENSE.txt"
+        }
+      ],
+      "decision": "Materials, processes and context represented separately; reusable process descriptions and provenance.",
+      "rejected_or_limited": [
+        "Materials-synthesis ontology, not a demonstrated assay-operation canonicalizer. Publisher full text was inaccessible in web tool; official repository documentation inspected."
+      ],
+      "implementation_findings": [],
+      "external_source_copied": false,
+      "runtime_dependency_added": false,
+      "benchmark_reproduced": false,
+      "dispositions": [
+        "adopt_representation_principle",
+        "limit_domain_transfer",
+        "no_code_copy"
+      ],
+      "local_evidence": {
+        "kind": "git_checkout",
+        "path": "../external/semantic_alignment_refs_20261019/wcso",
+        "head_verified": "99bca12fd3984ed72e8f0a15996c04ff02146893",
+        "files": [
+          {
+            "path": "README.md",
+            "sha256": "1456c23b8cbf3a13946b98a066683c9beb9efe001e5f2cc4479bac09d8275ac9"
+          },
+          {
+            "path": "docs/intro.md",
+            "sha256": "46d3814e9b0fa4a8499fbfc9b67abcf88af4265de124f0351a36e8791da06b45"
+          },
+          {
+            "path": "docs/versions.md",
+            "sha256": "92aade3fe4173f548ed83fbc535120d42e85824d120bad78b54dee1c5b7a665b"
+          },
+          {
+            "path": "LICENSE.txt",
+            "sha256": "f5b745ef98087f531e719ee8ca6a96809444573ecc7173c6fa68eaad39b3cc3f"
+          }
+        ]
+      }
+    }
+  ],
+  "unpinned_implementation_boundaries": [
+    {
+      "id": "matchmaker_icml2025",
+      "paper_url": "https://proceedings.mlr.press/v267/seedat25a.html",
+      "repository_url": null,
+      "commit": null,
+      "inspection_limit": "No official implementation located/inspected in this bounded search. Do not claim pinned-code reproduction.",
+      "decision": "ADAPT diverse candidate sources and explicit no-match/deferral; do not presume self-reported confidence calibrated or synthetic examples correct in scientific domains.",
+      "external_source_copied": false,
+      "audit_record": "provenance/semantic_alignment_research_20261019/cs_sources.json",
+      "audit_record_sha256": "fff6939cdef7ba2a7dfcd4705336196e0183e658ef7580187cf1ace1bb0735f3"
+    },
+    {
+      "id": "aspenplus_kr2025",
+      "paper_url": "https://proceedings.kr.org/2025/64/",
+      "repository_url": "https://github.com/zl-xiang/ASPEnP",
+      "commit": null,
+      "inspection_limit": "Repository landing inspected; no code/license pin audit completed, so recommend principle-level comparison only.",
+      "decision": "ADAPT local interpretation and must-link/cannot-link constraint checks; a full ASP optimizer is unnecessary for the first registry prototype.",
+      "external_source_copied": false,
+      "audit_record": "provenance/semantic_alignment_research_20261019/cs_sources.json",
+      "audit_record_sha256": "fff6939cdef7ba2a7dfcd4705336196e0183e658ef7580187cf1ace1bb0735f3"
+    }
+  ],
+  "literature_only_context": [
+    {
+      "title": "Concept Induction: Analyzing Unstructured Text with High-Level Concepts Using LLooM",
+      "url": "https://doi.org/10.1145/3613904.3642830",
+      "adopt_principle": "Define concepts by explicit inclusion criteria and representative examples; retain human-readable definitions.",
+      "limit": "Concept induction and analyst utility do not establish assay-operation equivalence.",
+      "audit_record": "provenance/semantic_alignment_research_20261019/human_nlp_sources.json",
+      "audit_record_sha256": "c2d394db60b6b1c708e542d6ed0e79ace0e3d3998bf58ff697b6fc79c6f746a2"
+    },
+    {
+      "title": "ThemeViz: Understanding the Effect of Human-AI Collaboration in Theme Development with an LLM-enhanced Interactive Visual System",
+      "url": "https://doi.org/10.1145/3757675",
+      "adopt_principle": "Retain alternative versions and traceable links to source excerpts for late review.",
+      "limit": "Human interaction occurred during development; usability and iteration do not prove scientific mapping accuracy.",
+      "audit_record": "provenance/semantic_alignment_research_20261019/human_nlp_sources.json",
+      "audit_record_sha256": "c2d394db60b6b1c708e542d6ed0e79ace0e3d3998bf58ff697b6fc79c6f746a2"
+    },
+    {
+      "title": "Just Put a Human in the Loop? Investigating LLM-Assisted Annotation for Subjective Tasks",
+      "url": "https://aclanthology.org/2025.findings-acl.1323/",
+      "adopt_principle": "Keep an initially suggestion-blind expert audit subset.",
+      "limit": "Crowdworker subjective annotation results must not be numerically extrapolated to assay experts.",
+      "audit_record": "provenance/semantic_alignment_research_20261019/human_nlp_sources.json",
+      "audit_record_sha256": "c2d394db60b6b1c708e542d6ed0e79ace0e3d3998bf58ff697b6fc79c6f746a2"
+    }
+  ],
+  "audit_capture_manifest": {
+    "path": "provenance/semantic_alignment_research_20261019/manifest.json",
+    "sha256": "a78e6d38d3af4a39595e7d40a46875acbf36de0cb0bd223a44047df420ef861e"
+  }
+}

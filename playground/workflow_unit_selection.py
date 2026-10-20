@@ -7,7 +7,7 @@ import hashlib
 import json
 import shlex
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import Field, model_validator
 
@@ -22,7 +22,22 @@ from genomics_discovery.curation.workflow_extraction.models import (
 )
 from genomics_discovery.curation.workflow_extraction.prompts import source_command
 from genomics_discovery.curation.workflow_extraction.sources import load_packet
-from genomics_discovery.curation.workflow_extraction.transformations import cut_transformation
+from genomics_discovery.curation.workflow_extraction.transformations import (
+    TransformationDefinition, cut_transformation,
+)
+
+
+class SelectionTargets(StrictModel):
+    """Retrieval questions, not claims that any parent contains the transformation."""
+
+    format_version: Literal["unit_selection_targets/1.0"] = "unit_selection_targets/1.0"
+    definitions: Annotated[tuple[TransformationDefinition, ...], Field(min_length=1)]
+
+    @model_validator(mode="after")
+    def distinct_definitions(self):
+        if len({d.id for d in self.definitions}) != len(self.definitions):
+            raise ValueError("Duplicate target definition ID")
+        return self
 
 
 class UnitRequest(StrictModel):
@@ -67,10 +82,39 @@ def load_parents(path: Path) -> dict[str, ParentFiles]:
     return result
 
 
-def build_selection_prompt(parents: Path, *, schema: Path, selection: Path, output: Path) -> str:
+def build_selection_prompt(parents: Path, *, schema: Path, selection: Path, output: Path,
+                           max_units: int | None = None, targets: Path | None = None) -> str:
     """Validate bounded inputs and hand off cut selection; launch no agent or transport."""
     if not all(path.is_absolute() for path in (schema, selection, output)):
         raise ValueError("Schema, selection and output paths must be absolute")
+    if max_units is not None and (type(max_units) is not int or max_units < 1):
+        raise ValueError("max_units must be a positive integer or None")
+    diagnostic_scope = ("" if max_units is None else
+        f"For this diagnostic select at most {max_units} cuts across the supplied parents. "
+        "This is a sampling cap, not a proposed number of modules in an assay. "
+        "Choose informative whole transformations; fewer or zero are valid. "
+        "Record in notes what was not sampled. Do not claim exhaustive decomposition.\n")
+    retrieval_scope = ""
+    if targets is not None:
+        definitions = SelectionTargets.model_validate_json(targets.read_bytes())
+        retrieval_scope = f"""
+SELECTION PURPOSE: retrieve candidate occurrences of the following frozen target
+definitions, rather than propose a partition into broad functional modules.
+{definitions.model_dump_json(indent=2)}
+
+These definitions are retrieval questions, not evidence that a match exists. Read
+the parent sources to choose candidate boundaries at the requested definition's
+input, transformation, output, information effect and context. A useful larger
+module can contain a requested transformation without being equivalent to it.
+Select the relevant nested region when supported; retain surrounding operations
+through the cut tool's boundary/context records instead of padding the candidate
+with their actions. One requested transformation may span multiple operations;
+overlapping candidates and multiple occurrences are allowed. Do not force one
+operation per definition, match by names alone, weaken a definition, or discard
+consequential interface evidence to obtain a match. Describe unlocated targets,
+uncertainty and unsampled alternatives in notes. Empty cuts remain valid. Selection
+proposes retrieval candidates only; separate source review decides membership.
+"""
     parents, schema, selection, output = (
         path.resolve() for path in (parents, schema, selection, output))
     if json.loads(schema.read_text()) != UnitSelection.model_json_schema():
@@ -116,6 +160,8 @@ def build_selection_prompt(parents: Path, *, schema: Path, selection: Path, outp
         f"--output {shlex.quote(str(output))}")
     return f"""ROLE: contextual_unit_compiler
 Read parent registry {parents} and UnitSelection schema {schema}.
+{diagnostic_scope}
+{retrieval_scope}
 Select scientifically useful bounded transformations for future assay comparison/design
 from these parent workflows. This is a compiler handoff, not an independent review.
 Validated parent IDs, frozen scope, workflow/packet bindings and registered originals:
@@ -239,6 +285,7 @@ def main():
     prompt.add_argument("--schema", type=Path, required=True)
     prompt.add_argument("--selection", type=Path, required=True)
     prompt.add_argument("--output", type=Path, required=True)
+    prompt.add_argument("--targets", type=Path, help="Frozen transformation definitions for targeted retrieval")
     build = sub.add_parser("build")
     build.add_argument("parents", type=Path)
     build.add_argument("selection", type=Path)
@@ -247,7 +294,7 @@ def main():
     try:
         if args.command == "prompt":
             print(build_selection_prompt(args.parents, schema=args.schema,
-                                         selection=args.selection, output=args.output))
+                                         selection=args.selection, output=args.output, targets=args.targets))
             return
         result = UnitSelection.model_json_schema() if args.command == "schema" else build_units(
             UnitSelection.model_validate_json(args.selection.read_bytes()),

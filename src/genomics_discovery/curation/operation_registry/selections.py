@@ -2,13 +2,29 @@
 
 import json
 import re
+from hashlib import sha256
 
 FIELDS = ("operations", "inputs", "outputs", "internal_states", "external_operations",
           "information_effects", "requirements", "flows", "unresolved", "gap_resolutions")
 
 
+def selection_ref(ident):
+    """Short exact navigation handle, stable under presentation-order changes."""
+    return "sel:" + sha256(ident.encode("utf-8")).hexdigest()[:12]
+
+
+def resolve_selection(views, query):
+    matches = {ident for ident in views if ident == query or selection_ref(ident) == query}
+    if len(matches) != 1:
+        raise ValueError("Unknown or ambiguous selection reference; use an exact ID or a handle from list")
+    return next(iter(matches))
+
+
 def list_selections(views):
-    return [{"occurrence_id": ident, "title": v["record"]["title"],
+    refs = [selection_ref(ident) for ident in views]
+    if len(refs) != len(set(refs)):
+        raise ValueError("Selection reference collision; use full occurrence IDs")
+    return [{"occurrence_id": ident, "selection_ref": selection_ref(ident), "title": v["record"]["title"],
              "operations": [{"id": o["id"], "name": o["name"]} for o in v["record"]["operations"]]}
             for ident, v in views.items()]
 

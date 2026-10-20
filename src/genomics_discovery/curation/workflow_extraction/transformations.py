@@ -319,6 +319,16 @@ def load_occurrences(manifest: dict) -> tuple[dict[str, TransformationOccurrence
                                      review=review)
         if ident != rebuilt.id or digest(occurrence) != digest(rebuilt):
             raise ValueError(f"Occurrence differs from its bound parent workflow/review: {ident}")
+        if row.get("comparison_profile"):
+            from ..workflow_matching.comparison_profiles import (
+                ComparisonProfile, validate_profile, validate_profile_selection,
+            )
+            profile = ComparisonProfile.model_validate_json(
+                Path(row["comparison_profile"]).read_bytes())
+            errors = validate_profile(profile, workflow, packet)
+            errors.extend(validate_profile_selection(profile, rebuilt))
+            if errors:
+                raise ValueError("Comparison profile: " + "; ".join(errors))
         occurrences[ident], packets[ident] = rebuilt, packet
     return occurrences, packets
 

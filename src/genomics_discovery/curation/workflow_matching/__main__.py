@@ -24,6 +24,8 @@ def main():
     parser.add_argument("--parents", type=Path)
     parser.add_argument("--manifest", type=Path)
     sub = parser.add_subparsers(dest="command", required=True)
+    comparison = sub.add_parser("comparison", help="Source-bound State/Operation comparison annotations")
+    comparison.add_argument("comparison_args", nargs=argparse.REMAINDER)
     schema = sub.add_parser("schema")
     schema.add_argument("kind", choices=("profiles", "alignments", "review"))
     sub.add_parser("units")
@@ -54,7 +56,10 @@ def main():
         if command == "review-check":
             check.add_argument("review", type=Path)
     args = parser.parse_args()
-    if args.command == "schema":
+    if args.command == "comparison":
+        from .comparison_profile_cli import run
+        result = run(args.comparison_args)
+    elif args.command == "schema":
         result = {"profiles": ProfileBatch, "alignments": AlignmentBatch, "review": MatchingReview}[
             args.kind
         ].model_json_schema()

@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+import re
 
 from genomics_discovery.curation.codex_worker import assess_archived_attempt
 from genomics_discovery.curation.run_state import sha
@@ -17,6 +18,66 @@ from .tools import (
 )
 
 
+def _replay_native_handoff(run, paths, profiles, alignments, review, context):
+    """A complete archive alone cannot authorize a different proposal or review.
+
+    Historical 1.1 records remain usable when their existing state, exact compiler
+    handoff and native ownership can be replayed. Missing checkpoints do not inherit
+    the stronger guarantee merely because their quotes or transport are valid.
+    """
+    state_path, config_path = run / "state.json", run / "config.json"
+    if not state_path.is_file():
+        raise ValueError("Matching lacks a completed native ownership checkpoint; "
+                         "legacy records require explicit re-review before new admission")
+    state = json.loads(state_path.read_text())
+    if (state.get("status") != "completed"
+            or state.get("review_status") != "supported_local_comparisons"
+            or state.get("review_sha256") != digest(review)
+            or state.get("profile_count") != len(profiles.profiles)
+            or state.get("alignment_count") != len(alignments.alignments)
+            or state.get("review_checks") != len(review.checks)
+            or state.get("outcomes") != {a.case_id: a.disposition for a in alignments.alignments}):
+        raise ValueError("Completed matching checkpoint differs from proposals/review")
+    attempts = state.get("attempts", [])
+    if (len(attempts) != 2
+            or [row.get("role") for row in attempts] != ["compiler", "reviewer"]):
+        raise ValueError("Matching needs one recorded compiler and independent reviewer")
+    files, threads = {state_path, config_path}, set()
+    for number, row in enumerate(attempts, 1):
+        role = row["role"]
+        directory = run / f"{number:03d}_{role}"
+        if (row.get("path") != str(directory) or row.get("status") != "transport_verified"):
+            raise ValueError("Matching native stage ownership changed")
+        archives = row.get("archive_sha256", {})
+        if not {"prompt.txt", "events.jsonl", "result.json", "final.txt"} <= archives.keys():
+            raise ValueError("Matching native archive checkpoint is incomplete")
+        if any(not (directory / name).is_file() or sha(directory / name) != expected
+               for name, expected in archives.items()):
+            raise ValueError("Matching native archive changed")
+        assessment = assess_archived_attempt(directory)
+        if (not assessment.complete or not assessment.thread_id
+                or assessment.thread_id != row.get("thread_id")
+                or assessment.usage != row.get("usage") or assessment.thread_id in threads):
+            raise ValueError("Matching requires distinct completed native stage sessions")
+        threads.add(assessment.thread_id)
+        instruction, prompt = directory / "instruction.json", directory / "prompt.txt"
+        saved = json.loads(instruction.read_text()).get("prompt")
+        if (saved != prompt.read_text()
+                or not re.search(r"ROLE:\s*source_bound_workflow_" + role + r"\b", saved)):
+            raise ValueError("Matching native prompt differs from its recorded stage instruction")
+        files.update(directory / name for name in archives)
+        files.add(instruction)
+        if role == "compiler":
+            for name in ("profiles", "alignments"):
+                original = directory / f"{name}.json"
+                if original.read_bytes() != paths[name].read_bytes():
+                    raise ValueError("Matching proposal differs from its exact compiler handoff")
+                files.add(original)
+        elif paths["review"] != directory / "artifact.json":
+            raise ValueError("Matching review is not owned by its recorded native reviewer")
+    context.files.update(files)
+
+
 def load_reviewed(index_path: Path):
     index_path = index_path.resolve()
     index = json.loads(index_path.read_text())
@@ -30,6 +91,8 @@ def load_reviewed(index_path: Path):
         if configuration["files"].get(str(paths[key])) != sha(paths[key]):
             raise ValueError("Frozen comparison context changed")
     context = load_context(paths["parents"], paths["manifest"])
+    if any(configuration["files"].get(str(path)) != sha(path) for path in context.files):
+        raise ValueError("Frozen comparison source or occurrence changed")
     profiles = ProfileBatch.model_validate_json(paths["profiles"].read_bytes())
     alignments = AlignmentBatch.model_validate_json(paths["alignments"].read_bytes())
     review = MatchingReview.model_validate_json(paths["review"].read_bytes())
@@ -44,9 +107,7 @@ def load_reviewed(index_path: Path):
     cuts = validate_alignments(alignments, cases, context)
     if validate_review(review, profiles, alignments, context) != "supported_local_comparisons":
         raise ValueError("Index has an incomplete or nonpositive source review")
-    transport = assess_archived_attempt(paths["review"].parent)
-    if not transport.complete or not transport.thread_id:
-        raise ValueError("Source review lacks a complete native transport archive")
+    _replay_native_handoff(index_path.parent, paths, profiles, alignments, review, context)
     return context, profiles, alignments, cuts, review, cases
 
 

@@ -1,0 +1,304 @@
+{
+  "format_version": "definition_reconciliation_diagnostic/1.0",
+  "recorded_at": "2026-10-18T05:48:35.265225+00:00",
+  "design": {
+    "created_at": "2026-10-18T05:32:55.635520+00:00",
+    "input_database": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_known_overlap_20261018/independent/registry.sqlite",
+    "input_sha256": "f08a5cfa74940b325df2622b97f12a5dd61d980c82a0bbf66e7799edddcfb561",
+    "groups": [
+      [
+        "6fc36d8166d80922efad4290ead6e0d30f4ac781f0037cb0fb67621b8ab5be8e",
+        "9fae7d960343fd4c3a362bf91e2ba396dda1aa6ebc08433cf0943e7366d1ae24",
+        "e832803610f3a3c39bb69c4782a90460ef479dbfffcb887c232b197412683bc5"
+      ]
+    ],
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "intervention": "One source-backed joint reconciliation of the preserved independent drafts, fresh independent source review, ordinary definition comparison/publication.",
+    "provided_to_worker": "Only original selected operations/source packets, pending independent definitions and their comparison ambiguities.",
+    "withheld": "No successful joint-curation result or expected-answer file.",
+    "scope": "Adaptive development repair, not a held-out accuracy experiment.",
+    "new_extraction": false,
+    "old_artifacts_unchanged": true
+  },
+  "status": "committed",
+  "elapsed_seconds": 807.71225,
+  "concepts": [
+    {
+      "id": "purification_of_dna_reaction_products",
+      "aliases": [
+        "DNA reaction cleanup"
+      ],
+      "definition": {
+        "context_requirements": "Requires an explicit purification/recovery action on a DNA-containing reaction product and retention of purified DNA output. Kit or method, physical support, product identity, adapter status, workflow position, downstream use, recovery behavior and any explicit size-selection intent remain properties of each use.",
+        "id": "purification_of_dna_reaction_products",
+        "information_effect": "Transfers existing DNA sequence and any pre-existing attached tags with the recovered molecules. Recovery may change fragment representation through losses; no quantitative preservation, new adapter introduction, amplification or specified size cutoff is implied.",
+        "mechanism_unknown_reason": "This shared_purpose concept groups recovery of DNA reaction products without asserting a common purification mechanism. The supplied Minelute use names a kit but does not specify its internal binding, wash or elution procedure; this reporting limit is not a claim that the individual operation's mechanism is scientifically unknown.",
+        "name": "Purification of DNA reaction products",
+        "operation": "Purify and recover the existing DNA reaction products as a retained DNA fraction for a subsequent molecular step.",
+        "output": "Retained purified DNA reaction products serving as substrate for a subsequent molecular operation, carrying whatever sequence and attached-tag information was present in the recovered input molecules.",
+        "physical_mechanism": null,
+        "purpose": "Recover existing DNA reaction products from their reaction mixture for further molecular processing.",
+        "substrate": "A DNA-bearing molecular reaction mixture containing existing DNA products to be retained for subsequent processing."
+      },
+      "relation": "shared_purpose",
+      "scope_note": "Shared-purpose scope for recovery of existing DNA reaction products as purified material for further molecular processing. No common purification mechanism is asserted. The selected standard ATAC-seq Minelute cleanup is one contextual use, not a kit-specific or universally pre-PCR definition. Simple direct transfer, upstream cell/nucleus preparation, and selected actions that only fragment, tag or amplify DNA do not satisfy this recovery transformation. Adapter status and size-selection intent are use properties; neither a size cutoff nor quantitative information preservation follows from purification alone. Membership does not establish experimental substitution or an executable kit recipe.",
+      "members": [
+        {
+          "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:bb04b4726d7136e8077b2313ad60059b6617168ed36b3942f24562de9d5ba29a",
+          "method_id": "atac-seq",
+          "operation_ids": [
+            "purify_base"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transposome_coupled_dna_fragmentation_adapter_tagging",
+      "aliases": [
+        "DNA tagmentation",
+        "Coupled DNA fragmentation and adapter tagging"
+      ],
+      "definition": {
+        "context_requirements": "Requires DNA input and evidence that a transposome-mediated reaction performs both fragmentation and sequencing-adapter introduction within the selected unit. Evidence may directly describe the mechanism or transparently infer it from a reported named-kit use and applicable supplied kit documentation. DNA origin, amplification history, prior fragmentation/enrichment, chromatin state, support, enzyme identity, loading evidence, reaction conditions and information interpretation remain properties of individual uses.",
+        "id": "transposome_coupled_dna_fragmentation_adapter_tagging",
+        "information_effect": "Converts input DNA into a representation of its subfragments with introduced sequencing-adapter tags for subsequent library processing and sequencing. The represented population and interpretation depend on the input: transcript-derived cDNA, antibody-enriched genomic DNA and accessibility-dependent native-chromatin fragments remain distinct use contexts. Accessibility measurement, full-transcript reads, absence of sequence bias and quantitative preservation are not universal effects.",
+        "mechanism_unknown_reason": null,
+        "name": "Coupled transposome DNA fragmentation and adapter tagging",
+        "operation": "In one transposome-mediated tagmentation reaction, fragment DNA and introduce sequencing-adapter tags, producing tagged DNA fragments before any separate cleanup, deproteinization or library amplification.",
+        "output": "A reaction product containing newly fragmented, adapter-tagged DNA, potentially still associated with chromatin, transposome or bead support. It is not yet the separately purified, repaired, indexed and amplified final library.",
+        "physical_mechanism": "Transposome-mediated tagmentation couples DNA fragmentation and sequencing-adapter tagging in the same reaction. This is a reaction-level mechanism: the sources describe transposome addition of adapters to fragment ends or Tn5 insertion of an adapter payload. Membership requires both coupled actions, rather than merely a shared enzyme or reagent. It does not require or assert identical loaded strands, transferred ends or covalent repair intermediates.",
+        "purpose": "Generate adapter-tagged DNA fragments through coupled fragmentation and tagging for sequencing-library construction.",
+        "substrate": "DNA accessible to a tagmentation reagent, including amplified cDNA and genomic DNA retained in native or immunoprecipitated chromatin."
+      },
+      "relation": "shared_mechanism",
+      "scope_note": "Reaction-level shared_mechanism concept covering the whole DNA-to-tagged-fragment tagmentation reaction. Coupled fragmentation and adapter introduction are required; neither cleanup alone, fragmentation alone, separate adapter ligation nor amplification alone satisfies it. Tn5 identity and explicit adapter preloading are documented use properties where established, not universal requirements inferred for every transposome. The selected reaction ends before later washes, release, repair or amplification; final end structure, indexing and immediate sequencing readiness are not required outputs. Native nuclei, fixed immunoenriched bead-bound chromatin and preamplified cDNA can be compared within this transformation using context filters without equating their information content. This abstraction does not establish exact strand-chemistry identity, experimental substitution, ancestry, novelty or a full recipe.",
+      "members": [
+        {
+          "occurrence_id": "chipmentation:451cd0f252e5e036012865c6bcd52b7c41b8a2aba179b608fa832d3a22e5fe83:26e2f9569364d026eb78fad5f360592ac68efdf22d9c9caed8b717008b72a3ff",
+          "method_id": "chipmentation",
+          "operation_ids": [
+            "o_tag_v1"
+          ]
+        },
+        {
+          "occurrence_id": "smart-seq2:e51f2b8c6e9389c8c31829fd6b4a9c7e174e9106d66c030c3307dcb0af34790b:08d0745d8b4cd8a73f9d15379780d74af8a931f0854c860a258f9ec7904154e5",
+          "method_id": "smart-seq2",
+          "operation_ids": [
+            "tagment"
+          ]
+        },
+        {
+          "occurrence_id": "ATAC-seq_Buenrostro2013:f36b1aa4ce401c4aeec88d32bec4fd1499815853b539c50ebca8031b9f3a7a3a:4a86ef7e2115adefaf512d16983bd9f95316320d764145eb8df486080143626a",
+          "method_id": "atac-seq",
+          "operation_ids": [
+            "transpose_base"
+          ]
+        }
+      ]
+    }
+  ],
+  "memberships": 4,
+  "positive_pairs": [
+    {
+      "methods": [
+        "atac-seq",
+        "chipmentation"
+      ],
+      "shared_mechanism_concepts": [
+        "transposome_coupled_dna_fragmentation_adapter_tagging"
+      ]
+    },
+    {
+      "methods": [
+        "atac-seq",
+        "smart-seq2"
+      ],
+      "shared_mechanism_concepts": [
+        "transposome_coupled_dna_fragmentation_adapter_tagging"
+      ]
+    },
+    {
+      "methods": [
+        "chipmentation",
+        "smart-seq2"
+      ],
+      "shared_mechanism_concepts": [
+        "transposome_coupled_dna_fragmentation_adapter_tagging"
+      ]
+    }
+  ],
+  "negative_control_mechanism_connections": [],
+  "graph_checks": [
+    {
+      "concept": "purification_of_dna_reaction_products",
+      "members": 1,
+      "operation_paths": [
+        {
+          "selection_id": "selection:a604d3c04b35ac481b46d240adb4d77400323dda8c9d9018fe69c1fd9834d2f9",
+          "operation_nodes": [
+            "operation:8aea236bdc9f01d91ca20ef5438b288f47a83342d9a4c8733d604d4f088564a7:purify_base"
+          ]
+        }
+      ],
+      "lookup_found": true
+    },
+    {
+      "concept": "transposome_coupled_dna_fragmentation_adapter_tagging",
+      "members": 3,
+      "operation_paths": [
+        {
+          "selection_id": "selection:99ebbab5936e886d94923407a1f0fcf7d4a2b1cad763db60bf2a31637993831c",
+          "operation_nodes": [
+            "operation:c8ffe89a4efe6af11e518b3c62fa2be16816aff81a021e4731023502870060ac:o_tag_v1"
+          ]
+        },
+        {
+          "selection_id": "selection:d3c7034a24184fcd19cc98d095d9dd02afafdb670c1a40d0db501f865a8cfa98",
+          "operation_nodes": [
+            "operation:99b1cecd43985cf45dd54f07439b9ca0bf71b2a21780be962fd6f900ac006585:tagment"
+          ]
+        },
+        {
+          "selection_id": "selection:97427fd599225db213b9be5cc7d46d1054f8e3d98e693b14f1f95d2970493b41",
+          "operation_nodes": [
+            "operation:8aea236bdc9f01d91ca20ef5438b288f47a83342d9a4c8733d604d4f088564a7:transpose_base"
+          ]
+        }
+      ],
+      "lookup_found": true
+    }
+  ],
+  "graph_nodes": 1752,
+  "graph_edges": 3975,
+  "input_and_code_binding_checks": [
+    {
+      "file": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/code_bindings.json",
+      "checked": 108,
+      "unchanged": true
+    },
+    {
+      "file": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/source/bindings.json",
+      "checked": 161,
+      "unchanged": true
+    }
+  ],
+  "fresh_threads_disjoint_from_original_run": true,
+  "software_tests_passed": 1038,
+  "old_records_preserved": true,
+  "old_comparison_reports_preserved": 3,
+  "lineage": [
+    {
+      "old_submission": "6fc36d8166d80922efad4290ead6e0d30f4ac781f0037cb0fb67621b8ab5be8e",
+      "current_result": {
+        "status": "withdrawn",
+        "submission_id": "6fc36d8166d80922efad4290ead6e0d30f4ac781f0037cb0fb67621b8ab5be8e",
+        "replacement_submission_id": "8d49303a49c63b2b3e1553d5a7bca91e1bcb678de2f89da472e07fda0ba0c6a7",
+        "reason": "Source-reviewed draft revision; not a finding of equivalent definitions."
+      }
+    },
+    {
+      "old_submission": "9fae7d960343fd4c3a362bf91e2ba396dda1aa6ebc08433cf0943e7366d1ae24",
+      "current_result": {
+        "status": "withdrawn",
+        "submission_id": "9fae7d960343fd4c3a362bf91e2ba396dda1aa6ebc08433cf0943e7366d1ae24",
+        "replacement_submission_id": "8d49303a49c63b2b3e1553d5a7bca91e1bcb678de2f89da472e07fda0ba0c6a7",
+        "reason": "Source-reviewed draft revision; not a finding of equivalent definitions."
+      }
+    },
+    {
+      "old_submission": "e832803610f3a3c39bb69c4782a90460ef479dbfffcb887c232b197412683bc5",
+      "current_result": {
+        "status": "withdrawn",
+        "submission_id": "e832803610f3a3c39bb69c4782a90460ef479dbfffcb887c232b197412683bc5",
+        "replacement_submission_id": "8d49303a49c63b2b3e1553d5a7bca91e1bcb678de2f89da472e07fda0ba0c6a7",
+        "reason": "Source-reviewed draft revision; not a finding of equivalent definitions."
+      }
+    }
+  ],
+  "source_review_decisions": 4,
+  "definition_field_verdicts": {
+    "supported": 27,
+    "not_asserted": 1
+  },
+  "native_sessions": [
+    {
+      "archive": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/resolution/comparison_001",
+      "complete": true,
+      "error": null,
+      "exit_code": 0,
+      "thread_id": "01a14d8b-55c6-7622-a5fd-5831c90f866c",
+      "usage": {
+        "input_tokens": 46683,
+        "cached_input_tokens": 33664,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2951,
+        "reasoning_output_tokens": 1077
+      },
+      "elapsed_seconds": 57.11095020797802
+    },
+    {
+      "archive": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/source/001_compiler",
+      "complete": true,
+      "error": null,
+      "exit_code": 0,
+      "thread_id": "01a14d7f-eb6b-7b63-b061-d9e9a4deb68b",
+      "usage": {
+        "input_tokens": 1138001,
+        "cached_input_tokens": 1066112,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 20882,
+        "reasoning_output_tokens": 8048
+      },
+      "elapsed_seconds": 397.0837349999929
+    },
+    {
+      "archive": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/source/002_reviewer",
+      "complete": true,
+      "error": null,
+      "exit_code": 0,
+      "thread_id": "01a14d85-fed4-7780-ae74-6b0f4f96708e",
+      "usage": {
+        "input_tokens": 1293450,
+        "cached_input_tokens": 1201280,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 18834,
+        "reasoning_output_tokens": 4558
+      },
+      "elapsed_seconds": 346.6045095829759
+    }
+  ],
+  "usage": {
+    "input_tokens": 2478134,
+    "cached_input_tokens": 2301056,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 42667,
+    "reasoning_output_tokens": 13683
+  },
+  "command_count": 64,
+  "tool_failures": [
+    {
+      "archive": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/source/002_reviewer",
+      "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/src /Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/.venv/bin/python -m genomics_discovery.curation.workflow_extraction read-batch /Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/curation_remediation_run_01/source_packet.json --ref buenrostro2013_primary p00004 --ref buenrostro2013_primary p00015 --ref buenrostro2013_primary p00016 --ref buenrostro2013_primary p00017 --ref buenrostro2013_primary p00018 --ref buenrostro2013_primary p00023 --ref buenrostro2013_supplement p00002 --ref buenrostro2013_supplement p00007 --ref buenrostro2013_supplement p00008'",
+      "exit_code": 2
+    }
+  ],
+  "forbidden_command_keyword_hits": [],
+  "usage_note": "Provider-reported native usage including cached/repeated context, not unique paper text or billing cost.",
+  "limitations": [
+    "Adaptive repair on previously used examples; not held-out accuracy.",
+    "Original operation boundaries were supplied.",
+    "Same model in fresh sessions, without human expert or experimental validation.",
+    "Command keyword audit is not OS-level access isolation.",
+    "Original atlas and failed experiment preserved; this graph is an isolated projection."
+  ],
+  "artifacts": {
+    "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/design.json": "e8fef3623b6fca6f2974421e45bac4ba8396d0cf2cca12115c0b181bfc7942c8",
+    "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/state.json": "f1ebfdef29848c462c62940a39bc6848a7cf98d57537618456ac274548cd776d",
+    "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/request.json": "03f4959ef416531d3837327014588634819af87d6b9d6006bf1f15bc41714c75",
+    "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/run/code_bindings.json": "68e799c413d5f8c0cb68fa141b21149807fa2aae9850bd13c59a21b2817ee11c",
+    "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/registry_snapshot.json": "b332559026e963bd21c6ad4e15104c10ef0f7b5b330076a7ac1d3ee98e9dfe6e",
+    "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/shared_reconciliation_20261018/atlas_with_shared_concepts.json": "dbd58385199d5b7a6402e40c3c1bfc441d9b334de978010f50b2306d66b571bc",
+    "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/../technology_atlas/v2/work/shared_reconciliation_20261018/evaluate_recovery.py": "f988f0962d2a2ed21f49c26b360a666e64be9414669a227ba1962d58619f9cf8"
+  }
+}

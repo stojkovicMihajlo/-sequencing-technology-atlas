@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 from pathlib import Path
 
@@ -13,15 +14,23 @@ from genomics_discovery.curation.workflow_extraction.sources import load_packet
 from genomics_discovery.curation.workflow_extraction.transformations import load_occurrences
 from playground.workflow_unit_selection import (
     UnitSelection,
+    SelectionTargets,
     build_selection_prompt,
     load_parents,
 )
 
 
-async def execute(parents_path: Path, run: Path, *, worker) -> dict:
+async def execute(parents_path: Path, run: Path, *, worker, max_units: int | None = None,
+                  targets: Path | None = None) -> dict:
     """Selection establishes no common memberships or scientific acceptance."""
     if isinstance(worker, CodexWorker) and (worker.web_search or worker.network_access):
         raise ValueError("Source-packet runs require web search and network access disabled")
+    if max_units is not None and (type(max_units) is not int or max_units < 1):
+        raise ValueError("max_units must be a positive integer or None")
+    if targets is not None:
+        targets = targets.resolve()
+        target_bytes = targets.read_bytes()
+        target_document = SelectionTargets.model_validate_json(target_bytes)
     run, parents_path = run.resolve(), parents_path.resolve()
     run.mkdir(parents=True, exist_ok=False)
     state = {"status": "preparing", "started_at": now(), "backend": "native_codex_cli"}
@@ -40,15 +49,30 @@ async def execute(parents_path: Path, run: Path, *, worker) -> dict:
         files |= set((package / "workflow_extraction").glob("*.py"))
         files |= {package / "codex_worker.py", package / "run_state.py",
                   package / "document_manifest.py", package.parent / "core/artifacts.py"}
+        target_snapshot = None
+        if targets is not None:
+            # Freeze query definitions, never prior memberships or reviewer opinions.
+            if targets.read_bytes() != target_bytes:
+                raise ValueError("Selection targets changed before snapshot")
+            target_snapshot = run / "targets.json"
+            write(target_snapshot, target_document.model_dump(mode="json"))
+            files |= {targets, target_snapshot}
         for row in parents.values():
             files |= {path for path in row.model_dump().values() if path is not None}
             files |= {Path(s["original_path"]) for s in load_packet(row.packet)["sources"]}
         pins = {path: sha(path) for path in files}
-        prompt = build_selection_prompt(snapshot, schema=schema, selection=selection, output=output)
+        if targets is not None:
+            pins[targets] = hashlib.sha256(target_bytes).hexdigest()
+            if sha(targets) != pins[targets]:
+                raise ValueError("Selection targets changed before prompt construction")
+        prompt = build_selection_prompt(snapshot, schema=schema, selection=selection, output=output,
+                                        max_units=max_units, targets=target_snapshot)
         write(run / "instruction.json", {"prompt": prompt})
         pins[run / "instruction.json"] = sha(run / "instruction.json")
         write(run / "config.json", {
-            "model": worker.model, "effort": worker.effort,
+            "model": worker.model, "effort": worker.effort, "max_units": max_units,
+            "selection_purpose": "target_retrieval" if targets is not None else "open_unit_discovery",
+            "targets_sha256": sha(target_snapshot) if target_snapshot else None,
             "files": {str(path): value for path, value in pins.items()},
         })
         pins[run / "config.json"] = sha(run / "config.json")
@@ -66,6 +90,8 @@ async def execute(parents_path: Path, run: Path, *, worker) -> dict:
         if any(sha(path) != expected for path, expected in pins.items()):
             raise ValueError("Frozen planner input or implementation changed")
         plan = UnitSelection.model_validate_json(selection.read_bytes())
+        if max_units is not None and len(plan.cuts) > max_units:
+            raise ValueError("Planner exceeded the declared diagnostic selection cap")
         receipt = json.loads((output / "selection_receipt.json").read_text())
         manifest_path = output / "comparison_manifest.json"
         manifest = json.loads(manifest_path.read_text())

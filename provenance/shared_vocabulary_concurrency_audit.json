@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-17",
+  "status": "research_and_design_recommendation_not_implemented",
+  "question": "What deserves a shared transformation identity, and how can parallel workers propose definitions without imposing global sequential scientific review?",
+  "local_contract": {
+    "input": "Source-bound connected operation selections, their actual material/data boundaries, evidence, and versioned definitions.",
+    "target": "Inspectable membership and definition-comparison decisions that support retrieval and comparison of protocol subgraphs.",
+    "stable_structure": "Record fields and edge meanings; the catalogue of transformation definitions may grow through review.",
+    "identity": "A definition ID identifies a scoped comparison concept, not an enzyme name, a universal protocol stage, or an interchangeable recipe.",
+    "preserve": [
+      "Original protocol operations, ordering, interfaces and evidence",
+      "Whole-selection boundary, including additional downstream transformations",
+      "Purpose-level similarity separately from shared mechanism",
+      "Contextual differences and unknowns",
+      "Every proposal and the definition versions used in its review"
+    ],
+    "not_identified": [
+      "A uniquely correct or exhaustive biochemical taxonomy",
+      "Experimental substitutability from concept membership",
+      "Historical development from similarity",
+      "Semantic duplicate absence from successful database transactions"
+    ]
+  },
+  "references": [
+    {
+      "name": "EDC, EMNLP 2024",
+      "paper": "https://aclanthology.org/2024.emnlp-main.548/",
+      "repository": "https://github.com/clear-nus/edc",
+      "commit": "02aad17e2fc1e9845c84746b384e7fd3160edc1a",
+      "inspected": ["edc/schema_canonicalization.py", "edc/edc_framework.py", "README.md", "LICENSE"],
+      "license": "MIT; inspected, no code copied into the harness",
+      "observed": "Definition embeddings retrieve candidates; an LLM chooses a relation or none. The released code canonicalizes relation names, bypasses verification for an existing exact relation key, and can enrich an in-memory schema during sequential processing.",
+      "adopt": "Separate extraction, definition, candidate retrieval and semantic decision.",
+      "reject_for_our_task": "Treating an exact string as scientific identity, immediately admitting a new definition after no retrieved match, or treating this implementation as a concurrent biochemical equivalence service."
+    },
+    {
+      "name": "Splink blocking",
+      "documentation": "https://moj-analytical-services.github.io/splink/topic_guides/blocking/blocking_rules.html",
+      "repository": "https://github.com/moj-analytical-services/splink",
+      "commit": "12aee3fd1facd505464a62a6e91f5831f6c10558",
+      "inspected": ["splink/internals/blocking.py", "LICENSE"],
+      "license": "MIT; inspected, no code copied into the harness",
+      "observed": "BlockingRule and block_using_rules_sqls generate candidate pairs from multiple rules and prevent repeated comparison pairs. This is candidate generation, not a semantic identity decision.",
+      "adapt": "Union several overlapping routes to candidates, retaining route provenance and deduplicating pairs. Use full-definition semantic retrieval as an additional route and measure missed comparisons.",
+      "reject_for_our_task": "Treating a matching blocking key as biochemical equivalence or importing demographic linkage scoring without validation."
+    },
+    {
+      "name": "Ontology for Biomedical Investigations",
+      "paper": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0154556",
+      "inspected": "Results: Material entity, Planned Processes, Information entities, Roles and Functions",
+      "adapt": "Separate process, specified inputs/outputs, materials, participant roles and objectives. Reuse external terminology only when its definition fits; do not infer a fixed list of stages for all assays."
+    },
+    {
+      "name": "OBO Relation Ontology module design",
+      "documentation": "https://oborel.github.io/obo-relations/modules/",
+      "observed": "Overlapping grouping/subset mechanisms and explicit discussion of difficulty choosing mutually exclusive domain partitions.",
+      "adapt": "Overlapping retrieval collections over stable identities rather than separate scientific copies in exclusive domain buckets."
+    },
+    {
+      "name": "Intern-Atlas",
+      "paper": "https://arxiv.org/html/2604.28158v1#A1",
+      "repository": "https://github.com/OpenRaiser/Intern-Atlas",
+      "commit": "1185dc36555c547b5b6e9553779cb498a15ce587",
+      "inspected": ["Appendix A.1-A.3", "src/intern_atlas/builder.py", "src/intern_atlas/models.py"],
+      "observed": "The paper reports a hand-curated method seed and author-adjudicated expansion. The inspected public local builder uses method-name overlap in a heuristic relation fallback, including after LLM failure.",
+      "adopt": "Explicit identities and distinct relationship meanings.",
+      "reject_for_our_task": "Treating the reported approach as autonomous discovery of experimental component equivalence, or admitting mechanistic/history edges from the local shared-term fallback."
+    },
+    {
+      "name": "Database concurrency specifications",
+      "sources": [
+        "https://www.sqlite.org/wal.html",
+        "https://www.postgresql.org/docs/current/explicit-locking.html",
+        "https://www.postgresql.org/docs/current/transaction-iso.html"
+      ],
+      "observed": "SQLite has one writer at a time. PostgreSQL offers row/advisory locks and serializable transaction checks. These enforce database predicates, not semantic identity of natural-language definitions.",
+      "adapt": "Perform model work outside database locks. Commit with version and new-candidate rechecks. Existing-row checks alone do not cover newly inserted candidates."
+    }
+  ],
+  "current_code_findings": [
+    "store.Registry.initialize stores the entire registry in one payload row.",
+    "store.check_proposal rejects stale new-definition proposals using a registry-wide revision; unchanged reuse is treated separately.",
+    "commit.commit_batch obtains BEGIN IMMEDIATE before full snapshot validation, batch checks and whole-payload rewrite.",
+    "Current deterministic duplicate checks cover IDs, normalized preferred labels and identical definition fields, not differently worded semantic duplicates.",
+    "Frozen matching stages extension requests but does not reconcile or promote them automatically.",
+    "The seven definition fields are natural-language criteria; a source quote and a structurally valid check do not prove entailment."
+  ],
+  "recommended_minimal_design": {
+    "storage": "Separate records for definitions and versions, protocol uses, proposals and comparison decisions; derived indexes over these records.",
+    "indexing": "Search by several overlapping participant/transformation/output/information/purpose features, aliases and definition text. No single exclusive category or single hash controls scientific identity.",
+    "admission": "A new definition needs an explicit useful comparison question, evidence-supported boundaries and a distinction that cannot adequately remain a property filter on an existing definition.",
+    "parallelism": "Workers extract and submit immutable proposals concurrently. Candidate comparison jobs can run concurrently; likely duplicate pending proposals must be visible to retrieval.",
+    "semantic_decisions": ["equivalent_scope", "broader", "narrower", "overlap_without_equivalence", "distinct", "unresolved"],
+    "decision_boundary": "Only reviewed equivalent scope permits shared identity. Similarity edges and connected candidate groups do not authorize transitive merging.",
+    "publication": "Start with one commit service and short transactions; keep all model reasoning outside them. Revalidate dependency versions and search newly accepted/pending records since the review watermark. A new candidate causes targeted review, not an LLM call inside the transaction. Recheck the watermark atomically at publication.",
+    "important_limit": "Candidate retrieval can miss semantic duplicates. A commit guarantees the recorded checks were current, not that no equivalent definition exists anywhere.",
+    "scaling": "Measure queue wait and transaction duration before adopting a row-locking backend or partitioned admission. Disjoint scientific buckets are not established by the current evidence.",
+    "source_safety": "Keep source workflows unchanged when assignments or definition relations are revised. Do not force every operation into an admitted shared concept."
+  },
+  "evaluation_to_run_before_scaleup": [
+    "Simultaneous synonymous proposals: one reviewed identity with both source-bound uses.",
+    "Same enzyme but different transformation or endpoint: no false equivalence.",
+    "Broader/narrower scopes: preserve the distinction rather than turn one into an alias.",
+    "Related proposals found through different indexes: measure candidate recall against exhaustively reviewed small cohorts.",
+    "Unrelated additions during review: no unnecessary scientific rerun.",
+    "A new potentially equivalent proposal after candidate search: targeted reconciliation before publication.",
+    "Repeated submission or worker crash: idempotent storage and recoverable review tasks.",
+    "Ingestion order changes: compare scientific memberships and boundaries, not display labels.",
+    "Report candidate recall, false merges, unnecessary splits, unresolved cases, model review cost and commit wait separately."
+  ],
+  "work_done_this_turn": "Primary-source and released-code audit, pinned public reference downloads, and this decision record. No production registry migration, concurrency implementation, graph change or live model experiment was performed."
+}

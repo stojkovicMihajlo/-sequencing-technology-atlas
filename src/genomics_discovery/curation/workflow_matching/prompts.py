@@ -56,6 +56,10 @@ Request source-supported refinement when needed; never invent a missing intermed
 Similar purpose can coexist with different chemistry. Similar chemistry can serve different
 information purposes. Broad actions such as PCR, washing or ligation cannot establish a match
 alone. Shared purpose/mechanism implies no compatibility, ancestry or transitive equivalence.
+An explicit shared-mechanism transformation claim must target selected operations on both
+sides. External context operations can explain dependencies but cannot supply the decisive
+mechanism correspondence for a different selected group. Count differences are allowed;
+targeting an operation does not establish equivalence of all actions bundled inside it.
 Unknown or no-supported-correspondence is allowed and must be explained, not used to hide
 known facts. The comparison concerns the supplied question and scope, not all possible uses.
 """

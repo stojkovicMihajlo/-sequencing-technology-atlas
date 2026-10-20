@@ -67,7 +67,7 @@ def prepare(cases, tmp_path):
 async def test_two_fresh_threads_commit_and_withhold_old_reviews(cases, tmp_path):
     manifest, registry = prepare(cases, tmp_path)
     result = await execute(manifest, registry.path, tmp_path / "run",
-                           worker=WorkerFixture(cases, registry.snapshot()))
+                           worker=WorkerFixture(cases, registry.snapshot()), curate=True)
     assert result["status"] == "committed"
     assert len({a["thread_id"] for a in result["attempts"]}) == 2
     row = next(iter(registry.snapshot()["assignments"].values()))
@@ -88,7 +88,7 @@ async def test_transport_faults_cannot_assign(cases, tmp_path, fault):
     manifest, registry = prepare(cases, tmp_path)
     with pytest.raises(ValueError):
         await execute(manifest, registry.path, tmp_path / "run",
-                      worker=WorkerFixture(cases, registry.snapshot(), fault=fault))
+                      worker=WorkerFixture(cases, registry.snapshot(), fault=fault), curate=True)
     assert not registry.snapshot()["assignments"]
     assert json.loads((tmp_path / "run/state.json").read_text())["status"] == "failed"
 
@@ -97,7 +97,7 @@ async def test_transport_faults_cannot_assign(cases, tmp_path, fault):
 async def test_scientific_negatives_recorded_without_commit(cases, tmp_path, verdict):
     manifest, registry = prepare(cases, tmp_path)
     result = await execute(manifest, registry.path, tmp_path / "run",
-                           worker=WorkerFixture(cases, registry.snapshot(), verdict=verdict))
+                           worker=WorkerFixture(cases, registry.snapshot(), verdict=verdict), curate=True)
     assert result["status"] == "completed_without_admission"
     assert result["commit"]["outcomes"][0]["status"] in {"needs_revision", "research_needed"}
     assert not registry.snapshot()["concepts"]
@@ -106,7 +106,7 @@ async def test_scientific_negatives_recorded_without_commit(cases, tmp_path, ver
 async def test_unclassified_selection_is_reviewed_and_retained(cases, tmp_path):
     manifest, registry = prepare(cases, tmp_path)
     worker = WorkerFixture(cases, registry.snapshot(), fault="abstain")
-    result = await execute(manifest, registry.path, tmp_path / "run", worker=worker)
+    result = await execute(manifest, registry.path, tmp_path / "run", worker=worker, curate=True)
     assert result["status"] == "completed_without_admission" and worker.calls == 2
     assert not registry.snapshot()["concepts"]
     assert len(registry.snapshot()["decisions"]) == 1
@@ -119,7 +119,8 @@ async def test_supplied_proposal_has_one_fresh_review_and_explicit_provenance(ca
     proposal.write_text(VocabularyProposal(decisions=(decision,)).model_dump_json())
     worker = WorkerFixture(cases, registry.snapshot())
     worker.calls = 1  # Exercise the fixture's reviewer branch; there is no compiler execution.
-    result = await execute(manifest, registry.path, tmp_path / 'run', worker=worker, supplied_proposal=proposal)
+    result = await execute(manifest, registry.path, tmp_path / 'run', worker=worker,
+                           supplied_proposal=proposal, curate=True)
     assert result['proposal_origin'] == 'supplied' and len(result['attempts']) == 1
     assert result['attempts'][0]['role'] == 'reviewer'
     provenance = next(iter(registry.snapshot()['assignments'].values()))['review_execution']

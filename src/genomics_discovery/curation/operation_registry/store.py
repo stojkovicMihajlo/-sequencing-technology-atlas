@@ -63,9 +63,10 @@ def search(snapshot: dict, query: str, *, limit: int = 10) -> dict:
             "boundary": "Candidate lookup only. An empty result does not establish a new concept."}
 
 
-def check_proposal(snapshot, proposal, occurrences, packets, *, allow_stale_reuse=False) -> list[dict]:
+def check_proposal(snapshot, proposal, occurrences, packets, *, allow_stale_reuse=False,
+                   allow_stale_new=False) -> list[dict]:
     if (proposal.registry_revision != revision(snapshot)
-        and not (allow_stale_reuse and proposal.decision == "reuse")):
+        and not (allow_stale_reuse and proposal.decision == "reuse") and not allow_stale_new):
         raise ValueError("Stale registry revision; look up again and re-review the decision")
     errors = validate_membership(proposal, occurrences, packets)
     if errors:
@@ -102,17 +103,19 @@ class Registry:
         self.path = Path(path).resolve()
 
     def initialize(self) -> dict:
+        from .storage import create, normalized
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with sqlite3.connect(self.path) as db:
-            db.execute("CREATE TABLE IF NOT EXISTS registry (id INTEGER PRIMARY KEY CHECK(id=1), "
-                       "payload TEXT NOT NULL)")
-            db.execute("INSERT OR IGNORE INTO registry VALUES (1, ?)",
-                       (json.dumps(empty_snapshot()),))
+            db.execute("BEGIN IMMEDIATE")
+            legacy = db.execute("SELECT 1 FROM sqlite_master WHERE name='registry'").fetchone()
+            if not normalized(db) and not legacy:
+                create(db, empty_snapshot())
         return self.snapshot()
 
     def snapshot(self) -> dict:
-        with sqlite3.connect(self.path.as_uri() + "?mode=ro", uri=True) as db:
-            value = json.loads(db.execute("SELECT payload FROM registry WHERE id=1").fetchone()[0])
+        from .storage import connect, read_snapshot
+        with connect(self.path) as db:
+            value = read_snapshot(db)
         validate_snapshot(value)
         return value
 

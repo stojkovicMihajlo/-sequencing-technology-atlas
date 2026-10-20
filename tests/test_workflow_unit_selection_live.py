@@ -84,3 +84,79 @@ async def test_planner_rejects_network_worker_before_run_creation(tmp_path):
         await execute(tmp_path / "parents", tmp_path / "run",
                       worker=CodexWorker(web_search=True, network_access=True))
     assert not (tmp_path / "run").exists()
+
+
+async def test_declared_selection_cap_is_in_prompt_and_enforced(cases,tmp_path):
+    state=await execute(parents_for(tmp_path),tmp_path/'capped',worker=PlannerFixture(),max_units=1)
+    assert state['status']=='failed' and 'selection cap' in state['error']
+    assert 'at most 1 cuts' in (tmp_path/'capped/prompt.txt').read_text()
+    assert 'not a proposed number of modules' in (tmp_path/'capped/prompt.txt').read_text()
+
+
+async def test_empty_selection_remains_valid_under_cap(cases,tmp_path):
+    state=await execute(parents_for(tmp_path),tmp_path/'capped',worker=PlannerFixture(empty=True),max_units=2)
+    assert state['status']=='completed' and state['units']==0
+
+
+@pytest.mark.parametrize('cap',[0,-1,True])
+async def test_invalid_selection_cap_rejected_before_run_creation(tmp_path,cap):
+    with pytest.raises(ValueError,match='positive integer'):
+        await execute(tmp_path/'parents',tmp_path/'run',worker=PlannerFixture(),max_units=cap)
+    assert not (tmp_path/'run').exists()
+
+
+
+def targets_for(tmp_path, **updates):
+    from test_workflow_transformations import definition
+    path = tmp_path / "retrieval_targets.json"
+    document = {"format_version": "unit_selection_targets/1.0",
+                "definitions": [definition().model_dump(mode="json")], **updates}
+    path.write_text(json.dumps(document))
+    return path
+
+
+async def test_target_retrieval_is_frozen_and_still_creates_only_candidate_cuts(cases, tmp_path):
+    targets = targets_for(tmp_path)
+    state = await execute(parents_for(tmp_path), tmp_path / "targeted", worker=PlannerFixture(),
+                          targets=targets)
+    assert state["status"] == "completed" and state["links_created"] == 0
+    directory = tmp_path / "targeted"
+    config = json.loads((directory / "config.json").read_text())
+    assert config["selection_purpose"] == "target_retrieval"
+    assert len(config["targets_sha256"]) == 64
+    assert json.loads((directory / "targets.json").read_text()) == json.loads(targets.read_text())
+    prompt = (directory / "prompt.txt").read_text()
+    assert "retrieve candidate occurrences" in prompt and "relevant nested region" in prompt
+    assert "multiple operations" in prompt and "not evidence that a match exists" in prompt
+
+
+@pytest.mark.parametrize("where", ["input", "snapshot"])
+async def test_changed_target_input_or_snapshot_cannot_claim_completed_selection(cases, tmp_path, where):
+    targets = targets_for(tmp_path)
+    class TargetMutation(PlannerFixture):
+        async def run(self, prompt, directory):
+            result = await super().run(prompt, directory)
+            path = targets if where == "input" else directory / "targets.json"
+            path.write_text(path.read_text() + " ")
+            return result
+    state = await execute(parents_for(tmp_path), tmp_path / "changed-target", worker=TargetMutation(),
+                          targets=targets)
+    assert state["status"] == "failed" and "Frozen planner input" in state["error"]
+    assert "units" not in state
+
+
+@pytest.mark.parametrize("fault", ["empty", "duplicate", "prior_opinions"])
+async def test_invalid_or_opinion_bearing_targets_are_rejected_before_native_calls(tmp_path, fault):
+    targets = targets_for(tmp_path)
+    document = json.loads(targets.read_text())
+    if fault == "empty":
+        document["definitions"] = []
+    elif fault == "duplicate":
+        document["definitions"] *= 2
+    else:
+        document["reviewer_opinions"] = ["must match"]
+    targets.write_text(json.dumps(document))
+    with pytest.raises(ValueError):
+        await execute(tmp_path / "absent-parents.json", tmp_path / "invalid-target",
+                      worker=PlannerFixture(), targets=targets)
+    assert not (tmp_path / "invalid-target").exists()

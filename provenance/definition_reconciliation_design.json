@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-18",
+  "status": "implemented_validated_on_preserved_three_method_failure",
+  "results": "definition_reconciliation_results.json",
+  "software_tests": {"full_suite_passed": 1038, "reconciliation_tests": 10},
+  "ambiguity": "Independent source-supported definitions can be incomparable as written even when their selected operations may fit a new shared abstraction.",
+  "materiality": "Representation and inference semantics: equivalent old definitions, members of a new broader definition, and experimentally interchangeable procedures are different claims.",
+  "contract": {
+    "inputs": "Immutable source-bound operation selections, independent pending proposals, recorded comparison fields/rationales and the current admitted catalogue.",
+    "output": "A new proposal covering exactly the same selections, followed by fresh independent source/utility review and normal publication checks.",
+    "allowed": ["clarify pending definitions", "propose a source-supported common abstraction", "retain separate definitions", "remain unresolved"],
+    "preserved": ["original operations and cuts", "original sources and quotations", "context-specific properties", "old proposals/reviews/comparisons", "admitted concept meanings"],
+    "not_inferred": ["old definitions are equivalent because a broader replacement exists", "experimental substitution", "historical development", "scientific accuracy from software validity"]
+  },
+  "references": [
+    {
+      "paper": "https://aclanthology.org/2024.emnlp-main.548/",
+      "repository": "https://github.com/clear-nus/edc",
+      "version": "02aad17e2fc1e9845c84746b384e7fd3160edc1a",
+      "inspected": "edc/schema_canonicalization.py: SchemaCanonicalizer.retrieve_similar_relations, llm_verify, canonicalize; local snapshot and pinned official raw source",
+      "adopt": "Separate definition construction from canonicalization and candidate retrieval from the semantic decision.",
+      "adapt": "Our recovery returns to the source material to revise definitions and independently review each membership.",
+      "reject": "The exact-name bypass and immediate schema enrichment after no match do not provide the source/compatibility guarantees this atlas needs.",
+      "code_copied": false
+    },
+    {
+      "source": "https://www.w3.org/TR/skos-reference/#mapping",
+      "type": "Independent authoritative concept-mapping specification",
+      "adopt": "Keep exact, broader/narrower and related meanings distinct.",
+      "adapt": "Replacing a draft with a newly reviewed abstraction is recorded as provenance, not an exactMatch assertion.",
+      "boundary": "SKOS does not decide biochemical equivalence or validate experimental interfaces."
+    }
+  ],
+  "alternatives_rejected": [
+    "Treat matching words or enzyme names as identity: loses whole-transformation boundaries.",
+    "Change unknown comparison fields to same: changes the claim without additional evidence.",
+    "Ask the same definition-only comparator repeatedly: does not give it the missing source evidence or permission to revise the representation.",
+    "Immediately retire old drafts when a new compiler proposes a merge: an unapproved proposal would replace already reviewed work."
+  ],
+  "implementation": {
+    "scheduling": "One source-backed reconciliation per connected component of unresolved pending comparisons after a batch; only components wholly owned by that batch. Explicit CLI also supports saved drafts.",
+    "scientific_work": "Fresh curation compiler reads original sources and comparison ambiguities; fresh reviewer sees the new proposal and sources, without being instructed to adopt previous verdicts.",
+    "draft_replacement": "Exact original selection coverage and all replacement decisions must pass current source/utility checks. Short transaction checks immutable records again before retiring the old pending drafts with a replacement pointer.",
+    "publication": "Separate resumable gate; outside definitions, current catalogue and fresh comparison requirements still apply. No membership is admitted by draft retirement.",
+    "failure": "An incomplete or unapproved replacement leaves parents active; failed replacement draft is archived as withdrawn. After replacement, unresolved publication stays pending and can be resumed.",
+    "bounds": "One scientific reconciliation attempt per component per batch. Existing bounded comparison updates remain. No retry-until-success policy."
+  },
+  "limitations": [
+    "Fresh model sessions are not human expert validation; shared model errors remain possible.",
+    "The comparator's candidate retrieval recall is unchanged.",
+    "Recovery does not select new subgraph boundaries.",
+    "Whole-submission atomicity can still hold otherwise useful selections if a replacement review remains unresolved.",
+    "Large connected ambiguity components may need future partitioning; no scalability claim from this three-method test.",
+    "An execution failure after draft replacement can leave a reviewed pending replacement; the database keeps it for resumed publication."
+  ]
+}

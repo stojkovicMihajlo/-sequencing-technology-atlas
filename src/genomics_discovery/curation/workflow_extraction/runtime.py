@@ -29,9 +29,14 @@ from .models import (
     target_ids,
     validate_evidence,
     validate_reader_gaps,
+    validate_repair_gap_references,
     validate_review,
 )
 from .projection import export_candidate, export_diagnostic
+from .obligations import (
+    SourceObligations, SourceCoverageReview, validate_source_obligations,
+    validate_source_coverage_review, source_coverage_outcome,
+)
 from .prompts import build_prompt
 from .sources import load_packet
 
@@ -41,7 +46,9 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                   initial_workflow: Path | None = None,
                   repair_review: Path | None = None,
                   repair_feedback_packet: Path | None = None,
-                  require_coverage: bool = False) -> dict:
+                  require_coverage: bool = False,
+                  require_source_coverage: bool = False,
+                  source_obligations: Path | None = None) -> dict:
     """Run two readers (or the baseline), integration, and independent source review.
 
     Operational failures return a persisted failed state. Cancellation is persisted
@@ -54,6 +61,10 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
         raise ValueError("Unknown workflow extraction mode")
     if type(require_coverage) is not bool or require_coverage and mode != "specialists":
         raise ValueError("require_coverage requires specialists with fresh reader lineage")
+    if type(require_source_coverage) is not bool:
+        raise ValueError("require_source_coverage must be a boolean")
+    if source_obligations is not None and not require_source_coverage:
+        raise ValueError("source_obligations requires require_source_coverage")
     if (mode in {"review_only", "repair"}) != (initial_workflow is not None):
         raise ValueError("initial_workflow is required only for review_only or repair modes")
     if (mode == "repair") != (repair_review is not None) or mode == "repair" and not max_revisions:
@@ -71,7 +82,8 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
     started = time.monotonic()
     state = {"format_version": "workflow_run/1.0", "run": str(run), "status": "preparing",
              "started_at": now(), "revision": 0, "attempts": [], "artifacts": {},
-             "require_coverage": require_coverage}
+             "require_coverage": require_coverage,
+             "require_source_coverage": require_source_coverage}
     # Exclusive initial creation prevents two orchestrators claiming an empty run.
     with (run / "state.json").open("x", encoding="utf-8") as handle:
         json.dump(state, handle, indent=2)
@@ -80,7 +92,11 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
     active: list[asyncio.Task] = []
     reader_reports: dict[str, ReadingReport] = {}
     coverage_records: dict[Path, IntegrationCoverage | CoverageReview] = {}
+    source_coverage_records: dict[Path, SourceCoverageReview] = {}
+    obligations = obligations_path = None
+    readers = {}
     old_feedback_sources = None
+    repair_gap_baseline = None
 
     def save() -> None:
         state["elapsed_seconds"] = time.monotonic() - started
@@ -127,8 +143,12 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                     errors.append(f"Workflow {key} differs from frozen source scope")
             if mode not in {"review_only", "repair"}:  # Prior reader lineage is not claimed.
                 errors.extend(validate_reader_gaps(document, reader_reports, packet))
+            elif mode == "repair" and repair_gap_baseline is not None:
+                errors.extend(validate_repair_gap_references(document, repair_gap_baseline))
         elif role == "reviewer":
             errors.extend(validate_review(document, workflow, sources))
+        elif role == "source_obligations":
+            errors.extend(validate_source_obligations(document, sources))
         if errors:
             raise ValueError("; ".join(errors))
 
@@ -161,7 +181,10 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                               coverage_schema=schemas.get(IntegrationCoverage),
                               coverage_review_schema=schemas.get(CoverageReview),
                               coverage_sha256=digest(coverage) if coverage else None,
-                              coverage_readers=readers if require_coverage else None)
+                              coverage_readers=readers if require_coverage else None,
+                              source_coverage_schema=schemas.get(SourceCoverageReview),
+                              source_obligations_sha256=(digest(obligations)
+                                                         if obligations else None))
         prompt_path = directory / "stage_prompt.txt"
         prompt_path.write_text(prompt, encoding="utf-8")
         pin(prompt_path)
@@ -222,6 +245,18 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                 attempt[key] = {"path": str(sidecar), "sha256": sidecar_sha256,
                                 "document_sha256": digest(extra)}
                 state["artifacts"][key] = attempt[key]
+            if require_source_coverage and role == "reviewer":
+                sidecar = directory / "source_coverage_review.json"
+                extra = SourceCoverageReview.model_validate_json(sidecar.read_bytes())
+                errors = validate_source_coverage_review(
+                    extra, obligations, document, workflow, packet)
+                if errors:
+                    raise ValueError("Source completeness: " + "; ".join(errors))
+                source_coverage_records[sidecar] = extra
+                attempt["source_coverage_review"] = {
+                    "path": str(sidecar), "sha256": pin(sidecar),
+                    "document_sha256": digest(extra)}
+                state["artifacts"]["source_coverage_review"] = attempt["source_coverage_review"]
             attempt.update(status="validated", artifact=str(artifact),
                            artifact_sha256=pin(artifact), document_sha256=digest(document))
             state["artifacts"][role] = {"path": str(artifact), "sha256": pins[artifact]}
@@ -268,6 +303,8 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
         models = [ReadingReport, Workflow, WorkflowDraft, WorkflowReview]
         if require_coverage:
             models.extend((IntegrationCoverage, CoverageReview))
+        if require_source_coverage:
+            models.extend((SourceObligations, SourceCoverageReview))
         for model in models:
             path = run / "schemas" / f"{model.__name__}.schema.json"
             write(path, model.model_json_schema())
@@ -307,6 +344,25 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                 {"name": "assay_extraction_skill_snapshot", "path": str(skill_snapshot),
                  "sha256": snapshot_skill_sha256},
             ))
+        # Freeze source obligations before copying or passing any seed/candidate.
+        # This is one source pass, independent of optional specialist readers.
+        obligations_input = None
+        if require_source_coverage:
+            if source_obligations is None:
+                obligations, obligations_path = await stage("source_obligations", SourceObligations)
+            else:
+                origin = Path(source_obligations).resolve()
+                original_digest = pin(origin)
+                obligations = SourceObligations.model_validate_json(origin.read_bytes())
+                check_artifact(obligations, "source_obligations")
+                obligations_path = run / "source_obligations.json"
+                obligations_path.write_bytes(origin.read_bytes())
+                pin(obligations_path)
+                obligations_input = {"path": str(origin), "sha256": original_digest}
+            state["artifacts"]["source_obligations"] = {
+                "path": str(obligations_path), "sha256": pins[obligations_path],
+                "document_sha256": digest(obligations)}
+            save()
         seed = None
         if initial_workflow is not None:
             initial_workflow = Path(initial_workflow).resolve()
@@ -363,6 +419,8 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                   "source_packet_digest": digest(packet), "implementation": implementation,
                   "mode": mode, "max_revisions": max_revisions,
                   "require_coverage": require_coverage,
+                  "require_source_coverage": require_source_coverage,
+                  "source_obligations_input": obligations_input,
                   "initial_workflow": seed, "repair_review": feedback,
                   "repair_feedback_packet": feedback_sources,
                   "model": getattr(worker, "model", DEFAULT_MODEL),
@@ -398,6 +456,8 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                               zip(("chemistry", "information"), reports, strict=True)}
         if mode in {"review_only", "repair"}:
             workflow = Workflow.model_validate_json(candidate.read_bytes())
+            if mode == "repair":
+                repair_gap_baseline = workflow
             check_artifact(workflow, "integrator", sources=prior_packet)
             if mode == "repair":
                 prior_review = WorkflowReview.model_validate_json(feedback_path.read_bytes())
@@ -417,6 +477,8 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                          workflow_digest=digest(workflow))
             save()
             reviewer_inputs = {"candidate": candidate}
+            if require_source_coverage:
+                reviewer_inputs["source_obligations"] = obligations_path
             coverage = None
             if require_coverage:
                 coverage_path = candidate.parent / "coverage.json"
@@ -441,6 +503,16 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                 coverage_review_path = review_path.parent / "coverage_review.json"
                 coverage_review = coverage_records[coverage_review_path]
                 outcome = coverage_review_outcome(coverage_review, review, workflow)
+            if require_source_coverage:
+                source_coverage_path = review_path.parent / "source_coverage_review.json"
+                source_result = source_coverage_outcome(
+                    source_coverage_records[source_coverage_path], obligations, review, workflow)
+                # Both independent gates must permit support. Research is not a
+                # request for a futile candidate-only repair.
+                if "research_needed" in (outcome, source_result):
+                    outcome = "research_needed"
+                elif "needs_revision" in (outcome, source_result):
+                    outcome = "needs_revision"
             state.update(review=str(review_path), review_sha256=sha(review_path), status=outcome)
             save()
             if outcome != "needs_revision" or state["revision"] >= max_revisions:
@@ -450,7 +522,10 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
             workflow, candidate = await stage("integrator", Workflow, inputs={
                 **readers, "previous_candidate": candidate, "previous_review": review_path,
                 **({"previous_coverage": coverage_path,
-                    "previous_coverage_review": coverage_review_path} if require_coverage else {})})
+                    "previous_coverage_review": coverage_review_path} if require_coverage else {}),
+                **({"source_obligations": obligations_path,
+                    "previous_source_coverage_review": source_coverage_path}
+                   if require_source_coverage else {})})
         if outcome == "supported":
             export_candidate(workflow, review, packet, run)
             outputs = (("graph_candidate", "graph_candidate.json"), ("protocol", "protocol.txt"))

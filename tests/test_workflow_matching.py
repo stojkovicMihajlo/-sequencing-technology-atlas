@@ -252,6 +252,29 @@ def test_a_purpose_only_alignment_cannot_be_promoted_to_shared_mechanism(example
         validate_alignments(AlignmentBatch.model_validate(data), mechanism_case, context)
 
 
+@pytest.mark.parametrize("side", ["left", "right", "both"])
+def test_external_context_cannot_supply_the_selected_mechanism(example, side):
+    context, _, alignments, cases, *_ = example
+    mechanism_case = [cases[0].model_copy(update={"relation": "shared_mechanism"})]
+    data = alignments.model_dump(mode="json")
+    claim = data["alignments"][0]["claims"][0]
+    for endpoint in ("left", "right") if side == "both" else (side,):
+        claim[endpoint + "_targets"] = ["operation:assay"]
+    # assay is a real, source-bound external operation of both cuts. Its own
+    # correspondence cannot establish a mechanism for the selected insert/repair.
+    with pytest.raises(ValueError, match="targeting selected operations"):
+        validate_alignments(AlignmentBatch.model_validate(data), mechanism_case, context)
+
+
+def test_mechanism_can_relate_different_group_counts_without_equating_whole_groups(example):
+    context, _, alignments, cases, *_ = example
+    mechanism_case = [cases[0].model_copy(update={"relation": "shared_mechanism"})]
+    cuts = validate_alignments(alignments, mechanism_case, context)
+    assert [len(cuts["comparison"][side]["operations"]) for side in ("left", "right")] == [2, 1]
+    assert alignments.alignments[0].claims[0].left_targets == ("operation:insert",)
+    assert "repair" in {o["id"] for o in cuts["comparison"]["left"]["operations"]}
+
+
 def test_agent_review_check_accepts_a_valid_negative_verdict(
     example, tmp_path, monkeypatch, capsys
 ):
@@ -316,11 +339,8 @@ def test_known_and_unknown_assertions_can_coexist_without_retagging(example):
         ProfileBatch.model_validate(data)
 
 
-@pytest.mark.asyncio
-@pytest.mark.parametrize("change_input", [False, True])
-async def test_native_handoff_and_mutable_state_boundary(
-    example, tmp_path, monkeypatch, change_input
-):
+@pytest.fixture
+def native_run_factory(example, tmp_path, monkeypatch):
     from genomics_discovery.curation.codex_worker import CodexWorker, WorkerResult
     from genomics_discovery.curation.workflow_matching import consumer
     from playground import workflow_matching_live as live
@@ -328,7 +348,7 @@ async def test_native_handoff_and_mutable_state_boundary(
     _, profiles, alignments, cases, review, registry, manifest = example
     cases_path = tmp_path / "cases.json"
     cases_path.write_text(json.dumps([c.model_dump() for c in cases]))
-    run = tmp_path / "native_boundary_test"
+    runs = []
 
     def assessment(path):
         return SimpleNamespace(complete=True, thread_id=path.name, usage={})
@@ -336,29 +356,50 @@ async def test_native_handoff_and_mutable_state_boundary(
     monkeypatch.setattr(live, "assess_archived_attempt", assessment)
     monkeypatch.setattr(consumer, "assess_archived_attempt", assessment)
 
-    class BoundaryWorker(CodexWorker):
-        def __init__(self):
-            super().__init__(web_search=False, network_access=False)
+    async def create(*, change_input=False):
+        run = tmp_path / f"native_boundary_test_{len(runs)}"
+        runs.append(run)
 
-        async def run(self, prompt, attempt):
-            (attempt / "prompt.txt").write_text(prompt)
-            if "compiler" in attempt.name:
-                assert not (run / "profiles.json").exists()
-                (attempt / "profiles.json").write_text(profiles.model_dump_json())
-                (attempt / "alignments.json").write_text(alignments.model_dump_json())
-                (attempt / "searches.json").write_text('[{"query":"adapter insertion"}]')
-                if change_input:
-                    (run / "cases.json").write_text("[]")
-            else:
-                assert (run / "profiles.json").read_bytes() == (
-                    run / "001_compiler/profiles.json"
-                ).read_bytes()
-                (attempt / "artifact.json").write_text(review.model_dump_json())
-            return WorkerResult(
-                exit_code=0, thread_id=attempt.name, usage={}, elapsed_seconds=0, error=None
-            )
+        class BoundaryWorker(CodexWorker):
+            def __init__(self):
+                super().__init__(web_search=False, network_access=False)
 
-    result = await live.execute(registry, manifest, cases_path, run, worker=BoundaryWorker())
+            async def run(self, prompt, attempt):
+                (attempt / "prompt.txt").write_text(prompt)
+                # Mock transport archives exercise ownership replay, not native execution.
+                for name in ("events.jsonl", "result.json", "final.txt"):
+                    (attempt / name).write_text(attempt.name)
+                if "compiler" in attempt.name:
+                    assert not (run / "profiles.json").exists()
+                    (attempt / "profiles.json").write_text(profiles.model_dump_json())
+                    (attempt / "alignments.json").write_text(alignments.model_dump_json())
+                    (attempt / "searches.json").write_text('[{"query":"adapter insertion"}]')
+                    if change_input:
+                        (run / "cases.json").write_text("[]")
+                else:
+                    assert (run / "profiles.json").read_bytes() == (
+                        run / "001_compiler/profiles.json"
+                    ).read_bytes()
+                    (attempt / "artifact.json").write_text(review.model_dump_json())
+                return WorkerResult(
+                    exit_code=0, thread_id=attempt.name, usage={}, elapsed_seconds=0, error=None
+                )
+
+        result = await live.execute(registry, manifest, cases_path, run, worker=BoundaryWorker())
+        return run, result
+
+    return create
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("change_input", [False, True])
+async def test_native_handoff_and_mutable_state_boundary(
+    example, native_run_factory, change_input
+):
+    from genomics_discovery.curation.workflow_matching import consumer
+
+    _, _, _, cases, review, *_ = example
+    run, result = await native_run_factory(change_input=change_input)
     if change_input:
         assert result["status"] == "failed" and "Frozen matching input" in result["error"]
         assert not (run / "matching_index.json").exists()
@@ -398,3 +439,70 @@ async def test_native_handoff_and_mutable_state_boundary(
     index_path.write_text(json.dumps(index))
     with pytest.raises(ValueError, match="nonpositive"):
         consumer.query_reviewed(index_path, query="adapter insertion")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("defect,expected", [
+    ("unrelated_complete_archive", "distinct completed native"),
+    ("same_native_thread", "distinct completed native"),
+    ("archive_changed", "native archive changed"),
+    ("wrong_stage_prompt", "recorded stage instruction"),
+    ("compiler_handoff_changed", "exact compiler handoff"),
+    ("reviewer_rebound", "owned by its recorded native reviewer"),
+    ("modified_positive_claim", "Completed matching checkpoint"),
+    ("missing_legacy_checkpoint", "legacy records require explicit re-review"),
+])
+async def test_reopening_replays_native_ownership_before_admission(
+    example, native_run_factory, monkeypatch, defect, expected
+):
+    from genomics_discovery.curation.run_state import sha
+    from genomics_discovery.curation.workflow_matching import consumer
+
+    run, result = await native_run_factory()
+    assert result["status"] == "completed"
+    index_path, state_path = run / "matching_index.json", run / "state.json"
+    state = json.loads(state_path.read_text())
+    reviewer = run / "002_reviewer"
+    if defect == "unrelated_complete_archive":
+        monkeypatch.setattr(consumer, "assess_archived_attempt", lambda path: SimpleNamespace(
+            complete=True, thread_id="unrelated" if path == reviewer else path.name, usage={}))
+    elif defect == "same_native_thread":
+        state["attempts"][1]["thread_id"] = state["attempts"][0]["thread_id"]
+        state_path.write_text(json.dumps(state))
+        monkeypatch.setattr(consumer, "assess_archived_attempt", lambda path: SimpleNamespace(
+            complete=True, thread_id="001_compiler", usage={}))
+    elif defect == "archive_changed":
+        (reviewer / "events.jsonl").write_text("Unrelated completed native event stream")
+    elif defect == "wrong_stage_prompt":
+        prompt = reviewer / "prompt.txt"
+        prompt.write_text(prompt.read_text().replace("source_bound_workflow_reviewer",
+                                                   "source_bound_workflow_compiler"))
+        state["attempts"][1]["archive_sha256"]["prompt.txt"] = sha(prompt)
+        state_path.write_text(json.dumps(state))
+    elif defect == "compiler_handoff_changed":
+        source = run / "001_compiler/alignments.json"
+        source.write_text(source.read_text() + "\n")
+    elif defect == "reviewer_rebound":
+        other = run / "unrelated_artifact.json"
+        other.write_bytes((reviewer / "artifact.json").read_bytes())
+        index = json.loads(index_path.read_text())
+        index["files"]["review"] = other.name
+        index_path.write_text(json.dumps(index))
+    elif defect == "modified_positive_claim":
+        changed = example[2].model_dump(mode="json")
+        changed["alignments"][0]["claims"][0]["description"] = (
+            "An invented compatibility guarantee absent from the reviewed proposal")
+        alignment = AlignmentBatch.model_validate(changed)
+        changed_review = example[4].model_dump(mode="json")
+        changed_review["alignments_sha256"] = digest(alignment)
+        review = MatchingReview.model_validate(changed_review)
+        for path in (run / "alignments.json", run / "001_compiler/alignments.json"):
+            path.write_text(alignment.model_dump_json())
+        (reviewer / "artifact.json").write_text(review.model_dump_json())
+        index = json.loads(index_path.read_text())
+        index.update(alignments_sha256=digest(alignment), review_sha256=digest(review))
+        index_path.write_text(json.dumps(index))
+    else:
+        state_path.unlink()
+    with pytest.raises(ValueError, match=expected):
+        consumer.load_reviewed(index_path)

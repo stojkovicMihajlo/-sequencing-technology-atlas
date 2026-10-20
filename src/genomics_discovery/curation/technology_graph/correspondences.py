@@ -24,15 +24,17 @@ def lookup_correspondences(graph, workflow_id, operation_ids):
                     or view["cut"]["source_packet_sha256"] != workflow["packet_sha256"]):
                 raise ValueError("Comparison selection differs from its bound workflow/source")
             claims, direct = [], set()
+            external = {ref["operation_id"] for ref in view["cut"]["external_operations"]}
             for index, claim in enumerate(comparison["alignment"]["claims"]):
                 targets = {t.removeprefix("operation:") for t in claim[side + "_targets"]
                            if t.startswith("operation:")}
-                if targets - stored:
-                    raise ValueError("Claim targets an operation outside its comparison selection")
+                if targets - stored - external:
+                    raise ValueError("Claim targets an operation outside its comparison selection/context")
                 if claim["kind"] == "correspondence":
-                    direct.update(targets)
+                    direct.update(targets & stored)
                 claims.append({"claim_index": index, **claim,
-                               "queried_operation_targets": sorted(requested & targets)})
+                               "queried_operation_targets": sorted(requested & targets & stored),
+                               "external_context_operation_targets": sorted(targets & external)})
             counterpart = graph["views"][comparison[other + "_view"]]
             comparisons.append({
                 "comparison_id": cid, "query_side": side,

@@ -48,6 +48,10 @@ def main() -> None:
     run.add_argument("--max-revisions", type=int, choices=(0, 1), default=1)
     run.add_argument("--require-coverage", action="store_true",
                      help="Require the extraction skill and source-finding disposition review")
+    run.add_argument("--require-source-coverage", action="store_true",
+                     help="Freeze candidate-blind source obligations and gate completeness review")
+    run.add_argument("--source-obligations", type=Path,
+                     help="Reuse frozen source obligations, revalidated against this packet")
     status = commands.add_parser("status", help="Show saved progress, not renewed acceptance")
     status.add_argument("run", type=Path)
     query = commands.add_parser("query", help="Inspect one operation and its explicit connections")
@@ -59,9 +63,14 @@ def main() -> None:
         "check", help="Check structure and citations; no scientific verdict")
     check.add_argument("artifact", type=Path)
     check.add_argument("--packet", type=Path, required=True)
-    check.add_argument("--kind", choices=("reading", "workflow", "review"), required=True)
+    check.add_argument("--kind", choices=("reading", "workflow", "review",
+                                         "source_obligations", "source_coverage"), required=True)
     check.add_argument("--candidate", type=Path)
+    check.add_argument("--obligations", type=Path)
+    check.add_argument("--workflow-review", type=Path)
     check.add_argument("--reading-report", type=Path, action="append", default=[])
+    check.add_argument("--previous-workflow", type=Path,
+                       help="Bound repair reader-gap references to a prior candidate; no inherited verdict")
     assemble = commands.add_parser("assemble", help="Render explicit operation I/O as typed flows")
     assemble.add_argument("draft", type=Path)
     assemble.add_argument("--packet", type=Path, required=True)
@@ -120,16 +129,32 @@ def main() -> None:
                 WorkflowReview,
                 validate_evidence,
                 validate_reader_gaps,
+                validate_repair_gap_references,
                 validate_review,
+            )
+            from .obligations import (
+                SourceObligations, SourceCoverageReview,
+                validate_source_obligations, validate_source_coverage_review,
             )
 
             packet = load_packet(args.packet)
             model = {"reading": ReadingReport, "workflow": Workflow,
-                     "review": WorkflowReview}[args.kind]
+                     "review": WorkflowReview, "source_obligations": SourceObligations,
+                     "source_coverage": SourceCoverageReview}[args.kind]
             try:
                 document = model.model_validate_json(args.artifact.read_bytes())
                 errors = validate_evidence(document, packet)
-                if args.kind == "workflow":
+                if args.kind == "source_obligations":
+                    errors.extend(validate_source_obligations(document, packet))
+                elif args.kind == "source_coverage":
+                    if not (args.candidate and args.obligations and args.workflow_review):
+                        raise ValueError("Source coverage needs --candidate, --obligations and --workflow-review")
+                    candidate = Workflow.model_validate_json(args.candidate.read_bytes())
+                    obligations = SourceObligations.model_validate_json(args.obligations.read_bytes())
+                    review = WorkflowReview.model_validate_json(args.workflow_review.read_bytes())
+                    errors.extend(validate_source_coverage_review(
+                        document, obligations, review, candidate, packet))
+                elif args.kind == "workflow":
                     for key in ("method_id", "title", "scope", "variant"):
                         if getattr(document, key) != packet[key]:
                             errors.append(f"Workflow {key} differs from source scope")
@@ -141,6 +166,9 @@ def main() -> None:
                         readers[reading.role] = reading
                     if args.reading_report:
                         errors.extend(validate_reader_gaps(document, readers, packet))
+                    if args.previous_workflow:
+                        previous = Workflow.model_validate_json(args.previous_workflow.read_bytes())
+                        errors.extend(validate_repair_gap_references(document, previous))
                 elif args.kind == "reading":
                     inspected = {(ref.source_id, ref.passage_id)
                                  for ref in document.inspected_passages}
@@ -209,7 +237,9 @@ def main() -> None:
                                         initial_workflow=args.initial_workflow,
                                         repair_review=args.repair_review,
                                         repair_feedback_packet=args.feedback_packet,
-                                        require_coverage=args.require_coverage))
+                                        require_coverage=args.require_coverage,
+                                        require_source_coverage=args.require_source_coverage,
+                                        source_obligations=args.source_obligations))
             print(json.dumps(result, indent=2, ensure_ascii=False))
             if result["status"] != "supported":
                 raise SystemExit(1)

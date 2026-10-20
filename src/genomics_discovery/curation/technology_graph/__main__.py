@@ -11,6 +11,7 @@ from genomics_discovery.curation.workflow_matching.models import QUESTIONS
 from .assembly import build_graph
 from .candidates import operation_candidates
 from .comparison_jobs import prepare_comparison
+from .comparison_bindings import cli_receipts
 from .discovery_cli import add_commands, dispatch
 from .planning import plan_comparisons
 from .queries import (
@@ -35,6 +36,9 @@ def main():
     build.add_argument("--atlas", type=Path, required=True)
     build.add_argument("--bindings", type=Path, required=True)
     build.add_argument("--index", type=Path, action="append", default=[])
+    build.add_argument("--comparison-receipt", nargs=2, action="append", default=[],
+                       metavar=("INDEX", "SELECTION_RECEIPT"),
+                       help="Exact prepared identity receipt scoped to one reviewed matching index")
     build.add_argument(
         "--extractions",
         type=Path,
@@ -134,7 +138,8 @@ def main():
         )
     elif args.command == "build":
         graph = build_graph(
-            args.atlas, args.bindings, args.index, extractions_path=args.extractions
+            args.atlas, args.bindings, args.index, extractions_path=args.extractions,
+            comparison_receipts=cli_receipts(args.comparison_receipt)
         )
         args.output.parent.mkdir(parents=True, exist_ok=True)
         if args.output.exists():

@@ -124,6 +124,8 @@ def validate_alignments(batch: AlignmentBatch, cases: list[Case], context: Conte
             and not any(
                 c.dimension == "transformation"
                 and c.kind == "correspondence"
+                and set(c.left_targets) & {f"operation:{oid}" for oid in alignment.left.operation_ids}
+                and set(c.right_targets) & {f"operation:{oid}" for oid in alignment.right.operation_ids}
                 and any(e.support == "reported" for e in c.left_evidence)
                 and any(e.support == "reported" for e in c.right_evidence)
                 for c in alignment.claims
@@ -131,7 +133,7 @@ def validate_alignments(batch: AlignmentBatch, cases: list[Case], context: Conte
         ):
             raise ValueError(
                 "A mechanism correspondence needs an explicit transformation claim "
-                "with reported evidence from both contexts"
+                "targeting selected operations with reported evidence from both contexts"
             )
         if (alignment.left.parent_id, alignment.right.parent_id) != (
             case.left_parent,

@@ -85,7 +85,7 @@ class CurrentVocabularyReview(VocabularyReview):
     reviews: tuple[AdmissionReviewV2, ...]
 
 
-def validate_decision(decision, snapshot, occurrences, packets):
+def validate_decision(decision, snapshot, occurrences, packets, *, allow_stale_new=False):
     from .store import check_proposal
     if decision.occurrence_id not in occurrences:
         raise ValueError("Unknown decision occurrence")
@@ -108,7 +108,8 @@ def validate_decision(decision, snapshot, occurrences, packets):
     if not any(e.occurrence_id == decision.occurrence_id and e.membership == "member"
                for e in case.boundary_examples):
         raise ValueError("Assignment must include its target as a positive boundary example")
-    return check_proposal(snapshot, proposal, occurrences, packets, allow_stale_reuse=True)
+    return check_proposal(snapshot, proposal, occurrences, packets, allow_stale_reuse=True,
+                          allow_stale_new=allow_stale_new)
 
 
 def evaluate(decision, review, occurrences, packets):
@@ -163,7 +164,7 @@ def evaluate(decision, review, occurrences, packets):
             "decision_sha256": digest(decision), "review_sha256": digest(review)}
 
 
-def validate_batch(proposal, review, snapshot, occurrences, packets):
+def validate_batch(proposal, review, snapshot, occurrences, packets, *, allow_stale_new=False):
     if set(occurrences) != {d.occurrence_id for d in proposal.decisions}:
         raise ValueError("Batch must account for every supplied selection exactly once")
     if review.proposal_sha256 != digest(proposal):
@@ -173,7 +174,7 @@ def validate_batch(proposal, review, snapshot, occurrences, packets):
         raise ValueError("Exactly one admission review per decision is required")
     outcomes = []
     for decision in proposal.decisions:
-        lookups = validate_decision(decision, snapshot, occurrences, packets)
+        lookups = validate_decision(decision, snapshot, occurrences, packets, allow_stale_new=allow_stale_new)
         outcomes.append({**evaluate(decision, checks[digest(decision)], occurrences, packets),
                          "lookup_results": lookups, "occurrence_id": decision.occurrence_id})
     from .consistency import check_batch_consistency

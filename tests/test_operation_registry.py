@@ -134,7 +134,8 @@ def test_mutating_a_stored_definition_invalidates_the_registry(cases, registry):
     snapshot = registry.snapshot()
     snapshot["concepts"][proposal.definition.id]["definition"]["output"] = "An unreviewed changed output"
     with sqlite3.connect(registry.path) as db:
-        db.execute("UPDATE registry SET payload=? WHERE id=1", (json.dumps(snapshot),))
+        from genomics_discovery.curation.operation_registry.storage import write_snapshot
+        write_snapshot(db, snapshot)
     with pytest.raises(ValueError, match="Stored concept differs"):
         registry.snapshot()
 

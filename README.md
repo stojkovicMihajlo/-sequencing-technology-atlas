@@ -4,21 +4,41 @@ A research harness for turning published sequencing methods into source-linked
 protocol graphs, then connecting technologies through separately supported
 historical relationships and contextual protocol comparisons.
 
-**Current stage: a working development snapshot for discussion and evaluation
-before large-scale extraction.** The atlas is not fully decomposed, and the
-extractions have model/source reviews rather than expert or experimental validation.
+**Current stage: Qiu Sherlock validation, 2026-10-19.**
+The inventory accounts for 201 methods. A completed three-method pilot produced
+106 operations and 246 protocol connections. The consolidated candidate passed
+1,524 software tests (7 skipped); its completion policy passed a two-case review
+control. A fresh shared-component matching test agreed with six predeclared
+development checks. A separate definition-targeted selector recovered two known
+component regions and an additional candidate, followed by fresh membership checks.
+A recovered scBS supplement also completed fresh extraction, repair, review and graph
+publication. Agents can query reviewed components inside larger workflow regions
+without labeling the entire region as equivalent.
+Earlier publications, including a 12-workflow graph with one freshly reviewed
+shared-mechanism comparison, remain preserved. Their copied status files do not
+establish active workers. The atlas is not yet fully decomposed, and model/source
+review is not experimental validation. See [current status](docs/STATUS.md) and
+[what extraction and matching must establish](docs/EXTRACTION_SCOPE_AND_MATCHING.md).
 
 ## Start here
 
 | Question | Read / run |
 | --- | --- |
+| How do I prepare, run, resume and publish a full inventory? | [Deployment workflow](docs/DEPLOYMENT.md) |
+| How are missing papers found and registered? | [Public source acquisition](docs/SOURCE_ACQUISITION.md) |
 | What have we built, and what remains undecided? | [Current status and pre-batch decisions](docs/STATUS.md) |
 | What exactly does an agent extract? | [Output fields and their connections](docs/OUTPUT_FORMAT.md) |
 | How do the agents and Python code work together? | [Pipeline and code map](docs/PIPELINE.md) |
 | Can I inspect a real extraction? | [ChIPmentation example](examples/chipmentation/README.md) |
 | How do methods enter the larger graph? | [Graph layers and agent tools](docs/GRAPH.md) |
 | How can agents reuse operation/module labels? | [Shared concept registry](docs/CONCEPT_REGISTRY.md) |
+| How can workers propose definitions concurrently? | [Pending proposals, comparisons and coordinated admission](docs/CONCEPT_REGISTRY.md#shared-proposals-and-coordinated-admission) |
+| What happened when ten paper jobs ran concurrently? | [Ten-paper results, failures and corrections](docs/TEN_PAPER_DIAGNOSTIC.md) |
+| Can the system connect methods with a known shared reaction? | [Three-method experiment and source-backed recovery of independent definitions](docs/KNOWN_OVERLAP_EXPERIMENT.md) |
 | How do we find common operations while preserving different assay architectures? | [Shared-operation discovery and broad workflow roles](docs/SHARED_OPERATIONS.md) |
+| How do we describe States/Operations for comparison and use semantic registry search? | [Comparison profiles, tool commands and admission boundaries](docs/COMPARISON_PROFILES.md) |
+| Why were these representation and matching choices made? | [Decision record](docs/decisions/2026-10-20-shared-operation-alignment.md) and [pinned reference implementations](docs/REFERENCE_IMPLEMENTATIONS.json) |
+| Can workers match a frozen vocabulary consistently without creating new labels? | [Real-paper frozen-matching pilot](examples/frozen_matching/README.md) |
 | How do we decide whether a shared label is useful? | [Admission policy, fields and reference audit](docs/CONCEPT_ADMISSION.md) |
 | What prevents a plausible-looking definition from passing incomplete checks? | [Definition review and consistency contract](docs/BEHAVIOR_CONTRACT.md) |
 | Did those checks catch deliberately incorrect scientific claims? | [Definition-review diagnostics and ordinary grouping run](examples/behavior_contract/README.md) |
@@ -45,45 +65,27 @@ software tests. They do not make model calls or re-review the paper.
 The explicit source path makes these checkout commands independent of editable-install
 path-file behavior. Run them from the repository root.
 
-The packaged snapshot passed **868 software tests** in a clean Python 3.13
-environment. See the [release checks](provenance/release_checks.json) for the exact
-checks and their limits.
+The [status record](docs/STATUS.md) separates software checks, live model runs
+and scientific limitations. Earlier experiment results remain linked there;
+test counts are not evidence of scientific accuracy.
 
-The definition-review update passed **964 software tests**. The
-[definition-review diagnostics](examples/behavior_contract/README.md) test
-unsupported claims attached to genuine quotations, whole-unit classification and
-contradictory membership assertions. The [current check record](provenance/behavior_contract_checks.json)
-separates software enforcement from observed model behavior; scientific accuracy
-has not been measured. Earlier
-[new-selection experiments](examples/concept_experiments/README.md) exposed a
-parent-context coverage bug and repeated large tool responses; the report records
-the corrections, controls and remaining differences in category granularity. A
-[paired cohort test and redundant-label control](examples/concept_admission/README.md)
-exercise separate source-support and category-usefulness decisions. The
-[earlier check record](provenance/concept_experiment_checks.json) distinguishes software
-integrity and observed model behavior from scientific accuracy, which has not been
-measured. The [earlier source-only pilot](examples/concept_registry/README.md)
-remains available with its original results.
-
-The [shared-operation discovery update](docs/SHARED_OPERATIONS.md) passes **978
-local software tests**. It adds overlapping workflow search questions, optional
-local semantic retrieval and exact claim-scope lookup. The
-[real-atlas diagnostic](examples/shared_operations/README.md) reports modest
-retrieval gains alongside substantial misses; retrieval does not create
-scientific edges or automatically classify operations into roles.
+Shared-operation matching has two modes. Routine workers compare against a
+frozen vocabulary. Separate curation jobs can propose definitions and reconcile
+parallel proposals through source review and coordinated admission. See the
+[registry workflow](docs/CONCEPT_REGISTRY.md#shared-proposals-and-coordinated-admission).
+Neither mode equates matching names with equivalent reactions.
 
 ## The pipeline
 
 ```mermaid
 flowchart TD
     S[Registered primary paper, supplements and dependencies] --> P[Frozen source packet]
-    P --> C[Chemistry reader]
-    P --> I[Information reader]
-    C --> W[Integrator: structured protocol draft]
-    I --> W
+    P --> C[Source requirements: candidate-blind reading]
+    C --> W[Extractor: structured protocol draft]
     W --> A[Python: materialize declared input/output edges]
     A --> R[Fresh source reviewer]
     P --> R
+    C --> R
     R -->|needs revision: at most one repair| W
     R -->|supported within scope| J[Reviewed extraction JSON]
     J --> T[Readable protocol.txt]
@@ -101,9 +103,9 @@ checks the structure, references and quotations, and renders the records. Scient
 support is judged by a separate model reviewer. A valid quotation is not proof
 that the interpretation is correct.
 
-## What exists in the local development atlas
+## Recorded atlas snapshot
 
-The recorded snapshot contains **201 technology nodes**, **15 detailed workflow
+The 2026-10-15 snapshot contains **201 technology nodes**, **15 detailed workflow
 records**, **578 operations**, **109 modules**, and **8 cross-protocol comparison
 records**. The workflows retain **224 gap records**, which may overlap and have
 different scopes and consequences. Counts describe stored records, not measured
@@ -127,6 +129,5 @@ sources when proposing new sequencing technologies. The present repository does
 not establish that access to this graph improves invention. That needs a separate
 evaluation.
 
-Use the [pre-batch checklist](docs/STATUS.md#decisions-before-a-large-extraction-job)
-to discuss readiness. No large extraction job is launched by installing or testing
-this repository.
+Use the [deployment workflow](docs/DEPLOYMENT.md) to prepare, inspect and launch
+a batch explicitly. Installing or testing this repository does not launch model jobs.

@@ -16,6 +16,7 @@ from genomics_discovery.curation.workflow_extraction.models import (
 from genomics_discovery.curation.workflow_matching.consumer import load_reviewed
 
 from .admission import load_extractions
+from .comparison_bindings import receipt_paths, resolve_bindings
 
 FORMAT = "integrated_technology_graph/1.0"
 HISTORICAL_KINDS = {"method_development", "component_reuse", "comparison", "analogy"}
@@ -25,7 +26,7 @@ def node_id(kind, namespace, local_id=None):
     return f"{kind}:{namespace}" + (f":{quote(local_id, safe='')}" if local_id else "")
 
 
-def assemble_graph(atlas: dict, bindings: dict, reviewed_runs: list[tuple]) -> dict:
+def assemble_graph(atlas: dict, bindings: dict, reviewed_runs: list[tuple], *, index_bindings=None) -> dict:
     """Pure projection of already loaded records; production calls must use build_graph.
 
     A reviewed_runs entry is (origin, load_reviewed result). A method identity binding
@@ -38,33 +39,33 @@ def assemble_graph(atlas: dict, bindings: dict, reviewed_runs: list[tuple]) -> d
     if len(methods) != len(atlas["methods"]) or len(history) != len(atlas["claims"]):
         raise ValueError("Atlas method and claim IDs must be unique")
     atlas_method_ids = set(methods)
-    used_parents = {p for _, loaded in reviewed_runs for p in loaded[0].parents}
-    for parent in sorted(used_parents):
-        binding = bindings.get(parent, {})
-        external = binding.get("external_method")
-        if external is None:
-            continue
-        if (
-            not isinstance(external, dict)
-            or set(external) != {"id", "name"}
-            or external["id"] != binding.get("atlas_method_id")
-            or not all(isinstance(v, str) and v.strip() for v in external.values())
-            or external["id"] in atlas_method_ids
-        ):
-            raise ValueError(
-                "External identity requires a new explicit ID/name, not an atlas override"
-            )
-        if external["id"] in methods:
-            if methods[external["id"]]["name"] != external["name"]:
-                raise ValueError("Conflicting external method identity")
-            continue
-        methods[external["id"]] = {
-            **external,
-            "outside_catalogue": True,
-            "original_categories": [],
-            "identity_basis": binding.get("basis"),
-            "record_scope": "Explicit external method; no Illumina classification inherited",
-        }
+    for origin, loaded in reviewed_runs:
+        for parent in sorted(loaded[0].parents):
+            binding = (index_bindings or {}).get(origin, bindings).get(parent, {})
+            external = binding.get("external_method")
+            if external is None:
+                continue
+            if (
+                not isinstance(external, dict)
+                or set(external) != {"id", "name"}
+                or external["id"] != binding.get("atlas_method_id")
+                or not all(isinstance(v, str) and v.strip() for v in external.values())
+                or external["id"] in atlas_method_ids
+            ):
+                raise ValueError(
+                    "External identity requires a new explicit ID/name, not an atlas override"
+                )
+            if external["id"] in methods:
+                if methods[external["id"]]["name"] != external["name"]:
+                    raise ValueError("Conflicting external method identity")
+                continue
+            methods[external["id"]] = {
+                **external,
+                "outside_catalogue": True,
+                "original_categories": [],
+                "identity_basis": binding.get("basis"),
+                "record_scope": "Explicit external method; no Illumina classification inherited",
+            }
 
     def add_node(record):
         if record["id"] in nodes and nodes[record["id"]] != record:
@@ -131,7 +132,7 @@ def assemble_graph(atlas: dict, bindings: dict, reviewed_runs: list[tuple]) -> d
         parent_workflows, parent_methods = {}, {}
         for parent, row in context.parents.items():
             workflow, packet, parent_review = row["workflow"], row["packet"], row["review"]
-            binding = bindings.get(parent, {})
+            binding = (index_bindings or {}).get(origin, bindings).get(parent, {})
             if (
                 binding.get("workflow_method_id") != workflow.method_id
                 or binding.get("atlas_method_id") not in methods
@@ -406,6 +407,7 @@ def build_graph(
     indexes: list[Path],
     *,
     extractions_path: Path | None = None,
+    comparison_receipts: dict[Path, Path] | None = None,
 ) -> dict:
     if not indexes and extractions_path is None:
         raise ValueError("Supply completed extraction runs and/or matching indexes")
@@ -414,6 +416,10 @@ def build_graph(
         files.add(extractions_path.resolve())
     pins = {str(p): sha(p) for p in files}
     atlas, bindings = json.loads(atlas_path.read_text()), json.loads(bindings_path.read_text())
+    scoped_bindings = {}
+    comparison_receipts = receipt_paths(comparison_receipts)
+    if set(comparison_receipts) - {Path(p).resolve() for p in indexes}:
+        raise ValueError("Comparison selection receipt needs an explicitly supplied matching index")
     runs = []
     if extractions_path is not None:
         loaded = load_extractions(extractions_path)
@@ -422,6 +428,14 @@ def build_graph(
     for index in indexes:
         index = index.resolve()
         loaded = load_reviewed(index)
+        if index in comparison_receipts:
+            local, preparation_pins = resolve_bindings(comparison_receipts[index], loaded)
+            scoped_bindings[str(index)] = local
+            for path, expected in preparation_pins.items():
+                if path in pins and pins[path] != expected:
+                    raise ValueError("Comparison preparation conflicts with a graph input pin")
+                pins[path] = expected
+                files.add(Path(path))
         runs.append((str(index), loaded))
         files.update(loaded[0].files)
         descriptor = json.loads(index.read_text())
@@ -431,7 +445,7 @@ def build_graph(
         files.update(p for p in review_dir.iterdir() if p.is_file())
     for path in files:
         pins.setdefault(str(path), sha(path))
-    result = assemble_graph(atlas, bindings, runs)
+    result = assemble_graph(atlas, bindings, runs, index_bindings=scoped_bindings)
     # Reopen bound sources after pin discovery, closing a load-to-pin mutation window.
     for index in indexes:
         load_reviewed(index.resolve())
@@ -439,6 +453,9 @@ def build_graph(
         load_extractions(extractions_path)
     if any(sha(Path(p)) != expected for p, expected in pins.items()):
         raise ValueError("Graph input changed during assembly")
+    if comparison_receipts:
+        result["comparison_identity_receipts"] = {str(index):str(receipt)
+            for index,receipt in comparison_receipts.items()}
     result["input_files"] = pins
     result["builder_implementation"] = {
         p.name: sha(p) for p in sorted(Path(__file__).parent.glob("*.py"))

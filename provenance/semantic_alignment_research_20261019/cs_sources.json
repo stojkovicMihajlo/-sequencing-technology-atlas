@@ -1,0 +1,235 @@
+{
+  "audit_date": "2026-10-19",
+  "scope": "Read-only primary-literature and implementation audit; no SSH or extraction/model execution. Only authorized research notes and source evidence were saved.",
+  "local_contract": {
+    "inputs": [
+      "Operation occurrence substrate and input state",
+      "state transformation",
+      "mechanism",
+      "output",
+      "information effect",
+      "context",
+      "source evidence"
+    ],
+    "target": "Evidence-supported membership in shared operation concepts at an explicit declared granularity, retaining all source occurrences.",
+    "relations": [
+      "same_meaning_at_declared_granularity",
+      "broader_than",
+      "narrower_than",
+      "shares_purpose",
+      "shares_mechanism",
+      "contextual_substitutability",
+      "composed_of",
+      "insufficient_evidence"
+    ],
+    "constraints": [
+      "A string label does not identify a concept.",
+      "Unknown facets are not agreements.",
+      "Similarity is not transitive; equivalence decisions require cluster consistency.",
+      "Contextual substitutability requires its conditions and is distinct from identity.",
+      "Bundle mappings are typed assertions between operation sets/subgraphs, not forced one-to-one node assignments."
+    ]
+  },
+  "sources": [
+    {
+      "id": "scion_icml2026",
+      "title": "SCOPE and SCION: A Benchmark and an Auditable Reference Pipeline for Schema Induction and Fusion from Text",
+      "venue": "ICML 2026",
+      "publication_status": "Verified official PMLR 306:45063-45091; conference July 6-11 2026, volume published September 29 2026, before audit cutoff.",
+      "primary_url": "https://proceedings.mlr.press/v306/hu26t.html",
+      "fulltext_read": "https://arxiv.org/html/2607.21610",
+      "paper_findings": "Train-text-only schema induction and fusion; candidate-constrained naming/merging/filtering, evidence pointers, conservative typed mapping; core event benchmark covers event types and within-event roles, with inter-event links auxiliary. Semantic/graph metrics are approximate summaries, not strict operation identity tests.",
+      "repository": "https://github.com/wandugu/paper_scion",
+      "inspected_commit": "cb77f824fcbd339c64aebcd7cb562b78a254e9a6",
+      "commit_date": "2026-10-10T08:29:56Z",
+      "license": "Apache-2.0; LICENSE inspected",
+      "code_paths_inspected": [
+        "src/ontology_generate.py",
+        "src/utils/scion_candidates.py",
+        "tests/test_ontology_generate_candidate_contract.py",
+        "tests/test_scion_candidates.py",
+        "src/rebuttal/rebuttal_experiments.py",
+        "src/rebuttal/scripts/E6_run_fusion_baselines.py",
+        "README.md",
+        "README_zh.md",
+        "rebuttal/outputs/E0_deviations.md",
+        "rebuttal/outputs/E6_summary.md",
+        "config/config.yaml"
+      ],
+      "implementation_findings": [
+        "src/utils/scion_candidates.py::_labels_match normalizes strings then accepts token overlap at least 0.75. constrain_ontology_to_candidates and constrain_events_to_candidates test label linkage rather than source entailment; event roles are pooled across the candidate package.",
+        "src/ontology_generate.py::merge_schema_payload (line 1510) uses exact-label/triple merge helpers. This inspected path is not a complete implementation of the paper's semantic alignment policy.",
+        "src/rebuttal/rebuttal_experiments.py::run_e6 (lines 1965-2070) emits literal fixed comparison rows and derives audit counts from those rows. It does not execute AML/LogMap/LLM matching in that function.",
+        "The authors disclose in rebuttal/outputs/E0_deviations.md: E6 uses a reproducible approximate implementation; paper Qwen/PPO artifacts and human annotation files are missing. README advertises E6 as a diagnostic/ablation runner. The observed helper cannot independently reproduce empirical fusion comparison; this is not evidence that the original paper study was fabricated."
+      ],
+      "decision": "ADAPT candidate/evidence boundaries, typed mapping outputs, conservative extensions; do not treat released approximate diagnostic rows as independently reproduced performance. Reimplement evidence validation for Operation contracts.",
+      "evidence_urls": [
+        "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/utils/scion_candidates.py",
+        "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/ontology_generate.py#L1510",
+        "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/src/rebuttal/rebuttal_experiments.py#L1965",
+        "https://github.com/wandugu/paper_scion/blob/cb77f824fcbd339c64aebcd7cb562b78a254e9a6/rebuttal/outputs/E0_deviations.md"
+      ]
+    },
+    {
+      "id": "kggen_neurips2025",
+      "title": "KGGen: Extracting Knowledge Graphs from Plain Text with Language Models",
+      "venue": "NeurIPS 2025",
+      "publication_status": "Verified NeurIPS 2025 conference PDF.",
+      "primary_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/2b368455e832d2b1a60bcad8c4c6481f-Paper-Conference.pdf",
+      "fulltext_read": "Same primary conference PDF including methods and evaluation.",
+      "paper_findings": "Extraction, aggregation, semantic clustering and hybrid lexical/dense retrieval followed by LLM duplicate resolution. Published method describes 128-item clusters and top-16 retrieved labels. Evaluation emphasizes text information retention and RAG, not expert operation-concept merge precision.",
+      "repository": "https://github.com/stair-lab/kg-gen",
+      "inspected_commit": "6259b4c71523ceae75dafb4acec2eb833bef8f8e",
+      "commit_date": "2026-03-24T21:10:16Z",
+      "license": "README states MIT; no standalone root LICENSE in inspected tree. No source copied into project implementation.",
+      "code_paths_inspected": [
+        "src/kg_gen/steps/_3_deduplicate.py",
+        "src/kg_gen/utils/deduplicate.py",
+        "src/kg_gen/utils/llm_deduplicate.py",
+        "experiments/wikiqa/utils/cluster_and_deduplication.py",
+        "README.md"
+      ],
+      "implementation_findings": [
+        "The inspected 2026 library code is later than the 2025 paper; do not attribute all current code choices to the published paper.",
+        "run_deduplication defaults FULL: SemHash threshold 0.95 collapse followed by LLM resolution. SemHash collapse is not evidence-backed semantic identity validation.",
+        "LLMDeduplicate encodes item labels; get_relevant_items combines raw 0.5 BM25 score + 0.5 cosine despite its rank-fusion docstring. Judge input includes item and label set, not structured facets or evidence.",
+        "LLMDeduplicate.cluster forms capacity-128 clusters; deduplicate_cluster retrieves top16 globally but filters actual duplicate merges to the current cluster, risking missed cross-cluster synonyms.",
+        "The WikiQA experiment helper uses the same raw-score hybrid and all-mpnet-base-v2 retrieval."
+      ],
+      "decision": "ADAPT broad hybrid candidate retrieval followed by strict contextual judgment. REJECT automatic string/embedding collapse as authoritative identity and cluster boundaries as completeness guarantees.",
+      "evidence_urls": [
+        "https://github.com/stair-lab/kg-gen/blob/6259b4c71523ceae75dafb4acec2eb833bef8f8e/src/kg_gen/steps/_3_deduplicate.py",
+        "https://github.com/stair-lab/kg-gen/blob/6259b4c71523ceae75dafb4acec2eb833bef8f8e/src/kg_gen/utils/llm_deduplicate.py",
+        "https://github.com/stair-lab/kg-gen/blob/6259b4c71523ceae75dafb4acec2eb833bef8f8e/src/kg_gen/utils/deduplicate.py"
+      ]
+    },
+    {
+      "id": "magneto_pvldb2025",
+      "title": "Magneto: Combining Small and Large Language Models for Schema Matching",
+      "venue": "PVLDB 18(8):2681-2694 (2025)",
+      "publication_status": "Verified primary publication DOI 10.14778/3742728.3742757; author arXiv v2 dated June 17 2025.",
+      "primary_url": "https://www.vldb.org/pvldb/vol18/p2681-freire.pdf",
+      "fulltext_read": "https://arxiv.org/html/2412.08194",
+      "paper_findings": "Cheap candidate retrieval and LLM reranking, optional synthetic-data contrastive retriever training; real biomedical GDC benchmark and curation-focused rankings. Candidate counts and evidence serialization affect performance; a ranking is an aid for human match decisions.",
+      "repository": "https://github.com/VIDA-NYU/magneto-matcher",
+      "inspected_commit": "6620623265fc7feac0f053996e62b68a13a72a57",
+      "commit_date": "2025-12-18T20:11:25Z",
+      "license": "Apache-2.0; LICENSE inspected",
+      "code_paths_inspected": [
+        "algorithms/magneto/magneto/magneto.py",
+        "algorithms/magneto/magneto/llm_reranker.py",
+        "algorithms/magneto/magneto/bp_reranker.py",
+        "LICENSE"
+      ],
+      "implementation_findings": [
+        "Magneto.DEFAULT_PARAMS uses topk20; default path enables bipartite reranker and disables GPT reranker. LLM reranking is an explicit configuration, not universal default behavior.",
+        "LLMReranker.rematch serializes column names and sample values, requests similarity scores, retries JSON parsing, and falls back to retriever scores if parsing fails. Those numbers are not calibrated operation-identity probabilities.",
+        "The optional bipartite assignment stage prioritizes one-to-one matches. This is unsuitable as a default operation bundle/subgraph alignment constraint."
+      ],
+      "decision": "ADAPT retrieve/rerank architecture and context-rich serialization. REJECT column-similarity scores and one-to-one assignment as the Operation semantic contract.",
+      "evidence_urls": [
+        "https://github.com/VIDA-NYU/magneto-matcher/blob/6620623265fc7feac0f053996e62b68a13a72a57/algorithms/magneto/magneto/magneto.py",
+        "https://github.com/VIDA-NYU/magneto-matcher/blob/6620623265fc7feac0f053996e62b68a13a72a57/algorithms/magneto/magneto/llm_reranker.py",
+        "https://github.com/VIDA-NYU/magneto-matcher/blob/6620623265fc7feac0f053996e62b68a13a72a57/algorithms/magneto/magneto/bp_reranker.py"
+      ]
+    },
+    {
+      "id": "autoschemakg_acl2026",
+      "title": "AutoSchemaKG: Autonomous Knowledge Graph Construction through Dynamic Schema Induction from Web-Scale Corpora",
+      "venue": "ACL 2026",
+      "publication_status": "Verified ACL Anthology July2026, pages20557-20584, DOI10.18653/v1/2026.acl-long.942.",
+      "primary_url": "https://aclanthology.org/2026.acl-long.942/",
+      "fulltext_read": "https://aclanthology.org/2026.acl-long.942.pdf",
+      "paper_findings": "Separates entity, event and concept nodes; generates multiple conceptualizations at different abstractions. Schema alignment headline is evaluated through BERTScore-based type recall/coverage in Appendix C.2, not adjudicated strict equivalence/merge precision.",
+      "repository": "https://github.com/HKUST-KnowComp/AutoSchemaKG",
+      "inspected_commit": "d0a1666ae6621806faf814504c73678de4e809f2",
+      "commit_date": "2026-01-14T07:14:40Z",
+      "license": "MIT; LICENSE inspected",
+      "code_paths_inspected": [
+        "atlas_rag/kg_construction/concept_generation.py",
+        "atlas_rag/kg_construction/concept_to_csv.py",
+        "atlas_rag/llm_generator/prompt/triple_extraction_prompt.py",
+        "EvaluateKGC/SchemaQuality/eval.py",
+        "LICENSE"
+      ],
+      "implementation_findings": [
+        "generate_concept requests several abstract phrases; entity context samples up to one predecessor and one successor, while event/relation conceptualization gets their label without this neighbor context.",
+        "all_concept_triples_csv_to_csv uses exact concept-string set deduplication and SHA256 of concept text for IDs. This does not implement semantic synonym resolution of conceptual nodes.",
+        "The generated abstraction phrases include related concepts and multiple abstraction levels; they cannot all be treated as equivalent aliases."
+      ],
+      "decision": "ADAPT separate occurrence/event and concept layers with multiple explicitly typed abstraction links. REJECT interpreting concept conceptualizations as synonyms or headline schema similarity as safe-merge validation.",
+      "evidence_urls": [
+        "https://github.com/HKUST-KnowComp/AutoSchemaKG/blob/d0a1666ae6621806faf814504c73678de4e809f2/atlas_rag/kg_construction/concept_generation.py",
+        "https://github.com/HKUST-KnowComp/AutoSchemaKG/blob/d0a1666ae6621806faf814504c73678de4e809f2/atlas_rag/kg_construction/concept_to_csv.py",
+        "https://github.com/HKUST-KnowComp/AutoSchemaKG/blob/d0a1666ae6621806faf814504c73678de4e809f2/EvaluateKGC/SchemaQuality/eval.py"
+      ]
+    },
+    {
+      "id": "matchmaker_icml2025",
+      "title": "Bootstrapping Self-Improvement of Language Model Programs for Zero-Shot Schema Matching",
+      "venue": "ICML 2025",
+      "publication_status": "Verified PMLR267:53791-53826; conference July13-19 2025. Earlier arXiv version title is Matchmaker: Self-Improving Large Language Model Programs for Schema Matching.",
+      "primary_url": "https://proceedings.mlr.press/v267/seedat25a.html",
+      "fulltext_read": "https://arxiv.org/html/2410.24105 (earlier named version); official final PDF search text inspected at https://openreview.net/attachment?id=clLERWKNja&name=pdf but direct download hit browser verification.",
+      "paper_findings": "Compositional candidate generation, refinement and confidence scoring; combines semantic retrieval with LLM reasoning candidates and provides a no-match option, synthetic in-context optimization and human deferral.",
+      "repository_audit": "No official implementation located/inspected in this bounded search. Do not claim pinned-code reproduction.",
+      "decision": "ADAPT diverse candidate sources and explicit no-match/deferral; do not presume self-reported confidence calibrated or synthetic examples correct in scientific domains."
+    },
+    {
+      "id": "aspenplus_kr2025",
+      "title": "Advances in Logic-Based Entity Resolution: Enhancing ASPEN with Local Merges and Optimality Criteria",
+      "venue": "KR2025, KR in the Wild",
+      "publication_status": "Verified official KR2025 proceedings659-669, November11-17 2025, DOI10.24963/kr.2025/64.",
+      "primary_url": "https://proceedings.kr.org/2025/64/",
+      "fulltext_read": "https://orca.cardiff.ac.uk/id/eprint/180758/2/ASPEn_KR2025_CR.pdf",
+      "paper_findings": "Local merging of value cells versus global object identity; hard and soft rules with denial constraints; multiple preferred solutions and alternative optimality criteria. Equivalence remains transitive inside a chosen solution, but unconstrained similarity proposals do not determine a unique solution.",
+      "repository": "https://github.com/zl-xiang/ASPEnP",
+      "repository_audit": "Repository landing inspected; no code/license pin audit completed, so recommend principle-level comparison only.",
+      "decision": "ADAPT local interpretation and must-link/cannot-link constraint checks; a full ASP optimizer is unnecessary for the first registry prototype."
+    }
+  ],
+  "minimal_architecture_recommendation": {
+    "attribution": "Own synthesis from inspected methods and the Operation contract; not a published validated architecture.",
+    "steps": [
+      "Retain source occurrence IDs, evidence spans, unknown fields, local order and parent/child structure. Store shared concepts separately with inclusion/exclusion definitions and declared granularity.",
+      "Candidate retrieval takes the union of dense retrieval over structured definitions, BM25/character ngrams over names/aliases, and typed facet indexes. Use rank fusion or separately calibrated features, never raw mixed-score thresholds as identity.",
+      "Judge candidates jointly using full operation cards and evidence. Return one typed relation, conflicting facets, applicability conditions, evidence support and abstention; distinguish same meaning from purpose/mechanism/substitutability.",
+      "Check proposed equivalences against existing cluster members, explicit exclusions and cannot-links. Similarity components are candidate neighborhoods, not equivalence classes.",
+      "Check-before-create against accepted and pending concepts; batch sibling proposals, recheck inside an atomic registry admission step, and keep unresolved records pending. Record concept versions and reversible mappings.",
+      "Treat variable-granularity matches as explicit set/subgraph mapping assertions with a composition rationale, pre/post-state boundary and coverage; do not force nodewise one-to-one matches."
+    ]
+  },
+  "evaluation_recommendation": {
+    "attribution": "Own proposed scientific evaluation, not established by these benchmarks.",
+    "gold": "Expert-adjudicated relation labels on difficult operation pairs and small subgraphs, with cited evidence, ambiguous cases and declared granularity; split by paper/assay family.",
+    "metrics": [
+      "candidate recall@k including sparse/dense union gain",
+      "strict equivalent-link precision and recall",
+      "false-merge rate and duplicate-creation rate",
+      "cluster consistency and bridge-error counts",
+      "abstention coverage versus error, calibrated on held-out judgments",
+      "source-family holdout generalization",
+      "batch order/concurrent insertion sensitivity",
+      "bundle mapping boundary and information-effect correctness",
+      "reviewer time/cost per accepted concept"
+    ],
+    "baselines": [
+      "normalized exact labels",
+      "character ngrams/BM25",
+      "dense-only retrieval",
+      "hybrid retrieval plus same judge",
+      "bounded allpairs on small gold subset as candidate-recall reference",
+      "check-before-create with and without pending-registry search"
+    ],
+    "negative_controls": [
+      "same purpose but different mechanism",
+      "same mechanism but changed substrate/output/information effect",
+      "near-identical labels with negation or different state",
+      "different labels with equivalent transformation",
+      "unknown substrate/output",
+      "composite step versus several atomic steps"
+    ]
+  },
+  "search_boundary": "Searched primary2025/2026 ICLR/ICML/NeurIPS and ACL/VLDB/SIGMOD-adjacent literature. Strong verified direct hits include ICML2026 SCION, ICML2025 Matchmaker, NeurIPS2025 KGGen; no comparable ICLR-specific claim or future NeurIPS2026 publication is made.",
+  "scion_local_evidence": "external/semantic_alignment_refs_20261019/scion_audit"
+}

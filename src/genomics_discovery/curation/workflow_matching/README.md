@@ -83,6 +83,12 @@ The discovery command can inspect unaccepted profiles while the analyst is worki
 output explicitly says that review status has not been checked. Consumers should use
 `search-reviewed` and `compare` with a successfully reviewed run's index. These commands
 replay source/cut/proposal/review bindings and require a completed native reviewer archive.
+They also replay the completed run checkpoint, both stage instructions and archive hashes,
+the exact compiler handoff, and distinct recorded compiler/reviewer native sessions. The
+frozen source and seed-occurrence pins are checked before serving claims or graph admission.
+Historical files remain intact; a record missing these ownership checkpoints needs explicit
+re-review before it can authorize a new graph admission. A complete unrelated archive is
+insufficient. These checks establish provenance, not whether a reviewer judged correctly.
 They fail if the source changed, the review is incomplete/nonpositive, or an index is stale.
 They preserve the difference between reported evidence, inference and uncharacterized facts.
 `compare` retrieves a recorded comparison for its original question; it does not generate
@@ -90,6 +96,13 @@ a new comparison on demand. Default output retains navigation, interface routes 
 claims. Add `--full-context` for the complete recorded states, citations and source gaps.
 New questions enter through a new cases file and the native analyst/reviewer driver.
 Read-only consumer calls reuse the completed index and require no new model calls.
+
+A positive shared-mechanism comparison needs an explicit transformation claim that targets
+selected operations on both sides, with reported source evidence from both contexts.
+External operations remain available as context and dependency targets; a correspondence
+solely between those external operations cannot establish the selected groups' mechanism.
+Different group sizes remain valid, and a targeted operation can still bundle actions that
+are outside the supported correspondence. The graph lookup reports that claim scope.
 
 ```sh
 PYTHONPATH=src .venv/bin/python -m genomics_discovery.curation.workflow_matching search-reviewed /absolute/path/to/run/matching_index.json 'origin association pooled recovery' --dimension information

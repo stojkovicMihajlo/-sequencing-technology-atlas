@@ -111,7 +111,8 @@ def test_legacy_entries_are_unassessed_and_can_be_explicitly_reviewed(cases, reg
     old = legacy["assignments"][digest(first)]
     old.pop("admission_decision_sha256"); old.pop("supersedes_assignment_ids")
     with sqlite3.connect(registry.path) as db:
-        db.execute("UPDATE registry SET payload=? WHERE id=1", (json.dumps(legacy),))
+        from genomics_discovery.curation.operation_registry.storage import write_snapshot
+        write_snapshot(db, legacy)
     assert catalogue(registry.snapshot())["admission_status"][first.definition.id] == "legacy_unassessed"
     assert not graph_overlay(registry.snapshot())["edges"]
     reused = assignment(cases, registry.snapshot(), decision="reuse")
@@ -145,7 +146,8 @@ def test_changed_archived_admission_review_is_rejected(cases, registry):
     snap = registry.snapshot()
     next(iter(snap["decisions"].values()))["review"]["boundary_clear"] = False
     with sqlite3.connect(registry.path) as db:
-        db.execute("UPDATE registry SET payload=? WHERE id=1", (json.dumps(snap),))
+        from genomics_discovery.curation.operation_registry.storage import write_snapshot
+        write_snapshot(db, snap)
     with pytest.raises(ValueError, match="admission decision/review binding"):
         registry.snapshot()
 

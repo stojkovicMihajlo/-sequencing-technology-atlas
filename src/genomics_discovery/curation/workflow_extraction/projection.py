@@ -19,6 +19,34 @@ from .models import (
 from .sources import validate_packet
 
 
+def _binding_view(flow) -> dict:
+    """Keep edge support and selection distinct from state/operation evidence."""
+    return {"flow_id": flow.id,
+            "state_id": flow.source if flow.kind.endswith("_input") else flow.target,
+            "direction": "input" if flow.kind.endswith("_input") else "output",
+            "association": flow.association,
+            "selection": flow.selection, "alternative_group": flow.alternative_group,
+            "condition": flow.condition, "basis": flow.basis,
+            "evidence": [item.model_dump(mode="json") for item in flow.evidence]}
+
+
+def _input_groups(bindings: list[dict]) -> list[dict]:
+    groups = {}
+    for binding in bindings:
+        alternative = binding["selection"] == "alternative"
+        key = ("alternative", binding["alternative_group"]) if alternative else (
+            "single", binding["flow_id"])
+        group = groups.setdefault(key, {
+            "selection": binding["selection"],
+            "alternative_group": binding["alternative_group"],
+            "rule": "exactly_one" if alternative else binding["selection"] or "unspecified",
+            "state_ids": [], "flow_ids": [],
+        })
+        group["state_ids"].append(binding["state_id"])
+        group["flow_ids"].append(binding["flow_id"])
+    return list(groups.values())
+
+
 def _relations(workflow: Workflow) -> list[dict]:
     operations = {op.id: op for op in workflow.operations}
     relations = []
@@ -28,6 +56,7 @@ def _relations(workflow: Workflow) -> list[dict]:
                 "source": flow.source, "target": flow.target,
                 "flow_ids": [flow.id], "flow_types": [flow.kind],
                 "state_id": None, "conditions": [flow.condition] if flow.condition else [],
+                "route_bindings": [],
             })
         elif flow.kind in {"material_output", "data_output"}:
             for consumer in workflow.flows:
@@ -37,6 +66,7 @@ def _relations(workflow: Workflow) -> list[dict]:
                         "flow_ids": [flow.id, consumer.id],
                         "flow_types": [flow.kind, consumer.kind], "state_id": flow.target,
                         "conditions": [f.condition for f in (flow, consumer) if f.condition],
+                        "route_bindings": [_binding_view(f) for f in (flow, consumer)],
                     })
     return relations
 
@@ -56,8 +86,13 @@ def query_workflow(workflow: Workflow, operation_id: str) -> dict:
             "operation_id": edge[other], "name": operations[edge[other]].name,
             "flow_ids": edge["flow_ids"], "flow_types": edge["flow_types"],
             "state_id": edge["state_id"], "conditions": edge["conditions"],
+            "route_bindings": edge["route_bindings"],
         } for edge in relations if edge[own] == operation_id]
 
+    input_bindings = [_binding_view(flow) for flow in workflow.flows
+                      if flow.target == operation_id and flow.kind.endswith("_input")]
+    output_bindings = [_binding_view(flow) for flow in workflow.flows
+                       if flow.source == operation_id and flow.kind.endswith("_output")]
     return {
         "method_id": workflow.method_id, "variant": workflow.variant, "scope": workflow.scope,
         "workflow_sha256": digest(workflow),
@@ -66,6 +101,8 @@ def query_workflow(workflow: Workflow, operation_id: str) -> dict:
         "operation": operation.model_dump(mode="json"),
         "inputs": [states[sid].model_dump(mode="json") for sid in operation.inputs],
         "outputs": [states[sid].model_dump(mode="json") for sid in operation.outputs],
+        "input_bindings": input_bindings, "output_bindings": output_bindings,
+        "input_groups": _input_groups(input_bindings),
         "resources": [resource.model_dump(mode="json") for resource in operation.resources],
         "predecessors": neighbours("predecessors"), "consumers": neighbours("consumers"),
         "modules": [module.model_dump(mode="json") for module in workflow.modules
@@ -121,7 +158,7 @@ def _evidence_line(evidence: list[dict]) -> str:
     return "; ".join(
         f"{e['source_id']}:{e['passage_id']} ({e['support']}): {e['quote']}"
         for e in evidence
-    ) or "No direct passage citation; curator interpretation."
+    ) or "No direct passage citation supplied."
 
 
 def _protocol_text(workflow: Workflow, review: WorkflowReview, *, diagnostic: bool = False) -> str:
@@ -132,7 +169,10 @@ def _protocol_text(workflow: Workflow, review: WorkflowReview, *, diagnostic: bo
              f"Model/source review outcome: {outcome} within the declared scope.",
              "This artifact does not establish human acceptance or experimental validation.",
              "Module boundaries are curator interpretations.",
-             "Step order follows declared flow dependencies; equally ready steps use ID order.", ""]
+             "Step order displays the union of declared flow dependencies; equally ready "
+             "steps use ID order. This is not an execution schedule.",
+             "Optional and mutually exclusive inputs remain conditional alternatives, "
+             "not cumulative execution requirements. Unspecified selection is not assumed required.", ""]
     for module in workflow.modules:
         lines.append(f"Module {module.id}: {module.name}; "
                      f"members: {', '.join(module.operation_ids)}")
@@ -141,9 +181,20 @@ def _protocol_text(workflow: Workflow, review: WorkflowReview, *, diagnostic: bo
         query = query_workflow(workflow, operation_id)
         op = query["operation"]
         lines.extend(["", f"Step {index} [{op['id']}]: {op['name']}"])
+        for group in query["input_groups"]:
+            if group["selection"] == "alternative":
+                lines.append(f"  Input alternative group [{group['alternative_group']}]: "
+                             f"exactly one of {', '.join(group['state_ids'])}")
         for state in query["inputs"]:
             lines.append(f"  Input [{state['id']}] ({state['kind']}): {state['description']}")
             lines.append(f"    Evidence: {_evidence_line(state['evidence'])}")
+        for binding in query["input_bindings"]:
+            lines.append(f"  Input binding [{binding['state_id']}]: "
+                         f"association {binding['association'] or 'legacy_unspecified'}; "
+                         f"selection {binding['selection'] or 'unspecified'}; "
+                         f"group {binding['alternative_group']}; condition {binding['condition']}")
+            lines.append(f"    Association basis: {binding['basis']}")
+            lines.append(f"    Association evidence: {_evidence_line(binding['evidence'])}")
         lines.append(f"  Action: {op['action']}")
         for resource in query["resources"]:
             lines.append(f"  {resource['kind'].capitalize()}: {resource['description']}")
@@ -167,7 +218,10 @@ def _protocol_text(workflow: Workflow, review: WorkflowReview, *, diagnostic: bo
         for flow in query["flows"]:
             lines.append(f"  Route [{flow['id']}]: {flow['source']} -> {flow['target']} "
                          f"({flow['kind']}); basis: {flow['basis']}; "
-                         f"condition: {flow['condition']}")
+                         f"condition: {flow['condition']}; "
+                         f"association: {flow.get('association', 'legacy_unspecified')}; "
+                         f"selection: {flow.get('selection', 'unspecified')}; "
+                         f"alternative group: {flow.get('alternative_group')}")
             lines.append(f"    Evidence: {_evidence_line(flow['evidence'])}")
     lines.extend(["", "Explicit gaps:"])
     lines.extend(f"  [{gap.id}] {gap.description}; blocking: {gap.blocking}; "
@@ -232,6 +286,8 @@ def _export(workflow: Workflow, review: WorkflowReview, packet: dict, run: Path,
     edges = [{"id": f"{namespace}:flow:{quote(flow.id, safe='')}",
               "source": ids[flow.source], "target": ids[flow.target], "kind": flow.kind,
               "scope": workflow.scope, "original": flow.model_dump(mode="json"),
+              "association": flow.association, "selection": flow.selection,
+              "alternative_group": flow.alternative_group, "condition": flow.condition,
               "review_verdict": verdicts[f"flow:{flow.id}"],
               "source_refs": _references(flow.model_dump(mode="json"), packet)}
              for flow in workflow.flows]

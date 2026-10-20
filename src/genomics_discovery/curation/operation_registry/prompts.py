@@ -12,6 +12,20 @@ def build_prompt(role: str, run: Path, attempt: Path, packets: dict, *, proposal
     tool = source.removesuffix("workflow_extraction") + "operation_registry"
     q = lambda path: shlex.quote(str(path))
     sources = "\n".join(f"Selection {ident}: source packet {q(path)}" for ident, path in packets.items())
+    profiles = ""
+    if (run / "comparison_profiles.json").is_file():
+        profiles = f"""
+Source-bound comparison annotations: {run / 'comparison_profiles.json'}.
+Read the annotations for each selection, including assertion status, applicability,
+lineage, scope and evidence. These are unreviewed interpretations, not additional
+sources or inherited verdicts. Reopen every passage relied on for a definition or
+membership. Unknown and not_assessed assertions are not agreement; explicit absence
+and non-applicability require evidence. A shared purpose can be supported while a
+mechanism is unknown; do not strengthen it into shared mechanism or substitution.
+The annotations retain the exact selected operations and states. They cannot
+authorize dropping an inconvenient branch, merging aliquots or inventing an
+intermediate. Describe unresolved consequential distinctions in the decision.
+"""
     common = f"""ROLE: operation_concept_{role}
 Build a useful index for agents comparing sequencing protocol transformations.
 This is post-extraction vocabulary curation. Preserve each actual operation,
@@ -47,6 +61,7 @@ claims about this selection. Assess their relevance. If a membership relies on
 a context note, cite its source in the member evidence and discuss its effect;
 do not ignore relevant uncertainty or automatically import unrelated analysis.
 {sources}
+{profiles}
 {source} catalog PACKET --focus methods
 {source} search PACKET 'specific terms' --limit 6
 {source} read PACKET --source-id SOURCE_ID --passage-id PASSAGE_ID
@@ -103,7 +118,30 @@ Integrity helper (not proof of scientific truth or usefulness):
 {tool} check-vocabulary {q(run / 'registry.json')} PROPOSAL {q(run / 'manifest.json')}
 """
     if role == "compiler":
-        return common + f"""
+        recovery = ""
+        if (run / "reconciliation.json").is_file():
+            recovery = f"""
+This is source-backed reconciliation of pending definitions. Read
+{run / 'reconciliation.json'} for the old definitions and the precise comparison
+ambiguities. Those drafts and judgments are questions to investigate, not evidence.
+Reopen the supplied sources to distinguish missing wording from a genuine
+difference, an unsupported claim, or different abstraction levels. Explain the
+resolution in each decision's explanation and preserve use-specific differences
+in case.properties_to_preserve and member context. Do not claim the old definitions
+were equivalent merely because a new, more general definition covers both.
+You may clarify a definition, propose one source-supported shared transformation,
+keep separate definitions, or retain a provisional decision. A shared definition
+must describe the whole selected transformation and have meaningful boundaries;
+shared terminology alone is insufficient. There is no required merge or label count.
+Do not broaden a definition until it says only that something processes molecules.
+All supplied selections must remain accounted for, including distinct controls or
+unrelated selections in the same original submission. Do not change their cuts,
+original operations or sources. If different cuts are needed, explain that as an
+unresolved boundary issue. Existing admitted definitions stay immutable. Old draft
+IDs are not admitted concepts and cannot appear in existing_concept_ids/revision_requests.
+Do not inspect other experimental runs, reference answers or expected outcomes.
+"""
+        return common + recovery + f"""
 Write VocabularyProposal to {attempt / 'artifact.json'} with exactly one decision
 per supplied selection. assignment may be null; explain properties-only or
 provisional retention in explanation/case. Otherwise use Assignment with exactly

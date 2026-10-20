@@ -1,0 +1,54 @@
+Bootstrap: docker
+From: python@sha256:2ed6491b93cd49272ee6de2b5a38440c3448360322c089fc23e370722d74179d
+
+%labels
+    org.opencontainers.image.title Sequencing technology atlas tools
+    org.opencontainers.image.description Software only; no papers, login data, or extraction results
+    atlas.codex.version 0.163.0
+    atlas.architecture linux-amd64
+
+%files
+    requirements.lock /opt/atlas/requirements.lock
+
+%post
+    set -eu
+    # This section runs inside the image build, never against the host package manager.
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ca-certificates curl git bubblewrap poppler-utils
+    rm -rf /var/lib/apt/lists/*
+    python -m pip install --no-cache-dir --require-hashes -r /opt/atlas/requirements.lock
+    python - <<'PY'
+import hashlib, pathlib, tarfile, urllib.request
+url = 'https://github.com/openai/codex/releases/download/rust-v0.163.0/codex-package-x86_64-unknown-linux-musl.tar.gz'
+expected = '582646c6bf0561eb0de540f7fc85b9121b0091a826bc6e96830b7f1722122182'
+archive = pathlib.Path('/tmp/codex-release.tar.gz')
+urllib.request.urlretrieve(url, archive)
+with archive.open('rb') as stream:
+    if hashlib.file_digest(stream, 'sha256').hexdigest() != expected:
+        raise RuntimeError('Codex release checksum mismatch')
+destination = pathlib.Path('/opt/codex')
+destination.mkdir()
+with tarfile.open(archive) as bundle:
+    bundle.extractall(destination, filter='data')
+if not (destination / 'bin/codex').is_file():
+    raise RuntimeError('Unexpected Codex package layout')
+archive.unlink()
+PY
+    python -m pip freeze > /opt/atlas/python-packages.txt
+    dpkg-query -W > /opt/atlas/os-packages.txt
+
+%environment
+    export PATH=/opt/codex/bin:/usr/local/bin:/usr/bin:/bin
+    export PYTHONDONTWRITEBYTECODE=1
+    export LC_ALL=C.UTF-8
+
+%test
+    set -eu
+    python -c 'import pydantic, pytest, pytest_asyncio; print(pydantic.__version__)'
+    /opt/codex/bin/codex --version
+    pdftotext -v
+    test ! -e /root/.codex/auth.json
+
+%runscript
+    exec "$@"

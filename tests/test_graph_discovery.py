@@ -52,6 +52,19 @@ def test_state_claim_does_not_invent_operation_coverage(graph):
     assert row["claims"][0]["left_targets"] == ["state:tagged"]
 
 
+def test_external_claims_remain_visible_without_covering_selected_operations(graph):
+    claim = next(iter(graph["comparisons"].values()))["alignment"]["claims"][0]
+    claim["left_targets"] = ["operation:assay"]
+    row = lookup_correspondences(graph, left(graph), ["insert", "repair"])["comparisons"][0]
+    assert row["direct_correspondence_operation_targets"] == []
+    assert row["selected_operations_without_direct_correspondence_target"] == ["insert", "repair"]
+    assert row["claims"][0]["external_context_operation_targets"] == ["assay"]
+    assert row["claims"][0]["queried_operation_targets"] == []
+    claim["left_targets"] = ["operation:invented"]
+    with pytest.raises(ValueError, match="outside its comparison selection/context"):
+        lookup_correspondences(graph, left(graph), ["insert"])
+
+
 def test_stale_comparison_selection_rejected(graph):
     view = next(iter(graph["comparisons"].values()))["left_view"]
     graph["views"][view]["cut"]["workflow_sha256"] = "stale"

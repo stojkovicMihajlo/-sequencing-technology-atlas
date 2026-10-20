@@ -101,8 +101,32 @@ expand its selections when an interface spans several operations. Both purpose
 and mechanism questions allow nonpositive results. Only completed, freshly reviewed
 indexes can contribute new links through the graph builder.
 The prepared receipt carries the original curated identity bindings for each parent
-alias. Reuse those exact bindings when integrating the comparison; inventing a new
-identity rationale for an already bound workflow creates a conflicting record.
+alias. Bind that exact receipt to its completed reviewed index during integration:
+
+```sh
+python -m genomics_discovery.curation.technology_graph build \
+  --atlas atlas.json --bindings publication/bindings.json \
+  --extractions publication/extractions.json \
+  --index matching-run/matching_index.json \
+  --comparison-receipt matching-run/matching_index.json prepared/selection_receipt.json \
+  --output next-graph.json
+```
+
+The same `--comparison-receipt INDEX SELECTION_RECEIPT` option is available on
+`python -m genomics_discovery.curation.batch_graph` alongside `--index` and
+`--previous`. The Python APIs accept `comparison_receipts={index_path: receipt_path}`.
+Aliases such as `left` and `right` are scoped per index, so separate comparisons
+can reuse them. Global atlas bindings stay unchanged. The host checks the exact
+source graph and prepared input pins, then matches workflow, packet and review
+hashes against each reviewed parent. Changed identities or workflow versions
+are rejected; title similarity never binds an identity. Matching artifacts are
+not rewritten. A comparison inherits the curated identity assertion, not a new
+scientific verdict.
+
+Publication `indexes.json` keeps legacy string entries and can also contain
+`{"index": "...", "selection_receipt": "..."}` records. Receipt associations and
+bytes are graph-pinned and inherited by later publications; an inherited index
+cannot be silently associated with a different receipt.
 
 New comparison edges expose their correspondence, inference-tagged and unestablished
 claim indices. These are summaries of recorded claims, not truth labels inferred from

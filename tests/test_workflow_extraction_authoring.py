@@ -39,7 +39,11 @@ def draft():
         "operations": [
             {"id": i, "name": i, "action": "Reported transformation.", "inputs": inputs,
              "outputs": outputs, "resources": [], "information_effect": "Preserve identity.",
-             "evidence": [EVIDENCE]}
+             "evidence": [EVIDENCE],
+             "input_bindings": [{"state_id": state, "basis": "Authored input association.",
+                                 "evidence": [EVIDENCE]} for state in inputs],
+             "output_bindings": [{"state_id": state, "basis": "Authored output association.",
+                                  "evidence": [EVIDENCE]} for state in outputs]}
             for i, inputs, outputs in [("prepare", ["native"], ["processed"]),
                                       ("measure", ["processed"], ["observations"])]],
         "modules": [{"id": "main", "name": "Preparation and readout",
@@ -65,6 +69,8 @@ def test_full_revision_preserves_manual_flow_evidence_and_uncertainty(draft):
     data = workflow.model_dump(mode="json")
     data["flows"][1]["evidence"][0]["support"] = "inferred"
     data["flows"][1]["evidence"][0]["rationale"] = "Explicit interpretation of routing."
+    data["operations"][0]["input_bindings"][0]["evidence"] = deepcopy(
+        data["flows"][1]["evidence"])
     original = Workflow.model_validate(data)
     view = authoring_view(original)
     assert len(view["evidence_registry"]) == 2

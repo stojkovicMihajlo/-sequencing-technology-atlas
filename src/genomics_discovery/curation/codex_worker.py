@@ -13,6 +13,7 @@ import json
 import math
 import os
 import signal
+import socket
 import subprocess
 import time
 from dataclasses import asdict, dataclass, field
@@ -223,6 +224,13 @@ class CodexWorker:
             "--ignore-user-config",
             "--sandbox",
             "workspace-write",
+            # Noninteractive exec otherwise cannot request an approved escalation
+            # when the host cannot start its inner sandbox. Review every request;
+            # never substitute a sandbox bypass or weaken managed requirements.
+            "--config",
+            'approval_policy="on-request"',
+            "--config",
+            'approvals_reviewer="auto_review"',
             "--skip-git-repo-check",
             "--disable",
             "multi_agent",
@@ -278,7 +286,9 @@ class CodexWorker:
         )
         (attempt_dir / "started.json").write_text(
             json.dumps({"pid": None, "process_group_id": None, "started_at": None,
-                        "process_start_identity": None, "spawned": False}, indent=2) + "\n",
+                        "process_start_identity": None, "spawned": False,
+                        "hostname": socket.gethostname(),
+                        "slurm_job_id": environment.get("SLURM_JOB_ID")}, indent=2) + "\n",
             encoding="utf-8",
         )
         started = time.monotonic()
@@ -298,6 +308,8 @@ class CodexWorker:
                 "process_start_identity": _process_start_identity(process.pid),
                 "spawned": True,
                 "cwd": str(attempt_dir),
+                "hostname": socket.gethostname(),
+                "slurm_job_id": environment.get("SLURM_JOB_ID"),
             }
             temporary = attempt_dir / "started.json.tmp"
             temporary.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")

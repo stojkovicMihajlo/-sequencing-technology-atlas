@@ -722,6 +722,79 @@ async def test_repair_scope_resolution_preserves_unknown_recipe_detail(source_ca
     assert "resolution:chemistry:recipe_volume" in {check.target_id for check in review.checks}
 
 
+async def test_repair_of_integrator_gap_retains_unknown_without_inventing_reader_lineage(
+    source_case, tmp_path,
+):
+    from genomics_discovery.curation.workflow_extraction.runtime import execute
+
+    worker = FakeWorker(source_case)
+    detail = {"id": "recipe_volume", "description": "Transfer volume is not reported.",
+              "blocking": True, "next_evidence": "Inspect the delegated recipe."}
+    worker.workflow["unresolved"] = [detail]
+    seed, feedback = repair_inputs(worker, tmp_path)
+    worker.workflow["unresolved"] = [{**detail, "blocking": False,
+        "description": detail["description"] + " The reported wash inputs, outputs and role "
+                       "support the general boundary; an executable volume is not claimed."}]
+    state = await execute(source_case[1], tmp_path / "repair", worker=worker, mode="repair",
+                          initial_workflow=seed, repair_review=feedback)
+    assert state["status"] == "supported", state.get("error")
+    repaired = Workflow.model_validate_json(Path(state["workflow"]).read_bytes())
+    assert repaired.unresolved[0].id == detail["id"]
+    assert repaired.unresolved[0].next_evidence == detail["next_evidence"]
+    assert not repaired.unresolved[0].blocking and not repaired.gap_resolutions
+    assert worker.integrations == worker.reviews == 1
+    prompt = worker.calls[0]["prompt"]
+    assert "Never invent a reader role" in prompt and "--previous-workflow" in prompt
+
+
+@pytest.mark.parametrize("gap_id", ["recipe_volume", "invented"])
+async def test_repair_rejects_new_reader_references_for_workflow_authored_or_absent_gaps(
+    source_case, tmp_path, gap_id,
+):
+    from genomics_discovery.curation.workflow_extraction.runtime import execute
+
+    worker = FakeWorker(source_case)
+    worker.workflow["unresolved"] = [{"id": "recipe_volume", "description": "Unknown volume.",
+        "blocking": True, "next_evidence": "Read the recipe."}]
+    seed, feedback = repair_inputs(worker, tmp_path)
+    worker.workflow["unresolved"][0]["blocking"] = False
+    worker.workflow["gap_resolutions"] = [{"reader_role": "chemistry", "gap_id": gap_id,
+        "rationale": "A scope correction cannot fabricate historical reader identity.",
+        "evidence": worker.workflow["operations"][1]["evidence"]}]
+    state = await execute(source_case[1], tmp_path / "repair", worker=worker, mode="repair",
+                          initial_workflow=seed, repair_review=feedback)
+    assert state["status"] == "failed"
+    assert "unknown prior reader gap" in state["error"]
+    assert worker.integrations == 1 and worker.reviews == 0
+    assert not (tmp_path / "repair/graph_candidate.json").exists()
+
+
+def test_repair_self_check_reports_unknown_reader_reference_with_source_valid_quotes(
+    source_case, tmp_path, monkeypatch, capsys,
+):
+    import sys
+    from genomics_discovery.curation.workflow_extraction.__main__ import main
+
+    raw = copy.deepcopy(source_case[2])
+    raw["unresolved"] = [{"id": "recipe_volume", "description": "Unknown volume.",
+        "blocking": False, "next_evidence": "Read the recipe."}]
+    previous = tmp_path / "previous.json"
+    previous.write_text(json.dumps(raw))
+    raw["gap_resolutions"] = [{"reader_role": "chemistry", "gap_id": "recipe_volume",
+        "rationale": "A matching quote does not establish reader lineage.",
+        "evidence": raw["operations"][1]["evidence"]}]
+    candidate = tmp_path / "candidate.json"
+    candidate.write_text(json.dumps(raw))
+    monkeypatch.setattr(sys, "argv", ["atlas-extract", "check", str(candidate), "--packet",
+        str(source_case[1]), "--kind", "workflow", "--previous-workflow", str(previous)])
+    with pytest.raises(SystemExit) as raised:
+        main()
+    assert raised.value.code == 1
+    result = json.loads(capsys.readouterr().out)
+    assert not result["valid"]
+    assert len(result["errors"]) == 1 and "unknown prior reader gap" in result["errors"][0]
+
+
 @pytest.mark.parametrize(("web_search", "network_access"), [(True, True), (True, False),
                                                              (False, True)])
 async def test_native_worker_search_or_network_rejected_before_any_job(

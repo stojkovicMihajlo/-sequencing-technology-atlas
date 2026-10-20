@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-17",
+  "status": "preimplementation_contract",
+  "purpose": "Constrain routine shared-component matching without allowing workers to grow the canonical vocabulary.",
+  "input": "Source-bound connected selections and one frozen registry catalogue; published protocol/source records stay unchanged.",
+  "policy": "Routine matching is read-only. The host supplies candidate pairs. Every pair receives checks for all seven existing definition fields. Two fresh native sessions examine the same pairs independently. New definitions are queued, never admitted by a matching run.",
+  "candidate_generation": "Exhaustive over the small frozen pilot catalogue; this deliberately separates membership consistency from retrieval recall. Not an all-protocol pairwise search and not a scalability result.",
+  "decision_rule": "Any contradicted criterion makes one assessment non-member; otherwise any unresolved criterion makes it unknown; otherwise member. The host requires agreement between sessions for member/non-member, and retains disagreement/unknown without a positive edge.",
+  "extensions": "Preserve source-backed proposals separately. Existing curation/source/utility review is still required before a new canonical definition or membership can be admitted.",
+  "references": [
+    {
+      "url": "https://arxiv.org/html/2604.28158v1#A1",
+      "adopt": "Explicit vocabularies, definitions and separate classification/record-completion tasks.",
+      "adapt": "Mechanism/interface claims about wet-lab operations require their own source context; method-name canonicalization is insufficient.",
+      "code": "https://github.com/OpenRaiser/Intern-Atlas/tree/1185dc36555c547b5b6e9553779cb498a15ce587",
+      "inspected": ["src/intern_atlas/builder.py:llm_extract_paper", "src/intern_atlas/builder.py:llm_relation", "src/intern_atlas/builder.py:heuristic_relation"],
+      "reject": "The public local builder's shared-word heuristic fallback must not authorize scientific connections. It does not reproduce all curation controls reported in the paper."
+    },
+    {
+      "url": "https://aclanthology.org/2024.emnlp-main.548/",
+      "adapt": "Separate extraction, definition and canonicalization; retain our existing source/utility admission checks rather than copying triple canonicalization as proof of biochemical equivalence."
+    },
+    {
+      "implementation": "src/genomics_discovery/curation/operation_registry/admission.py",
+      "adopt": "Definition-field coverage, immutable registry definitions, evidence provenance, and separate scientific support/usefulness decisions.",
+      "change": "Routine matching cannot call registry commits. A dedicated curation mode retains the existing admission workflow."
+    }
+  ],
+  "planned_tests": [
+    "Missing/duplicate candidate pairs and definition criteria fail closed.",
+    "Changed source selection or registry invalidates the matching plan.",
+    "An authentic quote does not bypass a contradicted or unresolved criterion.",
+    "Worker-supplied overall membership cannot override field checks.",
+    "Disagreement never creates a positive membership candidate.",
+    "New-label proposals leave the registry unchanged.",
+    "Same real-paper cohort in opposite presentation orders, same catalogue and model settings; compare decisions by occurrence/concept IDs, not names."
+  ],
+  "scientific_limits": "Criteria judgments remain model judgments. Pilot cases are previously studied development examples, not expert gold or held-out families. No biochemical interchangeability, historical ancestry, or invention benefit is established.",
+  "live_model": "gpt-6.1-sol",
+  "live_reasoning_effort": "xhigh"
+}

@@ -1,0 +1,462 @@
+{
+  "format_version": "frozen_matching_report/1.0",
+  "plan_sha256": "3b9c5dd1377cefb4df43d885f4bd7612bafec64345a5ceff3c83074e1799585c",
+  "assessments": [
+    {
+      "occurrence_id": "tagmentation:99bb0477c9177bae280717c701b4f763e0362344b14bc780f3b5644dbb3343da:08d0745d8b4cd8a73f9d15379780d74af8a931f0854c860a258f9ec7904154e5",
+      "concept_id": "tn5_dna_fragmentation_adapter_tagging",
+      "inspected_passages": [
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00009"
+        },
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00047"
+        },
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00048"
+        },
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00028"
+        },
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00033"
+        }
+      ],
+      "criteria": [
+        {
+          "fields": [
+            "substrate"
+          ],
+          "verdict": "supported",
+          "rationale": "The selected tagment operation receives previously prepared E. coli CC118 or human NA18507 genomic DNA. Its reported reaction with prepared transposomes establishes DNA accessible to the enzyme. This is isolated genomic DNA, without any demonstrated chromatin or antibody-enrichment requirement; those alternatives are permitted variation in the definition.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "Tagmentation was carried out using previously prepared E. coli (CC118) or human (NA18507) genomic DNA using either 100 or 200 ng of DNA, 5 μl prepared transposomes, 2 μl 5× Nextera HMW buffer (Epicentre), and water to 10 μl.",
+              "support": "reported",
+              "rationale": "Identifies the selected genomic-DNA substrates and their entry into the transposome reaction."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "operation"
+          ],
+          "verdict": "supported",
+          "rationale": "This selection contains only tagment. The source explicitly couples target-DNA fragmentation to ME-adaptor end joining, and the PCR-free variant puts Illumina adaptor sequences into the transposition payload. Upstream transposome assembly and subsequent nick translation are outside this selected unit.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00009",
+              "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA.",
+              "support": "reported",
+              "rationale": "Directly reports fragmentation coupled to adaptor joining."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "We developed a similar approach for transposase-based methods by including sequences corresponding to the primers used for cluster formation, i.e. the Illumina adaptor sequences, into the adaptors that are added during the transposition reaction, as opposed to incorporating them during PCR (See Methods).",
+              "support": "reported",
+              "rationale": "Establishes that the payload in this PCR-free route includes sequencing-platform adaptor sequences."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "physical_mechanism"
+          ],
+          "verdict": "supported",
+          "rationale": "The paper identifies the method as hyperactive-Tn5 integration and explains fragmentation with synthetic ME adaptors. The selected PCR-free recipe uses transposomes assembled from annealed NoPCR adaptors and Ez-Tn5. Together these establish adapter-loaded Tn5 fragmentation and payload integration for the entire single-operation selection. Exact strand offsets and transposase release are not specified and are not required by this definition.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00009",
+              "quote": "In the alternative approach that we characterize and extend here, a hyperactive derivative of the Tn5 transposase is used to catalyze in vitro integration of synthetic oligonucleotides into target DNA at a high density ('Nextera', Epicentre, Madison, WI, USA).",
+              "support": "reported",
+              "rationale": "Identifies hyperactive Tn5 as the integration catalyst for the method."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00047",
+              "quote": "Transposomes were assembled by incubating 5 μl annealed adaptors at 10 μM with 5 μl 100% glycerol and 10 μl Ez-Tn5 transposase (Epicentre) and allowed to incubate at room temperature for 20 min.",
+              "support": "reported",
+              "rationale": "Identifies the actual adaptor-loaded Ez-Tn5 preparation used by the PCR-free route."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00009",
+              "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA.",
+              "support": "reported",
+              "rationale": "Reports the fragmentation and target-DNA 5'-end adaptor joining mechanism."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "output"
+          ],
+          "verdict": "supported",
+          "rationale": "The selection ends at tagmented genomic DNA, with synthetic sequencing adaptors joined to the fragments. Nick translation is a subsequently reported operation, so this endpoint matches the definition's reaction-product boundary before end completion and purification. Exact residual nicks, short-strand fate and complete covalent structure remain unspecified; no fully sealed or sequencing-ready intermediate is claimed.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00009",
+              "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA.",
+              "support": "reported",
+              "rationale": "Establishes the immediate adaptor-bearing fragmentation product."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00047",
+              "quote": "were designed to contain the original 'Nextera' adaptor sequences, but with an additional 5' overhang of either P1 or P2 on adaptor 1 or adaptor 2, respectively (i.e. sequences to make compatible with cluster PCR on Illumina flow-cell), thus eliminating the need to add them during a PCR step.",
+              "support": "reported",
+              "rationale": "Identifies the transferred NoPCR adaptor domains as providing Illumina cluster-PCR compatibility."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "followed by the addition of 25 μl 2× FailSafe PCR master mix (Epicentre), 1 μl FailSafe DNA polymerase (Epicentre), and 14 μl nuclease-free water (Ambion), and subsequent 5 min incubation at 72°C for nick translation.",
+              "support": "reported",
+              "rationale": "Places the separate polymerase/nick-translation treatment after the tagmentation incubation."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "information_effect"
+          ],
+          "verdict": "supported",
+          "rationale": "Joining adaptors to target-DNA fragment ends adds sequencing handles while retaining substrate-derived insert sequence and fragmentation-site information; retention is an inference from the described transformation, not a claim of unbiased recovery. The input is prepared genomic DNA. The paper limits control of fragment-size distributions and reports sequence-composition bias; these per-use limitations remain visible rather than implying uniform representation.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00009",
+              "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA.",
+              "support": "inferred",
+              "rationale": "Fragmentation and adaptor joining to target DNA preserve DNA-derived fragments and their ends for downstream readout."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "We developed a similar approach for transposase-based methods by including sequences corresponding to the primers used for cluster formation, i.e. the Illumina adaptor sequences, into the adaptors that are added during the transposition reaction, as opposed to incorporating them during PCR (See Methods).",
+              "support": "reported",
+              "rationale": "Reports sequencing-adaptor information being introduced during transposition."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00033",
+              "quote": "Second, one has relatively limited control over the size distribution of fragmentation. In general, the trend is that the insert size distribution is smaller than desired when reacting to completion, and broader than desired when altering reaction conditions to increase the mean insert size.",
+              "support": "reported",
+              "rationale": "Limits the control of the fragment information represented by this method."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00033",
+              "quote": "Third, genomes with high G+C contents show greater bias with this method than with conventional methods, although this is potentially correctable in part by the PCR-free approach or through modified PCR conditions.",
+              "support": "reported",
+              "rationale": "Reports composition-dependent representation and only potential partial correction by the PCR-free approach."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "purpose"
+          ],
+          "verdict": "supported",
+          "rationale": "The selected reaction generates adaptor-tagged genomic fragments for the reported PCR-free Illumina library route. Cluster-formation sequences are supplied by transposition for downstream library completion and sequencing. Actual sequencing is evidence of the route's purpose, not an additional operation within this selection.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "We developed a similar approach for transposase-based methods by including sequences corresponding to the primers used for cluster formation, i.e. the Illumina adaptor sequences, into the adaptors that are added during the transposition reaction, as opposed to incorporating them during PCR (See Methods).",
+              "support": "reported",
+              "rationale": "Explains the sequencing-library role of adaptor introduction."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "This method was used to sequence E. coli CC118 and human NA18507 with two replicates of each using 100 ng and 200 ng starting material.",
+              "support": "reported",
+              "rationale": "Reports genomic sequencing using this PCR-free library route."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "context_requirements"
+          ],
+          "verdict": "supported",
+          "rationale": "The selected use supplies DNA, preassembled adaptor-loaded Ez-Tn5 and permissive reaction conditions: 100 or 200 ng genomic DNA, 5 μl prepared transposomes and 2 μl 5× Nextera HMW buffer in 10 μl, at 55°C for 5 min. Preparation uses annealed NoPCR adaptors, glycerol and Ez-Tn5 upstream of this selection. Specimen identity, product, dose, buffer and duration are retained as this use's context, without turning them into universal conditions. Unreported stock activity or transposase-release details do not negate the reported coupled reaction.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "Tagmentation was carried out using previously prepared E. coli (CC118) or human (NA18507) genomic DNA using either 100 or 200 ng of DNA, 5 μl prepared transposomes, 2 μl 5× Nextera HMW buffer (Epicentre), and water to 10 μl.",
+              "support": "reported",
+              "rationale": "Provides DNA, transposomes, buffer and reaction volume for this use."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00047",
+              "quote": "Transposomes were assembled by incubating 5 μl annealed adaptors at 10 μM with 5 μl 100% glycerol and 10 μl Ez-Tn5 transposase (Epicentre) and allowed to incubate at room temperature for 20 min.",
+              "support": "reported",
+              "rationale": "Confirms that the supplied transposomes have already been assembled with adaptors."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "Reactions were incubated at 55°C for 5 min",
+              "support": "reported",
+              "rationale": "Provides the selected transposition incubation."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "occurrence_id": "tagmentation:99bb0477c9177bae280717c701b4f763e0362344b14bc780f3b5644dbb3343da:9073789d5595d9bcdc138eed381c879043d868042b5303889ab0f2e17fbb2e19",
+      "concept_id": "tn5_dna_fragmentation_adapter_tagging",
+      "inspected_passages": [
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00009"
+        },
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00047"
+        },
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00048"
+        },
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00028"
+        },
+        {
+          "source_id": "adey2010",
+          "passage_id": "p00033"
+        }
+      ],
+      "criteria": [
+        {
+          "fields": [
+            "substrate"
+          ],
+          "verdict": "supported",
+          "rationale": "The complete selected unit begins with the same prepared E. coli CC118 or human NA18507 genomic DNA and adaptor-loaded transposomes. Tagmented DNA subsequently becomes the internal substrate for nick translation. These material states are DNA-containing and satisfy the definition's substrate allowance; the additional operation is assessed separately under operation, mechanism and output.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "Tagmentation was carried out using previously prepared E. coli (CC118) or human (NA18507) genomic DNA using either 100 or 200 ng of DNA, 5 μl prepared transposomes, 2 μl 5× Nextera HMW buffer (Epicentre), and water to 10 μl.",
+              "support": "reported",
+              "rationale": "Identifies the external genomic-DNA input to this selected reaction sequence."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "After transposition, a nick translation is performed resulting in Illumina-ready libraries.",
+              "support": "reported",
+              "rationale": "Places nick translation after the transposition product rather than on an unrelated substrate."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "operation"
+          ],
+          "verdict": "unsupported",
+          "rationale": "Both tagment and nick_translate are inside this selection. Tagment supplies the defined coupled fragmentation/tagging operation, but the whole selected unit also performs a subsequent production-library nick translation. The existing definition explicitly stops at the transposition transformation and leaves end completion separate. Accounting for both operations therefore contradicts its whole-unit operation boundary; the tagment subset cannot stand in for the selected unit.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00009",
+              "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA.",
+              "support": "reported",
+              "rationale": "Establishes what the tagment operation contributes."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "After transposition, a nick translation is performed resulting in Illumina-ready libraries.",
+              "support": "reported",
+              "rationale": "Demonstrates an additional transformation after transposition within this selection."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "followed by the addition of 25 μl 2× FailSafe PCR master mix (Epicentre), 1 μl FailSafe DNA polymerase (Epicentre), and 14 μl nuclease-free water (Ambion), and subsequent 5 min incubation at 72°C for nick translation.",
+              "support": "reported",
+              "rationale": "Specifies the added polymerase treatment and separate 72°C incubation for that transformation."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "physical_mechanism"
+          ],
+          "verdict": "unsupported",
+          "rationale": "The Tn5 fragmentation/integration mechanism explains tagment, but does not span the entire two-operation selection. The source explicitly adds FailSafe DNA polymerase for subsequent nick translation. A polymerase-mediated post-transposition transformation is consequentially distinct from adapter-loaded Tn5 fragmentation and insertion. This contradiction does not require resolving the exact repaired strand structure or enzyme-release route.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00009",
+              "quote": "In the alternative approach that we characterize and extend here, a hyperactive derivative of the Tn5 transposase is used to catalyze in vitro integration of synthetic oligonucleotides into target DNA at a high density ('Nextera', Epicentre, Madison, WI, USA).",
+              "support": "reported",
+              "rationale": "Identifies the Tn5 integration mechanism belonging to the transposition portion."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "followed by the addition of 25 μl 2× FailSafe PCR master mix (Epicentre), 1 μl FailSafe DNA polymerase (Epicentre), and 14 μl nuclease-free water (Ambion), and subsequent 5 min incubation at 72°C for nick translation.",
+              "support": "reported",
+              "rationale": "Demonstrates the distinct DNA-polymerase nick-translation treatment included in the same selected unit."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "After transposition, a nick translation is performed resulting in Illumina-ready libraries.",
+              "support": "reported",
+              "rationale": "Confirms that nick translation follows transposition as a separate transformation."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "output"
+          ],
+          "verdict": "unsupported",
+          "rationale": "The selected external output is the unpurified library reaction after nick translation, described as Illumina-ready. The immediate tagmented-DNA product is internal to this selection. The definition instead requires the reaction product before separately required end completion. Uncertainty about complete covalent sealing does not remove this demonstrated endpoint difference.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "After transposition, a nick translation is performed resulting in Illumina-ready libraries.",
+              "support": "reported",
+              "rationale": "Reports the selected unit's post-nick-translation endpoint."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "followed by the addition of 25 μl 2× FailSafe PCR master mix (Epicentre), 1 μl FailSafe DNA polymerase (Epicentre), and 14 μl nuclease-free water (Ambion), and subsequent 5 min incubation at 72°C for nick translation.",
+              "support": "reported",
+              "rationale": "Identifies the actual treatment that precedes the selected output and follows the tagmentation intermediate."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "information_effect"
+          ],
+          "verdict": "supported",
+          "rationale": "Across both selected operations, adaptor sequences are introduced during transposition and substrate-derived genomic sequence/fragment information is carried through the nick-translation route into sequenceable libraries. Preservation through repair is inferred from the reported genomic sequencing, without asserting a fully resolved strand structure or unbiased representation. Nick translation changes molecular completion state, already assessed under output, rather than establishing a different biological selection. Fragment-size control and G+C representation limitations remain applicable to the tagmentation part.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "We developed a similar approach for transposase-based methods by including sequences corresponding to the primers used for cluster formation, i.e. the Illumina adaptor sequences, into the adaptors that are added during the transposition reaction, as opposed to incorporating them during PCR (See Methods).",
+              "support": "reported",
+              "rationale": "Reports where sequencing-adaptor information enters the selected route."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00009",
+              "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA.",
+              "support": "inferred",
+              "rationale": "Joining adaptors to fragmented target DNA preserves substrate-derived fragment and endpoint information."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "This method was used to sequence E. coli CC118 and human NA18507 with two replicates of each using 100 ng and 200 ng starting material.",
+              "support": "inferred",
+              "rationale": "Sequencing the specified genomes through this route supports retention of genomic insert information through nick translation."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00033",
+              "quote": "Second, one has relatively limited control over the size distribution of fragmentation. In general, the trend is that the insert size distribution is smaller than desired when reacting to completion, and broader than desired when altering reaction conditions to increase the mean insert size.",
+              "support": "reported",
+              "rationale": "Preserves the published limitation on fragment-size distribution."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00033",
+              "quote": "Third, genomes with high G+C contents show greater bias with this method than with conventional methods, although this is potentially correctable in part by the PCR-free approach or through modified PCR conditions.",
+              "support": "reported",
+              "rationale": "Preserves the published limitation on composition-dependent representation."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "purpose"
+          ],
+          "verdict": "supported",
+          "rationale": "The complete selected unit still serves the broad stated purpose of making adaptor-tagged DNA for sequencing-library preparation, advancing that preparation through nick translation. The shared purpose does not establish that the same Tn5 mechanism covers both operations or that their output boundaries coincide.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "We developed a similar approach for transposase-based methods by including sequences corresponding to the primers used for cluster formation, i.e. the Illumina adaptor sequences, into the adaptors that are added during the transposition reaction, as opposed to incorporating them during PCR (See Methods).",
+              "support": "reported",
+              "rationale": "Reports the sequencing-library purpose of supplying Illumina adaptor sequences by transposition."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00028",
+              "quote": "After transposition, a nick translation is performed resulting in Illumina-ready libraries.",
+              "support": "reported",
+              "rationale": "Reports the additional nick-translation contribution to the sequencing-library endpoint."
+            }
+          ]
+        },
+        {
+          "fields": [
+            "context_requirements"
+          ],
+          "verdict": "supported",
+          "rationale": "The unit supplies the required DNA, adaptor-loaded Ez-Tn5 and permissive transposition conditions (100 or 200 ng DNA, 5 μl transposomes, Nextera HMW buffer, 55°C for 5 min). It additionally depends on 25 μl 2× FailSafe master mix, 1 μl FailSafe DNA polymerase, water and a 72°C 5 min nick-translation incubation. These extra selected dependencies remain explicit. They do not contradict the listed Tn5 requirements, although the extra transformation contradicts the definition's operation, mechanism and endpoint boundaries. Named products, amounts and temperatures are contextual properties rather than universal membership rules.",
+          "evidence": [
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "Tagmentation was carried out using previously prepared E. coli (CC118) or human (NA18507) genomic DNA using either 100 or 200 ng of DNA, 5 μl prepared transposomes, 2 μl 5× Nextera HMW buffer (Epicentre), and water to 10 μl.",
+              "support": "reported",
+              "rationale": "Reports the DNA, transposomes and buffer supplied to the tagmentation portion."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00047",
+              "quote": "Transposomes were assembled by incubating 5 μl annealed adaptors at 10 μM with 5 μl 100% glycerol and 10 μl Ez-Tn5 transposase (Epicentre) and allowed to incubate at room temperature for 20 min.",
+              "support": "reported",
+              "rationale": "Confirms the preparation is already adaptor-loaded Ez-Tn5."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "Reactions were incubated at 55°C for 5 min",
+              "support": "reported",
+              "rationale": "Reports permissive transposition conditions for this use."
+            },
+            {
+              "source_id": "adey2010",
+              "passage_id": "p00048",
+              "quote": "followed by the addition of 25 μl 2× FailSafe PCR master mix (Epicentre), 1 μl FailSafe DNA polymerase (Epicentre), and 14 μl nuclease-free water (Ambion), and subsequent 5 min incubation at 72°C for nick translation.",
+              "support": "reported",
+              "rationale": "Retains the additional source-specific polymerase and incubation dependencies of the selected nick-translation operation."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "extension_requests": []
+}
