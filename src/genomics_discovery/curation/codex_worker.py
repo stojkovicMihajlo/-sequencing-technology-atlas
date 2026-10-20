@@ -9,11 +9,13 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import hashlib
 import json
 import math
 import os
 import signal
 import socket
+import stat
 import subprocess
 import time
 from dataclasses import asdict, dataclass, field
@@ -32,6 +34,7 @@ _PARENT_SESSION_ENV = {"CODEX_THREAD_ID", "CODEX_INTERNAL_ORIGINATOR_OVERRIDE"}
 _MAX_EVENT_BYTES = 8 * 1024 * 1024
 _SHUTDOWN_GRACE_SECONDS = 2.0
 _STREAM_ERROR = "Codex emitted error; see events.jsonl"
+_PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
 
 @dataclass
@@ -190,6 +193,45 @@ class WorkerResult:
     error: str | None
 
 
+def _image_inventory(attempt_dir: Path, image_paths) -> list[dict[str, str]]:
+    """Bind explicitly staged PNG bytes, without claiming page identity or vision."""
+    if isinstance(image_paths, (str, bytes, os.PathLike, set, frozenset, dict)):
+        raise ValueError("image_paths must be an ordered collection of staged PNG paths")
+    try:
+        image_paths = tuple(image_paths)
+    except TypeError as exc:
+        raise ValueError("image_paths must be an ordered collection of staged PNG paths") from exc
+    inventory, seen = [], set()
+    for supplied in image_paths:
+        try:
+            path = Path(supplied)
+            if "," in str(path):
+                raise ValueError("Image paths must not contain the CLI comma-list delimiter")
+            path = path if path.is_absolute() else attempt_dir / path
+            relative = path.relative_to(attempt_dir)
+            if ".." in relative.parts:
+                raise ValueError("Image paths must not escape or traverse their attempt")
+            current = attempt_dir
+            for part in relative.parts:
+                current = current / part
+                if current.is_symlink():
+                    raise ValueError("Image paths must not contain symlinks")
+            info = path.stat(follow_symlinks=False)
+            if not stat.S_ISREG(info.st_mode):
+                raise ValueError("Image inputs must be regular PNG files")
+            identity = (info.st_dev, info.st_ino)
+            if identity in seen:
+                raise ValueError("Duplicate image input")
+            seen.add(identity)
+            raw = path.read_bytes()
+            if not raw.startswith(_PNG_SIGNATURE):
+                raise ValueError("Image inputs must have a PNG signature")
+        except (OSError, TypeError) as exc:
+            raise ValueError("Image input is not an available staged PNG file") from exc
+        inventory.append({"path": str(path), "sha256": hashlib.sha256(raw).hexdigest()})
+    return inventory
+
+
 class CodexWorker:
     """One sandboxed process per job; no implicit nested agent pool or retries."""
 
@@ -215,7 +257,7 @@ class CodexWorker:
         self.web_search = web_search
         self.network_access = network_access
 
-    def _command(self, attempt_dir: Path) -> list[str]:
+    def _command(self, attempt_dir: Path, image_paths=()) -> list[str]:
         command = [
             self.executable,
             "exec",
@@ -249,24 +291,33 @@ class CodexWorker:
         ]
         if self.model != "default":
             command.extend(("--model", self.model))
+        for path in image_paths:
+            command.extend(("--image", str(path)))
         return [*command, "-"]
 
-    async def run(self, prompt: str, attempt_dir: Path) -> WorkerResult:
+    async def run(self, prompt: str, attempt_dir: Path, *, image_paths=()) -> WorkerResult:
         """Archive an attempt and return its outcome; cancellation still propagates.
 
         An attempt directory may already contain input files, but existing job
         archives are never overwritten. A failed attempt must be retried in a new
         directory. Usage sums numeric fields from each ``turn.completed`` event
         once; cumulative item events are not counted as additional usage.
+
+        Optional images must already be regular PNG files inside this attempt.
+        Invalid attachment arguments raise before archives/process creation. Image
+        hashes are checked before launch and after cleanup; a changed input makes
+        the result nonaccepting. The caller owns original PDF/page/source binding;
+        explicit CLI attachment does not establish image understanding/entailment.
         """
         attempt_dir = Path(attempt_dir).resolve()
         attempt_dir.mkdir(parents=True, exist_ok=True)
         if any((attempt_dir / name).exists() for name in _ARCHIVES):
             raise FileExistsError(f"Attempt already has job archives: {attempt_dir}")
+        images = _image_inventory(attempt_dir, image_paths)
         # Exclusive prompt creation also prevents two workers claiming the same attempt.
         with (attempt_dir / "prompt.txt").open("x", encoding="utf-8") as handle:
             handle.write(prompt)
-        command = self._command(attempt_dir)
+        command = self._command(attempt_dir, [row["path"] for row in images])
         environment = {
             key: value for key, value in os.environ.items() if key not in _PARENT_SESSION_ENV
         }
@@ -274,6 +325,9 @@ class CodexWorker:
             json.dumps({
                 "argv": command,
                 "cwd": str(attempt_dir),
+                **({"image_inputs": images, "image_input_boundary":
+                    "Explicit CLI attachments only; caller owns PDF/page/source identity. "
+                    "Attachment does not establish image understanding or entailment."} if images else {}),
                 "authentication": {
                     "selection": "normal Codex CLI authentication",
                     "credential_mode": "inherited environment and existing CLI login; not forced",
@@ -409,6 +463,8 @@ class CodexWorker:
             attempt_dir / "stderr.log"
         ).open("xb") as stderr_handle:
             try:
+                if images != _image_inventory(attempt_dir, [row["path"] for row in images]):
+                    raise ValueError("Image inputs changed before launch")
                 spawning = asyncio.create_task(
                     asyncio.create_subprocess_exec(
                         *command,
@@ -475,6 +531,14 @@ class CodexWorker:
         if cancelled:
             exit_code = -signal.SIGTERM
             error = "Codex attempt cancelled"
+        if images:
+            try:
+                unchanged = images == _image_inventory(attempt_dir, [row["path"] for row in images])
+            except ValueError:
+                unchanged = False
+            if not unchanged:
+                image_error = "Codex image input changed or is unavailable after execution"
+                error = f"{error}; {image_error}" if error else image_error
         (attempt_dir / "final.txt").touch(exist_ok=True)
         result = WorkerResult(
             exit_code, event_state.thread_id, event_state.usage, time.monotonic() - started, error

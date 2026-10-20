@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import hashlib
 import json
 import os
 import signal
@@ -104,6 +106,7 @@ async def test_native_worker_archives_flags_prompt_events_and_usage(tmp_path, mo
     assert "non-JSON diagnostic" in (attempt / "events.jsonl").read_text()
     assert (attempt / "stderr.log").read_text() == "diagnostic retained"
     command = json.loads((attempt / "command.json").read_text())
+    assert set(command) == {"argv", "cwd", "authentication"}
     assert command["argv"][0] == executable and command["cwd"] == str(attempt)
     assert not any("bypass" in item for item in command["argv"])
     assert command["authentication"]["openai_api_key_present"] is True
@@ -121,6 +124,148 @@ async def test_native_worker_archives_flags_prompt_events_and_usage(tmp_path, mo
         assert started["process_group_id"] == started["pid"]
     if started["process_start_identity"] is not None:
         assert started["process_start_identity"]["kind"] == "ps_lstart"
+
+
+def staged_png(path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(base64.b64decode(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jCz0AAAAASUVORK5CYII="))
+    return path
+
+
+@pytest.mark.asyncio
+async def test_explicit_images_preserve_order_and_pinned_bytes(tmp_path):
+    attempt = tmp_path / "attempt"
+    first = staged_png(attempt / "images/first.png")
+    second = staged_png(attempt / "second.png")
+    second.write_bytes(second.read_bytes() + b"second-image-distinction")
+    requested = [second, first]
+    expected = [{"path": str(path), "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+                for path in requested]
+    executable = fake_codex(tmp_path,
+        "images = [args[i+1] for i,arg in enumerate(args) if arg == '--image']\n"
+        "assert [pathlib.Path(p).name for p in images] == ['second.png', 'first.png']\n"
+        "assert all(pathlib.Path(p).read_bytes().startswith(b'\\x89PNG\\r\\n\\x1a\\n') for p in images)\n"
+        "assert args[-1] == '-'\n"
+        "print(json.dumps({'type':'thread.started','thread_id':'image-job'}))\n"
+        "print(json.dumps({'type':'turn.completed','usage':{}}))\n"
+        "output.write_text('Attached images; no scientific judgment')\n")
+    worker = CodexWorker(executable)
+    result = await worker.run("Read explicitly attached pages", attempt,
+                              image_paths=(Path("second.png"), first))
+    assert result.error is None and result.exit_code == 0
+    command = json.loads((attempt / "command.json").read_text())
+    assert command["image_inputs"] == expected
+    assert command["argv"][-5:] == ["--image", str(second), "--image", str(first), "-"]
+    assert "does not establish image understanding or entailment" in command["image_input_boundary"]
+    assert assess_archived_attempt(attempt).complete
+    assert worker._command(attempt) == worker._command(attempt, ())
+    assert "--image" not in worker._command(attempt)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("fault", ["outside", "escape", "symlink", "parent_symlink", "duplicate",
+    "hardlink_duplicate", "missing", "non_png", "directory", "bare_path", "comma"])
+async def test_invalid_images_fail_before_archives_or_process(tmp_path, monkeypatch, fault):
+    attempt = tmp_path / "attempt"
+    image = staged_png(attempt / "image.png")
+    outside = staged_png(tmp_path / "outside.png")
+    paths = (image,)
+    if fault == "outside":
+        paths = (outside,)
+    elif fault == "escape":
+        paths = (Path("../attempt/image.png"),)
+    elif fault == "symlink":
+        (attempt / "alias.png").symlink_to(image)
+        paths = (Path("alias.png"),)
+    elif fault == "parent_symlink":
+        (attempt / "alias").symlink_to(attempt, target_is_directory=True)
+        paths = (Path("alias/image.png"),)
+    elif fault == "duplicate":
+        paths = (image, Path("image.png"))
+    elif fault == "hardlink_duplicate":
+        os.link(image, attempt / "hardlink.png")
+        paths = (image, attempt / "hardlink.png")
+    elif fault == "missing":
+        paths = (Path("missing.png"),)
+    elif fault == "non_png":
+        image.write_bytes(b"This filename is not PNG evidence")
+    elif fault == "directory":
+        paths = (attempt,)
+    elif fault == "bare_path":
+        paths = image
+    elif fault == "comma":
+        paths = (staged_png(attempt / "ambiguous,list.png"),)
+
+    async def forbidden_spawn(*args, **kwargs):
+        raise AssertionError("Invalid attachment must not start a native or text-only process")
+
+    monkeypatch.setattr(codex_worker.asyncio, "create_subprocess_exec", forbidden_spawn)
+    with pytest.raises(ValueError):
+        await CodexWorker("never-spawn").run("Task", attempt, image_paths=paths)
+    assert not any((attempt / name).exists() for name in codex_worker._ARCHIVES)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("mutation", ["bytes", "missing", "symlink"])
+async def test_changed_image_after_execution_is_nonaccepting(tmp_path, mutation):
+    attempt = tmp_path / "attempt"
+    image = staged_png(attempt / "image.png")
+    expected = hashlib.sha256(image.read_bytes()).hexdigest()
+    action = {"bytes": "image.write_bytes(image.read_bytes() + b'changed')",
+        "missing": "image.unlink()",
+        "symlink": "image.unlink(); image.symlink_to(output)"}[mutation]
+    executable = fake_codex(tmp_path,
+        "image = pathlib.Path(args[args.index('--image')+1])\n"
+        "print(json.dumps({'type':'thread.started','thread_id':'changed-image'}))\n"
+        "print(json.dumps({'type':'turn.completed','usage':{'output_tokens':1}}))\n"
+        "output.write_text('Transport completed')\n"
+        + action + "\n")
+    result = await CodexWorker(executable).run("Task", attempt, image_paths=(image,))
+    assert result.exit_code == 0 and "image input changed" in result.error
+    assert not assess_archived_attempt(attempt).complete
+    assert all((attempt / name).is_file() for name in codex_worker._ARCHIVES)
+    command = json.loads((attempt / "command.json").read_text())
+    assert command["image_inputs"] == [{"path": str(image), "sha256": expected}]
+    assert json.loads((attempt / "result.json").read_text())["error"] == result.error
+
+
+@pytest.mark.asyncio
+async def test_image_change_preserves_native_error(tmp_path):
+    attempt = tmp_path / "attempt"
+    image = staged_png(attempt / "image.png")
+    executable = fake_codex(tmp_path,
+        "pathlib.Path(args[args.index('--image')+1]).unlink()\n"
+        "sys.exit(7)\n")
+    result = await CodexWorker(executable).run("Task", attempt, image_paths=(image,))
+    assert result.exit_code == 7
+    assert "code 7" in result.error and "image input changed" in result.error
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("ending", ["timeout", "cancelled"])
+async def test_image_change_does_not_mask_timeout_or_cancellation(tmp_path, ending):
+    attempt = tmp_path / "attempt"
+    image = staged_png(attempt / "image.png")
+    executable = fake_codex(tmp_path,
+        "image = pathlib.Path(args[args.index('--image')+1])\n"
+        "image.write_bytes(image.read_bytes() + b'changed')\n"
+        "pathlib.Path('ready').touch()\n"
+        "time.sleep(60)\n")
+    task = asyncio.create_task(CodexWorker(executable, timeout_seconds=1).run(
+        "Task", attempt, image_paths=(image,)))
+    await wait_until_exists(attempt / "ready")
+    if ending == "cancelled":
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+    else:
+        result = await task
+        assert result.exit_code == 124
+    archived = json.loads((attempt / "result.json").read_text())
+    assert "cancelled" in archived["error"] if ending == "cancelled" else "timeout" in archived["error"]
+    assert "image input changed" in archived["error"]
+    assert not assess_archived_attempt(attempt).complete
 
 
 @pytest.mark.asyncio
