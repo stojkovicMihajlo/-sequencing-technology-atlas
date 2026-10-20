@@ -1,0 +1,811 @@
+{
+  "format_version": "benchmark_reference_implementation_audit/1.0",
+  "audit_date": "2026-10-20",
+  "decision_record": "docs/benchmark/REFERENCE_AUDIT.md",
+  "scope": "Independent primary-literature and executable-source audit for the user-authorized 12-method source-first benchmark spanning more than five technology types.",
+  "status": "Reference and design advice; no benchmark metric implemented or scientifically validated by this audit.",
+  "path_semantics": {
+    "decision_record": "Relative to project repository root.",
+    "inspected_files": "Relative to pinned upstream repository root.",
+    "optional_local_paths": "Historical workspace evidence outside project Git; not required to follow pinned official URLs."
+  },
+  "execution_boundary": {
+    "production_source_changed": false,
+    "native_model_calls": false,
+    "foreign_scripts_or_scorers_executed": false,
+    "reference_code_copied_or_vendored": false,
+    "full_datasets_or_model_weights_downloaded": false,
+    "local_actions": "Read selected source files, annotation examples and primary papers; hashed exact bytes and Git objects."
+  },
+  "local_contract": {
+    "observable_input": "Frozen declared method/variant source packet and registered dependencies; source evidence rather than current extractor output.",
+    "target": "Independently adjudicated source-supported claims and necessary input/output, lineage, branch, condition, information and order constraints, allowing explicit scientifically adequate representation alternatives.",
+    "not_identified": [
+      "Experimental executability",
+      "Real-world protocol correctness",
+      "Cross-method substitutability",
+      "Historical novelty",
+      "Population-wide extraction accuracy"
+    ],
+    "topology_boundary": "Exact reference node/edge topology is a secondary diagnostic: task ontologies, composite/split granularity, serialization roots, helper nodes and connector assumptions differ across inspected implementations.",
+    "denominator_rule": "Required reference obligations and complete candidate claims determine eligible counts before lexical/semantic alignment; unmatched items remain visible.",
+    "count_boundary": "Twelve methods and more than five types are the requested scope, not optimal or statistically validated sample sizes."
+  },
+  "primary_documents": [
+    {
+      "id": "xwlp_eacl2021",
+      "title": "Process-Level Representation of Scientific Protocols with Interactive Annotation",
+      "url": "https://aclanthology.org/2021.eacl-main.187.pdf",
+      "optional_local_capture": "../external/benchmark_refs_20261020/papers/xwlp_eacl2021.pdf",
+      "sha256": "ee74f559eb15b947ad34abe4b5c168962c8e94d861fda549c521d03a824c14a9",
+      "size_bytes": 686375,
+      "inspection": "Primary full-text sections relevant to representation, annotation and scoring; no paper experiments reproduced."
+    },
+    {
+      "id": "wlp_mstg_acl2021",
+      "title": "Learning Latent Structures for Cross Action Phrase Relations in Wet Lab Protocols",
+      "url": "https://aclanthology.org/2021.acl-long.525.pdf",
+      "optional_local_capture": "../external/benchmark_refs_20261020/papers/wlp_mstg_acl2021.pdf",
+      "sha256": "53424c376e460ad875f11a9fe3df3c2ccde824fe6f62a1a896045e52048774da",
+      "size_bytes": 670076,
+      "inspection": "Primary full-text sections relevant to representation, annotation and scoring; no paper experiments reproduced."
+    },
+    {
+      "id": "paged_acl2024",
+      "title": "PAGED: A Benchmark for Procedural Graphs Extraction from Documents",
+      "url": "https://aclanthology.org/2024.acl-long.583.pdf",
+      "optional_local_capture": "../external/benchmark_refs_20261020/papers/paged_acl2024.pdf",
+      "sha256": "876e37b48010fc7183563c2e2d2f4238cffe727a8461caf83b6d957f459b4bef",
+      "size_bytes": 3323773,
+      "inspection": "Primary full-text sections relevant to representation, annotation and scoring; no paper experiments reproduced."
+    },
+    {
+      "id": "smatch_acl2013",
+      "title": "Smatch: an Evaluation Metric for Semantic Feature Structures",
+      "url": "https://aclanthology.org/P13-2131.pdf",
+      "optional_local_capture": "../external/benchmark_refs_20261020/papers/smatch_acl2013.pdf",
+      "sha256": "33603331dcc327cbcdc734a81dc1650aae9153c356250578d2e9097888292122",
+      "size_bytes": 177672,
+      "inspection": "Primary full-text sections relevant to representation, annotation and scoring; no paper experiments reproduced."
+    },
+    {
+      "id": "smatchpp_eacl2023",
+      "title": "SMATCH++: Standardized and Extended Evaluation of Semantic Graphs",
+      "url": "https://aclanthology.org/2023.findings-eacl.118.pdf",
+      "optional_local_capture": "../external/benchmark_refs_20261020/papers/smatchpp_eacl2023.pdf",
+      "sha256": "9a3071656ae770a192560fd6dd60624923788a89e72f95f6b3d73fe0ba114364",
+      "size_bytes": 466553,
+      "inspection": "Primary full-text sections relevant to representation, annotation and scoring; no paper experiments reproduced."
+    },
+    {
+      "id": "xwlp_annotation_instructions",
+      "title": "Official TextLabs Annotation Instructions",
+      "url": "https://textlabs.github.io/TextLabs/misc/Annotation_Instructions.pdf",
+      "optional_local_capture": "../external/benchmark_refs_20261020/papers/xwlp_annotation_instructions.pdf",
+      "sha256": "30edc4f0804fc9d0ef36c0a1dd1e7fb3212fa6f5c514c3e9d5cc7361f4fd4a11",
+      "size_bytes": 1618478,
+      "inspection": "Primary full-text sections relevant to representation, annotation and scoring; no paper experiments reproduced."
+    }
+  ],
+  "repositories": [
+    {
+      "id": "xwlp_data",
+      "repository_url": "https://github.com/ronentk/textlabs-xwlp-data",
+      "commit": "db06ed1f27f9e9ef86a7324df5a0ee3607956db1",
+      "commit_url": "https://github.com/ronentk/textlabs-xwlp-data/tree/db06ed1f27f9e9ef86a7324df5a0ee3607956db1",
+      "commit_time_git": "1618907791 +0300",
+      "paper_url": "https://aclanthology.org/2021.eacl-main.187/",
+      "license": {
+        "observation": "MIT",
+        "file": "LICENSE",
+        "sha256": "271d1e13d049d1a875c747506316e500ab4e9062dc0b7f355d2015ff9e7b6676"
+      },
+      "optional_local_checkout": "../external/benchmark_refs_20261020/xwlp-data",
+      "checkout_scope": "Shallow filtered clone with sparse selected files; no submodules or model artifacts fetched.",
+      "inspection_extent": "Selected executable paths and annotation/schema examples; not a complete source audit.",
+      "inspected_symbols": [
+        "PEGNode",
+        "PEGProcessEvent",
+        "PEG.get_amr_root",
+        "PEG.to_amr",
+        "to_amr_triplet",
+        "edge_to_amr"
+      ],
+      "inspected_files": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/ronentk/textlabs-xwlp-data/blob/db06ed1f27f9e9ef86a7324df5a0ee3607956db1/LICENSE",
+          "git_blob_sha": "6da5e9e2d5faecb0a25b5709c6627e9b7908e8ba",
+          "sha256": "271d1e13d049d1a875c747506316e500ab4e9062dc0b7f355d2015ff9e7b6676",
+          "size_bytes": 1060
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/ronentk/textlabs-xwlp-data/blob/db06ed1f27f9e9ef86a7324df5a0ee3607956db1/README.md",
+          "git_blob_sha": "57a4753d7538d14cbe239ddfcda31d3274aa5995",
+          "sha256": "1ed99c26b785924f0bb2a80f4c05764083fbd617cd9ccbd75a73525ebcf8dd36",
+          "size_bytes": 3456
+        },
+        {
+          "path": "call-graph-format.md",
+          "url": "https://github.com/ronentk/textlabs-xwlp-data/blob/db06ed1f27f9e9ef86a7324df5a0ee3607956db1/call-graph-format.md",
+          "git_blob_sha": "0f678ee8a4d9bca41b49957a311923045308fb39",
+          "sha256": "d03158f8e3c424fb6e60671e82e386ca5cf654f8f5472ed51e20fd6c13323357",
+          "size_bytes": 7840
+        },
+        {
+          "path": "definitions.py",
+          "url": "https://github.com/ronentk/textlabs-xwlp-data/blob/db06ed1f27f9e9ef86a7324df5a0ee3607956db1/definitions.py",
+          "git_blob_sha": "8a513c72039264537f691dcaec2ef1b986368b70",
+          "sha256": "52ff26651d6dc8c9030e706b1a1770235d9c5ffe7fd23238832139c197b6a89e",
+          "size_bytes": 2486
+        },
+        {
+          "path": "peg.py",
+          "url": "https://github.com/ronentk/textlabs-xwlp-data/blob/db06ed1f27f9e9ef86a7324df5a0ee3607956db1/peg.py",
+          "git_blob_sha": "ab0ce9341b8b2f5bf6803e0b95b445e6374bcb17",
+          "sha256": "bb3611b74758fbe68c0063a80a536edb599c154f83f7f4d4e02c8ff543e52a9f",
+          "size_bytes": 5367
+        },
+        {
+          "path": "peg_to_amr.py",
+          "url": "https://github.com/ronentk/textlabs-xwlp-data/blob/db06ed1f27f9e9ef86a7324df5a0ee3607956db1/peg_to_amr.py",
+          "git_blob_sha": "f4331d84a7fa3b1fd83810a7371b71159e304363",
+          "sha256": "d598de96911762cbb94faa1c14c0231b3cbb64246bfbb30740aad2324b9713dd",
+          "size_bytes": 2842
+        },
+        {
+          "path": "data/0/proto_0.amr",
+          "url": "https://github.com/ronentk/textlabs-xwlp-data/blob/db06ed1f27f9e9ef86a7324df5a0ee3607956db1/data/0/proto_0.amr",
+          "git_blob_sha": "1d77fc968ba0c74d0f76b3745fa806ba336a4b30",
+          "sha256": "8dc3d3d4a75f00ae57ec1a54e35d72906d4a9d4b1e9875994f816c4208bc1d26",
+          "size_bytes": 40687
+        },
+        {
+          "path": "data/0/proto_0.txt",
+          "url": "https://github.com/ronentk/textlabs-xwlp-data/blob/db06ed1f27f9e9ef86a7324df5a0ee3607956db1/data/0/proto_0.txt",
+          "git_blob_sha": "55d2d3e46220fa3207025677bc8a8ccb64a7f2ed",
+          "sha256": "6b55024b455c34d08e207265637a8a18217617ad267eb7fac7c5b8368336d922",
+          "size_bytes": 1868
+        }
+      ],
+      "findings": [
+        "PEGNode preserves display name, AMR-safe name and text-span coordinates; process events retain inputs, outputs and simulator step.",
+        "PEG.to_amr reverses the graph for a last-event root and introduces additional name nodes and op1 mention triples; the serialized topology is a projection of its PEG object.",
+        "edge_to_amr emits successor relations for event-event links and core-role argument routing.",
+        "call-graph-format.md explicitly documents dummy temporal edges between adjacent disconnected components to obtain a connected AMR, assuming textual execution order.",
+        "One paired protocol example was inspected to trace source mention names, serializations and conditions; this is not a corpus-quality estimate."
+      ],
+      "adopt": [
+        "Source/mention anchoring and explicit operation argument interfaces."
+      ],
+      "adapt": [
+        "Decomposed predicate/argument/relation inspection."
+      ],
+      "reject": [
+        "Dummy connectors as source-supported flow or order.",
+        "Last-event root and AMR name-node expansion as universal scientific topology.",
+        "Executability-driven deletion of source-supported composite operations."
+      ],
+      "source_code_copied_to_project": false,
+      "foreign_pipeline_executed": false
+    },
+    {
+      "id": "xwlp_model_code",
+      "repository_url": "https://github.com/bflashcp3f/textlabs-xwlp-code",
+      "commit": "b099ec7382316f80355c453b4bd4aa742bf68359",
+      "commit_url": "https://github.com/bflashcp3f/textlabs-xwlp-code/tree/b099ec7382316f80355c453b4bd4aa742bf68359",
+      "commit_time_git": "1615342512 -0500",
+      "paper_url": "https://aclanthology.org/2021.eacl-main.187/",
+      "license": {
+        "observation": "MIT",
+        "file": "LICENSE",
+        "sha256": "4bedef2a7510a3a5b869722ae951be27672f872bfdb9abd56a26e3aa64897caf"
+      },
+      "optional_local_checkout": "../external/benchmark_refs_20261020/xwlp-code",
+      "checkout_scope": "Shallow filtered clone with sparse selected files; no submodules or model artifacts fetched.",
+      "inspection_extent": "Selected executable paths and annotation/schema examples; not a complete source audit.",
+      "inspected_symbols": [
+        "pipeline_re_eval.main",
+        "multi-task_re_eval.eval_by_rel_type",
+        "utils.re.score",
+        "utils.re.score_sel_rel"
+      ],
+      "inspected_files": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/bflashcp3f/textlabs-xwlp-code/blob/b099ec7382316f80355c453b4bd4aa742bf68359/LICENSE",
+          "git_blob_sha": "486c4f4bff120accfe700b9d6abaadd6def7e1d2",
+          "sha256": "4bedef2a7510a3a5b869722ae951be27672f872bfdb9abd56a26e3aa64897caf",
+          "size_bytes": 1058
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/bflashcp3f/textlabs-xwlp-code/blob/b099ec7382316f80355c453b4bd4aa742bf68359/README.md",
+          "git_blob_sha": "c1fedad3bd680a54314d15dfcc7772030130731c",
+          "sha256": "0942859e38ac5a1f55dbcf8132bb3e83f6a824b8039b8e9d740c05848008f157",
+          "size_bytes": 5861
+        },
+        {
+          "path": "code/pipeline_re_eval.py",
+          "url": "https://github.com/bflashcp3f/textlabs-xwlp-code/blob/b099ec7382316f80355c453b4bd4aa742bf68359/code/pipeline_re_eval.py",
+          "git_blob_sha": "d79947410775354ab4cd136a7467700efe5d9b56",
+          "sha256": "c43f3f665aae8fa2d2dbb0274d2128f54c611a845c65a3fd15144bcc6ea7c15f",
+          "size_bytes": 6440
+        },
+        {
+          "path": "code/multi-task_re_eval.py",
+          "url": "https://github.com/bflashcp3f/textlabs-xwlp-code/blob/b099ec7382316f80355c453b4bd4aa742bf68359/code/multi-task_re_eval.py",
+          "git_blob_sha": "c3e165ba87fc4ccd4e66f17ff869d8588fe304dc",
+          "sha256": "1e700d6daab7353bf6a9d139606dffefa62e3e8d96c5d2d5fd5cec5a09a5bdbd",
+          "size_bytes": 15405
+        },
+        {
+          "path": "code/utils/re.py",
+          "url": "https://github.com/bflashcp3f/textlabs-xwlp-code/blob/b099ec7382316f80355c453b4bd4aa742bf68359/code/utils/re.py",
+          "git_blob_sha": "3ae1c56332a2bbc4718f5e7707b3a7cab203f229",
+          "sha256": "849c9ebb592309a30b31a617d24ae8aed22f89ddf12d0a1cd04cb0f06b1f4557",
+          "size_bytes": 50825
+        }
+      ],
+      "findings": [
+        "Pipeline evaluation distinguishes gold-input relation classification from predicted-input exact token-coordinate/relation-string set matching; no_relation is excluded from the positive relation inventory.",
+        "utils.re.score aggregates per-relation classification counts into micro precision/recall/F1.",
+        "Multi-task relation evaluation reconstructs sliding-window relations and selects occurrence-vote thresholds by relation distance from development examples before test evaluation.",
+        "README links a specific external DyGIE++ commit f59dcf7ccd for its multitask setup; that dependency was not cloned or executed by this audit."
+      ],
+      "adopt": [
+        "Explicit distinction between gold-input and end-to-end evaluation."
+      ],
+      "adapt": [
+        "Per-relation and sentence-distance diagnostics; development-only configuration selection."
+      ],
+      "reject": [
+        "Token-coordinate/string identity as the sole assay-content score.",
+        "Treating tuned vote thresholds as optimal for our methods."
+      ],
+      "source_code_copied_to_project": false,
+      "foreign_pipeline_executed": false
+    },
+    {
+      "id": "wlp_mstg_data",
+      "repository_url": "https://github.com/chaitanya2334/wlp-mstg-dataset",
+      "commit": "2b40195b57b691a080399f8060ffb04b752c402d",
+      "commit_url": "https://github.com/chaitanya2334/wlp-mstg-dataset/tree/2b40195b57b691a080399f8060ffb04b752c402d",
+      "commit_time_git": "1628042372 -0400",
+      "paper_url": "https://aclanthology.org/2021.acl-long.525/",
+      "license": {
+        "observation": "Apache-2.0",
+        "file": "LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      "optional_local_checkout": "../external/benchmark_refs_20261020/wlp-mstg",
+      "checkout_scope": "Shallow filtered clone with sparse selected files; no submodules or model artifacts fetched.",
+      "inspection_extent": "Selected executable paths and annotation/schema examples; not a complete source audit.",
+      "inspected_symbols": [
+        "BRAT [entities]",
+        "BRAT [events] Action",
+        "BRAT [relations]"
+      ],
+      "inspected_files": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/chaitanya2334/wlp-mstg-dataset/blob/2b40195b57b691a080399f8060ffb04b752c402d/LICENSE",
+          "git_blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "size_bytes": 11357
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/chaitanya2334/wlp-mstg-dataset/blob/2b40195b57b691a080399f8060ffb04b752c402d/README.md",
+          "git_blob_sha": "2197feef1f72889a50605c9a633ba38e45557403",
+          "sha256": "0aa8e8a366f1568756eb4de40b9daf60a459cc07cc24d649a84a878d2ee47840",
+          "size_bytes": 8686
+        },
+        {
+          "path": "dev/annotation.conf",
+          "url": "https://github.com/chaitanya2334/wlp-mstg-dataset/blob/2b40195b57b691a080399f8060ffb04b752c402d/dev/annotation.conf",
+          "git_blob_sha": "d25df6bd8ffe0888e4ac6855136bb1430f9037d2",
+          "sha256": "178c93f6f2d409a1a7e5b2df3c45b9d8a374923d722a659fe2047455685ca6f2",
+          "size_bytes": 1798
+        },
+        {
+          "path": "dev/protocol_101.ann",
+          "url": "https://github.com/chaitanya2334/wlp-mstg-dataset/blob/2b40195b57b691a080399f8060ffb04b752c402d/dev/protocol_101.ann",
+          "git_blob_sha": "65fb04107f9cc9b3dbfec6920bfde7680339ab31",
+          "sha256": "4416c2e98de7dc3b7b6272c4238880da6e14c3250eb99355597460a589a84986",
+          "size_bytes": 2589
+        },
+        {
+          "path": "dev/protocol_101.txt",
+          "url": "https://github.com/chaitanya2334/wlp-mstg-dataset/blob/2b40195b57b691a080399f8060ffb04b752c402d/dev/protocol_101.txt",
+          "git_blob_sha": "1d566009b84cd7fb6b73e15975d1d34d88f17826",
+          "sha256": "3b0aada9d2d66c9ef7175fda0413c36fd410345fce993f974665e9de19cb4b1b",
+          "size_bytes": 2773
+        }
+      ],
+      "findings": [
+        "BRAT configuration constrains action argument roles, endpoint types and relation labels including Coreference-Link, Enables, Prevents and Overlaps.",
+        "README specifies text-bound character-offset annotations plus event and binary-relation records.",
+        "The sampled protocol_101 is an HPC/BLAST procedure whose annotations use the available entity vocabulary for computational artifacts. This cautions against inferring assay/material taxonomy from the corpus name.",
+        "The full tree is an annotation/data repository; model scoring was inspected separately in the author-linked LSM code."
+      ],
+      "adopt": [
+        "Auditable source offsets and explicit annotation schema."
+      ],
+      "adapt": [
+        "Cross-step input/output, coreference, temporal and causal review questions."
+      ],
+      "reject": [
+        "Corpus ontology or connectivity as a universal assay-coverage criterion."
+      ],
+      "source_code_copied_to_project": false,
+      "foreign_pipeline_executed": false
+    },
+    {
+      "id": "wlp_mstg_lsm",
+      "repository_url": "https://github.com/chaitanya2334/lsm",
+      "commit": "504c732238b419cd77e7e0a97af040778ee9c7dd",
+      "commit_url": "https://github.com/chaitanya2334/lsm/tree/504c732238b419cd77e7e0a97af040778ee9c7dd",
+      "commit_time_git": "1628041168 -0400",
+      "paper_url": "https://aclanthology.org/2021.acl-long.525/",
+      "license": {
+        "observation": "MIT",
+        "file": "LICENSE",
+        "sha256": "0cae6e6b6dc58522e117fb8648efbd242cdecbcde3b8d7cbda2875869bab39b3"
+      },
+      "optional_local_checkout": "../external/benchmark_refs_20261020/wlp-lsm",
+      "checkout_scope": "Shallow filtered clone with sparse selected files; no submodules or model artifacts fetched.",
+      "inspection_extent": "Selected executable paths and annotation/schema examples; not a complete source audit.",
+      "inspected_symbols": [
+        "EvalEntWLP.update",
+        "EvalRelWLP.update",
+        "EvalRelWLP.filter_rels",
+        "MetaEvalWLP",
+        "EvalNER.update",
+        "EvalRE.update",
+        "RelationGroupFinder",
+        "BratFile.replace_e_tags",
+        "BratFile.parse_e",
+        "BratFile.parse_r",
+        "to_json"
+      ],
+      "inspected_files": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/chaitanya2334/lsm/blob/504c732238b419cd77e7e0a97af040778ee9c7dd/LICENSE",
+          "git_blob_sha": "ec7b04f446981acf24703868872a131443343a9c",
+          "sha256": "0cae6e6b6dc58522e117fb8648efbd242cdecbcde3b8d7cbda2875869bab39b3",
+          "size_bytes": 1070
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/chaitanya2334/lsm/blob/504c732238b419cd77e7e0a97af040778ee9c7dd/README.md",
+          "git_blob_sha": "abd30055cef87e348e1df2eb4c758dbfc63f6734",
+          "sha256": "6849748249041ca12f68090b41eef6afb09a7bbcd644ddc86ad288d5fd26cd35",
+          "size_bytes": 2540
+        },
+        {
+          "path": "src/evaluator/eval_wlp.py",
+          "url": "https://github.com/chaitanya2334/lsm/blob/504c732238b419cd77e7e0a97af040778ee9c7dd/src/evaluator/eval_wlp.py",
+          "git_blob_sha": "15d198a8889d4adccaeb5f95d34a88824505b208",
+          "sha256": "da4e20d732aa740f0547e7695d157c6ec893739f79773a9eadf43b1f3f198702",
+          "size_bytes": 16225
+        },
+        {
+          "path": "src/evaluator/ner.py",
+          "url": "https://github.com/chaitanya2334/lsm/blob/504c732238b419cd77e7e0a97af040778ee9c7dd/src/evaluator/ner.py",
+          "git_blob_sha": "a7ff60a1c385167659a72b2b4bfe0112c047da16",
+          "sha256": "efb850ae17110af23d6c86a1d56d0dc642bdc8e687c8fc72b3d60ff140a79519",
+          "size_bytes": 3617
+        },
+        {
+          "path": "src/evaluator/re.py",
+          "url": "https://github.com/chaitanya2334/lsm/blob/504c732238b419cd77e7e0a97af040778ee9c7dd/src/evaluator/re.py",
+          "git_blob_sha": "f79da47eb0ffdcab89da4cd65e942b0d1dd698c0",
+          "sha256": "ea1eb9dc0e051ff70102331005bd28c65b0664ba6283dee325c51d198639e4d0",
+          "size_bytes": 8650
+        },
+        {
+          "path": "src/postprocessing/rel_group.py",
+          "url": "https://github.com/chaitanya2334/lsm/blob/504c732238b419cd77e7e0a97af040778ee9c7dd/src/postprocessing/rel_group.py",
+          "git_blob_sha": "b7faeb6bf207d53d63c071556797e0127fa29047",
+          "sha256": "7eb9ce41835735f87686881dc79f2a8d3f2c802cb7b3590d3f2d028a0ff32e3b",
+          "size_bytes": 5868
+        },
+        {
+          "path": "src/corpus/brat_file.py",
+          "url": "https://github.com/chaitanya2334/lsm/blob/504c732238b419cd77e7e0a97af040778ee9c7dd/src/corpus/brat_file.py",
+          "git_blob_sha": "d8153fcdefa7fcf46fc64c4bd7fe9acb7d1ca886",
+          "sha256": "03bd071d5f02adfd66b6380b8bd7fe4fff546b12a555b77837fab3858a0d0334",
+          "size_bytes": 10681
+        },
+        {
+          "path": "src/preprocessing/to_json.py",
+          "url": "https://github.com/chaitanya2334/lsm/blob/504c732238b419cd77e7e0a97af040778ee9c7dd/src/preprocessing/to_json.py",
+          "git_blob_sha": "f520b962c291651d7a5899335e185295e77d64f4",
+          "sha256": "47c9b42b567b79c071a50b9a6d18aceb14d356f39f715c67269ccf06e6065519",
+          "size_bytes": 2220
+        }
+      ],
+      "findings": [
+        "Entity evaluation outer-joins start/end/step coordinates and compares labels. Relation evaluation outer-joins ordered endpoint span pairs and compares relation labels, filling unmatched entries with the negative class.",
+        "The inspected relation matching key does not itself conjoin endpoint entity-label correctness; entity typing is separately scored and can affect relation-group assignment. Do not assume every reported relation number implements the paper strictness sentence identically.",
+        "MetaEvalWLP defaults max_gap=5 and filters CAPTAC/inter-CAPTAC summaries to ranges below that value, while FULL evaluation does not impose the same gap filter.",
+        "Preprocessing constructs lowercased, digit-replaced model inputs and treats Or, Overlaps and Coreference-Link as undirected classes.",
+        "BRAT parsing resolves event IDs to trigger text spans and flattens event arguments into binary links; numeric suffixes are removed from role names.",
+        "The repository gitlink pins wlp-mstg-dataset at 08c20d56304bbcd79ccf34bc91170f6df5bc438e, which differs from the independently inspected dataset HEAD."
+      ],
+      "adopt": [
+        "Retaining unmatched prediction/reference rows in metric denominators."
+      ],
+      "adapt": [
+        "Separate full, within-action, cross-action, implicitness and distance views with declared eligibility."
+      ],
+      "reject": [
+        "Silent distance filtering for source completeness.",
+        "Lowercasing/digit replacement/undirected model classes as edits to reference scientific evidence."
+      ],
+      "source_code_copied_to_project": false,
+      "foreign_pipeline_executed": false
+    },
+    {
+      "id": "paged",
+      "repository_url": "https://github.com/SCUNLP/PAGED",
+      "commit": "c0cf4e8552afc6aa0e6ef00e5de01beac0100a05",
+      "commit_url": "https://github.com/SCUNLP/PAGED/tree/c0cf4e8552afc6aa0e6ef00e5de01beac0100a05",
+      "commit_time_git": "1724294378 +0800",
+      "paper_url": "https://aclanthology.org/2024.acl-long.583/",
+      "license": {
+        "observation": "Apache-2.0",
+        "file": "LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      "optional_local_checkout": "../external/benchmark_refs_20261020/paged",
+      "checkout_scope": "Shallow filtered clone with sparse selected files; no submodules or model artifacts fetched.",
+      "inspection_extent": "Selected executable paths and annotation/schema examples; not a complete source audit.",
+      "inspected_symbols": [
+        "single_eva",
+        "eva_trans2triples",
+        "LexicalBased.update",
+        "spans_exact_match",
+        "single_span_match",
+        "parse_span_match",
+        "lexical_score",
+        "same_parsed_match",
+        "node_match",
+        "SpacyTool.compute_bleu"
+      ],
+      "inspected_files": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/SCUNLP/PAGED/blob/c0cf4e8552afc6aa0e6ef00e5de01beac0100a05/LICENSE",
+          "git_blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "size_bytes": 11357
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/SCUNLP/PAGED/blob/c0cf4e8552afc6aa0e6ef00e5de01beac0100a05/README.md",
+          "git_blob_sha": "78e6d283b7b0fd8041ea58f2f130b8c34e33c535",
+          "sha256": "eb753b7e5e5e6012e5bac4369cc8eb7d3a5799e133d5da79d72b6f8ae07c1335",
+          "size_bytes": 2764
+        },
+        {
+          "path": "evaluation/evaluate_saved_outputs.py",
+          "url": "https://github.com/SCUNLP/PAGED/blob/c0cf4e8552afc6aa0e6ef00e5de01beac0100a05/evaluation/evaluate_saved_outputs.py",
+          "git_blob_sha": "24c7e79c3f3d804214c9d97f6623a73c1245ed31",
+          "sha256": "f142a257a8175adb2892ccc5a6b4f5d34a0c7477fc41d9c14f41c1ae29c61d1a",
+          "size_bytes": 5419
+        },
+        {
+          "path": "evaluation/eva_utils/eva_graph2triple.py",
+          "url": "https://github.com/SCUNLP/PAGED/blob/c0cf4e8552afc6aa0e6ef00e5de01beac0100a05/evaluation/eva_utils/eva_graph2triple.py",
+          "git_blob_sha": "899a78b2af98e723e1fc0b4093b99bd6349e2b85",
+          "sha256": "b0d0785fdc7c176f1388e0b12aa34025d6eb0859d18b0cf1cb826ccd60f0e77c",
+          "size_bytes": 10048
+        },
+        {
+          "path": "evaluation/metric/lexical_based.py",
+          "url": "https://github.com/SCUNLP/PAGED/blob/c0cf4e8552afc6aa0e6ef00e5de01beac0100a05/evaluation/metric/lexical_based.py",
+          "git_blob_sha": "e78e4978813d8f71fb6236f4b6f783f9db5ac532",
+          "sha256": "fc878d5078155c73e1115af1543b1f3bb122fc89deabd66a855e5b4e7cc405af",
+          "size_bytes": 68157
+        }
+      ],
+      "findings": [
+        "Official evaluation entrypoint serializes graph objects into actor-grouped textual flow triples and updates LexicalBased statistics from generated text.",
+        "single_span_match selects a best lexical span and rejects it below span_threshold=0.5; spans_exact_match adds prediction/reference totals only inside if matched branches. Fully unmatched lines may be omitted from the denominators on this path.",
+        "lexical_score is lemma membership-overlap F1, while compute_bleu separately uses unigram NLTK BLEU after token filtering. Several local variable names do not distinguish the two.",
+        "same_parsed_match_threshold=0.8 supports parsed-node reuse; node_match_threshold=1 is a different setting. Start/end and OR node matching include type-specific shortcuts.",
+        "These are static code observations at the pinned revision. No scorer execution or published numerical result was reproduced."
+      ],
+      "adopt": [
+        "Explicit actors, branches and conditions as inspection aspects when the source supports them."
+      ],
+      "adapt": [
+        "Separate node/constraint, gateway and flow diagnostics."
+      ],
+      "reject": [
+        "Lexical gating that removes unmatched items from completeness/support denominators.",
+        "Fuzzy parsed-node collapse as scientific identity.",
+        "Graph-first constructed document topology as source-first assay gold."
+      ],
+      "source_code_copied_to_project": false,
+      "foreign_pipeline_executed": false
+    },
+    {
+      "id": "smatch_original",
+      "repository_url": "https://github.com/snowblink14/smatch",
+      "commit": "c01a838f39f25e7a424a65337dbd5f7540cc20f8",
+      "commit_url": "https://github.com/snowblink14/smatch/tree/c01a838f39f25e7a424a65337dbd5f7540cc20f8",
+      "commit_time_git": "1653454014 -0700",
+      "paper_url": "https://aclanthology.org/P13-2131/",
+      "license": {
+        "observation": "MIT",
+        "file": "LICENSE.txt",
+        "sha256": "4b2e32b1a8d6372a79904165d46bd528ef92d7d74bbb4a3923873f8f46fe221b"
+      },
+      "optional_local_checkout": "../external/benchmark_refs_20261020/smatch",
+      "checkout_scope": "Shallow filtered clone with sparse selected files; no submodules or model artifacts fetched.",
+      "inspection_extent": "Selected executable paths and annotation/schema examples; not a complete source audit.",
+      "inspected_symbols": [
+        "get_best_match",
+        "compute_pool",
+        "normalize",
+        "smart_init_mapping",
+        "random_init_mapping",
+        "generate_amr_lines",
+        "get_amr_match",
+        "score_amr_pairs",
+        "AMR.parse_AMR_line",
+        "AMR.get_triples",
+        "test_same_different_top"
+      ],
+      "inspected_files": [
+        {
+          "path": "LICENSE.txt",
+          "url": "https://github.com/snowblink14/smatch/blob/c01a838f39f25e7a424a65337dbd5f7540cc20f8/LICENSE.txt",
+          "git_blob_sha": "d1973c1600dddbf7977d6f2fb26dd16ed965022d",
+          "sha256": "4b2e32b1a8d6372a79904165d46bd528ef92d7d74bbb4a3923873f8f46fe221b",
+          "size_bytes": 1068
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/snowblink14/smatch/blob/c01a838f39f25e7a424a65337dbd5f7540cc20f8/README.md",
+          "git_blob_sha": "bc352a93615aefec136222a1eb65fd7e408ab2f2",
+          "sha256": "e01e5268b74a3333b4f454ff6033049e1212f89a73061168033d164b3d8683fa",
+          "size_bytes": 4275
+        },
+        {
+          "path": "smatch.py",
+          "url": "https://github.com/snowblink14/smatch/blob/c01a838f39f25e7a424a65337dbd5f7540cc20f8/smatch.py",
+          "git_blob_sha": "52d5d9125e739d16bedd9d058c1371185dcb5bca",
+          "sha256": "06f784538e76a9cc2f329cd291a2a5b1abdebc0249890cd99dbe4e6609c8b4a2",
+          "size_bytes": 37050
+        },
+        {
+          "path": "amr.py",
+          "url": "https://github.com/snowblink14/smatch/blob/c01a838f39f25e7a424a65337dbd5f7540cc20f8/amr.py",
+          "git_blob_sha": "182b6b52fe3d46d9dcf4461ce6e260939db0fc37",
+          "sha256": "5e7b6d619a26eb1196792dc5d4744e73f533f6d855fe1f6bf7bd88d26d277953",
+          "size_bytes": 19565
+        },
+        {
+          "path": "tests/test_top.py",
+          "url": "https://github.com/snowblink14/smatch/blob/c01a838f39f25e7a424a65337dbd5f7540cc20f8/tests/test_top.py",
+          "git_blob_sha": "a9bf4c49f261fba68fca5b81c3225b36abf97838",
+          "sha256": "e2c4a01610dfe85c319631753a632c1e6deaf92c5158cefabbb839faf9997124",
+          "size_bytes": 1372
+        }
+      ],
+      "findings": [
+        "Heuristic one-to-one variable alignment uses smart initialization followed by random restarts and greedy move/swap improvements.",
+        "Initialization calls random.seed() internally; externally seeding alone does not pin this code path.",
+        "normalize lowercases and strips trailing underscores. Parsing adds a TOP attribute; tests intentionally penalize changing only the root.",
+        "Corpus mode sums matching/predicted/reference triple counts before computing its aggregate. Unequal graph counts emit a warning and ignore the remaining graphs.",
+        "Triple lists and nested cross-comparisons motivate an explicit duplicate policy. Historical issue15 reports an above-one result, but this audit did not execute the example or claim universal current failure."
+      ],
+      "adopt": [
+        "Local-variable renaming invariance for a declared structural diagnostic."
+      ],
+      "adapt": [
+        "Exact triple comparison only after a source-appropriate normalization contract."
+      ],
+      "reject": [
+        "One-to-one node alignment as the sole measure for admissible composite/split assay descriptions.",
+        "AMR root/case rules or silent document truncation as benchmark defaults."
+      ],
+      "source_code_copied_to_project": false,
+      "foreign_pipeline_executed": false
+    },
+    {
+      "id": "smatchpp",
+      "repository_url": "https://github.com/flipz357/smatchpp",
+      "commit": "81317b66a3d45ec9fd0447397918152235552671",
+      "commit_url": "https://github.com/flipz357/smatchpp/tree/81317b66a3d45ec9fd0447397918152235552671",
+      "commit_time_git": "1746034001 +0200",
+      "paper_url": "https://aclanthology.org/2023.findings-eacl.118/",
+      "license": {
+        "observation": "GNU GPL Version 3 text",
+        "file": "LICENSE",
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      },
+      "optional_local_checkout": "../external/benchmark_refs_20261020/smatchpp",
+      "checkout_scope": "Shallow filtered clone with sparse selected files; no submodules or model artifacts fetched.",
+      "inspection_extent": "Selected executable paths and annotation/schema examples; not a complete source audit.",
+      "inspected_symbols": [
+        "Smatchpp.__init__",
+        "Smatchpp.process_pair",
+        "build_arg_parser",
+        "BasicGraphPairPreparer",
+        "ILP._solve",
+        "HillClimber._solve",
+        "TripleScorer",
+        "GenericStandardizer",
+        "DoNothingStandardizer",
+        "AMRStandardizer",
+        "ResultPrinter"
+      ],
+      "inspected_files": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/LICENSE",
+          "git_blob_sha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+          "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+          "size_bytes": 35149
+        },
+        {
+          "path": "README.md",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/README.md",
+          "git_blob_sha": "bb354386e586fd2f294b50bd1a702e07f666b5f7",
+          "sha256": "72cf35a00d179f0ceea28d7693bad95e311f24d1280b1253d252ee34c58a48ac",
+          "size_bytes": 23143
+        },
+        {
+          "path": "smatchpp/bindings.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/bindings.py",
+          "git_blob_sha": "908fa94a39145941699cafe784e87c9c9bf92234",
+          "sha256": "45ccc44d4e3141478e1fd519dfab459d2c3ca3e5da114b56bf98770079b6a1be",
+          "size_bytes": 7098
+        },
+        {
+          "path": "smatchpp/__main__.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/__main__.py",
+          "git_blob_sha": "1fd0e9683d67242064f152920728d709bf189b0c",
+          "sha256": "fc30d01cb686c5d19906f1f0633fdba36e1778d17b55eda806f507b5580ee1b4",
+          "size_bytes": 8520
+        },
+        {
+          "path": "smatchpp/preprocess.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/preprocess.py",
+          "git_blob_sha": "15f5c4487d7ed054e25b2564461b819cfc924a5f",
+          "sha256": "392cba3fa8d63f2395222583e6cde33fd2ed3f4d08174498135b90a17467fe29",
+          "size_bytes": 6337
+        },
+        {
+          "path": "smatchpp/solvers.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/solvers.py",
+          "git_blob_sha": "018de1a1ea5be7a1b67525fa1dd12fdad1895b3e",
+          "sha256": "dc0eba18ed9c8c48719c40cd2614983dfe85c56fab75afa488bad92d6de520a5",
+          "size_bytes": 31328
+        },
+        {
+          "path": "smatchpp/score.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/score.py",
+          "git_blob_sha": "f71b07c1a262b5c469308540aff71b093dfa6ef4",
+          "sha256": "5752a87a17a6ebb853a6a4b77a2a30ddf56d9cc5e4e109d44887a0de0736241a",
+          "size_bytes": 7085
+        },
+        {
+          "path": "smatchpp/graph_transforms.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/graph_transforms.py",
+          "git_blob_sha": "0ae56cafa657baa01560703e34fd1f85d273d95b",
+          "sha256": "2aee64406435c644835f0e5c36959a1d7efcc624a6975372fa7430018a5524f4",
+          "size_bytes": 13419
+        },
+        {
+          "path": "smatchpp/formalism/generic/tools.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/formalism/generic/tools.py",
+          "git_blob_sha": "581b5cd048454c4e2ab9b643926b3626af01b429",
+          "sha256": "ea6be7cdda9f8d5d17487fc532120d759c48e9437f27215627d576f6dab2234f",
+          "size_bytes": 1977
+        },
+        {
+          "path": "smatchpp/formalism/amr/tools.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/formalism/amr/tools.py",
+          "git_blob_sha": "82e327d99f3b07dc44df7e7ee4eec6a3b2399e13",
+          "sha256": "68c778081b454106e3324b6b02845442d8b8cf604979e8b757c955d36f392348",
+          "size_bytes": 8193
+        },
+        {
+          "path": "smatchpp/eval_statistics.py",
+          "url": "https://github.com/flipz357/smatchpp/blob/81317b66a3d45ec9fd0447397918152235552671/smatchpp/eval_statistics.py",
+          "git_blob_sha": "9a7b6b47a7d276808347fc52afb5face15383636",
+          "sha256": "513792710b6e49841441cdfcbc13f1bca2fe413e854de92a1ebd3052ba833acf",
+          "size_bytes": 10234
+        }
+      ],
+      "findings": [
+        "Preprocessing, graph-pair preparation, alignment solving and scoring are separate configurable components.",
+        "Inspected API defaults to no-op graph standardization and hill climbing; CLI parser defaults to ILP and pairwise scoring unless configured otherwise.",
+        "ILP has a time limit and returns objective value and bound; optimality requires inspecting the gap/status, not only selecting a solver name.",
+        "Generic standardization lowercases, removes quotes, relabels variables and deinverts relations. Selecting AMR standardization additionally handles domain/mod, root concepts, dereification and duplicate removal.",
+        "Default IDTripleMatcher is exact; alternative weighted/embedding matchers have different semantics. TripleScorer uses count-aware matching, and ResultPrinter distinguishes micro/macro summaries.",
+        "LICENSE contains GNU General Public License Version 3. No source was copied or relicensing interpretation made."
+      ],
+      "adopt": [
+        "Explicit separation of normalization, alignment and scoring, with solver-bound inspection."
+      ],
+      "adapt": [
+        "Possible bounded structural diagnostics after a project-specific meaning-preserving projection."
+      ],
+      "reject": [
+        "Unconfigured AMR standardization or embedding triple similarity as scientific truth.",
+        "Assuming CLI and API names imply identical defaults."
+      ],
+      "source_code_copied_to_project": false,
+      "foreign_pipeline_executed": false
+    }
+  ],
+  "related_pins": [
+    {
+      "context": "LSM dataset gitlink",
+      "model_repository": "https://github.com/chaitanya2334/lsm",
+      "model_commit": "504c732238b419cd77e7e0a97af040778ee9c7dd",
+      "path": "wlp-mstg-dataset",
+      "dataset_repository": "https://github.com/chaitanya2334/wlp-mstg-dataset",
+      "dataset_commit": "08c20d56304bbcd79ccf34bc91170f6df5bc438e",
+      "note": "Gitlink observed; submodule source at this older revision was not fetched or claimed audited."
+    },
+    {
+      "context": "X-WLP README external multitask dependency",
+      "repository": "https://github.com/dwadden/dygiepp",
+      "recorded_revision": "f59dcf7ccd",
+      "note": "README-recorded abbreviated revision only; not fetched, expanded to a full SHA, or audited here."
+    }
+  ],
+  "historical_issue_evidence": [
+    {
+      "url": "https://github.com/snowblink14/smatch/issues/15",
+      "claim": "Historical user report of score above one; original scorer has list-based triples and nested match accumulation.",
+      "limit": "No foreign scorer or supplied example executed; this is not a reproduction or a claim about every current input."
+    }
+  ],
+  "adopted_principles": [
+    "Independent source anchoring and adjudication",
+    "Separate support and required-content coverage",
+    "Retain unmatched rows",
+    "Inspect representation aspects separately",
+    "Pin normalization/alignment/aggregation/solver status"
+  ],
+  "rejected_assumptions": [
+    "Single exact topology as scientific gold",
+    "Executability-driven deletion of high-level source actions",
+    "Invented connectors for serialization",
+    "Lexical gating of metric eligibility",
+    "Undeclared distance cutoffs",
+    "Model preprocessing as modification of source truth",
+    "One-to-one node assignment as the only admissible semantic alignment"
+  ],
+  "deferred": [
+    "Primary claim-unit/scoring implementation",
+    "Expert-adjudicated gold creation",
+    "Allowed alternative granularity rules per method",
+    "Operational count/weight/cutoff tuning",
+    "Scorer negative-control execution",
+    "Any numerical external benchmark reproduction"
+  ],
+  "proposed_falsification_controls": [
+    "ID and serialization-order invariance",
+    "Meaning-preserving paraphrase",
+    "Allowed composite/split alternatives preserve required interfaces",
+    "Unmatched hallucination and omitted required claim change their respective counts",
+    "Duplicate-credit prevention with distinct repeated-event preservation",
+    "Retained/discarded fraction and QC/production branch swaps",
+    "Necessary order and condition omissions",
+    "Unknown versus supported absence and negation",
+    "Empty/malformed/missing-document outcomes",
+    "Solver-gap and score-range checks"
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "status": "predeclared_comparison_questions_not_gold_labels",
+  "cases_manifest": "cases.json",
+  "annotation_policy": {
+    "status": "question_only_no_expected_label",
+    "answers_after": "Per-method source-grounded reference candidates and their independent reviews must be frozen before comparison annotation.",
+    "decomposition": "Compare source-supported connected units at the boundaries needed for the question. Units may contain unequal numbers of operations; no single-word label, node count or forced one-to-one correspondence decides a relation.",
+    "evidence": "Every scientific answer must cite exact side-qualified source passages from the frozen packets. Quote integrity is mechanical evidence validation, not entailment.",
+    "judgments": [
+      "supported",
+      "contradicted",
+      "not_established"
+    ],
+    "not_established": "Insufficient or unassessed evidence is not false and is not a negative gold label.",
+    "edges": "No relation or graph edge is forced. Support for one scoped claim type does not establish another type. Benchmark relations do not admit production-registry concepts or uses.",
+    "exposure": "Reserved pairs are future-tuning holdouts only; prior method/family/harness exposure remains declared in cases.json."
+  },
+  "comparisons": [
+    {
+      "comparison_id": "methylation-fragment-selection-conversion",
+      "left_case_id": "rrbs-meissner-2008",
+      "right_case_id": "scbs-smallwood-2014",
+      "question": "How do the reported workflows select or retain genomic fragments and convert methylation information into sequencing-readable material? Compare source-supported connected units, which may contain different numbers of operations, including their inputs, transformations, outputs, information changes and experimental context.",
+      "why_included": "Tests whether different fragment-selection and conversion routes can be compared without erasing their scope, ordering or starting-material differences.",
+      "split": "development",
+      "allowed_claim_types": [
+        "shared_purpose",
+        "shared_mechanism",
+        "documented_development",
+        "interface_compatibility"
+      ],
+      "annotation_policy": "Inherit the manifest annotation_policy; no expected label, no forced edge, and not_established is not false."
+    },
+    {
+      "comparison_id": "accessibility-encoding",
+      "left_case_id": "atac-buenrostro-2013",
+      "right_case_id": "dnase-boyle-2008",
+      "question": "How does each reported workflow transform chromatin accessibility into a recoverable sequencing library? Delimit the relevant connected units and compare material inputs, transformations, outputs, information effects and context, including source-defined readout alternatives.",
+      "why_included": "Tests accessibility-encoding comparisons while keeping library construction and alternative readout branches explicit.",
+      "split": "development",
+      "allowed_claim_types": [
+        "shared_purpose",
+        "shared_mechanism",
+        "documented_development",
+        "interface_compatibility"
+      ],
+      "annotation_policy": "Inherit the manifest annotation_policy; no expected label, no forced edge, and not_established is not false."
+    },
+    {
+      "comparison_id": "droplet-cell-identity",
+      "left_case_id": "dropseq-macosko-2015",
+      "right_case_id": "indrop-klein-2015",
+      "question": "How does each reported workflow establish and preserve the cellular origin of captured RNA through compartmentalization, barcode introduction, pooling and library preparation? Compare complete source-supported connected units with explicit input, transformation, output, information and context boundaries.",
+      "why_included": "Tests identity-preserving comparisons across potentially unequal droplet workflow units without inferring equivalent chemistry from a shared cell-profiling objective.",
+      "split": "development",
+      "allowed_claim_types": [
+        "shared_purpose",
+        "shared_mechanism",
+        "documented_development",
+        "interface_compatibility"
+      ],
+      "annotation_policy": "Inherit the manifest annotation_policy; no expected label, no forced edge, and not_established is not false."
+    },
+    {
+      "comparison_id": "splitpool-cell-identity",
+      "left_case_id": "scirna-cao-2017",
+      "right_case_id": "splitseq-rosenberg-2018",
+      "question": "How do the reported split-pool workflows assign cellular origin to RNA-derived molecules across indexing rounds and library construction? Compare source-supported connected units, allowing unequal decompositions, with explicit input/output materials, transformations, information inheritance and context.",
+      "why_included": "Tests whether indexing histories and compartment boundaries survive comparison instead of treating a barcode label as a complete mechanism.",
+      "split": "development",
+      "allowed_claim_types": [
+        "shared_purpose",
+        "shared_mechanism",
+        "documented_development",
+        "interface_compatibility"
+      ],
+      "annotation_policy": "Inherit the manifest annotation_policy; no expected label, no forced edge, and not_established is not false."
+    },
+    {
+      "comparison_id": "spatial-coordinate-capture",
+      "left_case_id": "spatial-stahl-2016",
+      "right_case_id": "slideseq-rodriques-2019",
+      "question": "How does each original spatial workflow connect a tissue RNA measurement to a physical coordinate, including capture and any coordinate/barcode-decoding branch? Compare the complete relevant connected units, material inputs/outputs, transformations, information effects and context without importing later platform revisions.",
+      "why_included": "Tests spatial attribution and measurement-branch joins while allowing different physical layouts and graph granularity.",
+      "split": "future_tuning_holdout",
+      "allowed_claim_types": [
+        "shared_purpose",
+        "shared_mechanism",
+        "documented_development",
+        "interface_compatibility"
+      ],
+      "annotation_policy": "Inherit the manifest annotation_policy; no expected label, no forced edge, and not_established is not false."
+    },
+    {
+      "comparison_id": "metabolic-nascent-rna-recoding",
+      "left_case_id": "slamseq-herzog-2017",
+      "right_case_id": "tucseq-riml-2017",
+      "question": "How do the original workflows connect metabolic RNA labeling, chemical treatment and their actually reported sequencing readouts? Compare source-supported connected units with explicit inputs, transformations, outputs, information effects and context; retain targeted versus broader readout scope where the sources require it.",
+      "why_included": "Tests temporal-information comparisons without equating conversion chemistry or inferring an unreported genome-wide library workflow.",
+      "split": "future_tuning_holdout",
+      "allowed_claim_types": [
+        "shared_purpose",
+        "shared_mechanism",
+        "documented_development",
+        "interface_compatibility"
+      ],
+      "annotation_policy": "Inherit the manifest annotation_policy; no expected label, no forced edge, and not_established is not false."
+    },
+    {
+      "comparison_id": "cross-atac-drop-library-construction",
+      "left_case_id": "atac-buenrostro-2013",
+      "right_case_id": "dropseq-macosko-2015",
+      "question": "For fragmentation and adapter introduction during the reported library preparation, which connected units are comparable across these protocols, and at what precisely bounded claim scope? Compare their input molecular substrates, transformations, outputs, information effects, required surrounding steps and experimental context, permitting unequal-sized units.",
+      "why_included": "Hard distinction between a recognizable library-preparation operation and the broader assay role; requires explicit substrate and context boundaries before any relation is asserted.",
+      "split": "development",
+      "allowed_claim_types": [
+        "shared_purpose",
+        "shared_mechanism",
+        "documented_development",
+        "interface_compatibility"
+      ],
+      "annotation_policy": "Inherit the manifest annotation_policy; no expected label, no forced edge, and not_established is not false."
+    },
+    {
+      "comparison_id": "cross-drop-spatial-capture-attribution",
+      "left_case_id": "dropseq-macosko-2015",
+      "right_case_id": "spatial-stahl-2016",
+      "question": "How do capture and barcode attribution connect RNA-derived molecules to an identity unit in the original droplet and spatial workflows? Compare source-supported connected units, inputs, transformations, outputs, information inheritance and context, and state exactly which identity unit any proposed relation preserves.",
+      "why_included": "Hard distinction between capture/barcoding descriptions and what the barcode actually identifies; tests a cross-family comparison without assuming interchangeable interfaces.",
+      "split": "future_tuning_holdout",
+      "allowed_claim_types": [
+        "shared_purpose",
+        "shared_mechanism",
+        "documented_development",
+        "interface_compatibility"
+      ],
+      "annotation_policy": "Inherit the manifest annotation_policy; no expected label, no forced edge, and not_established is not false."
+    }
+  ]
+}

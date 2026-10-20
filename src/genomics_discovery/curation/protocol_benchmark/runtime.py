@@ -1,0 +1,344 @@
+"""Four fresh source-bound stages for reference construction, not blind evaluation."""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import os
+import re
+from collections import Counter
+from pathlib import Path
+
+from pydantic import ValidationError
+
+from genomics_discovery.curation.codex_worker import CodexWorker, assess_archived_attempt
+from genomics_discovery.curation.run_state import now, sha, write
+from genomics_discovery.curation.workflow_extraction.assemble import assemble_workflow
+from genomics_discovery.curation.workflow_extraction.models import (
+    Workflow, WorkflowDraft, digest, review_outcome, validate_evidence, validate_review,
+)
+from genomics_discovery.curation.workflow_extraction.projection import export_candidate
+from genomics_discovery.curation.workflow_extraction.sources import load_packet
+
+from .models import GraphReviewAssessment, ProtocolReference, ReferenceReview
+from .prompts import DEFAULT_DIRECTORY, ROLES, build_prompt
+from .scoring import score_assessment
+from .validation import (
+    reference_review_outcome, validate_assessment, validate_reference, validate_reference_review,
+)
+
+MODELS = {"reference_annotator": ProtocolReference, "reference_reviewer": ReferenceReview,
+          "graph_constructor": WorkflowDraft, "graph_reviewer": GraphReviewAssessment}
+BOUNDARY = (
+    "Model-reviewed reference construction and self-consistency on fixed source packets. "
+    "The graph constructor sees the reference; this is not blind extraction-harness "
+    "performance, expert-adjudicated ground truth or production atlas publication."
+)
+ARCHIVES = ("artifact.json", "prompt.txt", "command.json", "started.json", "events.jsonl",
+            "stderr.log", "final.txt", "result.json")
+
+
+class StageFailure(ValueError):
+    def __init__(self, category, message):
+        self.category = category
+        super().__init__(message)
+
+
+class DataIssue(StageFailure):
+    pass
+
+
+def verify_pins(pins):
+    for name, expected in pins.items():
+        path = Path(name)
+        if not path.is_file() or sha(path) != expected:
+            raise StageFailure("frozen_input_changed", f"Frozen file changed: {path}")
+
+
+def _usage(attempts):
+    total = Counter()
+    for attempt in attempts:
+        if attempt.get("transport_complete"):
+            total.update({key: value for key, value in attempt.get("usage", {}).items()
+                          if isinstance(value, (int, float)) and not isinstance(value, bool)})
+    return dict(total)
+
+
+class CaseSession:
+    def __init__(self, row, run, pins, prompts, used_threads, worker_factory, prepare_only):
+        self.row, self.run, self.pins = row, run, dict(pins)
+        self.prompts, self.used_threads = prompts, used_threads
+        self.worker_factory, self.prepare_only = worker_factory, prepare_only
+        self.state = {"case_id": row["case_id"], "status": "preparing", "stage": "source",
+                      "started_at": now(), "attempts": [], "repairs_used": 0, "boundary": BOUNDARY}
+
+    def persist(self):
+        self.state["usage"] = _usage(self.state["attempts"])
+        self.state["completed_native_sessions"] = sum(
+            bool(attempt.get("transport_complete")) for attempt in self.state["attempts"])
+        write(self.run / "state.json", self.state)
+        write(self.run / "bindings.json", self.pins)
+
+    def freeze(self, name, value):
+        path = self.run / name
+        if path.exists():
+            raise FileExistsError(f"Refuse to replace a pilot artifact: {path}")
+        write(path, value)
+        self.pins[str(path)] = sha(path)
+        return path
+
+    async def stage(self, role, inputs, *, repair=False):
+        self.state["stage"] = role
+        verify_pins(self.pins)
+        attempt = self.run / "attempts" / f"{len(self.state['attempts']) + 1:03d}_{role}"
+        attempt.mkdir(parents=True)
+        schema = self.run / "schemas" / f"{role}.json"
+        bindings = {"source_packet_sha256": digest(self.packet)}
+        if "reference" in inputs:
+            reference = ProtocolReference.model_validate_json(Path(inputs["reference"]).read_bytes())
+            bindings["reference_sha256"] = digest(reference)
+        if "workflow" in inputs:
+            workflow = Workflow.model_validate_json(Path(inputs["workflow"]).read_bytes())
+            bindings["workflow_sha256"] = digest(workflow)
+        prompt = build_prompt(role, directory=self.prompts, attempt=attempt, schema=schema,
+            packet=Path(self.row["packet"]), case_id=self.row["case_id"],
+            metadata=json.dumps({key: self.packet[key] for key in
+                ("method_id", "title", "scope", "variant")}, ensure_ascii=False),
+            inputs=inputs, bindings=bindings, repair=repair)
+        self.freeze(attempt.relative_to(self.run) / "instruction.json",
+                    {"prompt": prompt, "canonical_object_digests": bindings})
+        self.freeze(attempt.relative_to(self.run) / "input_bindings.json", self.pins)
+        record = {"role": role, "attempt": str(attempt), "started_at": now(),
+                  "status": "running", "transport_complete": False, "data_repair": repair}
+        self.state["attempts"].append(record)
+        self.persist()
+        try:
+            worker = self.worker_factory() if self.worker_factory else CodexWorker(
+                model="gpt-6.1-sol", effort="xhigh", timeout_seconds=3600,
+                web_search=False, network_access=False)
+            if isinstance(worker, CodexWorker) and (worker.web_search or worker.network_access):
+                raise StageFailure("network_policy", "Native benchmark work uses a fixed source corpus")
+            result = await worker.run(prompt, attempt)
+            checked = assess_archived_attempt(attempt)
+            if (not checked.complete or not checked.thread_id or result.exit_code != 0
+                    or result.error is not None or result.thread_id != checked.thread_id
+                    or result.usage != checked.usage or checked.thread_id in self.used_threads
+                    or (attempt / "prompt.txt").read_text() != prompt):
+                raise StageFailure("native_transport", "Expected a complete, unchanged, fresh native archive")
+            self.used_threads.add(checked.thread_id)
+            record.update(transport_complete=True, thread_id=checked.thread_id,
+                          usage=checked.usage, elapsed_seconds=result.elapsed_seconds)
+            verify_pins(self.pins)
+            if not (attempt / "artifact.json").is_file():
+                raise StageFailure("missing_artifact", "A final message cannot replace the JSON artifact")
+            if any(not (attempt / name).is_file() for name in ARCHIVES):
+                raise StageFailure("native_archive_missing", "Native transport archive is incomplete")
+            self.pins.update({str(attempt / name): sha(attempt / name) for name in ARCHIVES})
+            try:
+                model = MODELS[role].model_validate_json((attempt / "artifact.json").read_bytes())
+            except ValidationError as exc:
+                raise DataIssue("artifact_schema", json.dumps(
+                    exc.errors(include_input=False, include_url=False), default=str)) from exc
+            record.update(status="complete", artifact_sha256=sha(attempt / "artifact.json"),
+                          artifact_digest=digest(model))
+            return model, attempt / "artifact.json"
+        except BaseException as exc:
+            record.update(status="cancelled" if isinstance(exc, asyncio.CancelledError) else "failed",
+                          error_category=getattr(exc, "category", "execution"),
+                          error=f"{type(exc).__name__}: {exc}")
+            raise
+        finally:
+            record["finished_at"] = now()
+            self.persist()
+
+    async def reference(self):
+        previous, feedback = None, None
+        while True:
+            inputs = {"previous_artifact": previous, "feedback": feedback} if feedback else {}
+            try:
+                reference, artifact = await self.stage("reference_annotator", inputs,
+                                                        repair=feedback is not None)
+                errors = validate_reference(reference, self.packet)
+                if reference.case_id != self.row["case_id"]:
+                    errors.append("Reference case_id differs from assigned case")
+                if errors:
+                    raise DataIssue("reference_integrity", "; ".join(errors))
+            except DataIssue as exc:
+                if self.state["repairs_used"]:
+                    raise
+                self.state["repairs_used"] = 1
+                previous = Path(self.state["attempts"][-1]["attempt"]) / "artifact.json"
+                feedback = self.freeze("repair_feedback.json", {
+                    "category": exc.category, "integrity_errors": [str(exc)],
+                    "instruction": "Correct the published schema/integrity issues using the same sources."})
+                continue
+            review, review_path = await self.stage("reference_reviewer", {"reference": artifact})
+            if errors := validate_reference_review(review, reference, self.packet):
+                raise DataIssue("reference_review_integrity", "; ".join(errors))
+            outcome = reference_review_outcome(review)
+            self.state["reference_review_outcome"] = outcome
+            if outcome == "needs_revision" and not self.state["repairs_used"]:
+                self.state["repairs_used"] = 1
+                previous = artifact
+                feedback = self.freeze("repair_feedback.json", {
+                    "category": "reference_review_needs_revision", "review": str(review_path),
+                    "instruction": "Assess the review against the same sources and correct justified issues."})
+                continue
+            if outcome != "supported_reference_candidate":
+                self.state["status"] = "reference_needs_revision" if outcome == "needs_revision" else "reference_uncertain"
+                return None
+            reference_path = self.freeze("reference.json", reference.model_dump(mode="json"))
+            self.freeze("reference_review.json", review.model_dump(mode="json"))
+            self.state.update(reference_sha256=digest(reference),
+                              reference_file_sha256=sha(reference_path),
+                              reference_annotation_status="model_reviewed_reference_candidate")
+            return reference, reference_path
+
+    async def execute(self):
+        self.run.mkdir(parents=True, exist_ok=False)
+        self.persist()
+        try:
+            verify_pins(self.pins)
+            packet_path = Path(self.row["packet"])
+            if sha(packet_path) != self.row["packet_sha256"]:
+                raise StageFailure("packet_byte_hash", "Declared source packet byte hash differs")
+            self.packet = load_packet(packet_path)
+            self.pins[str(packet_path)] = sha(packet_path)
+            for source in self.packet["sources"]:
+                original = Path(source["original_path"])
+                self.pins[str(original)] = source["original_sha256"]
+            verify_pins(self.pins)
+            self.freeze("input.json", {"case_id": self.row["case_id"], "packet": str(packet_path),
+                "packet_sha256": self.row["packet_sha256"], "source_packet_sha256": digest(self.packet),
+                **{key: self.packet[key] for key in ("method_id", "title", "scope", "variant")}})
+            for role, model in MODELS.items():
+                self.freeze(Path("schemas") / f"{role}.json", model.model_json_schema())
+            if self.prepare_only:
+                self.state.update(status="prepared", stage="prepared")
+                return self.state
+            accepted = await self.reference()
+            if accepted is None:
+                return self.state
+            reference, reference_path = accepted
+            draft, _ = await self.stage("graph_constructor", {"reference": reference_path})
+            try:
+                workflow = assemble_workflow(draft, require_bindings=True)
+            except ValueError as exc:
+                raise DataIssue("graph_assembly", str(exc)) from exc
+            errors = validate_evidence(workflow, self.packet)
+            errors.extend(f"Workflow {field} differs from frozen packet" for field in
+                ("method_id", "title", "scope", "variant")
+                if getattr(workflow, field) != self.packet[field])
+            if errors:
+                raise DataIssue("graph_integrity", "; ".join(errors))
+            workflow_path = self.freeze("workflow.json", workflow.model_dump(mode="json"))
+            combined, _ = await self.stage("graph_reviewer", {
+                "reference": reference_path, "workflow": workflow_path})
+            errors = validate_review(combined.workflow_review, workflow, self.packet)
+            errors.extend(validate_assessment(combined.assessment, reference, workflow, self.packet))
+            if errors:
+                raise DataIssue("graph_review_integrity", "; ".join(errors))
+            outcome = review_outcome(combined.workflow_review, workflow)
+            self.state["workflow_review_outcome"] = outcome
+            self.freeze("workflow_review.json", combined.workflow_review.model_dump(mode="json"))
+            self.freeze("assessment.json", combined.assessment.model_dump(mode="json"))
+            scores = score_assessment(combined.assessment, reference, workflow, self.packet)
+            self.freeze("scores.json", scores)
+            self.state["critical_not_covered"] = scores["obligation_coverage"]["critical_not_covered"]
+            if outcome != "supported":
+                self.state["status"] = "graph_needs_revision" if outcome == "needs_revision" else "graph_uncertain"
+            elif self.state["critical_not_covered"]:
+                self.state["status"] = "critical_obligations_not_covered"
+            else:
+                verify_pins(self.pins)
+                export_candidate(workflow, combined.workflow_review, self.packet, self.run / "projection")
+                for name in ("graph_candidate.json", "protocol.txt"):
+                    path = self.run / "projection" / name
+                    self.pins[str(path)] = sha(path)
+                self.state.update(status="model_reviewed_reference_candidate",
+                    workflow_sha256=digest(workflow), assessment_sha256=digest(combined.assessment),
+                    obligation_completeness=("complete" if all(item.outcome == "covered" for item in
+                        combined.assessment.obligations) else "partial"),
+                    projection=str(self.run / "projection"))
+            verify_pins(self.pins)
+        except asyncio.CancelledError:
+            self.state.update(status="cancelled", issue_stage=self.state["stage"])
+            raise
+        except Exception as exc:
+            self.state.update(status=f"{self.state['stage']}_failed", issue_stage=self.state["stage"],
+                error_category=getattr(exc, "category", "execution"),
+                error=f"{type(exc).__name__}: {exc}")
+        finally:
+            self.state["finished_at"] = now()
+            self.persist()
+        return self.state
+
+
+async def run_batch(manifest_path, output, *, concurrency=4, case_ids=(), prepare_only=False,
+                    worker_factory=None, prompt_directory=DEFAULT_DIRECTORY, driver_path=None):
+    if type(concurrency) is not int or concurrency < 1:
+        raise ValueError("Use positive integer concurrency")
+    if not prepare_only and worker_factory is None and not os.environ.get("SLURM_JOB_ID"):
+        raise RuntimeError("Native reference construction requires a Sherlock Slurm allocation")
+    manifest_path, output = Path(manifest_path).resolve(), Path(output).resolve()
+    manifest = json.loads(manifest_path.read_bytes())
+    rows = manifest.get("cases")
+    if not isinstance(rows, list) or not rows:
+        raise ValueError("Manifest requires a nonempty cases list")
+    ids = [row.get("case_id") for row in rows]
+    if (any(not isinstance(ident, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", ident)
+            for ident in ids) or len(set(ids)) != len(ids)):
+        raise ValueError("Manifest case IDs must be distinct safe path components")
+    if set(case_ids) - set(ids):
+        raise ValueError("Requested case IDs are absent from the manifest")
+    rows = [dict(row) for row in rows if not case_ids or row["case_id"] in case_ids]
+    for row in rows:
+        if not isinstance(row.get("packet_sha256"), str) or not re.fullmatch(r"[0-9a-f]{64}", row["packet_sha256"]):
+            raise ValueError("Each case requires a declared packet file-byte SHA-256")
+        row["packet"] = str((manifest_path.parent / row["packet"]).resolve())
+    output.mkdir(parents=True, exist_ok=False)
+    templates = Path(prompt_directory).resolve()
+    root = Path(__file__).resolve().parents[4]
+    code = [*root.joinpath("src/genomics_discovery").rglob("*.py"),
+            Path(driver_path).resolve() if driver_path else root / "scripts/benchmark/run_reference_batch.py"]
+    files = [manifest_path, *code, *(templates / name for name in ROLES.values())]
+    pins = {str(path): sha(path) for path in files}
+    write(output / "manifest.json", {"cases": rows})
+    pins[str(output / "manifest.json")] = sha(output / "manifest.json")
+    write(output / "bindings.json", pins)
+    state = {"status": "running", "started_at": now(), "concurrency": concurrency,
+             "model": "gpt-6.1-sol", "effort": "xhigh", "cases": {}, "boundary": BOUNDARY,
+             "job_id": os.environ.get("SLURM_JOB_ID"), "prepare_only": prepare_only}
+    write(output / "state.json", state)
+    semaphore, used_threads = asyncio.Semaphore(concurrency), set()
+
+    async def case(row):
+        async with semaphore:
+            session = CaseSession(row, output / "cases" / row["case_id"], pins, templates,
+                                  used_threads, worker_factory, prepare_only)
+            state["cases"][row["case_id"]] = await session.execute()
+            write(output / "state.json", state)
+
+    tasks = [asyncio.create_task(case(row)) for row in rows]
+    try:
+        await asyncio.gather(*tasks)
+        verify_pins(pins)
+        statuses = Counter(item["status"] for item in state["cases"].values())
+        good = "prepared" if prepare_only else "model_reviewed_reference_candidate"
+        state.update(status=("prepared" if prepare_only else "completed") if set(statuses) == {good}
+                     else "finished_with_failures", counts=dict(statuses))
+    except BaseException:
+        for task in tasks:
+            task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+        state["status"] = "cancelled_or_batch_integrity_failure"
+        raise
+    finally:
+        attempts = [attempt for case in state["cases"].values() for attempt in case["attempts"]]
+        state.update(finished_at=now(), usage=_usage(attempts),
+            completed_native_sessions=sum(bool(attempt.get("transport_complete")) for attempt in attempts),
+            distinct_native_threads=len(used_threads),
+            usage_scope="Sum of separately assessed completed native sessions, including invalid data artifacts.")
+        write(output / "state.json", state)
+        write(output / "summary.json", state)
+    return state

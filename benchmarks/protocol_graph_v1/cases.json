@@ -1,0 +1,678 @@
+{
+  "schema_version": 1,
+  "status": "preregistered_source_acquisition_plan_not_reference_gold",
+  "created_date": "2026-10-20",
+  "path_base": "workspace_root (parent of sequencing-technology-atlas)",
+  "selection": {
+    "cases": 12,
+    "families": 6,
+    "development_families": [
+      "dna_methylation_conversion",
+      "chromatin_accessibility",
+      "droplet_single_cell_rna",
+      "combinatorial_indexing_rna"
+    ],
+    "future_tuning_holdout_families": [
+      "spatial_transcriptomics",
+      "metabolic_rna_recoding"
+    ],
+    "reserve": {
+      "case_id": "timelapse-schofield-2018",
+      "method_id": "timelapse-seq",
+      "primary_identity": {
+        "pmid": "29355846",
+        "pmcid": "PMC5831505",
+        "doi": "10.1038/nmeth.4582"
+      },
+      "activation": "Only after recorded failure to obtain or accept the prespecified TUC 2017 source scope, before reference curation."
+    }
+  },
+  "interpretation_limits": [
+    "These are extraction/evaluation case selections for existing protocols, not protocol inventions or verified scientific reference graphs.",
+    "The six family labels are sampling strata; methods share components and are not six independent biological mechanisms.",
+    "Holdout means excluded from future benchmark-driven tuning after registration. Prior source, graph, harness, prompt and model-training exposure cannot be ruled out; never-used or uncontaminated claims are prohibited.",
+    "Existing packet paths are leads, not current custody certification. Historical absolute source paths and hashes must be preserved; fresh remote source registrations are required.",
+    "URLs distinguish observed authoritative links, institutional/academic alternatives and unverified candidate leads. No successful download or complete source coverage follows from a URL, filename, search excerpt or browser challenge.",
+    "All necessary cited historical protocol/kit context must be assessed. Later revisions cannot silently fill unknown fields.",
+    "Model-authored graphs and LLM reviews remain provisional; human source-first verification is needed for any human-gold claim."
+  ],
+  "cases": [
+    {
+      "case_id": "rrbs-meissner-2008",
+      "method_id": "rrbs",
+      "title": "Genome-scale DNA methylation maps of pluripotent and differentiated cells",
+      "scope": "High-throughput MspI-based reduced representation bisulfite sequencing used in Meissner 2008, from genomic DNA through the reported sequencing library/readout. Exclude the original 2005 BglII/cloning workflow and unrelated ChIP-seq experiments.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "dna_methylation_conversion",
+      "split": "development",
+      "primary_identity": {
+        "pmid": "18600261",
+        "doi": "10.1038/nature07107",
+        "title": "Genome-scale DNA methylation maps of pluripotent and differentiated cells",
+        "pmcid": "PMC2896277"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18600261/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2896277/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://www.nature.com/articles/nature07107",
+          "role": "primary_publisher_and_supplement_index",
+          "format": "html",
+          "verification_note": "Publisher page for exact DOI; PMC indexes NIHMS106792-supplement-Supplementary_Data.pdf (3.7 MB). Acquire that original supplement and validate its article association."
+        }
+      ],
+      "existing_packet_leads": [],
+      "source_audit": {
+        "status": "source_acquisition_required",
+        "structural_challenge": "Restriction-defined reduced representation, size selection, adapter/conversion ordering, and information preservation through bisulfite conversion.",
+        "notes": [
+          "No exact 2008 bulk-RRBS local source packet was located; existing scRRBS 2013 packets are different implementations and must not be substituted.",
+          "PMC supplement filename was observed in indexed authoritative article text; no direct supplement URL or successful original-byte download is asserted."
+        ]
+      },
+      "historical_method_id": "RRBS_Meissner2008"
+    },
+    {
+      "case_id": "scbs-smallwood-2014",
+      "method_id": "scbs-seq",
+      "title": "Single-cell genome-wide bisulfite sequencing for assessing epigenetic heterogeneity",
+      "scope": "Original 2014 single-cell bisulfite sequencing workflow, with the reported post-bisulfite adapter-tagging steps, amplification and sequencing. Include Supplementary Data 1 methods as well as the main supplementary PDF.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "dna_methylation_conversion",
+      "split": "development",
+      "primary_identity": {
+        "pmid": "25042786",
+        "doi": "10.1038/nmeth.3035",
+        "title": "Single-cell genome-wide bisulfite sequencing for assessing epigenetic heterogeneity",
+        "pmcid": "PMC4117646"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25042786/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4117646/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://www.nature.com/articles/nmeth.3035",
+          "role": "primary_publisher_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact publisher article; enumerate all associated files."
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4117646/supplementaryFiles",
+          "role": "supplement_bundle",
+          "format": "zip",
+          "verification_note": "Europe PMC supplementary-files API recorded in local acquisition metadata; bundle and article association require fresh remote verification."
+        }
+      ],
+      "existing_packet_leads": [
+        "technology_atlas/v2/work/qiu_experiments_20261019/source_repair_19/batch/inputs/scbs-seq/source_packet.json",
+        "technology_atlas/v2/work/deployment_20261018/source_inventory_03/packets/scbs-seq/packet.json"
+      ],
+      "source_audit": {
+        "status": "existing_packet_leads_require_remote_reverification",
+        "structural_challenge": "Single-cell identity, conversion before amplification, repeated priming/purification, and distinguishing molecular transformations from information loss.",
+        "notes": [
+          "Expanded repair packet includes main article, supplementary PDF and a rendition of NIHMS59406-supplement-1.doc (Supplementary Data 1). Corresponding local rendition hashes were verified without rewriting remote absolute paths.",
+          "Word conversion receipt claims text extraction only, not complete figure/table visual coverage.",
+          "Extensive exact-method prior extraction, source repair, graph and matching exposure."
+        ]
+      },
+      "historical_method_id": "scBS-seq_Smallwood2014"
+    },
+    {
+      "case_id": "atac-buenrostro-2013",
+      "method_id": "atac-seq",
+      "title": "Transposition of native chromatin for fast and sensitive epigenomic profiling of open chromatin, DNA-binding proteins and nucleosome position",
+      "scope": "Original 2013 bulk-cell ATAC-seq library preparation and sequencing, preserving the reported starting material and transposition/amplification workflow. Exclude later Omni-ATAC, single-cell and revised-kit implementations.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "chromatin_accessibility",
+      "split": "development",
+      "primary_identity": {
+        "pmid": "24097267",
+        "doi": "10.1038/nmeth.2688",
+        "title": "Transposition of native chromatin for fast and sensitive epigenomic profiling of open chromatin, DNA-binding proteins and nucleosome position",
+        "pmcid": "PMC3959825"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24097267/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3959825/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fnmeth.2688/MediaObjects/41592_2013_BFnmeth2688_MOESM200_ESM.pdf",
+          "role": "supplement",
+          "format": "pdf",
+          "verification_note": "Exact publisher supplement URL is recorded in the existing source packet; a genuine original PDF and registered rendition were found locally."
+        }
+      ],
+      "existing_packet_leads": [
+        "technology_atlas/v2/work/deployment_20261018/source_inventory_03/packets/atac-seq/packet.json"
+      ],
+      "source_audit": {
+        "status": "existing_packet_leads_require_remote_reverification",
+        "structural_challenge": "One operation can couple fragmentation and adapter transfer; distinguish accessible-chromatin sampling from downstream library amplification.",
+        "notes": [
+          "Existing packet contains main article and supplementary material; original and rendition hashes were verified locally.",
+          "Exact method has repeated extraction, prompt, repair and matching exposure."
+        ]
+      },
+      "historical_method_id": "ATAC-seq_Buenrostro2013"
+    },
+    {
+      "case_id": "dnase-boyle-2008",
+      "method_id": "dnase-seq",
+      "title": "High-resolution mapping and characterization of open chromatin across the genome",
+      "scope": "Boyle 2008 DNase-seq sequencing branch as reported in the primary paper and its supplement, including DNase cleavage, capture/library preparation and sequencing. Keep DNase-chip validation and any cited Crawford 2006 protocol as explicitly separate branches/dependencies rather than replacing the selected workflow.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "chromatin_accessibility",
+      "split": "development",
+      "primary_identity": {
+        "pmid": "18243105",
+        "doi": "10.1016/j.cell.2007.12.014",
+        "title": "High-resolution mapping and characterization of open chromatin across the genome",
+        "pmcid": "PMC2669738"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18243105/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2669738/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://www.ebi.ac.uk/biostudies/api/v1/studies/S-EPMC2669738",
+          "role": "supplement_association_record",
+          "format": "json",
+          "verification_note": "Official BioStudies record preserved locally associates the supplement with this PMC article."
+        },
+        {
+          "url": "https://ftp.ebi.ac.uk/pub/databases/biostudies/S-EPMC/738/S-EPMC2669738/Files/NIHMS106456-supplement-supplemental.pdf",
+          "role": "supplement",
+          "format": "pdf",
+          "verification_note": "Exact final URL from existing receipt; genuine 33-page PDF and associated text rendition hashes verified locally."
+        }
+      ],
+      "existing_packet_leads": [
+        "technology_atlas/v2/work/deployment_20261018/source_acquisition_bulk_01/methods/dnase-seq/packet.json"
+      ],
+      "source_audit": {
+        "status": "existing_packet_leads_require_remote_reverification",
+        "structural_challenge": "Cleavage-derived ends, enrichment/capture, multiple enzyme/adaptor stages and separation of sequencing and array validation branches.",
+        "notes": [
+          "Main article and 33-page supplement exist locally with association and custody receipts.",
+          "Cited Crawford 2006 DNase-chip primary was acquired separately; referenced supplementary protocol coverage must be assessed if that branch enters the benchmark.",
+          "Prior finder/source-acquisition exposure exists."
+        ]
+      },
+      "historical_method_id": "DNase-seq_Boyle2008"
+    },
+    {
+      "case_id": "dropseq-macosko-2015",
+      "method_id": "drop-seq",
+      "title": "Highly parallel genome-wide expression profiling of individual cells using nanoliter droplets",
+      "scope": "Original 2015 Drop-seq workflow from the stated cell suspension and barcoded beads through droplets, bead recovery, cDNA and sequencing library. Include paper-linked supplementary procedures and cited historical library-preparation dependencies when they supply required context.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "droplet_single_cell_rna",
+      "split": "development",
+      "primary_identity": {
+        "pmid": "26000488",
+        "doi": "10.1016/j.cell.2015.05.002",
+        "title": "Highly parallel genome-wide expression profiling of individual cells using nanoliter droplets",
+        "pmcid": "PMC4481139"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26000488/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4481139/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://ars.els-cdn.com/content/image/1-s2.0-S0092867415005498-mmc1.pdf",
+          "role": "supplement",
+          "format": "pdf",
+          "verification_note": "Exact publisher supplement URL in existing packet; genuine original PDF and rendition verified locally."
+        },
+        {
+          "url": "https://web.stanford.edu/class/gene211/pdfs/Macosko-2015-DropSeq.pdf",
+          "role": "academic_copy_primary_with_supplement_figures",
+          "format": "pdf",
+          "verification_note": "Stanford course-hosted copy recorded in existing packet; an academic teaching copy, not an author-origin claim. Original bytes found locally."
+        },
+        {
+          "url": "https://www.science.smith.edu/wp-content/uploads/sites/36/2015/09/nextera-xt-library-prep-guide-15031942-d.pdf",
+          "role": "cited_historical_manufacturer_dependency",
+          "format": "pdf",
+          "verification_note": "Historical Nextera XT 2014 Rev D guide recorded in packet. Contextual dependency only; do not fill unspecified historical parameters from later kit versions."
+        }
+      ],
+      "existing_packet_leads": [
+        "technology_atlas/v2/work/deployment_20261018/source_inventory_03/packets/drop-seq/packet.json"
+      ],
+      "source_audit": {
+        "status": "existing_packet_leads_require_remote_reverification",
+        "structural_challenge": "Cell/bead co-encapsulation, physical pooling with preserved barcode identity, and separation of bead recovery, reverse transcription and amplification.",
+        "notes": [
+          "Existing packet has primary plus two supplementary renditions and the historical kit guide. Original/rendition hashes verified locally.",
+          "Exact method has extensive previous extraction, review and matching exposure."
+        ]
+      },
+      "historical_method_id": "Drop-seq_Macosko2015"
+    },
+    {
+      "case_id": "indrop-klein-2015",
+      "method_id": "indrop",
+      "title": "Droplet barcoding for single-cell transcriptomics applied to embryonic stem cells",
+      "scope": "Original 2015 inDrop workflow including reported barcode-bearing hydrogel beads, droplet processing and the paper's downstream cDNA/library workflow. Acquire Extended Methods and resolve explicit CEL-Seq dependencies without silently importing later inDrop versions.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "droplet_single_cell_rna",
+      "split": "development",
+      "primary_identity": {
+        "pmid": "26000487",
+        "doi": "10.1016/j.cell.2015.04.044",
+        "title": "Droplet barcoding for single-cell transcriptomics applied to embryonic stem cells",
+        "pmcid": "PMC4441768"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26000487/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4441768/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://www.iccb.med.harvard.edu/files/iccb/files/klein_et_al-2015-cell_-_supplement_1.pdf",
+          "role": "candidate_institutional_supplement",
+          "format": "pdf",
+          "verification_note": "Exact URL observed in a historical indexed search capture; original bytes were not present locally and present delivery/identity remain unverified. Treat as a candidate lead, not an acquired supplement."
+        }
+      ],
+      "existing_packet_leads": [
+        "technology_atlas/v2/work/deployment_20261018/source_inventory_03/packets/indrop/packet.json"
+      ],
+      "source_audit": {
+        "status": "existing_packet_leads_require_remote_reverification",
+        "structural_challenge": "Barcode release and attribution, droplet isolation followed by pooling, linear amplification and complementary molecular intermediates.",
+        "notes": [
+          "Existing inventory_03 packet is primary-only; 367 passages do not establish Extended Methods coverage.",
+          "Old component-curation indrop_2015.xml is an HTTP-500 JSON error, not a paper XML. Search-excerpt captures are not original supplements.",
+          "Prior primary registration and component-curation correction exposure."
+        ]
+      },
+      "historical_method_id": "inDrop_Klein2015"
+    },
+    {
+      "case_id": "scirna-cao-2017",
+      "method_id": "sci-rna-seq",
+      "title": "Comprehensive single-cell transcriptional profiling of a multicellular organism",
+      "scope": "Original two-level sci-RNA-seq workflow used for the 2017 C. elegans L2 cell atlas. Preserve fixed/permeabilized cellular compartments, first barcode introduction and later partition/indexing. Exclude later sci-RNA-seq3 revisions.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "combinatorial_indexing_rna",
+      "split": "development",
+      "primary_identity": {
+        "pmid": "28818938",
+        "doi": "10.1126/science.aam8940",
+        "title": "Comprehensive single-cell transcriptional profiling of a multicellular organism",
+        "pmcid": "PMC5894354"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28818938/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5894354/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://www.science.org/doi/10.1126/science.aam8940",
+          "role": "primary_publisher_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact DOI confirmed by PubMed. Supplement retrieval remains required; no guessed attachment URL is registered."
+        },
+        {
+          "url": "https://cole-trapnell-lab.github.io/papers/cao-scrnaseq-combinatorial-indexing/",
+          "role": "author_lab_primary_index",
+          "format": "html",
+          "verification_note": "Observed coauthor lab page matches title, authors and DOI and links the paper PDF."
+        },
+        {
+          "url": "https://cole-trapnell-lab.github.io/pdfs/papers/cao-combinatorial-indexing.pdf",
+          "role": "author_lab_primary_copy",
+          "format": "pdf",
+          "verification_note": "Exact link followed from coauthor lab page; web reader returned an eight-page PDF with matching paper identity. This is the primary paper, not complete supplementary methods."
+        }
+      ],
+      "existing_packet_leads": [],
+      "source_audit": {
+        "status": "source_acquisition_required",
+        "structural_challenge": "Barcode combinations depend on split-pool history and cellular compartment retention; distinguish molecule and cell identities across pooling.",
+        "notes": [
+          "No exact local packet was found in the searched cache; inspect remote migration registration before declaring absent.",
+          "Related combinatorial-indexing/sciATAC concepts have prior harness exposure."
+        ]
+      },
+      "historical_method_id": "sci-RNA-seq_Cao2017"
+    },
+    {
+      "case_id": "splitseq-rosenberg-2018",
+      "method_id": "split-seq",
+      "title": "Single-cell profiling of the developing mouse brain and spinal cord with split-pool barcoding",
+      "scope": "Original 2018 SPLiT-seq experimental workflow for fixed cells/nuclei, including all reported split-pool barcoding rounds and sequencing-library construction. Keep cell/nucleus handling variants explicit rather than combining them into a single invented protocol.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "combinatorial_indexing_rna",
+      "split": "development",
+      "primary_identity": {
+        "pmid": "29545511",
+        "doi": "10.1126/science.aam8999",
+        "title": "Single-cell profiling of the developing mouse brain and spinal cord with split-pool barcoding",
+        "pmcid": "PMC7643870",
+        "title_aliases": [
+          "SPLiT-seq reveals cell types and lineages in the developing brain and spinal cord"
+        ]
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29545511/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7643870/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/7643870/bin/NIHMS1581077-supplement-Supp_Combined.pdf",
+          "role": "supplement",
+          "format": "pdf",
+          "verification_note": "Exact download link observed on the authoritative PMC article (3.9 MB). Web click received a browser challenge, so original-byte delivery is not verified."
+        },
+        {
+          "url": "https://www.science.org/doi/10.1126/science.aam8999",
+          "role": "primary_publisher_and_supplement_index",
+          "format": "html",
+          "verification_note": "Primary DOI landing page. PMC also lists Tables S4/S5/S6/S7/S9/S12 and Table 1 as XLSX; enumerate them during acquisition."
+        }
+      ],
+      "existing_packet_leads": [],
+      "source_audit": {
+        "status": "source_acquisition_required",
+        "structural_challenge": "Repeated split-pool rounds, reverse-transcription versus ligation barcodes, and terminal amplification/indexing with ancestry retained.",
+        "notes": [
+          "No exact local packet was found; a missing local cache entry is a source-acquisition task.",
+          "Combinatorial-indexing principles have prior harness exposure; this case is development.",
+          "PubMed published title differs from the PMC author-manuscript title alias; DOI, PMID and PMCID identify the same paper. Validate both titles through their authoritative records rather than treating the alias as another paper."
+        ]
+      },
+      "historical_method_id": "SPLiT-seq_Rosenberg2018"
+    },
+    {
+      "case_id": "spatial-stahl-2016",
+      "method_id": "spatial-transcriptomics",
+      "title": "Visualization and analysis of gene expression in tissue sections by spatial transcriptomics",
+      "scope": "Original 2016 spatial-transcriptomics array workflow on tissue sections, including positional-barcode array, tissue processing, RNA capture and library preparation. Exclude commercial Visium and later array protocols.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "spatial_transcriptomics",
+      "split": "future_tuning_holdout",
+      "primary_identity": {
+        "pmid": "27365449",
+        "doi": "10.1126/science.aaf2403",
+        "title": "Visualization and analysis of gene expression in tissue sections by spatial transcriptomics",
+        "pmcid": null
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27365449/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://www.science.org/doi/10.1126/science.aaf2403",
+          "role": "primary_publisher_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact publisher DOI confirmed by PubMed. No PMCID was found; authoritative supplementary attachment still must be discovered and acquired."
+        },
+        {
+          "url": "https://jef.works/genomic-data-visualization-2024/resources/readings/stahl-et-al_science-aaf2403.pdf",
+          "role": "academic_teaching_copy_primary",
+          "format": "pdf",
+          "verification_note": "Actual search result from an academic lab teaching site matched the exact title/DOI. Not an author-origin or official-publisher claim; source identity and delivered bytes require acquisition checks."
+        },
+        {
+          "url": "https://www.spatialresearch.org/research-stahl-lab/",
+          "role": "author_lab_publication_index",
+          "format": "html",
+          "verification_note": "Observed KTH/SciLifeLab author lab page lists the exact 2016 title and links its Science publication. It also lists a distinct 2018 Nature Protocols workflow, which must not silently replace the 2016 case."
+        }
+      ],
+      "existing_packet_leads": [],
+      "source_audit": {
+        "status": "source_acquisition_required",
+        "structural_challenge": "Spatial identity is introduced by a physical coordinate map and barcode before tissue removal; molecular transfer must preserve the association.",
+        "notes": [
+          "Primary full text and complete original supplement are acquisition tasks; no guessed Science supplementary URL is registered.",
+          "Reserved only from future benchmark tuning. Prior spatial-method/DBiT graph and cohort exposure prevents a never-used claim."
+        ]
+      },
+      "historical_method_id": "SpatialTranscriptomics_Stahl2016"
+    },
+    {
+      "case_id": "slideseq-rodriques-2019",
+      "method_id": "slide-seq",
+      "title": "Slide-seq: A scalable technology for measuring genome-wide expression at high spatial resolution",
+      "scope": "Original 2019 Slide-seq workflow including barcoded bead-array preparation, spatial barcode decoding, tissue transfer/RNA capture and sequencing. Exclude Slide-seqV2 and later chemistry.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "spatial_transcriptomics",
+      "split": "future_tuning_holdout",
+      "primary_identity": {
+        "pmid": "30923225",
+        "doi": "10.1126/science.aaw1219",
+        "title": "Slide-seq: A scalable technology for measuring genome-wide expression at high spatial resolution",
+        "pmcid": "PMC6927209"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30923225/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6927209/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://www.science.org/doi/10.1126/science.aaw1219",
+          "role": "primary_publisher_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact DOI and PMCID identified. Original supplementary methods and any required bead-decoding procedures must be acquired; direct attachment not guessed."
+        },
+        {
+          "url": "https://singlecell.broadinstitute.org/single_cell/study/SCP354/slide-seq-study",
+          "role": "author_deposited_data_and_supplement_index",
+          "format": "html",
+          "verification_note": "Observed Broad study page states Rodriques/Stickels 2019 and explicitly links the following original Science supplement; data downloads may require login, which does not establish a supplement access restriction."
+        },
+        {
+          "url": "http://science.sciencemag.org/content/sci/suppl/2019/03/27/363.6434.1463.DC1/aaw1219_Rodriques_SM.pdf",
+          "role": "supplement",
+          "format": "pdf",
+          "verification_note": "Exact historical publisher supplement URL observed as an explicit link on the author-deposited Broad study page. Original bytes/current redirect not yet verified."
+        },
+        {
+          "url": "https://macoskolab.com/wp-content/uploads/2019/04/slideseq_full.pdf",
+          "role": "author_lab_primary_copy",
+          "format": "pdf",
+          "verification_note": "Actual search result from coauthor Macosko lab website matches 2019 Slide-seq. Original bytes still require acquisition/identity checks."
+        }
+      ],
+      "existing_packet_leads": [],
+      "source_audit": {
+        "status": "source_acquisition_required",
+        "structural_challenge": "Separate spatial barcode decoding from transcript capture, connect two measurement branches, and preserve bead-coordinate identity through sequencing.",
+        "notes": [
+          "No exact local packet was found; inspect remote registrations before declaring absent.",
+          "Reserved only from future benchmark tuning; the spatial family has prior DBiT/cohort graph exposure."
+        ]
+      },
+      "historical_method_id": "Slide-seq_Rodriques2019"
+    },
+    {
+      "case_id": "slamseq-herzog-2017",
+      "method_id": "slam-seq",
+      "title": "Thiol-linked alkylation of RNA to assess expression dynamics",
+      "scope": "Original 2017 SLAM-seq workflow using metabolic 4-thiouridine labeling, thiol alkylation and the reported mRNA sequencing preparation. Preserve distinctions between labeling designs and chemical/readout controls; exclude later SLAM protocols.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "metabolic_rna_recoding",
+      "split": "future_tuning_holdout",
+      "primary_identity": {
+        "pmid": "28945705",
+        "doi": "10.1038/nmeth.4435",
+        "title": "Thiol-linked alkylation of RNA to assess expression dynamics",
+        "pmcid": "PMC5712218"
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28945705/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5712218/",
+          "role": "primary_fulltext_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact PMC article identified; acquisition must retain original bytes and enumerate linked supplements. Web access challenges do not establish source unavailability."
+        },
+        {
+          "url": "https://www.nature.com/articles/nmeth.4435",
+          "role": "primary_publisher_and_supplement_index",
+          "format": "html",
+          "verification_note": "Exact publisher page observed. Lists Supplementary Text and Figures (PDF), Reporting Summary (PDF), and Tables 1/2 (XLS)."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/5712218/bin/NIHMS73945-supplement-Supplementary_figures.doc",
+          "role": "supplement_author_manuscript",
+          "format": "doc",
+          "verification_note": "Exact PMC link observed (4.5 MB); browser challenge on click. PMC additionally lists reporting summary, Tables 1/2 XLS and Table 3 PDF."
+        },
+        {
+          "url": "https://eprints.cs.univie.ac.at/5307/1/nmeth.4435.pdf",
+          "role": "institutional_repository_primary",
+          "format": "pdf",
+          "verification_note": "Actual University of Vienna institutional repository search result with matching title/authors; original bytes and source identity require acquisition checks."
+        }
+      ],
+      "existing_packet_leads": [],
+      "source_audit": {
+        "status": "source_acquisition_required",
+        "structural_challenge": "Chemical state changes create sequencing-readable substitutions without affinity purification; distinguish label acquisition, chemical recoding and read interpretation.",
+        "notes": [
+          "No exact local packet found; complete supplementary methods and historical library-preparation dependencies must be checked.",
+          "Reserved only from future benchmark tuning. Related BRIC/4sUDRB metabolic labeling methods already appeared in cohort/harness work."
+        ]
+      },
+      "historical_method_id": "SLAM-seq_Herzog2017"
+    },
+    {
+      "case_id": "tucseq-riml-2017",
+      "method_id": "tuc-seq",
+      "title": "Osmium-Mediated Transformation of 4-Thiouridine to Cytidine as Key To Study RNA Dynamics by Sequencing",
+      "scope": "Original 2017 TUC-seq chemistry and reported cellular-RNA sequencing demonstration. The primary abstract reports pulse-labeled mRNA of seven selected genes and tRNA validation; do not turn that into an unsupported genome-wide library workflow. Exact readout and library scope require full primary plus supporting information.",
+      "variant": "Original paper-specific implementation; later protocol revisions are excluded unless separately cited as contextual dependencies.",
+      "family": "metabolic_rna_recoding",
+      "split": "future_tuning_holdout",
+      "primary_identity": {
+        "pmid": "28817234",
+        "doi": "10.1002/anie.201707465",
+        "title": "Osmium-Mediated Transformation of 4-Thiouridine to Cytidine as Key To Study RNA Dynamics by Sequencing",
+        "pmcid": null
+      },
+      "source_leads": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28817234/",
+          "role": "identity_record",
+          "format": "html",
+          "verification_note": "PubMed identity lead; bibliographic metadata, not a substitute for full methods."
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/10.1002/anie.201707465",
+          "role": "primary_publisher_and_supplement_index",
+          "format": "html",
+          "verification_note": "Observed publisher page confirms exact title/DOI and links anie201707465-sup-0001-misc_information.pdf (2.3 MB). Full text delivery and supplement bytes not yet verified."
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/anie.201707465",
+          "role": "candidate_primary_fulltext",
+          "format": "html",
+          "verification_note": "Actual publisher search result for this exact DOI; full paper accessibility is unverified. Supporting information must be followed from the authoritative article link, not constructed by filename."
+        }
+      ],
+      "existing_packet_leads": [],
+      "source_audit": {
+        "status": "source_acquisition_required",
+        "structural_challenge": "Distinguish a shared metabolic-labeling purpose from different conversion chemistry; preserve targeted versus genome-wide readout boundaries.",
+        "notes": [
+          "Source acquisition and scope acceptance remain open; publisher abstract is insufficient for a workflow reference.",
+          "If exact primary+supplement cannot be obtained, prespecified reserve is TimeLapse-seq 2018 (PMID 29355846, PMC5831505, DOI 10.1038/nmeth.4582); replacement requires a recorded decision before curation, not silent substitution.",
+          "Reserved only from future benchmark tuning; related metabolic-labeling family exposure exists."
+        ]
+      },
+      "historical_method_id": "TUC-seq_Riml2017"
+    }
+  ]
+}
