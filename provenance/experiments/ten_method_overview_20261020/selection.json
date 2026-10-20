@@ -1,0 +1,98 @@
+{
+  "format_version": "ten_method_experiment_selection/1.0",
+  "runtime_commit": "063c531",
+  "general_scope": "Describe the general published assay introduced by the primary publication, from native specimen through the declared readout and its decoding. Preserve source-defined applicability, consequential interfaces, variants and control/calibration dependencies. Independent characterization or historical study execution belongs only where needed to explain the assay. Attribute manufacturer and cited-method material to its actual supported scope.",
+  "config": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "concurrency": 10,
+    "mode": "baseline",
+    "max_revisions": 1,
+    "transport_retries": 0,
+    "require_source_coverage": true,
+    "timeout_seconds": null
+  },
+  "source_boundary": "Inputs are registered primary literature, represented supplements/dependencies and frozen text renditions. Document presence is not completeness. Production extraction does not yet consume typed original-binding receipts as image context; preserved bindings establish custody only, not model visual inspection. No supplied prior extraction/reference/obligation seeds.",
+  "integration": {
+    "unit_selection": "open_unit_discovery",
+    "max_units": 10,
+    "max_canonical_revisions": 1,
+    "max_candidate_updates": 2,
+    "force_memberships": false,
+    "production_replacement": false,
+    "embedding": {
+      "bridge_sha256": "a69150e09142073934242e14fb21782c8519bd5a53ea791434a80a2455a1edc3",
+      "image_sha256": "6fb3452aedd7ae9fec3bae267c7b1860e621d5fee3b1961c562eb64351a31dd4",
+      "image_relative_to_group_home": "mstojkov/software/atlas/20261019-01/atlas.sif",
+      "environment_relative_to_group_home": "mstojkov/envs/atlas-alignment-container-20261020",
+      "models_relative_to_project": "technology_atlas/v2/work/qiu_experiments_20261019/semantic_alignment_23/container_run_02/semantic_cache/models",
+      "native_codex_location": "host; only embedding inference uses Apptainer"
+    }
+  },
+  "methods": [
+    {
+      "id": "dbit-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/migration_to_xiaojie_20261019/validation_48532750/sources/dbit-seq/packet.json",
+      "packet_sha256": "d84366b85e7015367a1b21d3125ebcb48c0152479364e0ff16b2ba91900b2f64",
+      "selection_reason": "Spatial RNA/protein identity"
+    },
+    {
+      "id": "dr-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/migration_to_xiaojie_20261019/validation_48532750/sources/dr-seq/packet.json",
+      "packet_sha256": "99a0f856ee4c7e770f78ed6e18ddca6d0b11037ab916d64ac589ed5c2774757d",
+      "selection_reason": "Joint DNA/RNA routing"
+    },
+    {
+      "id": "ddradseq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/migration_to_xiaojie_20261019/validation_48532750/sources/ddradseq/packet.json",
+      "packet_sha256": "eb58fefd3ffaca6b1697720e765af5acf66f99e5085f57e5030c582f317178a8",
+      "selection_reason": "Restriction/ligation and pooled genomic libraries"
+    },
+    {
+      "id": "4sudrb-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/migration_to_xiaojie_20261019/validation_48532750/sources/4sudrb-seq/packet.json",
+      "packet_sha256": "b927ad2f054e32095941d3b4e4f6f12e8364826fb04f44cc2622bb8809375838",
+      "selection_reason": "Perturbation, metabolic pulse and affinity recovery"
+    },
+    {
+      "id": "hiclip",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/migration_to_xiaojie_20261019/validation_48532750/sources/hiclip/packet.json",
+      "packet_sha256": "822a8fc41a400394da9c3e25a52c4d0852f4691dc82bf99d679c2ffc6d4a689c",
+      "selection_reason": "RNA duplex linking and enrichment"
+    },
+    {
+      "id": "drop-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/reference_v1_01/work/sources/initial_packets/drop-seq/packet.json",
+      "packet_sha256": "c85fd3cb94ac08a863a02723d096e7609d2dcaa0d8b59f6709d87fbdd9acd9f7",
+      "selection_reason": "Droplet cell identity and pooled amplification",
+      "original_bindings": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/original_source_closure_01/drop-seq/original_bindings.json",
+      "original_bindings_sha256": "346c1566cff15b6dda79ae720756baa18f8c212b204f81a05b8194b3eebea693"
+    },
+    {
+      "id": "atac-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/manual_sources_01/atac/packet.json",
+      "packet_sha256": "747c15dd9c3cfd25da3f1e6ae840bd7e59041556fb286025ce41c2755f168988",
+      "selection_reason": "Chromatin tagmentation and analytical feedback branch",
+      "original_bindings": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/original_source_closure_01/atac-seq/original_bindings.json",
+      "original_bindings_sha256": "52295c2d73c139a4d4b36a2452b7ee63eea33d7ab08ffee5ad0ace3b94021ea7"
+    },
+    {
+      "id": "slam-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/source_recovery_live_01/recovered/methods/slam-seq/packet.json",
+      "packet_sha256": "191142ec8bf41f4d817aa7d95bc51b50010dbd70e62db434da3d128d77287253",
+      "selection_reason": "Metabolic labeling and chemical recoding"
+    },
+    {
+      "id": "scbs-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/reference_v1_01/work/sources/initial_packets/scbs-seq/packet.json",
+      "packet_sha256": "05a41b22a270a746797b96c97ee47b750d500ab99b342406990abdce2d1d987d",
+      "selection_reason": "Single-cell DNA conversion and library construction"
+    },
+    {
+      "id": "split-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/source_recovery_live_01/recovered/methods/split-seq/packet.json",
+      "packet_sha256": "61d0806a36793404b6749905e6627d0afdc007d4bfafbf4b0c86726c22467f82",
+      "selection_reason": "Split/pool combinatorial barcoding"
+    }
+  ]
+}

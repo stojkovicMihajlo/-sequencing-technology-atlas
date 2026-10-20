@@ -46,6 +46,15 @@ latency and the durable archive receipt are preserved; the opt-in field-review
 sidecar remains unpromoted.
 
 The inventory accounts for 201 methods; protocol decomposition remains partial.
+The [new ten-method extraction experiment](provenance/ten_method_overview_submission_20261020.json)
+was submitted as Qiu CPU job **48677424**, using frozen runtime `063c531`,
+`gpt-6.1-sol` and `xhigh`. Its last recorded scheduler observation is queued;
+no new extraction result is claimed yet. It tests the revised Operation-boundary
+instructions, new reading views, isolated graph publication and bounded open-unit
+selection/shared-operation admission. Exact source selection and launcher bytes
+are recorded; prior workflows, reviews and source obligations are not supplied
+as extraction seeds. See [the overview example](examples/chipmentation/README.md).
+
 The new development checkpoint passed **1,589 software tests, 3 skipped**, plus six
 experiment-only subprocess checks. It adds source-bound comparison profiles and
 optional semantic registry retrieval while preserving each method's own graph.
