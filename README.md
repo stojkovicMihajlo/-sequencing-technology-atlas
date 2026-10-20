@@ -4,12 +4,13 @@ A research harness for turning published sequencing methods into source-linked
 protocol graphs, then connecting technologies through separately supported
 historical relationships and contextual protocol comparisons.
 
-**Current stage: shared-operation alignment development, 2026-10-20.**
+**Current stage: protocol and shared-operation benchmark development, 2026-10-20.**
 The new [protocol reference benchmark](benchmarks/protocol_graph_v1/README.md)
 defines 12 cases across six technology strata, permits different valid graph
 decompositions, and separates source collection, extraction and cross-method claims.
-The latest curation runtime passed **2,019 software tests, 3 skipped** locally
-and **2,014 tests, 8 skipped** on Qiu Linux.
+The frozen grounding-diagnostic runtime `c207db6` passed **2,088 software tests,
+8 skipped** on Qiu Linux. A later reporter custody fix passed 55 focused tests;
+it was not substituted into that frozen run.
 It preserves known requirements and consequential unknowns separately, archives
 every bounded graph-correction round, and blocks explicitly unsupported assertions
 from positive graph/comparison results. Initial Qiu CPU pilot **48612064** and
@@ -34,6 +35,15 @@ report. The run's frozen `7e670fd` runtime and historical artifacts remain uncha
 [the submission receipt](provenance/protocol_benchmark_originals_submission_20261020.json)
 records its inputs and software checks. See also
 [the optional original-document input contract](docs/benchmark/READING_A_CASE.md).
+
+The [first field-grounding comparison](examples/protocol_grounding_pilot/README.md)
+also completed on Qiu: basic and explicit review prompts each matched **24/24
+model-authored candidate labels**, rejected all 12 seeded unsupported/contradicted
+values and retained all 12 supported values. This small ceiling result shows no
+measured benefit from the more detailed instructions. It does not test complete
+workflow review or certify scientific accuracy. Exact outputs, prompts, bindings,
+latency and the durable archive receipt are preserved; the opt-in field-review
+sidecar remains unpromoted.
 
 The inventory accounts for 201 methods; protocol decomposition remains partial.
 The new development checkpoint passed **1,589 software tests, 3 skipped**, plus six
@@ -68,6 +78,7 @@ Earlier extractions, graph publications and live controls remain preserved in
 | What exactly does an agent extract? | [Output fields and their connections](docs/OUTPUT_FORMAT.md) |
 | How will we assess extraction without requiring one exact graph? | [Protocol benchmark](benchmarks/protocol_graph_v1/README.md) and [reading one case](docs/benchmark/READING_A_CASE.md) |
 | Why can a valid citation still accompany an unsupported claim? | [Observed failures, source-entailment research and proposed controls](docs/decisions/2026-10-20-source-entailment-and-unsupported-additions.md) |
+| Did more explicit review instructions improve the controlled grounding test? | [Matched prompt experiment and exact outputs](examples/protocol_grounding_pilot/README.md) |
 | How do the agents and Python code work together? | [Pipeline and code map](docs/PIPELINE.md) |
 | Can I inspect a real extraction? | [ChIPmentation example](examples/chipmentation/README.md) |
 | How do methods enter the larger graph? | [Graph layers and agent tools](docs/GRAPH.md) |
