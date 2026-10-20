@@ -8,19 +8,23 @@ candidate retrieval through the existing embedding adapter. Accepted and pending
 registry definitions are searched; backend/settings are bound through comparison,
 reconciliation and publication. Source occurrences remain unchanged, and fresh
 scientific membership review remains required. See [the exact tool contract](COMPARISON_PROFILES.md)
-and [18 recorded design decisions](decisions/2026-10-20-shared-operation-alignment.md).
+and [19 recorded design decisions](decisions/2026-10-20-shared-operation-alignment.md).
 
-The clean complete local run passed **1,589 tests, 3 skipped**, after restoring
-the validation script omitted by the earlier development promotion. A separate
-six-case injected-subprocess suite passed for the experiment-only embedding
-bridge. The initial packaging failure, correction, JUnit hash and reference-audit
-captures are preserved in `provenance/`. These checks do not run models or prove
-scientific accuracy. The complete Sherlock candidate check and bounded two-method
-native alignment diagnostic remain separate and are not reported as completed here. The first environment attempt, job 48600558, failed before tests/model calls
-because the locked ONNX Runtime wheel requires newer Linux userspace. A separate
-embedding-only container attempt was submitted as job 48601586; its native
-completion is not established by submission. The active default remains
-`targeted_selection_18`; this feature does not mutate its frozen files.
+The clean complete local run passed **1,589 tests, 3 skipped**. Qiu job48601586
+passed **1,584 tests, 8 skipped**, plus six experiment-only bridge checks; its
+semantic packages then installed successfully. Reports, hashes and the earlier
+packaging correction are preserved in `provenance/`. Source entailment and
+scientific matching accuracy are not established by these software checks.
+
+Native model execution has not yet been established for this feature. Job48600558
+failed before tests/models because the locked ONNX Runtime wheel needs a newer
+Linux userspace. The separate embedding-only container attempt48601586 completed
+software checks, then failed in Hugging Face Xet download at a read-only default
+cache path. Attempt02/job48603557 explicitly sets temporary cache paths before
+Python import, verifies environment reuse and model artifact persistence, and
+keeps native Codex on the host. It is submitted, not reported as completed.
+No source/scientific prompt was changed for these environment errors. The active
+default remains `targeted_selection_18`; its frozen files are unchanged.
 
 A prior nine-successful-method extraction cohort and one provider-refused method
 remain recorded in `cohort_21`. Its graph publication and historical relationships

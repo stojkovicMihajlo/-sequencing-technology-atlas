@@ -1,0 +1,12 @@
+{
+  "format_version": "alignment_environment_failure/1.0",
+  "job_id": "48601586",
+  "stage": "embedding model preparation after complete passing software check and semantic package install",
+  "native_agents_started": false,
+  "evidence": "container_run_01/job-48601586.log",
+  "observed_error": "HF xet_get: read-only file system",
+  "cause_interpretation": "Container clean environment left HF global download cache at a default read-only location; explicit model cache_dir alone does not cover Xet cache.",
+  "remedy": "Separate preparation attempt with explicit node-local HF_HOME, HF_XET_CACHE and XDG_CACHE_HOME. Keep model/code mounts readonly during inference, with ephemeral cache only. Reuse exactly frozen dependency environment after pip-freeze comparison.",
+  "scientific_prompt_or_inference_algorithm_change": false,
+  "new_attempt": "container_run_02"
+}

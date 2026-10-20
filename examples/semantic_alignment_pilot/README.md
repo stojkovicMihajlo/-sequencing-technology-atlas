@@ -26,3 +26,8 @@ software SIF, with explicit read-only mounts and no credentials. Its environment
 uses the same hash-locked dependency export. Codex and scientific review remain
 on the verified host. The bridge is an experiment-only adapter with six injected
 subprocess tests, not a default deployment backend or a new matching algorithm.
+
+Attempt01 passed the full Linux suite but failed during model preparation when
+Hugging Face's separate Xet cache reached a read-only default path.
+`container_run_02/` preserves the explicit temporary-cache fix and environment
+reuse checks. Neither failed setup is a source-extraction or agent-quality result.

@@ -10,15 +10,15 @@ The new development checkpoint passed **1,589 software tests, 3 skipped**, plus 
 experiment-only subprocess checks. It adds source-bound comparison profiles and
 optional semantic registry retrieval while preserving each method's own graph.
 [Tool commands and limits](docs/COMPARISON_PROFILES.md),
-[18 design decisions](docs/decisions/2026-10-20-shared-operation-alignment.md), and
+[19 design decisions](docs/decisions/2026-10-20-shared-operation-alignment.md), and
 [pinned reference implementations](docs/REFERENCE_IMPLEMENTATIONS.json) are tracked
 with the code. Similarity does not admit a shared component or a historical edge.
 
-The two-method native diagnostic is queued as Qiu Sherlock job **48601586** at the
-last recorded check. Its first dependency-install attempt failed before models;
-a separate embedding-only container adaptation is preserved. Native completion
-and scientific matching accuracy are not established by the software tests.
-The active default remains the earlier frozen `targeted_selection_18` runtime.
+The complete Qiu Linux check also passed **1,584 tests, 8 skipped**. The native
+two-method diagnostic is submitted as job **48603557** after two preserved setup
+failures (host wheel compatibility, then a container download-cache path).
+No native completion or scientific matching accuracy is claimed. The active
+default remains the earlier frozen `targeted_selection_18` runtime.
 Earlier extractions, graph publications and live controls remain preserved in
 [current status](docs/STATUS.md). See also
 [what extraction and matching must establish](docs/EXTRACTION_SCOPE_AND_MATCHING.md).

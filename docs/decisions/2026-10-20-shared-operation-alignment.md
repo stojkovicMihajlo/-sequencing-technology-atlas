@@ -324,6 +324,28 @@ experiment, not a new matching algorithm or evidence of scientific accuracy.
 The bridge is experiment-only until measured and reviewed; no persistent service,
 credential mount or unbounded supervisor is introduced.
 
+### D19 — Give preparation and inference explicit temporary cache locations
+
+**Observed:** attempt01/job48601586 passed the complete Linux suite (1,584 passed,
+8 skipped), its six bridge checks, and dependency installation, then failed in
+Hugging Face Xet download with a read-only-filesystem error. No native agents ran.
+The model cache directory alone does not cover Hugging Face's separate global
+Xet cache; `--cleanenv` also strips host cache exports.
+
+**Selected for attempt02:** pass `HF_HOME=/tmp/huggingface`,
+`HF_XET_CACHE=/tmp/xet`, and `XDG_CACHE_HOME=/tmp/xdg` explicitly before Python
+starts. Preparation binds `/tmp` to node-local storage and writes final model
+artifacts under persistent `/models`. Check model artifact symlink closure before
+read-only inference. Reuse the completed isolated environment only after image,
+requirements and package-freeze checks. Keep previous scripts, errors and archives.
+See the [official environment-variable contract](https://huggingface.co/docs/huggingface_hub/en/package_reference/environment_variables).
+
+**Alternatives:** widen home/code mounts, silently disable cache constraints, or
+change scientific prompts in response to an environment error. Those actions
+would not address the correct failure boundary. The inference bridge retains
+read-only code/model/environment mounts and ephemeral cache paths; native Codex
+policy and the scientific comparison task remain unchanged.
+
 ## Verification and falsifiers
 
 The injected-backend suite in
