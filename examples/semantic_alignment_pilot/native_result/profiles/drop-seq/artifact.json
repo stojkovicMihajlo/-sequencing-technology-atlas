@@ -1,0 +1,666 @@
+{
+  "format_version": "workflow_comparison_profile/1.0",
+  "workflow_sha256": "dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60",
+  "source_packet_sha256": "fef461380590eb974e9fd068eae7d0727f1cf550814f8d1f175b0e3873a3baed",
+  "states": [
+    {
+      "target_id": "nextera_inputs",
+      "entity": [
+        {
+          "id": "state:nextera_inputs:entity",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Four physical aliquots of cDNA, 600 pg per aliquot, supplying four separate Nextera XT tagmentation reactions.",
+          "value_kind": "value",
+          "rationale": "The unit here is a mass-defined cDNA aliquot for a reaction, not an individual cell or bead.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "reported",
+              "rationale": "Directly specifies the material, four aliquots, mass per aliquot, and four reactions."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:nextera_inputs:entity:amplified_dna",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "PCR-amplified, double-stranded cDNA copies derived from STAMPs.",
+          "value_kind": "value",
+          "rationale": "The preceding bead-PCR and purification identify the input as amplified cDNA. Double-stranded form follows from PCR amplification and is not separately measured in this passage.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "Aliquots of 1000 beads were amplified by PCR in a volume of 50 μL using 1x Hifi HotStart Readymix (Kapa Biosystems, cat #KK2602) and 0.8 μM Template_Switch_PCR primer (Table S6).",
+              "support": "inferred",
+              "rationale": "PCR of bead-associated templates supplies amplified DNA; double-stranded products are a mechanistic inference from PCR."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "Pairs of aliquots were pooled together after PCR and purified with 0.6x Agencourt AMPure XP beads (Beckman Coulter, cat # A63881) according to the manufacturer’s instructions, and eluted in 10 μL of H2O.",
+              "support": "inferred",
+              "rationale": "Purification of the PCR products precedes the quantified cDNA pool and Nextera inputs."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "form_or_association": [
+        {
+          "id": "state:nextera_inputs:form_or_association",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Four separate bulk cDNA aliquots drawn from purified, water-eluted PCR product; each retains a mixture of amplified molecules for its own reaction.",
+          "value_kind": "value",
+          "rationale": "The consecutive cleanup, pooling, quantification and aliquoting instructions establish this soluble bulk interface. The four aliquots partition material from the pool.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "Pairs of aliquots were pooled together after PCR and purified with 0.6x Agencourt AMPure XP beads (Beckman Coulter, cat # A63881) according to the manufacturer’s instructions, and eluted in 10 μL of H2O.",
+              "support": "inferred",
+              "rationale": "Water elution after AMPure purification supports solution-phase cDNA at the subsequent aliquoting boundary."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "inferred",
+              "rationale": "Four aliquots feeding four reactions support physical separation at this interface."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "identity_or_information": [
+        {
+          "id": "state:nextera_inputs:identity_or_information",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "The amplified molecular population carries transcript-derived sequence linked to pre-existing bead-derived 12-base cell barcodes and 8-base UMIs. PCR copies of a captured transcript inherit its tags.",
+          "value_kind": "value",
+          "rationale": "Barcoded STAMP amplification and the later paired barcode/UMI and transcript readout support continuity of these molecular identifiers through the pre-tagmentation cDNA pool; this is an inference at the selected intermediate.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00084",
+              "quote": "The mRNAs are reverse-transcribed into cDNAs, generating a set of beads called “single-cell transcriptomes attached to microparticles” (STAMPs). The barcoded STAMPs can then be amplified in pools for high-throughput mRNA-seq to analyze any desired number of individual cells.",
+              "support": "inferred",
+              "rationale": "Barcoded STAMPs are amplified in pools, supporting inheritance of barcoded transcript templates in the input cDNA."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00008",
+              "quote": "Read 1 was 20 bp (bases 1-12 cell barcode, bases 13-20 UMI); read 2 (paired end) was 50 bp for the human-mouse experiment, and 60 bp for the retina experiment.",
+              "support": "inferred",
+              "rationale": "The final read structure identifies the lengths and continued readout of the barcode and UMI, supporting their presence in the precursor molecules."
+            },
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00085",
+              "quote": "The first read yields the cell barcode and UMI. The second, paired read interrogates sequence from the cDNA (50 bp is typically sequenced); this sequence is then aligned to the genome to determine a transcript’s gene of origin.",
+              "support": "inferred",
+              "rationale": "Paired readout links barcode/UMI to transcript sequence; applying that linkage to the input pool is a lineage inference."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:nextera_inputs:identity_or_information:pcr_handles",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Amplified cDNA includes priming sequences inherited from the bead oligonucleotide and the template-switching reaction.",
+          "value_kind": "value",
+          "rationale": "The bead PCR handle and the template-switch-introduced handle explain the amplifiable cDNA architecture. Their retention at this exact input state is inferred from its PCR lineage.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00084",
+              "quote": "The primers on all beads contain a common sequence (“PCR handle”) to enable PCR amplification after STAMP formation.",
+              "support": "inferred",
+              "rationale": "The bead primers supply a common PCR handle retained in amplified products."
+            },
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00085",
+              "quote": "The mRNAs are then reverse-transcribed in bulk, forming STAMPs, and template switching is used to introduce a PCR handle downstream of the synthesized cDNA (Zhu et al., 2001).",
+              "support": "inferred",
+              "rationale": "Template switching supplies the other amplifiable cDNA handle upstream of this input state."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "lineage": [
+        {
+          "id": "state:nextera_inputs:lineage",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "All four aliquots descend by physical division from the quantified, purified amplified cDNA pool. The bulk pool contains STAMP-derived products; upstream bead/transcript attribution is carried by molecular barcodes within each aliquot.",
+          "value_kind": "value",
+          "rationale": "Serial pooling and mass-defined aliquoting support a shared material parent and multiple reaction branches. Aliquot identity does not specify an individual cell, and the source does not give the fraction of each STAMP represented in each aliquot.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "Aliquots were pooled according to the number of STAMPs to be sequenced, and the concentration of the pool quantified on a BioAnalyzer High Sensitivity Chip (Agilent Technologies, cat # 5067-4626).",
+              "support": "inferred",
+              "rationale": "The quantified STAMP-sized pool is the immediately preceding parent material."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "inferred",
+              "rationale": "Four physical cDNA aliquots are interpreted as withdrawals from that pool, rather than copies of the entire pool."
+            },
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00084",
+              "quote": "The mRNAs are reverse-transcribed into cDNAs, generating a set of beads called “single-cell transcriptomes attached to microparticles” (STAMPs). The barcoded STAMPs can then be amplified in pools for high-throughput mRNA-seq to analyze any desired number of individual cells.",
+              "support": "inferred",
+              "rationale": "Amplification of pooled barcoded STAMPs establishes the upstream biological provenance of the bulk cDNA."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "context": [
+        {
+          "id": "state:nextera_inputs:context",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The parent cDNA pool is assembled according to the intended number of STAMPs to sequence and its concentration is quantified on a BioAnalyzer High Sensitivity Chip before library input preparation.",
+          "value_kind": "value",
+          "rationale": "This is the source-reported scope and quantitative preparation of the parent pool; no universal cell number is specified for an aliquot.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "Aliquots were pooled according to the number of STAMPs to be sequenced, and the concentration of the pool quantified on a BioAnalyzer High Sensitivity Chip (Agilent Technologies, cat # 5067-4626).",
+              "support": "reported",
+              "rationale": "Directly reports STAMP-dependent pooling and the concentration measurement."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:nextera_inputs:context:aliquot_volume",
+          "status": "unknown",
+          "applicability": "applicable",
+          "value": null,
+          "value_kind": null,
+          "rationale": "The original supplement p00007 gives 600 pg per reaction but does not give the DNA volume or concentration of those input aliquots. The registered guide p00003 describes a different generic 1-ng/5-μl input and cannot determine the original aliquot volume.",
+          "evidence": [],
+          "unknown_reason": "not_reported"
+        }
+      ]
+    },
+    {
+      "target_id": "tagged_cdna",
+      "entity": [
+        {
+          "id": "state:tagged_cdna:entity",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Four reaction mixtures containing fragmented amplified cDNA with Nextera adapter sequences added at fragment ends.",
+          "value_kind": "value",
+          "rationale": "The original four-reaction procedure establishes the reaction multiplicity; the registered kit mechanism supplies the tagged-fragment interpretation. Applying that mechanism to this intermediate is inferred because the paper delegates the kit internals.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "inferred",
+              "rationale": "Each of the four 600-pg input aliquots feeds a separate tagmentation reaction."
+            },
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "inferred",
+              "rationale": "The manufacturer describes simultaneous fragmentation and adapter addition; this explains the delegated cDNA product."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "form_or_association": [
+        {
+          "id": "state:tagged_cdna:form_or_association",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Adapter-tagged fragments remain in their separate tagmentation reaction mixtures with the reaction reagents, at the boundary before neutralization and subsequent library PCR.",
+          "value_kind": "value",
+          "rationale": "The kit sequence adds tagmentation reagents and then directly neutralizes the same reactions. This supports a reaction-mixture interface rather than a purified final library; historical plate format and volumes are not established.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00003",
+              "quote": "5 Add 5 μl ATM to the wells containing input DNA and TD Buffer.",
+              "support": "inferred",
+              "rationale": "ATM is added to the DNA/buffer mixture, establishing the reagent-containing reaction context."
+            },
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00004",
+              "quote": "Neutralize NTA. 1 Carefully remove the Microseal 'B' seal and add 5 μl NT Buffer to each well of the NTA plate.",
+              "support": "inferred",
+              "rationale": "Neutralization is applied directly to the existing tagmentation wells, supporting the mixture at the preceding boundary."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "identity_or_information": [
+        {
+          "id": "state:tagged_cdna:identity_or_information",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "The fragments carry added Nextera adapter sequence at their ends while retaining the transcript-derived DNA sequence within each fragment.",
+          "value_kind": "value",
+          "rationale": "Fragmentation with end tagging changes molecular boundaries and appends sequence. The guide supplies this molecular interpretation for the original delegated tagmentation.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "inferred",
+              "rationale": "End tagging of fragmented input DNA supports adapter-bearing transcript-derived products."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:tagged_cdna:identity_or_information:barcode_linkage",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Fragments spanning the original barcoded transcript 3′ end can retain the linked cell barcode, UMI, PCR handle and adjacent transcript sequence. The mixture also contains fragments outside that end-associated subset; the complete barcode/UMI association is not established for every fragment.",
+          "value_kind": "value",
+          "rationale": "The original library selects only 3′ ends during later custom amplification, while tagmentation fragments the input DNA. Together with the paired barcode/transcript readout, this supports selective retention of useful molecular associations rather than universal linkage across all fragments.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "inferred",
+              "rationale": "Fragmentation divides input molecules, supporting different sequence contents among their resulting fragments."
+            },
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00035",
+              "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+              "support": "inferred",
+              "rationale": "Specific amplification of only 3′ ends supports a selected subset within the earlier fragmented population."
+            },
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00085",
+              "quote": "The first read yields the cell barcode and UMI. The second, paired read interrogates sequence from the cDNA (50 bp is typically sequenced); this sequence is then aligned to the genome to determine a transcript’s gene of origin.",
+              "support": "inferred",
+              "rationale": "The eventual paired readout supports preservation of barcode/UMI-to-transcript linkage on the selected end products."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "lineage": [
+        {
+          "id": "state:tagged_cdna:lineage",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "The four tagged reaction products descend separately from the four 600-pg aliquots of the same amplified cDNA pool. They remain separate through this boundary; the reported pairwise pooling occurs after the later library amplification.",
+          "value_kind": "value",
+          "rationale": "This preserves the four physical branches and does not treat the final combined library as the immediate tagmentation output.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "inferred",
+              "rationale": "Four input aliquots establish four parent-to-reaction relationships."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00008",
+              "quote": "The samples were then amplified as follows: 95 oC for 30 sec; 11 cycles of 95 oC for 10 sec, 55 oC for 30 sec, 72 oC for 30 sec; then a final extension step of 72 oC for 5 min.",
+              "support": "inferred",
+              "rationale": "The source places library amplification before the following pooling instruction."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00008",
+              "quote": "Pairs of the 4 aliquots were pooled together, and then purified using 0.6x Agencourt AMPure XP Beads according to the manufacturer’s instructions, and eluted in 10 μL of water.",
+              "support": "inferred",
+              "rationale": "Pairwise pooling of four aliquots is explicitly downstream, supporting separate lineages at tagmentation output."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "context": [
+        {
+          "id": "state:tagged_cdna:context",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "In the registered Rev.D kit implementation, the transposome remains active at the 10°C hold and the tagged reactions proceed immediately to neutralization.",
+          "value_kind": "value",
+          "rationale": "This is manufacturer context for the delegated intermediate, not confirmation that the original experiment used this exact guide revision or thermal program.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00004",
+              "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+              "support": "reported",
+              "rationale": "Directly reports residual transposome activity and immediate neutralization in Rev.D."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:tagged_cdna:context:intermediate_distribution",
+          "status": "unknown",
+          "applicability": "applicable",
+          "value": null,
+          "value_kind": null,
+          "rationale": "The inspected original library-preparation passages and registered kit passages do not report a measured fragment-size or adapter-junction distribution for this pre-neutralization intermediate. The supplement p00008 reports 450–650 bp average sizes for the later sequenced libraries after PCR and cleanup, which does not establish the distribution here.",
+          "evidence": [],
+          "unknown_reason": "not_reported"
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "target_id": "tagmentation",
+      "transformation": [
+        {
+          "id": "operation:tagmentation:transformation",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The amplified cDNA is fragmented using the Nextera XT DNA sample preparation kit as part of sequencing-library preparation.",
+          "value_kind": "value",
+          "rationale": "The primary paper reports fragmentation directly; its associated amplification is a later operation in the selected workflow.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00035",
+              "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+              "support": "reported",
+              "rationale": "Directly reports Nextera XT fragmentation of cDNA; custom amplification explains the surrounding library context."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagmentation:transformation:coupled_end_tagging",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Each of the four 600-pg cDNA aliquots is converted to a reaction containing DNA fragments with Nextera adapters at fragment ends by coupled fragmentation and end tagging.",
+          "value_kind": "value",
+          "rationale": "The original paper delegates standard Nextera XT. The registered manufacturer mechanism explains the material difference across the exact input/output boundary; it does not justify splitting fragmentation and tagging into separate invented operations.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "inferred",
+              "rationale": "Four mass-defined original aliquots establish the operation inputs and multiplicity."
+            },
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "inferred",
+              "rationale": "Simultaneous fragmentation and adapter addition define the coupled material transformation."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "purpose": [
+        {
+          "id": "operation:tagmentation:purpose",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Prepare cDNA for the workflow’s 3′-end sequencing-library construction.",
+          "value_kind": "value",
+          "rationale": "This is the stated workflow function. The subsequent custom amplification supplies the 3′-end specificity.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "reported",
+              "rationale": "The source explicitly introduces these reactions as preparation of 3′-end cDNA fragments for sequencing."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagmentation:purpose:adapter_function",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "In the registered Nextera XT guide, fragment-end adapter addition enables PCR amplification in subsequent steps.",
+          "value_kind": "value",
+          "rationale": "The guide explicitly states the functional role of the added adapters, distinct from the transposome mechanism that adds them.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "reported",
+              "rationale": "The guide directly states that the added adapters allow subsequent PCR amplification."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "mechanism": [
+        {
+          "id": "operation:tagmentation:mechanism",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Nextera XT transposome-mediated tagmentation simultaneously fragments input DNA and adds adapter sequences to fragment ends.",
+          "value_kind": "value",
+          "rationale": "The manufacturer reports the physical mechanism. Its application to the original cDNA reactions is inferred from the supplement’s delegation to Nextera XT; no additional enzyme identity, cut-site rule or independent ligation step is assumed.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "inferred",
+              "rationale": "Provides the transposome mechanism used to interpret the delegated operation."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "inferred",
+              "rationale": "The original source identifies the reactions as standard Nextera XT tagmentation."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00008",
+              "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+              "support": "inferred",
+              "rationale": "The continuation delegates to manufacturer instructions with a specified oligonucleotide modification, supporting use of the kit mechanism while preserving original differences."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "information_effect": [
+        {
+          "id": "operation:tagmentation:information_effect",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Creates fragment boundaries and appends adapter sequence to amplified transcript-derived DNA. The cell barcode and UMI information used for later attribution originates in the upstream bead primers and is inherited by the relevant end-containing fragments.",
+          "value_kind": "value",
+          "rationale": "The kit mechanism establishes sequence addition and fragmentation; the upstream bead design establishes the existing identity carriers. This does not assign a new cell identity to a tagmentation aliquot.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "inferred",
+              "rationale": "Fragmentation and end tagging imply changed molecular continuity and added adapter information."
+            },
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00084",
+              "quote": "Each microparticle contains more than 10^(8) individual primers that share the same “cell barcode” (panel C) but have different unique molecular identifiers (UMIs), enabling mRNA transcripts to be digitally counted (panel D).",
+              "support": "inferred",
+              "rationale": "Cell barcodes and UMIs are already present in bead primers before this operation, supporting inheritance of identity information."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagmentation:information_effect:selective_linkage",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Preserves barcode/UMI-to-transcript linkage on the subset of fragments spanning the original barcoded transcript 3′ end. Fragmentation can separate other transcript sequence from that identity-bearing end; subsequent custom PCR selects the usable 3′-end products.",
+          "value_kind": "value",
+          "rationale": "The retained information unit is an end-associated tagged cDNA fragment. Tagmentation itself is not the later 3′-specific amplification, and preservation of complete identity information is not claimed for all products.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "inferred",
+              "rationale": "Fragmentation supplies the basis for breaking continuity between portions of an input cDNA molecule."
+            },
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00035",
+              "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+              "support": "inferred",
+              "rationale": "Custom amplification of only 3′ ends supports later selection of a particular fragment subset."
+            },
+            {
+              "source_id": "macosko2015_primary",
+              "passage_id": "p00085",
+              "quote": "The first read yields the cell barcode and UMI. The second, paired read interrogates sequence from the cDNA (50 bp is typically sequenced); this sequence is then aligned to the genome to determine a transcript’s gene of origin.",
+              "support": "inferred",
+              "rationale": "The eventual paired barcode/UMI and cDNA readout supports useful linkage on the retained end products."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagmentation:information_effect:quantitative_retention",
+          "status": "unknown",
+          "applicability": "applicable",
+          "value": null,
+          "value_kind": null,
+          "rationale": "The inspected sources do not quantify which input molecules lose a usable barcode-linked transcript fragment, the per-molecule cut positions, or the yield of each informative product at this operation. Later library sizes and readout do not resolve those molecular losses.",
+          "evidence": [],
+          "unknown_reason": "not_reported"
+        }
+      ],
+      "context": [
+        {
+          "id": "operation:tagmentation:context",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The original procedure uses four separate 600-pg cDNA inputs in four standard Nextera XT reactions, Illumina catalog FC-131-1096.",
+          "value_kind": "value",
+          "rationale": "These original mass and multiplicity constraints govern the selected boundary.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "reported",
+              "rationale": "Directly specifies the original cDNA input amount, four reactions and kit catalog."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagmentation:context:manufacturer_conditions",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Registered Rev.D manufacturer context specifies 10 μl TD buffer and 5 μl ATM, a heated lid, 55°C for 5 minutes, then a 10°C hold followed immediately by neutralization while the transposome remains active.",
+          "value_kind": "value",
+          "rationale": "These are conditions reported by the registered guide for the delegated kit operation. They are not independent evidence of the exact historical Drop-seq reaction quantities or thermal implementation, and the guide’s generic 1-ng DNA input does not replace the original 600-pg input.",
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00003",
+              "quote": "2 Add 10 μl TD Buffer to each well to be used in this assay.",
+              "support": "reported",
+              "rationale": "Directly reports the guide’s TD-buffer volume."
+            },
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00003",
+              "quote": "5 Add 5 μl ATM to the wells containing input DNA and TD Buffer.",
+              "support": "reported",
+              "rationale": "Directly reports the guide’s ATM volume."
+            },
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00004",
+              "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+              "support": "reported",
+              "rationale": "Directly reports the guide’s thermal program and dependency on immediate neutralization."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagmentation:context:downstream_custom_amplification",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The original library procedure replaces kit oligonucleotides with 200 nM P5_TSO_Hybrid and Nextera_N701 and subsequently uses 11 PCR cycles. These downstream modifications qualify how the tagmented products become sequencing libraries.",
+          "value_kind": "value",
+          "rationale": "The source describes the custom primers and ensuing amplification separately from fragmentation; these details constrain downstream use without expanding this operation into PCR or cleanup.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00008",
+              "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+              "support": "reported",
+              "rationale": "Directly reports original custom-primer substitution and concentration."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00008",
+              "quote": "The samples were then amplified as follows: 95 oC for 30 sec; 11 cycles of 95 oC for 10 sec, 55 oC for 30 sec, 72 oC for 30 sec; then a final extension step of 72 oC for 5 min.",
+              "support": "reported",
+              "rationale": "Directly reports the subsequent original 11-cycle amplification program."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagmentation:context:historical_revision",
+          "status": "unknown",
+          "applicability": "applicable",
+          "value": null,
+          "value_kind": null,
+          "rationale": "The original supplement identifies Nextera XT and delegates manufacturer instructions but does not identify the guide revision. The registered Rev.D cover documents that guide’s identity only, not the revision actually used by the authors.",
+          "evidence": [],
+          "unknown_reason": "not_reported"
+        },
+        {
+          "id": "operation:tagmentation:context:historical_volumes",
+          "status": "unknown",
+          "applicability": "applicable",
+          "value": null,
+          "value_kind": null,
+          "rationale": "The original supplement reports 600 pg of cDNA per reaction without DNA input volume, total reaction volume, or original reagent-volume worksheet. Registered Rev.D generic quantities cannot establish how those original 600-pg reactions were assembled.",
+          "evidence": [],
+          "unknown_reason": "not_reported"
+        }
+      ]
+    }
+  ]
+}

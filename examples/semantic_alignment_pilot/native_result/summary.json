@@ -1,0 +1,243 @@
+{
+  "status": "committed",
+  "started_at": "2026-10-20T07:41:44.992292+00:00",
+  "job_id": "48603557",
+  "hostname": "sh04-05n13.int",
+  "project_root": "/scratch/groups/xiaojie/mstojkov/agents_snRNA",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "profiles": {
+    "chipmentation": {
+      "profile": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/semantic_alignment_23/live_container_02/profiles/chipmentation/artifact.json",
+      "profile_sha256": "f7084ce8f8b0ae925d5531e50414db3128f84f417ad1053ad6b775ce7925c8b0",
+      "profile_file_sha256": "124648784a77d56f7be0be2cdc87ac59a2c2fdd4ee5e8ddbab04210641cd3fa8",
+      "workflow_sha256": "82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0",
+      "source_packet_sha256": "f4ef18b534064d44dbc6ba7b5605c095684f373699e8d20c485f8309f9326799",
+      "occurrence_id": "chipmentation:82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0:11bab0194a97bc50edb7d892fba6b327035984a079ae592c41fe043cf54b48ba",
+      "occurrence_sha256": "f19e2bca267c2cc16232dcb0230df846854ea4bb4742e1338183a5b576982f6b",
+      "status_counts": {
+        "reported": 21,
+        "inferred": 7,
+        "unknown": 2
+      },
+      "uncertainties": [
+        {
+          "target_id": "tagged_beads_v1",
+          "field": "identity_or_information",
+          "assertion_id": "state:tagged_beads_v1:identity_or_information:exact_tag_structure",
+          "status": "unknown",
+          "unknown_reason": "not_reported",
+          "rationale": "The exact covalent tag/end sequences, strand architecture and index content present at this immediate interface are not specified in the reviewed ChIPmentation methods, supplement or author protocol. Main p00016 identifies the Nextera enzyme, while main p00018 and the cited Buenrostro protocol p00017 describe downstream custom Nextera PCR primers. Those primer descriptions do not establish the enzyme payload or the complete molecular ends at this stage."
+        },
+        {
+          "target_id": "tagment_v1",
+          "field": "information_effect",
+          "assertion_id": "operation:tagment_v1:information_effect:exact_tag_structure",
+          "status": "unknown",
+          "unknown_reason": "not_reported",
+          "rationale": "The exact covalent oligonucleotide payload, molecular end architecture and index content produced by this enzyme reaction are not reported in the reviewed ChIPmentation passages. The enzyme identity in main p00016 and the separate custom-PCR-primer descriptions in main p00018 and cited Buenrostro p00017 do not resolve those immediate molecular products; downstream primer designs are insufficient evidence for assigning the inserted tag sequence."
+        }
+      ],
+      "review_status": "unreviewed_comparison_annotations"
+    },
+    "drop-seq": {
+      "profile": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/semantic_alignment_23/live_container_02/profiles/drop-seq/artifact.json",
+      "profile_sha256": "3b91d126d078230e9969d332006384821d60746e1630eedff107f0665fe64e62",
+      "profile_file_sha256": "8510381b44033754e65b7b0095ca7c407c4de6c133d68ed33b60ed808947ba54",
+      "workflow_sha256": "dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60",
+      "source_packet_sha256": "fef461380590eb974e9fd068eae7d0727f1cf550814f8d1f175b0e3873a3baed",
+      "occurrence_id": "drop_seq_macosko_2015:dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60:82b713bb843a8c90859f1cc1d80a9ee85c34e742114f9cac7bd65f02da839ad5",
+      "occurrence_sha256": "1bc54bcbcb9ba5aa61d021db4aa14a5f75e60f9a2beda55dbd2d5c5a1617461e",
+      "status_counts": {
+        "reported": 9,
+        "inferred": 14,
+        "unknown": 5
+      },
+      "uncertainties": [
+        {
+          "target_id": "nextera_inputs",
+          "field": "context",
+          "assertion_id": "state:nextera_inputs:context:aliquot_volume",
+          "status": "unknown",
+          "unknown_reason": "not_reported",
+          "rationale": "The original supplement p00007 gives 600 pg per reaction but does not give the DNA volume or concentration of those input aliquots. The registered guide p00003 describes a different generic 1-ng/5-μl input and cannot determine the original aliquot volume."
+        },
+        {
+          "target_id": "tagged_cdna",
+          "field": "context",
+          "assertion_id": "state:tagged_cdna:context:intermediate_distribution",
+          "status": "unknown",
+          "unknown_reason": "not_reported",
+          "rationale": "The inspected original library-preparation passages and registered kit passages do not report a measured fragment-size or adapter-junction distribution for this pre-neutralization intermediate. The supplement p00008 reports 450–650 bp average sizes for the later sequenced libraries after PCR and cleanup, which does not establish the distribution here."
+        },
+        {
+          "target_id": "tagmentation",
+          "field": "information_effect",
+          "assertion_id": "operation:tagmentation:information_effect:quantitative_retention",
+          "status": "unknown",
+          "unknown_reason": "not_reported",
+          "rationale": "The inspected sources do not quantify which input molecules lose a usable barcode-linked transcript fragment, the per-molecule cut positions, or the yield of each informative product at this operation. Later library sizes and readout do not resolve those molecular losses."
+        },
+        {
+          "target_id": "tagmentation",
+          "field": "context",
+          "assertion_id": "operation:tagmentation:context:historical_revision",
+          "status": "unknown",
+          "unknown_reason": "not_reported",
+          "rationale": "The original supplement identifies Nextera XT and delegates manufacturer instructions but does not identify the guide revision. The registered Rev.D cover documents that guide’s identity only, not the revision actually used by the authors."
+        },
+        {
+          "target_id": "tagmentation",
+          "field": "context",
+          "assertion_id": "operation:tagmentation:context:historical_volumes",
+          "status": "unknown",
+          "unknown_reason": "not_reported",
+          "rationale": "The original supplement reports 600 pg of cDNA per reaction without DNA input volume, total reaction volume, or original reagent-volume worksheet. Registered Rev.D generic quantities cannot establish how those original 600-pg reactions were assembled."
+        }
+      ],
+      "review_status": "unreviewed_comparison_annotations"
+    }
+  },
+  "boundary": "Bounded diagnostic on two prescribed existing operation boundaries. Profiles are unreviewed interpretations; source reviews independently inspect original passages. Hashes/quote checks establish provenance, not entailment or scientific validation. No expected shared mechanism, substitution, ancestry or match is supplied. Registry admission is confined to this fresh experiment database, never the production atlas.",
+  "selections": [
+    {
+      "method": "chipmentation",
+      "operation_id": "tagment_v1",
+      "workflow": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/cohort_21/batch/methods/chipmentation/attempts/0001/attempts/003_reviewer/candidate.json",
+      "review": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/cohort_21/batch/methods/chipmentation/attempts/0001/attempts/003_reviewer/artifact.json",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/cohort_21/batch/methods/chipmentation/attempts/0001/source_packet.json",
+      "workflow_sha256": "82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0",
+      "source_packet_sha256": "f4ef18b534064d44dbc6ba7b5605c095684f373699e8d20c485f8309f9326799",
+      "input_state_ids": [
+        "beads_v1"
+      ],
+      "output_state_ids": [
+        "tagged_beads_v1"
+      ]
+    },
+    {
+      "method": "drop-seq",
+      "operation_id": "tagmentation",
+      "workflow": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/cohort_21/batch/methods/drop-seq/attempts/0001/attempts/005_reviewer/candidate.json",
+      "review": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/cohort_21/batch/methods/drop-seq/attempts/0001/attempts/005_reviewer/artifact.json",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/cohort_21/batch/methods/drop-seq/attempts/0001/source_packet.json",
+      "workflow_sha256": "dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60",
+      "source_packet_sha256": "fef461380590eb974e9fd068eae7d0727f1cf550814f8d1f175b0e3873a3baed",
+      "input_state_ids": [
+        "nextera_inputs"
+      ],
+      "output_state_ids": [
+        "tagged_cdna"
+      ]
+    }
+  ],
+  "shared_state": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/semantic_alignment_23/live_container_02/shared/state.json",
+  "registry_snapshot_sha256": "0f54975f6751e70b50db3b6e7d452b27c42c811198c338351f23eda534eed9fc",
+  "concept_count": 1,
+  "assignment_count": 2,
+  "finished_at": "2026-10-20T08:00:52.452742+00:00",
+  "native_attempts": [
+    {
+      "attempt": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/semantic_alignment_23/live_container_02/profiles/chipmentation",
+      "thread_id": "01a15842-6645-7223-9e94-2a8f7822d62d",
+      "usage": {
+        "input_tokens": 623254,
+        "cached_input_tokens": 565376,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 16064,
+        "reasoning_output_tokens": 4935
+      },
+      "result_sha256": "9190be5027c96165109d6d98cd6e9d00cbbb5f035c02ae72c9b3442c077f55ec",
+      "artifact_sha256": "124648784a77d56f7be0be2cdc87ac59a2c2fdd4ee5e8ddbab04210641cd3fa8"
+    },
+    {
+      "attempt": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/semantic_alignment_23/live_container_02/profiles/drop-seq",
+      "thread_id": "01a15842-6656-7070-a79a-b28ee89f10cc",
+      "usage": {
+        "input_tokens": 428751,
+        "cached_input_tokens": 373504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 14081,
+        "reasoning_output_tokens": 3993
+      },
+      "result_sha256": "b064ac66b6bd992e9e7c14382506774683627048c9a0e14e095d9aa87ac4a418",
+      "artifact_sha256": "8510381b44033754e65b7b0095ca7c407c4de6c133d68ed33b60ed808947ba54"
+    },
+    {
+      "attempt": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/semantic_alignment_23/live_container_02/shared/source_000/001_compiler",
+      "thread_id": "01a15848-a930-7e63-bdaa-0d902d4a2171",
+      "usage": {
+        "input_tokens": 674789,
+        "cached_input_tokens": 600320,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 14061,
+        "reasoning_output_tokens": 2727
+      },
+      "result_sha256": "3c8f490ce45be0ece4c6989240dbadc1310fe2af89bb219ab0453be33095f337",
+      "artifact_sha256": "d9e49b599986189e23279a8058ff5fd70779b0a517144049da230b736c269a82"
+    },
+    {
+      "attempt": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261019/semantic_alignment_23/live_container_02/shared/source_000/002_reviewer",
+      "thread_id": "01a1584e-5880-7741-9721-2b88c4c6b274",
+      "usage": {
+        "input_tokens": 879188,
+        "cached_input_tokens": 786688,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 13997,
+        "reasoning_output_tokens": 2297
+      },
+      "result_sha256": "56c26182f2b081bfb2c965b8fbc2474a102fac8c6ed888e987b91c01540ce44d",
+      "artifact_sha256": "8385bec68f8c2ec482d7036da6ea4d0e8097d499f225a10f9781f18779eeb353"
+    }
+  ],
+  "usage": {
+    "input_tokens": 2605982,
+    "cached_input_tokens": 2325888,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 58203,
+    "reasoning_output_tokens": 13952
+  },
+  "usage_scope": "Sum of separately assessed completed native result.json archives only.",
+  "semantic_backend": {
+    "cache_format": "text_vectors/1.0",
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "fastembed_version": "0.9.0",
+    "onnxruntime_version": "1.31.0",
+    "artifacts": {
+      "config.json": "1b4d8e2a3988377ed8b519a31d8d31025a25f1c5f8606998e8014111438efcd7",
+      "model.onnx": "bbd7b466f6d58e646fdc2bd5fd67b2f5e93c0b687011bd4548c420f7bd46f0c5",
+      "special_tokens_map.json": "5d5b662e421ea9fac075174bb0688ee0d9431699900b90662acd44b2a350503a",
+      "tokenizer.json": "851ca67100d372ca3ae031a6abd168f53489eebfd7d89523f35c5c9b4d372c3c",
+      "tokenizer_config.json": "abda01c8c14c5151ae498aceb30db406d6b91242c394fd88d3b6fd5a63a101e6"
+    },
+    "encoding": "symmetric document embeddings; exact text partition below tokenizer limit; token-count-weighted mean of chunk vectors; L2 cosine; partition/1.0",
+    "truncation": {
+      "max_length": 256,
+      "stride": 0,
+      "strategy": "longest_first",
+      "direction": "right"
+    },
+    "execution": {
+      "bridge": "apptainer_json/1.0",
+      "image_sha256": "6fb3452aedd7ae9fec3bae267c7b1860e621d5fee3b1961c562eb64351a31dd4",
+      "bridge_sha256": "a69150e09142073934242e14fb21782c8519bd5a53ea791434a80a2455a1edc3",
+      "embedding_module_sha256": "34507ca889c3ba67645a29d3eef0e0dc1b92b0202f0878562ff293bcb99a9ce5",
+      "runtime": {
+        "python": "3.12.15 (main, Oct  6 2026, 02:02:31) [GCC 12.2.0]",
+        "numpy": "2.5.4",
+        "tokenizers": "0.23.3",
+        "machine": "x86_64",
+        "libc": [
+          "glibc",
+          "2.36"
+        ]
+      }
+    }
+  },
+  "limits": {
+    "profile_sessions": 2,
+    "shared_execute_calls": 1,
+    "canonical_revisions": 0,
+    "candidate_updates": 1
+  }
+}

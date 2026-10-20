@@ -1,0 +1,305 @@
+{
+  "$defs": {
+    "AdmissionReviewV2": {
+      "additionalProperties": false,
+      "properties": {
+        "decision_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Decision Sha256",
+          "type": "string"
+        },
+        "source_review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MembershipReview"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vocabulary_verdict": {
+          "enum": [
+            "admit",
+            "properties_only",
+            "provisional"
+          ],
+          "title": "Vocabulary Verdict",
+          "type": "string"
+        },
+        "question_useful": {
+          "title": "Question Useful",
+          "type": "boolean"
+        },
+        "boundary_clear": {
+          "title": "Boundary Clear",
+          "type": "boolean"
+        },
+        "context_properties_separated": {
+          "title": "Context Properties Separated",
+          "type": "boolean"
+        },
+        "existing_plus_filters_sufficient": {
+          "title": "Existing Plus Filters Sufficient",
+          "type": "boolean"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "boundary_checks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/MemberCheck"
+          },
+          "title": "Boundary Checks",
+          "type": "array"
+        },
+        "format_version": {
+          "const": "concept_admission_review/2.0",
+          "title": "Format Version",
+          "type": "string"
+        },
+        "definition_checks": {
+          "items": {
+            "$ref": "#/$defs/DefinitionCheck"
+          },
+          "title": "Definition Checks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "decision_sha256",
+        "source_review",
+        "vocabulary_verdict",
+        "question_useful",
+        "boundary_clear",
+        "context_properties_separated",
+        "existing_plus_filters_sufficient",
+        "rationale",
+        "format_version",
+        "definition_checks"
+      ],
+      "title": "AdmissionReviewV2",
+      "type": "object"
+    },
+    "DefinitionCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "items": {
+            "enum": [
+              "substrate",
+              "operation",
+              "physical_mechanism",
+              "output",
+              "information_effect",
+              "purpose",
+              "context_requirements"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Fields",
+          "type": "array"
+        },
+        "verdict": {
+          "enum": [
+            "supported",
+            "unsupported",
+            "unresolved",
+            "not_asserted"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "fields",
+        "verdict",
+        "rationale",
+        "evidence"
+      ],
+      "title": "DefinitionCheck",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "passage_id": {
+          "minLength": 1,
+          "title": "Passage Id",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 600,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "support": {
+          "enum": [
+            "reported",
+            "inferred"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "passage_id",
+        "quote",
+        "support",
+        "rationale"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "MemberCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "occurrence_id": {
+          "minLength": 1,
+          "title": "Occurrence Id",
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "supported",
+            "unsupported",
+            "unresolved"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "inspected_passages": {
+          "items": {
+            "$ref": "#/$defs/PassageRef"
+          },
+          "minItems": 1,
+          "title": "Inspected Passages",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "occurrence_id",
+        "verdict",
+        "rationale",
+        "inspected_passages",
+        "evidence"
+      ],
+      "title": "MemberCheck",
+      "type": "object"
+    },
+    "MembershipReview": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Candidate Sha256",
+          "type": "string"
+        },
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/MemberCheck"
+          },
+          "title": "Checks",
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "candidate_sha256",
+        "checks",
+        "notes"
+      ],
+      "title": "MembershipReview",
+      "type": "object"
+    },
+    "PassageRef": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "passage_id": {
+          "minLength": 1,
+          "title": "Passage Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "passage_id"
+      ],
+      "title": "PassageRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "proposal_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Proposal Sha256",
+      "type": "string"
+    },
+    "reviews": {
+      "items": {
+        "$ref": "#/$defs/AdmissionReviewV2"
+      },
+      "title": "Reviews",
+      "type": "array"
+    }
+  },
+  "required": [
+    "proposal_sha256",
+    "reviews"
+  ],
+  "title": "CurrentVocabularyReview",
+  "type": "object"
+}

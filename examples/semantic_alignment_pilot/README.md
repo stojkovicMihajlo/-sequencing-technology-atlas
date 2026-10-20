@@ -1,5 +1,10 @@
 # Bounded native comparison-profile pilot
 
+**Completed:** Qiu job 48603557 ran four fresh sessions in 20 minutes and admitted
+one shared-purpose definition with two memberships in an isolated registry.
+[Read the exact prompts, outputs, checks and limitations](native_result/README.md).
+The chronological setup records below preserve the two earlier failed jobs.
+
 This is the exact experimental driver and Slurm script for Qiu Sherlock job
 48600558, with the predeclared intent. It is not a standalone public dataset:
 the accepted `cohort_21` source/workflow/review files must exist at the project
@@ -27,7 +32,8 @@ uses the same hash-locked dependency export. Codex and scientific review remain
 on the verified host. The bridge is an experiment-only adapter with six injected
 subprocess tests, not a default deployment backend or a new matching algorithm.
 
-Attempt01 passed the full Linux suite but failed during model preparation when
+Attempt 01 passed the full Linux suite but failed during model preparation when
 Hugging Face's separate Xet cache reached a read-only default path.
 `container_run_02/` preserves the explicit temporary-cache fix and environment
 reuse checks. Neither failed setup is a source-extraction or agent-quality result.
+Attempt 02 completed with no change to the scientific prompts or source selections.

@@ -1,0 +1,70 @@
+{
+  "format_version": "operation_concept_overlay/1.0",
+  "registry_revision": "087f6f7a6a37a2841ec9a8c79f4a48f6f5c54d8e5602873635f71237dfafa4d4",
+  "nodes": [
+    {
+      "id": "concept:dna_fragmentation_and_adapter_introduction_for_sequencing",
+      "kind": "operation_concept",
+      "record": {
+        "aliases": [
+          "Preparation of sequencing-adapter-bearing DNA fragments"
+        ],
+        "definition": {
+          "context_requirements": "Membership requires evidence for both DNA fragmentation and sequencing-adapter introduction within the selected input-to-output unit, and their sequencing-library function. Include any preparatory actions actually inside that unit. Preserve substrate form, conditioning, branch structure, identity carriers, output association and downstream dependencies on each use. Exact support, enzyme brand, dose, buffer, timing and assay position are implementation properties rather than membership requirements.",
+          "id": "dna_fragmentation_and_adapter_introduction_for_sequencing",
+          "information_effect": "Changes DNA fragment boundaries and adds adapter sequence that supplies an interface to subsequent sequencing-library processing. Retention or disruption of pre-existing biological attribution and molecular-identifier linkage is assessed on each use and relevant fragment subset; universal quantitative information retention is not assumed.",
+          "mechanism_unknown_reason": "This is a shared-purpose definition at the input-to-adapter-bearing-fragment stage. No common mechanism for the entire selected units is asserted. Individual uses retain their supported mechanisms: ChIPmentation includes solute-removal washes followed by Tn5 tagmentation; Drop-seq delegates Nextera XT transposome tagmentation. Null does not mean either individual reaction mechanism is scientifically unknown, nor does this relation assert that the mechanisms are equal or different.",
+          "name": "DNA fragmentation and sequencing-adapter introduction",
+          "operation": "Convert the supplied DNA-bearing material into fragments bearing introduced sequencing-adapter sequence for subsequent library processing. Account for preparatory substrate handling included in the selected unit, such as washing bead-bound chromatin before the fragmentation/tagging reaction.",
+          "output": "Reaction products containing DNA fragments with introduced sequencing-adapter sequence, with bead association, mixture composition, provenance and branch multiplicity retained as applicable; an intermediate for later library recovery and/or amplification.",
+          "physical_mechanism": null,
+          "purpose": "Produce sequencing-adapter-bearing DNA fragments from the selected DNA-containing input for subsequent sequencing-library construction.",
+          "substrate": "DNA-bearing material entering sequencing-library preparation, including enriched bead-bound chromatin or purified amplified cDNA; retain each use\u2019s material association and separate reaction branches."
+        },
+        "relation": "shared_purpose",
+        "scope_note": "Purpose-level retrieval of transformations that produce sequencing-adapter-bearing DNA fragments, across distinct materials and local operation boundaries. The ChIPmentation member includes both cold Tris washes and the on-bead reaction; the Drop-seq member retains all four independent cDNA reactions through their immediate outputs. Shared purpose covers these entire supplied transformations without deleting the preparatory handling or asserting a common complete mechanism. Observed coupled transposome fragmentation/tagging is retained on uses; simultaneity and enzyme identity are not defining requirements at this level. A wash alone, neutralization alone or downstream amplification alone does not establish the required conversion. Product end chemistry, quantitative recovery and barcode linkage require individual evidence. This category establishes neither experimental substitution, compatibility, ancestry, literature novelty nor an executable reaction recipe."
+      }
+    },
+    {
+      "id": "selection:1bc54bcbcb9ba5aa61d021db4aa14a5f75e60f9a2beda55dbd2d5c5a1617461e",
+      "kind": "protocol_selection",
+      "method_id": "drop_seq_macosko_2015",
+      "workflow_sha256": "dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60",
+      "source_packet_sha256": "fef461380590eb974e9fd068eae7d0727f1cf550814f8d1f175b0e3873a3baed",
+      "operation_ids": [
+        "tagmentation"
+      ]
+    },
+    {
+      "id": "selection:f19e2bca267c2cc16232dcb0230df846854ea4bb4742e1338183a5b576982f6b",
+      "kind": "protocol_selection",
+      "method_id": "chipmentation",
+      "workflow_sha256": "82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0",
+      "source_packet_sha256": "f4ef18b534064d44dbc6ba7b5605c095684f373699e8d20c485f8309f9326799",
+      "operation_ids": [
+        "tagment_v1"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "selection:1bc54bcbcb9ba5aa61d021db4aa14a5f75e60f9a2beda55dbd2d5c5a1617461e",
+      "target": "concept:dna_fragmentation_and_adapter_introduction_for_sequencing",
+      "kind": "instance_of_concept",
+      "basis": "shared_purpose",
+      "assignment_id": "016f2e2b953cd14c60b6563807709432eaf4701d8c3f93831db8aafa6f22eef5",
+      "review_sha256": "279c15d6179f37469e443be7072512fca4e365a9f6e2c3d242ce988318126abe",
+      "review_contract": "concept_admission_review/2.0"
+    },
+    {
+      "source": "selection:f19e2bca267c2cc16232dcb0230df846854ea4bb4742e1338183a5b576982f6b",
+      "target": "concept:dna_fragmentation_and_adapter_introduction_for_sequencing",
+      "kind": "instance_of_concept",
+      "basis": "shared_purpose",
+      "assignment_id": "42147a64563a7b1999555ba29caa3b69dd78b60d6ce8f8e465e3b747a27bd463",
+      "review_sha256": "275bc3f05692da8e6829785e1c5e8247ad38fe0fa0a2f065780cd6b4ef3794d6",
+      "review_contract": "concept_admission_review/2.0"
+    }
+  ],
+  "boundary": "Reviewed membership in the stated definition; not experimental compatibility, historical ancestry or scientific novelty. Names and search scores do not assign labels."
+}

@@ -55,9 +55,12 @@ Shared registry runs optionally use `--semantic-cache CACHE_DIRECTORY`, containi
 `models/` and `vectors.sqlite3`. Model download is a separate, explicit preparation
 step. The optional semantic extra supplies the CPU embedding backend. Its locked
 ONNX Runtime wheel requires a newer Linux userspace than the Sherlock host: the
-first native pilot stopped before model execution. A separate experiment tests
-embedding inference in the existing Apptainer userspace while keeping Codex and
-source review on the host; this is not a default portable deployment guarantee.
+first native pilot stopped before model execution. A separate experiment
+successfully ran embedding inference in the existing Apptainer userspace while
+keeping Codex and source review on the host; this is not a default portable
+deployment guarantee. Its four-session native comparison admitted one purpose-level
+definition across two source selections. See the
+[exact outputs and limits](../examples/semantic_alignment_pilot/native_result/README.md).
 Registry search combines existing lexical routes with dense retrieval over complete
 definitions, aliases and scope. Both admitted and pending definitions participate.
 Reciprocal rank fusion orders candidates; similarity never establishes membership.

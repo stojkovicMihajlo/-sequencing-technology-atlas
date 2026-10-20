@@ -10,21 +10,52 @@ reconciliation and publication. Source occurrences remain unchanged, and fresh
 scientific membership review remains required. See [the exact tool contract](COMPARISON_PROFILES.md)
 and [19 recorded design decisions](decisions/2026-10-20-shared-operation-alignment.md).
 
-The clean complete local run passed **1,589 tests, 3 skipped**. Qiu job48601586
+The clean complete local run passed **1,589 tests, 3 skipped**. Qiu job 48601586
 passed **1,584 tests, 8 skipped**, plus six experiment-only bridge checks; its
 semantic packages then installed successfully. Reports, hashes and the earlier
 packaging correction are preserved in `provenance/`. Source entailment and
 scientific matching accuracy are not established by these software checks.
 
-Native model execution has not yet been established for this feature. Job48600558
-failed before tests/models because the locked ONNX Runtime wheel needs a newer
-Linux userspace. The separate embedding-only container attempt48601586 completed
-software checks, then failed in Hugging Face Xet download at a read-only default
-cache path. Attempt02/job48603557 explicitly sets temporary cache paths before
-Python import, verifies environment reuse and model artifact persistence, and
-keeps native Codex on the host. It is submitted, not reported as completed.
-No source/scientific prompt was changed for these environment errors. The active
-default remains `targeted_selection_18`; its frozen files are unchanged.
+Native Qiu job **48603557 completed, exit 0, in 20 minutes**, using four fresh
+`gpt-6.1-sol` / `xhigh` sessions: two parallel profile writers, a compiler and a
+separate source/utility reviewer. They produced two profiles (58 assertions,
+7 explicit unknowns), then admitted **one shared-purpose definition and two
+memberships** into the experiment-only registry. The definition covers DNA
+fragmentation and sequencing-adapter introduction across the prescribed
+ChIPmentation and Drop-seq selections. It leaves their substrate associations,
+branch structure and information handling on each original use; no common
+whole-unit mechanism, interchangeability, compatibility or ancestry is asserted.
+Profile assertion statuses are model-authored annotations, not independently
+reviewed facts; admission review assesses claims relied on by the shared definition.
+
+The archived registry projected onto the larger development graph by exact
+workflow/packet hashes and operation IDs: **3 new nodes and 4 concept-layer edges**,
+with all 10 existing workflows, 946 nodes and 1,871 edges preserved. This was a
+pure structural projection; original remote source files were not reopened for a
+new canonical graph publication. The active atlas and frozen default
+`targeted_selection_18` remain unchanged.
+
+A separate engineering reviewer verified the archive hash, all 336 release file
+pins, four complete distinct native sessions, profile/assignment/review bindings,
+and snapshot agreement. This audit did not re-review scientific entailment.
+Real container embeddings and host candidate retrieval also completed a functional
+smoke test on one synthetic neighbor; this does not measure retrieval recall or
+large-catalogue deduplication. The four-session native run contained no separate
+definition-pair comparison stage.
+
+Exact scientific artifacts, custom prompts, transport metadata, hash manifest,
+usage and limitations are in the
+[native result](../examples/semantic_alignment_pilot/native_result/README.md).
+Raw event archives are preserved locally and in durable Qiu group storage with
+their hashes recorded in Git. This does not constitute evaluation across all 201 methods.
+
+Two earlier setup failures remain preserved: job 48600558 stopped before
+tests/models because the locked ONNX Runtime wheel needs a newer Linux userspace;
+job 48601586 passed software checks and then failed during Hugging Face Xet download
+at a read-only default cache path. The successful embedding-only container
+attempt explicitly sets temporary cache locations, verifies persistent model
+artifacts and keeps native Codex on the host. No scientific prompt or source
+selection was changed to remedy these environment failures.
 
 A prior nine-successful-method extraction cohort and one provider-refused method
 remain recorded in `cohort_21`. Its graph publication and historical relationships

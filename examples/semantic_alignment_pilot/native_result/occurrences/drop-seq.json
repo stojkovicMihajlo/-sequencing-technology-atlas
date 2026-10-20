@@ -1,0 +1,672 @@
+{
+  "id": "drop_seq_macosko_2015:dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60:82b713bb843a8c90859f1cc1d80a9ee85c34e742114f9cac7bd65f02da839ad5",
+  "workflow_sha256": "dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60",
+  "source_packet_sha256": "fef461380590eb974e9fd068eae7d0727f1cf550814f8d1f175b0e3873a3baed",
+  "method_id": "drop_seq_macosko_2015",
+  "title": "Drop-seq: original 2015 general single-cell droplet RNA capture assay",
+  "scope": "General original Macosko et al. 2015 Drop-seq assay: preparation of required barcoded beads and co-flow device, intact single-cell suspension interface, cell/bead droplet partitioning and lysis/poly(A) RNA capture, bead recovery, bulk reverse transcription/template switching, unextended-primer removal, cDNA amplification, 3-prime sequencing-library formation and paired readout/decoding to cell-associated gene molecule counts. Retain original bead/primer variants and source-reported choices/unknowns. Exclude exact historical retina/cohort recreation, cell culture/animal details as universal requirements, clustering and biological discovery, later assay variants, and unqualified transfer of optimized online-protocol recipes. Original full paper and original supplementary information are authoritative; binary originals and figure layouts remain available beside registered text renditions. The registered Illumina manufacturer source is Part 15031942 Rev.D (September 2014), selected faithful scan transcriptions for the delegated Nextera XT mechanism/tagmentation/neutralization and cleanup context. The exact historical guide revision is not stated by the paper. Applicability must be justified; general guide input, PCR, indexing, elution, normalization and instrument defaults do not override the original paper/supplement modifications.",
+  "variant": "original_2015_general_assay",
+  "operations": [
+    {
+      "id": "tagmentation",
+      "name": "Fragment cDNA and add Nextera adapters",
+      "action": "Tagment each original 600-pg cDNA aliquot using standard Nextera XT as delegated by the supplement. The contemporaneous Rev.D guide explains simultaneous fragmentation/adapter-end addition and gives TD 10 uL, ATM 5 uL, heated-lid 55 C 5 min then 10 C hold. These are explicitly manufacturer-context conditions for the delegated operation, not proof of the historical guide revision. Its 5-uL, 1-ng DNA default does not replace the paper's 600-pg mass; actual original DNA volume remains unknown.",
+      "inputs": [
+        "nextera_inputs"
+      ],
+      "outputs": [
+        "tagged_cdna"
+      ],
+      "resources": [
+        {
+          "kind": "reagent",
+          "description": "Original kit Nextera XT #FC-131-1096. Rev.D contextual reagents ATM (Amplicon Tagment Mix) and TD (Tagment DNA Buffer); guide TD 10 uL and ATM 5 uL are not independently verified historical reaction quantities.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "reported",
+              "rationale": "Supports resource at its stated applicability: Original kit Nextera XT #FC-131-1096. Rev.D contextual reagents ATM (Amplicon Tagment Mix) and TD (Tagment DNA Buffer); guide TD 10 uL and ATM 5 uL are not independently verified historical reaction quantities. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+            },
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00003",
+              "quote": "2 Add 10 μl TD Buffer to each well to be used in this assay. Change tips between samples. 3 Add 5 μl input DNA at 0.2 ng/μl (1 ng total) to each sample well of the NTA plate. NOTE It is critical to use the full amount of input DNA. 4 Using a multichannel pipette, gently pipette up and down 5 times to mix. Change tips between samples. 5 Add 5 μl ATM to the wells containing input DNA and TD Buffer.",
+              "support": "reported",
+              "rationale": "Supports resource at its stated applicability: Original kit Nextera XT #FC-131-1096. Rev.D contextual reagents ATM (Amplicon Tagment Mix) and TD (Tagment DNA Buffer); guide TD 10 uL and ATM 5 uL are not independently verified historical reaction quantities. Contemporaneous manufacturer tagmentation-volume context only: TD 10 uL and ATM 5 uL; its 1-ng/5-uL DNA instruction is superseded by the original 600-pg input, whose volume is not stated."
+            },
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "reported",
+              "rationale": "Supports resource at its stated applicability: Original kit Nextera XT #FC-131-1096. Rev.D contextual reagents ATM (Amplicon Tagment Mix) and TD (Tagment DNA Buffer); guide TD 10 uL and ATM 5 uL are not independently verified historical reaction quantities. Rev.D context for the delegated transposome mechanism: simultaneous fragmentation and adapter addition. This source does not prove authors used Rev.D."
+            }
+          ]
+        },
+        {
+          "kind": "condition",
+          "description": "Original input 600 pg per reaction. Delegated-step Rev.D context: 55 C 5 min with heated lid, hold 10 C and proceed immediately to neutralization because transposome remains active.",
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "reported",
+              "rationale": "Supports resource at its stated applicability: Original input 600 pg per reaction. Delegated-step Rev.D context: 55 C 5 min with heated lid, hold 10 C and proceed immediately to neutralization because transposome remains active. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+            },
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00004",
+              "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+              "support": "reported",
+              "rationale": "Supports resource at its stated applicability: Original input 600 pg per reaction. Delegated-step Rev.D context: 55 C 5 min with heated lid, hold 10 C and proceed immediately to neutralization because transposome remains active. Contemporaneous manufacturer delegated-step context: heated lid, 55 C 5 min, 10 C hold and immediate neutralization. Exact historical revision is unknown."
+            }
+          ]
+        }
+      ],
+      "information_effect": "Adds Nextera fragment-end adapters while preserving barcode-linked cDNA on the subset of fragments spanning the bead-proximal transcript end.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Supports operation tagmentation: Fragment cDNA and add Nextera adapters Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+        },
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00008",
+          "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+          "support": "reported",
+          "rationale": "Supports operation tagmentation: Fragment cDNA and add Nextera adapters Original procedure delegates Nextera XT internals with explicit custom primer replacement; exact guide revision is unspecified."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00002",
+          "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+          "support": "reported",
+          "rationale": "Supports operation tagmentation: Fragment cDNA and add Nextera adapters Rev.D context for the delegated transposome mechanism: simultaneous fragmentation and adapter addition. This source does not prove authors used Rev.D."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00003",
+          "quote": "2 Add 10 μl TD Buffer to each well to be used in this assay. Change tips between samples. 3 Add 5 μl input DNA at 0.2 ng/μl (1 ng total) to each sample well of the NTA plate. NOTE It is critical to use the full amount of input DNA. 4 Using a multichannel pipette, gently pipette up and down 5 times to mix. Change tips between samples. 5 Add 5 μl ATM to the wells containing input DNA and TD Buffer.",
+          "support": "reported",
+          "rationale": "Supports operation tagmentation: Fragment cDNA and add Nextera adapters Contemporaneous manufacturer tagmentation-volume context only: TD 10 uL and ATM 5 uL; its 1-ng/5-uL DNA instruction is superseded by the original 600-pg input, whose volume is not stated."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00004",
+          "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+          "support": "reported",
+          "rationale": "Supports operation tagmentation: Fragment cDNA and add Nextera adapters Contemporaneous manufacturer delegated-step context: heated lid, 55 C 5 min, 10 C hold and immediate neutralization. Exact historical revision is unknown."
+        }
+      ],
+      "input_bindings": [
+        {
+          "state_id": "nextera_inputs",
+          "basis": "Each of four original 600-pg aliquots enters one standard Nextera XT tagmentation.",
+          "condition": null,
+          "selection": "required",
+          "alternative_group": null,
+          "evidence": [
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "reported",
+              "rationale": "Each of four original 600-pg aliquots enters one standard Nextera XT tagmentation. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00008",
+              "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+              "support": "reported",
+              "rationale": "Each of four original 600-pg aliquots enters one standard Nextera XT tagmentation. Original procedure delegates Nextera XT internals with explicit custom primer replacement; exact guide revision is unspecified."
+            }
+          ]
+        }
+      ],
+      "output_bindings": [
+        {
+          "state_id": "tagged_cdna",
+          "basis": "The delegated transposome produces fragmented, adapter-tagged cDNA.",
+          "condition": null,
+          "selection": "required",
+          "alternative_group": null,
+          "evidence": [
+            {
+              "source_id": "illumina_nextera_xt_2014_revD",
+              "passage_id": "p00002",
+              "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+              "support": "reported",
+              "rationale": "The delegated transposome produces fragmented, adapter-tagged cDNA. Rev.D context for the delegated transposome mechanism: simultaneous fragmentation and adapter addition. This source does not prove authors used Rev.D."
+            },
+            {
+              "source_id": "macosko2015_supplement",
+              "passage_id": "p00007",
+              "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+              "support": "reported",
+              "rationale": "The delegated transposome produces fragmented, adapter-tagged cDNA. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "nextera_inputs",
+      "kind": "material",
+      "description": "Four physical aliquots of 600 pg from the purified amplified cDNA pool, one per original Nextera XT tagmentation reaction. The remaining pool is not duplicated into these aliquots.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Supports identity of state nextera_inputs: Four physical aliquots of 600 pg from the purified amplified cDNA pool, one per original Nextera XT tagmentation reaction. The remaining pool is not duplicated into these aliquots. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "id": "tagged_cdna",
+      "kind": "material",
+      "description": "Four reactions containing transposome-fragmented amplified cDNA with adapter sequences added at fragment ends; includes fragments that will not survive custom 3-prime selection.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Supports identity of state tagged_cdna: Four reactions containing transposome-fragmented amplified cDNA with adapter sequences added at fragment ends; includes fragments that will not survive custom 3-prime selection. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00002",
+          "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+          "support": "reported",
+          "rationale": "Supports identity of state tagged_cdna: Four reactions containing transposome-fragmented amplified cDNA with adapter sequences added at fragment ends; includes fragments that will not survive custom 3-prime selection. Rev.D context for the delegated transposome mechanism: simultaneous fragmentation and adapter addition. This source does not prove authors used Rev.D."
+        },
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00035",
+          "quote": "using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+          "support": "reported",
+          "rationale": "Supports identity of state tagged_cdna: Four reactions containing transposome-fragmented amplified cDNA with adapter sequences added at fragment ends; includes fragments that will not survive custom 3-prime selection. Reported selection mechanism: bead-handle-linked 3-prime cDNA fragments are retained/enriched during custom library PCR."
+        }
+      ]
+    }
+  ],
+  "internal_states": [],
+  "flows": [
+    {
+      "id": "io:output:library_input_aliquoting:nextera_inputs",
+      "source": "library_input_aliquoting",
+      "target": "nextera_inputs",
+      "kind": "material_output",
+      "basis": "Four separate 600-pg cDNA aliquots are the four Nextera inputs.",
+      "condition": null,
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Four separate 600-pg cDNA aliquots are the four Nextera inputs. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+        }
+      ],
+      "association": "source_qualified",
+      "selection": "required"
+    },
+    {
+      "id": "io:input:tagmentation:nextera_inputs",
+      "source": "nextera_inputs",
+      "target": "tagmentation",
+      "kind": "material_input",
+      "basis": "Each of four original 600-pg aliquots enters one standard Nextera XT tagmentation.",
+      "condition": null,
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Each of four original 600-pg aliquots enters one standard Nextera XT tagmentation. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+        },
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00008",
+          "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+          "support": "reported",
+          "rationale": "Each of four original 600-pg aliquots enters one standard Nextera XT tagmentation. Original procedure delegates Nextera XT internals with explicit custom primer replacement; exact guide revision is unspecified."
+        }
+      ],
+      "association": "source_qualified",
+      "selection": "required"
+    },
+    {
+      "id": "io:output:tagmentation:tagged_cdna",
+      "source": "tagmentation",
+      "target": "tagged_cdna",
+      "kind": "material_output",
+      "basis": "The delegated transposome produces fragmented, adapter-tagged cDNA.",
+      "condition": null,
+      "evidence": [
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00002",
+          "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+          "support": "reported",
+          "rationale": "The delegated transposome produces fragmented, adapter-tagged cDNA. Rev.D context for the delegated transposome mechanism: simultaneous fragmentation and adapter addition. This source does not prove authors used Rev.D."
+        },
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "The delegated transposome produces fragmented, adapter-tagged cDNA. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+        }
+      ],
+      "association": "source_qualified",
+      "selection": "required"
+    },
+    {
+      "id": "io:input:tagmentation_neutralization:tagged_cdna",
+      "source": "tagged_cdna",
+      "target": "tagmentation_neutralization",
+      "kind": "material_input",
+      "basis": "The still-active tagmentation reaction is the substrate for immediate guide neutralization.",
+      "condition": null,
+      "evidence": [
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00004",
+          "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+          "support": "reported",
+          "rationale": "The still-active tagmentation reaction is the substrate for immediate guide neutralization. Contemporaneous manufacturer delegated-step context: heated lid, 55 C 5 min, 10 C hold and immediate neutralization. Exact historical revision is unknown."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00004",
+          "quote": "Neutralize NTA. 1 Carefully remove the Microseal 'B' seal and add 5 μl NT Buffer to each well of the NTA plate. Change tips between samples. 2 Using a multichannel pipette, gently pipette up and down 5 times to mix. Change tips between samples. 3 Seal the NTA plate with a Microseal 'B' adhesive seal. 4 Centrifuge at 280 × g at 20°C for 1 minute. 5 Place the NTA plate at room temperature for 5 minutes.",
+          "support": "reported",
+          "rationale": "The still-active tagmentation reaction is the substrate for immediate guide neutralization. Contemporaneous delegated-step context: 5-uL NT, mix, seal, spin 280g 20C 1 min, room temperature 5 min. This is not an independent assay modification."
+        },
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00008",
+          "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+          "support": "reported",
+          "rationale": "The still-active tagmentation reaction is the substrate for immediate guide neutralization. Original procedure delegates Nextera XT internals with explicit custom primer replacement; exact guide revision is unspecified."
+        }
+      ],
+      "association": "source_qualified",
+      "selection": "required"
+    }
+  ],
+  "external_operations": [
+    {
+      "operation_id": "library_input_aliquoting",
+      "workflow_sha256": "dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60",
+      "json_pointer": "/operations/14"
+    },
+    {
+      "operation_id": "tagmentation_neutralization",
+      "workflow_sha256": "dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60",
+      "json_pointer": "/operations/16"
+    }
+  ],
+  "requirements": [
+    {
+      "kind": "reagent",
+      "description": "Original kit Nextera XT #FC-131-1096. Rev.D contextual reagents ATM (Amplicon Tagment Mix) and TD (Tagment DNA Buffer); guide TD 10 uL and ATM 5 uL are not independently verified historical reaction quantities.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Supports resource at its stated applicability: Original kit Nextera XT #FC-131-1096. Rev.D contextual reagents ATM (Amplicon Tagment Mix) and TD (Tagment DNA Buffer); guide TD 10 uL and ATM 5 uL are not independently verified historical reaction quantities. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00003",
+          "quote": "2 Add 10 μl TD Buffer to each well to be used in this assay. Change tips between samples. 3 Add 5 μl input DNA at 0.2 ng/μl (1 ng total) to each sample well of the NTA plate. NOTE It is critical to use the full amount of input DNA. 4 Using a multichannel pipette, gently pipette up and down 5 times to mix. Change tips between samples. 5 Add 5 μl ATM to the wells containing input DNA and TD Buffer.",
+          "support": "reported",
+          "rationale": "Supports resource at its stated applicability: Original kit Nextera XT #FC-131-1096. Rev.D contextual reagents ATM (Amplicon Tagment Mix) and TD (Tagment DNA Buffer); guide TD 10 uL and ATM 5 uL are not independently verified historical reaction quantities. Contemporaneous manufacturer tagmentation-volume context only: TD 10 uL and ATM 5 uL; its 1-ng/5-uL DNA instruction is superseded by the original 600-pg input, whose volume is not stated."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00002",
+          "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+          "support": "reported",
+          "rationale": "Supports resource at its stated applicability: Original kit Nextera XT #FC-131-1096. Rev.D contextual reagents ATM (Amplicon Tagment Mix) and TD (Tagment DNA Buffer); guide TD 10 uL and ATM 5 uL are not independently verified historical reaction quantities. Rev.D context for the delegated transposome mechanism: simultaneous fragmentation and adapter addition. This source does not prove authors used Rev.D."
+        }
+      ]
+    },
+    {
+      "kind": "condition",
+      "description": "Original input 600 pg per reaction. Delegated-step Rev.D context: 55 C 5 min with heated lid, hold 10 C and proceed immediately to neutralization because transposome remains active.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Supports resource at its stated applicability: Original input 600 pg per reaction. Delegated-step Rev.D context: 55 C 5 min with heated lid, hold 10 C and proceed immediately to neutralization because transposome remains active. Four physical aliquots of 600 pg amplified cDNA enter four Nextera XT reactions; manufacturer 1-ng default does not override this."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00004",
+          "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+          "support": "reported",
+          "rationale": "Supports resource at its stated applicability: Original input 600 pg per reaction. Delegated-step Rev.D context: 55 C 5 min with heated lid, hold 10 C and proceed immediately to neutralization because transposome remains active. Contemporaneous manufacturer delegated-step context: heated lid, 55 C 5 min, 10 C hold and immediate neutralization. Exact historical revision is unknown."
+        }
+      ]
+    }
+  ],
+  "information_effects": [
+    "Adds Nextera fragment-end adapters while preserving barcode-linked cDNA on the subset of fragments spanning the bead-proximal transcript end."
+  ],
+  "physical_mechanism": "not_separately_assessed",
+  "workflow_review_status": "supported",
+  "workflow_review_sha256": "cc43e67ace19f90550d578d5422f2170a6701953c65c96dd6e8ccb0b1f09fe0f",
+  "selected_checks": [
+    {
+      "target_id": "flow:io:input:tagmentation:nextera_inputs",
+      "verdict": "supported",
+      "rationale": "Each original 600-pg aliquot supplies one of four standard Nextera XT tagmentation reactions, rather than the generic 1-ng guide input.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Original four 600-pg aliquots and kit identity, with sentence continued onto the next page."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00003",
+          "quote": "Add 5 μl input DNA at 0.2 ng/μl (1 ng total)",
+          "support": "reported",
+          "rationale": "Generic guide default is inspected to delimit applicability; it must not replace the paper 600-pg mass."
+        }
+      ]
+    },
+    {
+      "target_id": "flow:io:input:tagmentation_neutralization:tagged_cdna",
+      "verdict": "supported",
+      "rationale": "The still-active tagmentation product is immediately neutralized in the guide context, an explicitly qualified delegated internal route.",
+      "evidence": [
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00004",
+          "quote": "NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+          "support": "reported",
+          "rationale": "Rev.D contextual heated-lid tagmentation and immediate neutralization precedence."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00004",
+          "quote": "1 Carefully remove the Microseal 'B' seal and add 5 μl NT Buffer to each well of the NTA plate. Change tips between samples. 2 Using a multichannel pipette, gently pipette up and down 5 times to mix. Change tips between samples. 3 Seal the NTA plate with a Microseal 'B' adhesive seal. 4 Centrifuge at 280 × g at 20°C for 1 minute. 5 Place the NTA plate at room temperature for 5 minutes.",
+          "support": "reported",
+          "rationale": "Rev.D contextual NT addition, mixing, seal, spin and neutralization incubation."
+        },
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00008",
+          "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+          "support": "reported",
+          "rationale": "Manufacturer delegation is modified by original custom primers at 200 nM; no guide revision is named."
+        }
+      ]
+    },
+    {
+      "target_id": "flow:io:output:library_input_aliquoting:nextera_inputs",
+      "verdict": "supported",
+      "rationale": "Four separate 600-pg aliquots are the literal original Nextera inputs.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Original four 600-pg aliquots and kit identity, with sentence continued onto the next page."
+        }
+      ]
+    },
+    {
+      "target_id": "flow:io:output:tagmentation:tagged_cdna",
+      "verdict": "supported",
+      "rationale": "The guide mechanism supplies the delegated fragmented, adapter-tagged DNA output; original custom 3-prime selection follows.",
+      "evidence": [
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00002",
+          "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+          "support": "reported",
+          "rationale": "Manufacturer mechanism explains the named delegated tagmentation boundary, not a separate original experimental observation."
+        },
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00035",
+          "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+          "support": "reported",
+          "rationale": "The original paper explicitly assigns custom primers to selective transcript 3-prime amplification."
+        }
+      ]
+    },
+    {
+      "target_id": "operation:tagmentation",
+      "verdict": "supported",
+      "rationale": "Original kit FC-131-1096 and 600-pg inputs are explicit. Fragmentation plus end-adapter tagging and ATM/TD quantities/heated-lid 55 C/5 min then 10 C are inspected Rev.D context, carefully qualified as manufacturer conditions rather than verified historical quantities. Generic 1-ng/5-uL input is excluded and barcode-retaining fragments are a bounded molecular inference.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Original four 600-pg aliquots and kit identity, with sentence continued onto the next page."
+        },
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00008",
+          "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+          "support": "reported",
+          "rationale": "Manufacturer delegation is modified by original custom primers at 200 nM; no guide revision is named."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00001",
+          "quote": "Part # 15031942 Rev. D. September 2014.",
+          "support": "reported",
+          "rationale": "Identity of the available contextual guide; it does not establish historical use by the paper."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00002",
+          "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+          "support": "reported",
+          "rationale": "Manufacturer mechanism explains the named delegated tagmentation boundary, not a separate original experimental observation."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00003",
+          "quote": "Add 10 μl TD Buffer to each well to be used in this assay.",
+          "support": "reported",
+          "rationale": "Rev.D contextual tagmentation reagent quantity; original historical quantity remains unverified."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00003",
+          "quote": "Add 5 μl ATM to the wells containing input DNA and TD Buffer.",
+          "support": "reported",
+          "rationale": "Rev.D contextual ATM quantity under the paper delegation, not proof of exact historical setup."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00004",
+          "quote": "NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+          "support": "reported",
+          "rationale": "Rev.D contextual heated-lid tagmentation and immediate neutralization precedence."
+        },
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00003",
+          "quote": "Add 5 μl input DNA at 0.2 ng/μl (1 ng total)",
+          "support": "reported",
+          "rationale": "Generic guide default is inspected to delimit applicability; it must not replace the paper 600-pg mass."
+        },
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00085",
+          "quote": "The first read yields the cell barcode and UMI. The second, paired read interrogates sequence from the cDNA",
+          "support": "inferred",
+          "rationale": "Together with custom 3-prime amplification and the bead-primer architecture, the paired identities support retention of barcode/UMI-linked transcript ends; exact transposase cut sites are not asserted."
+        },
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00035",
+          "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+          "support": "reported",
+          "rationale": "The original paper explicitly assigns custom primers to selective transcript 3-prime amplification."
+        }
+      ]
+    },
+    {
+      "target_id": "state:nextera_inputs",
+      "verdict": "supported",
+      "rationale": "Four separate original 600-pg cDNA inputs are physical aliquots. They are not four copies of the full production pool.",
+      "evidence": [
+        {
+          "source_id": "macosko2015_supplement",
+          "passage_id": "p00007",
+          "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+          "support": "reported",
+          "rationale": "Original four 600-pg aliquots and kit identity, with sentence continued onto the next page."
+        }
+      ]
+    },
+    {
+      "target_id": "state:tagged_cdna",
+      "verdict": "supported",
+      "rationale": "Manufacturer transposome action yields fragmented cDNA bearing adapter ends. Only fragments retaining the bead-derived barcode/UMI/transcript end are eligible for subsequent custom 3-prime selection; no universal retention of every input fragment is claimed.",
+      "evidence": [
+        {
+          "source_id": "illumina_nextera_xt_2014_revD",
+          "passage_id": "p00002",
+          "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+          "support": "reported",
+          "rationale": "Manufacturer mechanism explains the named delegated tagmentation boundary, not a separate original experimental observation."
+        },
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00085",
+          "quote": "The first read yields the cell barcode and UMI. The second, paired read interrogates sequence from the cDNA",
+          "support": "inferred",
+          "rationale": "Together with custom 3-prime amplification and the bead-primer architecture, the paired identities support retention of barcode/UMI-linked transcript ends; exact transposase cut sites are not asserted."
+        },
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00035",
+          "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+          "support": "reported",
+          "rationale": "The original paper explicitly assigns custom primers to selective transcript 3-prime amplification."
+        }
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "fabrication_dependency",
+      "description": "Original supplement reports SU8-master replica molding, Aquapel/air/65-C treatment and a CAD file in Data S1, but the registered passages do not supply the CAD geometry, master fabrication, PDMS mixture/cure/bonding internals or the full cited fabrication protocols. The device input/output and co-flow role are explicit, so this is a nonblocking delegated recipe/design-detail gap for the general architecture; it does not authorize fabricating a compatible replacement from this record.",
+      "blocking": false,
+      "next_evidence": "Inspect original Data S1 CAD and the specific Mazutis et al. 2013/McDonald et al. 2000 fabrication passages used for this device, including master geometry, curing and sealing."
+    },
+    {
+      "id": "bead_linker_and_release_details",
+      "description": "The resin, PEG-derived 18-carbon linker, reverse phosphoramidites, barcode/UMI/T30 architecture and free 3-prime priming ends are reported. Exact PEG derivative, complete coupling/wash/deprotection details and final bead manufacturing release specifications are not supplied. Named synthesis boundary supports the general assay; chemistry execution or substitutions require the original Chemgenes synthesis specification.",
+      "blocking": false,
+      "next_evidence": "Original Chemgenes bead functionalization/reverse-synthesis specification for SeqA/SeqB, including PEG derivative and final deprotection/quality-release steps."
+    },
+    {
+      "id": "cell_concentration_convention",
+      "description": "Supplemental implementation notes call 50 cells/uL a standard final concentration, and separately specify bead feed 120/uL giving 60/uL in droplets. Figure S3 caption explicitly describes a 50-cells/uL concentration in droplets for its impurity experiment; the culture dilution and retina preparation paragraphs describe their suspension concentrations. These have different sample/experiment anchors, so the record neither declares them contradictory nor silently assigns every reported cell concentration to the same syringe/droplet reference. This does not block the generic equal-aqueous-flow interface.",
+      "blocking": false,
+      "next_evidence": "A source-specific clarification mapping the implementation-note standard 50 cells/uL to pre-co-flow suspension versus final droplet concentration, if an execution concentration is required."
+    },
+    {
+      "id": "rt_pcr_primer_alias_and_extension",
+      "description": "The PCR procedure names Template_Switch_PCR, while Table S6 labels AAGCAGTGGTATCAACGCAGAGT as TSO_PCR; their intended alias is plausible and labeled inferred. The same bead-PCR paragraph states a five-minute final extension without its temperature. X=8 cultured-cell and X=9 retina choices are reported, with no general X choice for other specimens. These are nonblocking recipe details for the explicit bead-to-amplified-cDNA boundary, not permission to execute an inferred universal PCR.",
+      "blocking": false,
+      "next_evidence": "Original oligo order/primer alias confirmation and the bead-PCR thermocycler program specifying final-extension temperature and intended cycle selection for the desired specimen."
+    },
+    {
+      "id": "exo_catalogue_entry",
+      "description": "The treatment paragraph specifies 1 U/uL Exonuclease I but prints NEB B0293S; the study cost inventory lists Exonuclease I NEB M0293L. Retain the functional enzyme requirement and the differing catalogue contexts, without declaring that they identify the same purchasable item or changing the reaction. The reagent identity/function is sufficient for the general boundary.",
+      "blocking": false,
+      "next_evidence": "Original reagent order record or contemporaneous NEB catalogue clarifying the buffer and enzyme products used in the Exonuclease I reaction."
+    },
+    {
+      "id": "nextera_revision_and_input_volume",
+      "description": "The original supplement delegates standard Nextera XT but identifies no guide revision and supplies 600 pg per reaction without DNA input volume. Registered Rev.D is contextual for transposome, neutralization and cleanup mechanisms/conditions. Its 1-ng/5-uL input, generic PCR/index and RSB-elution defaults are not proof of the original recipe and do not override original custom primers, 11 cycles, 0.6x cleanup or water elution. Nonblocking for the declared delegated architecture, but the record is not an independently executable historical kit recipe.",
+      "blocking": false,
+      "next_evidence": "Exact Nextera XT guide revision and original reaction worksheet, including volume of the 600-pg cDNA input, master-mix quantities and tagmentation/stop implementation."
+    },
+    {
+      "id": "ampure_dependency",
+      "description": "Original 0.6x ratios, pooling pattern and 10-uL water elutions are reported. Full contemporaneous AMPure XP manufacturer instructions for the early cDNA cleanup are not registered; Rev.D provides contextual library cleanup only and does not establish identical plate-format details for the earlier cleanup. Boundaries and retained DNA fractions are supported, so this is a nonblocking delegated detail gap.",
+      "blocking": false,
+      "next_evidence": "Original AMPure XP protocol/version applicable to the paper's early cDNA and final library cleanups if complete execution instructions are needed."
+    },
+    {
+      "id": "seqb_read_number_note",
+      "description": "Supplement p8 explicitly states Read1CustSeqA or Read1CustSeqB for priming read 1, and the read-structure description assigns cell barcode/UMI to read 1. The p25 bead note pairs SeqB with Read1CustSeqB but literally says to prime read 2 in that clause, while subsequently recommending SeqB with that primer. This localized wording discrepancy remains unresolved; the record follows the explicit p8 read-1 procedure and preserves matched bead/primer identities. It does not block the general paired barcode/transcript readout or support a second barcode-bearing read.",
+      "blocking": false,
+      "next_evidence": "An author correction, original sequencing run setup or contemporaneous primer instructions clarifying the p25 SeqB read-number clause."
+    },
+    {
+      "id": "sequencing_index_setup",
+      "description": "Original paired reads, custom primer sequences, NextSeq loading and sample-dependent cDNA-read lengths are reported, but index-read cycle/demultiplexing configuration is not specified in inspected packet procedures. The N701 sequence is retained without inventing a standard dual-index execution. These settings do not block the declared barcode/UMI/transcript readout architecture or a source-described count boundary; they would be needed for exact run reconstruction.",
+      "blocking": false,
+      "next_evidence": "Original NextSeq sample sheet/run recipe and demultiplexing instructions if reproducing indexing or exact raw-file generation."
+    },
+    {
+      "id": "decoding_internal_rules",
+      "description": "Sources report barcode Q10 filtering, TSO/polyA trimming, STAR v2.4.0a/defaults, unique mapping, within-gene/barcode UMI merging, and integer counts. They do not specify the exact gene-annotation/overlap policy, barcode error-correction policy, or ED1 merge tie/order algorithm. The record does not add a whitelist, UMI quality threshold, directional graph algorithm or claim numerical reproduction. These are nonblocking internals of the source-described general decoding boundary, consequential if exact counts must be reproduced.",
+      "blocking": false,
+      "next_evidence": "The original processing implementation/configuration and annotation release defining gene assignment, barcode handling and UMI merge resolution."
+    },
+    {
+      "id": "barcode_knee_rule",
+      "description": "The supplement Methods ranks barcodes by total transcripts and cumulative transcripts; Figure S3A caption describes decreasing read counts and cumulative reads. Their reference anchors differ and no equivalence or executed cutoff calculation is established. The record represents the Methods transcript-based empirical rule, preserving the caption difference. No automatic knee detector or exact threshold selection algorithm is supplied; this is nonblocking for a qualified source-described cell-selection boundary, not enough to reproduce exact cell lists.",
+      "blocking": false,
+      "next_evidence": "Original barcode-ranking/knee-selection code or author clarification resolving transcript versus read ranking and the cutoff-selection procedure."
+    },
+    {
+      "id": "ercc_control_recipe_assignment",
+      "description": "Original ERCC dilution, cell-flow replacement, dual ERCC/hg19 alignment, substitution-only UMI correction and conversion comparison are explicit. The control paragraph delegates Drop-seq without assigning all control-specific bead-PCR X cycles, bead/read primer batch and read lengths. The optional branch is represented at its source-described standard-protocol boundary; these nonblocking characterization recipe details are not silently inherited from cultured-cell or retina experiments.",
+      "blocking": false,
+      "next_evidence": "Original ERCC run worksheet/primer and sequencing program, if execution of that characterization rather than its general role is required."
+    },
+    {
+      "id": "ddpcr_dependency",
+      "description": "The independent HEK comparator names Qiagen RNA purification and Bio-Rad RT-ddPCR generation/thermal protocol, QX100 and QuantaSoft, but the complete manufacturer reaction/thermal settings and versions are not packet passages. The optional characterization boundary is supported and is not a general Drop-seq production requirement; missing internals are nonblocking for this scope.",
+      "blocking": false,
+      "next_evidence": "Contemporaneous Qiagen RNeasy Plus and Bio-Rad RT-ddPCR protocols and exact reaction programs for recreating the independent HEK benchmark."
+    },
+    {
+      "id": "species_classification_threshold",
+      "description": "Species-mixing interpretation and the half-of-doublets assumption are explicit, but the inspected general description does not give a universal numeric threshold for designating mixed-species versus organism-specific barcodes. The conditional characterization operation is preserved as source-described scoring with unknown internals, not a complete arbitrary-sample doublet classifier. This does not block general gene molecule counts. Separately, the original retina preparation with a 1 cell/µL (0.5%) HEK spike-in could not calibrate purity/doublets because of retinal cell-size heterogeneity (retained with source evidence in species_mixing_interpretation). That demonstrated applicability limit is known; no numerical threshold resolution is claimed by adding it.",
+      "blocking": false,
+      "next_evidence": "Original mixed-species classification criteria/code and assumptions for the selected mixture if reproducing numerical doublet or impurity estimates."
+    }
+  ],
+  "gap_resolutions": [],
+  "boundary": "recorded_cut_not_complete_experimental_interface"
+}

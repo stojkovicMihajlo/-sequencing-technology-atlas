@@ -1,0 +1,314 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "passage_id": {
+          "minLength": 1,
+          "title": "Passage Id",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 600,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "support": {
+          "enum": [
+            "reported",
+            "inferred"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "passage_id",
+        "quote",
+        "support",
+        "rationale"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "OperationProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "target_id": {
+          "minLength": 1,
+          "title": "Target Id",
+          "type": "string"
+        },
+        "transformation": {
+          "description": "What changes between the exact input and output states?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Transformation",
+          "type": "array"
+        },
+        "purpose": {
+          "description": "What function does this operation serve in this workflow context?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Purpose",
+          "type": "array"
+        },
+        "mechanism": {
+          "description": "By what supported physical or computational process does it act?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Mechanism",
+          "type": "array"
+        },
+        "information_effect": {
+          "description": "What information is retained, created, changed or lost?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Information Effect",
+          "type": "array"
+        },
+        "context": {
+          "description": "Which conditions, dependencies and scope qualify this operation?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Context",
+          "type": "array"
+        }
+      },
+      "required": [
+        "target_id",
+        "transformation",
+        "purpose",
+        "mechanism",
+        "information_effect",
+        "context"
+      ],
+      "title": "OperationProfile",
+      "type": "object"
+    },
+    "ProfileAssertion": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "reported",
+            "inferred",
+            "unknown",
+            "not_assessed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "applicability": {
+          "default": "applicable",
+          "enum": [
+            "applicable",
+            "not_applicable"
+          ],
+          "title": "Applicability",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "value_kind": {
+          "anyOf": [
+            {
+              "enum": [
+                "value",
+                "absent"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value Kind"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "unknown_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "documentation_absent",
+                "not_reported",
+                "conflicting_evidence",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unknown Reason"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "rationale"
+      ],
+      "title": "ProfileAssertion",
+      "type": "object"
+    },
+    "StateProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "target_id": {
+          "minLength": 1,
+          "title": "Target Id",
+          "type": "string"
+        },
+        "entity": {
+          "description": "What material or data entities are present, at what unit of description?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Entity",
+          "type": "array"
+        },
+        "form_or_association": {
+          "description": "What physical form, compartment or association is established?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Form Or Association",
+          "type": "array"
+        },
+        "identity_or_information": {
+          "description": "What molecular identity or information is retained or represented?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Identity Or Information",
+          "type": "array"
+        },
+        "lineage": {
+          "description": "Which provenance, attribution or parent-to-product relationships are established?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Lineage",
+          "type": "array"
+        },
+        "context": {
+          "description": "Which conditions, scope and limitations qualify these state assertions?",
+          "items": {
+            "$ref": "#/$defs/ProfileAssertion"
+          },
+          "minItems": 1,
+          "title": "Context",
+          "type": "array"
+        }
+      },
+      "required": [
+        "target_id",
+        "entity",
+        "form_or_association",
+        "identity_or_information",
+        "lineage",
+        "context"
+      ],
+      "title": "StateProfile",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "const": "workflow_comparison_profile/1.0",
+      "default": "workflow_comparison_profile/1.0",
+      "title": "Format Version",
+      "type": "string"
+    },
+    "workflow_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Workflow Sha256",
+      "type": "string"
+    },
+    "source_packet_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Packet Sha256",
+      "type": "string"
+    },
+    "states": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/StateProfile"
+      },
+      "title": "States",
+      "type": "array"
+    },
+    "operations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/OperationProfile"
+      },
+      "title": "Operations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "workflow_sha256",
+    "source_packet_sha256"
+  ],
+  "title": "ComparisonProfile",
+  "type": "object"
+}

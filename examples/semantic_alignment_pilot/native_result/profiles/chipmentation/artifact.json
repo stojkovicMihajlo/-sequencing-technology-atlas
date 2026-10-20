@@ -1,0 +1,698 @@
+{
+  "format_version": "workflow_comparison_profile/1.0",
+  "workflow_sha256": "82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0",
+  "source_packet_sha256": "f4ef18b534064d44dbc6ba7b5605c095684f373699e8d20c485f8309f9326799",
+  "states": [
+    {
+      "target_id": "beads_v1",
+      "entity": [
+        {
+          "id": "state:beads_v1:entity",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "One version 1 immunoprecipitate containing a population of captured chromatin fragments, the selected antibody, and Protein A or antibody-dependent Protein G magnetic beads. The reported bead input is 20 μl per IP, blocked with 0.1% BSA in PBS.",
+          "value_kind": "value",
+          "rationale": "The unit is an immunoprecipitation preparation containing many chromatin fragments and its capture reagents.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "The lysate was adjusted to 200 μl per IP with a buffer composition of 20 mM HEPES, 0.1% SDS, 1%Triton X-100, 150 mM NaCl, 1 mM EDTA, 0.5 mM EGTA and incubated with an antibody against H3K4me3 (1 μg/IP, Diagenode pAb-003-050) or H3K27me3 (1 μg/IP, Diagenode pAb-195-050) overnight at 4°C on a rotator.",
+              "support": "reported",
+              "rationale": "Defines the individual IP and selected antibody."
+            },
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "20 μl of Protein A (or Protein G, dependent on the antibody used) magnetic beads were blocked overnight with 0.1% BSA in PBS and added to the IP the next day for 2 hours on a rotator at 4°C to capture the immunoprecipitated fragments.",
+              "support": "reported",
+              "rationale": "Identifies the magnetic bead reagent and captured chromatin fragments."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "form_or_association": [
+        {
+          "id": "state:beads_v1:form_or_association",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Immunoprecipitated chromatin is carried on beads at the LiCl-containing WBIII wash stage of ChIP version 1.",
+          "value_kind": "value",
+          "rationale": "This is the bead-associated chromatin interface at which ChIPmentation is inserted.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "The chosen ChIP protocol was followed until the beads carrying immunoprecipitated chromatin were washed with LiCl-containing wash buffer (WBIII for ChIP version 1, RIPA-LiCl for ChIP version 2, and TF-WBIII for ChIP version 3, as described in the Supplementary Note).",
+              "support": "reported",
+              "rationale": "Directly identifies bead-bound immunoprecipitated chromatin and the version 1 WBIII boundary."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:beads_v1:form_or_association:crosslinking",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "The bead-bound material retains the crosslinked chromatin preparation established by paraformaldehyde fixation; crosslink reversal is a later step.",
+          "value_kind": "value",
+          "rationale": "Fixation occurs upstream and the specified reversal occurs only during subsequent bead elution, so retained crosslinks at this interface are inferred from the preparation sequence.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "Cells were washed once with PBS and fixed with 1% paraformaldehyde in up to 1 ml PBS for 5 minutes at room temperature.",
+              "support": "inferred",
+              "rationale": "Establishes upstream paraformaldehyde fixation."
+            },
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "Beads were then incubated with 70 μl elution buffer (0.5% SDS, 300 mM NaCl, 5 mM EDTA, 10 mM Tris-HCl pH 8.0) containing 2 μl of Proteinase K (NEB) for 1 hour at 55°C and 8 hours at 65°C to revert formaldehyde crosslinking, and supernatant was transferred to a new tube.",
+              "support": "inferred",
+              "rationale": "Places reversal after bead capture and washing."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "identity_or_information": [
+        {
+          "id": "state:beads_v1:identity_or_information",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The selected chromatin is attributed to an H3K4me3 or H3K27me3 immunoprecipitation. These are separate antibody choices for this route; the recipe uses 1 μg of the selected antibody per IP.",
+          "value_kind": "value",
+          "rationale": "The histone modification and antibody choice define the molecular selection represented by the chromatin population.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "ChIP version 1 (used for H3K4me3 and H3K27me3)",
+              "support": "reported",
+              "rationale": "Assigns these histone marks to version 1."
+            },
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "The lysate was adjusted to 200 μl per IP with a buffer composition of 20 mM HEPES, 0.1% SDS, 1%Triton X-100, 150 mM NaCl, 1 mM EDTA, 0.5 mM EGTA and incubated with an antibody against H3K4me3 (1 μg/IP, Diagenode pAb-003-050) or H3K27me3 (1 μg/IP, Diagenode pAb-195-050) overnight at 4°C on a rotator.",
+              "support": "reported",
+              "rationale": "Explicitly gives the alternative antibodies and their amounts per IP."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "lineage": [
+        {
+          "id": "state:beads_v1:lineage",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Derived from the version 1 clarified sonicated chromatin lysate, allocated at 200 μl per IP, incubated overnight with the selected histone antibody, then captured with Protein A/G magnetic beads. Most precursor sonicated fragments were 200–700 bp.",
+          "value_kind": "value",
+          "rationale": "These are the source-supported precursor, aliquot and capture relationships for the material entering tagmentation; the precursor size range does not specify the later tagmented product size.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "and sonicated in a 130 μl microTUBE (for up to 3 x 106 cells) on a Covaris S220 for 12 minutes until most of the fragments were 200-700 base pairs long (settings: duty cycle 2%, peak incident power 105 Watts, cycles per burst 200).",
+              "support": "reported",
+              "rationale": "Identifies sonication and the precursor fragment range."
+            },
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "Lysates were centrifuged at full speed for 5 minutes at 4°C and the supernatant was transferred to a new tube.",
+              "support": "reported",
+              "rationale": "Identifies the retained clarified supernatant."
+            },
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "The lysate was adjusted to 200 μl per IP with a buffer composition of 20 mM HEPES, 0.1% SDS, 1%Triton X-100, 150 mM NaCl, 1 mM EDTA, 0.5 mM EGTA and incubated with an antibody against H3K4me3 (1 μg/IP, Diagenode pAb-003-050) or H3K27me3 (1 μg/IP, Diagenode pAb-195-050) overnight at 4°C on a rotator.",
+              "support": "reported",
+              "rationale": "Defines allocation per IP and antibody incubation."
+            },
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "20 μl of Protein A (or Protein G, dependent on the antibody used) magnetic beads were blocked overnight with 0.1% BSA in PBS and added to the IP the next day for 2 hours on a rotator at 4°C to capture the immunoprecipitated fragments.",
+              "support": "reported",
+              "rationale": "Establishes bead capture of that immunoprecipitate."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "context": [
+        {
+          "id": "state:beads_v1:context",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The version 1 pre-tagmentation wash history is WBI twice, WBII once, and WBIII once; WBIII contains 250 mM LiCl. The buffers also contain the detergents and chelators specified in the recipe.",
+          "value_kind": "value",
+          "rationale": "The wash series qualifies the input material and explains the subsequent removal of detergents, salts and EDTA.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "The immunoprecipitated chromatin was washed subsequently with WBI (20 mM HEPES, 150 mM NaCl, 0.1% SDS, 0.1% DOC, 1% Triton X-100, 1 mM EDTA, 0.5 mM EGTA) (twice), WBII (20 mM HEPES, 500 mM NaCl, 0.1% SDS, 0.1% DOC, 1% Triton X-100, 1 mM EDTA, 0.5 mM EGTA) (once), WBIII (20 mM HEPES, 250 mM LiCl, 0.5% DOC, 0.5% NP-40, 1 mM EDTA, 0.5 mM EGTA) (once)",
+              "support": "reported",
+              "rationale": "Reports the exact wash sequence and buffer compositions through WBIII."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:beads_v1:context:insertion_boundary",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "For ChIPmentation the input is taken after the LiCl wash, before the two cold Tris washes and enzyme reaction. The final ChIP bead wash, elution, reverse-crosslinking and DNA purification follow tagmentation.",
+          "value_kind": "value",
+          "rationale": "The main methods insert tagmentation before the conventional final wash and recovery, preserving the selected published boundary.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "The chosen ChIP protocol was followed until the beads carrying immunoprecipitated chromatin were washed with LiCl-containing wash buffer (WBIII for ChIP version 1, RIPA-LiCl for ChIP version 2, and TF-WBIII for ChIP version 3, as described in the Supplementary Note).",
+              "support": "reported",
+              "rationale": "Locates the input after the LiCl wash."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Beads were then washed twice with 10 mM cold Tris-Cl pH 8.0 to remove detergent, salts, and EDTA.",
+              "support": "reported",
+              "rationale": "Identifies the next handling action."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification.",
+              "support": "reported",
+              "rationale": "Places final washing and recovery downstream."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ]
+    },
+    {
+      "target_id": "tagged_beads_v1",
+      "entity": [
+        {
+          "id": "state:tagged_beads_v1:entity",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "A population of tagmented chromatin fragments on beads, with sequencing adapters introduced into the chromatin DNA.",
+          "value_kind": "value",
+          "rationale": "The direct product remains a chromatin-and-bead material interface.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00005",
+              "quote": "In ChIPmentation (right), the sequencing adapters are introduced in a single step by tagmentation of bead-bound chromatin.",
+              "support": "reported",
+              "rationale": "Identifies the adapter-bearing product of tagmentation on bead-bound chromatin."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:tagged_beads_v1:entity:reaction_mixture",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "At the immediate output of incubation, the treated beads and chromatin are in the 30 μl Tris/MgCl2 reaction mixture to which Nextera Tagment DNA Enzyme was added.",
+          "value_kind": "value",
+          "rationale": "The output boundary precedes reaction removal; soluble reaction constituents therefore belong to the scoped material mixture. This does not specify enzyme occupancy on individual DNA molecules.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+              "support": "inferred",
+              "rationale": "Defines the mixture incubated to produce this interface."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "form_or_association": [
+        {
+          "id": "state:tagged_beads_v1:form_or_association",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Tagmented chromatin remains bead-associated before the post-tagmentation WBI washes, final ChIP wash, elution, reverse-crosslinking and purification.",
+          "value_kind": "value",
+          "rationale": "The beads are washed after tagmentation and eluted only afterward, establishing the retained bead association at this interface.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Following tagmentation, the beads were washed twice with 150 μl cold WBI (ChIP version 1), RIPA (ChIP version 2), or TF-WBI (ChIP version 3).",
+              "support": "reported",
+              "rationale": "Places bead washing after tagmentation."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification.",
+              "support": "reported",
+              "rationale": "Places elution and reversal after those washes."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:tagged_beads_v1:form_or_association:crosslinking",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "The tagmented material is still in its crosslinked chromatin preparation at this point.",
+          "value_kind": "value",
+          "rationale": "The published order places reverse-crosslinking after tagmentation and bead washes; retention of crosslinks at this earlier output is inferred.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification.",
+              "support": "inferred",
+              "rationale": "Reverse-crosslinking is part of the later resumed ChIP protocol."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "identity_or_information": [
+        {
+          "id": "state:tagged_beads_v1:identity_or_information",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The chromatin DNA carries sequencing-adapter tags introduced by tagmentation on the beads.",
+          "value_kind": "value",
+          "rationale": "These molecular tags provide the adapter-bearing DNA interface for later library processing.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00005",
+              "quote": "In ChIPmentation (right), the sequencing adapters are introduced in a single step by tagmentation of bead-bound chromatin.",
+              "support": "reported",
+              "rationale": "Explicitly reports sequencing-adapter introduction at this step."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:tagged_beads_v1:identity_or_information:exact_tag_structure",
+          "status": "unknown",
+          "applicability": "applicable",
+          "value": null,
+          "value_kind": null,
+          "rationale": "The exact covalent tag/end sequences, strand architecture and index content present at this immediate interface are not specified in the reviewed ChIPmentation methods, supplement or author protocol. Main p00016 identifies the Nextera enzyme, while main p00018 and the cited Buenrostro protocol p00017 describe downstream custom Nextera PCR primers. Those primer descriptions do not establish the enzyme payload or the complete molecular ends at this stage.",
+          "evidence": [],
+          "unknown_reason": "not_reported"
+        }
+      ],
+      "lineage": [
+        {
+          "id": "state:tagged_beads_v1:lineage",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Direct descendant of beads_v1 through the two Tris washes and on-bead enzyme incubation in tagment_v1; the material remains attributed to that selected version 1 immunoprecipitate.",
+          "value_kind": "value",
+          "rationale": "Continuation of the same chosen ChIP bead preparation through washing and resuspension supports parent-to-product attribution. The local state names identify the supplied workflow interfaces.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "The chosen ChIP protocol was followed until the beads carrying immunoprecipitated chromatin were washed with LiCl-containing wash buffer (WBIII for ChIP version 1, RIPA-LiCl for ChIP version 2, and TF-WBIII for ChIP version 3, as described in the Supplementary Note).",
+              "support": "inferred",
+              "rationale": "Defines the selected LiCl-washed ChIP bead preparation."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Beads were then washed twice with 10 mM cold Tris-Cl pH 8.0 to remove detergent, salts, and EDTA.",
+              "support": "inferred",
+              "rationale": "Continues those beads through the Tris washes."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+              "support": "inferred",
+              "rationale": "Continues those beads directly into the enzyme reaction."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:tagged_beads_v1:lineage:histone_target_attribution",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "The version 1 product inherits the selected H3K4me3 or H3K27me3 IP attribution of its precursor; the two histone-target routes remain alternatives.",
+          "value_kind": "value",
+          "rationale": "The source assigns these alternative targets to version 1, and the supplied workflow continues the selected IP into this direct tagmentation product.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "The lysate was adjusted to 200 μl per IP with a buffer composition of 20 mM HEPES, 0.1% SDS, 1%Triton X-100, 150 mM NaCl, 1 mM EDTA, 0.5 mM EGTA and incubated with an antibody against H3K4me3 (1 μg/IP, Diagenode pAb-003-050) or H3K27me3 (1 μg/IP, Diagenode pAb-195-050) overnight at 4°C on a rotator.",
+              "support": "inferred",
+              "rationale": "Defines alternative target attribution per upstream IP, inherited by its product."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "context": [
+        {
+          "id": "state:tagged_beads_v1:context",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The reported reaction is 30 μl containing 10 mM Tris pH 8.0, 5 mM MgCl2 and 1 μl Nextera Tagment DNA Enzyme, incubated for 10 minutes at 37°C in a thermocycler.",
+          "value_kind": "value",
+          "rationale": "These are the preparation conditions of the immediate tagmented-bead output.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+              "support": "reported",
+              "rationale": "Reports reaction composition, enzyme input, time, temperature and instrument."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "state:tagged_beads_v1:context:downstream_removal",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Removal of the tagmentation reaction and the two version 1 WBI washes are subsequent handling of this product.",
+          "value_kind": "value",
+          "rationale": "The author protocol explicitly separates the enzyme incubation from reaction removal and bead washing; those actions are outside the selected tagmentation output boundary.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_author_protocol_v1",
+              "passage_id": "p00019",
+              "quote": "4. Remove tagmentation reaction and wash beads twice with WBI (ChIP version 1),",
+              "support": "reported",
+              "rationale": "Identifies the next handling action on the product."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "target_id": "tagment_v1",
+      "transformation": [
+        {
+          "id": "operation:tagment_v1:transformation",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The LiCl-washed input beads_v1 are washed twice with cold 10 mM Tris-Cl pH 8.0, removing detergent, salts and EDTA before the enzyme reaction.",
+          "value_kind": "value",
+          "rationale": "The supplied operation couples preparatory washing to the on-bead reaction, so this material handling change is part of the transformation.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Beads were then washed twice with 10 mM cold Tris-Cl pH 8.0 to remove detergent, salts, and EDTA.",
+              "support": "reported",
+              "rationale": "Explicitly reports the washes and removed soluble constituents."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagment_v1:transformation:fragment_and_tag",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The washed bead-bound immunoprecipitate undergoes simultaneous DNA fragmentation and adapter tagging during the Nextera enzyme incubation, producing tagged_beads_v1.",
+          "value_kind": "value",
+          "rationale": "Tagmentation is a coupled fragmentation/tagging action on the enriched bead material; the published boundary does not divide it into separate reaction intermediates.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00004",
+              "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA^(3).",
+              "support": "reported",
+              "rationale": "Defines simultaneous DNA fragmentation and adapter tagging."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+              "support": "reported",
+              "rationale": "Places that reaction directly on the resuspended beads."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "purpose": [
+        {
+          "id": "operation:tagment_v1:purpose",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Introduce sequencing adapters directly on bead-bound chromatin in one library-preparation step.",
+          "value_kind": "value",
+          "rationale": "This describes the function of tagmentation in ChIPmentation.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00005",
+              "quote": "In ChIPmentation (right), the sequencing adapters are introduced in a single step by tagmentation of bead-bound chromatin.",
+              "support": "reported",
+              "rationale": "Explicitly identifies single-step adapter introduction on beads."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagment_v1:purpose:wash_preparation",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Remove detergents, salts and EDTA from the enriched beads before resuspension in tagmentation buffer.",
+          "value_kind": "value",
+          "rationale": "This is the stated purpose of the preparatory washes included within this composite operation.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Beads were then washed twice with 10 mM cold Tris-Cl pH 8.0 to remove detergent, salts, and EDTA.",
+              "support": "reported",
+              "rationale": "Explicitly gives the wash purpose."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagment_v1:purpose:authors_protection_rationale",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The authors chose direct tagmentation of immunoprecipitated bead-bound chromatin with the rationale that chromatin proteins could protect DNA from excessive tagmentation.",
+          "value_kind": "value",
+          "rationale": "This records the authors' stated design rationale with its tentative wording; it does not assert measured protection of every fragment.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00007",
+              "quote": "We reasoned that performing tagmentation directly on the immunoprecipitated and bead-bound chromatin would allow chromatin proteins to protect the DNA from excessive tagmentation.",
+              "support": "reported",
+              "rationale": "Reports the proposed protection rationale for choosing the chromatin substrate."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "mechanism": [
+        {
+          "id": "operation:tagment_v1:mechanism",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Hyperactive Tn5 transposase mediates coupled DNA fragmentation and adapter tagging; the reaction uses Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit.",
+          "value_kind": "value",
+          "rationale": "The enzyme-mediated process explains how fragmentation and tagging occur, distinct from their library-preparation purpose.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00004",
+              "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA^(3).",
+              "support": "reported",
+              "rationale": "Names Tn5 and its coupled activities."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+              "support": "reported",
+              "rationale": "Identifies the enzyme reagent used on the beads."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagment_v1:mechanism:buffer_exchange",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "The two pre-reaction Tris washes exchange soluble wash-buffer components around the retained bead-associated chromatin.",
+          "value_kind": "value",
+          "rationale": "The source reports washing the beads to remove detergent, salts and EDTA; solution exchange while retaining the beads is the inferred handling process, without specifying an unreported separation technique.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Beads were then washed twice with 10 mM cold Tris-Cl pH 8.0 to remove detergent, salts, and EDTA.",
+              "support": "inferred",
+              "rationale": "Supports removal of soluble components by bead washing."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ],
+      "information_effect": [
+        {
+          "id": "operation:tagment_v1:information_effect",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Sequencing-adapter tags are introduced into chromatin DNA while it is bead-bound, creating an adapter-bearing molecular carrier for subsequent library processing.",
+          "value_kind": "value",
+          "rationale": "Adapter addition changes the molecular readout interface of the selected chromatin.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00005",
+              "quote": "In ChIPmentation (right), the sequencing adapters are introduced in a single step by tagmentation of bead-bound chromatin.",
+              "support": "reported",
+              "rationale": "Reports introduction of sequencing adapters into bead-bound chromatin."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagment_v1:information_effect:fragment_boundaries_and_attribution",
+          "status": "inferred",
+          "applicability": "applicable",
+          "value": "Fragmentation changes DNA fragment boundaries within the selected immunoprecipitated chromatin population. Attribution to the parent IP is carried through the direct bead reaction.",
+          "value_kind": "value",
+          "rationale": "Changing DNA fragment boundaries follows from fragmentation, and continuing the same selected beads supports retained IP provenance. This is a material inference, not a claim that every original fragment or all genomic information is quantitatively retained.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00004",
+              "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA^(3).",
+              "support": "inferred",
+              "rationale": "Fragmentation implies changed molecular boundaries."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "The chosen ChIP protocol was followed until the beads carrying immunoprecipitated chromatin were washed with LiCl-containing wash buffer (WBIII for ChIP version 1, RIPA-LiCl for ChIP version 2, and TF-WBIII for ChIP version 3, as described in the Supplementary Note).",
+              "support": "inferred",
+              "rationale": "Establishes the antibody-enriched input material."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+              "support": "inferred",
+              "rationale": "Uses the same beads as reaction substrate."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagment_v1:information_effect:exact_tag_structure",
+          "status": "unknown",
+          "applicability": "applicable",
+          "value": null,
+          "value_kind": null,
+          "rationale": "The exact covalent oligonucleotide payload, molecular end architecture and index content produced by this enzyme reaction are not reported in the reviewed ChIPmentation passages. The enzyme identity in main p00016 and the separate custom-PCR-primer descriptions in main p00018 and cited Buenrostro p00017 do not resolve those immediate molecular products; downstream primer designs are insufficient evidence for assigning the inserted tag sequence.",
+          "evidence": [],
+          "unknown_reason": "not_reported"
+        }
+      ],
+      "context": [
+        {
+          "id": "operation:tagment_v1:context",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "Perform on the enriched bead preparation after its LiCl wash, using 30 μl reaction buffer with 10 mM Tris pH 8.0, 5 mM MgCl2 and 1 μl Nextera Tagment DNA Enzyme, for 10 minutes at 37°C in a thermocycler.",
+          "value_kind": "value",
+          "rationale": "These conditions and the pre-reaction material stage qualify the selected operation.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "The chosen ChIP protocol was followed until the beads carrying immunoprecipitated chromatin were washed with LiCl-containing wash buffer (WBIII for ChIP version 1, RIPA-LiCl for ChIP version 2, and TF-WBIII for ChIP version 3, as described in the Supplementary Note).",
+              "support": "reported",
+              "rationale": "Locates the starting stage."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+              "support": "reported",
+              "rationale": "Specifies the reaction conditions."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagment_v1:context:version_1_scope",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "This selected branch uses ChIP version 1, reported for H3K4me3 or H3K27me3, with the antibody choice made per IP.",
+          "value_kind": "value",
+          "rationale": "The version 1 scope preserves the histone-target alternatives of the published preparation.",
+          "evidence": [
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "ChIP version 1 (used for H3K4me3 and H3K27me3)",
+              "support": "reported",
+              "rationale": "Assigns the targets to version 1."
+            },
+            {
+              "source_id": "chipmentation_original_supplement",
+              "passage_id": "p00039",
+              "quote": "The lysate was adjusted to 200 μl per IP with a buffer composition of 20 mM HEPES, 0.1% SDS, 1%Triton X-100, 150 mM NaCl, 1 mM EDTA, 0.5 mM EGTA and incubated with an antibody against H3K4me3 (1 μg/IP, Diagenode pAb-003-050) or H3K27me3 (1 μg/IP, Diagenode pAb-195-050) overnight at 4°C on a rotator.",
+              "support": "reported",
+              "rationale": "Shows alternative antibody selection per IP."
+            }
+          ],
+          "unknown_reason": null
+        },
+        {
+          "id": "operation:tagment_v1:context:output_boundary",
+          "status": "reported",
+          "applicability": "applicable",
+          "value": "The selected operation ends after the on-bead enzyme incubation. Version 1 post-tagmentation WBI washes, final bead washing, elution, reverse-crosslinking and DNA purification are downstream.",
+          "value_kind": "value",
+          "rationale": "The published ordering and supplied workflow boundary keep the product on beads and place recovery outside tagment_v1.",
+          "evidence": [
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Following tagmentation, the beads were washed twice with 150 μl cold WBI (ChIP version 1), RIPA (ChIP version 2), or TF-WBI (ChIP version 3).",
+              "support": "reported",
+              "rationale": "Places version-specific detergent washes after tagmentation."
+            },
+            {
+              "source_id": "batch27_chipmentation_main",
+              "passage_id": "p00016",
+              "quote": "Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification.",
+              "support": "reported",
+              "rationale": "Places final washing, elution, reversal and purification later."
+            }
+          ],
+          "unknown_reason": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,494 @@
+{
+  "decisions": [
+    {
+      "occurrence_id": "chipmentation:82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0:11bab0194a97bc50edb7d892fba6b327035984a079ae592c41fe043cf54b48ba",
+      "assignment": {
+        "format_version": "concept_assignment/1.0",
+        "definition": {
+          "id": "dna_fragmentation_and_adapter_introduction_for_sequencing",
+          "name": "DNA fragmentation and sequencing-adapter introduction",
+          "substrate": "DNA-bearing material entering sequencing-library preparation, including enriched bead-bound chromatin or purified amplified cDNA; retain each use’s material association and separate reaction branches.",
+          "operation": "Convert the supplied DNA-bearing material into fragments bearing introduced sequencing-adapter sequence for subsequent library processing. Account for preparatory substrate handling included in the selected unit, such as washing bead-bound chromatin before the fragmentation/tagging reaction.",
+          "physical_mechanism": null,
+          "mechanism_unknown_reason": "This is a shared-purpose definition at the input-to-adapter-bearing-fragment stage. No common mechanism for the entire selected units is asserted. Individual uses retain their supported mechanisms: ChIPmentation includes solute-removal washes followed by Tn5 tagmentation; Drop-seq delegates Nextera XT transposome tagmentation. Null does not mean either individual reaction mechanism is scientifically unknown, nor does this relation assert that the mechanisms are equal or different.",
+          "output": "Reaction products containing DNA fragments with introduced sequencing-adapter sequence, with bead association, mixture composition, provenance and branch multiplicity retained as applicable; an intermediate for later library recovery and/or amplification.",
+          "information_effect": "Changes DNA fragment boundaries and adds adapter sequence that supplies an interface to subsequent sequencing-library processing. Retention or disruption of pre-existing biological attribution and molecular-identifier linkage is assessed on each use and relevant fragment subset; universal quantitative information retention is not assumed.",
+          "purpose": "Produce sequencing-adapter-bearing DNA fragments from the selected DNA-containing input for subsequent sequencing-library construction.",
+          "context_requirements": "Membership requires evidence for both DNA fragmentation and sequencing-adapter introduction within the selected input-to-output unit, and their sequencing-library function. Include any preparatory actions actually inside that unit. Preserve substrate form, conditioning, branch structure, identity carriers, output association and downstream dependencies on each use. Exact support, enzyme brand, dose, buffer, timing and assay position are implementation properties rather than membership requirements."
+        },
+        "relation": "shared_purpose",
+        "members": [
+          {
+            "occurrence_id": "chipmentation:82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0:11bab0194a97bc50edb7d892fba6b327035984a079ae592c41fe043cf54b48ba",
+            "occurrence_sha256": "f19e2bca267c2cc16232dcb0230df846854ea4bb4742e1338183a5b576982f6b",
+            "rationale": "The entire supplied tagment_v1 unit prepares LiCl-washed version 1 immunoprecipitated beads by two cold Tris washes, then fragments/tags their chromatin DNA with Nextera enzyme. It produces the same chosen IP’s adapter-bearing bead/chromatin preparation for later recovery and amplification. Its wash mechanism, on-bead reaction, histone-target alternatives and inherited IP provenance are preserved. Direct fragment/tagging purpose is supported without a claim that this complete wash-plus-reaction mechanism equals the Drop-seq reaction. Relevant parent-context uncertainty is the transposase payload/end structure; enzyme identification and subsequent nick translation are cited, and this gap limits product-chemistry/substitution claims rather than blocking the purpose membership.",
+            "evidence": [
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "The chosen ChIP protocol was followed until the beads carrying immunoprecipitated chromatin were washed with LiCl-containing wash buffer (WBIII for ChIP version 1, RIPA-LiCl for ChIP version 2, and TF-WBIII for ChIP version 3, as described in the Supplementary Note).",
+                "support": "reported",
+                "rationale": "Locates the supplied version 1 input after WBIII and before Tris washing. References to other ChIP versions describe other routes; this assignment retains version 1 only."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Beads were then washed twice with 10 mM cold Tris-Cl pH 8.0 to remove detergent, salts, and EDTA.",
+                "support": "reported",
+                "rationale": "These two preparatory washes are consequential actions inside the supplied tagment_v1 selection. Their solute-removal purpose is reported; exchange of surrounding solution while retaining bead-associated chromatin is inferred. They remain part of this membership even though the shared category is defined by the library-preparation outcome."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+                "support": "reported",
+                "rationale": "Reports the on-bead reaction, Nextera reagent, buffer composition, volume, time and temperature. These are implementation properties, not required conditions for the purpose category."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00004",
+                "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA^(3).",
+                "support": "reported",
+                "rationale": "Names the coupled fragmentation/tagging mechanism discussed by the authors. Its use on immunoprecipitated bead-bound chromatin is established by p00016 and supplement p00005; this does not make the preparatory washes an enzyme reaction."
+              },
+              {
+                "source_id": "chipmentation_original_supplement",
+                "passage_id": "p00005",
+                "quote": "In ChIPmentation (right), the sequencing adapters are introduced in a single step by tagmentation of bead-bound chromatin.",
+                "support": "reported",
+                "rationale": "Directly supports adapter introduction on bead-bound chromatin and its library-preparation function, the positive membership criterion."
+              },
+              {
+                "source_id": "chipmentation_original_supplement",
+                "passage_id": "p00039",
+                "quote": "ChIP version 1 (used for H3K4me3 and H3K27me3) Cells were washed once with PBS and fixed with 1% paraformaldehyde in up to 1 ml PBS for 5 minutes at room temperature.",
+                "support": "reported",
+                "rationale": "Reports the version 1 histone-target scope and upstream fixation. The target is chosen per IP, not combined into a new target; retained crosslinking at the selected boundary is inferred using the later reverse-crosslinking order in main p00016."
+              },
+              {
+                "source_id": "chipmentation_original_supplement",
+                "passage_id": "p00039",
+                "quote": "The lysate was adjusted to 200 μl per IP with a buffer composition of 20 mM HEPES, 0.1% SDS, 1%Triton X-100, 150 mM NaCl, 1 mM EDTA, 0.5 mM EGTA and incubated with an antibody against H3K4me3 (1 μg/IP, Diagenode pAb-003-050) or H3K27me3 (1 μg/IP, Diagenode pAb-195-050) overnight at 4°C on a rotator.",
+                "support": "reported",
+                "rationale": "Preserves separate H3K4me3 and H3K27me3 antibody choices and per-IP lineage. This upstream molecular selection is inherited provenance, not cell barcoding created by tagmentation."
+              },
+              {
+                "source_id": "chipmentation_original_supplement",
+                "passage_id": "p00039",
+                "quote": "20 μl of Protein A (or Protein G, dependent on the antibody used) magnetic beads were blocked overnight with 0.1% BSA in PBS and added to the IP the next day for 2 hours on a rotator at 4°C to capture the immunoprecipitated fragments.",
+                "support": "reported",
+                "rationale": "Defines the bead-supported precursor and antibody-dependent Protein A/G alternative; the tagmented population descends from that selected IP."
+              },
+              {
+                "source_id": "chipmentation_original_supplement",
+                "passage_id": "p00039",
+                "quote": "sonicated in a 130 μl microTUBE (for up to 3 x 106 cells) on a Covaris S220 for 12 minutes until most of the fragments were 200-700 base pairs long",
+                "support": "reported",
+                "rationale": "Reports precursor sonication and size context only. The 200–700-bp range does not establish the immediate post-tagmentation distribution."
+              },
+              {
+                "source_id": "chipmentation_original_supplement",
+                "passage_id": "p00039",
+                "quote": "The immunoprecipitated chromatin was washed subsequently with WBI (20 mM HEPES, 150 mM NaCl, 0.1% SDS, 0.1% DOC, 1% Triton X-100, 1 mM EDTA, 0.5 mM EGTA) (twice), WBII (20 mM HEPES, 500 mM NaCl, 0.1% SDS, 0.1% DOC, 1% Triton X-100, 1 mM EDTA, 0.5 mM EGTA) (once), WBIII (20 mM HEPES, 250 mM LiCl, 0.5% DOC, 0.5% NP-40, 1 mM EDTA, 0.5 mM EGTA) (once), and WBIV (20 mM HEPES, 1 mM EDTA, 0.5 mM EGTA) (twice).",
+                "support": "reported",
+                "rationale": "Supplies version 1 wash context. Main p00016 inserts ChIPmentation after the LiCl wash, so WBIV is deferred until after tagmentation, rather than silently included in the input history."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Following tagmentation, the beads were washed twice with 150 μl cold WBI (ChIP version 1), RIPA (ChIP version 2), or TF-WBI (ChIP version 3). Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification.",
+                "support": "inferred",
+                "rationale": "Places recovery outside the selected incubation output. The immediate product is still the treated bead/chromatin preparation in its reaction mixture; retained crosslinks and continuity of the selected IP are inferred from this order."
+              },
+              {
+                "source_id": "chipmentation_author_protocol_v1",
+                "passage_id": "p00019",
+                "quote": "4. Remove tagmentation reaction and wash beads twice with WBI (ChIP version 1),",
+                "support": "reported",
+                "rationale": "Confirms reaction removal and WBI washing as subsequent handling, not an unrecorded purified-DNA output of tagment_v1."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00007",
+                "quote": "We reasoned that performing tagmentation directly on the immunoprecipitated and bead-bound chromatin would allow chromatin proteins to protect the DNA from excessive tagmentation.",
+                "support": "reported",
+                "rationale": "Retains the authors’ tentative protection rationale without converting it into universal measured protection or a mechanism shared with soluble cDNA."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00018",
+                "quote": "Kapa HiFi HotStart ReadyMix was incubated at 98°C for 45 s prior to preparation of the PCR reaction to activate the hot-start enzyme for successful nick translation in the first PCR step.",
+                "support": "reported",
+                "rationale": "The subsequent amplification includes nick translation. Together with the separate enzyme identification in p00016, this limits interpretation of the immediate product: exact loaded adapter strands, covalent end architecture and repaired-end sequence remain unresolved here and are not inferred from later primer or nick-translation descriptions."
+              }
+            ]
+          }
+        ],
+        "registry_revision": "2b516ccb102db5fc287c2de6f3fc404ec0b2026872dd3cfb5b71084ef1dfd6c7",
+        "decision": "new",
+        "aliases": [
+          "Preparation of sequencing-adapter-bearing DNA fragments"
+        ],
+        "scope_note": "Purpose-level retrieval of transformations that produce sequencing-adapter-bearing DNA fragments, across distinct materials and local operation boundaries. The ChIPmentation member includes both cold Tris washes and the on-bead reaction; the Drop-seq member retains all four independent cDNA reactions through their immediate outputs. Shared purpose covers these entire supplied transformations without deleting the preparatory handling or asserting a common complete mechanism. Observed coupled transposome fragmentation/tagging is retained on uses; simultaneity and enzyme identity are not defining requirements at this level. A wash alone, neutralization alone or downstream amplification alone does not establish the required conversion. Product end chemistry, quantitative recovery and barcode linkage require individual evidence. This category establishes neither experimental substitution, compatibility, ancestry, literature novelty nor an executable reaction recipe.",
+        "lookup_queries": [
+          "DNA cDNA chromatin transposase tagmentation fragmentation adapter addition"
+        ],
+        "distinction": "No existing definition is available. Admit one functional conversion category because it supports comparing preparation of adapter-bearing DNA fragments across assays; retain on-bead conditioning, chromatin/crosslink status, target attribution and recovery dependencies as properties. A separate label for version 1, antibody choice, bead reagent or 37°C recipe is unnecessary for this question. A shared-mechanism assignment across the supplied units would require accounting for the two washes as well as the reaction; a common tagmentation verb/enzyme family alone would not do so. The chosen shared-purpose claim accounts for all actions and asserts no equality or difference of complete mechanisms."
+      },
+      "case": {
+        "question": "Which selected sequencing-library transformations produce DNA fragments with introduced sequencing adapters, and how does preparation on antibody-enriched beads compare with preparation from amplified cDNA while preserving complete local handling?",
+        "existing_concept_ids": [],
+        "existing_plus_filters": "The frozen registry is empty (lookup returned total=0), so no existing concept plus filters can currently provide a reusable transformation anchor. Selection/property searches actually run were find 'Tris' --field operations --limit 6 (ChIPmentation only) and find '600' --field inputs --limit 6 (Drop-seq only). These demonstrate navigable implementation differences, subject to the tool’s lexical limitations. They support filtering a single purpose category by preparatory handling, substrate association and reaction multiplicity instead of creating labels for each material/condition combination. Properties alone can retrieve the two known examples but do not supply a common, evidence-defined input/action/output comparison across their different names. No narrower recipe category is requested.",
+        "filters_sufficient": false,
+        "lost_distinction_if_merged": "An undifferentiated tagmentation/identical-mechanism merge would hide the included solute-removal washes, bead/crosslink association, selected-IP provenance and still-bead-bound output. A generic library-preparation label would also lose the specific fragmentation-plus-adapter conversion. At the declared shared-purpose level these distinctions remain in the membership properties, so no narrower recipe category is needed.",
+        "properties_to_preserve": [
+          "Selected unit tagment_v1 spans beads_v1 after version 1 LiCl/WBIII washing through two cold Tris washes and enzyme incubation to tagged_beads_v1; no internal purified-DNA state is invented.",
+          "Input lineage: version 1 clarified sonicated chromatin, most precursor fragments 200–700 bp, 200 μl per IP. Upstream 1% paraformaldehyde fixation; crosslinks inferred to remain until later reversal. Precursor size is not immediate product size.",
+          "Retain H3K4me3 (1 μg/IP, Diagenode pAb-003-050) OR H3K27me3 (1 μg/IP, pAb-195-050) as separate selected-antibody alternatives, overnight 4°C IP; inherited selected-IP/sample/replicate provenance is contextual attribution rather than newly introduced cell identity.",
+          "Capture context: 20 μl Protein A or antibody-dependent Protein G magnetic beads, blocked overnight in 0.1% BSA/PBS and captured 2 h at 4°C. Chromatin is bead-associated at both selected interfaces.",
+          "Pre-input wash history WBI twice, WBII once, WBIII once (250 mM LiCl), with detergent/chelator context given in supplement p00039. Conventional final WBIV wash is deferred by the insertion boundary. Preparatory two cold 10 mM Tris-Cl pH 8.0 washes remove detergent, salts and EDTA; solution exchange is inferred without adding an unreported separation method.",
+          "Observed mechanism: Tn5-coupled DNA fragmentation and adapter tagging after the preparatory washes. Reaction 30 μl, 10 mM Tris pH 8.0, 5 mM MgCl2, 1 μl Nextera Tagment DNA Enzyme, 37°C 10 min in thermocycler. These values do not define the purpose category.",
+          "Immediate output retains the selected enriched bead/chromatin preparation in its reaction mixture, before reaction removal, two 150-μl WBI washes, final ChIP wash, elution, reverse-crosslinking and purification. It is not an eluted, repaired, amplified or size-selected final library.",
+          "Information effect: adapter sequence addition and changed DNA boundaries within the IP-selected population; direct material lineage supports IP attribution. No new cell barcode/UMI, universal preservation of all original fragments or quantitative recovery is asserted.",
+          "Authors’ chromatin-protein protection rationale is tentative as worded. Exact loaded transposase adapter strands, covalent end architecture/index content and complete nick-repair intermediate remain unresolved here; downstream primer designs and first-PCR nick translation do not establish the immediate enzyme payload."
+        ],
+        "boundary_examples": [
+          {
+            "occurrence_id": "chipmentation:82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0:11bab0194a97bc50edb7d892fba6b327035984a079ae592c41fe043cf54b48ba",
+            "membership": "member",
+            "reason": "The full selected unit removes detergent/salts/EDTA from LiCl-washed enriched beads, then introduces adapters by fragmenting bead-bound chromatin. Its immediate product remains a bead/chromatin reaction preparation before recovery. Preparatory washing is included rather than discarded to make the two selections appear mechanistically identical.",
+            "evidence": [
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "The chosen ChIP protocol was followed until the beads carrying immunoprecipitated chromatin were washed with LiCl-containing wash buffer (WBIII for ChIP version 1, RIPA-LiCl for ChIP version 2, and TF-WBIII for ChIP version 3, as described in the Supplementary Note).",
+                "support": "reported",
+                "rationale": "Locates the supplied version 1 input after WBIII and before Tris washing. References to other ChIP versions describe other routes; this assignment retains version 1 only."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Beads were then washed twice with 10 mM cold Tris-Cl pH 8.0 to remove detergent, salts, and EDTA.",
+                "support": "reported",
+                "rationale": "These two preparatory washes are consequential actions inside the supplied tagment_v1 selection. Their solute-removal purpose is reported; exchange of surrounding solution while retaining bead-associated chromatin is inferred. They remain part of this membership even though the shared category is defined by the library-preparation outcome."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+                "support": "reported",
+                "rationale": "Reports the on-bead reaction, Nextera reagent, buffer composition, volume, time and temperature. These are implementation properties, not required conditions for the purpose category."
+              },
+              {
+                "source_id": "chipmentation_original_supplement",
+                "passage_id": "p00005",
+                "quote": "In ChIPmentation (right), the sequencing adapters are introduced in a single step by tagmentation of bead-bound chromatin.",
+                "support": "reported",
+                "rationale": "Directly supports adapter introduction on bead-bound chromatin and its library-preparation function, the positive membership criterion."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Following tagmentation, the beads were washed twice with 150 μl cold WBI (ChIP version 1), RIPA (ChIP version 2), or TF-WBI (ChIP version 3). Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification.",
+                "support": "inferred",
+                "rationale": "Places recovery outside the selected incubation output. The immediate product is still the treated bead/chromatin preparation in its reaction mixture; retained crosslinks and continuity of the selected IP are inferred from this order."
+              }
+            ]
+          },
+          {
+            "occurrence_id": "drop_seq_macosko_2015:dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60:82b713bb843a8c90859f1cc1d80a9ee85c34e742114f9cac7bd65f02da839ad5",
+            "membership": "member",
+            "reason": "Four separate 600-pg amplified-cDNA aliquots undergo delegated standard Nextera XT fragmentation and adapter addition for sequencing. The manufacturer mechanism is contextual support for the delegated conversion. All four direct products remain separate reaction mixtures before neutralization and custom 3′-end PCR; they are not four cell identities or a pooled final library.",
+            "evidence": [
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00007",
+                "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+                "support": "reported",
+                "rationale": "Reports the purpose, four distinct 600-pg inputs and four reactions. All four branches are members of this one supplied occurrence; they are not pooled at the selected output, assigned to individual cells, or replaced by the guide’s generic 1-ng input."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00008",
+                "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+                "support": "reported",
+                "rationale": "Completes p00007’s delegation to standard Nextera XT with the original custom-primer modification. It supports contextual use of the registered guide but does not identify the historical guide revision or reaction worksheet."
+              },
+              {
+                "source_id": "illumina_nextera_xt_2014_revD",
+                "passage_id": "p00002",
+                "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+                "support": "inferred",
+                "rationale": "The manufacturer reports coupled fragmentation and end-adapter addition. Applying that mechanism and intermediate-product interpretation to the paper’s delegated Nextera XT cDNA reactions is inferred from supplement p00007–p00008; it supports the shared purpose without establishing the historical revision or equality of whole selected mechanisms."
+              },
+              {
+                "source_id": "illumina_nextera_xt_2014_revD",
+                "passage_id": "p00004",
+                "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+                "support": "reported",
+                "rationale": "Reports the registered guide’s heated-lid thermal program and still-active reaction before immediate neutralization. These are manufacturer context, not independently verified historical Drop-seq conditions; neutralization is downstream of the selected tagmentation boundary."
+              },
+              {
+                "source_id": "macosko2015_primary",
+                "passage_id": "p00035",
+                "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+                "support": "reported",
+                "rationale": "Reports original fragmentation and the downstream custom 3′-end amplification function. The complete tagmentation mixture includes fragments outside the subsequently selected 3′ subset; the selected transformation itself does not perform that PCR selection."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00008",
+                "quote": "The samples were then amplified as follows: 95 oC for 30 sec; 11 cycles of 95 oC for 10 sec, 55 oC for 30 sec, 72 oC for 30 sec; then a final extension step of 72 oC for 5 min. Pairs of the 4 aliquots were pooled together, and then purified using 0.6x Agencourt AMPure XP Beads according to the manufacturer’s instructions, and eluted in 10 μL of water.",
+                "support": "reported",
+                "rationale": "Places custom library PCR, pairwise pooling and cleanup downstream. The four direct tagmentation products remain separate reaction mixtures at the supplied output."
+              }
+            ]
+          }
+        ],
+        "revision_requests": []
+      },
+      "explanation": "New shared-purpose assignment for the complete selected unit, including both Tris washes and the enzyme reaction. Both supplied selections are positive boundary examples; this cohort provides no source-demonstrated negative example, so none is invented. The comparison annotations were treated as unreviewed interpretations: reported bead/target context, inferred retained crosslinks/provenance and unknown end architecture were checked against reopened original passages. The relevant payload gap limits chemistry and substitution claims. Other inherited gaps concerning IgG control matching, production-PCR waveform, replicate thresholds or peak-calling representations are outside this selected transformation and supply no membership premise."
+    },
+    {
+      "occurrence_id": "drop_seq_macosko_2015:dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60:82b713bb843a8c90859f1cc1d80a9ee85c34e742114f9cac7bd65f02da839ad5",
+      "assignment": {
+        "format_version": "concept_assignment/1.0",
+        "definition": {
+          "id": "dna_fragmentation_and_adapter_introduction_for_sequencing",
+          "name": "DNA fragmentation and sequencing-adapter introduction",
+          "substrate": "DNA-bearing material entering sequencing-library preparation, including enriched bead-bound chromatin or purified amplified cDNA; retain each use’s material association and separate reaction branches.",
+          "operation": "Convert the supplied DNA-bearing material into fragments bearing introduced sequencing-adapter sequence for subsequent library processing. Account for preparatory substrate handling included in the selected unit, such as washing bead-bound chromatin before the fragmentation/tagging reaction.",
+          "physical_mechanism": null,
+          "mechanism_unknown_reason": "This is a shared-purpose definition at the input-to-adapter-bearing-fragment stage. No common mechanism for the entire selected units is asserted. Individual uses retain their supported mechanisms: ChIPmentation includes solute-removal washes followed by Tn5 tagmentation; Drop-seq delegates Nextera XT transposome tagmentation. Null does not mean either individual reaction mechanism is scientifically unknown, nor does this relation assert that the mechanisms are equal or different.",
+          "output": "Reaction products containing DNA fragments with introduced sequencing-adapter sequence, with bead association, mixture composition, provenance and branch multiplicity retained as applicable; an intermediate for later library recovery and/or amplification.",
+          "information_effect": "Changes DNA fragment boundaries and adds adapter sequence that supplies an interface to subsequent sequencing-library processing. Retention or disruption of pre-existing biological attribution and molecular-identifier linkage is assessed on each use and relevant fragment subset; universal quantitative information retention is not assumed.",
+          "purpose": "Produce sequencing-adapter-bearing DNA fragments from the selected DNA-containing input for subsequent sequencing-library construction.",
+          "context_requirements": "Membership requires evidence for both DNA fragmentation and sequencing-adapter introduction within the selected input-to-output unit, and their sequencing-library function. Include any preparatory actions actually inside that unit. Preserve substrate form, conditioning, branch structure, identity carriers, output association and downstream dependencies on each use. Exact support, enzyme brand, dose, buffer, timing and assay position are implementation properties rather than membership requirements."
+        },
+        "relation": "shared_purpose",
+        "members": [
+          {
+            "occurrence_id": "drop_seq_macosko_2015:dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60:82b713bb843a8c90859f1cc1d80a9ee85c34e742114f9cac7bd65f02da839ad5",
+            "occurrence_sha256": "1bc54bcbcb9ba5aa61d021db4aa14a5f75e60f9a2beda55dbd2d5c5a1617461e",
+            "rationale": "The entire supplied tagmentation unit converts each of four separate 600-pg amplified-cDNA aliquots into adapter-bearing fragment reaction products for downstream 3′-end library construction. Original standard Nextera XT delegation plus registered manufacturer explanation support the conversion; applying the guide’s molecular mechanism to the original intermediate is an inference. All four branches and products outside the later selected 3′ subset are retained. Barcode/UMI linkage is inherited on relevant end-containing fragments rather than introduced per aliquot. The relevant nextera_revision_and_input_volume parent context is addressed by cited original input/delegation and guide passages: Rev.D explains the delegated architecture, but does not establish original reaction volumes, revision or exact thermal/stop settings. That uncertainty qualifies implementation claims and does not negate the source-supported shared library-preparation purpose.",
+            "evidence": [
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00007",
+                "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+                "support": "reported",
+                "rationale": "Reports the purpose, four distinct 600-pg inputs and four reactions. All four branches are members of this one supplied occurrence; they are not pooled at the selected output, assigned to individual cells, or replaced by the guide’s generic 1-ng input."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00007",
+                "quote": "Pairs of aliquots were pooled together after PCR and purified with 0.6x Agencourt AMPure XP beads (Beckman Coulter, cat # A63881) according to the manufacturer’s instructions, and eluted in 10 μL of H2O. Aliquots were pooled according to the number of STAMPs to be sequenced, and the concentration of the pool quantified on a BioAnalyzer High Sensitivity Chip (Agilent Technologies, cat # 5067-4626).",
+                "support": "inferred",
+                "rationale": "Identifies the parent as purified, water-eluted amplified cDNA in a quantified bulk pool. Four reaction aliquots are subsequent physical subdivisions of that pool; the purified soluble interface and double-stranded PCR-product form are inferred from this lineage, not a four-cell or four-bead interface."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00008",
+                "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+                "support": "reported",
+                "rationale": "Completes p00007’s delegation to standard Nextera XT with the original custom-primer modification. It supports contextual use of the registered guide but does not identify the historical guide revision or reaction worksheet."
+              },
+              {
+                "source_id": "illumina_nextera_xt_2014_revD",
+                "passage_id": "p00002",
+                "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+                "support": "inferred",
+                "rationale": "The manufacturer reports coupled fragmentation and end-adapter addition. Applying that mechanism and intermediate-product interpretation to the paper’s delegated Nextera XT cDNA reactions is inferred from supplement p00007–p00008; it supports the shared purpose without establishing the historical revision or equality of whole selected mechanisms."
+              },
+              {
+                "source_id": "illumina_nextera_xt_2014_revD",
+                "passage_id": "p00003",
+                "quote": "2 Add 10 μl TD Buffer to each well to be used in this assay. Change tips between samples. 3 Add 5 μl input DNA at 0.2 ng/μl (1 ng total) to each sample well of the NTA plate. NOTE It is critical to use the full amount of input DNA. 4 Using a multichannel pipette, gently pipette up and down 5 times to mix. Change tips between samples. 5 Add 5 μl ATM to the wells containing input DNA and TD Buffer.",
+                "support": "reported",
+                "rationale": "Reports Rev.D context: TD 10 μl and ATM 5 μl with a generic 1-ng/5-μl DNA input. The paper instead reports 600 pg; historical DNA input volume, total volume and exact reagent volumes remain unknown. This context note qualifies the member rather than overriding its original input."
+              },
+              {
+                "source_id": "illumina_nextera_xt_2014_revD",
+                "passage_id": "p00004",
+                "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+                "support": "reported",
+                "rationale": "Reports the registered guide’s heated-lid thermal program and still-active reaction before immediate neutralization. These are manufacturer context, not independently verified historical Drop-seq conditions; neutralization is downstream of the selected tagmentation boundary."
+              },
+              {
+                "source_id": "macosko2015_primary",
+                "passage_id": "p00035",
+                "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+                "support": "reported",
+                "rationale": "Reports original fragmentation and the downstream custom 3′-end amplification function. The complete tagmentation mixture includes fragments outside the subsequently selected 3′ subset; the selected transformation itself does not perform that PCR selection."
+              },
+              {
+                "source_id": "macosko2015_primary",
+                "passage_id": "p00084",
+                "quote": "Each microparticle contains more than 10^(8) individual primers that share the same “cell barcode” (panel C) but have different unique molecular identifiers (UMIs), enabling mRNA transcripts to be digitally counted (panel D).",
+                "support": "inferred",
+                "rationale": "Barcodes and UMIs originate upstream in bead primers. Their inheritance in the amplified input and relevant end-containing fragments is inferred with the PCR lineage and later paired readout; tagmentation does not create a new cell identity per aliquot."
+              },
+              {
+                "source_id": "macosko2015_primary",
+                "passage_id": "p00085",
+                "quote": "The mRNAs are then reverse-transcribed in bulk, forming STAMPs, and template switching is used to introduce a PCR handle downstream of the synthesized cDNA (Zhu et al., 2001).",
+                "support": "inferred",
+                "rationale": "Provides upstream template-switch handle context for the amplified cDNA. Retention of inherited priming sequences at this input follows from its PCR lineage, rather than a new priming handle attributed to the tagmentation aliquot."
+              },
+              {
+                "source_id": "macosko2015_primary",
+                "passage_id": "p00085",
+                "quote": "The first read yields the cell barcode and UMI. The second, paired read interrogates sequence from the cDNA (50 bp is typically sequenced); this sequence is then aligned to the genome to determine a transcript’s gene of origin.",
+                "support": "inferred",
+                "rationale": "Together with fragmentation and later 3′-specific amplification, supports useful barcode/UMI-to-transcript linkage on retained end-containing products. It does not establish retention on every immediate fragment or quantify molecular loss."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00008",
+                "quote": "Read 1 was 20 bp (bases 1-12 cell barcode, bases 13-20 UMI); read 2 (paired end) was 50 bp for the human-mouse experiment, and 60 bp for the retina experiment.",
+                "support": "reported",
+                "rationale": "Reports the later barcode/UMI lengths and paired readout. These identify inherited molecular information, not tagmentation-created identities or per-aliquot cell counts."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00008",
+                "quote": "The samples were then amplified as follows: 95 oC for 30 sec; 11 cycles of 95 oC for 10 sec, 55 oC for 30 sec, 72 oC for 30 sec; then a final extension step of 72 oC for 5 min. Pairs of the 4 aliquots were pooled together, and then purified using 0.6x Agencourt AMPure XP Beads according to the manufacturer’s instructions, and eluted in 10 μL of water.",
+                "support": "reported",
+                "rationale": "Places custom library PCR, pairwise pooling and cleanup downstream. The four direct tagmentation products remain separate reaction mixtures at the supplied output."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00008",
+                "quote": "The two 10 μL aliquots were combined together and the concentration determined using a BioAnayzer High Sensitivity Chip. The average size of sequenced libraries was between 450 and 650 bp.",
+                "support": "reported",
+                "rationale": "Reports final combined library context only. It cannot establish the immediate pre-neutralization fragment-size/adapter-junction distribution or quantitative barcode-linked product retention."
+              }
+            ]
+          }
+        ],
+        "registry_revision": "2b516ccb102db5fc287c2de6f3fc404ec0b2026872dd3cfb5b71084ef1dfd6c7",
+        "decision": "new",
+        "aliases": [
+          "Preparation of sequencing-adapter-bearing DNA fragments"
+        ],
+        "scope_note": "Purpose-level retrieval of transformations that produce sequencing-adapter-bearing DNA fragments, across distinct materials and local operation boundaries. The ChIPmentation member includes both cold Tris washes and the on-bead reaction; the Drop-seq member retains all four independent cDNA reactions through their immediate outputs. Shared purpose covers these entire supplied transformations without deleting the preparatory handling or asserting a common complete mechanism. Observed coupled transposome fragmentation/tagging is retained on uses; simultaneity and enzyme identity are not defining requirements at this level. A wash alone, neutralization alone or downstream amplification alone does not establish the required conversion. Product end chemistry, quantitative recovery and barcode linkage require individual evidence. This category establishes neither experimental substitution, compatibility, ancestry, literature novelty nor an executable reaction recipe.",
+        "lookup_queries": [
+          "DNA cDNA chromatin transposase tagmentation fragmentation adapter addition"
+        ],
+        "distinction": "Uses exactly the same new definition as ChIPmentation against the same frozen pre-commit registry. The reusable distinction is the fragmentation-plus-adapter outcome within sequencing-library construction. Purified amplified cDNA, four 600-pg reactions, inherited cell barcodes/UMIs and downstream selective PCR remain filters/properties rather than separate category names. Similar reaction terminology does not establish a common entire mechanism with ChIPmentation’s included washes. The registered guide’s generic inputs and conditions cannot replace the original experiment’s reported input or resolve its historical recipe."
+      },
+      "case": {
+        "question": "Which selected transformations prepare adapter-bearing DNA fragments for sequencing, and how does a four-reaction, barcode-bearing amplified-cDNA input compare with the on-bead chromatin route without collapsing aliquots or assigning PCR selection to tagmentation?",
+        "existing_concept_ids": [],
+        "existing_plus_filters": "The frozen registry is empty (lookup returned total=0), so no existing concept plus filters can currently provide a reusable transformation anchor. Selection/property searches actually run were find 'Tris' --field operations --limit 6 (ChIPmentation only) and find '600' --field inputs --limit 6 (Drop-seq only). These demonstrate navigable implementation differences, subject to the tool’s lexical limitations. They support filtering a single purpose category by preparatory handling, substrate association and reaction multiplicity instead of creating labels for each material/condition combination. Properties alone can retrieve the two known examples but do not supply a common, evidence-defined input/action/output comparison across their different names. No narrower recipe category is requested.",
+        "filters_sufficient": false,
+        "lost_distinction_if_merged": "An unqualified merge would erase four separate aliquot-to-product lineages, the soluble amplified-cDNA interface, pre-existing barcode/UMI linkage limited to relevant end fragments, and the later rather than immediate 3′-selection/pooling boundary. Treating kit context as the original recipe would also erase historical revision/volume uncertainty. These distinctions are preserved on this use of the common purpose definition; a generic sequencing-preparation label would lose the fragmentation-plus-adapter outcome.",
+        "properties_to_preserve": [
+          "Selected unit tagmentation consumes nextera_inputs and produces tagged_cdna; retains FOUR distinct 600-pg physical aliquots from the same quantified, purified amplified-cDNA parent pool and FOUR direct reaction products. Unused parent material is not duplicated into aliquots.",
+          "Parent is STAMP-derived cDNA amplified in bulk, cleaned with 0.6x AMPure XP, water eluted and pooled according to intended STAMP number before quantification. Soluble bulk and double-stranded PCR-product form at the selected input are inferred from this lineage; an aliquot is not one cell or one bead.",
+          "Observed mechanism is Nextera XT transposome-coupled fragmentation and adapter-end addition, inferred for the original reaction from explicit standard-kit delegation and the registered guide. Original kit FC-131-1096; no unsupported additional enzyme identity, cut-site rule or independent ligation intermediate is added.",
+          "Upstream 12-base cell barcode, 8-base UMI and bead/template-switch priming-handle information are inherited in amplified cDNA. Relevant end-containing fragments can retain barcode/UMI-to-transcript linkage; fragmentation can separate other transcript sequence from that end. Every immediate fragment is not claimed to carry complete identifiers.",
+          "Immediate output is four separate adapter-tagged cDNA reaction mixtures before neutralization and later custom library PCR. Products outside the later selected 3′-end subset remain part of the selected output. Pairwise pooling occurs only after subsequent PCR, with final two-aliquot combination after cleanup.",
+          "Registered Rev.D manufacturer context: TD 10 μl, ATM 5 μl, heated lid, 55°C 5 min, then 10°C hold and immediate neutralization while transposome remains active. Guide generic 1-ng/5-μl input does not replace original 600 pg. Actual historical guide revision, DNA input volume/concentration, total/reagent volumes and thermal/stop implementation remain unverified.",
+          "Original downstream context: 200 nM P5_TSO_Hybrid and Nextera_N701 replace kit oligonucleotides; 11-cycle library PCR supplies 3′-end selection, then pairwise pooling, 0.6x AMPure cleanup, 10-μl water elution and later combination. These operations are not silently included in the selected tagmentation unit.",
+          "Quantitative retention of useful barcode-linked molecules, per-molecule cut positions, immediate fragment-size/adapter-junction distribution and yield remain unknown here. Reported 450–650-bp average sizes describe later sequenced libraries after PCR and cleanup, not this intermediate."
+        ],
+        "boundary_examples": [
+          {
+            "occurrence_id": "chipmentation:82e74cf368aafba6bdfeeeb4886c9a9433283bb0dfe6cb1ac60dd5d13b18ace0:11bab0194a97bc50edb7d892fba6b327035984a079ae592c41fe043cf54b48ba",
+            "membership": "member",
+            "reason": "The full selected unit removes detergent/salts/EDTA from LiCl-washed enriched beads, then introduces adapters by fragmenting bead-bound chromatin. Its immediate product remains a bead/chromatin reaction preparation before recovery. Preparatory washing is included rather than discarded to make the two selections appear mechanistically identical.",
+            "evidence": [
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "The chosen ChIP protocol was followed until the beads carrying immunoprecipitated chromatin were washed with LiCl-containing wash buffer (WBIII for ChIP version 1, RIPA-LiCl for ChIP version 2, and TF-WBIII for ChIP version 3, as described in the Supplementary Note).",
+                "support": "reported",
+                "rationale": "Locates the supplied version 1 input after WBIII and before Tris washing. References to other ChIP versions describe other routes; this assignment retains version 1 only."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Beads were then washed twice with 10 mM cold Tris-Cl pH 8.0 to remove detergent, salts, and EDTA.",
+                "support": "reported",
+                "rationale": "These two preparatory washes are consequential actions inside the supplied tagment_v1 selection. Their solute-removal purpose is reported; exchange of surrounding solution while retaining bead-associated chromatin is inferred. They remain part of this membership even though the shared category is defined by the library-preparation outcome."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Subsequently, beads were resuspended in 30 μl of the tagmentation reaction buffer (10 mM Tris, pH 8.0, 5 mM MgCl_(2)) containing 1 μl Tagment DNA Enzyme from the Nextera DNA Sample Prep Kit (Illumina) and incubated at 37°C for 10 minutes in a thermocycler.",
+                "support": "reported",
+                "rationale": "Reports the on-bead reaction, Nextera reagent, buffer composition, volume, time and temperature. These are implementation properties, not required conditions for the purpose category."
+              },
+              {
+                "source_id": "chipmentation_original_supplement",
+                "passage_id": "p00005",
+                "quote": "In ChIPmentation (right), the sequencing adapters are introduced in a single step by tagmentation of bead-bound chromatin.",
+                "support": "reported",
+                "rationale": "Directly supports adapter introduction on bead-bound chromatin and its library-preparation function, the positive membership criterion."
+              },
+              {
+                "source_id": "batch27_chipmentation_main",
+                "passage_id": "p00016",
+                "quote": "Following tagmentation, the beads were washed twice with 150 μl cold WBI (ChIP version 1), RIPA (ChIP version 2), or TF-WBI (ChIP version 3). Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification.",
+                "support": "inferred",
+                "rationale": "Places recovery outside the selected incubation output. The immediate product is still the treated bead/chromatin preparation in its reaction mixture; retained crosslinks and continuity of the selected IP are inferred from this order."
+              }
+            ]
+          },
+          {
+            "occurrence_id": "drop_seq_macosko_2015:dbf26b8feffe1ae14af7c136249844213dba7208022877b9fe4c9099a6d6bf60:82b713bb843a8c90859f1cc1d80a9ee85c34e742114f9cac7bd65f02da839ad5",
+            "membership": "member",
+            "reason": "Four separate 600-pg amplified-cDNA aliquots undergo delegated standard Nextera XT fragmentation and adapter addition for sequencing. The manufacturer mechanism is contextual support for the delegated conversion. All four direct products remain separate reaction mixtures before neutralization and custom 3′-end PCR; they are not four cell identities or a pooled final library.",
+            "evidence": [
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00007",
+                "quote": "To prepare 3’-end cDNA fragments for sequencing, four aliquots of 600 pg of cDNA were used as input in four standard Nextera XT tagmentation reactions (Illumina, cat #FC-131-1096), performed",
+                "support": "reported",
+                "rationale": "Reports the purpose, four distinct 600-pg inputs and four reactions. All four branches are members of this one supplied occurrence; they are not pooled at the selected output, assigned to individual cells, or replaced by the guide’s generic 1-ng input."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00008",
+                "quote": "according to the manufacturer’s instructions except that 200 nM of the custom primers P5_TSO_Hybrid and Nextera_N701 (Table S6) were used in place of the kit’s provided oligonucleotides.",
+                "support": "reported",
+                "rationale": "Completes p00007’s delegation to standard Nextera XT with the original custom-primer modification. It supports contextual use of the registered guide but does not identify the historical guide revision or reaction worksheet."
+              },
+              {
+                "source_id": "illumina_nextera_xt_2014_revD",
+                "passage_id": "p00002",
+                "quote": "During this step, input DNA is tagmented (tagged and fragmented) by the Nextera XT transposome. The Nextera XT transposome simultaneously fragments the input DNA and adds adapter sequences to the ends, allowing amplification by PCR in subsequent steps.",
+                "support": "inferred",
+                "rationale": "The manufacturer reports coupled fragmentation and end-adapter addition. Applying that mechanism and intermediate-product interpretation to the paper’s delegated Nextera XT cDNA reactions is inferred from supplement p00007–p00008; it supports the shared purpose without establishing the historical revision or equality of whole selected mechanisms."
+              },
+              {
+                "source_id": "illumina_nextera_xt_2014_revD",
+                "passage_id": "p00004",
+                "quote": "9 Place the NTA plate in a thermal cycler and run the following program: NOTE Make sure that the thermal cycler lid is heated during the incubation. • 55°C for 5 minutes • Hold at 10°C. 10 When the sample reaches 10°C, proceed immediately to Neutralize NTA as the transposome is still active.",
+                "support": "reported",
+                "rationale": "Reports the registered guide’s heated-lid thermal program and still-active reaction before immediate neutralization. These are manufacturer context, not independently verified historical Drop-seq conditions; neutralization is downstream of the selected tagmentation boundary."
+              },
+              {
+                "source_id": "macosko2015_primary",
+                "passage_id": "p00035",
+                "quote": "The cDNA was fragmented and amplified for sequencing with the Nextera XT DNA sample prep kit (Illumina) using custom primers that enabled the specific amplification of only the 3’ ends (Table S6).",
+                "support": "reported",
+                "rationale": "Reports original fragmentation and the downstream custom 3′-end amplification function. The complete tagmentation mixture includes fragments outside the subsequently selected 3′ subset; the selected transformation itself does not perform that PCR selection."
+              },
+              {
+                "source_id": "macosko2015_supplement",
+                "passage_id": "p00008",
+                "quote": "The samples were then amplified as follows: 95 oC for 30 sec; 11 cycles of 95 oC for 10 sec, 55 oC for 30 sec, 72 oC for 30 sec; then a final extension step of 72 oC for 5 min. Pairs of the 4 aliquots were pooled together, and then purified using 0.6x Agencourt AMPure XP Beads according to the manufacturer’s instructions, and eluted in 10 μL of water.",
+                "support": "reported",
+                "rationale": "Places custom library PCR, pairwise pooling and cleanup downstream. The four direct tagmentation products remain separate reaction mixtures at the supplied output."
+              }
+            ]
+          }
+        ],
+        "revision_requests": []
+      },
+      "explanation": "New assignment to the same purpose definition, ID, relation, scope and aliases as the other decision; no intermediate registry commit is simulated. All four original inputs and immediate products remain represented, including fragments that later custom PCR will exclude. Manufacturer mechanism is contextual, with application to the original intermediate marked inferred; historical guide revision and reaction volumes remain unknown. The shared-purpose relation makes no common complete-mechanism claim and no substitution claim. Annotation unknowns about quantitative identifier retention and intermediate distribution remain unknown. Other inherited gaps about fabrication, bead synthesis, cell concentrations, early RT/PCR details, sequencing configuration, decoding and characterization do not determine this selection’s purpose membership."
+    }
+  ]
+}

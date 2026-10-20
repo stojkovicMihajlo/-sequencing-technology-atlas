@@ -326,7 +326,7 @@ credential mount or unbounded supervisor is introduced.
 
 ### D19 — Give preparation and inference explicit temporary cache locations
 
-**Observed:** attempt01/job48601586 passed the complete Linux suite (1,584 passed,
+**Observed:** attempt 01 / job 48601586 passed the complete Linux suite (1,584 passed,
 8 skipped), its six bridge checks, and dependency installation, then failed in
 Hugging Face Xet download with a read-only-filesystem error. No native agents ran.
 The model cache directory alone does not cover Hugging Face's separate global
@@ -345,6 +345,19 @@ change scientific prompts in response to an environment error. Those actions
 would not address the correct failure boundary. The inference bridge retains
 read-only code/model/environment mounts and ephemeral cache paths; native Codex
 policy and the scientific comparison task remain unchanged.
+
+**Result:** attempt 02 / job 48603557 completed in 20 minutes, with the four
+scientific sessions and original requested model/effort. Two profiles fed a
+compiler and fresh reviewer; one shared-purpose definition with two memberships
+was admitted to the isolated experiment registry. Exact scientific prompts,
+artifacts, transport records and archive pins are in the
+[native result](../../examples/semantic_alignment_pilot/native_result/README.md).
+Actual embeddings passed a synthetic-neighbor functional check; the native run
+does not measure large-catalogue candidate recall or include a separate definition-pair
+comparison stage. A pure graph projection preserved every original workflow and
+added only concept-layer links; it was not a new source-reopened canonical graph
+publication. These results support the implementation path, not an optimal
+embedding model, scientific accuracy estimate or assay interchangeability.
 
 ## Verification and falsifiers
 

@@ -1,0 +1,447 @@
+{
+  "$defs": {
+    "AdmissionCase": {
+      "additionalProperties": false,
+      "properties": {
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "existing_concept_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Existing Concept Ids",
+          "type": "array"
+        },
+        "existing_plus_filters": {
+          "minLength": 1,
+          "title": "Existing Plus Filters",
+          "type": "string"
+        },
+        "filters_sufficient": {
+          "title": "Filters Sufficient",
+          "type": "boolean"
+        },
+        "lost_distinction_if_merged": {
+          "minLength": 1,
+          "title": "Lost Distinction If Merged",
+          "type": "string"
+        },
+        "properties_to_preserve": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Properties To Preserve",
+          "type": "array"
+        },
+        "boundary_examples": {
+          "items": {
+            "$ref": "#/$defs/BoundaryExample"
+          },
+          "title": "Boundary Examples",
+          "type": "array"
+        },
+        "revision_requests": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/RevisionRequest"
+          },
+          "title": "Revision Requests",
+          "type": "array"
+        }
+      },
+      "required": [
+        "question",
+        "existing_concept_ids",
+        "existing_plus_filters",
+        "filters_sufficient",
+        "lost_distinction_if_merged",
+        "properties_to_preserve",
+        "boundary_examples"
+      ],
+      "title": "AdmissionCase",
+      "type": "object"
+    },
+    "Assignment": {
+      "additionalProperties": false,
+      "description": "One new contextual use; creating a concept does not need two methods.",
+      "properties": {
+        "format_version": {
+          "const": "concept_assignment/1.0",
+          "default": "concept_assignment/1.0",
+          "title": "Format Version",
+          "type": "string"
+        },
+        "definition": {
+          "$ref": "#/$defs/TransformationDefinition"
+        },
+        "relation": {
+          "enum": [
+            "shared_purpose",
+            "shared_mechanism"
+          ],
+          "title": "Relation",
+          "type": "string"
+        },
+        "members": {
+          "items": {
+            "$ref": "#/$defs/Membership"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "title": "Members",
+          "type": "array"
+        },
+        "registry_revision": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Registry Revision",
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "reuse",
+            "new"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "aliases": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "scope_note": {
+          "minLength": 1,
+          "title": "Scope Note",
+          "type": "string"
+        },
+        "lookup_queries": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Lookup Queries",
+          "type": "array"
+        },
+        "distinction": {
+          "description": "Why this definition fits and nearby definitions do not; state context differences without assuming interchangeability.",
+          "minLength": 1,
+          "title": "Distinction",
+          "type": "string"
+        }
+      },
+      "required": [
+        "definition",
+        "relation",
+        "members",
+        "registry_revision",
+        "decision",
+        "scope_note",
+        "lookup_queries",
+        "distinction"
+      ],
+      "title": "Assignment",
+      "type": "object"
+    },
+    "BoundaryExample": {
+      "additionalProperties": false,
+      "properties": {
+        "occurrence_id": {
+          "minLength": 1,
+          "title": "Occurrence Id",
+          "type": "string"
+        },
+        "membership": {
+          "enum": [
+            "member",
+            "non_member",
+            "unknown"
+          ],
+          "title": "Membership",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "occurrence_id",
+        "membership",
+        "reason",
+        "evidence"
+      ],
+      "title": "BoundaryExample",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "passage_id": {
+          "minLength": 1,
+          "title": "Passage Id",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 600,
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "support": {
+          "enum": [
+            "reported",
+            "inferred"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "passage_id",
+        "quote",
+        "support",
+        "rationale"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "LabelDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "occurrence_id": {
+          "minLength": 1,
+          "title": "Occurrence Id",
+          "type": "string"
+        },
+        "assignment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Assignment"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "case": {
+          "$ref": "#/$defs/AdmissionCase"
+        },
+        "explanation": {
+          "minLength": 1,
+          "title": "Explanation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "occurrence_id",
+        "assignment",
+        "case",
+        "explanation"
+      ],
+      "title": "LabelDecision",
+      "type": "object"
+    },
+    "Membership": {
+      "additionalProperties": false,
+      "properties": {
+        "occurrence_id": {
+          "minLength": 1,
+          "title": "Occurrence Id",
+          "type": "string"
+        },
+        "occurrence_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Occurrence Sha256",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "occurrence_id",
+        "occurrence_sha256",
+        "rationale",
+        "evidence"
+      ],
+      "title": "Membership",
+      "type": "object"
+    },
+    "RevisionRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "concept_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Concept Ids",
+          "type": "array"
+        },
+        "action": {
+          "enum": [
+            "broaden",
+            "split",
+            "merge",
+            "clarify"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "concept_ids",
+        "action",
+        "reason"
+      ],
+      "title": "RevisionRequest",
+      "type": "object"
+    },
+    "TransformationDefinition": {
+      "additionalProperties": false,
+      "description": "Reusable scientific interpretation; each contextual membership needs evidence.",
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "substrate": {
+          "minLength": 1,
+          "title": "Substrate",
+          "type": "string"
+        },
+        "operation": {
+          "minLength": 1,
+          "title": "Operation",
+          "type": "string"
+        },
+        "physical_mechanism": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Physical Mechanism"
+        },
+        "mechanism_unknown_reason": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mechanism Unknown Reason"
+        },
+        "output": {
+          "minLength": 1,
+          "title": "Output",
+          "type": "string"
+        },
+        "information_effect": {
+          "minLength": 1,
+          "title": "Information Effect",
+          "type": "string"
+        },
+        "purpose": {
+          "minLength": 1,
+          "title": "Purpose",
+          "type": "string"
+        },
+        "context_requirements": {
+          "minLength": 1,
+          "title": "Context Requirements",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "substrate",
+        "operation",
+        "physical_mechanism",
+        "output",
+        "information_effect",
+        "purpose",
+        "context_requirements"
+      ],
+      "title": "TransformationDefinition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "decisions": {
+      "items": {
+        "$ref": "#/$defs/LabelDecision"
+      },
+      "minItems": 1,
+      "title": "Decisions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "decisions"
+  ],
+  "title": "VocabularyProposal",
+  "type": "object"
+}

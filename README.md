@@ -14,10 +14,15 @@ optional semantic registry retrieval while preserving each method's own graph.
 [pinned reference implementations](docs/REFERENCE_IMPLEMENTATIONS.json) are tracked
 with the code. Similarity does not admit a shared component or a historical edge.
 
-The complete Qiu Linux check also passed **1,584 tests, 8 skipped**. The native
-two-method diagnostic is submitted as job **48603557** after two preserved setup
-failures (host wheel compatibility, then a container download-cache path).
-No native completion or scientific matching accuracy is claimed. The active
+The complete Qiu Linux check also passed **1,584 tests, 8 skipped**. Native Qiu
+job **48603557 completed in 20 minutes**: four fresh `gpt-6.1-sol` / `xhigh`
+sessions produced two comparison profiles, then compiled and independently reviewed
+**one shared-purpose definition with two memberships** in an isolated registry.
+The example links DNA fragmentation and sequencing-adapter introduction across
+ChIPmentation and Drop-seq; it asserts no whole-unit mechanism identity,
+interchangeability or ancestry. [Exact prompts, outputs and interpretation](examples/semantic_alignment_pilot/native_result/README.md)
+are preserved, alongside two earlier environment failures. This is a two-method
+development check, not an atlas-wide accuracy or invention benchmark. The active
 default remains the earlier frozen `targeted_selection_18` runtime.
 Earlier extractions, graph publications and live controls remain preserved in
 [current status](docs/STATUS.md). See also
