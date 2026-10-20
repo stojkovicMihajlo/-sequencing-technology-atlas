@@ -1,5 +1,45 @@
 # Runbook
 
+## Read the reusable harness
+
+Start with the public command handlers, then follow their calls:
+
+| Read | Question it answers |
+|---|---|
+| `src/genomics_discovery/curation/workflow_extraction/__main__.py`, `prepare` branch | How do document files become a registered source packet? |
+| `src/genomics_discovery/curation/workflow_extraction/sources.py`, `build_packet()` | What text, passage IDs, scope and file hashes does that packet contain? |
+| `src/genomics_discovery/curation/extraction_batch/__main__.py` | How do I plan, run and inspect an arbitrary extraction inventory? |
+| `src/genomics_discovery/curation/extraction_batch/controller.py`, `plan()` and `run()` | How are inputs frozen, concurrent sessions controlled and results retained? |
+| `src/genomics_discovery/curation/workflow_extraction/runtime.py`, `execute()` | How does one method pass through extraction, fresh review and a bounded correction? |
+
+The input records have distinct jobs:
+
+```text
+Source manifest: method identity, scope and document file locations
+    -> prepare
+Source packet: registered document text, passage IDs and file hashes
+    -> listed in an extraction inventory
+Inventory: method job IDs and their source-packet locations
+    -> plan
+Plan: frozen inventory, execution settings, source and implementation hashes
+    -> run
+Per-method workflow, review, state and reading views
+```
+
+A source packet contains literature evidence, not a previously extracted protocol.
+An existing packet whose scope and source versions are already correct can be
+listed directly in an inventory. No packet rebuilding is required on every run.
+New papers change the manifests/inventory. A new file format, parsing defect or
+general extraction requirement can require a shared preprocessing/harness change;
+evaluate that change across relevant formats/methods and freeze a new plan.
+
+The saved `provenance/experiments/ten_method_overview_20261020/run.py` is an
+experiment record, not the reusable entrypoint. Its `old_packet` means the input
+source registration before that experiment rebuilt it under a common scope.
+That rebuild can also adopt the current parser/rendition defaults. The ten-job
+assertion, project paths and scope replacement belong to that experiment and must
+not become prerequisites for ordinary extraction. Preserve its recorded bytes.
+
 ## Inspect the distributed example
 
 From a checkout with `uv` installed:
@@ -57,39 +97,67 @@ uv run atlas-extract catalog outputs/packet.json --focus methods
 uv run atlas-extract search outputs/packet.json 'relevant search terms'
 ```
 
-Create `outputs/` before writing the packet if it does not exist.
+Preparation creates the output directory and refuses to overwrite an existing
+packet. It registers evidence; it does not launch an extraction agent.
 
-## Run one live extraction
+## Plan and run live extraction
 
-Live execution uses the existing native Codex CLI sign-in and requires the `codex`
-executable on PATH. It is a separate action from the offline tests. Use a fresh
-output directory and an account-accessible model. The current configuration is
-`gpt-6.1-sol` with `xhigh` effort:
+Use the durable extraction-batch entrypoint for one or many methods. Create
+`inventory.json` beside the `outputs/` directory from the preparation example:
 
-```sh
-uv run atlas-extract run outputs/packet.json \
-  --run runs/pilot-01 --model gpt-6.1-sol --effort xhigh --require-coverage
+```json
+{
+  "format_version": "extraction_inventory/1.0",
+  "jobs": [
+    {"id": "chosen_method", "status": "ready", "packet": "outputs/packet.json"}
+  ]
+}
 ```
 
-Readers run concurrently; integration and fresh review follow. There is at most
-one repair. The default 1800-second timeout is per native stage, not a claim that
-the complete method, review and graph placement finish in 30 minutes. No new live
-experiment is launched as part of preparing this repository.
+Add another job for each additional method. Packet paths are relative to the
+inventory file. Method count does not require a different Python script.
+
+For this project, new model runs execute inside Sherlock Slurm allocations under
+the Qiu environment. Connect with `ssh sherlock-qiu` and follow
+[SHERLOCK.md](SHERLOCK.md) for environment/allocation setup. The commands below
+describe the entrypoint inside that allocation; they are not instructions to
+launch model sessions on the Mac or on a Sherlock login node. Live execution
+requires the configured Codex CLI and its existing sign-in.
+
+From the repository root with the selected environment and `PYTHONPATH` above:
+
+```sh
+python -m genomics_discovery.curation.extraction_batch plan inventory.json \
+  --run runs/batch-01 --model gpt-6.1-sol --effort xhigh \
+  --mode baseline --require-source-coverage --transport-retries 0
+python -m genomics_discovery.curation.extraction_batch run runs/batch-01
+python -m genomics_discovery.curation.extraction_batch status runs/batch-01
+```
+
+`plan` validates inputs, snapshots source packets and records file hashes without
+model calls. Source documents are pinned in place rather than copied. `run` uses
+those frozen settings. This example uses the baseline extractor, candidate-blind source
+obligations, a fresh review and at most one correction followed by fresh review.
+It has no per-stage timeout unless `--timeout` is supplied. The Slurm allocation
+still has an explicit wall-time limit. Concurrency is controlled by
+`--concurrency` when planning; the default is two native sessions. The optional
+specialist-reader mode is a different configuration, not an extra stage secretly
+enabled by baseline mode.
 
 ## Batch and graph placement
 
-After the agreed pilot gates, a batch manifest lists `jobs`, each with `id` and
-`packet` (relative to the manifest). Run:
+The durable batch writes `parents.json` for methods that pass its review gates;
+other methods retain their own statuses and artifacts. Extraction does not itself
+establish shared components or historical ancestry. Assembly into the combined
+atlas is a separate step described in [GRAPH.md](GRAPH.md).
 
-```sh
-uv run python -m playground.workflow_graph_batch batch_manifest.json \
-  --run runs/batch-01 --model gpt-6.1-sol --effort xhigh --require-coverage
-```
-
-Inspect `--help` before changing concurrency or comparison-stage settings. Each
-method retains its own result; a failed method does not erase another's output.
-The optional batch graph stage selects contextual units and reviews comparisons.
-Assembly into the combined atlas is a separate step described in [GRAPH.md](GRAPH.md).
+The completed ten-method experiment then called `batch_graph.publish()`,
+`workflow_unit_selection_live.execute()`, `workflow_shared_live.execute()` and
+`operation_registry.graph.attach_to_graph()`. Its `integrate()` function records
+that wiring. The latest full graph/registry integration still uses this
+experiment-level wiring; it is not yet one generic public deployment command.
+The older `playground.workflow_graph_batch` runner has different coverage/default
+settings and should not be presented as reproducing the newer experiment.
 
 ## If a run does not export a supported candidate
 

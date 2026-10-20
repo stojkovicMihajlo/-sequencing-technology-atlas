@@ -91,18 +91,20 @@ def main() -> None:
     args = parser.parse_args()
     try:
         if args.command == "prepare":
-            manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
-            for source in manifest["sources"]:
-                path = Path(source["path"])
-                source["path"] = str((args.manifest.resolve().parent / path).resolve())
-            packet = build_packet(**manifest)
+            source_manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+            for source_document in source_manifest["sources"]:
+                source_file_path = Path(source_document["path"])
+                source_document["path"] = str(
+                    (args.manifest.resolve().parent / source_file_path).resolve())
+            # Register source text, passage IDs and file hashes; no assay extraction yet.
+            source_packet = build_packet(**source_manifest)
             args.output.parent.mkdir(parents=True, exist_ok=True)
             # Never overwrite a source packet used by a previous run.
             with args.output.open("x", encoding="utf-8") as handle:
-                handle.write(json.dumps(packet, indent=2, ensure_ascii=False) + "\n")
+                handle.write(json.dumps(source_packet, indent=2, ensure_ascii=False) + "\n")
             result = {"packet": str(args.output.resolve()),
-                      "sources": len(packet["sources"]),
-                      "passages": sum(len(s["passages"]) for s in packet["sources"])}
+                      "sources": len(source_packet["sources"]),
+                      "passages": sum(len(s["passages"]) for s in source_packet["sources"])}
         elif args.command in {"catalog", "read", "read-batch", "search"}:
             packet = load_packet(args.packet)
             if args.command == "catalog":

@@ -4,6 +4,11 @@ A research harness for turning published sequencing methods into source-linked
 protocol graphs, then connecting technologies through separately supported
 historical relationships and contextual protocol comparisons.
 
+Start with the [reusable harness reading path](docs/RUNBOOK.md#read-the-reusable-harness):
+document registration, inventory, immutable batch planning and per-method execution.
+Saved experiment launchers under `provenance/` record particular runs and are not
+the general extraction entrypoint.
+
 **Current stage: protocol and shared-operation benchmark development, 2026-10-20.**
 The new [protocol reference benchmark](benchmarks/protocol_graph_v1/README.md)
 defines 12 cases across six technology strata, permits different valid graph
