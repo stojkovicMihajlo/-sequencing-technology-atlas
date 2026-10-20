@@ -1,0 +1,426 @@
+{
+  "format_version": "hiclip_terminal_science_audit/1.0",
+  "created_at": "2026-10-20T22:21:54.575304+00:00",
+  "job_id": "48677424",
+  "snapshot": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261020/ten_method_overview_01/monitoring/snapshot_20261020T221454Z",
+  "observed_terminal_status": "needs_revision",
+  "revision_budget_used": 1,
+  "input_files": {
+    "packet": {
+      "path": "work/batch/methods/hiclip/attempts/0001/source_packet.json",
+      "sha256": "2292ffdef566ccfa53b4953f03f56b6a7e5a5e710c648f978dcd719206a7726e"
+    },
+    "state": {
+      "path": "work/batch/methods/hiclip/attempts/0001/state.json",
+      "sha256": "961d0b4bdf4d27ff3e67dbf8169cd791ed74a0b8348d6396acb73b40f5cc9316"
+    },
+    "obligations": {
+      "path": "work/batch/methods/hiclip/attempts/0001/attempts/001_source_obligations/artifact.json",
+      "sha256": "541de546b0e9ee22141c36a2eb301e426aec9611c230182e14d9cfc71937d01f"
+    },
+    "first_workflow": {
+      "path": "work/batch/methods/hiclip/attempts/0001/attempts/002_integrator/artifact.json",
+      "sha256": "17fc012ed78eb242c3bd8ceba142ef7eade70dfe99d29815a51bd1ec9d86d94e"
+    },
+    "first_review": {
+      "path": "work/batch/methods/hiclip/attempts/0001/attempts/003_reviewer/artifact.json",
+      "sha256": "d576652ed0b828b202c652024386185eaff814d450603d958549d5e73cb83b37"
+    },
+    "first_source_review": {
+      "path": "work/batch/methods/hiclip/attempts/0001/attempts/003_reviewer/source_coverage_review.json",
+      "sha256": "028f30bff874985fa79721937c04d4f5cf441386f26b1210e341a3387b37aae9"
+    },
+    "corrected_workflow": {
+      "path": "work/batch/methods/hiclip/attempts/0001/attempts/004_integrator/artifact.json",
+      "sha256": "24bcc4cb9c37d55316f782f99dae87c8c90d14901c966533befe91e700c63561"
+    },
+    "final_review": {
+      "path": "work/batch/methods/hiclip/attempts/0001/attempts/005_reviewer/artifact.json",
+      "sha256": "d7c13563ca1cca1fc66fdf59b3f3ac2d16dc34f649afb59bbf8d818db937edf6"
+    },
+    "final_source_review": {
+      "path": "work/batch/methods/hiclip/attempts/0001/attempts/005_reviewer/source_coverage_review.json",
+      "sha256": "521eb64b4ebb9f8af594893e37465cdf50c2952e8ff9634132f82691006e18af"
+    }
+  },
+  "integrity_replay": {
+    "first": {
+      "workflow_evidence_errors": [],
+      "review_errors": [],
+      "source_review_errors": [],
+      "workflow_review_outcome": "needs_revision",
+      "source_coverage_outcome": "needs_revision"
+    },
+    "final": {
+      "workflow_evidence_errors": [],
+      "review_errors": [],
+      "source_review_errors": [],
+      "workflow_review_outcome": "needs_revision",
+      "source_coverage_outcome": "needs_revision"
+    }
+  },
+  "declared_review_accounting_not_accuracy": {
+    "first": {
+      "target_verdicts": {
+        "supported": 193,
+        "unsupported": 6
+      },
+      "source_obligation_dispositions": {
+        "partial": 5,
+        "satisfied": 39,
+        "not_applicable": 5
+      },
+      "omission_actions": {
+        "revise_record": 5
+      },
+      "blocking_workflow_gaps": 0
+    },
+    "final": {
+      "target_verdicts": {
+        "supported": 199
+      },
+      "source_obligation_dispositions": {
+        "satisfied": 43,
+        "partial": 1,
+        "not_applicable": 5
+      },
+      "omission_actions": {
+        "advisory": 1,
+        "revise_record": 1
+      },
+      "blocking_workflow_gaps": 0
+    }
+  },
+  "terminal_diagnosis": {
+    "classification": "remaining_available_source_model_limit_omission_preexisting_before_repair",
+    "workflow_pointers": [
+      "/operations/31/resources/1/description",
+      "/operations/38/resources/0/description"
+    ],
+    "frozen_obligation_pointer": "/obligations/36/requirement",
+    "first_source_review_pointer": "/checks/36",
+    "final_review_pointer": "/omissions/1",
+    "final_source_review_pointer": "/checks/36",
+    "actual_corrected_resource_text": {
+      "call_duplexes": "RNAhybrid optimizes hybridization of two submitted sequences and excludes pairing within either sequence. HiCLIP supplies two arms even when they map to one transcript. The cited miRNA-target algorithm's calibration machinery is not automatically assigned to this operation.",
+      "compare_energies": "RNAhybrid `-s 3utr_human -m 1000 -n 1000 -c`; two-sequence minimum hybridization energy, not within-arm folding. R wilcox.test for Mann–Whitney U test and p-value. RNAhybrid's miRNA-target E-value/calibration features are not automatically inferred from the citation."
+    },
+    "assessment": "The cited RNAhybrid algorithm excludes branching structures (multiloops), in addition to within-sequence base pairing. The final candidate states the latter but omits the former. This is a missing model-domain qualification in the selected software description, not a demonstrated false positive assertion, missing biological material route, unavailable source, or proof that hiCLIP cannot sample RNAs containing branches. The limit applies to the cited two-sequence prediction model; no exact installed default loop bound/version is inferred.",
+    "source_passages": [
+      {
+        "source_id": "hiclip_rnahybrid",
+        "passage_id": "p00011",
+        "locator": "text block 10; normalized chars 4000:6006",
+        "exact_quote": "forbidding intramolecular base pairings and"
+      },
+      {
+        "source_id": "hiclip_rnahybrid",
+        "passage_id": "p00011",
+        "locator": "text block 10; normalized chars 4000:6006",
+        "exact_quote": "branching structures (multiloops)."
+      },
+      {
+        "source_id": "hiclip_rnahybrid",
+        "passage_id": "p00005",
+        "locator": "text block 5; normalized chars 0:1700"
+      },
+      {
+        "source_id": "batch27_hiclip_main",
+        "passage_id": "p00082",
+        "locator": "S45/p1 [P77] — Calculation of folding free energies of hybrid reads; normalized chars 0:402"
+      },
+      {
+        "source_id": "batch27_hiclip_main",
+        "passage_id": "p00086",
+        "locator": "S49/p1 [P81] — Identification of intra-molecular RNA duplexes; normalized chars 0:1421"
+      }
+    ],
+    "rendition_note": "p00011 interleaves two PDF columns. The two exact quoted fragments are separately contiguous in the registered passage; they are not represented as one cleaned verbatim sentence. Their algorithm context explicitly states the two exclusions.",
+    "new_criterion": false,
+    "introduced_by_repair": false,
+    "preexistence_evidence": {
+      "frozen_obligation_text": "Attribute RNAhybrid to prediction of energetic hybridization between the two supplied RNA-arm sequences, excluding within-sequence pairing. The cited software paper concerns miRNA/target prediction and forbids intramolecular pairings and multiloops; this describes its model, not a requirement that hiCLIP substrates be miRNAs. Do not import RNAcalibrate/RNAeffective significance calibration, forced seed helices or other options from that dependency as used hiCLIP stages. The primary paper’s explicit command governs reported usage; the cited algorithm’s default loop bounds or statistical models do not prove the exact installed configuration.",
+      "unchanged_packet_obligations_and_first_draft_since_snapshot03": {
+        "packet": true,
+        "frozen_obligations": true,
+        "first_workflow": true
+      },
+      "call_duplexes_and_compare_energies_records_byte_equivalent_as_parsed": true,
+      "first_review_marked_obligation_satisfied": "satisfied",
+      "final_review_marked_obligation_partial": "partial"
+    },
+    "review_consistency_assessment": "The first source review missed this already-authored requirement while citing the passage containing it. The final reviewer corrected that completeness assessment; it did not introduce a new criterion after repair. All 199 final target support judgments are compatible with a missing qualification in the separate completeness ledger, but they are model judgments, not proof of full scientific correctness.",
+    "why_status_is_needs_revision": "The final primary review contains a source-backed revise_record omission, which requires correction even with blocking=false. The selected required source obligation is also partial. Zero blocking unresolved gaps does not cancel either condition. The single allowed correction was already spent on first-review findings; terminal withholding is coherent under the frozen gates."
+  },
+  "first_findings_followup": [
+    {
+      "id": "HICLIP-ARITHMETIC",
+      "classification": "genuine_initial_factual_and_false_gap_premise",
+      "first_review_pointer": "/omissions/0",
+      "first_workflow_pointers": [
+        "/operations/5/resources/0/description",
+        "/unresolved/0/description",
+        "/unresolved/0/next_evidence"
+      ],
+      "corrected_workflow_pointers": [
+        "/operations/5/resources/0/description",
+        "/unresolved/0/description",
+        "/unresolved/0/next_evidence"
+      ],
+      "assessment": "The listed first-ligation volumes sum to 20 microliters, matching the stated volume. The original 22 microliter assertion and request for corrected first-ligation amounts were wrong.004 corrects the sum and removes that false uncertainty while retaining the separate real second-ligation 20 versus 100 mix-scale ambiguity.",
+      "source_passages": [
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00037",
+          "locator": "S12/p2 [P32] — hiCLIP (3′ end RNA dephosphorylation and 1st round of adaptor ligation); normalized chars 0:1192"
+        },
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00039",
+          "locator": "S13/p2 [P34] — hiCLIP (5′ end phosphorylation of RNA, removal of adaptor B’s phosphate blocking, and 2nd round of RNA ligation); normalized chars 0:529"
+        }
+      ],
+      "status": "fixed_in_004_with_source_qualification"
+    },
+    {
+      "id": "HICLIP-PREFIX",
+      "classification": "consequential_initial_query_identity_omission",
+      "first_review_pointer": "/omissions/1",
+      "first_workflow_pointers": [
+        "/operations/21/action",
+        "/states/25/description",
+        "/states/28/description",
+        "/flows/56/basis"
+      ],
+      "corrected_workflow_pointers": [
+        "/operations/21/action",
+        "/operations/21/resources/1",
+        "/states/25/description",
+        "/states/26/description",
+        "/states/27/description",
+        "/states/28/description",
+        "/flows/56/basis",
+        "/unresolved/7"
+      ],
+      "assessment": "004 separates the nine-base primer barcode prefix from RNA mapping queries while preserving experimental/random identity as linked metadata. It explicitly marks this as inference from the related profiling description and iCLIP carrier mechanism, leaves exact preprocessing order/code unknown, and does not import profiling-specific Bowtie trimming options. This repairs a query-interface omission without asserting a newly verified historical command.",
+      "source_passages": [
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00070",
+          "locator": "S36/p1 [P65] — Sequence processing and mapping of reads (hiCLIP, pre-processing of sequence reads, identifying hybrid and non-hybrid reads); normalized chars 0:302"
+        },
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00078",
+          "locator": "S42/p1 [P73] — Sequence processing and mapping of reads (Ribosome profiling and mRNA-Seq); normalized chars 0:780",
+          "exact_quote": "the barcode trimming steps"
+        },
+        {
+          "source_id": "hiclip_iclip_protocol",
+          "passage_id": "p00008",
+          "locator": "s0005/p4 — Introduction; normalized chars 0:1779"
+        }
+      ],
+      "status": "fixed_in_004_with_source_qualification"
+    },
+    {
+      "id": "HICLIP-RRNA-FILTER",
+      "classification": "selected_optional_benchmark_cohort_omission",
+      "first_review_pointer": "/omissions/2",
+      "first_workflow_pointers": [
+        "/operations/40/action",
+        "/states/51/description",
+        "/flows/105/basis"
+      ],
+      "corrected_workflow_pointers": [
+        "/operations/40/action",
+        "/operations/40/resources/0",
+        "/operations/40/input_bindings/0",
+        "/operations/40/output_bindings/0",
+        "/states/51/description",
+        "/flows/103/basis",
+        "/flows/105/basis"
+      ],
+      "assessment": "The selected published 28S comparison did exclude one-read duplexes.004 adds that exclusion inside the optional benchmark, keeps 18S separate and does not transfer the restriction to production mRNA calling. This requirement is consequential if describing that selected comparison; it is not a mandatory calibration experiment for every general hiCLIP workflow. Historical counts need not be reproduced.",
+      "source_passages": [
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00111",
+          "locator": "S62/fig4 [F8] — Extended Data; normalized chars 0:1720",
+          "exact_quote": "We first removed the duplexes with only one read"
+        },
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00077",
+          "locator": "S41/p1 [P72] — Sequence processing and mapping of reads (hiCLIP, reads uniquely mapped to rRNAs); normalized chars 0:357"
+        }
+      ],
+      "status": "fixed_in_004_with_source_qualification"
+    },
+    {
+      "id": "HICLIP-RT-ASSIGNMENT",
+      "classification": "unqualified_inference_provenance_rather_than_proven_wrong_chemistry",
+      "first_review_pointer": "/omissions/3",
+      "first_workflow_pointers": [
+        "/states/19/description"
+      ],
+      "corrected_workflow_pointers": [
+        "/states/19/description"
+      ],
+      "assessment": "The primary paragraph reports generic linker annealing. The first draft said priming from A without qualifying its complementary-sequence inference.004 uses the source-generic wording. This is a provenance-level repair; the audit does not claim that A-specific priming is chemically false.",
+      "source_passages": [
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00048",
+          "locator": "S20/p2 [P43] — hiCLIP (Reverse transcription and purification of cDNAs); normalized chars 0:1152",
+          "exact_quote": "The primers were annealed to the linkers"
+        },
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00031",
+          "locator": "S7/p1 [P26] — hiCLIP (Preparation of adaptors); normalized chars 0:2228"
+        }
+      ],
+      "status": "fixed_in_004_with_source_qualification"
+    },
+    {
+      "id": "HICLIP-APPLICABILITY",
+      "classification": "initial_general_assay_applicability_underdescription",
+      "first_review_pointer": "/omissions/4",
+      "first_workflow_pointers": [
+        "/operations/28/information_effect",
+        "/operations/28/output_bindings/0/basis",
+        "/states/37/description"
+      ],
+      "corrected_workflow_pointers": [
+        "/operations/28/information_effect",
+        "/operations/28/output_bindings/0/basis",
+        "/states/37/description",
+        "/flows/75/basis"
+      ],
+      "assessment": "004 explicitly retains same-gene and different-gene arm associations before the narrower same-mRNA atlas selection, preserves the distinction between same-species mapping and a single physical RNA molecule, and names long-range duplex discovery within the STAU1-bound fraction. It adds a supported qualification at an existing interface, not an invented material route or whole-cell RNA-structure census.",
+      "source_passages": [
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00108",
+          "locator": "S62/fig1 [F5] — Extended Data; normalized chars 0:1485"
+        },
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00003",
+          "locator": "abstract1/p1 [P2] — Abstract; normalized chars 0:1050"
+        },
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00005",
+          "locator": "article/p3 [P4]; normalized chars 0:1279"
+        },
+        {
+          "source_id": "batch27_hiclip_main",
+          "passage_id": "p00086",
+          "locator": "S49/p1 [P81] — Identification of intra-molecular RNA duplexes; normalized chars 0:1421"
+        }
+      ],
+      "status": "fixed_in_004_with_source_qualification"
+    }
+  ],
+  "introduced_repair_error_conclusion": "No new consequential error was established in the bounded inspection of changed fields. The terminal multiloop omission is unchanged, not repair-introduced. This does not certify every unexamined claim or parameter.",
+  "provisional_obligation_error": {
+    "classification": "source_checklist_transcription_error_not_candidate_defect",
+    "obligation_pointer": "/obligations/3/requirement",
+    "corrected_workflow_pointers": [
+      "/operations/3/resources/0/description",
+      "/operations/23/resources/0/description"
+    ],
+    "source_b_notation": "/5Phos/rCrUrGrUrArGrGrCrArCrCrArUrArCrArArUrG/3Phos/",
+    "source_b_rna_sequence": "CUGUAGGCACCAUACAAUG",
+    "source_b_length": 19,
+    "obligation_b_notation": "/5Phos/rCrUrGrUrArGrGrCrArCrArUrArCrArArUrG/3Phos/",
+    "obligation_b_rna_sequence": "CUGUAGGCACAUACAAUG",
+    "obligation_b_length": 18,
+    "assessment": "The frozen obligation omitted one C from adaptor B. The primary source, candidate oligo and 19 nt B classifier agree. The final reviewer explicitly records this source-versus-ledger dispute rather than forcing an incorrect 18 nt candidate. The first reviewer did not identify the provisional-ledger error. This is not the terminal partial obligation.",
+    "final_source_review_pointer": "/checks/3",
+    "source_passages": [
+      {
+        "source_id": "batch27_hiclip_main",
+        "passage_id": "p00031",
+        "locator": "S7/p1 [P26] — hiCLIP (Preparation of adaptors); normalized chars 0:2228"
+      },
+      {
+        "source_id": "batch27_hiclip_main",
+        "passage_id": "p00072",
+        "locator": "S36/p3 [P67] — Sequence processing and mapping of reads (hiCLIP, pre-processing of sequence reads, identifying hybrid and non-hybrid reads); normalized chars 0:628"
+      }
+    ]
+  },
+  "scope_expansion_assessment": {
+    "general_scope": "Describe the general published assay introduced by the primary publication, from native specimen through the declared readout and its decoding. Preserve source-defined applicability, consequential interfaces, variants and control/calibration dependencies. Independent characterization or historical study execution belongs only where needed to explain the assay. Attribute manufacturer and cited-method material to its actual supported scope.",
+    "did_optional_supporting_scope_add_review_burden": true,
+    "specific_example": "The optional rRNA benchmark made its 28S cohort exclusion relevant once the draft represented that published comparison. Removing an unselected benchmark from a prospectively narrower main view could avoid that ancillary description burden; this audit does not retroactively remove it to obtain acceptance.",
+    "did_terminal_criterion_require_historical_execution_reconstruction": false,
+    "terminal_core_relevance": "RNAhybrid is used for the core paired-arm duplex assignment as well as the optional energy comparison. The cited model-domain limit remains relevant even without the rRNA benchmark, reference-coordinate reproduction or historical sample counts. It was required before candidate inspection.",
+    "granularity_boundary": "No operation/module count or universal sequence is needed to fix the remaining omission. The correction kept 41 operations, 52 states, 106 flows and 7 modules; it added one named nonblocking implementation gap. Counts are descriptive only.",
+    "causal_limit": "The records show optional scope increased the issues to describe. They do not establish that graph size or source volume caused the failure, or that any particular smaller graph would have passed faithfully."
+  },
+  "explicit_erratum_to_prior_independent_audit": {
+    "prior_report": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261020/ten_method_overview_01/monitoring/groupA_followup_snapshot03.json",
+    "prior_report_sha256": "21d237b5ffb8cc912d532014d11c99d55a19323da2ddfd5efed9ca286ed8b21b",
+    "prior_report_preserved": true,
+    "prior_pointer": "/hiclip/positive_preserved_distinctions/7/assessment",
+    "correction": "Snapshot 03 treated the first-ligation 22 microliter claim as a literal source ambiguity without independently summing the components. That assessment was mistaken. 6+4+1+0.5+0.5+2+2+4 = 20 microliters; source p00037 states 20. The first draft created a false gap and unnecessary retrieval request, and003 correctly identified it. The separate second-ligation 20 microliter addition versus 100 microliter listed composition remains unresolved.",
+    "independent_arithmetic_components": [
+      {
+        "component": "water",
+        "microliters": 6
+      },
+      {
+        "component": "4x ligation buffer",
+        "microliters": 4
+      },
+      {
+        "component": "T4 RNA Ligase2 truncated K227Q",
+        "microliters": 1
+      },
+      {
+        "component": "RNasin",
+        "microliters": 0.5
+      },
+      {
+        "component": "SUPERaseIn",
+        "microliters": 0.5
+      },
+      {
+        "component": "AdaptorAstock",
+        "microliters": 2
+      },
+      {
+        "component": "AdaptorBstock",
+        "microliters": 2
+      },
+      {
+        "component": "PEG400",
+        "microliters": 4
+      }
+    ],
+    "computed_total_microliters": 20.0,
+    "source_passages": [
+      {
+        "source_id": "batch27_hiclip_main",
+        "passage_id": "p00037",
+        "locator": "S12/p2 [P32] — hiCLIP (3′ end RNA dephosphorylation and 1st round of adaptor ligation); normalized chars 0:1192"
+      },
+      {
+        "source_id": "batch27_hiclip_main",
+        "passage_id": "p00039",
+        "locator": "S13/p2 [P34] — hiCLIP (5′ end phosphorylation of RNA, removal of adaptor B’s phosphate blocking, and 2nd round of RNA ligation); normalized chars 0:529"
+      }
+    ],
+    "precision_boundary": "This erratum records an audit miss. Neither the prior targeted positives nor this follow-up yields an audit precision estimate or whole-graph accuracy claim."
+  },
+  "limits": [
+    "Read-only local snapshot audit; only this requested sibling report was created. No SSH, model calls, remote polling, runtime edits, source edits or feedback to workers.",
+    "All cited packet quotes and review/candidate bindings replayed mechanically; integrity is not entailment. No binary original, exact installed RNAhybrid version or historical numerical output was independently replayed.",
+    "Terminal target counts and source-ledger counts are evaluator-declared accounting, not scientific accuracy measurements.",
+    "Useful qualified general-method description and incomplete experimental execution detail remain distinct; no unavailable recipe is declared solved, and no withheld workflow is forced to supported."
+  ]
+}
