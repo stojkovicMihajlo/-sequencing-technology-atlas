@@ -12,6 +12,9 @@ import tempfile
 from html.parser import HTMLParser
 from xml.etree import ElementTree as ET
 
+from genomics_discovery.curation.source_originals import FORMAT as ORIGINALS_FORMAT, load_originals
+from genomics_discovery.curation.workflow_extraction.models import digest
+
 DENIED = {".ssh", ".aws", ".azure", ".git", ".codex", ".config", ".kube", ".gnupg",
           ".netrc", ".npmrc", ".pypirc", ".git-credentials", "auth.json", "credentials",
           "credentials.json", "secrets.json", "token.json", "id_rsa", "id_ed25519"}
@@ -105,6 +108,7 @@ def archive(experiment, output, project_root, *, ancestor_mappings=()):
     if target.exists():
         raise FileExistsError(target)
     files, declared, documents, pending, gaps, receipts = {}, {}, [], {}, [], []
+    declared_originals, original_bindings = {}, []
     applied_mappings, native_originals = [], []
 
     def declare(path, expected):
@@ -182,6 +186,8 @@ def archive(experiment, output, project_root, *, ancestor_mappings=()):
     for path, value in documents:
         if isinstance(value, dict) and value.get("format_version") in {"workflow_sources/1.0", "workflow_sources/1.1"}:
             packet_ref(path, files[path]["sha256"])
+        if isinstance(value, dict) and value.get("format_version") == ORIGINALS_FORMAT:
+            declared_originals[path] = files[path]["sha256"]
         for row in objects(value):
             if isinstance(row.get("packet"), str) and row.get("packet_sha256"):
                 selected = checked(row["packet"], path.parent)
@@ -190,17 +196,69 @@ def archive(experiment, output, project_root, *, ancestor_mappings=()):
             if isinstance(selected, dict) and selected.get("path") and selected.get("sha256"):
                 selected_path = checked(selected["path"], path.parent)
                 packet_ref(selected_path, selected["sha256"])
+            binding = row.get("original_bindings")
+            if isinstance(binding, dict) and ("case_id" in row or "method_id" in row):
+                binding_path = checked(binding["path"], path.parent)
+                expected = binding["sha256"]
+                if binding_path in declared_originals and declared_originals[binding_path] != expected:
+                    raise ValueError(f"Conflicting original binding SHA256 pins: {binding_path}")
+                declared_originals[binding_path] = expected
             if receipt_fields(row)[2]:
                 receipts.append((path, row))
-    selected_sources = {}
+    selected_sources, selected_packets = {}, {}
     for path, expected in pending.items():
         pin(path, expected, "declared_source_packet")
         packet = read_json(path)
         if not isinstance(packet, dict) or packet.get("format_version") not in {"workflow_sources/1.0", "workflow_sources/1.1"}:
             raise ValueError(f"Declared packet is not workflow_sources: {path}")
+        selected_packets[path] = packet
         for row in packet["sources"]:
             source = pin(row["original_path"], row["original_sha256"], f"packet_source:{path}")
             selected_sources[source] = row["original_sha256"]
+    for path, expected in declared_originals.items():
+        pin(path, expected, "declared_source_originals_binding")
+        value = read_json(path)
+        if not isinstance(value, dict) or value.get("format_version") != ORIGINALS_FORMAT:
+            raise ValueError(f"Declared original binding has unsupported format: {path}")
+        packet_path = checked(value["packet"])
+        if packet_path not in selected_packets:
+            raise ValueError("Original binding cannot introduce an undeclared source packet")
+        packet = selected_packets[packet_path]
+        sources = {row["source_id"]: row for row in packet["sources"]}
+        if not isinstance(value.get("input_files"), dict):
+            raise ValueError("Original binding requires an exact input-file pin map")
+        # Validate every path before the helper can open/replay it. Required
+        # typed inputs cannot use optional historical-ancestor remapping.
+        for filename, expected_sha in value["input_files"].items():
+            if not Path(filename).is_absolute():
+                raise ValueError("Original binding input paths must be absolute")
+            pin(filename, expected_sha, f"source_originals_input:{path}")
+        ledger_path = checked(value["ledger"])
+        if any(str(required) not in value["input_files"] for required in (packet_path, ledger_path)):
+            raise ValueError("Original binding must pin its exact packet and provenance ledger")
+        ledger = read_json(ledger_path)
+        if not isinstance(ledger, list) or any(not isinstance(row, dict) for row in ledger):
+            raise ValueError("Original provenance ledger must be a list of records")
+        # Replay may inspect matching ledger originals. Reject undeclared or
+        # external ones before invoking it; unrelated ledger rows stay unselected.
+        for row in ledger:
+            source = sources.get(row.get("source_id"))
+            if source is None or not row.get("rendition") or Path(row["rendition"]).resolve() != Path(source["original_path"]):
+                continue
+            original = checked(row["original"])
+            if value["input_files"].get(str(original)) != row["original_sha256"]:
+                raise ValueError("Ledger original is not bound by the exact original-binding artifact")
+        bound = load_originals(path)
+        if bound["source_packet_sha256"] != digest(packet):
+            raise ValueError("Original binding differs from the selected packet digest")
+        for source_id, binding in bound["bindings"].items():
+            source = sources.get(source_id)
+            if source is None or (binding["rendition"], binding["rendition_sha256"]) != (
+                    source["original_path"], source["original_sha256"]):
+                raise ValueError("Original binding differs from the exact selected source")
+            receipts.append((path, binding))
+        original_bindings.append({"path": str(path), "sha256": expected, "revision_id": bound["revision_id"],
+            "packet": str(packet_path), "source_ids": sorted(bound["bindings"])})
     for source, expected in selected_sources.items():
         local_receipts = list(receipts)
         candidates = (directory / name for directory in (source.parent, source.parent.parent)
@@ -250,6 +308,7 @@ def archive(experiment, output, project_root, *, ancestor_mappings=()):
         "ancestor_mapping_prefixes": [{"old_prefix": str(old), "new_prefix": str(new)}
                                       for old, new in ordered_prefixes],
         "ancestor_mappings": applied_mappings,
+        "original_bindings": original_bindings,
         "native_originals": native_originals,
         "status": "incomplete_binary_provenance" if gaps else "declared_inputs_preserved",
         "boundary": "Exact available phase/source bytes; not scientific source completeness or successful model execution."}

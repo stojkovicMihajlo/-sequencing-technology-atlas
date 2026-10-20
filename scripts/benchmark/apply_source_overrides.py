@@ -9,10 +9,12 @@ from collections import Counter
 from copy import deepcopy
 import json
 from pathlib import Path
+import re
 
 from scripts.benchmark import combine_sources
 from genomics_discovery.curation.extraction_batch.storage import check_pins, sha, write
 from genomics_discovery.curation.protocol_benchmark import source_identity
+from genomics_discovery.curation.source_originals import load_originals
 from genomics_discovery.curation.workflow_extraction.models import digest
 from genomics_discovery.curation.workflow_extraction.sources import load_packet
 
@@ -34,6 +36,21 @@ def _packet(path, expected_sha, case, files):
         raise ValueError("Selected packet differs from frozen method identity or case scope")
     proof = source_identity.verify_publication(packet, case, packet_path=path, bound_pins=files)
     return packet, proof
+
+
+def _original_bindings(declared, packet_path, packet, files):
+    if (not isinstance(declared, dict) or set(declared) != {"path", "sha256"}
+            or not isinstance(declared["path"], str) or not Path(declared["path"]).is_absolute()
+            or not isinstance(declared["sha256"], str) or not re.fullmatch(r"[0-9a-f]{64}", declared["sha256"])):
+        raise ValueError("Original bindings require an absolute path and file-byte SHA256")
+    path = Path(declared["path"]).resolve()
+    check_pins({str(path): declared["sha256"]})
+    bound = load_originals(path)
+    if (Path(bound["packet"]).resolve() != packet_path.resolve()
+            or bound["source_packet_sha256"] != digest(packet)):
+        raise ValueError("Original bindings belong to another selected packet")
+    bind(files, {str(path): declared["sha256"], **bound["input_files"]})
+    return {"path": str(path), "sha256": declared["sha256"]}
 
 
 def apply_overrides(cases_path, base_sources, overrides_path, output):
@@ -70,7 +87,7 @@ def apply_overrides(cases_path, base_sources, overrides_path, output):
         registration = requested.get(mid)
         if registration is not None:
             report["previous_disposition"] = deepcopy(previous[mid])
-            for key in ("packet", "packet_sha256", "source_packet_sha256", "publication_verification"):
+            for key in ("packet", "packet_sha256", "source_packet_sha256", "publication_verification", "original_bindings"):
                 report.pop(key, None)
             report["source_override"] = {"registration": deepcopy(registration),
                 "fallback_permitted": False, "status": "withheld"}
@@ -103,17 +120,25 @@ def apply_overrides(cases_path, base_sources, overrides_path, output):
             packet, proof = _packet(packet_path, expected_sha, case, selected_files)
             if registration is None and digest(packet) != report.get("source_packet_sha256"):
                 raise ValueError("Base packet canonical digest differs from its report")
+            selected = registration if registration is not None else rows[mid]
+            originals = (_original_bindings(selected["original_bindings"], packet_path, packet, selected_files)
+                         if "original_bindings" in selected else None)
             bind(files, selected_files)
             report.update(status="registered_for_source_first_annotation", packet=str(packet_path),
                 packet_sha256=expected_sha, source_packet_sha256=digest(packet), sources=len(packet["sources"]),
                 supplement_count=sum(source["role"] == "supplement" for source in packet["sources"]),
                 publication_verification=proof)
+            if originals is not None:
+                report["original_bindings"] = originals
+            else:
+                report.pop("original_bindings", None)
             if registration is not None:
                 report.pop("reason", None)
                 report["source_override"]["status"] = "registered"
             annotation.append({**{field: case[field] for field in ("case_id", "method_id", "family", "split")},
                 "packet": str(packet_path), "packet_sha256": expected_sha,
-                "source_report": str(output / "source_report.json")})
+                "source_report": str(output / "source_report.json"),
+                **({"original_bindings": originals} if originals is not None else {})})
         except (OSError, ValueError, KeyError, TypeError) as exc:
             report.update(status="source_identity_or_scope_inspection_needed", reason=f"{type(exc).__name__}: {exc}")
     check_pins(files)

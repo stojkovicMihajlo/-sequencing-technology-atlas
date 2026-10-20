@@ -75,3 +75,34 @@ recovery fallback, and masked archival/copy failures. Unknown-preservation check
 and unsupported-assertion accounting remain separate from known-fact coverage.
 Live source recovery and native reference/graph reviews provide additional
 observations; passing software tests alone cannot establish biological fidelity.
+# Follow-up: explicit original-document bindings
+
+A real preservation check found four legacy TXT renditions for which the archive
+reader did not recover binary ancestry. Independent inspection located all four
+PDFs and their existing conversion/association records. This was a legacy metadata
+integration failure, not evidence that the papers were absent or that every
+transcribed statement was false. The documentary associations and their exact
+hashes are recorded in
+[`benchmark_legacy_source_associations_20261020.json`](../../provenance/benchmark_legacy_source_associations_20261020.json).
+
+Reuse the existing `source_originals` binding, replay and page-render tools. A new
+host-curated ledger links the unchanged registered TXT bytes to the exact original
+PDFs and retains the documentary inputs. Manual selected transcription and declared
+glyph/unit repairs remain distinguished from mechanical extraction. Byte association
+does not certify textual/visual equivalence or scientific correctness.
+
+An optional `original_bindings: {path, sha256}` descriptor survives source overrides
+only after exact packet, artifact and original-byte verification. The benchmark
+runtime grants access to those bound originals and the existing page-render tool,
+without granting directory access. The archiver consumes only explicitly declared
+typed bindings, checks paths before replay, and cannot admit a new source packet
+through an ancestry record. No filename, word similarity or automatic guessed path
+establishes an association. Missing or malformed declared proof withholds the
+override; it does not silently restore the prior source packet.
+
+Old packets, transcriptions, receipts, native attempts and archives retain their
+original bytes. New records record the recovered ancestry. Consequential source
+ambiguities require an original-page check or a scoped unknown, rather than a
+plausibility-based correction. The nine-case expanded run was held before model
+work while this integration was checked. Source-preparer inspection, worker access,
+actual image inspection and scientific acceptance remain separate observations.
