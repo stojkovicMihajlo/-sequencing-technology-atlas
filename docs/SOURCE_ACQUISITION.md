@@ -63,6 +63,48 @@ and exact document identity require an explicit scoped registration step. This
 command does not automatically recover scientific procedural dependencies.
 This command does not establish applicability, coverage or scientific resolution.
 
+## Prepare evidence before extracting a technology
+
+File acquisition/registration is the first part of preparation. A registered file
+and an exact parser replay do not establish that its Methods, tables or equations
+are readable, or that the supplement contains the experimental procedure. Current
+source-ready counts mean registered inputs for source-first reading, not complete
+scientific evidence for every detail of a technology.
+
+For a declared method version and task scope, preparation should establish:
+
+1. The applicable primary paper, experimental supplements and delegated procedure
+   documents, with their identity and original/rendition bindings.
+2. Where the needed procedural evidence occurs: source sections/passages and, when
+   text is inadequate, original PDF pages or regions.
+3. The input modality actually supplied to the reader. Readable text can use the
+   existing packet tools. Image-dependent content needs explicit page/image inputs
+   or a separately verified page-bound transcription. A render receipt alone does
+   not establish that an image reached the model or supports a claim.
+4. Content limitations for this scope: missing experimental Methods, unreadable
+   tables, ambiguous glyphs or uninspected dependency procedures. These are source
+   preparation limits, distinct from an author's unreported experimental detail.
+5. The frozen input manifest used by extraction and independent verification.
+   Source availability and scope must not silently change between those roles.
+
+This is a task-specific input-readiness requirement, not a fixed universal assay
+stage sequence or a requirement to reconstruct every historical experiment. It
+does not decide operation boundaries, module groupings or historical edges in
+advance. Those remain source-grounded extraction and comparison judgments.
+
+The grouped-record diagnostic applies this separation to finite, audited text
+contexts; it is not a completed preparation pass across all 201 technologies.
+Spatial's damaged supplement text is retained as an explicit pre-inference modality
+exclusion, rather than used to judge recipe details from headings. See the
+[input-delivery decision](decisions/2026-10-20-image-source-delivery.md) and
+[larger-record diagnostic](../benchmarks/protocol_grounding_grouped_v1/README.md).
+
+The worker's optional `image_paths` API pins staged PNG inputs and passes explicit
+CLI image attachments. It has software tests; a native image-input/source-fidelity
+pilot and end-to-end preparation gate still need validation before production use.
+It does not turn every registered source packet into a fully prepared reading
+package automatically.
+
 Existing packets retain their method ID, title, scope, variant, source IDs and
 passages. A single declared PMID origin uses the same provisional general scope
 as `atlas-sources`; ambiguous or missing origins require `--scopes scopes.json`:
