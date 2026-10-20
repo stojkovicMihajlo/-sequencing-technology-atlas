@@ -48,20 +48,27 @@ sidecar remains unpromoted.
 The inventory accounts for 201 methods; protocol decomposition remains partial.
 The [new ten-method extraction experiment](provenance/ten_method_overview_submission_20261020.json)
 was submitted as Qiu CPU job **48677424**, using frozen runtime `063c531`,
-`gpt-6.1-sol` and `xhigh`. At **22:14 UTC on October 20**, eight methods had
-passed their per-method review/coverage gates, hiCLIP remained `needs_revision`
-after its allowed correction, and ddRAD correction remained active. Four of
-the eight passed first review and four passed after correction.
+`gpt-6.1-sol` and `xhigh`. Extraction finished at **22:26 UTC on October 20**:
+nine methods passed their per-method review/coverage gates and hiCLIP remained
+`needs_revision` after its allowed correction. Four passed first review and
+five passed after correction; all ten remain in the denominator.
 The [independent interim audit](provenance/experiments/ten_method_overview_20261020/monitoring/preliminary_findings.json)
 found an accepted ATAC source-attribution overstatement and a Drop-seq scope-expansion
 problem, alongside preserved material/identity boundaries and functioning correction
 gates. The [later independent audit](provenance/experiments/ten_method_overview_20261020/monitoring/ddrad_and_final_gates_snapshot04.json)
-replays all eight completed per-method export gates and reading-view bindings;
+replays the first eight completed per-method export gates and reading-view bindings;
 that does not establish every clause's scientific support. The
 [hiCLIP terminal audit](provenance/experiments/ten_method_overview_20261020/monitoring/hiclip_terminal_audit_snapshot04.json)
-also corrects an earlier independent audit's arithmetic miss. All ten methods
-remain in the denominator. No new graph publication or shared-operation admission
-is established at this checkpoint.
+also corrects an earlier independent audit's arithmetic miss. The
+[ddRAD final audit](provenance/experiments/ten_method_overview_20261020/monitoring/ddrad_terminal_audit_delta222752.json)
+replays the ninth completed export. An
+[independent publication rebuild](provenance/experiments/ten_method_overview_20261020/monitoring/publication_audit_delta222752.json)
+reproduces the exact isolated graph hash: nine workflows, 223 Operations,
+310 States and 57 Modules, with no duplicate IDs or dangling edges.
+All 322 publication input hashes also match on Qiu. Its 98 older relationships
+are explicitly imported, not re-reviewed here. Shared-operation curation remains
+active; the completed ten-unit selection itself creates no links. The main atlas
+has not been replaced, and the positive review counts are not scientific accuracy.
 The experiment tests the revised Operation-boundary
 instructions, new reading views, isolated graph publication and bounded open-unit
 selection/shared-operation admission. Exact source selection and launcher bytes
