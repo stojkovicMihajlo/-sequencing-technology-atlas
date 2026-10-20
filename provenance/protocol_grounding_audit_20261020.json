@@ -1,0 +1,187 @@
+{
+  "format_version": "protocol_grounding_audit/1.0",
+  "date": "2026-10-20",
+  "audited_repository_commit": "b3d1559",
+  "status": "observed failure analysis and proposed diagnostic; no new native experiment or runtime promotion",
+  "benchmark_incident": {
+    "case": "atac-buenrostro-2013",
+    "run": "reference_v1_01",
+    "graph": {
+      "path": "technology_atlas/v2/work/benchmark_20261020/pilot_inspection_local_01/reference_v1_01/work/references/cases/atac-buenrostro-2013/workflow.json",
+      "file_sha256": "cdf7fdfcaf4a200ac63d2d698cd424229206e9bf76919958a9bd95c8975d5bda"
+    },
+    "review": {
+      "path": "technology_atlas/v2/work/benchmark_20261020/pilot_inspection_local_01/reference_v1_01/work/references/cases/atac-buenrostro-2013/workflow_review.json",
+      "file_sha256": "5820656890495806680bc167a6f9f54c5ded7e7c179f016c235b8fd7f454b5d4"
+    },
+    "assessment": {
+      "path": "technology_atlas/v2/work/benchmark_20261020/pilot_inspection_local_01/reference_v1_01/work/references/cases/atac-buenrostro-2013/assessment.json",
+      "file_sha256": "170aa8902f1807dd5492ffd54141e327cfc6dbf37a47e336646a7238e7a6e30a"
+    },
+    "reference": {
+      "path": "technology_atlas/v2/work/benchmark_20261020/pilot_inspection_local_01/reference_v1_01/work/references/cases/atac-buenrostro-2013/reference.json",
+      "file_sha256": "32a88b7ee5c871785752711db4548cef4f3841bfdca736aa4fc4ef774e5c8cce"
+    },
+    "source_packet_canonical_digest": "256a9f309c89c47864c53b42f623b21de06aa88e9ad1ee66862bea90ffc13dce",
+    "reference_obligations": 28,
+    "all_declared_obligations_covered": true,
+    "finding_target": "operation:monitor_qpcr",
+    "finding_verdict": "unresolved",
+    "case_status": "graph_needs_revision",
+    "disputed_field": "operations[id=monitor_qpcr].information_effect",
+    "interpretation": "The physical no-recovery assertion was not established; the case was withheld rather than scientifically accepted."
+  },
+  "prior_qualification_drift_examples": [
+    {
+      "review": {
+        "path": "technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/expanded_evidence_run_01/attempts/001_reviewer/artifact.json",
+        "file_sha256": "af97f7afabddd542f02a417e5dd43c9c529964eafc20f10e62d2667ad1ee011c"
+      },
+      "candidate_input": {
+        "path": "technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/expanded_evidence_run_01/attempts/001_reviewer/candidate.json",
+        "file_sha256": "f2292c80efa91e5596b6ad0c8f715bb3c8b96e18f70e6a434b092175ff74b6cd"
+      },
+      "review_pointer": "/checks/119/rationale",
+      "target_id": "operation:extend_pcr",
+      "verdict": "supported",
+      "rationale": "The qPCR-determined cycle decision governs the retained 45 μL production reaction. The attached cycle-temperature resource is supported by the stated library thermal program; 10–12 total cycles remains an observed outcome, not a fixed controller. The analytical product is not returned to production.",
+      "candidate_qualifications": [
+        {
+          "pointer": "/states/13/description",
+          "value": "Separately amplified analytical qPCR product after 20 cycles, with added PCR cocktail/Sybr Green. This branch terminates as analytical material; no return to production is supported."
+        },
+        {
+          "pointer": "/modules/3/boundary_rationale",
+          "value": "Physical analytical aliquot and retained production fraction are separate. Only qPCR information returns as a controller; cleaned production library retains its origin."
+        }
+      ],
+      "interpretation": "Observed strengthening of qualified candidate wording; no copying or internal causal mechanism established."
+    },
+    {
+      "review": {
+        "path": "technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/curation_remediation_run_01/attempts/002_reviewer/artifact.json",
+        "file_sha256": "5f716eba607129b9e2cd3bfc0d62dc3316392ea178fec9194b47e33877a1108a"
+      },
+      "candidate_input": {
+        "path": "technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/curation_remediation_run_01/attempts/002_reviewer/candidate.json",
+        "file_sha256": "f7e45ee3a59b708ea2cbab68454de81391fe016fe1bd00dfb3a680044a3d2ea6"
+      },
+      "review_pointer": "/checks/132/rationale",
+      "target_id": "operation:monitor_qpcr",
+      "verdict": "supported",
+      "rationale": "The analytical aliquot receives 10 μL PCR cocktail with final 0.6x Sybr Green and is run for 20 analytical cycles to determine further cycles for the retained 45 μL. Both attached reagent and cycle condition are supported. Complete cocktail/thermal program and quantitative decision rule remain unknown; analytical DNA is not returned to production.",
+      "candidate_qualifications": [
+        {
+          "pointer": "/states/13/description",
+          "value": "Separately amplified analytical qPCR product after 20 cycles, with added PCR cocktail/Sybr Green. This branch terminates as analytical material; no return to production is supported."
+        },
+        {
+          "pointer": "/modules/3/boundary_rationale",
+          "value": "Physical analytical aliquot and retained production fraction are separate. Only qPCR information returns as a controller; cleaned production library retains its origin."
+        }
+      ],
+      "interpretation": "Observed strengthening of qualified candidate wording; no copying or internal causal mechanism established."
+    }
+  ],
+  "primary_papers": [
+    {
+      "method": "ALCE",
+      "url": "https://aclanthology.org/2023.emnlp-main.398/"
+    },
+    {
+      "method": "WiCE",
+      "url": "https://aclanthology.org/2023.emnlp-main.470/"
+    },
+    {
+      "method": "Attribute First, then Generate",
+      "url": "https://aclanthology.org/2024.acl-long.182/"
+    },
+    {
+      "method": "Claimify",
+      "url": "https://aclanthology.org/2025.acl-long.348/"
+    },
+    {
+      "method": "FActScore",
+      "url": "https://aclanthology.org/2023.emnlp-main.741/"
+    }
+  ],
+  "official_code_inspected_by_root": [
+    {
+      "repository": "lovodkin93/attribute-first-then-generate",
+      "commit": "cc7b995dfb288da7982ae388994f182bef030b75",
+      "path": "few_shot_experiments/run_full_pipeline.py",
+      "url": "https://raw.githubusercontent.com/lovodkin93/attribute-first-then-generate/cc7b995dfb288da7982ae388994f182bef030b75/few_shot_experiments/run_full_pipeline.py",
+      "sha256": "622dd1f40cfbea24d2e40ac077fc27de4e2a6d7b53b502db30b2f17a4b2c045f"
+    },
+    {
+      "repository": "lovodkin93/attribute-first-then-generate",
+      "commit": "cc7b995dfb288da7982ae388994f182bef030b75",
+      "path": "few_shot_experiments/run_iterative_sentence_generation.py",
+      "url": "https://raw.githubusercontent.com/lovodkin93/attribute-first-then-generate/cc7b995dfb288da7982ae388994f182bef030b75/few_shot_experiments/run_iterative_sentence_generation.py",
+      "sha256": "a8d6defeef1f07daec5889ee3d787d7b7a5d7fa6ccbdde4f1f39d24549122a65"
+    },
+    {
+      "repository": "RManLuo/graph-constrained-reasoning",
+      "commit": "9518e8e69197d5e577a6e414060fb898771617b9",
+      "path": "src/trie.py",
+      "url": "https://raw.githubusercontent.com/RManLuo/graph-constrained-reasoning/9518e8e69197d5e577a6e414060fb898771617b9/src/trie.py",
+      "sha256": "85b2af233244b4f430da8fee909baa23f66bd538418e40ef15f34cb507817dd1"
+    },
+    {
+      "repository": "RManLuo/graph-constrained-reasoning",
+      "commit": "9518e8e69197d5e577a6e414060fb898771617b9",
+      "path": "workflow/predict_paths_and_answers.py",
+      "url": "https://raw.githubusercontent.com/RManLuo/graph-constrained-reasoning/9518e8e69197d5e577a6e414060fb898771617b9/workflow/predict_paths_and_answers.py",
+      "sha256": "b7f703330c47ea06d6d74e8f31007c915e252668959603ef3b2cc9e8910b5fb9"
+    },
+    {
+      "repository": "RManLuo/graph-constrained-reasoning",
+      "commit": "9518e8e69197d5e577a6e414060fb898771617b9",
+      "path": "src/graph_constrained_decoding.py",
+      "url": "https://raw.githubusercontent.com/RManLuo/graph-constrained-reasoning/9518e8e69197d5e577a6e414060fb898771617b9/src/graph_constrained_decoding.py",
+      "sha256": "348ee68983882edaa37b2bdfdcc960eab7da3c1b6e191c96dfc9825c63cd3dde"
+    },
+    {
+      "repository": "RManLuo/graph-constrained-reasoning",
+      "commit": "9518e8e69197d5e577a6e414060fb898771617b9",
+      "path": "src/llms/graph_constrained_decoding_model.py",
+      "url": "https://raw.githubusercontent.com/RManLuo/graph-constrained-reasoning/9518e8e69197d5e577a6e414060fb898771617b9/src/llms/graph_constrained_decoding_model.py",
+      "sha256": "7d9fab18c7ce0e5a42161a4cfd2bd395620270f61849aa14ef72b24840d881cc"
+    }
+  ],
+  "additional_official_code_inspected_by_subagent": [
+    {
+      "repository": "princeton-nlp/ALCE",
+      "commit": "246c476a4edfc564266b7346b6e29ef4861ae937",
+      "path": "eval.py",
+      "url": "https://raw.githubusercontent.com/princeton-nlp/ALCE/246c476a4edfc564266b7346b6e29ef4861ae937/eval.py",
+      "sha256": "e0f63bf865cacc64d7390fc62669c82b2653b1628f40051de0efdf5518064091"
+    },
+    {
+      "repository": "shmsw25/FActScore",
+      "commit": "f28272deffcf33efc1f1117d5479c10bb75221a9",
+      "path": "factscore/factscorer.py",
+      "url": "https://raw.githubusercontent.com/shmsw25/FActScore/f28272deffcf33efc1f1117d5479c10bb75221a9/factscore/factscorer.py",
+      "sha256": "d6f61090ad3e2d0cdb84c46c48d27278c2be3c2ae5f3fec2268771a8413e4cdb"
+    },
+    {
+      "repository": "anthonywchen/RARR",
+      "commit": "51a1a10fe5bada837a368f98cb55288ac5168c9e",
+      "path": "run_editor_sequential.py",
+      "url": "https://raw.githubusercontent.com/anthonywchen/RARR/51a1a10fe5bada837a368f98cb55288ac5168c9e/run_editor_sequential.py",
+      "sha256": "adf60273dfb8d884bbcd03cd460fed70362ee52a59ecf6e030b03058a48f25b2"
+    }
+  ],
+  "runtime_code_copied": false,
+  "native_evaluation_executed_for_this_audit": false,
+  "historical_artifacts_modified": false,
+  "running_frozen_batch_modified": false,
+  "current_software_boundary": "Exact quotes, identities, review accounting and declared outcome gates; natural-language entailment remains a fallible review judgment.",
+  "next_diagnostic": "Frozen supported/unsupported/qualified-control assertions across representative method strata; separately measure unsupported acceptance, supported-content retention, qualifier preservation and latency.",
+  "limits": [
+    "The model-authored reference construction corpus is not expert gold.",
+    "A stub supported review passing integrity validation does not estimate live reviewer error.",
+    "Claim splitting and grouped field checks cannot prove exhaustive proposition coverage.",
+    "No zero-hallucination guarantee or scientific improvement is established by this audit."
+  ]
+}

@@ -61,6 +61,7 @@ Earlier extractions, graph publications and live controls remain preserved in
 | What have we built, and what remains undecided? | [Current status and pre-batch decisions](docs/STATUS.md) |
 | What exactly does an agent extract? | [Output fields and their connections](docs/OUTPUT_FORMAT.md) |
 | How will we assess extraction without requiring one exact graph? | [Protocol benchmark](benchmarks/protocol_graph_v1/README.md) and [reading one case](docs/benchmark/READING_A_CASE.md) |
+| Why can a valid citation still accompany an unsupported claim? | [Observed failures, source-entailment research and proposed controls](docs/decisions/2026-10-20-source-entailment-and-unsupported-additions.md) |
 | How do the agents and Python code work together? | [Pipeline and code map](docs/PIPELINE.md) |
 | Can I inspect a real extraction? | [ChIPmentation example](examples/chipmentation/README.md) |
 | How do methods enter the larger graph? | [Graph layers and agent tools](docs/GRAPH.md) |
