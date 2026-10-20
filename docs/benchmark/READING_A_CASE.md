@@ -31,6 +31,19 @@ A valid quote establishes where the text came from; whether it supports the
 requirement remains a scientific judgment. Text renditions do not certify visual
 inspection of the upstream PDF, Word document, figure or table.
 
+In the development runtime after `8c93d08`, a case row may additionally declare
+`original_bindings: {"path": "bindings.json", "sha256": "FILE_BYTE_HASH"}`.
+This uses the existing `source_originals` binding artifact, not a new source format.
+The host verifies its byte hash, replays its provenance and requires the exact
+case packet before granting access to the named originals. Agents receive the
+existing `source_originals inspect` and `render` commands; rendered pages go only
+into that agent's attempt directory. A consequential unit/glyph ambiguity needs
+an original-page check or an explicit unresolved qualification, rather than a
+correction based on plausibility. File availability or a render receipt still
+does not prove visual inspection or understanding. The frozen `8c93d08` run does
+not receive this later optional interface; absent declarations preserve legacy
+behavior, and malformed declarations fail instead of silently downgrading.
+
 `unknowns` records unresolved questions, their consequences, what was inspected,
 and what evidence could resolve them. It does not mean the authors demonstrated
 an impossibility. `admissible_decompositions` describes acceptable grouping/splitting

@@ -1,0 +1,153 @@
+{
+  "format_version": "benchmark_source_availability/1.0",
+  "recorded_at_utc": "2026-10-20T10:50:07Z",
+  "activity": "Bounded web research for exact-publication source availability; not source acquisition or scientific extraction.",
+  "observer": "Engineering agent using web search/open/click/find only.",
+  "raw_binary_downloads": 0,
+  "host_receipts_created": false,
+  "source_packets_modified": false,
+  "native_model_calls": 0,
+  "scope_boundary": "Web-tool observations may use indexed/cached representations. Tool errors are not proof of an origin-server HTTP status unless explicitly reported. No original-source byte hashes, completeness claims, or scientific admission follow from this record.",
+  "prior_context_not_retested": [
+    "Parent reported PMC attachment challenge HTML, EBI BioStudies 404, and publisher access failures.",
+    "Parent verified macoskolab.com/wp-content/uploads/2019/04/slideseq_full.pdf has six pages and is not the original supplement.",
+    "The exact preregistered specimen/procedure variants remain unchanged."
+  ],
+  "cases": [
+    {
+      "case_id": "rrbs",
+      "primary_identity": {
+        "pmid": "18600261",
+        "doi": "10.1038/nature07107",
+        "pmcid": "PMC2896277"
+      },
+      "needed": "Original publication supplementary information.",
+      "observations": [
+        {
+          "url": "https://www.nature.com/articles/nature07107",
+          "authority": "Publisher",
+          "observed": "Search representation identifies exact target publication; direct open failed via publisher identity redirect. No supplementary binary inspected.",
+          "disposition": "metadata_only"
+        },
+        {
+          "url": "https://courses.cs.duke.edu/spring13/compsci662/pdf/meissner.2008.pdf",
+          "authority": "Public university course host; publication source reprint",
+          "observed": "Search index begins with the exact target DOI/title. Direct open reported timeout fetching. Page count and supplementary inclusion were not verified.",
+          "disposition": "unverified_institutional_pdf_candidate"
+        },
+        {
+          "url": "https://www.nature.com/nature/journal/v454/n7205/suppinfo/nature07107.html",
+          "authority": "Historical publisher path",
+          "discovery": "Inferred historical URL pattern; not recovered as a current publication link.",
+          "observed": "Web tool returned internal fetch error; origin status and contents unknown.",
+          "disposition": "unresolved_tool_fetch"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC2896277/supplementaryFiles",
+          "authority": "Official public archive API route",
+          "observed": "Web tool returned internal fetch error; origin status and contents unknown.",
+          "disposition": "unresolved_tool_fetch"
+        }
+      ],
+      "conclusion": "No original supplement recovered in this pass; source-withheld disposition remains warranted. This does not establish global public unavailability."
+    },
+    {
+      "case_id": "slide-seq",
+      "primary_identity": {
+        "pmid": "30923225",
+        "doi": "10.1126/science.aaw1219",
+        "pmcid": "PMC6927209"
+      },
+      "needed": "Original 2019 materials/methods supplement, not Slide-seqV2 or another protocol version.",
+      "observations": [
+        {
+          "url": "https://zenodo.org/records/2571615",
+          "authority": "Author-deposited official release archive",
+          "observed": "Record describes a code archive and resource type Software; exposes broadchenf/Slideseq-V1.0.zip, 151.1 MB, published 2019-02-18.",
+          "publisher_declared_checksum": {
+            "algorithm": "md5",
+            "value": "96c19a20d9d742771e366029774ea6c1",
+            "verified_against_download": false
+          },
+          "disposition": "software_not_verified_paper_supplement"
+        },
+        {
+          "url": "https://github.com/broadchenf/Slideseq/tree/master/BeadSeq%20Code",
+          "authority": "Author code repository",
+          "observed": "Visible directory/readme describes analysis software and refers to a separate supplement. No original paper supplement identified in the inspected listing/readme; nested directories and archive bytes were not exhaustively inspected.",
+          "disposition": "does_not_establish_original_supplement"
+        },
+        {
+          "url": "https://github.com/broadchenf/Slideseq/tree/master/PipelineFunctions",
+          "authority": "Author code repository",
+          "observed": "Visible directory listing is software files; no matching .pdf text found in that listing. This is not an exhaustive repository-content absence claim.",
+          "disposition": "does_not_establish_original_supplement"
+        },
+        {
+          "url": "https://github.com/broadchenf/Slideseq/tree/V1.0",
+          "authority": "Author release linked by Zenodo",
+          "observed": "Web tool returned cache/internal fetch error; release tree/archive contents not verified.",
+          "disposition": "unresolved_tool_fetch"
+        },
+        {
+          "url": "https://macoskolab.com/papers/",
+          "authority": "Corresponding-author lab",
+          "observed": "Current page lists the exact 2019 publication; visible target entry did not supply a separate original supplement link.",
+          "disposition": "citation_only"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6927209/supplementaryFiles",
+          "authority": "Official public archive API route",
+          "observed": "Web tool returned internal fetch error; origin status and contents unknown.",
+          "disposition": "unresolved_tool_fetch"
+        }
+      ],
+      "conclusion": "No original 2019 supplement recovered in this pass. Zenodo software is not a justified substitute for the missing wet-lab supplement."
+    },
+    {
+      "case_id": "tuc-seq",
+      "primary_identity": {
+        "pmid": "28817234",
+        "doi": "10.1002/anie.201707465"
+      },
+      "needed": "Exact 2017 International Edition primary publication and its original supporting information.",
+      "observations": [
+        {
+          "url": "https://www.uibk.ac.at/en/organic/micura/publications/",
+          "authority": "Corresponding-author university laboratory",
+          "observed": "2017 entry identifies target authors/volume/pages and links to Wiley's target abstract path, not an independently hosted primary/SI file.",
+          "outbound_target": "https://onlinelibrary.wiley.com/doi/10.1002/anie.201707465/abstract",
+          "disposition": "institutional_listing_to_publisher"
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/10.1002/anie.201707465",
+          "authority": "Exact target publisher landing",
+          "observed": "Web representation exposes abstract and supporting-information filename anie201707465-sup-0001-misc_information.pdf, declared 2.3 MB.",
+          "disposition": "verified_supplement_link_metadata"
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002%2Fanie.201707465&file=anie201707465-sup-0001-misc_information.pdf",
+          "authority": "Publisher link clicked from exact target landing",
+          "observed": "Web tool explicitly reported HTTP 403 Forbidden; no PDF bytes acquired.",
+          "reported_http_status": 403,
+          "disposition": "access_failed"
+        },
+        {
+          "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/anie.201707465",
+          "authority": "Publisher full-text link",
+          "observed": "Web tool followed the landing's full-text link to /doi/abs/10.1002/anie.201707465; returned abstract representation rather than full primary methods.",
+          "final_url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/anie.201707465",
+          "disposition": "abstract_not_full_primary"
+        }
+      ],
+      "conclusion": "Exact SI filename/link is now explicitly documented, but neither primary full text nor original SI was recovered. No alternate author/institutional copy was established in inspected routes."
+    }
+  ],
+  "excluded_substitutions": [
+    "TUC-seq DUAL (2020) and the 2020 TUC-seq methods chapter: later procedures, not the frozen 2017 target.",
+    "German companion DOI 10.1002/ange.201707465: not silently substituted for the declared International Edition target.",
+    "Slide-seqV2, newer protocols, preprints, and unrelated papers citing these publications.",
+    "Unverified third-party reprints, arbitrary guessed assets, and software archives as proof of original supplementary content."
+  ],
+  "overall_conclusion": "No source-withheld case was promoted. Negative conclusions are limited to these observed attempts; root retains responsibility for any later host acquisition, binary identity checks, immutable registration and source review."
+}

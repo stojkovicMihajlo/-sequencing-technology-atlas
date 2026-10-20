@@ -20,6 +20,24 @@ def build_prompt(role, *, directory, attempt, schema, packet, case_id, metadata,
     q = lambda value: shlex.quote(str(value))
     source = source_command(packet)
     benchmark = source.removesuffix("workflow_extraction") + "protocol_benchmark"
+    originals_instructions = ""
+    if original_bindings := inputs.get("original_bindings"):
+        originals = source.removesuffix("workflow_extraction") + "source_originals"
+        originals_instructions = f"""A host-verified original binding manifest is permitted: {original_bindings}
+You may inspect that exact manifest and the cached original files named in its
+bindings, in addition to the registered text sources. This grants no access to
+their directories or unbound ledger entries. Inspect one source association with
+`{originals} inspect {q(original_bindings)} --source-id SOURCE_ID`.
+For a bound PDF, render its exact one-based page inside this attempt with
+`{originals} render {q(original_bindings)} SOURCE_ID PAGE {q(attempt / 'original-page')}`.
+Use a fresh output directory for each page, then open the returned image with the
+available image-viewing tool. For consequential unit/glyph, formula, figure or
+table ambiguities, verify the exact original page; never silently correct the
+rendition by plausibility. If unresolved, preserve a scoped unknown and the next
+evidence needed. Original association and render receipts do not prove visual
+inspection, scientific support or equivalence between text and figures.
+
+"""
     body = (Path(directory) / ROLES[role]).read_text()
     input_lines = "\n".join(f"{name}: {path}" for name, path in inputs.items()) or "(none)"
     if role == "reference_annotator":
@@ -72,7 +90,7 @@ packet, full paper or complete reference JSON to shell output. Read needed field
 and batches without silently omitting method sections. Source coverage records
 declared inspection, not proof of reading or source completeness.
 
-After writing, run this one-line integrity check: `{check}`.
+{originals_instructions}After writing, run this one-line integrity check: `{check}`.
 An integrity check is not a scientific support verdict. Host graph assembly also
 requires exact I/O bindings even if the helper command accepts a legacy draft.
 

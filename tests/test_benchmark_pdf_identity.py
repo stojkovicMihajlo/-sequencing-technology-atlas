@@ -267,7 +267,7 @@ def test_region_identity_context_cannot_cross_an_excluded_source_interval(regist
 
 
 @pytest.mark.parametrize("registered", ["regions"], indirect=True)
-@pytest.mark.parametrize("problem", ["rendered_text", "foreign_page", "missing_page", "wrong_header_image"])
+@pytest.mark.parametrize("problem", ["rendered_text", "foreign_page", "missing_page", "wrong_header_image", "missing_inspected_pin"])
 def test_region_replay_revalidates_rendered_source_and_inspection_relationships(registered, tmp_path, problem):
     case, directory, original, *_ = registered
     registration = json.loads((directory / "registration.json").read_bytes())
@@ -286,8 +286,10 @@ def test_region_replay_revalidates_rendered_source_and_inspection_relationships(
         inspection["pages"][1]["relationship"] = "other_article"
     elif problem == "missing_page":
         inspection["pages"].pop()
-    else:
+    elif problem == "wrong_header_image":
         evidence["title_page_image_sha256"] = inspection["pages"][1]["image_sha256"]
+    else:
+        inspection["files"].pop(inspection["render_manifest"]["path"])
     write(inspection_path, inspection)
     report = {"path": str(inspection_path), "sha256": sha(inspection_path)}
     selection["inspection_report"] = evidence["inspection_report"] = report
@@ -298,5 +300,37 @@ def test_region_replay_revalidates_rendered_source_and_inspection_relationships(
         registration["identity"], selection, evidence, original_sha256=sha(original))
     write(directory / "registration.json", registration)
     repin_fixture(directory)
-    with pytest.raises(ValueError, match="Rendered source page|foreign or unreadable|Every original source page|first selected source-page image"):
+    with pytest.raises(ValueError, match="Rendered source page|foreign or unreadable|Every original source page|first selected source-page image|exact declared file pin"):
         verify_publication(load_packet(directory / "packet.json"), case, project_root=tmp_path)
+
+
+@pytest.mark.parametrize("registered", ["regions"], indirect=True)
+def test_region_replay_resolves_inspection_metadata_paths_against_its_bound_directory(registered, tmp_path):
+    case, directory, *_ = registered
+    registration = json.loads((directory / "registration.json").read_bytes())
+    selection = registration["article_selection"]
+    inspection_path = Path(selection["inspection_report"]["path"])
+    inspection = json.loads(inspection_path.read_bytes())
+    render_path = Path(inspection["render_manifest"]["path"])
+    render = json.loads(render_path.read_bytes())
+    render["original"] = Path(render["original"]).relative_to(tmp_path).as_posix()
+    for row in render["pages"]:
+        row["image"] = Path(row["image"]).relative_to(tmp_path).as_posix()
+    write(render_path, render)
+    for field in ("render_manifest", "source_text"):
+        path = Path(inspection[field]["path"])
+        inspection[field] = {"path": path.relative_to(tmp_path).as_posix(), "sha256": sha(path)}
+    inspection["files"] = {Path(path).relative_to(tmp_path).as_posix(): sha(Path(path)) for path in inspection["files"]}
+    write(inspection_path, inspection)
+    selection["inspection_report"] = {"path": str(inspection_path), "sha256": sha(inspection_path)}
+    write(directory / "article_selection.json", selection)
+    evidence_path = Path(registration["identity_evidence"]["path"])
+    evidence = json.loads(evidence_path.read_bytes())
+    evidence["inspection_report"] = selection["inspection_report"]
+    write(evidence_path, evidence)
+    registration["identity_evidence"].update(record=evidence, sha256=sha(evidence_path))
+    write(directory / "registration.json", registration)
+    repin_fixture(directory)
+    proof = verify_publication(load_packet(directory / "packet.json"), case, project_root=tmp_path)
+    assert proof["primaries"][0]["identity_route"] == "registered_pdf_inspected_selected_article"
+    assert proof["pins"][str(render_path)] == sha(render_path)

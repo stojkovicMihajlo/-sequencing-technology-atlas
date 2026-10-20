@@ -109,8 +109,12 @@ class FixturePool:
                         assessment["obligations"][0].update(outcome="unassessed", targets=[], evidence=[])
                     if pool.fault == "critical_partial_once" and round_number == 1:
                         assessment["obligations"][0]["outcome"] = "partial"
-                    if pool.fault == "noncritical_partial":
+                    if pool.fault == "noncritical_partial" or (pool.fault == "noncritical_partial_once" and round_number == 1):
                         assessment["obligations"][1]["outcome"] = "partial"
+                    if pool.fault == "noncritical_missing_once" and round_number == 1:
+                        assessment["obligations"][1].update(outcome="missing", targets=[])
+                    if pool.fault == "noncritical_unassessed":
+                        assessment["obligations"][1].update(outcome="unassessed", targets=[], evidence=[])
                     review = make_review(workflow.model_dump(mode="json"), pool.packet)
                     if pool.fault == "unsupported_graph" or (round_number == 1 and pool.fault in {
                             "graph_revision_once", "graph_revision_then_uncertain", "graph_repair_missing_artifact"}):
@@ -132,9 +136,11 @@ class FixturePool:
                 (attempt / "artifact.json").write_text(json.dumps(document))
                 (attempt / "prompt.txt").write_text(prompt)
                 thread = "duplicate" if pool.fault == "duplicate_thread" else f"fixture-{index}"
+                if pool.fault == "partial_then_reuse" and case == "later" and role == "reference_annotator":
+                    thread = "fixture-1"
                 usage = {"input_tokens": 10, "output_tokens": 2}
                 events = [{"type": "thread.started", "thread_id": thread}, {"type": "turn.started"}]
-                if pool.fault != "transport":
+                if pool.fault != "transport" and not (pool.fault in {"partial_then_reuse", "partial_then_fresh"} and case == "failed"):
                     events.append({"type": "turn.completed", "usage": usage})
                 result = WorkerResult(0, thread, usage, .01, None)
                 (attempt / "events.jsonl").write_text("".join(json.dumps(event) + "\n" for event in events))
@@ -295,6 +301,37 @@ async def test_noncritical_partial_is_visible_without_fabricating_full_coverage(
                             worker_factory=pool.worker)
     assert state["status"] == "completed"
     assert state["cases"]["fixture"]["obligation_completeness"] == "partial"
+    assert state["cases"]["fixture"]["graph_repairs_used"] == 1
+    assert len(pool.calls) == 6
+
+
+@pytest.mark.parametrize("fault,initial_outcome", [("noncritical_partial_once", "partial"),
+                                                 ("noncritical_missing_once", "missing")])
+async def test_known_required_omission_gets_one_correction_and_fresh_review(records, tmp_path, fault, initial_outcome):
+    pool = FixturePool(records, fault=fault)
+    output = tmp_path / "required-correction"
+    state = await run_batch(manifest_for(records, tmp_path), output, worker_factory=pool.worker)
+    case, root = state["cases"]["fixture"], output / "cases/fixture"
+    assert len(pool.calls) == state["distinct_native_threads"] == 6
+    assert [call[1] for call in pool.calls[-2:]] == ["graph_constructor", "graph_reviewer"]
+    assert case["graph_repairs_used"] == 1 and case["selected_graph_round"] == 2
+    assert case["status"] == "model_reviewed_reference_candidate" and case["obligation_completeness"] == "complete"
+    # A supported partial candidate remains distinct from whole-reference readiness.
+    assert case["graph_rounds"][0]["status"] == "model_reviewed_reference_candidate"
+    first = json.loads((root / "graph_rounds/001/scores.json").read_bytes())["obligation_coverage"]
+    assert first["counts"][initial_outcome] == 1 and first["critical_not_covered"] == []
+    final = json.loads((root / "scores.json").read_bytes())["obligation_coverage"]
+    assert final["counts"]["covered"] == 2
+    assert "previous_assessment:" in pool.calls[-2][2]
+    assert "previous_assessment:" not in pool.calls[-1][2] and "feedback:" not in pool.calls[-1][2]
+
+
+async def test_unassessed_required_obligation_does_not_trigger_graph_correction(records, tmp_path):
+    pool = FixturePool(records, fault="noncritical_unassessed")
+    state = await run_batch(manifest_for(records, tmp_path), tmp_path / "required-unassessed", worker_factory=pool.worker)
+    case = state["cases"]["fixture"]
+    assert len(pool.calls) == 4 and case["graph_repairs_used"] == 0
+    assert case["selected_graph_round"] == 1 and case["obligation_completeness"] == "partial"
 
 
 @pytest.mark.parametrize("fault,status", [("unknown_partial", "reference_unknowns_not_retained"),
@@ -476,3 +513,24 @@ async def test_source_report_custody_failures_stop_before_any_native_call(record
     with pytest.raises(ValueError, match="Frozen file changed|globally bound source report"):
         await run_batch(manifest, output, case_ids=["one"], worker_factory=pool.worker)
     assert not pool.calls and not output.exists()
+
+
+@pytest.mark.parametrize("reuse", [True, False])
+async def test_raw_thread_from_failed_transport_cannot_be_reused_by_a_later_case(records, tmp_path, reuse):
+    # Inject a CLI identity reuse; real CodexWorker uses fresh exec without resume.
+    pool = FixturePool(records, fault="partial_then_reuse" if reuse else "partial_then_fresh")
+    output = tmp_path / "thread_audit"
+    state = await run_batch(manifest_for(records, tmp_path, ids=("failed", "later")),
+        output, concurrency=1, worker_factory=pool.worker)
+    failed, later = state["cases"]["failed"], state["cases"]["later"]
+    assert failed["error_category"] == "native_transport"
+    assert failed["attempts"][0]["observed_thread_ids"] == ["fixture-1"]
+    if reuse:
+        assert later["status"] == "reference_annotator_failed"
+        assert later["error_category"] == "native_transport"
+        assert len(later["attempts"]) == 1
+        assert later["attempts"][0]["observed_thread_ids"] == ["fixture-1"]
+        assert not (output / "cases/later/projection").exists()
+    else:
+        assert later["status"] == "model_reviewed_reference_candidate"
+        assert (output / "cases/later/projection/graph_candidate.json").is_file()

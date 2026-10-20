@@ -27,7 +27,7 @@ from .comparisons import (
     score_comparison, validate_comparison_reference, validate_comparison_review,
 )
 from .models import ProtocolReference, ReferenceReview, parse_assessment, parse_graph_review
-from .runtime import ARCHIVES, StageFailure, _usage, verify_pins
+from .runtime import ARCHIVES, StageFailure, _observed_threads, _usage, verify_pins
 from .scoring import unknown_preservation
 from .source_identity import verify_publication
 from .validation import reference_review_outcome, validate_assessment, validate_reference_review
@@ -49,22 +49,6 @@ def _merge(pins, additions):
     if any(name in pins and pins[name] != value for name, value in additions.items()):
         raise StageFailure("conflicting_pins", "Inputs declare conflicting file-byte hashes")
     pins.update(additions)
-
-
-def _observed_threads(attempt):
-    """Reserve identities even from interrupted or otherwise invalid transports."""
-    threads = set()
-    events = attempt / "events.jsonl"
-    if events.is_file():
-        with events.open("rb") as handle:
-            for line in handle:
-                try:
-                    event = json.loads(line)
-                except (ValueError, UnicodeError):
-                    continue
-                if isinstance(event, dict) and event.get("type") == "thread.started" and isinstance(event.get("thread_id"), str):
-                    threads.add(event["thread_id"])
-    return threads
 
 
 def _prior_thread_owners(reference_run):

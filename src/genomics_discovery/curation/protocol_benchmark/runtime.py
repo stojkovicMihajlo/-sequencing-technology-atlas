@@ -13,6 +13,7 @@ from pydantic import ValidationError
 
 from genomics_discovery.curation.codex_worker import CodexWorker, assess_archived_attempt
 from genomics_discovery.curation.run_state import now, sha, write
+from genomics_discovery.curation.source_originals import load_originals
 from genomics_discovery.curation.workflow_extraction.assemble import assemble_workflow
 from genomics_discovery.curation.workflow_extraction.models import (
     Workflow, WorkflowDraft, WorkflowReview, digest, review_outcome, validate_evidence, validate_review,
@@ -55,6 +56,22 @@ def verify_pins(pins):
             raise StageFailure("frozen_input_changed", f"Frozen file changed: {path}")
 
 
+def _observed_threads(attempt):
+    """Reserve identities even from interrupted or otherwise invalid transports."""
+    threads = set()
+    events = attempt / "events.jsonl"
+    if events.is_file():
+        with events.open("rb") as handle:
+            for line in handle:
+                try:
+                    event = json.loads(line)
+                except (ValueError, UnicodeError):
+                    continue
+                if isinstance(event, dict) and event.get("type") == "thread.started" and isinstance(event.get("thread_id"), str):
+                    threads.add(event["thread_id"])
+    return threads
+
+
 def _usage(attempts):
     total = Counter()
     for attempt in attempts:
@@ -69,6 +86,7 @@ class CaseSession:
         self.row, self.run, self.pins = row, run, dict(pins)
         self.prompts, self.used_threads = prompts, used_threads
         self.worker_factory, self.prepare_only = worker_factory, prepare_only
+        self.original_bindings_path = None
         self.state = {"case_id": row["case_id"], "status": "preparing", "stage": "source",
                       "started_at": now(), "attempts": [], "repairs_used": 0,
                       "graph_repairs_used": 0, "graph_rounds": [], "boundary": BOUNDARY}
@@ -91,6 +109,8 @@ class CaseSession:
     async def stage(self, role, inputs, *, repair=False):
         self.state["stage"] = role
         verify_pins(self.pins)
+        if self.original_bindings_path is not None:
+            inputs = {**inputs, "original_bindings": self.original_bindings_path}
         attempt = self.run / "attempts" / f"{len(self.state['attempts']) + 1:03d}_{role}"
         attempt.mkdir(parents=True)
         schema = self.run / "schemas" / f"{role}.json"
@@ -126,9 +146,11 @@ class CaseSession:
                 raise StageFailure("network_policy", "Native benchmark work uses a fixed source corpus")
             result = await worker.run(prompt, attempt)
             checked = assess_archived_attempt(attempt)
+            observed = _observed_threads(attempt)
             if (not checked.complete or not checked.thread_id or result.exit_code != 0
                     or result.error is not None or result.thread_id != checked.thread_id
                     or result.usage != checked.usage or checked.thread_id in self.used_threads
+                    or observed != {checked.thread_id}
                     or (attempt / "prompt.txt").read_text() != prompt):
                 raise StageFailure("native_transport", "Expected a complete, unchanged, fresh native archive")
             self.used_threads.add(checked.thread_id)
@@ -154,6 +176,9 @@ class CaseSession:
                           error=f"{type(exc).__name__}: {exc}")
             raise
         finally:
+            observed = _observed_threads(attempt)
+            self.used_threads.update(observed)
+            record["observed_thread_ids"] = sorted(observed)
             record["finished_at"] = now()
             self.persist()
 
@@ -251,8 +276,8 @@ class CaseSession:
                 self.persist()
                 # Unassessed alone is evaluator incompleteness, not a graph defect.
                 # A reference revision needs new adjudication, never a graph patch.
-                correctable = (bool(unsupported) or outcome == "needs_revision" or any(item.obligation_id in critical
-                    and item.outcome in {"missing", "partial"} for item in combined.assessment.obligations)
+                correctable = (bool(unsupported) or outcome == "needs_revision" or any(
+                    item.outcome in {"missing", "partial"} for item in combined.assessment.obligations)
                     or any(item.outcome in {"missing", "partial"} for item in combined.assessment.unknown_checks))
                 if number == 2 or revision or (outcome == "research_needed" and not unsupported) or not correctable:
                     break
@@ -289,6 +314,22 @@ class CaseSession:
             for source in self.packet["sources"]:
                 original = Path(source["original_path"])
                 self.pins[str(original)] = source["original_sha256"]
+            if declared := self.row.get("original_bindings"):
+                binding_path = Path(declared["path"])
+                verify_pins({str(binding_path): declared["sha256"]})
+                bound = load_originals(binding_path)
+                if (Path(bound["packet"]).resolve() != packet_path.resolve()
+                        or bound["source_packet_sha256"] != digest(self.packet)):
+                    raise StageFailure("original_bindings_packet", "Original bindings belong to another packet")
+                additions = {str(binding_path): declared["sha256"], **bound["input_files"]}
+                if any(name in self.pins and self.pins[name] != expected
+                       for name, expected in additions.items()):
+                    raise StageFailure("original_bindings_conflict", "Original binding pins conflict with frozen inputs")
+                self.pins.update(additions)
+                self.original_bindings_path = binding_path
+                self.state["original_bindings"] = {**declared, "revision_id": bound["revision_id"],
+                    "bound_source_ids": sorted(bound["bindings"]),
+                    "unmapped_source_ids": bound["unmapped_source_ids"]}
             verify_pins(self.pins)
             self.freeze("input.json", {"case_id": self.row["case_id"], "packet": str(packet_path),
                 "packet_sha256": self.row["packet_sha256"], "source_packet_sha256": digest(self.packet),
@@ -366,6 +407,15 @@ async def run_batch(manifest_path, output, *, concurrency=4, case_ids=(), prepar
         if not isinstance(row.get("packet_sha256"), str) or not re.fullmatch(r"[0-9a-f]{64}", row["packet_sha256"]):
             raise ValueError("Each case requires a declared packet file-byte SHA-256")
         row["packet"] = str((manifest_path.parent / row["packet"]).resolve())
+        if "original_bindings" in row:
+            declared = row["original_bindings"]
+            if (not isinstance(declared, dict) or set(declared) != {"path", "sha256"}
+                    or not isinstance(declared["path"], str) or not declared["path"].strip()
+                    or not isinstance(declared["sha256"], str)
+                    or not re.fullmatch(r"[0-9a-f]{64}", declared["sha256"])):
+                raise ValueError("Original bindings require an exact path and file-byte SHA-256")
+            row["original_bindings"] = {**declared,
+                "path": str((manifest_path.parent / declared["path"]).resolve())}
     output.mkdir(parents=True, exist_ok=False)
     templates = Path(prompt_directory).resolve()
     root = Path(__file__).resolve().parents[4]

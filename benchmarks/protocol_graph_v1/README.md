@@ -39,6 +39,14 @@ Initial annotations are **model-authored, independently model-reviewed reference
 candidates**, not human-validated ground truth. Graph construction from reference
 answers is a self-consistency check. It is not a blind harness benchmark result.
 
+The benchmark uses the same graph schema and assembly as production extraction;
+it does not introduce a competing protocol format. The
+[contract audit](../../docs/benchmark/audits/20261020-benchmark-production-contract.md)
+separates format compatibility from scientific acceptance and production provenance.
+Any future representation change needs corresponding extraction instructions,
+schema/assembly checks and a versioned migration before it becomes a benchmark
+requirement. Existing archived records keep their original meaning and hashes.
+
 ```mermaid
 flowchart TD
     S[Frozen source packet] --> A[Annotator: requirements and consequential unknowns]

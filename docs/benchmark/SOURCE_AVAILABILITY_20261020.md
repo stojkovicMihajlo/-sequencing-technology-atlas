@@ -1,0 +1,15 @@
+# Exact-publication source availability: bounded follow-up
+
+Recorded 2026-10-20. No missing original source binary was recovered in this web-only pass. The three cases remain source-withheld; this is not a finding that the materials are unavailable everywhere. No source packets, native runs, production code, or frozen artifacts were changed. The [structured observation record](../../provenance/benchmark_source_availability_20261020.json) distinguishes tool errors, indexed metadata and actual reported HTTP failures; it is not a host acquisition receipt or source-byte proof.
+
+| Frozen target | Additional public route checked | Observed result |
+| --- | --- | --- |
+| RRBS 2008; PMID 18600261; DOI 10.1038/nature07107 | [Duke course-hosted PDF](https://courses.cs.duke.edu/spring13/compsci662/pdf/meissner.2008.pdf) | Search index identifies exact DOI/title; direct fetch timed out. Page count and possible supplementary inclusion remain unverified. No original SM recovered. |
+| Slide-seq 2019; PMID 30923225; DOI 10.1126/science.aaw1219 | [Author-deposited Zenodo release](https://zenodo.org/records/2571615) and [author code/readme](https://github.com/broadchenf/Slideseq/tree/master/BeadSeq%20Code) | Zenodo explicitly describes software/code; the inspected readme refers to a separate supplement. The release ZIP was not downloaded or exhaustively audited, so its contents are not an absence proof. It cannot currently replace the missing original wet-lab SM. |
+| TUC-seq 2017; PMID 28817234; DOI 10.1002/anie.201707465 | [Author's current institutional publication list](https://www.uibk.ac.at/en/organic/micura/publications/) and [exact publisher target](https://onlinelibrary.wiley.com/doi/10.1002/anie.201707465) | The institutional target links back to Wiley. Publisher metadata identifies the exact SI filename `anie201707465-sup-0001-misc_information.pdf` (2.3 MB); its linked download returned 403. The full-text link redirected to the abstract. |
+
+The exact TUC [publisher-supplied SI link](https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002%2Fanie.201707465&file=anie201707465-sup-0001-misc_information.pdf) is retained as a future acquisition lead, not as recovered evidence. Its filename contains `misc_information`, not `misc_info`.
+
+The current [Macosko lab publication page](https://macoskolab.com/papers/) supplies the Slide-seq citation but no separate original SM link in the inspected target entry. Historical Nature and Europe PMC supplementary endpoints also produced web-tool errors in this pass; those errors do not establish an origin-server 404 or permanent absence.
+
+Later TUC-seq protocols/TUC-seq DUAL, Slide-seqV2, preprints, German-companion-edition content and unrelated citing papers were not substituted. Exact publication and preregistered specimen/procedure scope remain unchanged. Any subsequent usable URL still requires ordinary host retrieval, original-byte identity/association verification, immutable custody records and source review before benchmark admission.

@@ -457,6 +457,11 @@ def _comparisons(archive, design, reference_cases):
                 if workflow_hash is not None and workflow_hash != digests.get("workflow"):
                     conflicts.append(side + " archived workflow")
             if isinstance(review, dict):
+                author_session, reviewer_session = reference.get("annotation_session_id"), review.get("review_session_id")
+                if (not isinstance(author_session, str) or not author_session.strip()
+                        or not isinstance(reviewer_session, str) or not reviewer_session.strip()
+                        or author_session.strip() == reviewer_session.strip()):
+                    conflicts.append("comparison author/reviewer session separation")
                 expected_bindings = {"comparison_sha256": object_digest(reference),
                     "task_sha256": reference.get("task_sha256")}
                 for side in ("left", "right"):

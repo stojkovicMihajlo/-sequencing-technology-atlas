@@ -16,6 +16,16 @@ subsequent frozen runs retain their own source, prompt and review artifacts;
 no completed expert-adjudicated benchmark or scientific accuracy result is claimed
 by these software checks. See
 [the preregistered decisions](docs/decisions/2026-10-20-protocol-reference-benchmark.md).
+Source registration and a prepare-only run now pass for **9 methods covering all
+six sampling strata**. Three source-blocked cases remain in the denominator.
+Expanded construction job **48622574** was submitted on Qiu CPU resources after
+the pilot; submission is not a completed scientific result. The
+[run receipt](provenance/protocol_benchmark_followup_20261020.json) records the exact
+frozen runtime, inputs, bounded corrections and preservation steps.
+Later development audit changes passed **1,998 software tests, 3 skipped**;
+they add explicit optional original-document access and strengthen failed-session
+and reporting checks. They do not modify the frozen native run or upgrade its
+scientific results. See [the optional input contract](docs/benchmark/READING_A_CASE.md).
 
 The inventory accounts for 201 methods; protocol decomposition remains partial.
 The new development checkpoint passed **1,589 software tests, 3 skipped**, plus six
@@ -48,6 +58,7 @@ Earlier extractions, graph publications and live controls remain preserved in
 | How are missing papers found and registered? | [Public source acquisition](docs/SOURCE_ACQUISITION.md) |
 | What have we built, and what remains undecided? | [Current status and pre-batch decisions](docs/STATUS.md) |
 | What exactly does an agent extract? | [Output fields and their connections](docs/OUTPUT_FORMAT.md) |
+| How will we assess extraction without requiring one exact graph? | [Protocol benchmark](benchmarks/protocol_graph_v1/README.md) and [reading one case](docs/benchmark/READING_A_CASE.md) |
 | How do the agents and Python code work together? | [Pipeline and code map](docs/PIPELINE.md) |
 | Can I inspect a real extraction? | [ChIPmentation example](examples/chipmentation/README.md) |
 | How do methods enter the larger graph? | [Graph layers and agent tools](docs/GRAPH.md) |

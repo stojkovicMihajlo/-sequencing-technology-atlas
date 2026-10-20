@@ -40,3 +40,18 @@ budget or a benchmark performance result. Future extraction-harness comparisons
 must declare equal opportunity for correction and report both first-pass results
 and total cost. Construction here still sees reference answers and remains
 model-authored/model-reviewed reference curation, pending expert adjudication.
+
+## Follow-up after frozen runtime `8c93d08`
+
+Extend the same one-correction opportunity to a reviewed `missing` or `partial`
+obligation labeled `required`, as well as one labeled `critical`. Both categories
+already have frozen source support and an assay-necessity rationale; a known
+representation omission is a correctable graph defect regardless of its export
+severity. This changes the correction trigger only. Unassessed judgments alone,
+source/research blockers and reference-revision requests retain their existing
+dispositions, and the correction cap remains one.
+
+A source-supported partial graph may still be recorded as a partial candidate
+after correction. Full benchmark/pair eligibility continues to require every
+required and critical obligation covered. No source, reference answer, export
+severity or scoring denominator changes, and frozen `8c93d08` remains unchanged.

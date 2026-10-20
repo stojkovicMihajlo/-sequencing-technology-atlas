@@ -147,6 +147,7 @@ class Phase:
         task = json.loads(self.comparisons.read_bytes())["comparisons"][index]
         folder = self.work / "comparisons/cases" / task["comparison_id"]
         reference = {"comparison_id": task["comparison_id"], "task_sha256": reporter.object_digest(task),
+            "annotation_session_id": "author-" + task["comparison_id"],
             "claims": [], "no_claims_reason": "No claim established in inspected scope.",
             **{side: {"case_id": task[side + "_case_id"], "reference_sha256": "a" * 64,
                       "source_packet_sha256": "b" * 64} for side in ("left", "right")}}
@@ -157,6 +158,7 @@ class Phase:
                 reference[side].update(reference_sha256=reporter.object_digest(ref),
                     source_packet_sha256=ref["source_packet_sha256"])
         review = {"comparison_sha256": reporter.object_digest(reference), "task_sha256": reference["task_sha256"],
+            "review_session_id": "reviewer-" + task["comparison_id"],
             "claim_checks": [], "unit_checks": [{"side": side, "verdict": "supported"} for side in ("left", "right")],
             "no_claims_check": "supported", **{side + "_" + field: reference[side][field]
                 for side in ("left", "right") for field in ("reference_sha256", "source_packet_sha256")}}
@@ -448,6 +450,33 @@ def test_orphaned_comparison_cannot_satisfy_prerequisite_coverage(tmp_path):
     assert not comparison["prerequisite_case_gates_recorded"]
     assert not comparison["reviewed_candidate_recorded"]
     assert "left archived reference" in comparison["metadata_conflicts"]
+
+
+@pytest.mark.parametrize("defect", ["same_session", "missing_author", "missing_reviewer"])
+def test_report_withholds_comparison_without_declared_author_reviewer_separation(tmp_path, defect):
+    phase = Phase(tmp_path)
+    phase.case(0)
+    phase.case(1)
+    folder = phase.compare()
+    reference = json.loads((folder / "reference.json").read_bytes())
+    review = json.loads((folder / "review.json").read_bytes())
+    if defect == "same_session":
+        review["review_session_id"] = reference["annotation_session_id"]
+    elif defect == "missing_author":
+        reference.pop("annotation_session_id")
+    else:
+        review.pop("review_session_id")
+    review["comparison_sha256"] = reporter.object_digest(reference)
+    write(folder / "reference.json", reference)
+    write(folder / "review.json", review)
+    phase.repin(folder)
+    result = phase.report()["comparisons"]
+    row = result["cases"][0]
+    assert row["declared_review_supported"]
+    assert row["essential_artifact_bytes_verified"] and not row["local_pin_failures"]
+    assert not row["reviewed_candidate_recorded"]
+    assert "comparison author/reviewer session separation" in row["metadata_conflicts"]
+    assert result["reviewed_candidates_recorded"] == 0 and result["denominator"] == 8
 
 
 def test_all_legacy_stages_still_leave_new_uncertainty_criterion_not_assessed(tmp_path):

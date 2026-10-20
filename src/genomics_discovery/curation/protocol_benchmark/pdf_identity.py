@@ -107,9 +107,19 @@ def verify_pdf_registration(source, case, expected, pin):
     if (inspection["method_id"] != case["method_id"] or inspection["original_sha256"] != files[str(original)]
             or inspection["selection"] != inspected_decision or not inspection.get("files")):
         raise ValueError("PDF inspection does not bind the same original and article selection")
+    inspected_pins = {}
     for name, expected_sha in inspection["files"].items():
         inspected = Path(name)
-        bound(inspected if inspected.is_absolute() else (inspection_path.parent / inspected).resolve(), expected_sha)
+        inspected = inspected.resolve() if inspected.is_absolute() else (inspection_path.parent / inspected).resolve()
+        bound(inspected, expected_sha)
+        inspected_pins[str(inspected)] = expected_sha
+
+    def inspected_pin(value, expected_sha):
+        path = Path(value)
+        path = path.resolve() if path.is_absolute() else (inspection_path.parent / path).resolve()
+        if inspected_pins.get(str(path)) != expected_sha:
+            raise ValueError("Region inspection artifact lacks its exact declared file pin")
+        return bound(path, expected_sha)
     evidence_binding = registration.get("identity_evidence")
     if decision["kind"] == "exact_text_regions" and not evidence_binding:
         raise ValueError("PDF selected regions require their inspected identity evidence")
@@ -122,7 +132,7 @@ def verify_pdf_registration(source, case, expected, pin):
             raise ValueError("PDF selected-article identity check differs")
         if decision["kind"] == "exact_text_regions":
             pdf.verify_region_inspection(inspection, selection, full_text,
-                original_sha256=files[str(original)], pin=bound, identity_evidence=evidence)
+                original_sha256=files[str(original)], pin=inspected_pin, identity_evidence=evidence)
         route = "registered_pdf_inspected_selected_article"
     else:
         check = pdf.verify_pdf_text(full_text, identity)
