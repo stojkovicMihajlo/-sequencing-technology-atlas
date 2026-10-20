@@ -136,7 +136,12 @@ witnesses and any qualification, rather than accepting a matching phrase alone.
 The corresponding planned falsification controls are: a schema-valid graph missing
 a consequential connection; a QC/production route swap; and an admissible split or
 grouping alternative that preserves the interface. The first two should fail the
-affected question and the last should pass. These controls are not reported as
+affected source-correctness question and the last should pass. Assess a future
+graph reader's faithfulness separately: faithfully reporting a deliberately
+corrupted route can be source-wrong, while repeating the source-correct answer
+without valid graph witnesses must not pass as graph-supported retrieval. Hide
+source/reference answers from that reader and give them only to its evaluator.
+These controls are not reported as
 executed scientific results. They require no new graph ontology. Any demonstrated
 representation failure should instead motivate a versioned change shared by the
 benchmark and production extraction/assembly/validation contracts; historical
