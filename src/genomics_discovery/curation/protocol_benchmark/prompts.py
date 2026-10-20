@@ -31,7 +31,7 @@ def build_prompt(role, *, directory, attempt, schema, packet, case_id, metadata,
         check = (f"{source} assemble {q(attempt / 'artifact.json')} --packet {q(packet)} "
                  f"--output {q(attempt / 'assembled_check.json')}")
     else:
-        check = (f"{benchmark} check graph-review {q(attempt / 'artifact.json')} --packet {q(packet)} "
+        check = (f"{benchmark} check graph-review-v2 {q(attempt / 'artifact.json')} --packet {q(packet)} "
                  f"--reference {q(inputs['reference'])} --workflow {q(inputs['workflow'])}")
     feedback = (
         "\nOne bounded data repair is authorized. Read previous_artifact and feedback below. "

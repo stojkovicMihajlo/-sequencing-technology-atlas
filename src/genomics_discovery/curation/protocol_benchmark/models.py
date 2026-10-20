@@ -6,6 +6,7 @@ Obligations do not prescribe node counts, names or a unique graph decomposition.
 
 from __future__ import annotations
 
+import json
 from typing import Annotated, Literal
 
 from pydantic import Field, model_validator
@@ -140,3 +141,59 @@ class GraphReviewAssessment(StrictModel):
 
     workflow_review: WorkflowReview
     assessment: BenchmarkAssessment
+
+
+class UnknownPreservationCheck(StrictModel):
+    """A judgment of retained uncertainty, never a new resolved scientific fact."""
+
+    unknown_id: Text
+    outcome: Literal["retained", "partial", "missing", "reference_revision_needed", "unassessed"]
+    targets: tuple[Text, ...] = ()
+    rationale: Text
+    evidence: tuple[Evidence, ...] = ()
+
+    @model_validator(mode="after")
+    def meaningful_judgment(self):
+        if self.outcome in {"retained", "partial"} and not self.targets:
+            raise ValueError("Retained/partial unknowns require qualified graph witnesses")
+        if self.outcome == "reference_revision_needed" and not self.evidence:
+            raise ValueError("Reference revision requires source evidence, not an unsupported resolution")
+        return self
+
+
+class BenchmarkAssessmentV2(BenchmarkAssessment):
+    """Assessment 1.1 adds exhaustive uncertainty accounting; 1.0 is unchanged."""
+
+    format_version: Literal["protocol_benchmark_assessment/1.1"] = Field(...)
+    unknown_checks: tuple[UnknownPreservationCheck, ...]
+
+
+class GraphReviewAssessmentV2(StrictModel):
+    workflow_review: WorkflowReview
+    assessment: BenchmarkAssessmentV2
+
+
+def parse_assessment(value) -> BenchmarkAssessment | BenchmarkAssessmentV2:
+    """Dispatch archived versions without upgrading or changing legacy bytes."""
+    if isinstance(value, (BenchmarkAssessment, BenchmarkAssessmentV2)):
+        return value
+    value = json.loads(value) if isinstance(value, (str, bytes, bytearray)) else value
+    if not isinstance(value, dict):
+        raise ValueError("Benchmark assessment must be a JSON object")
+    version = value.get("format_version", "protocol_benchmark_assessment/1.0")
+    model = {"protocol_benchmark_assessment/1.0": BenchmarkAssessment,
+             "protocol_benchmark_assessment/1.1": BenchmarkAssessmentV2}.get(version)
+    if model is None:
+        raise ValueError(f"Unsupported benchmark assessment version: {version}")
+    return model.model_validate(value)
+
+
+def parse_graph_review(value) -> GraphReviewAssessment | GraphReviewAssessmentV2:
+    if isinstance(value, (GraphReviewAssessment, GraphReviewAssessmentV2)):
+        return value
+    value = json.loads(value) if isinstance(value, (str, bytes, bytearray)) else value
+    if not isinstance(value, dict):
+        raise ValueError("Graph review assessment must be a JSON object")
+    assessment = parse_assessment(value["assessment"])
+    model = GraphReviewAssessmentV2 if isinstance(assessment, BenchmarkAssessmentV2) else GraphReviewAssessment
+    return model.model_validate(value)

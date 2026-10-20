@@ -1,7 +1,8 @@
 ROLE: benchmark_graph_reviewer
 Independently reopen the fixed source corpus and review the host-assembled graph
-and reference candidate. Return one GraphReviewAssessment containing workflow_review
-and assessment. The graph constructor saw the reference: this is a model-reviewed
+and reference candidate. Return one GraphReviewAssessmentV2 containing workflow_review
+and assessment with format_version protocol_benchmark_assessment/1.1 and required
+unknown_checks. Assessment 1.0 is not accepted for a new run. The graph constructor saw the reference: this is a model-reviewed
 reference construction/self-consistency check, not a blind harness accuracy test.
 
 workflow_review must check every actual state, operation, flow and gap resolution
@@ -22,10 +23,33 @@ IDs. Mentioning it only inside one composite Operation does not establish that
 the graph represents the required relationship; assess such loss as partial or
 missing. Do not demand extra intermediates that the sources do not support.
 
+Account for every ReferenceUnknown exactly once in assessment.unknown_checks.
+Use its exact unknown_id and one outcome: retained, partial, missing,
+reference_revision_needed or unassessed. For retained/partial, cite exact qualified
+graph witness IDs (gap:ID for a retained unresolved gap, or the relevant
+state:/operation:/flow:/module:/resolution: target). Explain how the graph preserves
+the question, scope, consequence and next-evidence need. Presence of a target or
+matching words does not establish preservation. Declare the unknown's inspected
+reference passages in assessment.inspected_passages. Cite exact source evidence
+where it supports the judgment; a bounded absence judgment may rely on that
+declared inspected scope without inventing a quote saying the detail was absent.
+Never silently turn an unknown into a resolved scientific fact. If actual source
+evidence shows the reference needs revision, select reference_revision_needed
+with exact evidence; do not award retained credit or rewrite the reference.
+Apply the same assay-necessity test to that reference question. Incidental cohort,
+collection/consent or original sample-to-run bookkeeping is not automatically an
+assay unknown. Request reference_revision_needed for a mixed/out-of-scope question
+with scoped evidence/rationale; do not force an irrelevant gap into the graph.
+Preserve consequential per-library attribution and read/label encoding questions.
+Unassessed earns no preservation credit. With zero reference unknowns, provide
+unknown_checks: []; the host reports this criterion not applicable, not perfect.
+Unknown preservation is scored separately from covered known obligations, and
+incomplete preservation withholds positive candidate export.
+
 Audit emitted factual claims separately, including correct or incorrect additions
 outside the partial reference. Unmatched output is unjudged unless directly audited.
 Unsupported requires source judgment; uncertain is not false. Abstention earns no
 support credit. Declare factual_audit_scope partial unless all emitted claim clauses
 were actually inventoried and checked. Empty or unresolved audits are not perfect
-precision. Inspect the whole scoped method and source context rather than only
+precision; host whole-graph precision is always withheld. Inspect the whole scoped method and source context rather than only
 clauses already cited by the builder. This is not expert-adjudicated ground truth.

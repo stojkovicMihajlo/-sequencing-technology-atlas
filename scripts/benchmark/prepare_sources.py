@@ -14,8 +14,9 @@ from pathlib import Path
 
 from genomics_discovery.curation.codex_worker import CodexWorker
 from genomics_discovery.curation.run_state import now, sha, write
-from genomics_discovery.curation.source_acquisition.models import Identity
-from genomics_discovery.curation.source_acquisition.runtime import _match, acquire
+from genomics_discovery.curation.protocol_benchmark import pdf_identity, source_identity
+from genomics_discovery.curation.protocol_benchmark.source_identity import verify_publication
+from genomics_discovery.curation.source_acquisition.runtime import acquire
 from genomics_discovery.curation.workflow_extraction.models import digest
 from genomics_discovery.curation.workflow_extraction.sources import build_packet, load_packet
 
@@ -36,14 +37,10 @@ def verify(pins):
             raise ValueError(f"Source preparation input changed: {filename}")
 
 
-def verify_publication(packet, case):
-    expected = Identity(**{k: case["primary_identity"][k]
-        for k in ("pmid", "doi") if case["primary_identity"].get(k)})
-    primaries = [s for s in packet["sources"] if s["role"] == "primary_paper"]
-    if not primaries:
-        raise ValueError("Packet has no primary publication")
-    for source in primaries:
-        _match(source["document_identity"], expected)
+def bind(pins, additions):
+    if any(path in pins and pins[path] != expected for path, expected in additions.items()):
+        raise ValueError("Source preparation inputs declare conflicting SHA256 pins")
+    pins.update(additions)
 
 
 def existing_packet(case, root):
@@ -57,14 +54,15 @@ def existing_packet(case, root):
         path = path if path.is_absolute() else root / path
         if not path.is_file():
             continue
+        proof_pins = {}
         try:
             packet = load_packet(path)
             # Publication identity is not an arbitrary historical method label.
-            verify_publication(packet, case)
-            return path, packet, failures
+            proof = verify_publication(packet, case, packet_path=path, project_root=root, pins=proof_pins)
+            return path, packet, failures, proof
         except (OSError, ValueError, KeyError) as exc:
-            failures.append({"path": str(path), "error": str(exc)})
-    return None, None, failures
+            failures.append({"path": str(path), "error": str(exc), "publication_pins": proof_pins})
+    return None, None, failures, None
 
 
 async def prepare(args):
@@ -79,7 +77,10 @@ async def prepare(args):
     cases = document["cases"]
     if len({c["case_id"] for c in cases}) != len(cases) or len({c["method_id"] for c in cases}) != len(cases):
         raise ValueError("Case and method IDs must be unique")
-    pins = {str(cases_path): sha(cases_path), str(Path(__file__).resolve()): sha(Path(__file__).resolve())}
+    code = (Path(__file__).resolve(), Path(source_identity.__file__).resolve(), Path(pdf_identity.__file__).resolve(),
+        Path(pdf_identity.pdf.__file__).resolve(), Path(source_identity._identity.__code__.co_filename).resolve(),
+        Path(source_identity.assess_primary_html.__code__.co_filename).resolve())
+    pins = {str(path): sha(path) for path in (cases_path, *code)}
     extra = {}
     if getattr(args, "additional_leads", None):
         extra_path = args.additional_leads.resolve()
@@ -94,14 +95,15 @@ async def prepare(args):
     for case in cases:
         mid = case["method_id"]
         options = {key: case[key] for key in ("method_id", "title", "scope", "variant")}
-        source_path, packet, failures = existing_packet(case, root)
+        source_path, packet, failures, previous_proof = existing_packet(case, root)
+        for failure in failures:
+            bind(pins, failure["publication_pins"])
         row = {"id": mid, "title": case["title"], "origin_paper_ids": [],
                "source_packet": None, "tasks": [], "retained_unknowns": [],
                "source_leads": [*case.get("source_leads", []), *extra.get(mid, [])]}
-        # Exact PMID/DOI jointly identify the publication. Manuscript and published
-        # titles may differ (SPLiT-seq); preserve titles in the design without a
-        # fuzzy title match or treating an alias as a different publication.
-        expected = {k: case["primary_identity"][k] for k in ("pmid", "doi")
+        # The frozen publication title is distinct from the packet's method label.
+        # It anchors the existing narrow documented-manuscript HTML exception.
+        expected = {k: case["primary_identity"][k] for k in ("pmid", "doi", "title")
                     if case["primary_identity"].get(k)}
         if expected.get("pmid"):
             row["origin_paper_ids"] = ["pmid:" + str(expected["pmid"])]
@@ -110,6 +112,8 @@ async def prepare(args):
                   "invalid_existing_leads": failures, "previous_packet": None,
                   "boundary": "Registration and exact-file identity only; original scientific scope must be checked by source-first curators."}
         if packet is not None:
+            bind(pins, previous_proof["pins"])
+            report["previous_publication_verification"] = previous_proof
             # Build a NEW packet with declared benchmark scope. Do not edit old paths.
             pins[str(source_path)] = sha(source_path)
             pins.update({s["original_path"]: s["original_sha256"] for s in packet["sources"]})
@@ -166,22 +170,29 @@ async def prepare(args):
         if chosen is None:
             report["status"] = "source_acquisition_needed"
             continue
-        packet = load_packet(chosen)
+        proof_pins = {}
         try:
+            packet = load_packet(chosen)
             for key in ("method_id", "title", "scope", "variant"):
                 if packet[key] != case[key]:
                     raise ValueError(f"Final packet {key} differs from declared benchmark scope")
-            verify_publication(packet, case)
-        except (ValueError, KeyError, TypeError) as exc:
+            proof = verify_publication(packet, case, packet_path=chosen, project_root=root, pins=proof_pins)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            bind(pins, proof_pins)
             report.update(status="source_identity_or_scope_inspection_needed", reason=str(exc),
-                          retained_packet=str(chosen))
+                          retained_packet=str(chosen), publication_verification={"pins": proof_pins, "status": "failed"})
             continue
+        bind(pins, proof["pins"])
+        pins[str(chosen)] = sha(chosen)
+        pins.update({source["original_path"]: source["original_sha256"] for source in packet["sources"]})
         report.update(status="registered_for_source_first_annotation", packet=str(chosen), packet_sha256=sha(chosen),
                       source_packet_sha256=digest(packet), sources=len(packet["sources"]),
-                      supplement_count=sum(s["role"] == "supplement" for s in packet["sources"]))
+                      supplement_count=sum(s["role"] == "supplement" for s in packet["sources"]), publication_verification=proof)
         annotation_cases.append({"case_id": case["case_id"], "method_id": mid,
             "family": case["family"], "split": case["split"], "packet": str(chosen),
             "packet_sha256": sha(chosen), "source_report": str(output / "source_report.json")})
+    verify(pins)
+    write(output / "input_bindings.json", pins)
     write(output / "source_report.json", {"format_version": "benchmark_source_report/1.0", "cases": reports,
           "counts": dict(Counter(r["status"] for r in reports.values())),
           "annotation_ready_is_not_scientific_completeness": True})

@@ -9,7 +9,7 @@ from genomics_discovery.curation.workflow_extraction.models import (
 )
 from genomics_discovery.curation.workflow_extraction.sources import validate_packet
 
-from .models import BenchmarkAssessment, ProtocolReference, ReferenceReview
+from .models import BenchmarkAssessment, BenchmarkAssessmentV2, ProtocolReference, ReferenceReview
 
 
 def _unique(values, label, errors):
@@ -165,4 +165,22 @@ def validate_assessment(assessment: BenchmarkAssessment, reference: ProtocolRefe
         if set(item.targets) - valid_targets:
             errors.append(f"{label}: unknown workflow target IDs")
         _inspected_evidence(item.evidence, inspected, label, errors)
+    if isinstance(assessment, BenchmarkAssessmentV2):
+        unknowns = {item.id: item for item in reference.unknowns}
+        ids = [item.unknown_id for item in assessment.unknown_checks]
+        _unique(ids, "unknown preservation check", errors)
+        if set(ids) != set(unknowns):
+            errors.append("Assessment 1.1 must account for every reference unknown exactly once")
+        for item in assessment.unknown_checks:
+            _unique(item.targets, f"unknown witness target in {item.unknown_id}", errors)
+            if set(item.targets) - valid_targets:
+                errors.append(f"Unknown {item.unknown_id}: unknown workflow target IDs")
+            _inspected_evidence(item.evidence, inspected, item.unknown_id, errors)
+            unknown = unknowns.get(item.unknown_id)
+            if (unknown is not None and item.outcome != "unassessed"
+                    and _refs(unknown.inspected_passages) - inspected):
+                errors.append(f"Unknown {item.unknown_id}: preservation judgment requires its inspected reference scope")
+            # An inspected absence can be retained without fabricating a quote
+            # saying something was not reported. No outcome asserts resolution;
+            # reference_revision_needed instead supplies a source-backed objection.
     return errors

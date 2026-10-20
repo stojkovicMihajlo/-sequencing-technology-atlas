@@ -119,10 +119,10 @@ def test_zero_audit_denominator_is_not_perfect_precision(records):
     assert score["supported_claim_precision"] is None
 
 
-def test_precision_requires_complete_decided_claim_audit(records):
+def test_declared_complete_audit_still_cannot_certify_whole_graph_precision(records):
     workflow, packet, reference, _, assessment, _ = records
     complete = assessment.model_copy(update={"factual_audit_scope": "complete_declared"})
-    assert score_assessment(complete, reference, workflow, packet)["factual_audit"]["supported_claim_precision"] == 1
+    assert score_assessment(complete, reference, workflow, packet)["factual_audit"]["supported_claim_precision"] is None
     data = complete.model_dump(mode="json")
     data["factual_audits"][0].update(verdict="uncertain", evidence=[])
     score = score_assessment(BenchmarkAssessment.model_validate(data), reference, workflow, packet)

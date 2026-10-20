@@ -27,6 +27,9 @@ class FixturePool:
         self.workflow, self.packet, self.reference, self.review, self.assessment, self.source = records
         self.fault, self.calls, self.counts = fault, [], Counter()
         raw = self.workflow.model_dump(mode="json")
+        raw["unresolved"] = [{"id": "reference-" + item.id,
+            "description": item.question + " " + item.consequence, "blocking": False,
+            "next_evidence": item.next_evidence} for item in self.reference.unknowns]
         flows = raw.pop("flows")
         raw["ordering_flows"] = [flow for flow in flows if flow["kind"] in {"control", "precedence"}]
         for operation in raw["operations"]:
@@ -76,7 +79,21 @@ class FixturePool:
                     reference = ProtocolReference.model_validate_json(reference_path.read_bytes())
                     assessment = pool.assessment.model_dump(mode="json")
                     assessment.update(workflow_sha256=digest(workflow), reference_sha256=digest(reference),
-                                      factual_audits=[])
+                        factual_audits=[], format_version="protocol_benchmark_assessment/1.1",
+                        unknown_checks=[{"unknown_id": item.id, "outcome": "retained",
+                            "targets": ["gap:reference-" + item.id],
+                            "rationale": "The synthetic gap retains this scoped question and next evidence.",
+                            "evidence": []} for item in reference.unknowns])
+                    if pool.fault == "legacy_assessment":
+                        assessment.update(format_version="protocol_benchmark_assessment/1.0")
+                        assessment.pop("unknown_checks")
+                    elif pool.fault == "missing_unknown_check":
+                        assessment["unknown_checks"] = []
+                    elif pool.fault == "unknown_partial":
+                        assessment["unknown_checks"][0]["outcome"] = "partial"
+                    elif pool.fault == "unknown_revision":
+                        assessment["unknown_checks"][0].update(outcome="reference_revision_needed",
+                            evidence=[reference.obligations[0].evidence[0].model_dump(mode="json")])
                     if pool.fault == "critical_unassessed":
                         assessment["obligations"][0].update(outcome="unassessed", targets=[], evidence=[])
                     if pool.fault == "noncritical_partial":
@@ -135,6 +152,10 @@ async def test_four_fresh_stages_source_only_first_and_deterministic_exports(rec
     assert "previous_artifact:" not in first
     assert "gold" not in first.casefold()
     assert "schema" in first and "catalog" in first and "read-batch" in first
+    for _, role, prompt, _ in pool.calls[:2]:
+        assert "Counterfactual inclusion test" in prompt
+        assert "same assay-necessity test to ReferenceUnknowns" in prompt
+        assert "pulse/chase" in prompt
     assert "not blind" in pool.calls[2][2]
     case = state["cases"]["fixture"]
     assert case["status"] == "model_reviewed_reference_candidate"
@@ -146,6 +167,9 @@ async def test_four_fresh_stages_source_only_first_and_deterministic_exports(rec
     scores = json.loads((output / "cases/fixture/scores.json").read_text())
     assert scores["factual_audit"]["denominator"] == 0
     assert scores["factual_audit"]["supported_claim_precision"] is None
+    assert scores["unknown_preservation"]["status"] == "retained"
+    assert scores["unknown_preservation"]["denominator"] == 1
+    assert "protocol_benchmark_assessment/1.1" in pool.calls[-1][2]
     bindings = json.loads((output / "cases/fixture/bindings.json").read_text())
     assert bindings[str(tmp_path / "packet.json")] == sha(tmp_path / "packet.json")
     assert bindings[str(records[-1])] == sha(records[-1])
@@ -242,6 +266,23 @@ async def test_noncritical_partial_is_visible_without_fabricating_full_coverage(
                             worker_factory=pool.worker)
     assert state["status"] == "completed"
     assert state["cases"]["fixture"]["obligation_completeness"] == "partial"
+
+
+@pytest.mark.parametrize("fault,status", [("unknown_partial", "reference_unknowns_not_retained"),
+    ("unknown_revision", "reference_unknown_revision_needed"),
+    ("missing_unknown_check", "graph_reviewer_failed"), ("legacy_assessment", "graph_reviewer_failed")])
+async def test_new_runs_require_v2_and_uncertainty_preservation_before_export(records, tmp_path, fault, status):
+    pool = FixturePool(records, fault=fault)
+    output = tmp_path / "unknowns"
+    state = await run_batch(manifest_for(records, tmp_path), output, worker_factory=pool.worker)
+    case = state["cases"]["fixture"]
+    assert case["status"] == status
+    assert len(pool.calls) == 4
+    assert not (output / "cases/fixture/projection/protocol.txt").exists()
+    if fault in {"unknown_partial", "unknown_revision"}:
+        scores = json.loads((output / "cases/fixture/scores.json").read_bytes())
+        assert scores["obligation_coverage"]["strict_covered_fraction"] == 1
+        assert scores["unknown_preservation"]["status"] == "incomplete"
 
 
 async def test_one_bad_source_case_does_not_cancel_other_cases(records, tmp_path):

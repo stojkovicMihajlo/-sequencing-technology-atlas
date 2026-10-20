@@ -30,7 +30,8 @@ inactive unless an explicit, recorded source-availability decision activates it.
 4. **Workflow:** one source-supported example graph, constructed after reference
    review. States, Operations, Flows and Modules use the existing extraction schema.
 5. **Graph review and BenchmarkAssessment:** source support and obligation coverage
-   are assessed separately; deterministic scoring retains every denominator.
+   are assessed separately; assessment 1.1 additionally checks every reference
+   unknown against graph witnesses. Deterministic scoring retains every denominator.
 6. **Separate cross-method cases:** scoped relationships with source-bound witnesses;
    unannotated relationships are not automatically negative examples.
 
@@ -41,6 +42,10 @@ answers is a self-consistency check. It is not a blind harness benchmark result.
 Schema/hash/quote checks do not establish entailment. See
 [the decisions and alternatives](../../docs/decisions/2026-10-20-protocol-reference-benchmark.md)
 and [primary paper/code audit](../../docs/benchmark/REFERENCE_AUDIT.md).
+[Read one case](../../docs/benchmark/READING_A_CASE.md) explains the exact artifacts,
+their fields and their authority. The [uncertainty accounting decision](../../docs/decisions/2026-10-20-benchmark-unknown-preservation.md)
+and [source-recovery decision](../../docs/decisions/2026-10-20-benchmark-source-recovery.md)
+record the general changes exposed by the first construction run.
 
 ## Inspect schemas without models
 
@@ -50,8 +55,16 @@ From the repository root:
 PYTHONPATH=src .venv/bin/python -m genomics_discovery.curation.protocol_benchmark schema reference
 PYTHONPATH=src .venv/bin/python -m genomics_discovery.curation.protocol_benchmark schema review
 PYTHONPATH=src .venv/bin/python -m genomics_discovery.curation.protocol_benchmark schema assessment
+PYTHONPATH=src .venv/bin/python -m genomics_discovery.curation.protocol_benchmark schema assessment-v2
 ```
 
 All native source finding and annotation execute in bounded Qiu Sherlock Slurm
 jobs with `gpt-6.1-sol`, `xhigh`. Existing frozen runtimes, historical papers and
 accepted atlas records are not overwritten.
+
+`scripts/benchmark/run_recovered_qiu.sbatch` runs the retained-source recovery,
+reference construction, eligible pair review and offline report as one bounded
+phase. `scripts/benchmark/report.py` reports all 12 selected cases, six strata
+and eight pair questions, including withheld and unassessed cases. Missing source
+access is not scored as an extraction error, and declared factual-audit rows are
+not promoted to whole-graph precision. Legacy assessment 1.0 remains 1.0.

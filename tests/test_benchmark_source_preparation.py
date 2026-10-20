@@ -10,6 +10,7 @@ import pytest
 from scripts.benchmark import prepare_sources as preparation
 from genomics_discovery.curation.run_state import sha, write
 from genomics_discovery.curation.workflow_extraction.sources import build_packet, load_packet
+from test_source_html_identity import html as citation_html
 
 
 def case(mid="assay", **updates):
@@ -257,3 +258,113 @@ async def test_ambiguous_case_identity_cannot_create_annotation_work(prepared, m
     with pytest.raises(ValueError, match="must be unique"):
         await preparation.prepare(args)
     assert not (args.output / "annotation_manifest.json").exists()
+
+
+def html_packet(directory, declared, *, pmid="123", title="Published protocol", manuscript=False):
+    original = directory / "originals/primary/article.html"
+    original.parent.mkdir(parents=True)
+    original.write_bytes(citation_html(pmid=pmid, doi="10.1234/fixture", title=title, manuscript=manuscript))
+    rendition = directory / "renditions/primary.txt"
+    rendition.parent.mkdir()
+    rendition.write_text("Rendered Methods. This prose and its claimed PMID 123 are not identity metadata.")
+    value = build_packet(**{key: declared[key] for key in ("method_id", "title", "scope", "variant")},
+        sources=[{"source_id": "primary-html", "title": title, "role": "primary_paper",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC123/", "path": str(rendition)}])
+    selected = directory / "packet.json"
+    write(selected, value)
+    ledger = directory / "originals_ledger.json"
+    write(ledger, [{"source_id": "primary-html", "original": str(original), "original_sha256": sha(original),
+        "rendition": str(rendition), "rendition_sha256": sha(rendition),
+        "identity_assessment": {"frozen_expected_identity": {"pmid": "123", "doi": "10.1234/fixture"}}}])
+    return selected, original, rendition, ledger
+
+
+def test_native_jats_identity_is_reparsed_and_pinned(prepared):
+    root, _ = prepared
+    declared = case()
+    selected = packet(root / "jats", declared)
+    proof = preparation.verify_publication(load_packet(selected), declared, packet_path=selected, project_root=root)
+    assert proof["primaries"][0]["identity_route"] == "reparsed_jats"
+    assert proof["primaries"][0]["actual_identity"]["identifiers"]["pmid"] == ["123"]
+    assert proof["pins"][str(selected.parent / "primary.xml")] == sha(selected.parent / "primary.xml")
+
+
+def test_html_rendition_requires_and_preserves_exact_original_custody(prepared):
+    root, _ = prepared
+    declared = case(primary_identity={"pmid": "123", "doi": "10.1234/fixture", "title": "Published protocol"})
+    selected, original, rendition, ledger = html_packet(root / "html", declared)
+    value = load_packet(selected)
+    assert value["sources"][0]["document_identity"] == {"status": "supplied_metadata_not_publication_verified"}
+    proof = preparation.verify_publication(value, declared, packet_path=selected, project_root=root)
+    assert set(proof["pins"]) == {str(original), str(rendition), str(ledger)}
+    assert all(sha(Path(path)) == expected for path, expected in proof["pins"].items())
+    assert proof["primaries"][0]["actual_identity"]["identifiers"]["pmid"] == ["123"]
+    assert proof["primaries"][0]["html_assessment"]["identifier_route"] == "exact_expected_identifiers"
+
+
+@pytest.mark.parametrize("defect", ["missing_ledger", "source_id", "rendition_path", "rendition_hash", "original_hash", "wrong_pmid"])
+def test_rendition_prose_or_asserted_ledger_identity_cannot_authorize_primary(prepared, defect):
+    root, _ = prepared
+    declared = case()
+    selected, original, rendition, ledger = html_packet(root / "bad-html", declared,
+        pmid="999" if defect == "wrong_pmid" else "123")
+    rows = preparation.read(ledger)
+    if defect == "missing_ledger":
+        ledger.unlink()
+    else:
+        if defect == "source_id": rows[0]["source_id"] = "another-source"
+        elif defect == "rendition_path": rows[0]["rendition"] = str(root / "another.txt")
+        elif defect == "rendition_hash": rows[0]["rendition_sha256"] = "a" * 64
+        elif defect == "original_hash": rows[0]["original_sha256"] = "b" * 64
+        write(ledger, rows)
+    with pytest.raises(ValueError):
+        preparation.verify_publication(load_packet(selected), declared, packet_path=selected, project_root=root)
+
+
+def test_valid_primary_does_not_excuse_a_wrong_additional_primary(prepared):
+    root, _ = prepared
+    declared = case()
+    native = packet(root / "native", declared)
+    html, _, _, _ = html_packet(root / "wrong-extra", declared, pmid="999")
+    descriptors = [{**{key: source[key] for key in ("source_id", "title", "url", "role")}, "path": source["original_path"]}
+        for selected in (native, html) for source in load_packet(selected)["sources"]]
+    combined = build_packet(**{key: declared[key] for key in ("method_id", "title", "scope", "variant")}, sources=descriptors)
+    with pytest.raises(ValueError, match="pmid mismatch"):
+        preparation.verify_publication(combined, declared, project_root=root)
+
+
+async def test_html_primary_restores_registration_and_pins_original_and_receipt(prepared, monkeypatch):
+    root, arguments = prepared
+    declared = case(primary_identity={"pmid": "123", "doi": "10.1234/fixture", "title": "Published protocol"})
+    selected, original, rendition, ledger = html_packet(root / "acquired", declared)
+
+    async def acquire(worklist, output, *, scopes, **kwargs):
+        assert scopes["assay"]["primary_identity"]["title"] == "Published protocol"
+        return {"methods": {"assay": {"status": "registered_for_fresh_source_review", "packet": str(selected)}}}
+
+    monkeypatch.setattr(preparation, "acquire", acquire)
+    args = arguments([declared])
+    result = await preparation.prepare(args)
+    assert len(result["cases"]) == 1
+    report = preparation.read(args.output / "source_report.json")["cases"]["assay"]
+    assert report["publication_verification"]["primaries"][0]["html_assessment"]["expected_title"] == "Published protocol"
+    pins = preparation.read(args.output / "input_bindings.json")
+    assert all(pins[str(path)] == sha(path) for path in (selected, original, rendition, ledger))
+
+
+async def test_frozen_title_reaches_existing_documented_manuscript_exception(prepared, monkeypatch):
+    root, arguments = prepared
+    declared = case(primary_identity={"pmid": "123", "doi": "10.1234/fixture", "title": "Published protocol"})
+    selected, _, _, _ = html_packet(root / "manuscript", declared, title="Manuscript version title", manuscript=True)
+
+    async def acquire(*args, scopes, **kwargs):
+        assert scopes["assay"]["primary_identity"] == declared["primary_identity"]
+        return {"methods": {"assay": {"packet": str(selected), "status": "registered_for_fresh_source_review"}}}
+
+    monkeypatch.setattr(preparation, "acquire", acquire)
+    args = arguments([declared])
+    result = await preparation.prepare(args)
+    assert len(result["cases"]) == 1
+    assessment = preparation.read(args.output / "source_report.json")["cases"]["assay"]["publication_verification"]["primaries"][0]["html_assessment"]
+    assert assessment["title_variant_accepted"] and assessment["expected_title"] == "Published protocol"
+    assert assessment["actual_title"] == "Manuscript version title"

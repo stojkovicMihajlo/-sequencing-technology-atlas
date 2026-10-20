@@ -20,7 +20,7 @@ from genomics_discovery.curation.workflow_extraction.models import (
 from genomics_discovery.curation.workflow_extraction.projection import export_candidate
 from genomics_discovery.curation.workflow_extraction.sources import load_packet
 
-from .models import GraphReviewAssessment, ProtocolReference, ReferenceReview
+from .models import GraphReviewAssessmentV2, ProtocolReference, ReferenceReview
 from .prompts import DEFAULT_DIRECTORY, ROLES, build_prompt
 from .scoring import score_assessment
 from .validation import (
@@ -28,7 +28,7 @@ from .validation import (
 )
 
 MODELS = {"reference_annotator": ProtocolReference, "reference_reviewer": ReferenceReview,
-          "graph_constructor": WorkflowDraft, "graph_reviewer": GraphReviewAssessment}
+          "graph_constructor": WorkflowDraft, "graph_reviewer": GraphReviewAssessmentV2}
 BOUNDARY = (
     "Model-reviewed reference construction and self-consistency on fixed source packets. "
     "The graph constructor sees the reference; this is not blind extraction-harness "
@@ -245,10 +245,16 @@ class CaseSession:
             scores = score_assessment(combined.assessment, reference, workflow, self.packet)
             self.freeze("scores.json", scores)
             self.state["critical_not_covered"] = scores["obligation_coverage"]["critical_not_covered"]
+            unknowns = scores["unknown_preservation"]
+            self.state.update(unknown_preservation=unknowns["status"],
+                              unknowns_not_fully_retained=unknowns["not_fully_retained_ids"])
             if outcome != "supported":
                 self.state["status"] = "graph_needs_revision" if outcome == "needs_revision" else "graph_uncertain"
             elif self.state["critical_not_covered"]:
                 self.state["status"] = "critical_obligations_not_covered"
+            elif unknowns["status"] not in {"retained", "not_applicable"}:
+                self.state["status"] = ("reference_unknown_revision_needed" if
+                    unknowns["counts"]["reference_revision_needed"] else "reference_unknowns_not_retained")
             else:
                 verify_pins(self.pins)
                 export_candidate(workflow, combined.workflow_review, self.packet, self.run / "projection")

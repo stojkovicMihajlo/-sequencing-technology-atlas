@@ -158,9 +158,82 @@ def select_article_text(text, selection):
     return text[begin:finish], text[:begin], text[finish:], {**selection, "start_char": begin, "end_char": finish}
 
 
+def verify_selected_pdf_text(text, identity, selection, evidence, *, original_sha256):
+    """Check an explicitly inspected article whose identifier is not on page one.
+
+    This route records the source preparer's publication-identifier interpretation.
+    It does not infer article boundaries or turn a reference-list DOI into identity.
+    The conservative early-page route remains the default for uninspected PDFs.
+    """
+    required = {"format_version", "original_sha256", "inspection_report", "title_witness",
+                "identifier_witness", "identifier_context", "identifier_role", "basis"}
+    if (not isinstance(evidence, dict) or set(evidence) != required
+            or evidence["format_version"] != "selected_article_identity/1.0"
+            or evidence["original_sha256"] != original_sha256
+            or evidence["identifier_role"] != "article_publication_identifier"
+            or not isinstance(evidence["basis"], str) or len(evidence["basis"].strip()) < 20):
+        raise ValueError("Explicit inspected article-identity evidence and original binding required")
+    decision = {k: v for k, v in selection.items() if k not in {"start_char", "end_char"}}
+    if decision.get("kind") != "exact_text_bounds":
+        raise ValueError("Inspected identity route requires explicit exact article boundaries")
+    if evidence["inspection_report"] != decision.get("inspection_report"):
+        raise ValueError("Identity evidence and article selection must bind the same inspection")
+    _, _, _, bounds = select_article_text(text, decision)
+    opening = text[bounds["start_char"]:bounds["start_char"] + 3000]
+    if re.search(r"(?im)^\s*(?:correction|author correction|publisher correction|erratum|"
+                 r"corrigendum|retraction|expression of concern)\b", opening):
+        raise ValueError("Correction/retraction notice requires separate publication inspection")
+
+    def witness(name):
+        item = evidence[name]
+        if (not isinstance(item, dict) or set(item) != {"start_char", "end_char", "quote", "page"}
+                or type(item["start_char"]) is not int or type(item["end_char"]) is not int
+                or not bounds["start_char"] <= item["start_char"] < item["end_char"] <= bounds["end_char"]
+                or not isinstance(item["quote"], str)
+                or text[item["start_char"]:item["end_char"]] != item["quote"]
+                or type(item["page"]) is not int
+                or text[:item["start_char"]].count("\f") + 1 != item["page"]):
+            raise ValueError(f"Invalid exact selected-article identity witness: {name}")
+        return item
+
+    title = witness("title_witness")
+    identifier = witness("identifier_witness")
+    context = witness("identifier_context")
+    if (_title(title["quote"]) != _title(identity["title"])
+            or title["start_char"] - bounds["start_char"] > 3000):
+        raise ValueError("Inspected title must match the authoritative title at the article opening")
+    line_start = text.rfind("\n", 0, title["start_char"]) + 1
+    line_end = text.find("\n", title["end_char"])
+    if line_end < 0:
+        line_end = len(text)
+    if text[line_start:title["start_char"]].strip() or text[title["end_char"]:line_end].strip():
+        raise ValueError("Inspected title witness must cover its complete header lines")
+    expected = identity.get("doi")
+    value = identifier["quote"].strip()
+    if not expected or _doi(value) != _doi(expected):
+        raise ValueError("Inspected publication identifier must match the authoritative DOI")
+    before = text[max(0, identifier["start_char"] - 1):identifier["start_char"]]
+    after = text[identifier["end_char"]:identifier["end_char"] + 1]
+    if re.fullmatch(r"[\w./-]", before) or re.fullmatch(r"[\w./-]", after):
+        raise ValueError("Inspected publication identifier has conflicting DOI boundary")
+    if (not context["start_char"] <= identifier["start_char"] < identifier["end_char"] <= context["end_char"]
+            or len(context["quote"]) > 1000 or len(context["quote"]) <= len(identifier["quote"])):
+        raise ValueError("Publication DOI needs a bounded inspected context, not an isolated citation")
+    dois = {_doi(m.group().rstrip(".,;:)]}")) for m in re.finditer(
+        r"10\.\d{4,9}/[^\s<>\"']+", context["quote"], re.I)}
+    if dois != {_doi(expected)}:
+        raise ValueError("Inspected publication-identifier context has conflicting DOI identity")
+    return {"route": "inspected_selected_article", "title_witness": title,
+            "identifier_witness": identifier, "identifier_context": context,
+            "identifier_role": evidence["identifier_role"], "basis": evidence["basis"],
+            "boundary": "Exact selected-text/bibliography bindings plus an explicit inspected "
+                        "publication-identifier interpretation; not automatic article purity, "
+                        "visual comprehension or scientific completeness."}
+
+
 def register_pdf(scope, original, original_sha256, public_url, output, *, fetch=download,
                  acquisition_record=None, document_id=None, bibliographic_receipt=None,
-                 original_receipt=None, selection=None):
+                 original_receipt=None, selection=None, identity_evidence=None):
     """Register pinned original bytes after independent host identity checks.
 
     ``fetch`` is an injectable host downloader for tests, never a finder result.
@@ -264,7 +337,7 @@ def register_pdf(scope, original, original_sha256, public_url, output, *, fetch=
                 raise ValueError("Acquisition-declared identity conflicts with authoritative " + kind)
     command = [executable, "-enc", "UTF-8", "-eol", "unix", str(original), "-"]
     converted = subprocess.run(command, check=True, capture_output=True, timeout=120).stdout.decode("utf-8")
-    check = verify_pdf_text(converted, identity)
+    check = verify_pdf_text(converted, identity) if identity_evidence is None else None
     if sha(original) != original_sha256:
         raise ValueError("Original changed during conversion")
     if not converted.strip():
@@ -272,6 +345,14 @@ def register_pdf(scope, original, original_sha256, public_url, output, *, fetch=
     with (output / "full_pdf_text.txt").open("x", encoding="utf-8") as handle:
         handle.write(converted)
     selected, prefix, suffix, selection = select_article_text(converted, selection)
+    identity_binding = None
+    if identity_evidence is not None:
+        identity_path = Path(identity_evidence).resolve()
+        identity_record = json.loads(identity_path.read_bytes())
+        identity_binding = {"path": str(identity_path), "sha256": sha(identity_path),
+                            "record": identity_record}
+        check = verify_selected_pdf_text(converted, identity, selection, identity_record,
+                                         original_sha256=original_sha256)
     inspection_path = Path(selection["inspection_report"]["path"]).resolve()
     inspection_pins = {str(inspection_path): selection["inspection_report"]["sha256"]}
     if sha(inspection_path) != inspection_pins[str(inspection_path)]:
@@ -329,12 +410,23 @@ def register_pdf(scope, original, original_sha256, public_url, output, *, fetch=
                    [executable, "-v"], capture_output=True, text=True, check=True).stderr.strip(),
                "limits": limits, "scope": scope.model_dump(mode="json"),
                "unregistered_dependencies": "No supplements, cited protocols or adjacent files automatically registered."}
+    if identity_binding is not None:
+        receipt["identity_evidence"] = identity_binding
+        receipt["identity_check"] = receipt.pop("first_pages_check")
+        receipt["identity_boundary"] = (
+            "Exact title/DOI/context witnesses within an explicitly inspected article selection, "
+            "bound to independent bibliography. Identifier context is an inspected interpretation, "
+            "not an automatic purity or scientific-completeness guarantee.")
     _write(output / "registration.json", receipt)
     files = [original, metadata_path, output / "bibliographic_retrieval.json", rendition,
              output / "packet.json", output / "registration.json",
              output / "full_pdf_text.txt", output / "excluded_prefix.txt", output / "excluded_suffix.txt",
              output / "article_selection.json",
              *(Path(item["snapshot"]) for item in implementation)]
+    if identity_binding is not None:
+        if sha(identity_binding["path"]) != identity_binding["sha256"]:
+            raise ValueError("Inspected publication-identity evidence changed during registration")
+        files.append(Path(identity_binding["path"]))
     if acquisition_record is not None:
         if sha(acquisition_record) != acquisition_binding["sha256"]:
             raise ValueError("Acquisition record changed during registration")
@@ -376,6 +468,8 @@ def main(argv=None):
                         help="Inspected whole-document decision or exact unique start/end text selectors")
     parser.add_argument("--bibliography-receipt", type=Path,
                         help="Explicit replay of pinned, independently host-retrieved metadata")
+    parser.add_argument("--identity-evidence", type=Path,
+                        help="Explicit bound title/DOI/context inspection for an identifier outside the early-page default")
     args = parser.parse_args(argv)
     scope = Scope.model_validate(json.loads(args.scopes.read_bytes())[args.method])
     if scope.method_id != args.method:
@@ -398,7 +492,7 @@ def main(argv=None):
     result = register_pdf(scope, original, expected_sha, url, args.output,
                           acquisition_record=args.acquisition, document_id=args.document,
                           bibliographic_receipt=args.bibliography_receipt, original_receipt=args.original_receipt,
-                          selection=json.loads(args.selection.read_bytes()))
+                          selection=json.loads(args.selection.read_bytes()), identity_evidence=args.identity_evidence)
     print(json.dumps({"output": str(args.output.resolve()), "status": result["status"],
                       "scientific_resolution": False}))
 
