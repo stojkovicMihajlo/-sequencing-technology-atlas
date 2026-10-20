@@ -1,0 +1,299 @@
+{
+  "format_version": "protocol_grounding_labels/1.0",
+  "annotation_status": "model_authored_diagnostic_candidate",
+  "boundary": "Labels apply only to the provided context for each case. Supported includes licensed arithmetic, conditional statements and directly reported negatives. Not established means the complete value is not supported by that context, not that it is false in the publication or world. Contradicted requires a direct incompatible statement in the provided context. These model-authored labels are diagnostic candidates, not human-adjudicated gold or new experimental results.",
+  "cases": [
+    {
+      "case_id": "g-7a731f5666ec4bfa",
+      "outcome": "supported",
+      "phenomenon": "licensed_arithmetic_from_reported_structure",
+      "rationale": "The passage describes 12 split-pool cycles adding one base per cycle for the cell barcode and eight degenerate synthesis rounds for the UMI. Summing those two stated segment lengths gives 20; the PCR handle and oligo(dT) tract are excluded from this sum.",
+      "decisive_passages": [
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00084"
+        }
+      ]
+    },
+    {
+      "case_id": "g-9785ea215e4748e4",
+      "outcome": "supported",
+      "phenomenon": "reported_probe_components_and_readout",
+      "rationale": "The figure passage lists those probe components and explicitly states that captured mRNA is converted to cDNA by reverse transcription.",
+      "decisive_passages": [
+        {
+          "source_id": "primary_pdf_39d88dc581bc",
+          "passage_id": "p00021"
+        }
+      ]
+    },
+    {
+      "case_id": "g-f5ea4ac7243e4c1a",
+      "outcome": "contradicted",
+      "phenomenon": "opposite_reported_non_thiol_effect",
+      "rationale": "The passage expressly says iodoacetamide treatment leaves conversion rates of non-thiol-containing nucleotides unaltered, contradicting the claimed change.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_primary_europepmc_jats_a306191f",
+          "passage_id": "p00005"
+        }
+      ]
+    },
+    {
+      "case_id": "g-aac8831e4a7f4bf8",
+      "outcome": "supported",
+      "phenomenon": "supported_conditional_multiplexing",
+      "rationale": "The passage says each first-round well can contain a different biological sample and explicitly gives up to 96 samples. The value preserves possibility rather than turning it into a requirement for every experiment.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_splitseq_primary_pmc_08823e62",
+          "passage_id": "p00136"
+        }
+      ]
+    },
+    {
+      "case_id": "g-e881f6d6baa24872",
+      "outcome": "supported",
+      "phenomenon": "reported_barcode_introduction_roles",
+      "rationale": "The passage assigns the first round to barcoded RT, the second and third rounds to in-cell ligation, and the fourth sequencing barcode to PCR.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_splitseq_primary_pmc_08823e62",
+          "passage_id": "p00136"
+        }
+      ]
+    },
+    {
+      "case_id": "g-3be48ad5d5bd463e",
+      "outcome": "contradicted",
+      "phenomenon": "confused_initial_and_analytical_cycle_roles",
+      "rationale": "Five cycles describe the initial full-library amplification. The separate aliquot reaction is explicitly run for 20 cycles, contradicting the assigned analytical cycle count.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_atac_documented_manuscript_html_80310c92",
+          "passage_id": "p00137"
+        }
+      ]
+    },
+    {
+      "case_id": "g-e10f1e8ed9044e8d",
+      "outcome": "supported",
+      "phenomenon": "supported_explicit_negative_sequence_constraint",
+      "rationale": "The figure passage explicitly defines V as anything but T and N as any nucleotide. The negative sequence constraint is directly supported.",
+      "decisive_passages": [
+        {
+          "source_id": "primary_pdf_39d88dc581bc",
+          "passage_id": "p00021"
+        }
+      ]
+    },
+    {
+      "case_id": "g-3c48172ee4f74475",
+      "outcome": "supported",
+      "phenomenon": "supported_scoped_negative_observation",
+      "rationale": "The passage explicitly reports no significant effect in that comparison. The value preserves the observational and assay scope; it does not claim no effect under all conditions.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_primary_europepmc_jats_a306191f",
+          "passage_id": "p00005"
+        }
+      ]
+    },
+    {
+      "case_id": "g-a3a7ea8b4ec44bbe",
+      "outcome": "not_established",
+      "phenomenon": "mixed_supported_and_unreported_universal_transfer",
+      "rationale": "The assay-specific conversion rate is reported. The provided passage supplies no universal, error-free cellular-molecule identification guarantee. Moving from that primer-extension result to every newly synthesized cellular RNA exceeds the evidence.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_primary_europepmc_jats_a306191f",
+          "passage_id": "p00005"
+        }
+      ]
+    },
+    {
+      "case_id": "g-737d5a2dd18a4020",
+      "outcome": "contradicted",
+      "phenomenon": "swapped_barcode_and_umi_identity_units",
+      "rationale": "The passage explicitly states the opposite allocation: the same cell barcode is shared on one bead and UMIs differ among its primers.",
+      "decisive_passages": [
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00084"
+        }
+      ]
+    },
+    {
+      "case_id": "g-1f884fad67564ccf",
+      "outcome": "not_established",
+      "phenomenon": "mixed_supported_and_unreported_single_cell_attribution",
+      "rationale": "The provided passages support positional barcodes, UMIs and two-dimensional tissue-position information. They do not establish one-cell-per-feature attribution or a unique single-cell identity guarantee. This is not labeled contradicted merely because that guarantee is absent.",
+      "decisive_passages": [
+        {
+          "source_id": "primary_pdf_39d88dc581bc",
+          "passage_id": "p00003"
+        },
+        {
+          "source_id": "primary_pdf_39d88dc581bc",
+          "passage_id": "p00021"
+        }
+      ]
+    },
+    {
+      "case_id": "g-ea5f7f7fdb1e484f",
+      "outcome": "contradicted",
+      "phenomenon": "reversed_transformation_order",
+      "rationale": "For scBS-seq the passage explicitly puts bisulfite treatment first and adapter-bearing primed synthesis afterward. The adapter-first ligation workflow is the contrasted commonly used BS-seq procedure, not this scoped method.",
+      "decisive_passages": [
+        {
+          "source_id": "pmid_25042786",
+          "passage_id": "p00008"
+        }
+      ]
+    },
+    {
+      "case_id": "g-87668c05b5844930",
+      "outcome": "supported",
+      "phenomenon": "reported_identity_granularity",
+      "rationale": "The figure passage explicitly states that primers on one microparticle share the same cell barcode but have different UMIs. This does not add a guarantee that every UMI is globally unique.",
+      "decisive_passages": [
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00084"
+        }
+      ]
+    },
+    {
+      "case_id": "g-d97d8152aa814af2",
+      "outcome": "supported",
+      "phenomenon": "supported_explicit_negative",
+      "rationale": "The provided passage expressly states the choice to avoid size selection and its library-complexity purpose. This is a reported absence, not a closed-world inference.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_atac_documented_manuscript_html_80310c92",
+          "passage_id": "p00141"
+        }
+      ]
+    },
+    {
+      "case_id": "g-0ae71ac989414610",
+      "outcome": "supported",
+      "phenomenon": "reported_order_and_count",
+      "rationale": "The passage explicitly gives the nine-random-nucleotide priming segment, repeats this first tagging step five times, and places tagged-strand capture afterward.",
+      "decisive_passages": [
+        {
+          "source_id": "pmid_25042786",
+          "passage_id": "p00008"
+        }
+      ]
+    },
+    {
+      "case_id": "g-d7d861cc809242f3",
+      "outcome": "supported",
+      "phenomenon": "reported_split_and_decision_handoff",
+      "rationale": "The passage explicitly distinguishes five initial full-library cycles, the aliquot reaction run for 20 cycles, and its role in determining additional cycles for the remaining 45 μL reaction.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_atac_documented_manuscript_html_80310c92",
+          "passage_id": "p00137"
+        }
+      ]
+    },
+    {
+      "case_id": "g-2ffec10a917649db",
+      "outcome": "not_established",
+      "phenomenon": "mixed_supported_and_context_unreported_parameter",
+      "rationale": "Five tagging repetitions followed by capture are stated. The provided passage does not give a capture duration. The whole value therefore exceeds this context, even if a duration might be available elsewhere; this is not a paper-global denial.",
+      "decisive_passages": [
+        {
+          "source_id": "pmid_25042786",
+          "passage_id": "p00008"
+        }
+      ]
+    },
+    {
+      "case_id": "g-4fb3b1ae04f34fd5",
+      "outcome": "contradicted",
+      "phenomenon": "reversed_explicit_sequence_constraint",
+      "rationale": "Although the statement about N agrees with the passage, its V constraint is the opposite of the explicit definition that V is anything but T. The value contains a direct contradiction.",
+      "decisive_passages": [
+        {
+          "source_id": "primary_pdf_39d88dc581bc",
+          "passage_id": "p00021"
+        }
+      ]
+    },
+    {
+      "case_id": "g-205178333cc644ad",
+      "outcome": "supported",
+      "phenomenon": "supported_negative_order_distinction",
+      "rationale": "The passage contrasts adapter-first BS-seq with scBS-seq, for which bisulfite treatment is performed first and adapter-containing complementary-strand synthesis follows. This scoped negative distinction is supported rather than inferred from a missing statement.",
+      "decisive_passages": [
+        {
+          "source_id": "pmid_25042786",
+          "passage_id": "p00008"
+        }
+      ]
+    },
+    {
+      "case_id": "g-b9c51f678b134c8d",
+      "outcome": "contradicted",
+      "phenomenon": "swapped_reverse_transcription_and_ligation_rounds",
+      "rationale": "The passage explicitly assigns reverse transcription to the first round and ligation to the second, contradicting the reversed assignments.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_splitseq_primary_pmc_08823e62",
+          "passage_id": "p00136"
+        }
+      ]
+    },
+    {
+      "case_id": "g-0c9077a5e79b48c6",
+      "outcome": "not_established",
+      "phenomenon": "mixed_supported_and_unreported_material_fate",
+      "rationale": "The analytical cycle count and decision handoff are stated. The passage does not state the analytical material’s eventual fate or establish categorical nonreturn. Distinct fractions and no described return are not evidence that return never occurs.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_atac_documented_manuscript_html_80310c92",
+          "passage_id": "p00137"
+        }
+      ]
+    },
+    {
+      "case_id": "g-2d086c9ae9e14463",
+      "outcome": "not_established",
+      "phenomenon": "mixed_supported_and_unreported_molecular_fate",
+      "rationale": "The passage states the 30-base oligo(dT) capture tract and reverse transcription, but does not describe removal of that tract, an enzyme for doing so, or its timing. The added fate claim is not established by the supplied context.",
+      "decisive_passages": [
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00084"
+        }
+      ]
+    },
+    {
+      "case_id": "g-5d5855c4136e455c",
+      "outcome": "supported",
+      "phenomenon": "reported_assay_scoped_conversion_effect",
+      "rationale": "The passage reports the primer-extension experiment and those numerical effects of alkylation. The value remains scoped to that reported assay rather than promising universal cellular detection.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_primary_europepmc_jats_a306191f",
+          "passage_id": "p00005"
+        }
+      ]
+    },
+    {
+      "case_id": "g-619a7fbefabf4c77",
+      "outcome": "not_established",
+      "phenomenon": "mixed_supported_and_unreported_verification_step",
+      "rationale": "PCR introduction of the fourth barcode is stated. No Sanger verification step or per-sublibrary verification requirement appears in the provided passage; the added validation claim remains not established.",
+      "decisive_passages": [
+        {
+          "source_id": "acquired_splitseq_primary_pmc_08823e62",
+          "passage_id": "p00136"
+        }
+      ]
+    }
+  ]
+}

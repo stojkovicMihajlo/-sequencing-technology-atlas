@@ -397,6 +397,153 @@ def test_archive_path_mapping_is_explicit_and_keeps_original_strings(tmp_path):
                for pin in mapped["source"]["manifest_packet_checks"])
 
 
+def external_packet(phase):
+    """Keep frozen declarations external; stage a separate byte-identical copy."""
+    folder = phase.work / "references/cases/c00"
+    packet = phase.work / "sources/packets/c00.json"
+    copied = phase.work.parent / "packet_copies/c00.json"
+    copied.parent.mkdir()
+    copied.write_bytes(packet.read_bytes())
+    packet.unlink()
+    original = "/remote/other_source_phase/packets/c00.json"
+    phase.sources["m00"]["packet"] = phase.manifest[0]["packet"] = original
+    inputs = json.loads((folder / "input.json").read_bytes())
+    inputs["packet"] = original
+    write(folder / "input.json", inputs)
+    phase.repin(folder)
+    phase.refresh()
+    mapping = write(phase.work.parent / "packet_map.json", {
+        "format_version": "benchmark_report_source_packets/1.0",
+        "case_design_sha256": file_hash(phase.design),
+        "packets": [{"case_id": "c00", "original_path": original,
+                     "local_path": str(copied), "sha256": file_hash(copied)}]})
+    return original, copied, mapping
+
+
+def test_external_packet_default_is_unavailable_not_model_unknown_loss(tmp_path):
+    phase = Phase(tmp_path)
+    phase.case()
+    phase.v2()
+    original, copied, _ = external_packet(phase)
+    row = phase.report()["cases"][0]
+    assert row["graph_unknown_preservation"] == "source_packet_unavailable"
+    assert row["unknown_preservation"]["counts"]["retained"] == 1
+    assert row["unknown_preservation"]["accounting_valid"] is None
+    assert row["unknown_preservation"]["strict_retained_fraction"] is None
+    assert not any(failure["stage"] == "unknown_preservation" for failure in row["failures"]["graph"])
+    assert not row["full_model_candidate_coverage"]
+    assert all(pin["status"] == "unavailable_external" for pin in row["source"]["manifest_packet_checks"])
+    archive = reporter.Archive(phase.work)
+    assert archive.resolve(original)["local_path"] is None
+    assert archive.read(copied) is None
+
+
+def test_exact_packet_map_checks_only_declared_copy_and_preserves_paths(tmp_path, monkeypatch):
+    phase = Phase(tmp_path, remote="/remote/immutable/phase")
+    phase.case()
+    phase.v2()
+    original, copied, mapping = external_packet(phase)
+    original_source = phase.work / "originals/c00.txt"
+    read_bytes = Path.read_bytes
+
+    def bounded_read(path):
+        if path == original_source:
+            raise AssertionError("Packet mapping must not re-audit originals")
+        return read_bytes(path)
+
+    monkeypatch.setattr(Path, "read_bytes", bounded_read)
+    result = reporter.build_report(phase.design, phase.work, original_work_root=phase.remote,
+                                   source_packet_map=mapping)
+    row = result["cases"][0]
+    assert row["graph_unknown_preservation"] == "retained"
+    assert row["unknown_preservation"]["strict_retained_fraction"] == 1
+    assert row["full_model_candidate_coverage"]
+    assert all(pin["recorded_path"] == original and pin["local_path"] == str(copied) and
+               pin["resolution"] == "explicit_source_packet_map" and pin["status"] == "matched"
+               for pin in row["source"]["manifest_packet_checks"])
+    assert result["source_packet_map"]["sha256"] == file_hash(mapping)
+    assert not result["changed_during_read"]
+    archive = reporter.Archive(phase.work, packet_map={original: {"local_path": str(copied)}})
+    assert archive.resolve(original)["local_path"] is None
+    assert archive.resolve(copied)["local_path"] is None
+
+
+@pytest.mark.parametrize("fault", ["map_hash", "copy_changed", "case", "original", "design", "duplicate"])
+def test_source_packet_map_rejects_wrong_bindings(tmp_path, fault):
+    phase = Phase(tmp_path)
+    phase.case()
+    phase.v2()
+    _, copied, mapping = external_packet(phase)
+    data = json.loads(mapping.read_bytes())
+    row = data["packets"][0]
+    if fault == "map_hash":
+        row["sha256"] = "0" * 64
+    elif fault == "copy_changed":
+        copied.write_text('{"sources":[]}')
+    elif fault == "case":
+        row["case_id"] = "c01"
+    elif fault == "original":
+        row["original_path"] = "/remote/undeclared/packet.json"
+    elif fault == "design":
+        data["case_design_sha256"] = "0" * 64
+    else:
+        data["packets"].append(row.copy())
+    write(mapping, data)
+    with pytest.raises(ValueError, match="[Mm]ap|[Mm]apped"):
+        reporter.build_report(phase.design, phase.work, source_packet_map=mapping)
+
+
+def test_mapped_packet_does_not_bypass_canonical_or_passage_scope_checks(tmp_path):
+    phase = Phase(tmp_path)
+    folder = phase.case()
+    phase.v2()
+    original, copied, mapping = external_packet(phase)
+    data = json.loads(copied.read_bytes())
+    data["sources"][0]["passages"][0]["passage_id"] = "foreign-passage"
+    write(copied, data)
+    declared_hash = file_hash(copied)
+    map_data = json.loads(mapping.read_bytes())
+    map_data["packets"][0]["sha256"] = declared_hash
+    write(mapping, map_data)
+    phase.sources["m00"]["packet_sha256"] = phase.manifest[0]["packet_sha256"] = declared_hash
+    inputs = json.loads((folder / "input.json").read_bytes())
+    inputs["packet_sha256"] = declared_hash
+    write(folder / "input.json", inputs)
+    phase.repin(folder)
+    phase.refresh()
+    row = reporter.build_report(phase.design, phase.work, source_packet_map=mapping)["cases"][0]
+    assert not row["full_model_candidate_coverage"]
+    assert row["unknown_preservation"]["status"] == "invalid_accounting"
+    assert any(check["field"] == "source_packet_sha256" and check["status"] == "mismatch"
+               for check in row["archived_object_binding_checks"])
+
+
+def test_unavailable_packet_does_not_hide_declared_nonretention(tmp_path):
+    phase = Phase(tmp_path)
+    phase.case()
+    phase.v2(outcome="partial")
+    external_packet(phase)
+    row = phase.report()["cases"][0]
+    assert row["graph_unknown_preservation"] == "incomplete"
+    assert row["unknown_preservation"]["counts"]["partial"] == 1
+    assert row["unknown_preservation"]["source_evidence_status"] == "unavailable"
+    assert row["unknown_preservation"]["strict_retained_fraction"] is None
+
+
+def test_cli_accepts_explicit_packet_map(tmp_path, capsys):
+    phase = Phase(tmp_path)
+    phase.case()
+    phase.v2()
+    _, _, mapping = external_packet(phase)
+    output = tmp_path / "report_output"
+    assert reporter.main(["--design", str(phase.design), "--work", str(phase.work),
+        "--output", str(output), "--source-packet-map", str(mapping)]) == 0
+    report = json.loads((output / "report.json").read_bytes())
+    assert report["cases"][0]["graph_unknown_preservation"] == "retained"
+    assert report["source_packet_map"]["path"] == str(mapping)
+    assert json.loads(capsys.readouterr().out)["output"] == str(output)
+
+
 def test_modified_artifact_or_foreign_review_digest_blocks_candidate(tmp_path):
     phase = Phase(tmp_path)
     folder = phase.case()

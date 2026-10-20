@@ -26,12 +26,13 @@ def object_digest(value):
 class Archive:
     """Read only the selected local phase; mapping is explicit and recorded."""
 
-    def __init__(self, work, original_work_root=None):
+    def __init__(self, work, original_work_root=None, packet_map=None):
         self.work = Path(work).resolve()
         self.original_root = Path(original_work_root) if original_work_root else None
         if self.original_root and not self.original_root.is_absolute():
             raise ValueError("original-work-root must be the exact absolute original phase path")
         self.reads, self.errors, self.originals = {}, [], set()
+        self.packet_map, self.mapped_reads = packet_map or {}, set()
 
     def resolve(self, recorded, base=None):
         value = Path(recorded)
@@ -90,6 +91,61 @@ class Archive:
             except OSError as exc:
                 result.update(status="unreadable_local_artifact", error=str(exc))
         return result
+
+    def packet(self, recorded, expected, case_id, base):
+        """An explicit packet map grants this read only, never general path access.
+
+        Mapping rows bind an exact case and its unchanged original declaration.
+        Originals linked inside a packet remain unread and unmapped.
+        """
+        mapped = self.packet_map.get(str(recorded))
+        if mapped is None:
+            return self.pin(recorded, expected, base), self.linked(recorded, base)
+        if mapped["case_id"] != case_id or mapped["sha256"] != expected:
+            raise ValueError("Source-packet mapping differs from the exact case declaration")
+        local = Path(mapped["local_path"])
+        if local.is_symlink():
+            raise ValueError("Source-packet map requires a regular local copy, not a symlink")
+        raw = local.read_bytes()
+        actual = sha_bytes(raw)
+        if actual != mapped["sha256"]:
+            raise ValueError("Mapped source packet byte hash differs")
+        packet = json.loads(raw)
+        if not isinstance(packet, dict):
+            raise ValueError("Mapped source packet must be a JSON object")
+        self.reads.setdefault(str(local), actual)
+        self.mapped_reads.add(str(local))
+        return {"recorded_path": str(recorded), "local_path": str(local),
+                "resolution": "explicit_source_packet_map", "expected_sha256": expected,
+                "actual_sha256": actual, "status": "matched"}, packet
+
+
+def _source_packet_map(path, design_hash, case_ids):
+    """Load an opt-in byte-copy manifest; no directories or original-source grants.
+
+    Format: benchmark_report_source_packets/1.0, case_design_sha256, packets:
+    [{case_id, original_path, local_path, sha256}]. All paths are absolute. Every
+    row must subsequently match the case's archived packet path and byte pin.
+    """
+    if path is None:
+        return {}, None
+    path = Path(path).resolve()
+    raw = path.read_bytes()
+    data = json.loads(raw)
+    if (not isinstance(data, dict) or set(data) != {"format_version", "case_design_sha256", "packets"}
+            or data["format_version"] != "benchmark_report_source_packets/1.0"
+            or data["case_design_sha256"] != design_hash or not isinstance(data["packets"], list)):
+        raise ValueError("Source-packet map must bind this exact case design and supported format")
+    mapped = {}
+    for row in data["packets"]:
+        if (not isinstance(row, dict) or set(row) != {"case_id", "original_path", "local_path", "sha256"}
+                or row["case_id"] not in case_ids or not isinstance(row["original_path"], str)
+                or not isinstance(row["local_path"], str) or not Path(row["original_path"]).is_absolute()
+                or not Path(row["local_path"]).is_absolute() or not isinstance(row["sha256"], str)
+                or not re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) or row["original_path"] in mapped):
+            raise ValueError("Source-packet map requires unique exact paths, known cases and byte hashes")
+        mapped[row["original_path"]] = row
+    return mapped, {"path": str(path), "sha256": sha_bytes(raw), "packets": data["packets"]}
 
 
 def _rows(document, key):
@@ -216,19 +272,24 @@ def _unknown_preservation(reference, assessment, workflow, packet):
                 set(targets) - _benchmark_targets(workflow) or
                 row.get("outcome") in {"retained", "partial"} and not targets or
                 row.get("outcome") == "reference_revision_needed" and not evidence or
-                row.get("outcome") != "unassessed" and (not scope or scope - inspected or scope - set(passages))):
+                row.get("outcome") != "unassessed" and (not scope or scope - inspected or
+                    isinstance(packet, dict) and scope - set(passages))):
             errors.append(unknown["id"] + ": invalid judgment, witnesses or inspected scope")
         for ev in evidence:
             ref = (ev.get("source_id"), ev.get("passage_id"))
-            if ref not in inspected or ref not in passages or not ev.get("quote") or ev["quote"] not in passages[ref]:
+            if (ref not in inspected or not ev.get("quote") or isinstance(packet, dict) and
+                    (ref not in passages or ev["quote"] not in passages[ref])):
                 errors.append(unknown["id"] + ": invalid archived evidence reference/quote")
     counts = Counter(outcomes.values())
     valid = bool(valid and not errors)
+    unavailable = bool(expected) and not isinstance(packet, dict)
     not_retained = [key for key, value in outcomes.items() if value != "retained"]
     return {"status": "invalid_accounting" if not valid else "not_applicable" if not expected else
-            "retained" if not not_retained else "incomplete", "denominator": len(expected),
-        "counts": {key: counts[key] for key in allowed}, "accounting_valid": valid,
-        "strict_retained_fraction": counts["retained"] / len(expected) if expected and valid else None,
+            "incomplete" if not_retained else "source_packet_unavailable" if unavailable else
+            "retained", "denominator": len(expected),
+        "counts": {key: counts[key] for key in allowed}, "accounting_valid": None if valid and unavailable else valid,
+        "source_evidence_status": "unavailable" if unavailable else "available_archived_packet",
+        "strict_retained_fraction": counts["retained"] / len(expected) if expected and valid and not unavailable else None,
         "not_fully_retained_ids": not_retained, "errors": errors,
         "missing_unknown_ids": sorted(set(outcomes) - set(ids)),
         "extra_unknown_ids": sorted(set(ids) - set(outcomes)),
@@ -298,12 +359,17 @@ def _case(archive, design, source_rows, manifests):
         declarations.append((source, archive.work / "sources"))
     if inputs:
         declarations.append((inputs, folder))
+    declared_paths = {str(row["packet"]) for row, _ in declarations if row.get("packet")}
+    if any(row["case_id"] == cid and original not in declared_paths
+           for original, row in archive.packet_map.items()):
+        raise ValueError("Source-packet mapping is not declared by its exact case")
     hashes = {row["packet_sha256"] for row, _ in declarations if row.get("packet_sha256")}
     packet_checks, packet = [], None
     for row, base in declarations:
         if row.get("packet"):
-            packet_checks.append(archive.pin(row["packet"], row.get("packet_sha256"), base))
-            packet = packet or archive.linked(row["packet"], base)
+            check, available = archive.packet(row["packet"], row.get("packet_sha256"), cid, base)
+            packet_checks.append(check)
+            packet = packet or available
     if not packet and source.get("packet"):
         packet = archive.linked(source["packet"], archive.work / "sources")
     if isinstance(packet, dict):
@@ -385,7 +451,7 @@ def _case(archive, design, source_rows, manifests):
         workflow_review["status"] == "model_review_supported" and obligations["status"] == "full" and
         not bad_pins and not metadata_conflicts and byte_verified and binding_checks and
         all(row["status"] == "matched" for row in binding_checks) and
-        unknowns["status"] not in {"incomplete", "invalid_accounting"} and
+        unknowns["status"] not in {"incomplete", "invalid_accounting", "source_packet_unavailable"} and
         not factual_audit["unsupported_factual_audit_ids"])
     return {"case_id": cid, "method_id": mid, "family": design.get("family", "unspecified"),
         "split": design.get("split", "unspecified"), "title": design.get("title", cid),
@@ -531,14 +597,19 @@ def _sessions(archive, cases):
         "sessions": records, "boundary": "Usage/latency come only from archived per-session result.json metadata, including failures. Provider item events are not parsed; transport retries, liveness and currency cost are not inferred. Duplicate thread IDs are disclosed."}
 
 
-def build_report(design_path, work, *, comparisons_path=None, original_work_root=None):
+def build_report(design_path, work, *, comparisons_path=None, original_work_root=None, source_packet_map=None):
     design_path = Path(design_path).resolve()
     design = json.loads(design_path.read_bytes())
     rows = design.get("cases", [])
     if not rows or len({row["case_id"] for row in rows}) != len(rows) or any(
             not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", row["case_id"]) for row in rows):
         raise ValueError("Design must contain distinct cases; never substitute the source-ready manifest")
-    archive = Archive(work, original_work_root)
+    packet_map, packet_map_record = _source_packet_map(source_packet_map,
+        sha_bytes(design_path.read_bytes()), {row["case_id"] for row in rows})
+    archive = Archive(work, original_work_root, packet_map)
+    if packet_map_record:
+        archive.reads[packet_map_record["path"]] = packet_map_record["sha256"]
+        archive.mapped_reads.add(packet_map_record["path"])
     source_report = archive.read(archive.work / "sources/source_report.json") or {}
     source_rows = {row.get("case_id"): row for row in _rows(source_report, "cases")}
     source_rows.update({row.get("method_id", key): row for key, row in
@@ -572,7 +643,8 @@ def build_report(design_path, work, *, comparisons_path=None, original_work_root
         group["reference_reviewed"] += row["reference_review"]["status"] == "model_review_supported"
         group["workflow_reviewed"] += row["workflow_review"]["status"] == "model_review_supported"
         group["full_coverage"] += row["full_model_candidate_coverage"]
-        group["unknown_preservation_assessed"] += row["graph_unknown_preservation"] != "not_assessed"
+        group["unknown_preservation_assessed"] += row["graph_unknown_preservation"] not in {
+            "not_assessed", "source_packet_unavailable"}
         group["unknown_preserved_or_na"] += row["graph_unknown_preservation"] in {"retained", "not_applicable"}
     expected_cases, expected_strata = EXPECTED_CASES, EXPECTED_STRATA
     all_cases = len(rows) == expected_cases and len(strata) == expected_strata and all(
@@ -581,6 +653,8 @@ def build_report(design_path, work, *, comparisons_path=None, original_work_root
     unknown_status = ("incomplete" if unknown_statuses & {"incomplete", "invalid_accounting"} else
         "not_applicable" if unknown_statuses == {"not_applicable"} else
         "retained" if unknown_statuses <= {"retained", "not_applicable"} else
+        "source_packet_unavailable" if "source_packet_unavailable" in unknown_statuses and
+            unknown_statuses <= {"source_packet_unavailable", "not_assessed"} else
         "partially_assessed" if unknown_statuses - {"not_assessed"} else "not_assessed")
     comparisons_done = comparisons["designed_question_count"] == comparisons["denominator"] > 0 and comparisons[
         "reviewed_candidates_recorded"] == comparisons["denominator"]
@@ -590,7 +664,7 @@ def build_report(design_path, work, *, comparisons_path=None, original_work_root
     sessions = _sessions(archive, cases)
     changed = []
     for name, expected in archive.reads.items():
-        local = archive.resolve(name)["local_path"]
+        local = name if name in archive.mapped_reads else archive.resolve(name)["local_path"]
         try:
             if not local or sha_bytes(Path(local).read_bytes()) != expected:
                 changed.append(name)
@@ -610,6 +684,7 @@ def build_report(design_path, work, *, comparisons_path=None, original_work_root
     return {"format_version": "protocol_benchmark_archived_report/1.0",
         "as_of_read_utc": datetime.now(timezone.utc).isoformat(), "work": str(archive.work),
         "original_work_root": str(original_work_root) if original_work_root else None,
+        "source_packet_map": packet_map_record,
         "coverage_status": "all_designed_model_candidate_stages_recorded" if all_cases and comparisons_done and
             unknown_status in {"retained", "not_applicable"} and
             design_pin["status"] == "matched" and source_report_pin["status"] == "matched" and
@@ -716,9 +791,11 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--comparisons", type=Path)
     parser.add_argument("--original-work-root", type=Path)
+    parser.add_argument("--source-packet-map", type=Path,
+                        help="Explicit case-bound original packet paths to pinned local copies; never maps originals")
     args = parser.parse_args(argv)
     report = build_report(args.design, args.work, comparisons_path=args.comparisons,
-                          original_work_root=args.original_work_root)
+                          original_work_root=args.original_work_root, source_packet_map=args.source_packet_map)
     args.output.mkdir(parents=True, exist_ok=False)
     (args.output / "report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True,
                                                        allow_nan=False) + "\n")

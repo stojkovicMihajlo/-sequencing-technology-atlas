@@ -1,0 +1,259 @@
+{
+  "format_version": "protocol_grounding_cases/1.0",
+  "annotation_status": "model_authored_diagnostic_candidate",
+  "boundary": "Model-authored diagnostic candidate, not human gold or experimental validation. Judgments concern only the exact finite provided passage context, not full-publication or real-world truth. Contexts are selected excerpts, not complete protocols. All methods have prior project exposure; Spatial Transcriptomics and SLAM-seq are reserved from future tuning only. Original packet paths remain unchanged provenance metadata. Cases and separate labels must be frozen before any inference.",
+  "contexts": [
+    {
+      "id": "ctx-059d5eac6f78",
+      "method_id": "scbs-seq",
+      "family": "dna_methylation_conversion",
+      "split": "development",
+      "source_packet_sha256": "05a41b22a270a746797b96c97ee47b750d500ab99b342406990abdce2d1d987d",
+      "source_packet_digest": "f2fccfc4a8193f2f81ff32a41cc7be06284429452a1e10375710acb0b5df3cea",
+      "source_packet_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/reference_v1_01/work/sources/initial_packets/scbs-seq/packet.json",
+      "passages": [
+        {
+          "source_id": "pmid_25042786",
+          "passage_id": "p00008",
+          "text": "In commonly used BS-Seq protocols, sequencing adapters are first ligated to fragmented DNA and bisulfite conversion is performed, resulting in loss of information due to DNA degradation by bisulfite treatment. For scBS-Seq we used a modification of Post-Bisulfite Adaptor Tagging (PBAT)^(7), where bisulfite treatment is performed first, resulting in simultaneous DNA fragmentation and conversion of unmethylated cytosines (Fig. 1a). Then, complementary strand synthesis is primed using custom oligos containing Illumina adapter sequences and a 3′ stretch of nine random nucleotides. This step is performed five times to ensure that maximum numbers of DNA strands are tagged and to generate multiple copies of each fragment. After capture of the tagged strands, the second adapter is similarly integrated, and PCR amplification is performed with indexed primers allowing multiple single-cell libraries to be sequenced together."
+        }
+      ]
+    },
+    {
+      "id": "ctx-832347f5dbae",
+      "method_id": "atac-seq",
+      "family": "chromatin_accessibility",
+      "split": "development",
+      "source_packet_sha256": "747c15dd9c3cfd25da3f1e6ae840bd7e59041556fb286025ce41c2755f168988",
+      "source_packet_digest": "f9ba73711d8a32e6008105774c589697edd56fed2d132c37a8d8e41e5fb1d674",
+      "source_packet_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/manual_sources_01/atac/packet.json",
+      "passages": [
+        {
+          "source_id": "acquired_atac_documented_manuscript_html_80310c92",
+          "passage_id": "p00137",
+          "text": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions: 72°C for 5 minutes, 98°C for 30 seconds, followed by thermocycling at 98°C for 10 seconds, 63°C for 30 seconds and 72°C for 1 minute. To reduce GC and size bias in our PCR we monitored the PCR reaction using qPCR in order to stop amplification prior to saturation. To do this, we amplified the full libraries for 5 cycles, after 5 cycles we took an aliquot of the PCR reaction and added 10 μl of the PCR cocktail with Sybr Green at a final concentration of 0.6x. We ran this reaction for 20 cycles, to determine the additional number of cycles needed for the remaining 45 μL reaction. The libraries were purified using a Qiagen PCR cleanup kit yielding a final library concentration of ~30 nM in 20 μL. Libraries were amplified for a total of 10–12 cycles."
+        },
+        {
+          "source_id": "acquired_atac_documented_manuscript_html_80310c92",
+          "passage_id": "p00141",
+          "text": "During the ATAC-seq protocol, we chose to avoid a size selection step to maximize the library complexity. The sequenced insert size is a distribution between 40 to 1 kb with a mean of ~120 bps. From bioanalyzer and gels we observed fragments >2 kb, which would make Qubit and other mass-based quantitation methods hard to interpret. For this reason we quantified our libraries using qPCR based methods."
+        }
+      ]
+    },
+    {
+      "id": "ctx-b7a32e600aba",
+      "method_id": "drop-seq",
+      "family": "droplet_single_cell_rna",
+      "split": "development",
+      "source_packet_sha256": "c85fd3cb94ac08a863a02723d096e7609d2dcaa0d8b59f6709d87fbdd9acd9f7",
+      "source_packet_digest": "f51f1aba47de925084f380758cb172d35e9675cc29c08149c6e7132cdebb02ef",
+      "source_packet_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/reference_v1_01/work/sources/initial_packets/drop-seq/packet.json",
+      "passages": [
+        {
+          "source_id": "macosko2015_primary",
+          "passage_id": "p00084",
+          "text": "Figure 1 ; Molecular barcoding of cellular transcriptomes in droplets ; (A) Drop-Seq barcoding schematic. A complex tissue is dissociated into individual cells, which are then encapsulated in droplets together with microparticles (gray circles) that deliver barcoded primers. Each cell is lysed within a droplet; its mRNAs bind to the primers on its companion microparticle. The mRNAs are reverse-transcribed into cDNAs, generating a set of beads called “single-cell transcriptomes attached to microparticles” (STAMPs). The barcoded STAMPs can then be amplified in pools for high-throughput mRNA-seq to analyze any desired number of individual cells. ; (B) Sequence of primers on the microparticle. The primers on all beads contain a common sequence (“PCR handle”) to enable PCR amplification after STAMP formation. Each microparticle contains more than 10^(8) individual primers that share the same “cell barcode” (panel C) but have different unique molecular identifiers (UMIs), enabling mRNA transcripts to be digitally counted (panel D). A 30 bp oligo dT sequence is present at the end of all primer sequences for capture of mRNAs. ; (C) Split-and-pool synthesis of the cell barcode. To generate the cell barcode, the pool of microparticles is repeatedly split into four equally sized oligonucleotide synthesis reactions, to which one of the four DNA bases is added, and then pooled together after each cycle, in a total of 12 split-pool cycles. The barcode synthesized on any individual bead reflects that bead’s unique path through the series of synthesis reactions. The result is a pool of microparticles, each possessing one of 4^(12) (16,777,216) possible sequences on its entire complement of primers (see also Figure S1). ; (D) Synthesis of a unique molecular identifier (UMI). Following the completion of the “split-and-pool” synthesis cycles, all microparticles are together subjected to eight rounds of degenerate synthesis with all four DNA bases available during each cycle, such that each individual primer receives one of 4^(8) (65,536) possible sequences (UMIs)."
+        }
+      ]
+    },
+    {
+      "id": "ctx-25c29ce8d0b9",
+      "method_id": "split-seq",
+      "family": "combinatorial_indexing_rna",
+      "split": "development",
+      "source_packet_sha256": "61d0806a36793404b6749905e6627d0afdc007d4bfafbf4b0c86726c22467f82",
+      "source_packet_digest": "6b6c1bcb4ace6fe16a4c037e73179b9326ec3c9dafa1217d1434c602ef71923a",
+      "source_packet_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/source_recovery_live_01/recovered/methods/split-seq/packet.json",
+      "passages": [
+        {
+          "source_id": "acquired_splitseq_primary_pmc_08823e62",
+          "passage_id": "p00136",
+          "text": "In SPLiT-seq, individual transcriptomes are uniquely labeled by passing a suspension of formaldehyde fixed cells or nuclei through four rounds of combinatorial barcoding. In the first round of barcoding, cells are distributed into a 96-well plate and cDNA is generated with an in-cell reverse transcription (RT) reaction using well-specific barcoded primers. Each well can contain a different biological sample – thereby enabling multiplexing of up to 96 samples in a single experiment. After this step, cells from all wells are pooled and redistributed into a new 96-well plate, where an in-cell ligation reaction appends a second well-specific barcode to the cDNA. The third-round barcode, which also contains a unique molecular identifier (UMI), is then appended with another round of pooling, splitting, and ligation. After three rounds of barcoding, the cells are pooled, split into sublibraries, and sequencing barcodes are introduced by PCR. This final step provides a fourth barcode, while also making it possible to sequence different numbers of cells in each sublibrary. After sequencing, each transcriptome is assembled by combining reads containing the same four-barcode combination (Fig. 1A [link: #F1], Fig. S1A [link: #SD1])."
+        }
+      ]
+    },
+    {
+      "id": "ctx-e75d3e125efb",
+      "method_id": "spatial-transcriptomics",
+      "family": "spatial_transcriptomics",
+      "split": "future_tuning_holdout",
+      "source_packet_sha256": "4159a067311dfde2ac094a60625451d34728d0780db1420541598be85f7bd936",
+      "source_packet_digest": "fee944ad46954e2e8c689a6ccb2fadaa8757e6ce8eccc6880378d1934bde9295",
+      "source_packet_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/manual_sources_01/spatial/packet.json",
+      "passages": [
+        {
+          "source_id": "primary_pdf_39d88dc581bc",
+          "passage_id": "p00003",
+          "text": "Visualization and analysis of gene expression in tissue sections by spatial transcriptomics Patrik L. Ståhl,1,2* Fredrik Salmén,2* Sanja Vickovic,2† Anna Lundmark,2,3† José Fernández Navarro,1,2 Jens Magnusson,1 Stefania Giacomello,2 Michaela Asp,2 Jakub O. Westholm,4 Mikael Huss,4 Annelie Mollbrink,2 Sten Linnarsson,5 Simone Codeluppi,5,6 Åke Borg,7 Fredrik Pontén,8 Paul Igor Costea,2 Pelin Sahlén,2 Jan Mulder,9 Olaf Bergmann,1 Joakim Lundeberg,2‡ Jonas Frisén1 Analysis of the pattern of proteins or messenger RNAs (mRNAs) in histological tissue sections is a cornerstone in biomedical research and diagnostics.This typically involves the visualization of a few proteins or expressed genes at a time. We have devised a strategy, which we call “spatial transcriptomics,” that allows visualization and quantitative analysis of the transcriptome with spatial resolution in individual tissue sections. By positioning histological sections on arrayed reverse transcription primers with unique positional barcodes, we demonstrate high-quality RNA-sequencing data with maintained two-dimensional positional information from the mouse brain and human breast cancer. Spatial transcriptomics provides quantitative gene expression data and visualization of the distribution of mRNAs within tissue sections and enables novel types of bioinformatics analyses, valuable in research and diagnostics."
+        },
+        {
+          "source_id": "primary_pdf_39d88dc581bc",
+          "passage_id": "p00021",
+          "text": "Fig. 2. Spatially resolved gene expression. (A) Each array feature contains unique DNA-barcoded probes containing a cleavage site, a T7 amplification and sequencing handle, a spatial barcode, a unique molecular identifier (UMI), and an oligo(dT) VN-capture region, where V is anything but T and where N is any nucleotide. cDNA (red) is generated from captured mRNA by reverse transcription. (B) Visualization of the expression of three genes by spatial transcriptomics (top) and in situ hybridization (bottom). Penk and Kctd12 in situ images are from the Allen Institute. Cutoff normalized counts, Penk, 8; Doc2g,"
+        }
+      ]
+    },
+    {
+      "id": "ctx-e2a39855ab8f",
+      "method_id": "slam-seq",
+      "family": "metabolic_rna_recoding",
+      "split": "future_tuning_holdout",
+      "source_packet_sha256": "191142ec8bf41f4d817aa7d95bc51b50010dbd70e62db434da3d128d77287253",
+      "source_packet_digest": "987b52513120c65e6ad0ebcb8f8858a75d4bd8a807b4074e40b769f8cd7eb5e7",
+      "source_packet_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/source_recovery_live_01/recovered/methods/slam-seq/packet.json",
+      "passages": [
+        {
+          "source_id": "acquired_primary_europepmc_jats_a306191f",
+          "passage_id": "p00005",
+          "text": "In SLAM-seq, we employed the primary thiol-reactive compound iodoacetamide (IAA), which covalently attaches a carboxyamidomethyl-group to s^(4)U by nucleophilic substitution (Fig.1a). Quantitative s^(4)U-alkylation was confirmed by a shift in the characteristic absorbance spectrum of 4-thiouracil from ~335 nm to ~297 nm (Fig.1b)15. Under optimal reaction conditions (Supplementary Fig.1), absorbance at 335 nm decreased 50-fold compared to untreated 4-thiouracil, resulting in complete (≥98%) alkylation within 15 min (Supplementary Fig.1). Mass spectrometry analysis of thiol-specific alkylation in a ribose-context confirmed these derivatization-efficiencies (Fig.1c, and Supplementary Fig.2). Because quantitative identification of s^(4)U by sequencing presumes that reverse transcriptase (RT) passes alkylated s^(4)U-residues without drop-off, we determined the effect of s^(4)U-alkylation on RT-processivity in primer extension assays (Supplementary Fig.3a). We did not observe a significant effect of s^(4)U-alkylation on RT processivity when compared to a non-s^(4)U-containing oligo with identical sequence (Supplementary Fig.3b, c). To evaluate the effect of s^(4)U-alkylation on RT-directed nucleotide incorporation, we isolated the full-length products of primer extension reactions, PCR-amplified the cDNA and subjected the libraries to high-throughput-sequencing (Fig.1d, and Supplementary Fig.4). While the presence of s^(4)U prompted a constant ten to eleven percent T>C-conversions already in the absence of alkylation (presumably due to base-pairing variations of s^(4)U-tautomeres), s^(4)U-alkylation increased T>C-conversions by 8.5-fold, resulting in a >0.94 conversion rate (Fig.1d). Importantly, iodoacetamide-treatment leaves conversion rates of any given non-thiol-containing nucleotide unaltered (Supplementary Fig.4c)."
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "g-7a731f5666ec4bfa",
+      "context_id": "ctx-b7a32e600aba",
+      "field_pointer": "/states/0/description",
+      "value": "The cell-barcode and UMI segments together contribute 20 variable nucleotide positions per primer: 12 for the cell barcode and eight for the UMI."
+    },
+    {
+      "id": "g-9785ea215e4748e4",
+      "context_id": "ctx-e75d3e125efb",
+      "field_pointer": "/states/0/description",
+      "value": "The array probes include a spatial barcode, a UMI, a T7 amplification and sequencing handle, and an oligo(dT) VN capture region; reverse transcription generates cDNA from captured mRNA."
+    },
+    {
+      "id": "g-f5ea4ac7243e4c1a",
+      "context_id": "ctx-e2a39855ab8f",
+      "field_pointer": "/operations/0/action",
+      "value": "Iodoacetamide treatment changed the conversion rates of non-thiol-containing nucleotides in the reported assays."
+    },
+    {
+      "id": "g-aac8831e4a7f4bf8",
+      "context_id": "ctx-25c29ce8d0b9",
+      "field_pointer": "/operations/0/action",
+      "value": "First-round wells may contain different biological samples, allowing up to 96 samples to be multiplexed in a single experiment."
+    },
+    {
+      "id": "g-e881f6d6baa24872",
+      "context_id": "ctx-25c29ce8d0b9",
+      "field_pointer": "/operations/0/action",
+      "value": "The first barcode is introduced during in-cell reverse transcription, the second and third by ligation, and the fourth by PCR."
+    },
+    {
+      "id": "g-3be48ad5d5bd463e",
+      "context_id": "ctx-832347f5dbae",
+      "field_pointer": "/operations/0/action",
+      "value": "The analytical qPCR aliquot is run for five cycles to determine additional cycles for the remaining 45 μL reaction."
+    },
+    {
+      "id": "g-e10f1e8ed9044e8d",
+      "context_id": "ctx-e75d3e125efb",
+      "field_pointer": "/states/0/description",
+      "value": "In the VN capture region, V may be any nucleotide except T, while N may be any nucleotide."
+    },
+    {
+      "id": "g-3c48172ee4f74475",
+      "context_id": "ctx-e2a39855ab8f",
+      "field_pointer": "/operations/0/action",
+      "value": "The reported primer-extension comparison found no significant effect of s4U alkylation on RT processivity relative to an otherwise identical oligo lacking s4U."
+    },
+    {
+      "id": "g-a3a7ea8b4ec44bbe",
+      "context_id": "ctx-e2a39855ab8f",
+      "field_pointer": "/operations/0/action",
+      "value": "The primer-extension assay achieved a T>C conversion rate greater than 0.94 after alkylation, so the protocol guarantees error-free identification of every newly synthesized cellular RNA molecule."
+    },
+    {
+      "id": "g-737d5a2dd18a4020",
+      "context_id": "ctx-b7a32e600aba",
+      "field_pointer": "/states/0/description",
+      "value": "All primers on a microparticle share the same UMI, whereas the cell barcode differs from primer to primer on that microparticle."
+    },
+    {
+      "id": "g-1f884fad67564ccf",
+      "context_id": "ctx-e75d3e125efb",
+      "field_pointer": "/states/0/description",
+      "value": "Each array feature carries spatial barcodes and UMIs, and every spatial barcode uniquely identifies one individual cell."
+    },
+    {
+      "id": "g-ea5f7f7fdb1e484f",
+      "context_id": "ctx-059d5eac6f78",
+      "field_pointer": "/operations/0/action",
+      "value": "For scBS-seq, the first sequencing adapter is ligated to DNA before bisulfite conversion."
+    },
+    {
+      "id": "g-87668c05b5844930",
+      "context_id": "ctx-b7a32e600aba",
+      "field_pointer": "/states/0/description",
+      "value": "A bead’s cell barcode is shared among its primers, while UMIs vary among primers on that bead."
+    },
+    {
+      "id": "g-d97d8152aa814af2",
+      "context_id": "ctx-832347f5dbae",
+      "field_pointer": "/operations/0/action",
+      "value": "The reported ATAC-seq protocol avoids a size-selection step to maximize library complexity."
+    },
+    {
+      "id": "g-0ae71ac989414610",
+      "context_id": "ctx-059d5eac6f78",
+      "field_pointer": "/operations/0/action",
+      "value": "First-adapter-containing complementary-strand synthesis uses a 3′ stretch of nine random nucleotides and is performed five times before capture of the tagged strands."
+    },
+    {
+      "id": "g-d7d861cc809242f3",
+      "context_id": "ctx-832347f5dbae",
+      "field_pointer": "/operations/0/action",
+      "value": "After five initial library-amplification cycles, an aliquot is run for 20 analytical cycles to determine additional cycles for the remaining 45 μL reaction."
+    },
+    {
+      "id": "g-2ffec10a917649db",
+      "context_id": "ctx-059d5eac6f78",
+      "field_pointer": "/operations/0/action",
+      "value": "The first-adapter tagging step is performed five times, and capture of the tagged strands then lasts exactly 20 minutes."
+    },
+    {
+      "id": "g-4fb3b1ae04f34fd5",
+      "context_id": "ctx-e75d3e125efb",
+      "field_pointer": "/states/0/description",
+      "value": "In the VN capture region, V is restricted to T, while N may be any nucleotide."
+    },
+    {
+      "id": "g-205178333cc644ad",
+      "context_id": "ctx-059d5eac6f78",
+      "field_pointer": "/operations/0/action",
+      "value": "Unlike the adapter-first BS-seq workflow described here, scBS-seq performs bisulfite treatment before introducing sequencing adapters by primed strand synthesis."
+    },
+    {
+      "id": "g-b9c51f678b134c8d",
+      "context_id": "ctx-25c29ce8d0b9",
+      "field_pointer": "/operations/0/action",
+      "value": "The first-round barcode is appended by in-cell ligation, and the second-round barcode is introduced by reverse transcription."
+    },
+    {
+      "id": "g-0c9077a5e79b48c6",
+      "context_id": "ctx-832347f5dbae",
+      "field_pointer": "/operations/0/action",
+      "value": "The analytical aliquot undergoes 20 cycles to determine additional cycles for the remaining 45 μL reaction and is not returned to the production library."
+    },
+    {
+      "id": "g-2d086c9ae9e14463",
+      "context_id": "ctx-b7a32e600aba",
+      "field_pointer": "/states/0/description",
+      "value": "The capture primers include a 30-base oligo(dT) tract that is enzymatically removed immediately after reverse transcription."
+    },
+    {
+      "id": "g-5d5855c4136e455c",
+      "context_id": "ctx-e2a39855ab8f",
+      "field_pointer": "/operations/0/action",
+      "value": "In the reported primer-extension experiment, s4U alkylation increased T>C conversions 8.5-fold, resulting in a conversion rate greater than 0.94."
+    },
+    {
+      "id": "g-619a7fbefabf4c77",
+      "context_id": "ctx-25c29ce8d0b9",
+      "field_pointer": "/operations/0/action",
+      "value": "A fourth barcode is added by PCR, and its sequence is independently confirmed by Sanger sequencing for every sublibrary."
+    }
+  ]
+}
