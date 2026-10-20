@@ -53,8 +53,12 @@ Use `--require-comparison-profiles` to reject a run with any missing sidecar.
 
 Shared registry runs optionally use `--semantic-cache CACHE_DIRECTORY`, containing
 `models/` and `vectors.sqlite3`. Model download is a separate, explicit preparation
-step. The optional semantic extra supplies the CPU embedding backend. Registry
-search combines existing lexical routes with dense retrieval over complete
+step. The optional semantic extra supplies the CPU embedding backend. Its locked
+ONNX Runtime wheel requires a newer Linux userspace than the Sherlock host: the
+first native pilot stopped before model execution. A separate experiment tests
+embedding inference in the existing Apptainer userspace while keeping Codex and
+source review on the host; this is not a default portable deployment guarantee.
+Registry search combines existing lexical routes with dense retrieval over complete
 definitions, aliases and scope. Both admitted and pending definitions participate.
 Reciprocal rank fusion orders candidates; similarity never establishes membership.
 

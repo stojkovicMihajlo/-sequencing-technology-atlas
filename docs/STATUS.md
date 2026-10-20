@@ -8,7 +8,7 @@ candidate retrieval through the existing embedding adapter. Accepted and pending
 registry definitions are searched; backend/settings are bound through comparison,
 reconciliation and publication. Source occurrences remain unchanged, and fresh
 scientific membership review remains required. See [the exact tool contract](COMPARISON_PROFILES.md)
-and [17 recorded design decisions](decisions/2026-10-20-shared-operation-alignment.md).
+and [18 recorded design decisions](decisions/2026-10-20-shared-operation-alignment.md).
 
 The independent focused integration run passed **109 tests**. The first complete
 local suite passed 1,573 tests with 3 skips and 16 setup errors, all caused by an
@@ -16,7 +16,10 @@ omitted validation script from the earlier development promotion. Restoring the
 byte-identical frozen script made those 16 tests pass. This packaging correction
 and all reference-audit captures are preserved in `provenance/`. A complete new
 Sherlock candidate check and a bounded two-method native alignment diagnostic are
-being prepared; neither is reported as completed here. The active default remains
+being prepared; neither is reported as completed here. The first environment attempt, job 48600558, failed before tests/model calls
+because the locked ONNX Runtime wheel requires newer Linux userspace. A separate
+embedding-only container attempt was submitted as job 48601586; its native
+completion is not established by submission. The active default remains
 `targeted_selection_18`; this feature does not mutate its frozen files.
 
 A prior nine-successful-method extraction cohort and one provider-refused method

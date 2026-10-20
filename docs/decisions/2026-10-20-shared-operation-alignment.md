@@ -303,6 +303,27 @@ without this script; 1,573 other tests passed. The correction is recorded in
 release. A complete source/test/script manifest is needed for a reproducible
 candidate; a feature test alone cannot demonstrate release completeness.
 
+### D18 — Isolate a platform dependency without changing scientific decisions
+
+**Observed:** Qiu job 48600558 failed in dependency installation before tests or
+model calls: locked ONNX Runtime 1.31.0 provides manylinux2_28 wheels whereas the
+host advertises manylinux2_17. The existing immutable Apptainer image was probed:
+Python 3.12.15, glibc 2.36, with no semantic dependencies installed.
+
+**Selected for a separate experiment:** install the existing lock-exported semantic
+dependencies into an isolated group environment using that image. Run only the
+unchanged local embedding adapter there; retain native Codex, source tools,
+registry orchestration and managed approvals on the verified host. A bounded
+subprocess bridge returns JSON vectors plus checked metadata to the existing host
+embedding cache. Pin the image/helper/weights and preserve the failed job.
+
+**Alternatives:** silently change dependency versions, disable managed sandbox
+requirements to move all workers into a container, or report a lexical-only run
+as semantic validation. None is justified. This is an operational compatibility
+experiment, not a new matching algorithm or evidence of scientific accuracy.
+The bridge is experiment-only until measured and reviewed; no persistent service,
+credential mount or unbounded supervisor is introduced.
+
 ## Verification and falsifiers
 
 The injected-backend suite in
