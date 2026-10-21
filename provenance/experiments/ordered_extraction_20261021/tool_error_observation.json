@@ -1,0 +1,36 @@
+{
+  "observed_at": "2026-10-21T18:15:23Z",
+  "job_id": "48832345",
+  "scheduler_state": "RUNNING",
+  "active_stage": "source_obligations",
+  "methods": {
+    "atac-seq": {
+      "stage_error": null,
+      "nonzero_commands": 3
+    },
+    "scbs-seq": {
+      "stage_error": null,
+      "nonzero_commands": 1
+    },
+    "dbit-seq": {
+      "stage_error": null,
+      "nonzero_commands": 2
+    }
+  },
+  "error_classification": [
+    {
+      "kind": "expected_sherlock_sandbox_start_failure",
+      "count": 5,
+      "message": "bwrap: Creating new namespace failed",
+      "handling": "Existing managed approval path; sandbox settings unchanged; subsequent tool commands executed."
+    },
+    {
+      "kind": "invalid_passage_reference",
+      "method": "atac-seq",
+      "count": 1,
+      "message": "ValueError: Unknown registered source/passage",
+      "handling": "Source helper rejected the request. No automatic aliasing or invented source support."
+    }
+  ],
+  "boundary": "Early tool-behavior diagnostic. No completed workflow, final source acceptance, or scientific accuracy claimed."
+}
