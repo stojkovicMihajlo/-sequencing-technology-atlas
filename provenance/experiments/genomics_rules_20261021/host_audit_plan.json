@@ -1,0 +1,154 @@
+{
+  "format_version": "genomics_rule_rerun_audit/1.0",
+  "written_before_native_run": true,
+  "model_input": false,
+  "baseline_job_id": "48677424",
+  "stage_scope": "Fresh open selection and shared-source matching on the nine supported preserved parent workflows; no extraction rerun.",
+  "expected_answer_boundary": "These seven nonexhaustive development comparison questions are not required positive edges or gold labels, and are withheld from the native prompts/runtime bundle.",
+  "prior_question_artifact": "provenance/experiments/ten_method_overview_20261020/monitoring/independent_comparison_opportunities_preselection.json",
+  "prior_question_sha256": "8500005ce122fe5c6a889a588d43cfa5745dd3e76bfdd06e8991f01b324eb02f",
+  "questions": [
+    {
+      "id": "opportunity-01",
+      "question": "At the declared captured-cDNA amplification scope, do these connected regions share the biotin/streptavidin capture, bead-bound template-switch and five-cycle PCR-to-soluble-product mechanism, and which substrate/primer/identity differences limit a common definition?",
+      "left": {
+        "method_id": "dbit-seq",
+        "operation_ids": [
+          "capture_cDNA",
+          "template_switch",
+          "initial_PCR"
+        ]
+      },
+      "right": {
+        "method_id": "split-seq",
+        "operation_ids": [
+          "capture_cDNA",
+          "template_switch",
+          "initial_PCR"
+        ]
+      }
+    },
+    {
+      "id": "opportunity-02",
+      "question": "Can one DBiT library-construction operation correspond to the two connected SPLiT tagmentation/index-PCR operations at the named Nextera-XT cDNA-to-sequencing-library boundary, while retaining differences in documented indexing and unspecified DBiT internals?",
+      "left": {
+        "method_id": "dbit-seq",
+        "operation_ids": [
+          "make_RNA_library"
+        ]
+      },
+      "right": {
+        "method_id": "split-seq",
+        "operation_ids": [
+          "tagment",
+          "index_PCR_cleanup"
+        ]
+      }
+    },
+    {
+      "id": "opportunity-03",
+      "question": "Does the shared tagmentation name justify common whole-transform membership when ATAC converts chromatin accessibility into genomic fragment selection, whereas SPLiT prepares already amplified barcoded cDNA for sequencing?",
+      "left": {
+        "method_id": "atac-seq",
+        "operation_ids": [
+          "tagment"
+        ]
+      },
+      "right": {
+        "method_id": "split-seq",
+        "operation_ids": [
+          "tagment"
+        ]
+      }
+    },
+    {
+      "id": "opportunity-04",
+      "question": "Do nucleotide conversion and subsequent primed synthesis describe the same transformation in SLAM and scBS, after accounting for RNA/DNA substrate, reacting base, chemistry, synthesis enzyme and encoded biological information?",
+      "left": {
+        "method_id": "slam-seq",
+        "operation_ids": [
+          "o_alk",
+          "o_first"
+        ]
+      },
+      "right": {
+        "method_id": "scbs-seq",
+        "operation_ids": [
+          "convert_recover",
+          "first_tag"
+        ]
+      }
+    },
+    {
+      "id": "opportunity-05",
+      "question": "At what resolution, if any, can affinity capture be shared while retaining substrate, denaturation and strand-processing differences?",
+      "left": {
+        "method_id": "scbs-seq",
+        "operation_ids": [
+          "capture_first"
+        ]
+      },
+      "right": {
+        "method_id": "dbit-seq",
+        "operation_ids": [
+          "capture_cDNA"
+        ]
+      }
+    },
+    {
+      "id": "opportunity-06",
+      "question": "Does the index role follow the documented physical allocation and decoding key, rather than PCR/read-channel names?",
+      "left": {
+        "method_id": "split-seq",
+        "operation_ids": [
+          "index_PCR_cleanup"
+        ]
+      },
+      "right": {
+        "method_id": "drop-seq",
+        "operation_ids": [
+          "select_3prime"
+        ]
+      }
+    },
+    {
+      "id": "opportunity-07",
+      "question": "Do monitoring and continuation regions share a control purpose or a broader mechanism after preserving the distinct physical branches?",
+      "left": {
+        "method_id": "atac-seq",
+        "operation_ids": [
+          "split_for_monitoring",
+          "measure_pcr_cycles",
+          "complete_library"
+        ]
+      },
+      "right": {
+        "method_id": "split-seq",
+        "operation_ids": [
+          "monitor_PCR",
+          "stop_PCR"
+        ]
+      }
+    }
+  ],
+  "failure_checks": [
+    "Rendered prompts contain current policy and correct source scope.",
+    "Every intake parent and every selected/withheld/failed unit remains in the denominator.",
+    "Candidate discovery is assessed separately from membership correctness.",
+    "Definitions state resolution and do not silently broaden to avoid a contradiction.",
+    "Consequential factual clauses are source-supported, including exclusions and material fate.",
+    "Unknown is not a positive wildcard or evidence of incompatibility; missing fine detail does not automatically refute a broad supported family.",
+    "Original workflow nodes and source versions are preserved; purpose membership does not acquire mechanism/substitution/ancestry claims.",
+    "Latency, native completion, source commands, helper failures and token usage are recorded."
+  ],
+  "inherited_parent_issues": [
+    "ATAC analytical-aliquot prohibition is an old extraction defect, not repaired by rerunning comparisons.",
+    "Drop-seq characterization scope growth is an old parent issue.",
+    "hiCLIP remains outside the nine-parent accepted comparison denominator; it was withheld in the ten-method intake."
+  ],
+  "limits": [
+    "One stochastic development rerun cannot establish causal accuracy improvement.",
+    "Registry starts empty, so populated-registry retrieval/reuse is not evaluated.",
+    "No fresh ComparisonProfile generation is requested; prompt integration for that mode remains software-checked only."
+  ]
+}
