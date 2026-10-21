@@ -104,6 +104,14 @@ The first extraction remains `extraction/run_001/`, since no extraction began in
 the failed job. A used extraction destination is rejected before any paid call.
 Existing acquisition and recovery attempt 001 remain unchanged.
 
+Restart **job 48874338** was submitted on 2026-10-21 using frozen runtime
+**750ba29** (`gpt-6.1-sol`, `xhigh`, Qiu CPU partition, recovery attempt 2).
+Its first scheduler observation was `PENDING`; no new extraction outcome is
+established by submission. Scheduler output is in
+`method_experiments/logs/scstamp-recover-extract-attempt002-48874338.log`.
+Three targeted regressions passed for reading-order identity versus layout,
+unchanged DOI rejection, and rejection of a used extraction destination.
+
 Both stages use `gpt-6.1-sol`, `xhigh`, the existing Codex login and managed
 execution policy. There is no per-stage model timeout. The four-hour Slurm
 allocation is a finite safety/resource boundary, not a promised method latency.

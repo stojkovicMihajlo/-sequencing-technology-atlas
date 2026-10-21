@@ -1,5 +1,22 @@
 # Deployment status
 
+## Fresh scSTAMP-seq recovery/extraction restart, 2026-10-21
+
+Qiu CPU job **48874338** is submitted with frozen runtime **750ba29** and
+`gpt-6.1-sol` / `xhigh`. It reuses the acquired 2025 v1 preprint sources and
+creates recovery attempt 002 before fresh extraction with all three review gates.
+Its first scheduler observation was `PENDING`; submission is not an extraction
+result. The [isolated experiment](../experiments/scstamp_seq_20261021/README.md)
+records exact publication scope, outputs, source failures and restart.
+
+Previous recovery job 48847411 failed before any new model call because a caller
+supplied two-column layout text to the PDF title/DOI verifier. Normal reading order
+passed that same unchanged verifier on the actual dependency. The new caller
+retains both renditions and preserves the failed attempt. Three targeted
+regressions passed. Supplement recovery now retains the true ZIP/member locator
+and requires a separately recorded content/version inspection; these mechanical
+checks do not establish scientific completeness or extraction accuracy.
+
 ## Fresh extraction test submitted, 2026-10-21
 
 Qiu CPU job **48832345** tests fresh ATAC-seq, scBS-seq and DBiT-seq extraction
