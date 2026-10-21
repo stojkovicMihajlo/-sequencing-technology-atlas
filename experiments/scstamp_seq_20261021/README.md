@@ -84,6 +84,26 @@ review; registering them does not establish use of every listed setting.
 Unavailable dependency supplements remain in the acquisition ledger. The final
 packet still requires the normal source-obligation and review gates.
 
+### Recovery restart
+
+Job **48847411**, frozen runtime **6dd6428**, stopped before any new model call.
+The final cited dependency, Grün et al., has a two-column title page: `pdftotext
+-layout` inserted the adjacent column between title lines. The experiment had
+incorrectly supplied that layout rendition to the identity verifier. A bounded
+inspection of the actual original confirmed the correct title and DOI; normal
+reading order passed the same unchanged verifier on page 1.
+
+The corrected caller uses the existing primary-PDF registration command for
+identity text and retains the separate layout rendition for protocol inspection.
+Both commands, text and hashes are preserved. This is a conversion-contract fix;
+no title/identifier rule or scientific extraction instruction was weakened.
+
+Restart with `run.sbatch recover-extract METHOD_ROOT 2`. This explicitly creates
+`source_recovery/attempt_002/` and records the chosen attempt in launch metadata.
+The first extraction remains `extraction/run_001/`, since no extraction began in
+the failed job. A used extraction destination is rejected before any paid call.
+Existing acquisition and recovery attempt 001 remain unchanged.
+
 Both stages use `gpt-6.1-sol`, `xhigh`, the existing Codex login and managed
 execution policy. There is no per-stage model timeout. The four-hour Slurm
 allocation is a finite safety/resource boundary, not a promised method latency.

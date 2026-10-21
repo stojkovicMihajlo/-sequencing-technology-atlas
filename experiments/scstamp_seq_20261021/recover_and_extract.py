@@ -5,6 +5,7 @@ assay graph, operations, scientific answers or technology-matching instructions.
 """
 
 import asyncio
+import argparse
 import json
 from pathlib import Path
 import subprocess
@@ -53,7 +54,13 @@ def prepare_dependencies(acquisition, recovery):
             command = ["pdftotext", "-layout", str(original), "-"]
             text = subprocess.run(command, check=True, capture_output=True).stdout.decode("utf-8")
             if row["role"] == "cited_protocol":
-                identity = verify_pdf_text(text, row["identity"])
+                identity_command = ["pdftotext", "-enc", "UTF-8", "-eol", "unix", str(original), "-"]
+                identity_text = subprocess.run(identity_command, check=True, capture_output=True).stdout.decode("utf-8")
+                identity_path = destination / "identity_reading_order.txt"
+                identity_path.write_text(identity_text, encoding="utf-8")
+                identity = {**verify_pdf_text(identity_text, row["identity"]),
+                            "reading_order_path": str(identity_path),
+                            "reading_order_sha256": sha(identity_path), "command": identity_command}
             else:
                 # The primary names the kit, not the manufacturer's exact revision.
                 # Check the actual guide identity and retain this version qualification.
@@ -84,7 +91,12 @@ def prepare_dependencies(acquisition, recovery):
     return descriptors, ledger
 
 
-async def main(root):
+async def main(root, recovery_attempt=1):
+    if type(recovery_attempt) is not int or recovery_attempt < 1:
+        raise ValueError("Recovery attempt must be a positive integer")
+    extraction = root / "extraction/run_001"
+    if extraction.exists() and (not extraction.is_dir() or any(extraction.iterdir())):
+        raise ValueError("Extraction destination must be fresh before source recovery")
     acquisition = root / "acquisition/methods/scstamp-seq"
     custody_path = root / "acquisition/source_receipts.json"
     custody = json.loads(custody_path.read_bytes())["files"]
@@ -93,7 +105,7 @@ async def main(root):
     custody[str(acquisition / "acquisition.json")] = sha(acquisition / "acquisition.json")
     initial = acquisition / "packet.json"
     packet = load_packet(initial)
-    recovery = root / "source_recovery/attempt_001"
+    recovery = root / f"source_recovery/attempt_{recovery_attempt:03d}"
     recovery.mkdir(parents=True, exist_ok=False)
     descriptors, dependency_ledger = prepare_dependencies(acquisition, recovery)
     source = next(s for s in packet["sources"] if s["original_path"].endswith(".xml"))
@@ -167,7 +179,7 @@ Copy exact frozen bindings from request; no generated source text or new protoco
         "packet": str(recovery / "packet.json"), "packet_sha256": sha(recovery / "packet.json"),
         "sources": len(expanded["sources"]), "scientific_completeness": False,
         "limits": "Dependency supplements remain as recorded in acquisition; image details need original inspection. Source obligations and independent review decide consequences."})
-    state = await execute(recovery / "packet.json", root / "extraction/run_001", worker=worker,
+    state = await execute(recovery / "packet.json", extraction, worker=worker,
         mode="specialists", max_revisions=1, require_coverage=True,
         require_source_coverage=True, require_field_review=True)
     check_pins(pins)
@@ -176,5 +188,9 @@ Copy exact frozen bindings from request; no generated source text or new protoco
 
 
 if __name__ == "__main__":
-    if not asyncio.run(main(Path(sys.argv[1]).resolve())):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("method_root", type=Path)
+    parser.add_argument("--recovery-attempt", type=int, default=1)
+    args = parser.parse_args()
+    if not asyncio.run(main(args.method_root.resolve(), args.recovery_attempt)):
         raise SystemExit(1)

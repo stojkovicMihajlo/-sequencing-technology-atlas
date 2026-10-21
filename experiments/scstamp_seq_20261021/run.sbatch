@@ -47,7 +47,7 @@ preserve_result() {
 trap preserve_result EXIT
 "$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.curation.execution_check \
     --workdir "$ATLAS_REPOSITORY" --require-slurm > "$method_root/audit/execution-$stage-$SLURM_JOB_ID.json"
-"$ATLAS_ENV_DIR/bin/python" - "$stage" "$method_root" <<'PY'
+"$ATLAS_ENV_DIR/bin/python" - "$stage" "$method_root" "${3:-1}" <<'PY'
 import json, os
 from datetime import datetime, timezone
 from pathlib import Path
@@ -58,6 +58,9 @@ record = {"stage": stage, "slurm_job_id": os.environ["SLURM_JOB_ID"],
           "runtime": os.environ["ATLAS_REPOSITORY"], "runtime_commit": os.environ["ATLAS_RUNTIME_COMMIT"],
           "method_root": str(root), "method_id": "scstamp-seq", "model": "gpt-6.1-sol", "effort": "xhigh",
           "stage_timeout_seconds": None, "canonical_promotion": False}
+if stage == "recover-extract":
+    record["source_recovery_attempt"] = int(sys.argv[3])
+    record["extraction_run"] = str(root / "extraction/run_001")
 with (root / f"launch-{stage}-{record['slurm_job_id']}.json").open("x") as handle:
     json.dump(record, handle, indent=2)
 PY
@@ -72,7 +75,8 @@ if [[ "$stage" == acquire ]]; then
         "$method_root/inputs/worklist.json" --output "$method_root/acquisition" \
         --method scstamp-seq --scopes "$method_root/inputs/scopes.json" --concurrency 1
 elif [[ "$stage" == recover-extract ]]; then
-    "$ATLAS_ENV_DIR/bin/python" experiments/scstamp_seq_20261021/recover_and_extract.py "$method_root"
+    "$ATLAS_ENV_DIR/bin/python" experiments/scstamp_seq_20261021/recover_and_extract.py \
+        "$method_root" --recovery-attempt "${3:-1}"
 else
     packet="${3:?Supply the inspected registered packet path}"
     "$ATLAS_ENV_DIR/bin/python" - "$packet" "$method_root/extraction/run_001" <<'PY'
