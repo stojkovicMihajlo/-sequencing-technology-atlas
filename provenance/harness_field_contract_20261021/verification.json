@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-21",
+  "base_commit": "57458fd1dfcfcf2b589a753591b365cea8a786a8",
+  "scope": "Development field descriptions, same-reviewer field accountability, execution naming and CLI compatibility. No new model or Sherlock extraction run.",
+  "software_checks": [
+    {
+      "command": ".venv/bin/python -m pytest -q",
+      "passed": 2201,
+      "skipped": 3,
+      "failed": 0,
+      "seconds": 246.53
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_workflow_field_review_runtime.py tests/test_workflow_field_contract.py",
+      "passed": 37,
+      "failed": 0,
+      "seconds": 3.68,
+      "context": "After final prompt guidance to preserve scaffold bookkeeping programmatically."
+    },
+    {
+      "check": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "check": "run --help and runtime.execute compatibility import",
+      "result": "passed"
+    }
+  ],
+  "schema_compatibility": {
+    "method": "Recovered baseline models from the base commit in an isolated Python process; removed JSON Schema description annotations while preserving properties named description; compared validation-schema hashes.",
+    "BenchmarkAssessment": {
+      "baseline_full": "e147877d266c5c47801f43ccb0268dd8b1bf850771f42405e6a8176e57526d86",
+      "new_full": "39f62badb9a4986bb9a185d6be9d7b4386d6a2a397a392137e70c5b7bfd663ea",
+      "baseline_and_new_validation": "e147877d266c5c47801f43ccb0268dd8b1bf850771f42405e6a8176e57526d86"
+    },
+    "GraphReviewAssessment": {
+      "baseline_full": "5a026147c5326e3ea36013e9bf1b3dfae1b1a1273040b1cccbd6b0b7814deb68",
+      "new_full": "b4712c982edf1437b64c8443a8fb0008f236f7d27d78347547259e18d4e62937",
+      "baseline_and_new_validation": "5c58f4c5384a024dec399b0b68440aadde9aae9690581f3ac37dcb6a994a49ec"
+    },
+    "note": "Initial full-suite run found one documentation-sensitive schema hash assertion. Replaced it with baseline validation-shape checks; stored assessment round-trip checks remain."
+  },
+  "example_inventory": {
+    "path": "examples/chipmentation/workflow.json",
+    "groups": 235,
+    "bound_fields": 1227,
+    "ordinary_json_inventory_bytes": 199296,
+    "coverage": "All present non-identifier scientific fields are inventoried; no source-entailment claim."
+  },
+  "remaining_evaluation": [
+    "Native false-positive source-support rate",
+    "Source-to-record omission coverage",
+    "Native latency and artifact size",
+    "Cross-run field-review history and downstream enforcement beyond extraction pipeline"
+  ],
+  "historical_artifacts_modified": false,
+  "external_code_copied": false
+}

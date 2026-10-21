@@ -1,5 +1,34 @@
 # Deployment status
 
+## Field contract and review enforcement in development, 2026-10-21
+
+The development extractor now carries semantic descriptions on every field in
+the 14 extraction record classes and explicitly supplies the Workflow schema to
+authors and reviewers. Compact authoring retains these descriptions. Stored
+Workflow shapes and historical records are unchanged.
+
+`workflow_extraction/extraction_pipeline.py` now requires the existing factual-field
+review helper by default in the same independent reviewer stage. A host-created
+inventory binds judgments to current field values. Missing/stale reviews fail;
+unsupported or unestablished assertions require correction; unassessed groups
+fail as unfinished review rather than missing literature. Within a run, unchanged
+negative values need explicit source-backed adjudication. The older `runtime.py`
+is an import compatibility shim. The exact design and research precedents are in
+the [decision record](decisions/2026-10-21-field-contract-and-review.md).
+
+This is a development code change, not a fresh model result or Qiu deployment.
+Existing standalone exporters and historical accepted records do not gain this
+gate retroactively. Source-to-record omissions and the truth of a reviewer's
+judgment remain separate evaluation problems. An additional review artifact adds
+output work; its native accuracy/latency effect is unmeasured. The requested
+Sherlock model/effort and frozen runtime selections remain unchanged.
+
+Validation: **2,201 software tests passed, three skipped**; 37 focused tests passed
+again after the final prompt clarification. The
+[verification record](../provenance/harness_field_contract_20261021/verification.json)
+separates control tests, unchanged data-format checks and the measured review
+inventory size from scientific model evaluation.
+
 ## Fresh comparison diagnostic completed, 2026-10-21
 
 Qiu CPU job **48793023** completed in 55 minutes with `gpt-6.1-sol` / `xhigh`.

@@ -1,6 +1,6 @@
 # Operation workflow extraction
 
-This is the small operation-level extraction path for the atlas. It produces a
+This is the operation-level extraction path for the atlas. It produces a
 general description of one published protocol version/variant, a fresh source
 review, a readable protocol and a queryable graph candidate. It does not reconstruct
 all historical experiments or certify an executable SOP.
@@ -28,6 +28,45 @@ unaccepted reader findings and proposed dispositions, while withholding reader
 gap opinions and prior review verdicts. This is candidate-visible review, so
 anchoring and shared model errors remain risks.
 
+The execution order is prescribed by Python; agents choose what to search/read
+and how to describe the supported protocol within each stage. The two reader
+perspectives are a local design choice, not an established optimum from ROBIN.
+`--mode baseline` allows their contribution to be tested without replacing the
+integration and review stages.
+
+## Field meanings and acceptance
+
+`models.py` contains the authoritative per-field descriptions, alongside field
+types and validation. They are included in the JSON schemas supplied to the
+agents, including compact authoring schemas. All roles receive the Workflow
+field-definition schema as well as their own output schema; a reader still writes
+a ReadingReport and a reviewer still writes reviews. Shared prompt instructions
+explain scope, granularity and cross-field rules.
+
+New runs require factual-field review by default. Before the existing reviewer
+starts, Python creates an unassessed inventory of the exact candidate fields and
+their hashes. The reviewer writes `field_review.json` in the same attempt as its
+ordinary `artifact.json` WorkflowReview. This adds no agent stage. Each record
+group must be reviewed; negative judgments name the affected fields. Scope,
+module interpretation and gap premises are included, not just graph nodes/edges.
+
+The host rejects missing, malformed or stale field reviews and withholds supported
+export for incomplete or negative judgments. The existing bounded repair receives
+the findings. Within that run, an unchanged negative value requires explicit
+source-backed reconsideration before a positive verdict. The legacy opt-out
+`--no-field-review` is recorded in run state/configuration; it cannot claim this
+additional check. Historical runs retain their original profiles.
+
+This verifies that judgments cover the current records, not that the judgments
+are scientifically correct. One judgment covers all fields in a record group,
+not an independent proof of every sentence. Reader-finding coverage and optional
+candidate-blind source coverage separately test omissions. Standalone export
+helpers do not enforce the new execution profile; old graphs are not upgraded by
+it. Cross-run repairs do not automatically inherit field-review history.
+
+These choices and their paper/code precedents are recorded in the
+[field-contract decision](../../../../docs/decisions/2026-10-21-field-contract-and-review.md).
+
 ## Read the code in this order
 
 | File | Purpose |
@@ -38,12 +77,21 @@ anchoring and shared model errors remain risks.
 | `sources.py` | Register originals and build bounded, reproducible JATS/text passages. |
 | `jats_text.py` | Preserve scripts and formula source structure in the declared text rendition. |
 | `prompts.py` | Exact shared contract and the instructions for each reading perspective. |
-| `runtime.py` | Parallel reading, integration, fresh review, one repair and durable run status. |
+| `extraction_pipeline.py` | Execute parallel reading, integration, fresh review, one repair and the export gates. |
+| `runtime.py` | Compatibility import for earlier callers; execution lives in `extraction_pipeline.py`. |
+| `field_review.py` | Inventory current fields and validate complete, value-bound review judgments. |
 | `projection.py` | Readable protocol, typed graph candidate and operation-neighborhood queries. |
 | `overview.py`, `overview_html.py` | Main reading view; preserve declared structure and known review corrections while expanding recipes/evidence on demand. |
 | `inspection.py` | Display the complete candidate with repeated evidence objects stored once. |
 | `transformations.py` | Cut contextual operation units and check source-reviewed comparison memberships. |
 | `__main__.py` | CLI wiring for preparation, reading, checks, execution and queries. |
+
+The tools are actual CLI commands invoked through the native worker's shell tool:
+`catalog`, `search`, `read`, `read-batch`, `inspect`, `query`, `assemble`,
+`expand-authoring` and `check`. They are not a separately registered MCP tool set.
+Source acquisition runs separately: extraction can adaptively search its frozen
+packet but cannot silently add external literature to the evidence set. A missing
+dependency requires acquisition, a new packet and a new bound review.
 
 The graph-building helpers remain separate small files in `playground/`:
 `workflow_unit_selection.py` materializes an agent's proposed cuts;

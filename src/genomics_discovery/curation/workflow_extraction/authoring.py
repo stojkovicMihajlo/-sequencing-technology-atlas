@@ -102,6 +102,10 @@ def authoring_schema(kind: str) -> dict:
                 properties["evidence_refs"] = {
                     "type": "array", "items": {"type": "string", "minLength": 1},
                     **({"minItems": previous["minItems"]} if "minItems" in previous else {}),
+                    **({"description": previous["description"] +
+                        " Encode this evidence as IDs in evidence_registry; references preserve "
+                        "the same claim-specific support requirements."}
+                       if "description" in previous else {}),
                 }
                 value["required"] = ["evidence_refs" if key == "evidence" else key
                                      for key in value.get("required", [])]

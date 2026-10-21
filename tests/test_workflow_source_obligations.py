@@ -16,7 +16,7 @@ from genomics_discovery.curation.workflow_extraction.obligations import (
     SourceObligations, SourceCoverageReview, source_coverage_outcome,
     validate_source_obligations, validate_source_coverage_review,
 )
-from genomics_discovery.curation.workflow_extraction.runtime import execute
+from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
 
 def obligations_for(packet):

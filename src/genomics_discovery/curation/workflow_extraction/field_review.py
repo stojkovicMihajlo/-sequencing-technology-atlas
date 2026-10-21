@@ -1,4 +1,4 @@
-"""Opt-in factual-field accountability; no production wiring or entailment proof.
+"""Factual-field accountability used by extraction; no entailment proof.
 
 One group covers each record, not each sentence. The policy inventories workflow
 scope/identity; state kinds/descriptions; operation actions, resources, information
@@ -7,7 +7,9 @@ gap premises/next evidence. Names and module boundaries need contextual judgment
 not literal paper category names. Evidence and topology already have separate
 integrity checks. Evidence rationales remain inside the reviewed groups, too.
 Source-to-record omissions remain a separate denominator. This sidecar complements
-ordinary workflow/source review; it never authorizes export by itself.
+ordinary workflow/source review; it never authorizes export by itself. The
+extraction pipeline defaults this additional gate on; standalone graph exporters
+do not automatically inherit its policy.
 
 Supported deductions may cite their premises with Evidence.support='inferred';
 their wording need not occur in a quotation. not_established records insufficient

@@ -20,39 +20,62 @@ Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
 
 class PassageRef(StrictModel):
-    source_id: Text
-    passage_id: Text
+    source_id: Text = Field(description=
+        "Exact ID of a registered source in the frozen packet; not a citation invented from memory.")
+    passage_id: Text = Field(description=
+        "Exact passage ID within source_id. Inspect that passage and relevant context before citing it.")
 
 
 class Evidence(PassageRef):
-    quote: Annotated[Text, Field(max_length=600)]
-    support: Literal["reported", "inferred"]
-    rationale: Text
+    quote: Annotated[Text, Field(max_length=600)] = Field(description=
+        "Short exact quotation from the named passage supporting this claim or its inference premises. "
+        "Do not paraphrase inside quote; matching text establishes provenance, not entailment.")
+    support: Literal["reported", "inferred"] = Field(description=
+        "reported when the source states the claimed fact in the relevant scope; inferred when the "
+        "claim is a deduction from cited premises. Neither value makes an unsupported assertion valid.")
+    rationale: Text = Field(description=
+        "Explain how this passage supports this exact claim, including applicable variant, "
+        "qualifications and any inference. Do not introduce uncited scientific facts in the explanation.")
 
 
 EvidenceSet = Annotated[tuple[Evidence, ...], Field(min_length=1)]
 
 
 class Finding(StrictModel):
-    id: Text
-    description: Text
-    evidence: EvidenceSet
+    id: Text = Field(description="Stable local finding ID, unique within this reader report.")
+    description: Text = Field(description=
+        "A source-supported fact relevant to the scoped protocol, retaining consequential "
+        "conditions, identity and route qualifications; not a proposed assay improvement.")
+    evidence: EvidenceSet = Field(description=
+        "Contextual source support for this finding. Different source applicability or deductions "
+        "need their own rationale; a paper-level citation alone is insufficient.")
 
 
 class Gap(StrictModel):
-    id: Text
-    description: Text
-    blocking: bool
-    next_evidence: Text
+    id: Text = Field(description=
+        "Stable local gap ID. Integrators retaining reader gaps use reader_role:original_gap_id.")
+    description: Text = Field(description=
+        "The specific unresolved fact and its consequence for this scope. Distinguish missing "
+        "source access, an unreported fact and an extraction error; absence is not impossibility.")
+    blocking: bool = Field(description=
+        "True if the unknown prevents support for a consequential scoped claim, interface or route; "
+        "false for permitted detail gaps with supported boundaries. False does not supply the missing fact.")
+    next_evidence: Text = Field(description=
+        "The concrete passage, supplement, dependency or other evidence needed to resolve the "
+        "question. State an unknown retrieval target honestly rather than inventing a source.")
 
 
 class GapResolution(StrictModel):
     """An evidence-backed answer or scope exclusion, still requiring source review."""
 
-    reader_role: Literal["chemistry", "information"]
-    gap_id: Text
-    rationale: Text
-    evidence: EvidenceSet
+    reader_role: Literal["chemistry", "information"] = Field(description=
+        "Role of the supplied reader that authored the gap; not an invented role for an integrator gap.")
+    gap_id: Text = Field(description="Exact original gap ID from the named reader report.")
+    rationale: Text = Field(description=
+        "Source-backed answer or scope exclusion for this gap. If only criticality changes, "
+        "preserve the unknown fact separately; do not claim it was discovered.")
+    evidence: EvidenceSet = Field(description=
+        "Inspected evidence supporting the resolution or scope decision, not the earlier reader's opinion.")
 
 
 def _unique_resolution_keys(resolutions: tuple[GapResolution, ...]) -> None:
@@ -62,23 +85,46 @@ def _unique_resolution_keys(resolutions: tuple[GapResolution, ...]) -> None:
 
 
 class ReadingReport(StrictModel):
-    role: Literal["chemistry", "information"]
-    inspected_passages: tuple[PassageRef, ...]
-    findings: Annotated[tuple[Finding, ...], Field(min_length=1)]
-    unresolved: tuple[Gap, ...]
+    role: Literal["chemistry", "information"] = Field(description=
+        "The assigned reader perspective; it does not impose a protocol stage or module sequence.")
+    inspected_passages: tuple[PassageRef, ...] = Field(description=
+        "Passages actually inspected in this session. Include cited finding passages; do not "
+        "claim inspection merely because a source appears in the packet catalogue.")
+    findings: Annotated[tuple[Finding, ...], Field(min_length=1)] = Field(description=
+        "Source-supported findings for the declared method and variant; evidence for later "
+        "integration, not an already verified Workflow.")
+    unresolved: tuple[Gap, ...] = Field(description=
+        "Specific unresolved questions after inspecting relevant available evidence; an empty "
+        "list means no identified gaps, not proof that all possible details are known.")
 
 
 class Resource(StrictModel):
-    kind: Literal["reagent", "equipment", "software", "condition"]
-    description: Text
-    evidence: EvidenceSet
+    kind: Literal["reagent", "equipment", "software", "condition"] = Field(description=
+        "Type of resource used by this Operation: material reagent, apparatus, computational "
+        "tool, or reaction/processing setting. A resource is not automatically a routed State.")
+    description: Text = Field(description=
+        "Reported resource identity and relevant quantity, sequence, unit or setting for this "
+        "Operation and variant. Preserve alternatives and unknowns; do not assign a study-wide "
+        "inventory to every reaction or fill omitted conditions with customary defaults.")
+    evidence: EvidenceSet = Field(description=
+        "Evidence for this resource's identity, stated details and assignment to this Operation; "
+        "a reagent's presence somewhere in the paper does not establish that assignment.")
 
 
 class State(StrictModel):
-    id: Text
-    kind: Literal["material", "data"]
-    description: Text
-    evidence: EvidenceSet
+    id: Text = Field(description=
+        "Unique local interface ID referenced by Operation I/O and Flows. Distinct physical "
+        "aliquots or routes may need distinct IDs despite identical composition or wording.")
+    kind: Literal["material", "data"] = Field(description=
+        "material for a physical specimen, fraction, molecule or assembly; data for observations "
+        "or derived representations. Barcoded molecules are material; sequencing reads are data.")
+    description: Text = Field(description=
+        "What material or data exists at this protocol boundary, including consequential stage, "
+        "retained fraction, molecular/identity association and branch. This describes an interface, "
+        "not an observed historical sample or a full reaction recipe. Qualify unknown properties.")
+    evidence: EvidenceSet = Field(description=
+        "Source support for the described interface identity and qualifications. A supported "
+        "State does not by itself support every Flow connected to it.")
 
 
 IOSelection = Literal["required", "optional", "alternative"]
@@ -110,12 +156,22 @@ class IOBinding(StrictModel):
     executable predicate language. Required inputs outside a group are cumulative.
     """
 
-    state_id: Text
-    basis: Text
-    condition: Text | None = None
-    selection: IOSelection = "required"
-    alternative_group: Text | None = None
-    evidence: EvidenceSet
+    state_id: Text = Field(description="Exact local State ID for this single input or output association.")
+    basis: Text = Field(description=
+        "Why this specific State enters or leaves the Operation, supported in the selected "
+        "variant. Distinguish an inspected input from consumed material; do not infer transfer from text order.")
+    condition: Text | None = Field(default=None, description=
+        "Source-qualified condition under which this association applies. Required for optional "
+        "and alternative selections; null when no condition is asserted, not a universal applicability claim.")
+    selection: IOSelection = Field(default="required", description=
+        "required for cumulative I/O on the selected route, optional for conditional additional "
+        "I/O, alternative for mutually exclusive choices in a named group. The default is not evidence.")
+    alternative_group: Text | None = Field(default=None, description=
+        "Local group ID shared by at least two alternative bindings in the same I/O direction; "
+        "exactly one applies when that route is selected. Null for non-alternative bindings.")
+    evidence: EvidenceSet = Field(description=
+        "Evidence for this exact association and its selection/condition. Evidence that an "
+        "Operation occurs is not automatically evidence for every proposed input or output.")
 
     @model_validator(mode="after")
     def selection_semantics(self) -> IOBinding:
@@ -124,16 +180,38 @@ class IOBinding(StrictModel):
 
 
 class Operation(StrictModel):
-    id: Text
-    name: Text
-    action: Text
-    inputs: tuple[Text, ...]
-    outputs: Annotated[tuple[Text, ...], Field(min_length=1)]
-    resources: tuple[Resource, ...]
-    information_effect: Text
-    evidence: EvidenceSet
-    input_bindings: tuple[IOBinding, ...] | None = None
-    output_bindings: tuple[IOBinding, ...] | None = None
+    id: Text = Field(description="Unique local Operation ID used by Flows, Modules and review targets.")
+    name: Text = Field(description=
+        "Short descriptive action label for this occurrence. The label does not establish "
+        "equivalence to another method or membership in a shared mechanism.")
+    action: Text = Field(description=
+        "The supported transformation, handling or inspection applied to the specified inputs. "
+        "Preserve consequential mechanism and retained material; put recipe values in resources. "
+        "Combine routine handling only if no independently needed interface, branch or identity is hidden.")
+    inputs: tuple[Text, ...] = Field(description=
+        "Exact IDs of States used or inspected by this Operation. Empty only when no input is "
+        "represented. List order is not execution order; explain each association in input_bindings.")
+    outputs: Annotated[tuple[Text, ...], Field(min_length=1)] = Field(description=
+        "Exact IDs of material or data States produced by this Operation. Preserve consequential "
+        "retained fractions and branches; describe each association in output_bindings.")
+    resources: tuple[Resource, ...] = Field(description=
+        "Reported reagents, equipment, software and conditions assigned to this Operation. "
+        "An empty list asserts no resources here, not that the operation requires none; retain "
+        "consequential unavailable requirements as explicit unknowns or gaps.")
+    information_effect: Text = Field(description=
+        "Supported change, preservation, measurement or loss of biological/sample identity or "
+        "other information at this Operation. Distinguish physical encoding, observed data and "
+        "inference. If no effect is established, say so without inventing a purpose or claiming no effect.")
+    evidence: EvidenceSet = Field(description=
+        "Contextual evidence for the action and stated information effect; resources and "
+        "individual I/O associations also need their own support. Do not approve a whole description "
+        "because one clause matches a quotation.")
+    input_bindings: tuple[IOBinding, ...] | None = Field(default=None, description=
+        "One source-qualified binding per input State, covering inputs exactly once. Use these "
+        "for new authoring. Null is supported for legacy records and does not certify an association.")
+    output_bindings: tuple[IOBinding, ...] | None = Field(default=None, description=
+        "One source-qualified binding per output State, covering outputs exactly once. Use these "
+        "for new authoring. Null is supported for legacy records and does not certify an association.")
 
     @model_validator(mode="after")
     def exact_bindings(self) -> Operation:
@@ -160,20 +238,39 @@ class Operation(StrictModel):
 
 
 class Flow(StrictModel):
-    id: Text
-    source: Text
-    target: Text
+    id: Text = Field(description="Unique local ID for this explicit association or dependency.")
+    source: Text = Field(description=
+        "Exact source endpoint ID: State for material/data input, Operation for output, "
+        "precedence or control. Endpoints describe the asserted relation, not list positions.")
+    target: Text = Field(description=
+        "Exact target endpoint ID: Operation for material/data input, State for output, "
+        "Operation for precedence or control.")
     kind: Literal[
         "material_input", "material_output", "data_input", "data_output", "precedence", "control"
-    ]
-    basis: Text
-    condition: Text | None = None
+    ] = Field(description=
+        "material_input/output or data_input/output connects an Operation with the respective "
+        "State; precedence asserts supported ordering; control asserts a reported decision "
+        "governing another Operation. Text order or measurement alone establishes neither dependency.")
+    basis: Text = Field(description=
+        "Explain this exact connection and its qualification; for unqualified I/O describe only "
+        "its mechanical construction. For source-qualified connections, include inferred routing "
+        "where appropriate. Do not use shared terminology as evidence of transfer or compatibility.")
+    condition: Text | None = Field(default=None, description=
+        "Source-qualified applicability or decision rule for this Flow. Required for control "
+        "and optional/alternative I/O; null means no condition is asserted, not proved unconditionality.")
     evidence: tuple[Evidence, ...] = Field(description=
         "Support for this exact association. Empty only for explicitly unqualified I/O; "
         "an operation citation is not automatically evidence for each of its connections.")
-    association: Literal["source_qualified", "unqualified"] | None = None
-    selection: IOSelection | None = None
-    alternative_group: Text | None = None
+    association: Literal["source_qualified", "unqualified"] | None = Field(default=None, description=
+        "For I/O, source_qualified means an authored association with evidence and selection; "
+        "unqualified records only mechanical I/O with no scientific support assertion. Null "
+        "retains legacy/non-I/O form and must not be silently upgraded to source qualification.")
+    selection: IOSelection | None = Field(default=None, description=
+        "required, optional or alternative for source-qualified I/O, with the same meaning "
+        "as IOBinding.selection. Null for unqualified I/O or non-I/O dependencies.")
+    alternative_group: Text | None = Field(default=None, description=
+        "Local group of mutually exclusive alternative I/O Flows for the same Operation and "
+        "direction. Null unless selection is alternative; preserve the corresponding binding group.")
 
     @model_validator(mode="after")
     def association_support(self) -> Flow:
@@ -202,24 +299,47 @@ class Flow(StrictModel):
 
 
 class Module(StrictModel):
-    id: Text
-    name: Text
-    operation_ids: Annotated[tuple[Text, ...], Field(min_length=1)]
-    boundary_rationale: Text
+    id: Text = Field(description="Unique local grouping ID; not a universal mechanism identifier.")
+    name: Text = Field(description=
+        "Human-readable name for this local group of Operations. A shared name is not evidence "
+        "of a shared mechanism or interchangeable assay component.")
+    operation_ids: Annotated[tuple[Text, ...], Field(min_length=1)] = Field(description=
+        "Existing Operation IDs grouped for navigation. Current schema assigns each Operation "
+        "to exactly one Module; this list does not create execution order or additional transformations.")
+    boundary_rationale: Text = Field(description=
+        "Why these Operations form a useful local group, referring to their documented purpose "
+        "or interfaces. Do not invent an intermediate State solely to justify a Module boundary.")
 
 
 class Workflow(StrictModel):
-    format_version: Literal["protocol_workflow/1.0"] = "protocol_workflow/1.0"
-    method_id: Text
-    title: Text
-    scope: Text
-    variant: Text
-    states: Annotated[tuple[State, ...], Field(min_length=1)]
-    operations: Annotated[tuple[Operation, ...], Field(min_length=1)]
-    flows: Annotated[tuple[Flow, ...], Field(min_length=1)]
-    modules: Annotated[tuple[Module, ...], Field(min_length=1)]
-    unresolved: tuple[Gap, ...]
-    gap_resolutions: tuple[GapResolution, ...] = ()
+    format_version: Literal["protocol_workflow/1.0"] = Field(default="protocol_workflow/1.0",
+        description="Exact serialization version; not a scientific validation or protocol version.")
+    method_id: Text = Field(description="Copy the frozen source packet's method_id exactly.")
+    title: Text = Field(description="Copy the frozen source packet's method title exactly.")
+    scope: Text = Field(description=
+        "Copy the frozen extraction scope exactly. It defines the specimen-to-endpoint claim "
+        "and required detail; do not narrow it to avoid a review finding or assert historical execution.")
+    variant: Text = Field(description=
+        "Copy the frozen published implementation/variant exactly. Preserve conditional routes "
+        "within it; do not combine incompatible versions into an invented hybrid.")
+    states: Annotated[tuple[State, ...], Field(min_length=1)] = Field(description=
+        "Source-supported material/data interfaces required to describe this scoped protocol. "
+        "Their array order carries no route or execution semantics.")
+    operations: Annotated[tuple[Operation, ...], Field(min_length=1)] = Field(description=
+        "Documented transformations, handling units and inspections with explicit I/O. "
+        "Use consequential interfaces to decide granularity; array order does not connect them.")
+    flows: Annotated[tuple[Flow, ...], Field(min_length=1)] = Field(description=
+        "Explicit typed associations and supported dependencies connecting States and Operations. "
+        "I/O must agree exactly with Operation references and any authored bindings.")
+    modules: Annotated[tuple[Module, ...], Field(min_length=1)] = Field(description=
+        "Local navigational groups covering each Operation exactly once. They do not replace "
+        "Flows or prescribe a universal assay sequence.")
+    unresolved: tuple[Gap, ...] = Field(description=
+        "Remaining specific uncertainties and their scope consequences after source investigation. "
+        "Retain reader gaps or explicitly resolve them; unknown does not mean physically impossible.")
+    gap_resolutions: tuple[GapResolution, ...] = Field(default=(), description=
+        "Source-backed answers or scope exclusions for supplied reader gaps. No entry is needed "
+        "for a retained gap; do not invent resolutions for integrator-authored gaps.")
 
     @model_validator(mode="after")
     def explicit_graph(self) -> Workflow:
@@ -309,17 +429,25 @@ class Workflow(StrictModel):
 class WorkflowDraft(StrictModel):
     """Explicit scientific interfaces before the host materializes their typed I/O flows."""
 
-    format_version: Literal["protocol_workflow/1.0"] = "protocol_workflow/1.0"
-    method_id: Text
-    title: Text
-    scope: Text
-    variant: Text
-    states: Annotated[tuple[State, ...], Field(min_length=1)]
-    operations: Annotated[tuple[Operation, ...], Field(min_length=1)]
-    ordering_flows: tuple[Flow, ...] = ()
-    modules: Annotated[tuple[Module, ...], Field(min_length=1)]
-    unresolved: tuple[Gap, ...]
-    gap_resolutions: tuple[GapResolution, ...] = ()
+    # Shared fields retain exactly the same meaning as the assembled Workflow.
+    format_version: Literal["protocol_workflow/1.0"] = Field(default="protocol_workflow/1.0",
+        description=Workflow.model_fields["format_version"].description)
+    method_id: Text = Field(description=Workflow.model_fields["method_id"].description)
+    title: Text = Field(description=Workflow.model_fields["title"].description)
+    scope: Text = Field(description=Workflow.model_fields["scope"].description)
+    variant: Text = Field(description=Workflow.model_fields["variant"].description)
+    states: Annotated[tuple[State, ...], Field(min_length=1)] = Field(
+        description=Workflow.model_fields["states"].description)
+    operations: Annotated[tuple[Operation, ...], Field(min_length=1)] = Field(
+        description=Workflow.model_fields["operations"].description)
+    ordering_flows: tuple[Flow, ...] = Field(default=(), description=
+        "Only source-supported precedence/control relations between Operations. Material/data "
+        "I/O Flows are assembled from explicit Operation bindings; do not derive ordering from arrays.")
+    modules: Annotated[tuple[Module, ...], Field(min_length=1)] = Field(
+        description=Workflow.model_fields["modules"].description)
+    unresolved: tuple[Gap, ...] = Field(description=Workflow.model_fields["unresolved"].description)
+    gap_resolutions: tuple[GapResolution, ...] = Field(default=(),
+        description=Workflow.model_fields["gap_resolutions"].description)
 
     @model_validator(mode="after")
     def ordering_only(self) -> WorkflowDraft:

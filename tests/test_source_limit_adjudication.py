@@ -13,7 +13,7 @@ from genomics_discovery.curation.workflow_extraction.obligations import (
     SourceObligations, SourceCoverageReview, source_coverage_outcome,
     validate_source_obligations, validate_source_coverage_review,
 )
-from genomics_discovery.curation.workflow_extraction.runtime import execute
+from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 from genomics_discovery.curation.workflow_extraction.sources import build_packet
 from test_workflow_extraction_runtime import make_review
 from test_workflow_source_obligations import SourceWorker

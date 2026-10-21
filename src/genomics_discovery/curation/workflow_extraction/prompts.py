@@ -189,6 +189,8 @@ def build_prompt(role: str, attempt: Path, packet_path: Path, packet: dict,
                  coverage_sha256: str | None = None,
                  coverage_readers: dict[str, Path] | None = None,
                  source_coverage_schema: Path | None = None,
+                 field_review_schema: Path | None = None,
+                 workflow_schema: Path | None = None,
                  source_obligations_sha256: str | None = None) -> str:
     if role not in {"chemistry", "information", "integrator", "reviewer", "source_obligations"}:
         raise ValueError("Unknown workflow extraction role")
@@ -203,6 +205,12 @@ def build_prompt(role: str, attempt: Path, packet_path: Path, packet: dict,
         f"Read and follow the mandatory, version-pinned extraction contract: {skill_path}\n"
         "This supplies completion criteria, not a predetermined decomposition.\n"
         if skill_path is not None else "")
+    if workflow_schema is not None:
+        completion_instructions += (
+            f"Read the shared field definitions in the Workflow schema: {workflow_schema}\n"
+            "Its field descriptions define the content and boundaries for every role, "
+            "including independent review. Your own output schema below defines the "
+            "artifact you must write; it does not replace these shared meanings.\n")
     kind = "reading" if role in {"chemistry", "information"} else (
         "workflow" if role == "integrator" else
         "source_obligations" if role == "source_obligations" else "review")
@@ -382,6 +390,11 @@ reports repeatedly. Independently verify relevant source passages.
             task += (" The old_feedback_sources packet binds historical repair feedback only. "
                      "Reopen and rebind every revised Evidence object against the current frozen "
                      "packet; old citation locations and prior verdicts supply no new acceptance.")
+        if "previous_field_review" in inputs:
+            task += (" Read previous_field_review as correction feedback. Address each affected "
+                     "field using source evidence; preserve accurate statements. Do not merely "
+                     "rename records or paraphrase unsupported assertions to evade the review. "
+                     "An accurate explicit unknown is preferable to an unestablished assertion.")
         coverage_instructions = ""
         if coverage_schema is not None:
             coverage_check = (
@@ -573,6 +586,59 @@ Save and check the sidecar in addition to the normal WorkflowReview:
 The host withholds supported export unless BOTH reviews permit it. Source scope,
 access limits, exact coverage and digest checks are integrity, not expert truth.
 """
+    field_instructions = ""
+    if field_review_schema is not None:
+        scaffold = inputs["field_review_scaffold"]
+        sidecar = attempt / "field_review.json"
+        field_check = (f"{command} check {shlex.quote(str(sidecar))} --kind field_review "
+                       f"--packet {packet_arg} --candidate "
+                       f"{shlex.quote(str(inputs['candidate']))}")
+        history = ""
+        if "previous_field_review" in inputs:
+            field_check += (f" --previous-field-review "
+                            f"{shlex.quote(str(inputs['previous_field_review']))} "
+                            f"--previous-workflow "
+                            f"{shlex.quote(str(inputs['previous_field_candidate']))}")
+            history = f"""
+Exception to the restriction on previous reviews: inspect ONLY the provided
+previous_field_review ({inputs['previous_field_review']}) and its exact previous
+candidate ({inputs['previous_field_candidate']}) for correction accountability.
+These are feedback, never source evidence or inherited acceptance. If a previously
+unsupported/not_established affected value is unchanged, a supported judgment
+requires an explicit source-backed adjudication naming that prior field binding.
+Changed text still needs fresh scientific review; renaming or paraphrasing cannot
+make a false claim supported. Keep the scaffold's prior artifact digests intact.
+"""
+        field_instructions = f"""
+Also complete the factual-field review in THIS reviewer stage; no extra agent.
+Read schema {field_review_schema} and the host-generated unassessed scaffold:
+{scaffold}
+Write {sidecar}. Preserve every group_id and exact field_binding (pointer and value
+digest) from the scaffold. They identify the current candidate values, not a
+preselected verdict. Load the scaffold as JSON and preserve IDs/bindings
+programmatically rather than retyping hashes or dumping the entire inventory into
+conversation. Inspect candidate groups incrementally with the provided navigation
+tools and exact source reads. Review ALL bound fields within each group, including scope,
+State descriptions, Operation names/actions/resources/information_effect/I/O,
+Flow qualifiers, Module interpretations, gap premises and proposed resolutions.
+Use supported only when all assertions in the group are supported as qualified.
+Use unsupported for an assertion contradicted by the inspected source/context;
+not_established for insufficient support; unassessed if you did not complete review.
+For unsupported/not_established specify the exact affected_fields JSON pointers,
+including nested fields when appropriate. Judged groups require inspected_passages;
+supported/unsupported require contextual evidence. A reported quote does not support
+an additional negative claim, a universal rule, or an unreported reagent assignment.
+Unknown recipe details can be faithfully described as unknown and receive supported
+field review; this never cancels their separately assessed blocking status.
+Module names are curator organization, not words that must literally occur in the
+paper. Judge whether the grouping/rationale misrepresents its member Operations.
+{history}
+Self-check the sidecar after the ordinary WorkflowReview:
+{field_check}
+The host withholds supported export unless this review and ALL other active gates
+permit it. Unassessed groups make the run fail as unfinished review, not as missing
+scientific evidence. Integrity checks verify completeness/current values, not entailment.
+"""
     return common + f"""
 Produce a fresh independent WorkflowReview. Read the candidate: {inputs['candidate']}
 {review_authoring}
@@ -621,4 +687,5 @@ remain blocking. Do not ignore resource-assignment defects, omit unknown facts o
 change the frozen scope to obtain acceptance.
 {coverage_instructions}
 {source_coverage_instructions}
+{field_instructions}
 """

@@ -11,7 +11,7 @@ from genomics_discovery.curation.batch_graph import publish
 from genomics_discovery.curation.extraction_batch import BatchConfig, Job, plan, run, status
 from genomics_discovery.curation.extraction_batch.storage import PinDrift, read, sha, write
 from genomics_discovery.curation.workflow_extraction.models import digest, WorkflowReview
-from genomics_discovery.curation.workflow_extraction.runtime import execute
+from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 from genomics_discovery.curation.workflow_extraction.sources import build_packet
 from test_workflow_extraction_runtime import FakeWorker, source_case
 from test_workflow_source_obligations import SourceWorker

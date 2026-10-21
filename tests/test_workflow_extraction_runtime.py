@@ -192,6 +192,16 @@ class FakeWorker:
                 self.review_verdicts) else "supported"
             self.reviews += 1
             artifact = make_review(self.workflow, self.packet, verdict)
+            scaffold = attempt_dir / "field_review_scaffold.json"
+            if scaffold.exists():
+                # Synthetic evaluator declarations exercise host gates, not science.
+                field_review = json.loads(scaffold.read_text())
+                evidence = self.workflow["states"][0]["evidence"]
+                inspected = [{key: evidence[0][key] for key in ("source_id", "passage_id")}]
+                for check in field_review["checks"]:
+                    check.update(verdict="supported", rationale="Synthetic fixture judgment.",
+                                 inspected_passages=inspected, evidence=evidence)
+                (attempt_dir / "field_review.json").write_text(json.dumps(field_review))
         serialized = ("{" if self.fault == "malformed" and role == "integrator"
                       else json.dumps(artifact))
         (attempt_dir / "artifact.json").write_text(serialized, encoding="utf-8")
@@ -215,7 +225,7 @@ class FakeWorker:
 
 
 async def run_case(source_case, tmp_path, *, mode="specialists", initial_workflow=None, **kwargs):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case, **kwargs)
     if mode == "review_only" and initial_workflow is None:
@@ -262,7 +272,7 @@ async def test_specialists_parallel_then_integration_and_fresh_source_review(sou
 
 
 async def test_baseline_has_no_readers(source_case, tmp_path):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     state = await execute(source_case[1], tmp_path / "baseline", worker=worker, mode="baseline")
@@ -299,7 +309,7 @@ async def test_review_only_seed_gets_one_fresh_review_and_scoped_output(
 
 
 async def test_review_only_requires_seed_before_claiming_run(source_case, tmp_path):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     run = tmp_path / "missing_seed"
@@ -309,7 +319,7 @@ async def test_review_only_requires_seed_before_claiming_run(source_case, tmp_pa
 
 
 async def test_review_only_missing_seed_file_never_starts_worker(source_case, tmp_path):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     state = await execute(source_case[1], tmp_path / "missing_file_run", worker=worker,
@@ -318,7 +328,7 @@ async def test_review_only_missing_seed_file_never_starts_worker(source_case, tm
 
 
 async def test_review_only_changed_original_seed_fails_before_export(source_case, tmp_path):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     seed = tmp_path / "seed_workflow.json"
@@ -353,7 +363,7 @@ def repair_inputs(worker, tmp_path, review=None):
 async def test_repair_uses_bound_feedback_then_fresh_review_without_initial_review(
     source_case, tmp_path,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     seed, feedback = repair_inputs(worker, tmp_path)
@@ -407,7 +417,7 @@ async def test_repair_source_expansion_binds_old_feedback_and_new_fresh_outputs(
     source_case, tmp_path,
 ):
     from genomics_discovery.curation.run_state import sha
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     seed, feedback = repair_inputs(FakeWorker(source_case), tmp_path)
     worker = expanded_repair_case(source_case, tmp_path)
@@ -464,7 +474,7 @@ def test_cli_feedback_packet_reaches_expanded_repair(source_case, tmp_path, monk
 async def test_source_expansion_without_feedback_packet_cannot_rebind_old_review(
     source_case, tmp_path,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     seed, feedback = repair_inputs(FakeWorker(source_case), tmp_path)
     worker = expanded_repair_case(source_case, tmp_path)
@@ -479,7 +489,7 @@ async def test_source_expansion_without_feedback_packet_cannot_rebind_old_review
 async def test_expanded_repair_rejects_changed_sources_or_identity_before_worker(
     source_case, tmp_path, fault,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     seed, feedback = repair_inputs(FakeWorker(source_case), tmp_path)
     worker = expanded_repair_case(source_case, tmp_path)
@@ -507,7 +517,7 @@ async def test_expanded_repair_rejects_changed_sources_or_identity_before_worker
 
 @pytest.mark.parametrize("mode", ["specialists", "baseline", "review_only"])
 async def test_feedback_packet_requires_repair_before_claiming_run(source_case, tmp_path, mode):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     seed, _ = repair_inputs(worker, tmp_path)
@@ -523,7 +533,7 @@ async def test_feedback_packet_requires_repair_before_claiming_run(source_case, 
 async def test_expanded_repair_pins_old_packet_copies_and_originals(
     source_case, tmp_path, fault,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     seed, feedback = repair_inputs(FakeWorker(source_case), tmp_path)
     worker = expanded_repair_case(source_case, tmp_path, clone_original=True)
@@ -548,7 +558,7 @@ async def test_expanded_repair_pins_old_packet_copies_and_originals(
 
 
 async def test_expanded_repair_fresh_review_must_bind_current_packet(source_case, tmp_path):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     seed, feedback = repair_inputs(FakeWorker(source_case), tmp_path)
     worker = expanded_repair_case(source_case, tmp_path)
@@ -576,7 +586,7 @@ async def test_expanded_repair_fresh_review_must_bind_current_packet(source_case
 async def test_feedback_passage_ids_stay_old_until_revised_evidence_is_rebound(
     source_case, tmp_path, rebind,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     original = tmp_path / "structured.xml"
     body = source_case[0]["sources"][0]["passages"][0]["text"]
@@ -630,7 +640,7 @@ async def test_feedback_passage_ids_stay_old_until_revised_evidence_is_rebound(
 async def test_repair_stops_after_one_correction_and_nonpositive_fresh_review(
     source_case, tmp_path,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case, review_verdicts=["unsupported"])
     seed, feedback = repair_inputs(worker, tmp_path)
@@ -647,7 +657,7 @@ async def test_repair_stops_after_one_correction_and_nonpositive_fresh_review(
 async def test_repair_rejects_unbound_or_nonrepair_feedback_before_worker(
     source_case, tmp_path, fault,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     review = make_review(worker.workflow, worker.packet,
@@ -677,7 +687,7 @@ async def test_repair_rejects_unbound_or_nonrepair_feedback_before_worker(
 async def test_repair_arguments_reject_before_claiming_run(
     source_case, tmp_path, mode, seed, feedback, budget,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     candidate, review = repair_inputs(worker, tmp_path)
@@ -690,7 +700,7 @@ async def test_repair_arguments_reject_before_claiming_run(
 
 
 async def test_repair_changed_feedback_stops_before_fresh_review(source_case, tmp_path):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     seed, feedback = repair_inputs(worker, tmp_path)
@@ -709,7 +719,7 @@ async def test_repair_changed_feedback_stops_before_fresh_review(source_case, tm
 
 
 async def test_repair_scope_resolution_preserves_unknown_recipe_detail(source_case, tmp_path):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     detail = {"id": "chemistry:recipe_volume", "description": "Transfer volume is not reported.",
@@ -737,7 +747,7 @@ async def test_repair_scope_resolution_preserves_unknown_recipe_detail(source_ca
 async def test_repair_of_integrator_gap_retains_unknown_without_inventing_reader_lineage(
     source_case, tmp_path,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     detail = {"id": "recipe_volume", "description": "Transfer volume is not reported.",
@@ -763,7 +773,7 @@ async def test_repair_of_integrator_gap_retains_unknown_without_inventing_reader
 async def test_repair_rejects_new_reader_references_for_workflow_authored_or_absent_gaps(
     source_case, tmp_path, gap_id,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     worker.workflow["unresolved"] = [{"id": "recipe_volume", "description": "Unknown volume.",
@@ -812,7 +822,7 @@ def test_repair_self_check_reports_unknown_reader_reference_with_source_valid_qu
 async def test_native_worker_search_or_network_rejected_before_any_job(
     source_case, tmp_path, monkeypatch, web_search, network_access,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = CodexWorker(web_search=web_search, network_access=network_access)
 
@@ -1027,7 +1037,7 @@ def test_diagnostic_preserves_nonpositive_target_verdicts_without_candidate_prom
 async def test_repair_seed_metadata_cannot_override_packet_with_a_self_bound_review(
     source_case, tmp_path, field,
 ):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case)
     worker.workflow[field] += " changed"
@@ -1039,7 +1049,7 @@ async def test_repair_seed_metadata_cannot_override_packet_with_a_self_bound_rev
 
 
 async def test_repair_fresh_research_outcome_never_inherits_old_verdict(source_case, tmp_path):
-    from genomics_discovery.curation.workflow_extraction.runtime import execute
+    from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
     worker = FakeWorker(source_case, review_verdicts=["unresolved"])
     seed, feedback = repair_inputs(worker, tmp_path)
@@ -1058,7 +1068,7 @@ async def test_repair_fresh_research_outcome_never_inherits_old_verdict(source_c
 async def test_final_export_source_mutation_makes_final_state_failed(
     source_case, tmp_path, monkeypatch,
 ):
-    from genomics_discovery.curation.workflow_extraction import runtime
+    from genomics_discovery.curation.workflow_extraction import extraction_pipeline as runtime
 
     original_export = runtime.export_candidate
 

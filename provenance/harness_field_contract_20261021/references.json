@@ -1,0 +1,62 @@
+{
+  "audit_date": "2026-10-21",
+  "scope": "Field instructions, evidence tools and stage orchestration for source-grounded protocol extraction. This audit does not establish semantic accuracy of our extraction or reproduce hosted retrieval services.",
+  "source_code_copied": false,
+  "references": [
+    {
+      "name": "ROBIN",
+      "paper_url": "https://www.nature.com/articles/s41586-026-10652-y",
+      "repository": "https://github.com/Future-House/robin",
+      "commit": "4a5cce310f3bc7663a67117db88af43b84733ffe",
+      "license": "Apache-2.0; LICENSE inspected in the pinned clone",
+      "inspection": [
+        {"path": "robin/assays.py", "symbols": ["experimental_assay"], "observation": "Explicit stages generate literature questions, call literature services, generate assay ideas, investigate individual proposals, rank them and synthesize the next goal."},
+        {"path": "robin/candidates.py", "symbols": ["therapeutic_candidates"], "observation": "Candidate reports are requested from the configured service and subsequently formatted and ranked."},
+        {"path": "robin/configuration.py", "symbols": ["Prompts", "AgentConfig", "RobinConfiguration"], "observation": "Prompt templates, required format arguments, model settings and literature-service agent choices are separately configured."},
+        {"path": "robin/prompts.py", "symbols": ["ASSAY_PROPOSAL_SYSTEM_MESSAGE", "ASSAY_HYPOTHESIS_FORMAT", "ASSAY_RANKING_SYSTEM_PROMPT"], "observation": "Prompts specify scientific priorities, report sections and output fields. These are configurable defaults, not evidence that the requested semantics are satisfied."},
+        {"path": "robin/utils.py", "symbols": ["call_platform", "poll_for_task_completion", "save_crow_files", "save_falcon_files"], "observation": "The wrapper submits query jobs to the Edison service, polls completion and records answers, references and task IDs. Saved reports link to hosted trajectories."}
+      ],
+      "paper_observations": [
+        "Methods explain that the original agent nearly always called tools in the same sequence, motivating a deterministic notebook for stability and ease of use.",
+        "Discussion states that ROBIN generates experimental outlines rather than precise executable protocols, and that Finch relies on domain-expert prompt engineering.",
+        "Reference-veracity ablations support evidence retrieval for the evaluated reports, not correctness of protocol graphs or their individual edges."
+      ],
+      "limits": [
+        "The public ROBIN repository contains hosted-service clients, not the complete Crow/Falcon retrieval implementation.",
+        "The public repository revision inspected is not asserted to be the exact revision used for the paper's experiments.",
+        "ROBIN's report ranking does not supply an admission rule for source-grounded operation/state graphs."
+      ],
+      "our_adaptation": "Use explicit outer extraction/review/admission stages and configurable, archived role prompts. Retain independently callable evidence acquisition within stages. Our field-level review and graph admission constraints are task-specific additions, not validated by ROBIN."
+    },
+    {
+      "name": "PaperQA2 / public PaperQA implementation",
+      "paper_url": "https://arxiv.org/html/2409.13740v2",
+      "repository": "https://github.com/Future-House/paper-qa",
+      "commit": "57e89f7223b0960d5ee5ea048c69e3c47e088572",
+      "license": "Apache-2.0, recorded by the prior local implementation audit in docs/BEHAVIOR_CONTRACT.md; no code copied",
+      "inspection": [
+        {"path": "src/paperqa/agents/tools.py", "symbols": ["EnvironmentState", "PaperSearch", "GatherEvidence", "GenerateAnswer", "Reset", "Complete"], "observation": "Tools have named functions, typed arguments, usage guidance, concurrency qualifications and persistent document/evidence/session state. GatherEvidence returns bounded high-relevance contexts and status."},
+        {"path": "src/paperqa/docs.py", "symbols": ["Docs", "Docs.aget_evidence"], "observation": "Document text and retrieved evidence belong to a persistent collection; evidence acquisition is separate from answer generation."}
+      ],
+      "paper_observations": [
+        "The paper separates document search, evidence retrieval and contextual summarization, answer generation and further acquisition when evidence is insufficient.",
+        "The paper reports worse performance for fixed one-pass retrieval than adaptive tool use on its question-answering task.",
+        "The paper describes citation traversal; the inspected public tools file does not expose that complete paper-era hosted search stack."
+      ],
+      "limits": [
+        "Current public code is not assumed to reproduce every paper-era or hosted Crow/Falcon capability.",
+        "Question-relevance summaries can omit facts needed for whole-protocol coverage.",
+        "Retrieval relevance and citation presence do not establish entailment, correct variant assignment or biochemical compatibility.",
+        "The paper's evidence-count heuristics and benchmark results are not adopted as protocol-completeness thresholds."
+      ],
+      "our_adaptation": "Keep summaries as navigation and memory aids backed by exact source passages. Expose bounded evidence and validation tools. Permit targeted additional evidence acquisition while keeping graph acceptance deterministic and source-bound."
+    }
+  ],
+  "local_prior_audits": [
+    "docs/BEHAVIOR_CONTRACT.md",
+    "provenance/representation_audit_20261021/lab_protocol_systems.json",
+    "provenance/representation_audit_20261021/protocol_extraction_systems.json",
+    "docs/decisions/2026-10-21-extraction-graph-boundary.md"
+  ],
+  "decision_boundary": "Existing literature supports explicit instructions, persistent evidence state, narrow tools and reproducible orchestration. It does not prove that our fields are interpreted correctly. Field-specific negative controls, coverage checks and source-grounded review remain required, with semantic judgments reported as fallible."
+}

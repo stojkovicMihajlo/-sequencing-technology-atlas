@@ -15,7 +15,7 @@ from genomics_discovery.curation.technology_graph.queries import inspect, neighb
 from genomics_discovery.curation.workflow_extraction.assemble import assemble_workflow
 from genomics_discovery.curation.workflow_extraction.models import WorkflowDraft, digest
 from genomics_discovery.curation.workflow_extraction.obligations import SourceCoverageReview
-from genomics_discovery.curation.workflow_extraction.runtime import execute
+from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 from genomics_discovery.curation.workflow_matching.models import AlignmentBatch, ProfileBatch
 from genomics_discovery.curation.workflow_matching.tools import Context
 

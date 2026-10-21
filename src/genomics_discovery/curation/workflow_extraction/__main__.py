@@ -50,6 +50,8 @@ def main() -> None:
                      help="Require the extraction skill and source-finding disposition review")
     run.add_argument("--require-source-coverage", action="store_true",
                      help="Freeze candidate-blind source obligations and gate completeness review")
+    run.add_argument("--no-field-review", action="store_true",
+                     help="Explicit legacy opt-out from default factual-field review; recorded in run config")
     run.add_argument("--source-obligations", type=Path,
                      help="Reuse frozen source obligations, revalidated against this packet")
     status = commands.add_parser("status", help="Show saved progress, not renewed acceptance")
@@ -72,13 +74,15 @@ def main() -> None:
     check.add_argument("artifact", type=Path)
     check.add_argument("--packet", type=Path, required=True)
     check.add_argument("--kind", choices=("reading", "workflow", "review",
-                                         "source_obligations", "source_coverage"), required=True)
+                                         "source_obligations", "source_coverage", "field_review"), required=True)
     check.add_argument("--candidate", type=Path)
     check.add_argument("--obligations", type=Path)
     check.add_argument("--workflow-review", type=Path)
     check.add_argument("--reading-report", type=Path, action="append", default=[])
     check.add_argument("--previous-workflow", type=Path,
                        help="Bound repair reader-gap references to a prior candidate; no inherited verdict")
+    check.add_argument("--previous-field-review", type=Path,
+                       help="Immediate prior field review, paired with --previous-workflow")
     assemble = commands.add_parser("assemble", help="Render explicit operation I/O as typed flows")
     assemble.add_argument("draft", type=Path)
     assemble.add_argument("--packet", type=Path, required=True)
@@ -168,15 +172,27 @@ def main() -> None:
                 SourceObligations, SourceCoverageReview,
                 validate_source_obligations, validate_source_coverage_review,
             )
+            from .field_review import WorkflowFieldReview, validate_field_review
 
             packet = load_packet(args.packet)
             model = {"reading": ReadingReport, "workflow": Workflow,
                      "review": WorkflowReview, "source_obligations": SourceObligations,
-                     "source_coverage": SourceCoverageReview}[args.kind]
+                     "source_coverage": SourceCoverageReview,
+                     "field_review": WorkflowFieldReview}[args.kind]
             try:
                 document = model.model_validate_json(args.artifact.read_bytes())
                 errors = validate_evidence(document, packet)
-                if args.kind == "source_obligations":
+                if args.kind == "field_review":
+                    if args.candidate is None:
+                        raise ValueError("Field review check needs --candidate")
+                    workflow = Workflow.model_validate_json(args.candidate.read_bytes())
+                    prior_review = (WorkflowFieldReview.model_validate_json(
+                        args.previous_field_review.read_bytes()) if args.previous_field_review else None)
+                    prior_workflow = (Workflow.model_validate_json(args.previous_workflow.read_bytes())
+                                      if args.previous_workflow else None)
+                    errors.extend(validate_field_review(document, workflow, packet,
+                        prior_review=prior_review, prior_workflow=prior_workflow))
+                elif args.kind == "source_obligations":
                     errors.extend(validate_source_obligations(document, packet))
                 elif args.kind == "source_coverage":
                     if not (args.candidate and args.obligations and args.workflow_review):
@@ -259,7 +275,7 @@ def main() -> None:
                                       else "workflow"),
                       "boundary": "Structural/provenance expansion; no inherited source verdict."}
         else:
-            from .runtime import execute
+            from .extraction_pipeline import execute
 
             worker = CodexWorker(model=args.model, effort=args.effort,
                                  timeout_seconds=args.timeout,
@@ -270,6 +286,7 @@ def main() -> None:
                                         repair_review=args.repair_review,
                                         repair_feedback_packet=args.feedback_packet,
                                         require_coverage=args.require_coverage,
+                                        require_field_review=not args.no_field_review,
                                         require_source_coverage=args.require_source_coverage,
                                         source_obligations=args.source_obligations))
             print(json.dumps(result, indent=2, ensure_ascii=False))

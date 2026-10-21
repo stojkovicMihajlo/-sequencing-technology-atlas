@@ -30,9 +30,25 @@ def assessed_unknown(records):
     return workflow, packet, reference, data
 
 
-def test_legacy_model_schema_and_roundtrip_digests_are_unchanged():
-    assert digest(BenchmarkAssessment.model_json_schema()) == "e147877d266c5c47801f43ccb0268dd8b1bf850771f42405e6a8176e57526d86"
-    assert digest(GraphReviewAssessment.model_json_schema()) == "5a026147c5326e3ea36013e9bf1b3dfae1b1a1273040b1cccbd6b0b7814deb68"
+def _validation_schema(value):
+    """Ignore documentation, preserving properties actually named 'description'."""
+    if isinstance(value, list):
+        return [_validation_schema(item) for item in value]
+    if not isinstance(value, dict):
+        return value
+    return {
+        key: ({name: _validation_schema(schema) for name, schema in item.items()}
+              if key in {"properties", "$defs", "definitions", "patternProperties"}
+              else _validation_schema(item))
+        for key, item in value.items() if key != "description"
+    }
+
+
+def test_legacy_validation_schema_and_roundtrip_digests_are_unchanged():
+    # Baseline validation hashes were recovered from the pre-field-guidance models.
+    # Documentation is versioned in new run schemas, not a change to stored data.
+    assert digest(_validation_schema(BenchmarkAssessment.model_json_schema())) == "e147877d266c5c47801f43ccb0268dd8b1bf850771f42405e6a8176e57526d86"
+    assert digest(_validation_schema(GraphReviewAssessment.model_json_schema())) == "5c58f4c5384a024dec399b0b68440aadde9aae9690581f3ac37dcb6a994a49ec"
     old = BenchmarkAssessment.model_validate({"reference_sha256": "1" * 64,
         "workflow_sha256": "2" * 64, "source_packet_sha256": "3" * 64,
         "inspected_passages": [], "obligations": [], "factual_audits": []})

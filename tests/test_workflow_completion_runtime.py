@@ -26,7 +26,7 @@ from genomics_discovery.curation.workflow_coverage import (
     validate_coverage,
     validate_coverage_review,
 )
-from genomics_discovery.curation.workflow_extraction import runtime
+from genomics_discovery.curation.workflow_extraction import extraction_pipeline as runtime
 from genomics_discovery.curation.workflow_extraction.models import (
     ReadingReport,
     Workflow,
@@ -218,7 +218,8 @@ async def test_completion_accounts_reader_findings_before_same_turn_review(sourc
         (role, finding.id) for role, report in reports.items() for finding in report.findings
     }
     assert set(state["attempts"][2]["inputs"]) == {"chemistry", "information"}
-    assert set(state["attempts"][3]["inputs"]) == {"candidate", "coverage", "finding_view"}
+    assert set(state["attempts"][3]["inputs"]) == {
+        "candidate", "coverage", "finding_view", "field_review_scaffold"}
     for role, report in reports.items():
         copied = ReadingReport.model_validate(read_json(integrator["directory"] / f"{role}.json"))
         assert digest(copied) == digest(report)
@@ -296,9 +297,12 @@ async def test_one_coverage_repair_rebinds_ledger_and_both_reviews(source_case, 
     expected_inputs = {
         "chemistry", "information", "previous_candidate", "previous_review",
         "previous_coverage", "previous_coverage_review",
+        "previous_field_review",
     }
     assert set(state["attempts"][4]["inputs"]) == expected_inputs
-    assert set(state["attempts"][5]["inputs"]) == {"candidate", "coverage", "finding_view"}
+    assert set(state["attempts"][5]["inputs"]) == {
+        "candidate", "coverage", "finding_view", "field_review_scaffold",
+        "previous_field_review", "previous_field_candidate"}
     workflow_digests = []
     for integ, review in ((worker.calls[2], worker.calls[3]), (worker.calls[4], worker.calls[5])):
         workflow = Workflow.model_validate(read_json(integ["directory"] / "artifact.json"))
@@ -413,7 +417,7 @@ async def test_coverage_opt_out_preserves_existing_formats_and_proofs(source_cas
     assert [call["role"] for call in worker.calls] == [
         "chemistry", "information", "integrator", "reviewer",
     ]
-    assert set(state["attempts"][3]["inputs"]) == {"candidate"}
+    assert set(state["attempts"][3]["inputs"]) == {"candidate", "field_review_scaffold"}
     assert all(attempt["transport_complete"] for attempt in state["attempts"])
     for call in worker.calls:
         assert not (call["directory"] / "coverage.json").exists()

@@ -10,7 +10,7 @@ from test_workflow_extraction_runtime import source_case as source_case
 
 from genomics_discovery.curation.technology_graph.admission import load_extractions
 from genomics_discovery.curation.technology_graph.assembly import build_graph
-from genomics_discovery.curation.workflow_extraction.runtime import execute
+from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 
 
 @pytest.mark.parametrize("coverage", [False, True])

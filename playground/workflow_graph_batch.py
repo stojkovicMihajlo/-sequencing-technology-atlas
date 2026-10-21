@@ -14,7 +14,7 @@ from pydantic import Field, model_validator
 from genomics_discovery.core.artifacts import StrictModel
 from genomics_discovery.curation.codex_worker import DEFAULT_EFFORT, DEFAULT_MODEL, CodexWorker
 from genomics_discovery.curation.run_state import now, sha, write
-from genomics_discovery.curation.workflow_extraction.runtime import execute as extract
+from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute as extract
 from genomics_discovery.curation.workflow_extraction.sources import load_packet
 from playground.workflow_transformations_live import execute as compare
 from playground.workflow_unit_selection_live import execute as select
