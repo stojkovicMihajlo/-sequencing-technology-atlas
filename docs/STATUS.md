@@ -1,5 +1,125 @@
 # Deployment status
 
+## Current assessment and release goals, 2026-10-21
+
+**A bounded end-to-end research run works. Scientific reliability and useful
+shared-component discovery still need evaluation before bulk promotion.**
+
+The [completed ten-method experiment](../provenance/experiments/ten_method_overview_20261020/monitoring/completion_report.json)
+ran extraction, fresh review/correction, isolated publication, operation-unit
+selection, source review, definition comparison and registry admission on Qiu CPU
+resources with `gpt-6.1-sol` / `xhigh`. Nine methods passed model gates; hiCLIP
+remained `needs_revision`. Four passed first review, five after one correction.
+These are review outcomes, not a 90% scientific-accuracy result.
+
+It produced nine workflow graphs and nine admitted memberships in five concepts.
+Only two concepts connect multiple methods, both by **shared purpose**. The three
+mechanism concepts currently have one member each. There was no demonstrated
+multi-method shared-mechanism group in this run. Its initially empty registry also
+does not evaluate retrieval against an existing populated catalogue. Whole-driver
+wall time was about 127 minutes; extraction finished after about 85 minutes.
+
+Working engineering controls include source/configuration hashes, independently
+recorded model stages, a bounded correction, preservation of withheld outcomes,
+exact operation-ID bindings, isolated graph publication and a durable archive.
+The [registry audit](../provenance/experiments/ten_method_overview_20261020/monitoring/final_registry_audit.json)
+and [archive audit](../provenance/experiments/ten_method_overview_20261020/monitoring/final_archive_audit.json)
+separate those integrity checks from scientific support. The active atlas was not
+replaced and bulk extraction has not been launched from this experiment.
+
+### Goal 1: faithful, appropriately scoped method graphs
+
+Fix observed attribution and scope failures through the shared extraction/review
+contract, not special answers supplied for individual papers. The accepted ATAC
+record overstates the source's instruction about analytical-aliquot return. The
+shared-concept reviewer correctly withheld an unsupported wave-estimator claim
+about retaining rejected/missing calls. Drop-seq expanded from 22 to 39 operations
+when independent ERCC/ddPCR characterization entered the general-assay scope.
+
+Completion checks:
+
+- A fresh result distinguishes reported facts, defensible inference and unknowns,
+  including prohibitions, material fate and negative software outputs. Known
+  unsupported additions and paraphrased held-out controls do not receive positive
+  source-support judgments; supported content and qualifications remain intact.
+- Scope separates routine assay operations, necessary calibration/controls and
+  independent characterization. Do not require exact operation counts or module
+  boundaries to match one reference representation.
+- Gaps distinguish missing documents, unreadable content, extraction omissions
+  and facts unreported in inspected sources. Required missing evidence triggers
+  recovery or withholding of the affected claim; unrelated recipe unknowns do not
+  create an endless extraction task. The 77 retained items in nine workflows are
+  not automatically 77 required repairs.
+- Source records identify native artifact types and relevant conversion lineage.
+  The archive's 28 lineage flags are not 28 missing PDFs: two DBiT records are
+  supported as text/code and plain TSV. Do not demand nonexistent binary ancestors.
+- hiCLIP's remaining RNAhybrid prediction-model qualification is addressed or
+  remains withheld; it is not a biological prohibition on sampling branched RNA.
+
+Measure required-fact coverage, unsupported-claim acceptance, qualification
+retention and scope inflation separately on source-checked controls and held-out
+families. More positive model verdicts alone do not satisfy this goal.
+
+### Goal 2: useful and justified cross-method connections
+
+Separate finding candidate transformations from judging their relationship. The
+open selector missed both predeclared shared library-preparation span questions;
+the downstream matcher therefore never assessed those spans. Use existing open
+discovery and definition-targeted retrieval tools before inventing another agent
+architecture. Preserve source-specific operation boundaries and interfaces.
+
+Completion checks:
+
+- Predeclared comparison opportunities reach adjudication, or the record states
+  whether selection, retrieval or evidence review prevented comparison. They are
+  questions to test, not required positive edges.
+- Held-out cases include shared transformations across unequal decompositions and
+  misleading similarities in names or purposes. Report candidate coverage and
+  membership correctness separately; permit unknown and negative conclusions.
+- New methods are tested against a populated registry, including definition reuse
+  and near-neighbor rejection. Exact hashes identify records; they do not decide
+  semantic equivalence. Shared purpose, shared mechanism and documented historical
+  development remain different relationships.
+- Existing graph tools retrieve a concept, its exact member operations, contextual
+  differences and cited source passages. Membership never silently asserts
+  experimental substitutability, compatibility or ancestry.
+
+### Goal 3: one reusable, auditable release of the existing components
+
+Source registration and `atlas-batch` are already reusable. `atlas-deploy` also
+provides durable extraction plus cumulative isolated publication. The latest
+shared-selection/registry integration remains wired in an experiment launcher.
+Extend these existing paths with the remaining stages; do not create another
+extractor or change frozen experiment scripts. See the [runbook](RUNBOOK.md).
+
+Completion checks:
+
+- A supported configuration identifies arbitrary registered inputs, atlas snapshot,
+  registry, model/effort, coverage settings and stage limits without study-specific
+  paths, scope replacement or a ten-method assertion.
+- Publication, selection, admission and final projection have explicit checkpoints.
+  Restart reuses verified completed scientific stages and preserves negatives;
+  changed scientific inputs cannot silently inherit an earlier accepted result.
+- A final report agrees with all stage outcomes, includes every intake method and
+  records accepted, withheld, failed and unfinished results separately. Final graph,
+  registry and archive hashes are written after completion. No supported parents or
+  unfinished admission is not presented as successful graph construction.
+- The declared distribution contains the entire dependency closure, including code
+  currently imported from `playground/`. One fresh bounded Qiu Slurm run validates
+  the exact frozen release together, followed by structural replay and an audit.
+
+The deterministic overlay-order fix passed 2,146 local software tests, three
+skipped; a subsequent source-preparation naming/documentation change passed 37
+focused tests. Codex leader-exit cleanup also passed a separate Qiu software check.
+These fixes have not been substituted into the old run or validated together in a
+new native model run. Track extraction, correction, source review, matching and
+transport time separately; do not claim a 30-minute end-to-end run from a per-stage
+setting. Reduce unnecessary scope and repeated work before adding more agents.
+
+The next checkpoint is a frozen representative pilot evaluated against these
+three goals, with held-out families and failure cases preserved. Bulk promotion
+requires explicit reporting of remaining scientific and source-access limits.
+
 ## Shared-operation alignment development, 2026-10-20
 
 The development tree now adds optional source-bound `ComparisonProfile` sidecars,
