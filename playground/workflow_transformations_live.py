@@ -210,7 +210,8 @@ async def execute(manifest_path: Path, run: Path, *, worker=None,
         package = Path(__file__).resolve().parents[1] / "src/genomics_discovery/curation"
         files |= set((package / "workflow_extraction").glob("*.py"))
         files |= {package / "codex_worker.py", package / "run_state.py",
-                  package / "document_manifest.py", package.parent / "core/artifacts.py"}
+                  package / "document_manifest.py", package / "evidence_views.py",
+                  package.parent / "core/artifacts.py"}
         pins.update({path: sha(path) for path in files})
         seed = None
         if initial_proposal is not None:

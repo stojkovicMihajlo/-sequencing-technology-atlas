@@ -8,7 +8,7 @@ from pathlib import Path
 from ..comparison_rules import GENOMICS_COMPARISON_RULES
 from ..workflow_extraction.models import Workflow, digest
 from ..workflow_extraction.prompts import source_command
-from ..workflow_extraction.sources import load_packet
+from ..workflow_extraction.sources import MAX_READ_BATCH, load_packet
 from .comparison_profiles import (
     ComparisonProfile, STATE_QUESTIONS, OPERATION_QUESTIONS,
     comparison_profile_schema, comparison_profile_view, load_comparison_profile,
@@ -114,6 +114,8 @@ Use this scaffold's exact targets and Workflow/source-packet hashes:
 Read
 relevant passages with `{source} catalog {q(str(packet_path))} --focus methods`,
 `{source} search {q(str(packet_path))} 'terms'`, and the read/read-batch helpers.
+Each read-batch accepts 1 to {MAX_READ_BATCH} distinct references from one packet;
+split larger requests and use the supplied packet path.
 Write one ComparisonProfile. Keep the five prescribed questions per target, with
 separate assertions when sources or status differ. An unassessed template is not
 a completed scientific annotation. Investigate the consequential fields, leaving

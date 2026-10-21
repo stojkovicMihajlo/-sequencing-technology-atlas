@@ -1,11 +1,34 @@
-"""Lossless reading view: display repeated evidence once, without summarizing claims."""
+"""Workflow inspection: lossless display and source-bound navigation."""
 
 from __future__ import annotations
 
 import json
 from copy import deepcopy
 
+from ..evidence_views import evidence_navigation, inspect_pointer
 from .models import Workflow, digest
+
+
+def navigation_view(workflow: Workflow, pointer: str | None = None) -> dict:
+    """Keep non-evidence fields; reopen quotations and rationales in the original."""
+    projected = evidence_navigation(workflow.model_dump(mode="json"))
+    return {
+        "format_version": "workflow_navigation/1.0",
+        "workflow_sha256": digest(workflow),
+        **({"pointer": pointer} if pointer is not None else {}),
+        "record": inspect_pointer(projected, pointer) if pointer is not None else projected,
+        "boundary": "Navigation, not source review. All non-evidence fields are unchanged. "
+                    "With --navigation, --pointer selects within the projected Workflow record, "
+                    "not this envelope; evidence lists there are locator objects. Returned evidence "
+                    "locators retain absolute pointers into the original Workflow JSON. Use inspect "
+                    "--pointer without --navigation to reopen exact evidence, then inspect source passages.",
+    }
+
+
+def workflow_pointer(workflow: Workflow, pointer: str) -> dict:
+    """Fetch an exact original field under the same binding as the navigation view."""
+    return {"workflow_sha256": digest(workflow), "pointer": pointer,
+            "value": inspect_pointer(workflow.model_dump(mode="json"), pointer)}
 
 
 def inspection_view(workflow: Workflow) -> dict:

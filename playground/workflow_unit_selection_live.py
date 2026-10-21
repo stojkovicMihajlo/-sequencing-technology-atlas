@@ -49,6 +49,7 @@ async def execute(parents_path: Path, run: Path, *, worker, max_units: int | Non
         files |= set((package / "workflow_extraction").glob("*.py"))
         files |= {package / "codex_worker.py", package / "run_state.py",
                   package / "document_manifest.py", package / "comparison_rules.py",
+                  package / "evidence_views.py",
                   package.parent / "core/artifacts.py"}
         target_snapshot = None
         if targets is not None:

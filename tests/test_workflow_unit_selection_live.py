@@ -65,7 +65,8 @@ async def test_planner_replays_context_without_establishing_links(cases, tmp_pat
     assert "No network" in (tmp_path / "run/prompt.txt").read_text()
 
 
-async def test_changed_comparison_policy_prevents_completed_selection(cases, tmp_path, monkeypatch):
+@pytest.mark.parametrize("dependency", ["comparison_rules.py", "evidence_views.py"])
+async def test_changed_navigation_or_policy_prevents_completed_selection(cases, tmp_path, monkeypatch, dependency):
     from playground import workflow_unit_selection_live as runtime
 
     original_sha = runtime.sha
@@ -73,7 +74,7 @@ async def test_changed_comparison_policy_prevents_completed_selection(cases, tmp
 
     def changed_policy_sha(path):
         nonlocal policy_reads
-        if path.name == "comparison_rules.py":
+        if path.name == dependency:
             policy_reads += 1
             if policy_reads > 1:
                 return "0" * 64

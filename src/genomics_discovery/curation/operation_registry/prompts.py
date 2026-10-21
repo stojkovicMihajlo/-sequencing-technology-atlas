@@ -5,6 +5,7 @@ from pathlib import Path
 
 from genomics_discovery.curation.comparison_rules import GENOMICS_COMPARISON_RULES
 from genomics_discovery.curation.workflow_extraction.prompts import source_command
+from genomics_discovery.curation.workflow_extraction.sources import MAX_READ_BATCH
 
 
 def build_prompt(role: str, run: Path, attempt: Path, packets: dict, *, proposal_hash=""):
@@ -67,7 +68,9 @@ do not ignore relevant uncertainty or automatically import unrelated analysis.
 {source} search PACKET 'specific terms' --limit 6
 {source} read PACKET --source-id SOURCE_ID --passage-id PASSAGE_ID
 {source} read-batch PACKET --ref SOURCE_ID PASSAGE_ID --ref SOURCE_ID ANOTHER_PASSAGE_ID
-Batch already identified passages when useful; references must be exact.
+Each read-batch accepts 1 to {MAX_READ_BATCH} distinct references from one packet;
+split larger requests. Use the supplied packet paths rather than reconstructing
+relative paths. Batch already identified passages when useful; references must be exact.
 Do not repeatedly dump whole papers. Inspect passages needed for the whole selected
 transformation, including its interfaces, information effects and context.
 

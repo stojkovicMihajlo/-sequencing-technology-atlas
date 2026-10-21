@@ -175,6 +175,7 @@ async def execute(
             curation / "codex_worker.py",
             curation / "run_state.py",
             curation / "document_manifest.py",
+            curation / "evidence_views.py",
             curation.parent / "core/artifacts.py",
         }
         files |= {

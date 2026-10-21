@@ -146,7 +146,9 @@ proposes retrieval candidates only; separate source review decides membership.
                                     for path in (files.workflow, files.packet))
         helpers.append(
             f"Parent {json.dumps(ident)}:\n"
-            f"{command} inspect {workflow_arg}\n"
+            f"{command} overview {workflow_arg} --format json\n"
+            f"{command} inspect {workflow_arg} --navigation --pointer /operations/0\n"
+            f"{command} inspect {workflow_arg} --pointer /operations/0/evidence\n"
             f"{command} query {workflow_arg} OPERATION_ID\n"
             f"{command} catalog {packet_arg} --focus methods\n"
             f"{command} catalog {packet_arg} --focus all\n"
@@ -182,6 +184,19 @@ effects, internal states, branches, control semantics and unresolved facts.
 Existing helper commands (absolute project interpreter/module paths; replace ID/term
 placeholders with IDs/terms found in the corresponding workflow and packet):
 {chr(10).join(helpers)}
+Start with overview for structure, then inspect --navigation --pointer with the
+operation/state pointers provided there. Read only the needed parts, not whole
+parent workflows by default. Navigation preserves every non-evidence field, including actions,
+resources, interface bindings, conditions, branches and information effects;
+it recursively replaces evidence quotations/rationales with exact locators.
+With --navigation, --pointer selects the projected Workflow record; its evidence
+fields contain locators whose absolute pointers still address the original Workflow.
+Use inspect --pointer without --navigation to reopen that exact original evidence
+or another needed field, and read the cited source passages. Pointers never address
+the navigation envelope. Query is available for
+one operation's full routed context. Do not create ad hoc bulk Python dumps or
+print every operation's evidence across the cohort; default full inspect remains
+available for a deliberate complete inspection, not routine navigation.
 The methods catalogue and search are navigation aids, not coverage or absence proof.
 Search may append --source-id SOURCE_ID to focus on one registered original; total
 and truncated report omitted hits. Choose source scope deliberately when a long

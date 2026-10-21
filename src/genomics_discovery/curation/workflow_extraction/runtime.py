@@ -320,7 +320,8 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
         src = package.parents[2]
         implementation = []
         code_files = [*package.glob("*.py"), *(package.parent / name for name in (
-            "codex_worker.py", "run_state.py", "document_manifest.py", "workflow_coverage.py")),
+            "codex_worker.py", "run_state.py", "document_manifest.py", "workflow_coverage.py",
+            "evidence_views.py")),
             package.parent.parent / "core" / "artifacts.py"]
         for path in sorted(code_files):
             original_sha256 = pin(path)

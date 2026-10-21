@@ -275,7 +275,7 @@ def test_emitted_quoted_commands_match_helper_clis_and_build(prompt_inputs, tmp_
     prompt = build_selection_prompt(registry, **paths)
     lines = [line for line in prompt.splitlines()
              if line.startswith("PYTHONDONTWRITEBYTECODE=")]
-    assert len(lines) == 15
+    assert len(lines) == 19
     unrelated = tmp_path / "unrelated cwd"
     unrelated.mkdir()
     commands = set()
@@ -294,7 +294,7 @@ def test_emitted_quoted_commands_match_helper_clis_and_build(prompt_inputs, tmp_
             line = line.replace("SOURCE_ID", "paper").replace("PASSAGE_ID", "p00001")
         result = run_prompt_command(line, unrelated)
         assert isinstance(result, dict)
-    assert commands == {"inspect", "query", "catalog", "search", "read", "read-batch"}
+    assert commands == {"overview", "inspect", "query", "catalog", "search", "read", "read-batch"}
     paths["selection"].write_text(plan(("alpha route", ["insert", "repair"])).model_dump_json())
     build_args = shlex.split(lines[-1])
     assert build_args[4:] == ["build", str(registry), str(paths["selection"]),

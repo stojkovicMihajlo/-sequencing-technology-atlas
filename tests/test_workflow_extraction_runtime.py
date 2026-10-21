@@ -269,6 +269,11 @@ async def test_baseline_has_no_readers(source_case, tmp_path):
     assert state["status"] == "supported"
     assert [call["role"] for call in worker.calls] == ["integrator", "reviewer"]
     assert worker.max_active_readers == 0
+    config = json.loads((tmp_path / "baseline/config.json").read_text())
+    helper = next(row for row in config["implementation"] if Path(row["path"]).name == "evidence_views.py")
+    from genomics_discovery.curation.run_state import sha
+    assert sha(Path(helper["path"])) == helper["sha256"] == helper["snapshot_sha256"]
+    assert Path(helper["snapshot"]).read_bytes() == Path(helper["path"]).read_bytes()
 
 
 @pytest.mark.parametrize("blocking", [False, True])

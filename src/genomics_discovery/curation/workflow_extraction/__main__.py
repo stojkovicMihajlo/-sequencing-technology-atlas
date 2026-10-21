@@ -59,6 +59,9 @@ def main() -> None:
     query.add_argument("operation_id")
     inspect = commands.add_parser("inspect", help="Show a lossless candidate with shared evidence")
     inspect.add_argument("workflow", type=Path)
+    inspect.add_argument("--navigation", action="store_true",
+                         help="Keep scientific fields; replace nested evidence text with exact locators")
+    inspect.add_argument("--pointer", help="JSON Pointer into the Workflow; with --navigation, select its projected value")
     overview = commands.add_parser(
         "overview", help="Read the main structure; recipe and evidence remain in the workflow")
     overview.add_argument("workflow", type=Path)
@@ -125,10 +128,13 @@ def main() -> None:
             workflow = Workflow.model_validate_json(args.workflow.read_bytes())
             result = query_workflow(workflow, args.operation_id)
         elif args.command == "inspect":
-            from .inspection import inspection_view
+            from .inspection import inspection_view, navigation_view, workflow_pointer
             from .models import Workflow
 
-            result = inspection_view(Workflow.model_validate_json(args.workflow.read_bytes()))
+            workflow = Workflow.model_validate_json(args.workflow.read_bytes())
+            result = (navigation_view(workflow, args.pointer) if args.navigation else
+                      workflow_pointer(workflow, args.pointer) if args.pointer is not None else
+                      inspection_view(workflow))
         elif args.command == "overview":
             from .models import Workflow
             from .overview import overview_text, workflow_overview
