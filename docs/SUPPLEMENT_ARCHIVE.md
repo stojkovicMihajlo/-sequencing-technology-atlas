@@ -60,11 +60,17 @@ python -m genomics_discovery.curation.source_acquisition.supplement_archive regi
 ```
 
 `--prior-ledger` is optional; supply it to preserve existing source-to-original
-bindings. Outputs are a fresh expanded `packet.json`, `originals_ledger.json`,
-`original_bindings.json`, `registration.json` and `source_receipts.json`. Existing
+bindings. Outputs are a fresh expanded `packet.json`, `conversion_receipt.json`,
+`originals_ledger.json`, `original_bindings.json`, `registration.json` and `source_receipts.json`. Existing
 source records are preserved exactly. The receipt pins original ZIP, selected PDF,
-rendition and inspection; the conversion ledger explicitly lists the ZIP as an
-upstream intermediate, which `scripts/benchmark/archive_result.py` follows.
+rendition and inspection. The new registration conversion ledger explicitly lists
+the ZIP, exact preparation, inspection and retrieval JSON files, earlier conversion
+receipt, inspected artifacts and any prior ledger as hashed upstream intermediates.
+`scripts/benchmark/archive_result.py` follows these records even when only the
+registration directory is selected. A successful archive therefore retains those
+exact source/version judgments as well as the PDF bytes. The earlier preparation
+conversion receipt is preserved unchanged. An arbitrary `source_receipts.json`
+pin map alone does not instruct the archiver to include its referenced files.
 
 The helper reads one exact ZIP member without extracting archive paths. It rejects
 unsafe paths/types, duplicate names, ambiguous basenames, encrypted entries,

@@ -254,9 +254,24 @@ def register(preparation_path, inspection_path, output, *, prior_ledger=None):
     expanded = build_packet(**options, sources=[*descriptors, source])
     if expanded["sources"][:-1] != packet["sources"]:
         raise ValueError("Existing source records changed while adding the supplement")
+    # The archiver follows conversion intermediates, not arbitrary source_receipts
+    # mappings. Preserve the exact acquisition/inspection records even when only
+    # this registration directory is selected for archival. Never rewrite the
+    # earlier preparation conversion receipt or its already pinned ledger value.
+    intermediates = {row["path"]: row["sha256"] for row in receipt.get("intermediates", [])}
+    for path in (preparation_path, inspection_path, preparation_path.parent / "retrieval.json", receipt_path):
+        intermediates[str(path)] = sha(path)
+    intermediates.update({str(Path(path).resolve()): value
+                          for path, value in inspection.inspected_files.items()})
+    if prior_ledger is not None:
+        intermediates[str(prior_ledger)] = sha(prior_ledger)
+    check_pins(intermediates)
+    registered_receipt = {**receipt, "intermediates": [
+        {"path": path, "sha256": value} for path, value in sorted(intermediates.items())]}
     output.mkdir(parents=True, exist_ok=False)
     write(output / "packet.json", expanded)
-    write(output / "originals_ledger.json", [*ledger, prepared["conversion"]])
+    write(output / "conversion_receipt.json", registered_receipt)
+    write(output / "originals_ledger.json", [*ledger, registered_receipt])
     bindings = bind_originals(output / "packet.json", output / "originals_ledger.json")
     write(output / "original_bindings.json", bindings)
     result = {"status": "registered_for_fresh_source_review", "scientific_resolution": False,

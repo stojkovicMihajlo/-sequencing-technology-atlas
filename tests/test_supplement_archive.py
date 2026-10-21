@@ -6,6 +6,7 @@ from pathlib import Path
 import shutil
 import stat
 import struct
+import tarfile
 from zipfile import ZIP_DEFLATED, ZIP_STORED, ZipFile, ZipInfo
 
 import pytest
@@ -90,6 +91,7 @@ def test_prepare_is_pending_and_register_preserves_real_archive_member_custody(f
     assert prepared["member"]["path"].endswith("/selected.pdf")
     assert (directory / "supplementary_files.zip").read_bytes() == fixture[1]
     report = inspection(directory, prepared)
+    original_receipt = (directory / "conversion_receipt.json").read_bytes()
     output = tmp_path / "registered"
     result = helper.register(directory / "preparation.json", report, output)
     packet = load_packet(output / "packet.json")
@@ -104,7 +106,9 @@ def test_prepare_is_pending_and_register_preserves_real_archive_member_custody(f
     assert selected["original"] == prepared["member"]["path"]
     receipt = json.loads((output / "originals_ledger.json").read_text())[-1]
     assert receipt["archive_member"] == MEMBER
-    assert receipt["intermediates"] == [prepared["archive"]]
+    assert prepared["archive"] in receipt["intermediates"]
+    assert (directory / "conversion_receipt.json").read_bytes() == original_receipt
+    assert json.loads((output / "conversion_receipt.json").read_text()) == receipt
     check_pins(json.loads((output / "source_receipts.json").read_text())["files"])
     # Archive only registration; ZIP/PDF/rendition must be followed as inherited custody.
     manifest = preserve(output, tmp_path / "archive.tar.gz", tmp_path)
@@ -113,6 +117,38 @@ def test_prepare_is_pending_and_register_preserves_real_archive_member_custody(f
     assert manifest["status"] == "declared_inputs_preserved"
     with pytest.raises(FileExistsError):
         helper.register(directory / "preparation.json", report, output)
+
+
+@requires_poppler
+def test_registration_only_archive_preserves_exact_preparation_inspection_and_retrieval(fixture, tmp_path):
+    directory, prepared = prepare(fixture, tmp_path)
+    report = inspection(directory, prepared)
+    required = [directory / "preparation.json", report, directory / "retrieval.json"]
+    expected = {str(path): (sha(path), path.read_bytes()) for path in required}
+    output, target = tmp_path / "registered", tmp_path / "registration-only.tar.gz"
+    helper.register(directory / "preparation.json", report, output)
+    manifest = preserve(output, target, tmp_path)
+    members = {path: (member, row["sha256"]) for member, row in manifest["members"].items()
+               for path in row["original_paths"]}
+    with tarfile.open(target) as archive:
+        for path, (expected_hash, expected_bytes) in expected.items():
+            member, recorded_hash = members[path]
+            assert recorded_hash == expected_hash
+            assert archive.extractfile(member).read() == expected_bytes
+    assert manifest["status"] == "declared_inputs_preserved"
+
+
+@requires_poppler
+@pytest.mark.parametrize("record", ["preparation", "inspection", "retrieval"])
+def test_registration_only_archive_detects_changed_upstream_judgment_or_retrieval(fixture, tmp_path, record):
+    directory, prepared = prepare(fixture, tmp_path)
+    report = inspection(directory, prepared)
+    output = tmp_path / "registered"
+    helper.register(directory / "preparation.json", report, output)
+    changed = report if record == "inspection" else directory / f"{record}.json"
+    changed.write_text("{}")
+    with pytest.raises(ValueError, match="SHA256 changed"):
+        preserve(output, tmp_path / "changed.tar.gz", tmp_path)
 
 
 @pytest.mark.parametrize("url,member,source,error", [
