@@ -1,7 +1,9 @@
 # Genomics evidence questions for operation comparison
 
-Date: 2026-10-21. Status: source-audited development policy; native evaluation
-pending. This decision does not certify existing graph connections.
+Date: 2026-10-21. Status: source-audited development policy exercised in one
+[native diagnostic rerun](../../provenance/experiments/genomics_rules_20261021/README.md).
+Coverage and review limitations remain. This decision does not certify existing
+graph connections.
 
 ## What was underspecified
 

@@ -1,5 +1,42 @@
 # Deployment status
 
+## Fresh comparison diagnostic completed, 2026-10-21
+
+Qiu CPU job **48793023** completed in 55 minutes with `gpt-6.1-sol` / `xhigh`.
+It reran selection, source review, definition comparison and isolated publication
+on nine preserved accepted workflows. It did not rerun extraction or source
+recovery. The [experiment report](../provenance/experiments/genomics_rules_20261021/README.md)
+and [machine-readable results](../provenance/experiments/genomics_rules_20261021/completion_report.json)
+record ten admitted memberships in seven definitions. Two definitions connect
+multiple methods, both by shared purpose; the five mechanism definitions remain
+singletons. Both predeclared shared library-preparation questions were missed
+again. This is a completed execution with unresolved scientific coverage, not a
+full-atlas reliability result.
+
+Independent source audit identified ambiguous scBS sequence-origin wording and
+limitations of broad field-level review. Fresh membership review declines
+unsupported ATAC/Drop aliquot-return instructions, but the unchanged parent graphs
+still expose those clauses. Valid membership does not promote or repair all raw
+protocol text. Known negative review findings need to accompany retrieval, or the
+parents need a separately reviewed repair before trusted protocol export.
+
+All 177 archived payload hashes and 46 registered source-original references were
+independently verified. The original graph nodes, edges and workflows are
+unchanged. Twenty-eight conversion-lineage flags remain in the immutable archive;
+four concern omitted ATAC/Drop binding records whose original PDFs are preserved
+in the prior archive. An [additive recovery manifest](../provenance/experiments/genomics_rules_20261021/lineage_recovery.json)
+reconnects those four exact custody chains; 24 other flags remain across the
+combined record. This is a provenance-handoff problem, not four inaccessible
+papers. The initial catalogue was empty, and no held-out families were tested.
+
+The next development tree adds scoped workflow navigation with exact evidence
+reopening and explicit source-tool limits. **2,164 local software tests passed,
+three skipped**, and 2,539 evidence lists reconstructed exactly across the nine
+workflows. These changes were not inserted into the frozen run; their native
+latency/behavior effect remains unmeasured. Definition comparison also spent a
+model call on 189 field judgments, including ten pairs whose unequal relation
+types already rule out identity under the existing policy.
+
 ## Source-derived comparison rules, 2026-10-21
 
 The development prompts now include conditional genomics evidence questions at
@@ -15,8 +52,9 @@ origin indices, stoichiometric reactions and assumed extraction order. The rule
 dependency is included in selection runtime pins; a changed policy prevents a
 completed selection result. **139 focused software checks passed.** The 54
 source-derived comparison cases are development expectations, not executed model
-successes. No fresh native model run or graph-edge promotion has validated this
-policy yet; the active atlas and frozen releases are unchanged.
+successes. The fresh diagnostic above exercised the policy and exposed remaining
+coverage/review limitations; it does not establish general scientific accuracy.
+The active atlas and earlier frozen releases are unchanged.
 
 ## Current assessment and release goals, 2026-10-21
 

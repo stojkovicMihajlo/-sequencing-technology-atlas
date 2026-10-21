@@ -1,0 +1,25 @@
+{
+  "plan_sha256": "64cc1b88cbe0520e7c45088efcaa9402e1f71bca24cb3111dee5995668fa880c",
+  "pair_count": 21,
+  "required_fields_per_pair": 9,
+  "field_judgments_requested": 189,
+  "cross_relation_pair_ids": [
+    "9d0ead517c31088ce767dadba598abf1382dfa4d223571122b9c37649c644b1b",
+    "33a4358ae293cafb7ed50fdcd14aba061d0da25d0539b40d65b2d9e128840927",
+    "503e88bd8982cb5a7a31c3d5c9b845598a00c8c571969ceba31e41289863ce04",
+    "6d8b128d95f5459af26f533f5afeed74b36d44ad145753c82c46e20be3c269ac",
+    "a4ed9bc6abc8ab10cf4e7d5bcd62f2d33197548bd7c04b6e8e9621eadadbe916",
+    "66dd6ba349aaab44737a8ebb334e8b349007208d5e07fdbc1728dff5a642c2fa",
+    "edd10b1e5fbb53755caf6a67272054192b2e2764c74720acf5dd9387be6ae092",
+    "eec032bbfdf60bfcfbd4993b6d9be4ef3a40d843126dc312ad5e77204612c2ef",
+    "cf8f7df6d021f37672bdc285f08171b968e6de7189e35d1d9ed3618f137adc88",
+    "cf5ff3da882a238abcae12c79582962aac4672bbf6c66bae9c67f6cc3f31be59"
+  ],
+  "cross_relation_pairs": 10,
+  "finding": "Ten planned pairs have unequal exact membership-relation enums. Existing identity policy disallows treating those relations as identical, so their non-equivalence can be established deterministically without asking a model to compare all nine fields.",
+  "code_basis": [
+    "src/genomics_discovery/curation/operation_registry/definition_comparison.py:validate_report",
+    "src/genomics_discovery/curation/operation_registry/definition_comparison.py:outcome"
+  ],
+  "boundary": "Potential future admission optimization. Not applied to the frozen run or measured as a latency gain. Relation mismatch proves identity failure under this policy; it establishes neither disjointness, lack of shared suboperations nor experimental incompatibility. Detailed overlap analysis can remain a separate requested task."
+}

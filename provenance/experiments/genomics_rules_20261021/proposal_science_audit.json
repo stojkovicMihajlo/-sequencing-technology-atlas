@@ -1,0 +1,109 @@
+{
+  "proposal_sha256": "fb82fbea2f8365cf78afaf56b118710e6f97baa8e1f9d015b3c8c9ac031ffddd",
+  "stage": "First source-writer proposal, before completion of the fresh native review.",
+  "review_type": "Three independent local agent source audits; neither human expert gold nor instructions supplied to the running native reviewer.",
+  "target_bindings": [
+    {
+      "method_id": "scbs-seq",
+      "decision_index": 7,
+      "occurrence_id": "scbs-seq:bf58345ca4531f12991da8422a8e07fb82d3a221e3b7abd05640ea5e2d2d8622:8561988e57d8b7224467d4c087f1fc66d841cfb6c883afc1bbb476ffc111ec11",
+      "definition_id": "post_bisulfite_two_stage_random_adapter_copying"
+    },
+    {
+      "method_id": "ddradseq",
+      "decision_index": 4,
+      "occurrence_id": "ddradseq:d2afaaab3734937cdee64600cdacf5463b73213ce223007ca56c83bc9663e3f2:c2afc9b33d32ec6ab915cb7ae7f15250248b8fe27c64d511176d4498a7802987",
+      "definition_id": "barcoded_restriction_fragment_pool_size_selection"
+    },
+    {
+      "method_id": "dbit_seq_2020",
+      "decision_index": 3,
+      "occurrence_id": "dbit_seq_2020:accd7100e08b16d6c28429c039c608ad2096509ef9cf443120393bee048382a6:b0fef0f895f9ae8139589dc267465716722a858f2f0aa5042c2e69c2731f1cfa",
+      "definition_id": "origin_associated_cdna_preparation"
+    }
+  ],
+  "findings": [
+    {
+      "id": "primer_payload_origin",
+      "method_id": "scbs-seq",
+      "classification": "consequential_mechanistic_ambiguity",
+      "locations": [
+        "/decisions/7/assignment/definition/physical_mechanism",
+        "/decisions/7/case/properties_to_preserve/2"
+      ],
+      "observation": "Adapter introduction is described as by copying. The cited first and second oligos already contain adapter tails; Klenow extends a primer using its template. Later complementary-strand synthesis may copy a pre-existing handle. The account should distinguish the existing primer payload from sequence synthesized from each template.",
+      "source_locators": [
+        "pmid_25042786:p00019"
+      ],
+      "boundary": "This is a causal ambiguity requiring clarification, not evidence that the entire adapter-preparation mechanism is false."
+    },
+    {
+      "id": "strand_fraction_wording",
+      "method_id": "scbs-seq",
+      "classification": "unestablished_quantifier",
+      "locations": [
+        "/decisions/7/case/properties_to_preserve/1"
+      ],
+      "observation": "Predominantly single-stranded suggests a population claim; the inspected passage establishes denaturation and priming, not a measured strand fraction.",
+      "source_locators": [
+        "pmid_25042786:p00019"
+      ]
+    },
+    {
+      "id": "uncited_caution",
+      "method_id": "scbs-seq",
+      "classification": "source_support_not_located",
+      "locations": [
+        "/decisions/7/case/properties_to_preserve/6"
+      ],
+      "observation": "The 5mC/5hmC caution is plausible background, but its source support was not located in the bound packet. Conservative wording can still add uncited assertions.",
+      "boundary": "Not demonstrated false; do not equate missing local support with scientific falsity."
+    },
+    {
+      "id": "ddrad_route_qualification",
+      "method_id": "ddradseq",
+      "classification": "variant_scope_qualification",
+      "locations": [
+        "/decisions/4/assignment/definition/operation",
+        "/decisions/4/case/properties_to_preserve"
+      ],
+      "observation": "The definition follows ligation, pooling, pooled cleanup and size selection in Protocol S1. Analysis S1 instead describes individual cleanup before pooling. The retained properties distinguish ligation temperature but omit this associated order difference.",
+      "source_locators": [
+        "ddradseq_protocol_s1:p00014,p00015",
+        "ddradseq_analysis_s1:p00016"
+      ],
+      "boundary": "The narrow definition fits the selected general-route cut. This is not a definite source contradiction or automatically invalid membership."
+    },
+    {
+      "id": "origin_purpose_scope",
+      "method_id": "dr-seq",
+      "classification": "retrieval_scope_design_issue",
+      "locations": [
+        "/decisions/3/assignment/definition/output",
+        "/decisions/3/assignment/definition/context_requirements",
+        "/decisions/3/case/boundary_examples"
+      ],
+      "observation": "The origin-associated cDNA purpose definition deliberately excludes joint gDNA/cDNA amplification and modality branching. DR-seq has those additional functions while also preserving cell-associated transcript origin. Its exclusion is consistent with the narrow definition, but does not establish absence of the broader purpose.",
+      "source_locators": [
+        "batch27_dr_seq_main:p00005,p00006,p00018,p00019,p00020"
+      ],
+      "implementation_boundary": "One assignment per occurrence is permitted in a proposal batch. Registry storage and fixed matching permit multiple concepts for one occurrence across separately reviewed submissions. The graph is not globally single-label.",
+      "boundary": "A useful-query/overlap issue rather than an identified molecular falsehood."
+    }
+  ],
+  "supported_distinctions": [
+    "ATAC proposed definition does not inherit the parent unsupported categorical analytical-aliquot return prohibition.",
+    "4sUDRB and SLAM retain different chemistry, output fraction and quantitative denominators under a shared-purpose relation.",
+    "DBiT, Drop and SPLiT retain distinct physical carriers, writing mechanisms and origin-key completeness.",
+    "DR retains joint mixed-product preparation, seven primary rounds and source-attributed dependency rationale."
+  ],
+  "native_review_outcome": {
+    "review_sha256": "698e84b7572a72486d899f048f5d2e798e4279598a56938e6e14440abaa7b450",
+    "source_and_vocabulary_verdicts": "All ten supported/admit; all asserted definition fields supported.",
+    "scbs_assessment": "The reviewer repeats adapter sequence introduced by DNA-polymerase copying; it does not distinguish pre-existing primer payload from newly synthesized template sequence. This remains ambiguous shorthand, not proof of invented chemistry or an invalid whole-unit membership.",
+    "scbs_review_pointer": "/reviews/7/definition_checks/2/rationale",
+    "property_assessment": "The scBS strand-fraction wording and 5mC/5hmC caution are not independently addressed clause by clause in the review. A positive seven-field review does not certify every free-text property.",
+    "boundary": "Fresh native review artifacts were read after completion. Independent local findings were not sent to that worker. Canonical admission/graph outcomes are recorded separately.",
+    "ddrad_assessment": "Fresh reviewer explicitly distinguishes pooled cleanup after ligation in Protocol S1 from separately scoped empirical cleanup order and 37-degree-C ligation in Analysis S1; this qualification is retained in source_review.notes[0]."
+  }
+}

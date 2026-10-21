@@ -1,0 +1,153 @@
+{
+  "format_version": "cross_archive_lineage_recovery/1.0",
+  "audit_date": "2026-10-21",
+  "scope": "Additive custody links between two immutable archives. Neither archive, its manifest, its model outputs, nor its historical absolute paths are modified.",
+  "archives": {
+    "current": {
+      "job_id": "48793023",
+      "sha256": "7357eaf8b63fe8ca86ce4f0ab90cf06cb6567671f83e82a0e6ce61d2cc378319",
+      "audited_local_path": "/private/tmp/atlas-rules-completed/genomics-rules-48793023.tar.gz",
+      "durable_path": "/home/groups/xiaojie/mstojkov/atlas-results/genomics-rules-48793023.tar.gz",
+      "verification": "Local archive bytes independently rehashed; durable path follows the recorded run-preservation destination. This audit made no SSH or fresh remote-durability check."
+    },
+    "baseline": {
+      "job_id": "48677424",
+      "sha256": "3293a0cad19178180f98e81eed267795321e30c749769861d119d30131b53a82",
+      "audited_local_path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/qiu_experiments_20261020/ten_method_overview_01/monitoring/ten-method-overview-48677424.tar.gz",
+      "durable_path": "/home/groups/xiaojie/mstojkov/atlas-results/ten-method-overview-48677424.tar.gz",
+      "verification": "Local archive bytes independently rehashed and matched the previously recorded durable archive receipt. This audit made no fresh SSH check."
+    }
+  },
+  "packet_and_binding_equivalence": [
+    {
+      "method_id": "atac-seq",
+      "current_packet_member": "phase/intake/001/packet.json",
+      "baseline_packet_member": "phase/sources/atac-seq/packet.json",
+      "packet_file_sha256": "f610e60b65c5858e859b8fbbf38b6d73fd510a7491c798c041d4e7243da22cd4",
+      "canonical_packet_sha256": "148bf7f72310439fc9a38906b8e63bb4c847f7614c99c7c6ea8b58d549970a72",
+      "verification": "Both archived packet files were rehashed and are byte-identical. The current canonical packet digest equals the historical typed binding's source_packet_sha256.",
+      "baseline_binding": {
+        "member": "phase/sources/atac-seq/original_bindings.json",
+        "sha256": "37245c0f2ef7ac5b1ed8f5f8c58c69905aa8c25b90baf9a917c13d3238d2033e",
+        "revision_id": "de4b5dfa83ecb08958a81cd836a76f53dda25a7fc7f0fa243278f32ec9694f3f",
+        "format_version": "workflow_source_originals/1.0"
+      },
+      "baseline_ledger": {
+        "member": "inherited_inputs/7fbb555ac9e0b7890f6855220621e2b31445513ec3bf5abb72a11097a28c357c/originals_ledger.json",
+        "sha256": "7fbb555ac9e0b7890f6855220621e2b31445513ec3bf5abb72a11097a28c357c",
+        "verification": "Archived bytes independently rehashed and matched the typed binding's input-file pin."
+      }
+    },
+    {
+      "method_id": "drop-seq",
+      "current_packet_member": "phase/intake/005/packet.json",
+      "baseline_packet_member": "phase/sources/drop-seq/packet.json",
+      "packet_file_sha256": "8dafb3a7e05e74039e05023051bb6f32d397f71cdfcb917da9fe9237d8eb421f",
+      "canonical_packet_sha256": "5f572b28b141c3add77cd311ea0b1891d092bde6ebc4c56060d6be65a868dda3",
+      "verification": "Both archived packet files were rehashed and are byte-identical. The current canonical packet digest equals the historical typed binding's source_packet_sha256.",
+      "baseline_binding": {
+        "member": "phase/sources/drop-seq/original_bindings.json",
+        "sha256": "33697aa519101e97b82322433e15950c8988b3c7c31a923281fb9cbe5c191be4",
+        "revision_id": "2bbfa86482d2401cb5ea09b0d32b423481df88b578f87d6c330366766bedd7b9",
+        "format_version": "workflow_source_originals/1.0"
+      },
+      "baseline_ledger": {
+        "member": "inherited_inputs/dbadfbf785ab047eafd826e1d4e8656dc6bda3169503212ace110057d2d856a7/originals_ledger.json",
+        "sha256": "dbadfbf785ab047eafd826e1d4e8656dc6bda3169503212ace110057d2d856a7",
+        "verification": "Archived bytes independently rehashed and matched the typed binding's input-file pin."
+      }
+    }
+  ],
+  "recovered_links": [
+    {
+      "method_id": "atac-seq",
+      "source_id": "buenrostro2013_supplement",
+      "source_role": "supplement",
+      "binding_method_id": "atac-seq",
+      "ledger_row": 0,
+      "rendition": {
+        "sha256": "42863843accb08cfb655408b45f95aebef01235d61b37d5d7b6eb8dee745707e",
+        "current_member": "inherited_inputs/42863843accb08cfb655408b45f95aebef01235d61b37d5d7b6eb8dee745707e/buenrostro2013_supplement_pages.txt",
+        "baseline_member": "inherited_inputs/42863843accb08cfb655408b45f95aebef01235d61b37d5d7b6eb8dee745707e/buenrostro2013_supplement_pages.txt"
+      },
+      "binary": {
+        "sha256": "9bf7b9298a474d4f2ab44a7f5c50f5d28c42d86e8cc2feecd9685b43dcb846cd",
+        "baseline_member": "inherited_inputs/9bf7b9298a474d4f2ab44a7f5c50f5d28c42d86e8cc2feecd9685b43dcb846cd/buenrostro2013_publisher_supplement.pdf",
+        "present_in_current_archive": false
+      },
+      "historical_rendition_limits": "Binding describes all 15 pages, a recorded pdftotext-layout command, table separators and nine documented superscript repairs. Parser/version are null in the typed binding. The association is not renewed fidelity adjudication."
+    },
+    {
+      "method_id": "drop-seq",
+      "source_id": "macosko2015_supplement",
+      "source_role": "supplement",
+      "binding_method_id": "drop-seq",
+      "ledger_row": 0,
+      "rendition": {
+        "sha256": "b825433172a2eda6c4586dd840c0d6427721749a547349a23c57c74c584225f3",
+        "current_member": "inherited_inputs/b825433172a2eda6c4586dd840c0d6427721749a547349a23c57c74c584225f3/supplement_rendition.txt",
+        "baseline_member": "inherited_inputs/b825433172a2eda6c4586dd840c0d6427721749a547349a23c57c74c584225f3/supplement_rendition.txt"
+      },
+      "binary": {
+        "sha256": "7b63216599c518dccd63c484cb6bc448fa181e8d9ddbdf0f2ac788b12296442d",
+        "baseline_member": "inherited_inputs/7b63216599c518dccd63c484cb6bc448fa181e8d9ddbdf0f2ac788b12296442d/supplement_elsevier_original.pdf",
+        "present_in_current_archive": false
+      },
+      "historical_rendition_limits": "Binding describes all 31 pages, PDF-to-text with page markers/whitespace handling and declared Symbol-font repairs. A converter version/process receipt was not located; parser/version are null in the typed binding."
+    },
+    {
+      "method_id": "drop-seq",
+      "source_id": "macosko2015_suppfigures",
+      "source_role": "supplement",
+      "binding_method_id": "drop-seq",
+      "ledger_row": 1,
+      "rendition": {
+        "sha256": "9605af0100502ae6109cada6b47e75a04d55535404e7a7312aa1756a4370119f",
+        "current_member": "inherited_inputs/9605af0100502ae6109cada6b47e75a04d55535404e7a7312aa1756a4370119f/supplement_figures_rendition.txt",
+        "baseline_member": "inherited_inputs/9605af0100502ae6109cada6b47e75a04d55535404e7a7312aa1756a4370119f/supplement_figures_rendition.txt"
+      },
+      "binary": {
+        "sha256": "ed0adb6d611115764067c5493e3fc2427b2bbaafbff93db313865f130ffc2a8f",
+        "baseline_member": "inherited_inputs/ed0adb6d611115764067c5493e3fc2427b2bbaafbff93db313865f130ffc2a8f/primary_with_suppfigures_stanford.pdf",
+        "present_in_current_archive": false
+      },
+      "historical_rendition_limits": "Binding covers selected PDF pages 15-20 and preserves the prior declaration of visual unit/control-character repairs. Parser/version are null. This audit did not independently certify those repairs or inspect figure layouts."
+    },
+    {
+      "method_id": "drop-seq",
+      "source_id": "illumina_nextera_xt_2014_revD",
+      "source_role": "manufacturer_protocol",
+      "binding_method_id": "drop-seq",
+      "ledger_row": 2,
+      "rendition": {
+        "sha256": "aa83f5e9580600e60576ff20939236c54b80b1a672001e4ea724f4bf77dd4a6a",
+        "current_member": "inherited_inputs/aa83f5e9580600e60576ff20939236c54b80b1a672001e4ea724f4bf77dd4a6a/nextera_revD_selected_transcription.txt",
+        "baseline_member": "inherited_inputs/aa83f5e9580600e60576ff20939236c54b80b1a672001e4ea724f4bf77dd4a6a/nextera_revD_selected_transcription.txt"
+      },
+      "binary": {
+        "sha256": "c187f20bdbdf4407b3218196ddcabec360c172a20f352918c178d3c97c06767d",
+        "baseline_member": "inherited_inputs/c187f20bdbdf4407b3218196ddcabec360c172a20f352918c178d3c97c06767d/nextera_2014_guide_smith.pdf",
+        "present_in_current_archive": false
+      },
+      "historical_rendition_limits": "Binding describes manual selected transcription of original PDF pages 1, 20-23 and 27-31. Raw pdftotext was declared unreadable and unregistered. The original rendering command/version receipt was not located; this is not a mechanically reproducible full-guide extraction."
+    }
+  ],
+  "verification_boundary": {
+    "baseline_binding_ledger_packet_rendition_and_pdf_bytes": "The two binding records, two ledgers, two packets, four renditions and four PDFs were read from the baseline archive and independently rehashed against their declared pins.",
+    "current_packets": "The two current packet members were independently rehashed and their canonical digests compared with the historical typed bindings.",
+    "current_renditions": "The four current rendition member names and SHA256 values were located in the current archive manifest. Their originals are not present in that archive.",
+    "no_new_source_acquisition": true,
+    "no_native_model_calls": true,
+    "no_ssh": true,
+    "no_frozen_artifact_mutation": true,
+    "scientific_limit": "Custody identity does not establish source completeness, chemical entailment, transcription fidelity, model visual inspection or experimental validity."
+  },
+  "remaining_limits": {
+    "current_archive_original_flag_count_unchanged": 28,
+    "rendition_lineage_flags_linked_through_baseline": 4,
+    "still_unresolved_current_run_lineage_flags": 24,
+    "comparison": "Compared by rendition SHA256 and reason, 24 flags are shared with the baseline, four additional current flags arise from the omitted typed bindings, and four baseline hiCLIP flags are outside this nine-parent run.",
+    "status": "Partial cross-archive custody recovery; current archive alone remains as originally declared.",
+    "action": "Preserve this sidecar beside both hash-pinned durable archives. Resolving these four links requires retaining access to the baseline archive; it does not close the other 24 flags or reproduce unrecorded conversion steps."
+  }
+}
