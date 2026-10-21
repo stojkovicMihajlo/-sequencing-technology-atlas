@@ -128,3 +128,29 @@ runtime, field contract and field-review runtime suites. `git diff --check`
 passed. An independent code review checked role separation, revisitable route
 reconstruction and the distinction between instructed and enforced ordering.
 No native extraction was launched for this prompt change.
+
+## Follow-up: preserve the field gate through batch recovery
+
+The fresh-run launch audit found that the batch controller revalidated primary
+reviews and source coverage but did not combine the newly required field review.
+It could therefore recover a supported parent despite a direct-pipeline veto.
+The three-method experiment calls the direct pipeline from its frozen runtime;
+it does not exercise this separate controller fix.
+
+Development recovery now checks the policy against the hash-pinned runtime
+configuration, rejecting a changed or removed current-state flag. It reopens the
+successful reviewer's own hash-bound field sidecar, validates its candidate/source
+binding and immediate same-runtime review history, and combines its outcome with
+the existing gates. Negative judgments
+cannot become supported parents; unfinished or missing reviews cannot authorize
+publication. Accepted results retain the field-review pointer/hash. Explicitly
+disabled and absent historical profiles keep their historical behavior; this
+does not retroactively field-certify old records. This is an acceptance-path fix,
+not a change to the model's scientific judgment.
+
+Eighty-two focused batch, field-pipeline and graph-publication checks passed,
+including unsupported/unestablished/unassessed results, stale bytes, reviewer
+ownership, repair history, persistent research outcomes, policy downgrade and
+historical profiles. A source-obligations-only interruption before configuration
+creation can still reuse validated obligations. Independent review reproduced
+the policy-flag bypass and confirmed its rejection after the correction.

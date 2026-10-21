@@ -17,7 +17,7 @@ from pathlib import Path
 from ..codex_worker import CodexWorker, assess_archived_attempt
 from ..workflow_extraction import runtime
 from ..workflow_extraction.models import (
-    Workflow, WorkflowReview, review_outcome, validate_evidence, validate_review,
+    Workflow, WorkflowReview, digest, review_outcome, validate_evidence, validate_review,
 )
 from ..workflow_extraction.sources import load_packet
 from .models import BatchConfig, Inventory
@@ -239,6 +239,51 @@ def _coverage(state, workflow, review, packet):
     return source_coverage_outcome(coverage, obligations, review, workflow)
 
 
+def _field_policy(state, state_path):
+    """Recover policy from pinned configuration, never from a state flag alone."""
+    if "config_sha256" not in state:
+        if any(a.get("status") == "validated" and a.get("role") != "source_obligations"
+               for a in state.get("attempts", [])):
+            raise ValueError("Successful runtime stages lack pinned configuration")
+        return False  # Source-only preparation precedes configuration creation.
+    path = _file({"path": str(state_path.parent / "config.json"),
+                  "sha256": state["config_sha256"]})
+    required = read(path).get("require_field_review", False)
+    recorded = state.get("require_field_review", False)
+    if type(required) is not bool or type(recorded) is not bool or required != recorded:
+        raise ValueError("Field-review policy differs from pinned runtime configuration")
+    return required
+
+
+def _fields(attempt, workflow, packet, prior):
+    """Replay the field gate for this successful reviewer and same-run history."""
+    from ..workflow_extraction.field_review import WorkflowFieldReview, field_review_outcome
+
+    record = attempt.get("field_review")
+    if not record:
+        return None
+    path = _file(record)
+    if path.resolve() != (Path(attempt["directory"]) / "field_review.json").resolve():
+        raise ValueError("Field review must belong to its successful reviewer")
+    review = WorkflowFieldReview.model_validate_json(path.read_bytes())
+    if record.get("document_sha256") != digest(review):
+        raise ValueError("Field review document digest changed")
+    history = {}
+    if prior is not None:
+        old_review, old_workflow = prior
+        inputs = attempt.get("inputs", {})
+        if not all(key in inputs for key in ("previous_field_review", "previous_field_candidate")):
+            raise ValueError("Field review repair lacks pinned immediate prior artifacts")
+        prior_review = WorkflowFieldReview.model_validate_json(
+            _file(inputs["previous_field_review"]).read_bytes())
+        prior_workflow = _workflow(_file(inputs["previous_field_candidate"]), packet)
+        if (digest(prior_review) != digest(old_review)
+                or digest(prior_workflow) != digest(old_workflow)):
+            raise ValueError("Field review history differs from the prior successful reviewer")
+        history = {"prior_review": prior_review, "prior_workflow": prior_workflow}
+    return review, field_review_outcome(review, workflow, packet, **history), record
+
+
 def _recover(row, packet, config):
     """Latest validated candidate/pair across preserved fresh runtime attempts."""
     candidate = None
@@ -256,6 +301,8 @@ def _recover(row, packet, config):
             # artifacts merely because a JSON file happens to exist.
             continue
         last_state = state
+        require_fields = _field_policy(state, state_path)
+        prior_fields = None  # Field-review history is scoped to one runtime invocation.
         if config.require_source_coverage:
             record = state.get("artifacts", {}).get("source_obligations")
             if record:
@@ -283,13 +330,24 @@ def _recover(row, packet, config):
             errors = validate_review(review, workflow, packet)
             if errors:
                 raise ValueError("Validated review no longer verifies: " + "; ".join(errors))
+            candidate = (candidate_path, workflow)
+            pair = None
             outcome = review_outcome(review, workflow)
+            fields = None
+            if require_fields:
+                fields = _fields(attempt, workflow, packet, prior_fields)
+                if fields is None:
+                    continue
+                field_review, field_outcome, field_record = fields
+                prior_fields = (field_review, workflow)
+                if field_outcome == "unassessed":
+                    continue  # Unfinished review is not a scientific acceptance.
             if config.require_source_coverage:
                 outcome = _coverage(state, workflow, review, packet)
                 if outcome is None:
-                    candidate = (candidate_path, workflow)
                     continue
-            candidate = (candidate_path, workflow)
+            if fields is not None and field_outcome != "supported":
+                outcome = "research_needed" if outcome == "research_needed" else "needs_revision"
             pair = {"workflow": str(candidate_path), "review": str(path), "outcome": outcome,
                     "primary_outcome": review_outcome(review, workflow),
                     "runtime_run": str(state_path.parent),
@@ -298,6 +356,8 @@ def _recover(row, packet, config):
                 pair["accepted_source_coverage"] = {
                     key: state["artifacts"][key] for key in
                     ("source_obligations", "source_coverage_review")}
+            if fields is not None:
+                pair["accepted_field_review"] = field_record
     return candidate, pair, obligations, last_state
 
 

@@ -15,8 +15,10 @@ isolated from the canonical atlas.
 
 The launch audit found that `extraction_batch` recovery reconstructs acceptance
 without factual-field review. This experiment calls the existing extraction
-pipeline directly, preserving its combined review gate. Bulk batch deployment
-requires a separately tested recovery fix.
+pipeline directly, preserving its combined review gate. Development recovery now
+replays the field gate and checks its policy against pinned runtime configuration;
+82 focused tests passed. This separate fix is not part of the frozen experiment
+and has not received a fresh native batch evaluation.
 
 ## Field contract and review enforcement in development, 2026-10-21
 
