@@ -130,6 +130,12 @@ The helper and adjacent converter/archive tests passed 108 checks; an independen
 focused audit passed eight checks and found no blockers. Native behavior still
 requires the fresh run.
 
+Recovery attempt 003 is job **48877794**, submitted at 22:39 UTC on 2026-10-21
+with frozen runtime **ae2c1a1**. At 22:42 UTC it remained pending, so no new model
+or extraction result was available. The dated [tracking record](tracking.json)
+keeps later observations separate from submission metadata. Its log is
+`method_experiments/logs/scstamp-recover-extract-attempt003-48877794.log`.
+
 Both stages use `gpt-6.1-sol`, `xhigh`, the existing Codex login and managed
 execution policy. There is no per-stage model timeout. The four-hour Slurm
 allocation is a finite safety/resource boundary, not a promised method latency.
