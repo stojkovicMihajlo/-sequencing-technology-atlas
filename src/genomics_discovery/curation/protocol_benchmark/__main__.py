@@ -28,6 +28,10 @@ def main(argv=None):
     commands = parser.add_subparsers(dest="command", required=True)
     schema = commands.add_parser("schema")
     schema.add_argument("kind", choices=MODELS)
+    graph_input = commands.add_parser(
+        "graph-input", help="Prepare reconstruction input without source registry or evidence quotations")
+    graph_input.add_argument("workflow", type=Path)
+    graph_input.add_argument("--output", type=Path, required=True)
     check = commands.add_parser("check")
     check.add_argument("kind", choices=MODELS)
     check.add_argument("document", type=Path)
@@ -40,6 +44,22 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.command == "schema":
         print(json.dumps(MODELS[args.kind].model_json_schema(), indent=2))
+        return 0
+    if args.command == "graph-input":
+        from ..workflow_extraction.inspection import navigation_view
+
+        try:
+            workflow = Workflow.model_validate_json(args.workflow.read_bytes())
+            view = navigation_view(workflow)
+            with args.output.open("x", encoding="utf-8") as handle:
+                handle.write(json.dumps(view, ensure_ascii=False, indent=2) + "\n")
+        except (OSError, ValueError) as exc:
+            print(json.dumps({"prepared": False, "error": f"{type(exc).__name__}: {exc}"}))
+            return 1
+        print(json.dumps({"prepared": True, "input": str(args.output.resolve()),
+                          "workflow_sha256": digest(workflow),
+                          "boundary": "Graph-only input preparation. No generation, scientific "
+                                      "review, anonymity guarantee or benchmark score."}))
         return 0
     kind = args.kind if args.command == "check" else "assessment"
     if kind != "reference" and args.reference is None:

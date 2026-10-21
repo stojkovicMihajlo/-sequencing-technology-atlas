@@ -4,6 +4,10 @@ Status, 2026-10-21: development/evaluation procedure. Existing tools are identif
 below; the native graph-reader and representation-variation evaluations have not
 been executed. This document does not add a runtime or certify scientific accuracy.
 
+The complementary [graph-to-protocol track](GRAPH_TO_PROTOCOL.md) asks for a full
+natural-language reconstruction with graph witnesses. It uses the same graph
+content and distinguishes graph faithfulness from independent source correctness.
+
 ## Scope each iteration
 
 Use a development pool of ATAC-seq, scBS-seq, DBiT-seq, SPLiT-seq and SLAM-seq.

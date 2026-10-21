@@ -4,6 +4,12 @@ The benchmark evaluates whether a system faithfully represents published sequenc
 protocols and makes supported cross-method connections. Multiple graph decompositions
 can satisfy the same scientific requirements. Invention quality is outside this task.
 
+A complementary [graph-to-protocol track](../../docs/benchmark/GRAPH_TO_PROTOCOL.md)
+tests whether a fresh agent can reconstruct readable protocol prose from the
+graph alone. Its restricted input command and writer prompt are implemented;
+native reconstruction and scientific scoring are not yet executed. The
+source-bearing graph export must not be supplied wholesale to that writer.
+
 The [case design](cases.json) specifies **12 methods in six sampling strata**:
 
 | Stratum | Methods | Split |
