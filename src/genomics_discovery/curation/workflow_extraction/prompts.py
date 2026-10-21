@@ -534,10 +534,22 @@ No digest, verdict, omission or required target is generated or inferred by expa
             f"{shlex.quote(str(inputs['coverage']))}{coverage_reader_args}")
         coverage_instructions = f"""
 In this same review turn, independently check the completion ledger as well.
-Read {inputs['coverage']} and the paginated finding view {inputs['finding_view']}.
+Read the paginated finding view {inputs['finding_view']}; {inputs['coverage']}
+is its bound integration ledger.
 Inspect focused pages rather than repeatedly dumping whole reports. Every original
-finding and its proposed dispositions are present; do not treat a reader finding
-as true merely because it was extracted. Reopen contextual source evidence.
+finding and its proposed dispositions are present inline or explicitly referenced.
+An oversized single entry uses coverage_review_view/1.1 with content_mode
+bound_reference. The locator is not the finding: read its complete content using
+the bounded accessor, substituting its reader_role and finding_id:
+{coverage_command} read {shlex.quote(str(inputs['coverage']))} --packet {packet_arg} --workflow {shlex.quote(str(inputs['candidate']))}{coverage_reader_args} --reader-role chemistry --finding-id FINDING_ID --pointer /original_finding/description
+Use --pointer '' to list the entry's child pointers, then follow the required
+original_finding and proposed_dispositions fields. Containers return child
+pointers; text returns exact character windows. Follow next_start with --start
+until each needed field is complete; --chars controls text windows (maximum 4000).
+This accessor exposes only this finding and its proposed dispositions, not reader
+gap opinions, and checks their full bound lineage. A valid locator or partial
+window is not a completed scientific review. Do not treat a reader finding as
+true merely because it was extracted. Reopen contextual source evidence.
 Read the CoverageReview schema: {coverage_review_schema}
 Write {attempt / 'coverage_review.json'} with exactly one source-backed check per
 (reader_role, finding_id). Its coverage_sha256 must be {coverage_sha256}. Compute

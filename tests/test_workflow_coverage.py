@@ -10,7 +10,9 @@ from pydantic import ValidationError
 from genomics_discovery.curation.workflow_coverage import (
     CoverageReview,
     IntegrationCoverage,
+    MAX_VIEW_CHARS,
     coverage_review_outcome,
+    coverage_review_read,
     coverage_review_view,
     main,
     validate_coverage,
@@ -552,7 +554,7 @@ def test_view_is_bounded_and_does_not_silently_truncate(review_records, kwargs):
         coverage_review_view(coverage, workflow, reports, packet, **kwargs)
 
 
-def test_oversized_view_and_stale_reader_binding_are_explicit_errors(review_records):
+def test_oversized_finding_has_bound_exact_read_access_without_relaxing_budget(review_records):
     packet, workflow, reports, coverage, source_review, data = review_records
     raw = reports["chemistry"].model_dump(mode="json")
     raw["findings"][0]["description"] = "Original finding " * 2500
@@ -562,8 +564,97 @@ def test_oversized_view_and_stale_reader_binding_are_explicit_errors(review_reco
     raw_coverage = coverage.model_dump(mode="json")
     raw_coverage["readers"][0]["report_sha256"] = digest(reports["chemistry"])
     coverage = IntegrationCoverage.model_validate(raw_coverage)
-    with pytest.raises(ValueError, match="exceeds"):
-        coverage_review_view(coverage, workflow, reports, packet, limit=1)
+    view = coverage_review_view(coverage, workflow, reports, packet, limit=1)
+    assert view["format_version"] == "coverage_review_view/1.1"
+    entry = view["entries"][0]
+    assert entry["content_mode"] == "bound_reference"
+    assert len(json.dumps(view, ensure_ascii=False)) <= MAX_VIEW_CHARS
+    original = reports["chemistry"].findings[0].description
+    chunks, start = [], 0
+    while True:
+        part = coverage_review_read(coverage, workflow, reports, packet,
+            reader_role="chemistry", finding_id=entry["finding_id"],
+            pointer="/original_finding/description", start=start)
+        assert part["entry_sha256"] == entry["entry_sha256"]
+        assert part["total_characters"] == len(original)
+        assert len(json.dumps(part, ensure_ascii=False)) <= MAX_VIEW_CHARS
+        chunks.append(part["text"])
+        if part["next_start"] is None:
+            break
+        start = part["next_start"]
+    assert "".join(chunks) == original
+
+
+def test_oversized_proposals_retain_all_dispositions_and_evidence(review_records):
+    packet, workflow, reports, coverage, source_review, data = review_records
+    raw = coverage.model_dump(mode="json")
+    original = "Proposed contextual explanation " * 2000
+    raw["entries"][0]["dispositions"][0]["rationale"] = original
+    coverage = IntegrationCoverage.model_validate(raw)
+    original = coverage.entries[0].dispositions[0].rationale
+    view = coverage_review_view(coverage, workflow, reports, packet, limit=1)
+    assert view["entries"][0]["content_mode"] == "bound_reference"
+    context = dict(reader_role="chemistry", finding_id=coverage.entries[0].finding_id)
+    root = coverage_review_read(coverage, workflow, reports, packet, **context)
+    assert {child["pointer"] for child in root["children"]} == {
+        "/reader_role", "/finding_id", "/original_finding", "/proposed_dispositions"}
+    container = coverage_review_read(coverage, workflow, reports, packet, **context,
+                                    pointer="/proposed_dispositions")
+    assert container["children"] == [{"pointer": "/proposed_dispositions/0", "kind": "object"}]
+    quote = coverage_review_read(coverage, workflow, reports, packet, **context,
+        pointer="/proposed_dispositions/0/evidence/0/quote")
+    assert quote["text"] == coverage.entries[0].dispositions[0].evidence[0].quote
+    chunks, start = [], 0
+    while True:
+        page = coverage_review_read(coverage, workflow, reports, packet, **context,
+            pointer="/proposed_dispositions/0/rationale", start=start)
+        chunks.append(page["text"])
+        if page["next_start"] is None:
+            break
+        start = page["next_start"]
+    assert "".join(chunks) == original
+
+
+@pytest.mark.parametrize("change", [
+    {"reader_role": "unknown"}, {"finding_id": "absent"}, {"pointer": "/unresolved"},
+    {"pointer": "/original_finding/~2"}, {"start": -1}, {"start": True},
+    {"limit": 9}, {"chars": 4001}, {"chars": True},
+])
+def test_bounded_finding_read_rejects_unknown_records_gap_access_and_bad_windows(review_records,
+                                                                              change):
+    packet, workflow, reports, coverage, source_review, data = review_records
+    arguments = {"reader_role": "chemistry", "finding_id": coverage.entries[0].finding_id,
+                 **change}
+    with pytest.raises(ValueError):
+        coverage_review_read(coverage, workflow, reports, packet, **arguments)
+
+
+def test_bounded_read_rejects_stale_lineage_and_never_exposes_old_gap_opinions(review_records):
+    packet, workflow, reports, coverage, source_review, data = review_records
+    arguments = dict(reader_role="chemistry", finding_id=coverage.entries[0].finding_id)
+    raw = reports["chemistry"].model_dump(mode="json")
+    raw["unresolved"][0]["description"] = "WITHHELD prior gap severity"
+    reports = {**reports, "chemistry": ReadingReport.model_validate(raw)}
+    with pytest.raises(ValueError, match="report_sha256"):
+        coverage_review_read(coverage, workflow, reports, packet, **arguments)
+    raw_coverage = coverage.model_dump(mode="json")
+    raw_coverage["readers"][0]["report_sha256"] = digest(reports["chemistry"])
+    coverage = IntegrationCoverage.model_validate(raw_coverage)
+    result = coverage_review_read(coverage, workflow, reports, packet, **arguments)
+    assert "WITHHELD" not in json.dumps(result)
+    assert all("unresolved" not in child["pointer"] for child in result["children"])
+
+
+def test_multi_entry_view_still_requires_a_smaller_page(review_records):
+    packet, workflow, reports, coverage, source_review, data = review_records
+    raw = reports["chemistry"].model_dump(mode="json")
+    raw["findings"][0]["description"] = "Long exact finding " * 2500
+    reports = {**reports, "chemistry": ReadingReport.model_validate(raw)}
+    raw_coverage = coverage.model_dump(mode="json")
+    raw_coverage["readers"][0]["report_sha256"] = digest(reports["chemistry"])
+    coverage = IntegrationCoverage.model_validate(raw_coverage)
+    with pytest.raises(ValueError, match="smaller batch"):
+        coverage_review_view(coverage, workflow, reports, packet)
 
 
 def test_review_schema_cli_and_valid_negative_review_report_outcome(review_records, tmp_path,
@@ -597,3 +688,9 @@ def test_review_schema_cli_and_valid_negative_review_report_outcome(review_recor
     assert main(["view", str(paths["coverage"]), *context, "--limit", "1"]) == 0
     view = json.loads(capsys.readouterr().out)
     assert view["total_entries"] == 3 and len(view["entries"]) == 1
+    assert main(["read", str(paths["coverage"]), *context, "--reader-role", "chemistry",
+                 "--finding-id", coverage.entries[0].finding_id,
+                 "--pointer", "/original_finding/description", "--chars", "5"]) == 0
+    part = json.loads(capsys.readouterr().out)
+    assert part["text"] == reports["chemistry"].findings[0].description[:5]
+    assert part["next_start"] == 5

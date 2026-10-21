@@ -16,6 +16,7 @@ from typing import Annotated, Literal
 from pydantic import Field
 
 from genomics_discovery.core.artifacts import StrictModel
+from genomics_discovery.curation.evidence_views import inspect_pointer
 from genomics_discovery.curation.workflow_extraction.models import (
     Evidence,
     Omission,
@@ -38,6 +39,7 @@ Role = Literal["chemistry", "information"]
 ROLES = frozenset({"chemistry", "information"})
 MAX_VIEW_ENTRIES = 8
 MAX_VIEW_CHARS = 32_000
+MAX_READ_CHARS = 4_000
 BOUNDARY = (
     "Integrity only: accounting, bindings and provenance. Target existence does not prove "
     "representation; semantic/source review is still required."
@@ -272,10 +274,11 @@ def coverage_review_view(
 ) -> dict:
     """Page original unaccepted findings and proposals without prior gap opinions.
 
-    Original descriptions and evidence are never truncated or rewritten. Oversized
-    batches fail explicitly; callers can reduce the page size rather than silently
-    omit claims. Original full reader reports remain canonically bound even though
-    their unresolved-gap opinions are withheld from this scientific review view.
+    Original descriptions and evidence are never truncated or rewritten. An
+    oversized single entry is an explicit reference, readable through
+    coverage_review_read in bounded exact chunks. Oversized multi-entry batches
+    still require a smaller page. Full reader reports remain canonically bound;
+    their unresolved-gap opinions are withheld from both review accessors.
     """
     errors = validate_coverage(coverage, workflow, reports, packet)
     if errors:
@@ -312,9 +315,82 @@ def coverage_review_view(
         "boundary": BOUNDARY,
     }
     if len(json.dumps(view, ensure_ascii=False)) > MAX_VIEW_CHARS:
-        raise ValueError(f"Coverage review view exceeds {MAX_VIEW_CHARS} characters; "
-                         "request a smaller batch or inspect the bound originals")
+        if len(view["entries"]) == 1:
+            entry = view["entries"][0]
+            view.update(format_version="coverage_review_view/1.1", entries=[{
+                "reader_role": entry["reader_role"], "finding_id": entry["finding_id"],
+                "content_mode": "bound_reference", "entry_sha256": digest(entry),
+                "field_pointers": ["/original_finding", "/proposed_dispositions"],
+                "read_required": "Use workflow_coverage read for this role/finding; "
+                                 "this locator does not replace reading the complete entry.",
+            }])
+        if len(json.dumps(view, ensure_ascii=False)) > MAX_VIEW_CHARS:
+            raise ValueError(f"Coverage review view exceeds {MAX_VIEW_CHARS} characters; "
+                             "request a smaller batch")
     return view
+
+
+def coverage_review_read(
+    coverage: IntegrationCoverage, workflow: Workflow, reports: dict[str, ReadingReport],
+    packet: dict, *, reader_role: str, finding_id: str, pointer: str = "",
+    start: int = 0, limit: int = MAX_VIEW_ENTRIES, chars: int = MAX_READ_CHARS,
+) -> dict:
+    """Navigate one exact finding/proposal entry, never previous reader gap opinions.
+
+    Containers expose bounded child locators; strings expose explicit character
+    windows with continuation offsets. No summary stands in for omitted text.
+    """
+    if errors := validate_coverage(coverage, workflow, reports, packet):
+        raise ValueError("Invalid coverage lineage: " + "; ".join(errors))
+    if type(start) is not int or start < 0:
+        raise ValueError("Read start must be a nonnegative integer")
+    if type(limit) is not int or not 1 <= limit <= MAX_VIEW_ENTRIES:
+        raise ValueError(f"Read limit must be an integer from 1 to {MAX_VIEW_ENTRIES}")
+    if type(chars) is not int or not 1 <= chars <= MAX_READ_CHARS:
+        raise ValueError(f"Read chars must be an integer from 1 to {MAX_READ_CHARS}")
+    entry = next((item for item in coverage.entries
+                  if (item.reader_role, item.finding_id) == (reader_role, finding_id)), None)
+    if entry is None:
+        raise ValueError("Unknown reader role/finding ID")
+    finding = next(item for item in reports[reader_role].findings if item.id == finding_id)
+    record = {"reader_role": reader_role, "finding_id": finding_id,
+              "original_finding": finding.model_dump(mode="json"),
+              "proposed_dispositions": [part.model_dump(mode="json")
+                                        for part in entry.dispositions]}
+    value = inspect_pointer(record, pointer)
+    result = {"format_version": "coverage_review_read/1.0",
+              "claim_status": "unaccepted_reader_findings_and_integration_proposals",
+              "source_packet_sha256": digest(packet), "workflow_sha256": digest(workflow),
+              "coverage_sha256": digest(coverage), "entry_sha256": digest(record),
+              "readers": [binding.model_dump(mode="json") for binding in coverage.readers],
+              "reader_role": reader_role, "finding_id": finding_id, "pointer": pointer,
+              "value_sha256": digest({"value": value}), "boundary": BOUNDARY}
+    if isinstance(value, str):
+        if start > len(value):
+            raise ValueError("Read start is outside the string")
+        stop = min(start + chars, len(value))
+        result.update(kind="text", text=value[start:stop], start=start,
+                      total_characters=len(value), next_start=stop if stop < len(value) else None)
+    elif isinstance(value, (dict, list)):
+        items = list(value.items()) if isinstance(value, dict) else list(enumerate(value))
+        if start > len(items):
+            raise ValueError("Read start is outside the container")
+        stop = min(start + limit, len(items))
+        result.update(kind="object" if isinstance(value, dict) else "array", start=start,
+                      total_children=len(items), next_start=stop if stop < len(items) else None,
+                      children=[{"pointer": pointer + "/" + str(key).replace("~", "~0").replace("/", "~1"),
+                                 "kind": "object" if isinstance(child, dict) else "array" if
+                                 isinstance(child, list) else "text" if isinstance(child, str)
+                                 else "scalar"}
+                                for key, child in items[start:stop]])
+    else:
+        if start:
+            raise ValueError("Scalar values require start=0")
+        result.update(kind="scalar", value=value)
+    if len(json.dumps(result, ensure_ascii=False)) > MAX_VIEW_CHARS:
+        raise ValueError(f"Coverage review read exceeds {MAX_VIEW_CHARS} characters; "
+                         "request fewer children or a smaller text window")
+    return result
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -331,7 +407,15 @@ def main(argv: list[str] | None = None) -> int:
     view.add_argument("document", type=Path)
     view.add_argument("--start", type=int, default=0)
     view.add_argument("--limit", type=int, default=MAX_VIEW_ENTRIES)
-    for command in (check, view):
+    read = commands.add_parser("read", help="Read an exact bounded finding/proposal field")
+    read.add_argument("document", type=Path)
+    read.add_argument("--reader-role", choices=sorted(ROLES), required=True)
+    read.add_argument("--finding-id", required=True)
+    read.add_argument("--pointer", default="")
+    read.add_argument("--start", type=int, default=0)
+    read.add_argument("--limit", type=int, default=MAX_VIEW_ENTRIES)
+    read.add_argument("--chars", type=int, default=MAX_READ_CHARS)
+    for command in (check, view, read):
         command.add_argument("--packet", type=Path, required=True)
         command.add_argument("--workflow", type=Path, required=True)
         command.add_argument("--reader", type=Path, action="append", default=[],
@@ -351,13 +435,19 @@ def main(argv: list[str] | None = None) -> int:
         if len({reader.role for reader in readers}) != len(readers):
             errors.append("Duplicate input reader role")
         reports = {reader.role: reader for reader in readers}
-        if args.command == "view" or args.kind == "coverage":
+        if args.command in {"view", "read"} or args.kind == "coverage":
             coverage = IntegrationCoverage.model_validate_json(args.document.read_bytes())
             errors.extend(validate_coverage(coverage, workflow, reports, packet))
             if args.command == "view" and not errors:
                 result = coverage_review_view(coverage, workflow, reports, packet,
                                               start=args.start, limit=args.limit)
                 print(json.dumps(result, indent=2, ensure_ascii=False))
+                return 0
+            if args.command == "read" and not errors:
+                result = coverage_review_read(coverage, workflow, reports, packet,
+                    reader_role=args.reader_role, finding_id=args.finding_id,
+                    pointer=args.pointer, start=args.start, limit=args.limit, chars=args.chars)
+                print(json.dumps(result, ensure_ascii=False))
                 return 0
         else:
             if args.workflow_review is None or args.integration_coverage is None:

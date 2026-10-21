@@ -401,6 +401,33 @@ async def test_finding_view_keeps_lineage_without_old_gap_opinions(source_case, 
         }
 
 
+async def test_single_large_reader_finding_does_not_prevent_fresh_review(source_case, tmp_path):
+    class LargeFindingWorker(CompletionWorker):
+        async def run(self, prompt, attempt_dir):
+            result = await super().run(prompt, attempt_dir)
+            if re.search(r"ROLE:\s*(\w+)", prompt).group(1) == "chemistry":
+                path = Path(attempt_dir) / "artifact.json"
+                document = read_json(path)
+                document["findings"][0]["description"] += " Exact contextual finding." * 2000
+                write_json(path, document)
+                self.reader_documents["chemistry"] = ReadingReport.model_validate(document)
+            return result
+
+    worker = LargeFindingWorker(source_case)
+    state = await runtime.execute(source_case[1], tmp_path / "large_finding", worker=worker,
+                                  require_coverage=True, max_revisions=0)
+    assert state["status"] == "supported"  # Injected worker judgments, not scientific acceptance.
+    assert worker.reviews == 1
+    reviewer = worker.calls[3]
+    view = read_json(reviewer["directory"] / "finding_view.json")
+    references = [entry for page in view["pages"] for entry in page["entries"]
+                  if entry.get("content_mode") == "bound_reference"]
+    assert [(entry["reader_role"], entry["finding_id"]) for entry in references] == [
+        ("chemistry", "prepare")]
+    assert ".workflow_coverage read " in reviewer["prompt"]
+    assert "OLD_GAP_OPINION_SENTINEL" not in json.dumps(view)
+
+
 async def test_coverage_sidecars_cannot_bypass_native_turn_completion(source_case, tmp_path):
     state, worker, run = await execute_completion(source_case, tmp_path, fault="unfinished_turn")
     assert state["status"] == "failed" and worker.reviews == 0
