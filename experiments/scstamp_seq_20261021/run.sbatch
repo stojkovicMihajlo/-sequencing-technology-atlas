@@ -8,9 +8,11 @@
 set -euo pipefail
 : "${SLURM_JOB_ID:?Submit through Slurm}"
 hostname
+selected_runtime="${ATLAS_FRESH_METHOD_RUNTIME:?Select a frozen runtime}"
+selected_commit="${ATLAS_RUNTIME_COMMIT:?Record its Git commit}"
 source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
-: "${ATLAS_REPOSITORY:?Select a frozen runtime}"
-: "${ATLAS_RUNTIME_COMMIT:?Record its Git commit}"
+export ATLAS_REPOSITORY="$selected_runtime"
+export ATLAS_RUNTIME_COMMIT="$selected_commit"
 export ATLAS_CODEX_BIN_DIR="$GROUP_HOME/mstojkov/software/codex/0.163.0/bin"
 source "$ATLAS_REPOSITORY/scripts/sherlock/environment.sh"
 export OMP_NUM_THREADS=1
