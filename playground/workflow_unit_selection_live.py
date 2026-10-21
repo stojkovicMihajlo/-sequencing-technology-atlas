@@ -48,7 +48,8 @@ async def execute(parents_path: Path, run: Path, *, worker, max_units: int | Non
         package = Path(__file__).resolve().parents[1] / "src/genomics_discovery/curation"
         files |= set((package / "workflow_extraction").glob("*.py"))
         files |= {package / "codex_worker.py", package / "run_state.py",
-                  package / "document_manifest.py", package.parent / "core/artifacts.py"}
+                  package / "document_manifest.py", package / "comparison_rules.py",
+                  package.parent / "core/artifacts.py"}
         target_snapshot = None
         if targets is not None:
             # Freeze query definitions, never prior memberships or reviewer opinions.

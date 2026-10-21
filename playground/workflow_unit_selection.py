@@ -12,6 +12,7 @@ from typing import Annotated, Literal
 from pydantic import Field, model_validator
 
 from genomics_discovery.core.artifacts import StrictModel
+from genomics_discovery.curation.comparison_rules import GENOMICS_COMPARISON_RULES
 from genomics_discovery.curation.workflow_extraction.models import (
     Text,
     Workflow,
@@ -195,6 +196,9 @@ words and reported precedence alone do not connect a whole transformation. Retai
 external consumers/branches and unknowns when deciding boundaries. Overlapping cuts
 are allowed. Do not force a universal partition, fixed module names/count, default
 cuts or any cross-parent relation. Empty cuts=[] with explanatory notes is valid.
+Use the following questions to choose and explain boundaries, not to admit links:
+{GENOMICS_COMPARISON_RULES}
+
 Use only the registry's exact parent_id values and explicit operation IDs from that
 parent; parent IDs need not equal method IDs. Do not duplicate an operation within
 a cut or request the same parent/operation set twice, including through aliases.

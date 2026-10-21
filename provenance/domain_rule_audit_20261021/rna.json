@@ -1,0 +1,756 @@
+{
+  "format_version": "domain_rule_audit/1.0",
+  "domain": "RNA metabolic labeling, thiol chemistry, enrichment and sequencing recoding",
+  "audit_date": "2026-10-21",
+  "contract": "contract.json",
+  "relationship_to_existing_design": "Domain-specific scientific checks for assertions in docs/COMPARISON_PROFILES.md. This is not a new graph schema, universal stage grammar, universal set of assay requirements, or an admission certificate.",
+  "local_documents_read": [
+    "docs/COMPARISON_PROFILES.md",
+    "provenance/domain_rule_audit_20261021/contract.json"
+  ],
+  "scope_and_limits": [
+    "Actual accessible Methods and primary experimental results were read; named methods were not assessed from abstracts alone.",
+    "The original 2017 TUC-seq publisher page supplied only its abstract and supplement listing. Its supplement and full-text links failed. Detailed TUC chemistry below relies on an explicitly identified independent primary replication, not claimed access to the original supplement.",
+    "No extraction runs, SSH sessions, code changes, frozen-runtime changes, or wet-lab validation were performed.",
+    "No source text is quoted verbatim. Rules are locally proposed scientific judgments; source reports and local inferences are distinguished."
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Herzog et al. 2017, Thiol-linked alkylation of RNA to assess expression dynamics",
+      "sourceURLs": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC5712218/",
+        "https://doi.org/10.1038/nmeth.4435"
+      ],
+      "actually_accessed_sections": [
+        "Results: Detection of 4-thiouridine by sequencing; Figure 1",
+        "Online Methods: Carboxyamidomethylation of s4U; Mass Spectrometry; Primer extension assays",
+        "Online Methods: SLAM-seq in mESCs; RNA library preparation",
+        "Discussion: short-pulse sensitivity and library scope"
+      ],
+      "access": "Full author manuscript HTML, including Online Methods. Supplement listing accessed; supplement contents not relied upon.",
+      "facts": [
+        {
+          "id": "F1",
+          "status": "reported",
+          "text": "SLAM-seq treats extracted RNA with iodoacetamide, attaching a carboxyamidomethyl group to 4sU sulfur by substitution. The RNA product remains a modified thiouridine; the apparent T>C readout is RT dependent."
+        },
+        {
+          "id": "F2",
+          "status": "reported",
+          "text": "The study separately measured chemical alkylation, RT drop-off and sequencing changes using defined RNA and negative controls. High efficiency and negligible additional RT drop-off were established in the tested conditions, not all substrates."
+        },
+        {
+          "id": "F3",
+          "status": "reported",
+          "text": "Cellular labeling preceded RNA isolation, alkylation and library construction. The discussion identifies uptake kinetics, transcriptional activity and sequencing depth as short-pulse detection limits. QuantSeq restricted the demonstrated library to polyadenylated RNA ends."
+        }
+      ],
+      "verbatim_quote_word_count": 0
+    },
+    {
+      "id": "S2",
+      "title": "Schofield et al. 2018, TimeLapse-seq: Adding a temporal dimension to RNA sequencing through nucleoside recoding",
+      "sourceURLs": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC5831505/",
+        "https://doi.org/10.1038/nmeth.4582"
+      ],
+      "actually_accessed_sections": [
+        "Main text and Figure 1: oxidation and aminolysis; product identification",
+        "Online Methods: LC-MS analysis of nucleosides; NMR analysis of nucleobase chemistry",
+        "Online Methods: NotI restriction endonuclease assay; Primer extension assay; Targeted TimeLapse sequencing",
+        "Online Methods: Transcriptome-wide TimeLapse-seq; TT-TimeLapse-seq",
+        "Online Methods: data fitting and correction for labeled-RNA loss"
+      ],
+      "access": "Full author manuscript HTML including Online Methods. Supplement listings accessed; supplement documents not opened successfully.",
+      "facts": [
+        {
+          "id": "F4",
+          "status": "reported",
+          "text": "Optimized TimeLapse chemistry uses sodium periodate and 2,2,2-trifluoroethylamine on isolated RNA. Oxidative substitution/aminolysis produces an N4-trifluoroethyl cytidine analogue. Earlier mCPBA nucleoside assays are distinct experimental conditions."
+        },
+        {
+          "id": "F5",
+          "status": "reported",
+          "text": "Chemistry was examined by LC-MS/NMR and through RT-dependent assays. Measured cDNA T>C conversion is distinct from chemical product yield. Modeling accounts for uridines per read and background; the authors corrected modest labeled-RNA loss for half-life estimation."
+        },
+        {
+          "id": "F6",
+          "status": "reported",
+          "text": "TT-TimeLapse-seq first enriches thiolated RNA through MTS-biotin/streptavidin chemistry, then applies TimeLapse chemistry to eluate and input. Affinity enrichment and recoding can therefore coexist in one method."
+        }
+      ],
+      "verbatim_quote_word_count": 0
+    },
+    {
+      "id": "S3",
+      "title": "Simon et al. 2018, Protocol for TimeLapse-seq",
+      "sourceURLs": [
+        "https://doi.org/10.1038/protex.2018.004",
+        "https://assets-eu.researchsquare.com/files/nprot-6521/v1/e8ec07f7-44df-49f2-9418-9c5091f83c42.pdf?c=1631825361"
+      ],
+      "actually_accessed_sections": [
+        "PDF pages 2-4: Introduction, Procedure: Metabolic Labeling, Modified RNeasy isolation, TimeLapse chemistry",
+        "PDF pages 4-5: Troubleshooting; Anticipated Results"
+      ],
+      "access": "Actual six-page author protocol PDF text, not search snippet.",
+      "facts": [
+        {
+          "id": "F7",
+          "status": "reported",
+          "text": "The protocol separates cellular exposure, RNA isolation and chemical treatment. Label dose and duration depend on cell type and question. Dark/reducing handling protects thiolated RNA; RNA integrity and label-plus-chemistry-dependent mutation increases are expected controls."
+        }
+      ],
+      "verbatim_quote_word_count": 0
+    },
+    {
+      "id": "S4",
+      "title": "Fuchs et al. 2014, 4sUDRB-seq: measuring genomewide transcriptional elongation rates and initiation frequencies within cells",
+      "sourceURLs": [
+        "https://link.springer.com/article/10.1186/gb-2014-15-5-r69",
+        "https://doi.org/10.1186/gb-2014-15-5-r69"
+      ],
+      "actually_accessed_sections": [
+        "Results: Adaptation of the DRB assay for measuring elongation rates in short time scales by RNA sequencing; Figure 1",
+        "Materials and methods: Cell culture; RNA purification and quantitative RT-PCR",
+        "Materials and methods: Biotinylation and purification of 4sU labeled RNA; Preparation and sequencing of 4sU labeled RNA",
+        "Materials and methods: Boundary detection algorithm; Calculating elongation rate"
+      ],
+      "access": "Full publisher HTML Methods; PMC URL initially returned a browser challenge.",
+      "facts": [
+        {
+          "id": "F8",
+          "status": "reported",
+          "text": "After cellular 4sU pulses around DRB removal, extracted RNA is reacted with Biotin-HPDP, captured on streptavidin beads and released using DTT. Libraries omit poly(A) isolation and use random-primed RT. This is affinity selection, not a designed T>C recoding operation."
+        },
+        {
+          "id": "F9",
+          "status": "reported",
+          "text": "Both 4- and 8-minute post-release samples receive the final 8-minute label pulse. Elongation inference uses recovery fronts and intronic coverage with gene/replicate filters; mature-RNA contamination motivates intron analysis."
+        }
+      ],
+      "verbatim_quote_word_count": 0
+    },
+    {
+      "id": "S5",
+      "title": "Duffy et al. 2015, Tracking distinct RNA populations using efficient and reversible covalent chemistry",
+      "sourceURLs": [
+        "https://stacks.cdc.gov/view/cdc/36272/cdc_36272_DS1.pdf",
+        "https://doi.org/10.1016/j.molcel.2015.07.023"
+      ],
+      "actually_accessed_sections": [
+        "PDF pages 2-4: Design; Optimizing labeling chemistry using free nucleosides; RNA specificity and enrichment comparisons",
+        "PDF page 6: Limitations",
+        "PDF page 7: Experimental Procedures: Cell lines and s4U metabolic labeling; Purification of s4U-labeled RNA"
+      ],
+      "access": "Actual eighteen-page primary author manuscript PDF through CDC; PMC direct page challenged.",
+      "facts": [
+        {
+          "id": "F10",
+          "status": "reported",
+          "text": "HPDP-biotin and MTS-biotin form reversible RNA-linked disulfides, with streptavidin capture and reductive release. Their reaction efficiencies differ. Limited incorporation favors recovery of longer, U-rich RNA. Defined thiolated/nonthiolated RNAs and external standards test specificity and recovery."
+        }
+      ],
+      "verbatim_quote_word_count": 0
+    },
+    {
+      "id": "S6",
+      "title": "Ohashi et al. 2024, Development and Comparison of 4-Thiouridine to Cytidine Base Conversion Reaction",
+      "sourceURLs": [
+        "https://rcastoragev2.blob.core.windows.net/72aecbb516a6376341fecd939e7eb989/ao3c08516.PMC10905967.pdf",
+        "https://doi.org/10.1021/acsomega.3c08516"
+      ],
+      "actually_accessed_sections": [
+        "PDF pages 2-4: Materials and Methods 2.1-2.5: substrates, transcription, OsO4/NH4Cl, IAA, NaIO4/TFEA",
+        "PDF page 5: Results 3.1.1-3.1.3: HPLC/mass characterization",
+        "PDF pages 6-7: Results 3.2.1-3.2.3: labeled RNA transcript and RT/PCR outcomes"
+      ],
+      "access": "Actual nine-page primary experimental comparison PDF. This is an independent replication, not the original TUC-seq Methods.",
+      "facts": [
+        {
+          "id": "F11",
+          "status": "reported",
+          "text": "The OsO4/NH4Cl route produces native cytidine, unlike the alkylated or N4-substituted products. Methods explicitly treat RNA before RT. Small-substrate tests use 4-thiodeoxyuridine-containing trimers; transcript tests use a 751-nt RNA with all 147 U positions replaced by 4sU."
+        },
+        {
+          "id": "F12",
+          "status": "reported",
+          "text": "Results vary between short substrates and densely labeled RNA; IAA impaired long-amplicon recovery in that context. This does not universally refute the original single-site RT result. Conversion, integrity and amplification outcomes need their tested substrate and conditions."
+        },
+        {
+          "id": "F13",
+          "status": "reported",
+          "text": "The paper notes periodate oxidation of the RNA terminal vicinal diol.",
+          "evidence_scope": "Chemical limitation described in the paper with reference to earlier work; not a new terminal-ligation compatibility measurement in this study."
+        }
+      ],
+      "verbatim_quote_word_count": 0
+    },
+    {
+      "id": "S7",
+      "title": "Matsushima et al. 2019, Sequencing cell type-specific transcriptomes with SLAM-ITseq",
+      "sourceURLs": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC6997029/",
+        "https://doi.org/10.1038/s41596-019-0179-x"
+      ],
+      "actually_accessed_sections": [
+        "Development of the protocol; Applications; Limitations",
+        "Experimental design: Mouse breeding, 4-thiouracil administration, RNA extraction, IAA treatment",
+        "Procedure: IAA treatment steps 26-35; RNA-seq library preparation"
+      ],
+      "access": "Actual full primary protocol HTML including procedure and control design.",
+      "facts": [
+        {
+          "id": "F14",
+          "status": "reported",
+          "text": "Cell-specific 4-thiouracil labeling uses Cre-dependent UPRT expression. Cre-negative animals receive matched precursor exposure to estimate UPRT-independent background. Promoter leakage, transgene specificity and label accessibility limit attribution. IAA chemistry then reads thiolated RNA from whole-tissue extracts."
+        },
+        {
+          "id": "F15",
+          "status": "reported",
+          "text": "The protocol recommends RNA quality checks, fresh IAA and an alkylation-positive control. It demonstrates different RT-containing library formats; a shared chemical readout does not identify the cell origin without the biological labeling design."
+        }
+      ],
+      "verbatim_quote_word_count": 0
+    }
+  ],
+  "unaccessed_priority_source": {
+    "title": "Riml et al. 2017, Osmium-Mediated Transformation of 4-Thiouridine to Cytidine as Key To Study RNA Dynamics by Sequencing",
+    "sourceURLs": [
+      "https://onlinelibrary.wiley.com/doi/10.1002/anie.201707465",
+      "https://onlinelibrary.wiley.com/doi/suppl/10.1002/anie.201707465/supinfo/anie201707465-sup-0001-misc_information.pdf"
+    ],
+    "actually_accessed_sections": [
+      "Abstract and supporting-information listing only"
+    ],
+    "unavailable_sections": [
+      "Full text",
+      "Supporting-information PDF contents"
+    ],
+    "effect": "Do not cite this audit as a reading of original TUC experimental details. S6 supplies the inspected primary experimental basis for bounded chemistry claims."
+  },
+  "proposed_rules": [
+    {
+      "id": "RNA01",
+      "kind": "locally_designed_rule",
+      "check": "Identify the material acted on and where the action occurs: cellular nucleotide incorporation, chemical modification of isolated RNA, copying into cDNA, or selection of an RNA population. Compare the selected transformation scope, not method-name similarity.",
+      "basis": [
+        "F1",
+        "F3",
+        "F4",
+        "F8",
+        "F14"
+      ],
+      "outcome_logic": "A known stage/material difference is supported_difference at that resolution. Unknown material or reaction location is unresolved when essential to the proposed shared mechanism."
+    },
+    {
+      "id": "RNA02",
+      "kind": "locally_designed_rule",
+      "check": "Keep administered precursor, incorporated RNA residue and post-treatment product distinct. A different cellular precursor/salvage path can converge on the same downstream RNA substrate; it need not exclude a shared downstream transformation.",
+      "basis": [
+        "F1",
+        "F4",
+        "F14"
+      ],
+      "outcome_logic": "Assess biological incorporation separately from downstream chemistry; do not invent a common incorporation route."
+    },
+    {
+      "id": "RNA03",
+      "kind": "locally_designed_rule",
+      "check": "Declare the mechanistic resolution before judgment. Same T>C readout supports a common information effect; exact reaction matching needs source-supported reacting group, reaction class and consequential product identity. Compare known intermediates only when they matter at that resolution.",
+      "basis": [
+        "F1",
+        "F4",
+        "F8",
+        "F11"
+      ],
+      "outcome_logic": "Missing essential chemistry blocks an exact mechanism claim. Missing a transient intermediate does not block a supported broader chemical family. A reagent word alone cannot fill missing chemistry."
+    },
+    {
+      "id": "RNA04",
+      "kind": "locally_designed_rule",
+      "check": "Record the chemical output where established: sulfur-bound alkyl adduct, substituted cytidine, native cytidine, or reversible affinity conjugate. Do not turn every apparent conversion into native-base replacement.",
+      "basis": [
+        "F1",
+        "F4",
+        "F10",
+        "F11"
+      ],
+      "outcome_logic": "Different products exclude exact product equivalence while potentially preserving broader mechanism-family agreement. Unknown product identity remains unresolved at the exact-product level."
+    },
+    {
+      "id": "RNA05",
+      "kind": "locally_designed_rule",
+      "check": "Distinguish physical enrichment from molecular sequence recoding. Ask whether the information is a selected fraction, a per-site signature, or both. Capture alone identifies a retained molecule/fragment, not the exact incorporated nucleotide position.",
+      "basis": [
+        "F6",
+        "F8",
+        "F10"
+      ],
+      "outcome_logic": "Do not impose mutually exclusive method classes; evaluate actual operations and retained branches."
+    },
+    {
+      "id": "RNA06",
+      "kind": "locally_designed_rule",
+      "check": "Specify which molecule carries the physical change and which carries the reported sequence. Normalize transcript/read strand conventions before comparing mutation symbols. In an RT workflow, a changed RNA template and a stable cDNA mutation are different events.",
+      "basis": [
+        "F1",
+        "F4",
+        "F11"
+      ],
+      "outcome_logic": "RNA versus cDNA is consequential; a complementary-strand symbol difference alone is not evidence of different chemistry."
+    },
+    {
+      "id": "RNA07",
+      "kind": "locally_designed_rule",
+      "check": "Separate chemical yield, label incorporation, polymerase read-through, misincorporation probability, per-U mutation frequency, and fraction of molecules classified as new. Require the denominator and tested substrate for quantitative equality claims.",
+      "basis": [
+        "F2",
+        "F5",
+        "F10",
+        "F12"
+      ],
+      "outcome_logic": "Same family does not confer identical efficiency, sensitivity or preservation. No particular mass spectrometer, RT brand or sequencing instrument is universally required."
+    },
+    {
+      "id": "RNA08",
+      "kind": "locally_designed_rule",
+      "check": "For a demonstrated label-specific recoding property, seek matched label/chemistry negatives, known labeled and unlabeled substrate controls, background mutation handling, and RNA/RT recovery checks appropriate to the claim. Distinguish a described mechanism from performance demonstrated in the submitted context.",
+      "basis": [
+        "F2",
+        "F5",
+        "F7",
+        "F15"
+      ],
+      "outcome_logic": "A missing contextual control limits the demonstrated property, not automatically a well-supported mechanism-family membership. Do not demand every control from every unrelated operation."
+    },
+    {
+      "id": "RNA09",
+      "kind": "locally_designed_rule",
+      "check": "Temporal interpretation needs pulse/chase schedule, exposure and uptake, survival until harvest, labeling/detection sensitivity and relevant kinetic assumptions. A label marks synthesis during availability; it does not identify an exact transcription-initiation instant.",
+      "basis": [
+        "F3",
+        "F7",
+        "F9",
+        "F10"
+      ],
+      "inference_label": "The statement about exact initiation time is a local consequence of nucleotide incorporation into elongating RNA, not a quoted source conclusion.",
+      "outcome_logic": "A zero-signature read is not automatically old RNA. Different pulse contexts can share chemistry while supporting different temporal conclusions."
+    },
+    {
+      "id": "RNA10",
+      "kind": "locally_designed_rule",
+      "check": "For enrichment properties, examine incorporation and coupling efficiency, U content/length, wash stringency, nonspecific carryover, recovery and normalization controls. Keep label-dependent capture probability separate from abundance and synthesis rate.",
+      "basis": [
+        "F6",
+        "F8",
+        "F10"
+      ],
+      "outcome_logic": "Shared capture family does not establish equal bias or recovery. Missing recovery data leaves contextual quantitative equivalence unresolved."
+    },
+    {
+      "id": "RNA11",
+      "kind": "locally_designed_rule",
+      "check": "Cell-of-origin attribution requires evidence for restricted label activation/delivery or another origin-preserving design, including appropriate background and specificity controls. A metabolic mark alone supplies neither a unique cell barcode nor a heritable clone identity.",
+      "basis": [
+        "F14",
+        "F15"
+      ],
+      "inference_label": "The exclusion of unique clone identity is a local identifiability conclusion.",
+      "outcome_logic": "Shared downstream chemistry can coexist with different or absent origin information. Unknown origin is unresolved, not evidence of absent incorporation."
+    },
+    {
+      "id": "RNA12",
+      "kind": "locally_designed_rule",
+      "check": "Bound preservation, RT fidelity and amplification claims to the actual substrate, label density, enzyme, conditions and assay. Small-substrate chemistry or a single-site RT test cannot establish transcript-wide contextual behavior.",
+      "basis": [
+        "F2",
+        "F5",
+        "F12"
+      ],
+      "outcome_logic": "Retain mechanism-family agreement when context changes; treat newly asserted performance as unresolved until supported. Do not universalize a bounded failure either."
+    },
+    {
+      "id": "RNA13",
+      "kind": "locally_designed_rule",
+      "check": "Future interface compatibility needs actual chemical end state, residual reagents, cleanup, RNA integrity and the proposed downstream substrate requirements. Chemical recoding can precede different readers; reader performance still needs evidence.",
+      "basis": [
+        "F7",
+        "F11",
+        "F13"
+      ],
+      "outcome_logic": "Do not infer incompatibility from untested transfer, or validated direct-RNA recognition from an RT-based demonstration. A direct-RNA workflow must not acquire a fictional RT step."
+    },
+    {
+      "id": "RNA14",
+      "kind": "locally_designed_rule",
+      "check": "Treat DRB synchronization, release fronts, intronic quantification and filtering as part of the declared elongation-inference scope. Shared thiol incorporation or capture cannot establish the same transcriptional estimand.",
+      "basis": [
+        "F8",
+        "F9"
+      ],
+      "outcome_logic": "A capture operation may match while the larger temporal-measurement scope differs."
+    },
+    {
+      "id": "RNA15",
+      "kind": "locally_designed_rule",
+      "check": "Allow connected operation groups with source-supported interfaces. Retain every consequential chemical, selection and information step in the selected scope; do not invent intermediates to force a one-to-one alignment.",
+      "basis": [
+        "F1",
+        "F6",
+        "F8"
+      ],
+      "outcome_logic": "Changing graph granularity alone must not change chemical judgment. A broad purpose match must not be promoted to a whole-scope mechanism match."
+    },
+    {
+      "id": "RNA16",
+      "kind": "locally_designed_rule",
+      "check": "Read the actual published protocol version and material path. Neither a kit's current instructions nor an enzyme name establishes which nucleic acid was acted on or read in an older experiment. Missing RT/PCR detail must remain unknown unless the source supports presence, absence or non-applicability.",
+      "basis": [
+        "F1",
+        "F4",
+        "F8",
+        "F15"
+      ],
+      "outcome_logic": "Do not infer a DNA substrate from a reagent's name or require cDNA/PCR for an RNA workflow. Compare source-reported chemistry before reader architecture."
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "T01",
+      "case": "SLAM-seq versus TimeLapse-seq, same observed T>C",
+      "resolution": "exact chemical reaction and product",
+      "expected": "supported_difference",
+      "rules": [
+        "RNA03",
+        "RNA04"
+      ],
+      "basis": [
+        "F1",
+        "F4"
+      ],
+      "fixture_kind": "source_grounded_comparison"
+    },
+    {
+      "id": "T02",
+      "case": "TimeLapse-seq versus OsO4/NH4Cl chemistry",
+      "resolution": "oxidation-enabled nucleophilic substitution/aminolysis of RNA 4sU",
+      "expected": "supported_agreement",
+      "qualification": "Reagents and native versus N4-substituted products remain explicit differences; this is a family claim.",
+      "rules": [
+        "RNA03",
+        "RNA04"
+      ],
+      "basis": [
+        "F4",
+        "F11"
+      ],
+      "fixture_kind": "source_grounded_comparison"
+    },
+    {
+      "id": "T03",
+      "case": "Same pair as T02",
+      "resolution": "same oxidant, nucleophile and final nucleoside",
+      "expected": "supported_difference",
+      "rules": [
+        "RNA04"
+      ],
+      "basis": [
+        "F4",
+        "F11"
+      ],
+      "fixture_kind": "source_grounded_comparison"
+    },
+    {
+      "id": "T04",
+      "case": "SLAM-seq IAA and SLAM-ITseq IAA on isolated thiolated RNA",
+      "resolution": "downstream alkylation/readout mechanism",
+      "expected": "supported_agreement",
+      "qualification": "Cellular precursor and origin-labeling designs remain different.",
+      "rules": [
+        "RNA01",
+        "RNA02",
+        "RNA11"
+      ],
+      "basis": [
+        "F1",
+        "F14",
+        "F15"
+      ],
+      "fixture_kind": "source_grounded_comparison"
+    },
+    {
+      "id": "T05",
+      "case": "4sUDRB affinity capture versus SLAM RNA recoding",
+      "resolution": "same information-bearing transformation",
+      "expected": "supported_difference",
+      "rules": [
+        "RNA05"
+      ],
+      "basis": [
+        "F1",
+        "F8"
+      ],
+      "fixture_kind": "source_grounded_comparison"
+    },
+    {
+      "id": "T06",
+      "case": "TT-TimeLapse-seq contains affinity enrichment and chemical recoding",
+      "resolution": "presence of both operations",
+      "expected": "supported_agreement",
+      "qualification": "A rule requiring enrichment-free recoding would incorrectly reject this source-backed positive case.",
+      "rules": [
+        "RNA05",
+        "RNA15"
+      ],
+      "basis": [
+        "F6"
+      ],
+      "fixture_kind": "source_grounded_comparison"
+    },
+    {
+      "id": "T07",
+      "case": "HPDP versus MTS biotin coupling",
+      "resolution": "reversible thiol-linked disulfide affinity tagging",
+      "expected": "supported_agreement",
+      "qualification": "No equality of coupling rate, enrichment bias or recovery follows.",
+      "rules": [
+        "RNA04",
+        "RNA07",
+        "RNA10"
+      ],
+      "basis": [
+        "F10"
+      ],
+      "fixture_kind": "source_grounded_comparison"
+    },
+    {
+      "id": "T08",
+      "case": "Unspecified chemistry yields T>C; product and substrate stage omitted",
+      "resolution": "exact reaction equivalence to SLAM",
+      "expected": "unresolved",
+      "qualification": "Missing chemistry is not supported_difference or a wildcard agreement.",
+      "rules": [
+        "RNA01",
+        "RNA03",
+        "RNA04"
+      ],
+      "basis": [
+        "F1",
+        "F4",
+        "F11"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T09",
+      "case": "Known same RNA reaction but a transient intermediate is uncharacterized",
+      "resolution": "supported reaction family independent of intermediate details",
+      "expected": "supported_agreement",
+      "qualification": "Exact intermediate identity remains unresolved; require it only if the definition depends on it.",
+      "rules": [
+        "RNA03"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T10",
+      "case": "Zero T>C in a short U-poor read after a short pulse",
+      "resolution": "molecule was pre-existing",
+      "expected": "unresolved",
+      "rules": [
+        "RNA07",
+        "RNA09"
+      ],
+      "basis": [
+        "F3",
+        "F5",
+        "F10"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T11",
+      "case": "Same chemistry, no label-negative or chemistry-negative measurements in a new context",
+      "resolution": "demonstrated label-specific sensitivity in that context",
+      "expected": "unresolved",
+      "qualification": "The chemical-family claim can still be supported by source evidence.",
+      "rules": [
+        "RNA08",
+        "RNA12"
+      ],
+      "basis": [
+        "F2",
+        "F7"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T12",
+      "case": "Single-site oligo RT preservation transferred to all-U-labeled long RNA",
+      "resolution": "equal RT processivity and long-amplicon recovery",
+      "expected": "unresolved",
+      "qualification": "S6 supplies a bounded counterexample to universal preservation; do not infer universal failure.",
+      "rules": [
+        "RNA07",
+        "RNA12"
+      ],
+      "basis": [
+        "F2",
+        "F12"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T13",
+      "case": "Chemical native-C RNA product proposed for direct-RNA sequencing",
+      "resolution": "demonstrated recognition/calibration by the proposed reader",
+      "expected": "unresolved",
+      "qualification": "No fictional RT requirement; separate chemical output from reader validation.",
+      "rules": [
+        "RNA06",
+        "RNA13"
+      ],
+      "basis": [
+        "F11"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T14",
+      "case": "Poly(A)-selected QuantSeq versus random-primed non-poly(A)-isolated 4sUDRB library",
+      "resolution": "equal RNA population coverage",
+      "expected": "supported_difference",
+      "rules": [
+        "RNA01",
+        "RNA14"
+      ],
+      "basis": [
+        "F3",
+        "F8"
+      ],
+      "fixture_kind": "source_grounded_comparison"
+    },
+    {
+      "id": "T15",
+      "case": "T>C present in bulk tissue without restricted label activation or an origin barcode",
+      "resolution": "specific cell or clonal lineage attribution",
+      "expected": "unresolved",
+      "rules": [
+        "RNA11"
+      ],
+      "basis": [
+        "F14",
+        "F15"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T16",
+      "case": "Cre-dependent UPRT design with no specificity/background evidence",
+      "resolution": "demonstrated target-cell restriction",
+      "expected": "unresolved",
+      "qualification": "A named cell promoter does not establish exclusivity.",
+      "rules": [
+        "RNA08",
+        "RNA11"
+      ],
+      "basis": [
+        "F14"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T17",
+      "case": "Same RNA chemistry performed at changed pulse length or temperature",
+      "resolution": "mechanism family",
+      "expected": "supported_agreement",
+      "qualification": "Conditional on source support that the reaction family persists; efficiency and kinetics remain separate claims.",
+      "rules": [
+        "RNA03",
+        "RNA09",
+        "RNA12"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T18",
+      "case": "Periodate-treated RNA proposed for a new end-dependent ligation",
+      "resolution": "downstream interface compatibility",
+      "expected": "unresolved",
+      "qualification": "Terminal chemistry must be examined; neither success nor incompatibility is implied by a different completed library.",
+      "rules": [
+        "RNA13"
+      ],
+      "basis": [
+        "F13"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T19",
+      "case": "Same instrument model absent from two otherwise source-supported transformations",
+      "resolution": "chemical mechanism family",
+      "expected": "not_applicable",
+      "qualification": "Instrument equality is not required for this comparison; assay-specific measurement properties may require their own checks.",
+      "rules": [
+        "RNA07"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T20",
+      "case": "RNA biotinylation and capture split into separate nodes versus one connected source group",
+      "resolution": "combined affinity-selection transformation",
+      "expected": "supported_agreement",
+      "qualification": "Only if the source-supported material path and consequential steps agree; no manufactured bridging state.",
+      "rules": [
+        "RNA15"
+      ],
+      "basis": [
+        "F8",
+        "F10"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T21",
+      "case": "Current kit manual contains an RT step absent from the accessed original experiment",
+      "resolution": "physical read molecule in original experiment",
+      "expected": "unresolved",
+      "qualification": "The current manual cannot supply a missing historical step.",
+      "rules": [
+        "RNA16"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    },
+    {
+      "id": "T22",
+      "case": "An enzyme name includes DNA but the source-specified substrate has not been read",
+      "resolution": "RNA versus DNA substrate",
+      "expected": "unresolved",
+      "qualification": "A reagent name alone does not identify the material path.",
+      "rules": [
+        "RNA01",
+        "RNA16"
+      ],
+      "fixture_kind": "constructed_counterexample_or_unknown"
+    }
+  ],
+  "not_identifiable_from_shared_mechanism_alone": [
+    "Historical ancestry, reuse or independent invention.",
+    "Experimental interchangeability or preservation in an untested cellular, RNA, support or reader context.",
+    "The exact age or initiation time of an individual transcript.",
+    "Old versus newly synthesized identity of every zero-signature read.",
+    "Absolute synthesis and decay rates without time design, normalization and kinetic assumptions.",
+    "Unique cell identity, clonal lineage, or cell-type restriction without a separate origin-preserving design.",
+    "Unbiased recovery, universal transcript coverage, equal chemical yield or equal RT fidelity.",
+    "Exact chemical product or reaction path from a T>C signal alone."
+  ],
+  "minimal_implementation_guidance": [
+    "Use these checks as mechanism-specific reviewer requirements attached to the existing purpose/mechanism/context assertions; do not add a new universal operation grammar.",
+    "Record declared resolution, required property, applicability reason, observed evidence and outcome. Only supported_agreement on every essential applicable property can justify that scoped mechanism claim.",
+    "Keep unresolved interface/property evidence from becoming either agreement or incompatibility. A contextual unknown need not block a narrower supported family claim.",
+    "Bind each reported source fact to the actual selected operation/state and reopened passage. This audit is a candidate scientific rule set, not inherited evidence for future extractions."
+  ]
+}

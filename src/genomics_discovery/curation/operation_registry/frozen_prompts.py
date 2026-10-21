@@ -2,6 +2,7 @@
 
 import shlex
 
+from genomics_discovery.curation.comparison_rules import GENOMICS_COMPARISON_RULES
 from genomics_discovery.curation.workflow_extraction.prompts import source_command
 from genomics_discovery.curation.workflow_extraction.sources import MAX_READ_BATCH
 
@@ -75,6 +76,8 @@ occurrence_id values copied programmatically from the plan or selection records.
 {tool} check-matching {q(run / 'registry.json')} {q(run / 'plan.json')} {q(run / 'manifest.json')} {q(attempt / 'artifact.json')}
    Omit the last argument to get the plan hash. Fix structural errors within your
    attempt; never alter sources or the plan to make a claim pass.
+
+{GENOMICS_COMPARISON_RULES}
 
 shared_purpose does not assert a common mechanism. shared_mechanism asserts the
 specified mechanism across the entire selected unit. Neither establishes experimental

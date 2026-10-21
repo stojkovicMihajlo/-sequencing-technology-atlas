@@ -1,0 +1,437 @@
+{
+  "audit_version": "domain_rule_audit/1.0",
+  "domain": "DNA fragmentation, chromatin tagmentation, and restriction-associated library preparation",
+  "audit_date": "2026-10-21",
+  "artifact_status": "Proposed scientific rule content for review; not an admitted ontology, benchmark gold standard, or experimental validation",
+  "execution_scope": {
+    "work_location": "Local read-only source research and one new provenance artifact",
+    "prohibited_actions_not_taken": ["SSH", "model CLI runs", "frozen artifact edits", "commits"],
+    "coverage": "Targeted inspection of the primary sections listed below. No full-paper or full-supplement coverage is claimed.",
+    "quotation_policy": "No verbatim source quotations are stored. Source facts are paraphrased and linked."
+  },
+  "frozen_local_contract": {
+    "observable_input": "Exact selected Operation IDs and their State interfaces, source-defined variant, inspected primary passages, proposed definition, and the intended granularity of comparison.",
+    "scientific_target": "A supported comparison of what physical transformation occurs, on which material, by which catalytic process, and with which retained product and information effect.",
+    "separate_target": "A proposed substitution must also connect the actual incoming material to the candidate operation and its outgoing material to the receiving workflow. Mechanism membership alone does not identify this feasibility.",
+    "invariants": [
+      "Preserve source-specific material association, route, retained fraction, sample identity, and adapter attachment stage.",
+      "Do not invent a free-DNA intermediate where tagmentation acts on chromatin, or a ligase step where adapters enter by transposase strand transfer.",
+      "Keep unknowns distinct from supported absence and from contradiction.",
+      "Do not turn one supported component mechanism into an identity claim about an entire selected module."
+    ],
+    "success_criteria": [
+      "Recover the Tn5 tagging family across ATAC, ChIPmentation and Nextera at an explicitly restricted reaction scope.",
+      "Preserve differences in chromatin association, upstream selection and information effect.",
+      "Reject tagging-versus-purification mechanism identity and Tn5-versus-restriction-plus-ligation mechanism identity at a catalytic transformation scope.",
+      "Expose missing adapter/end or retained-product facts when they are necessary to a proposed transfer."
+    ],
+    "not_identifiable_from_this_audit": [
+      "General experimental interchangeability, equivalent yields or biases, universal buffer tolerances, new biological feasibility, historical descent, or novelty.",
+      "Exact sequence compatibility where commercial oligonucleotide or reagent compositions are undisclosed."
+    ]
+  },
+  "existing_architecture": {
+    "inspected_local_files": [
+      "docs/COMPARISON_PROFILES.md",
+      "docs/BEHAVIOR_CONTRACT.md",
+      "docs/EXTRACTION_SCOPE_AND_MATCHING.md (opening scope, gap, and matching sections)",
+      "src/genomics_discovery/curation/workflow_matching/comparison_profiles.py (question names discovered by text search)"
+    ],
+    "reuse": "ComparisonProfile already separates State entity, form/association, identity/information, lineage and context from Operation transformation, purpose, mechanism, information effect and context. Put the checks below into those assertions and definition-specific review. Do not replace that architecture with a universal assay-stage list.",
+    "implementation_boundary": "Existing reported/inferred/unknown/not_assessed assertion statuses and evidence bindings should carry these domain questions. Proposed comparison and transfer outcomes below describe scientific review logic, not new graph relation names or a new schema."
+  },
+  "sources": [
+    {
+      "id": "ATAC2013",
+      "citation": "Buenrostro et al. 2013, original ATAC-seq, doi:10.1038/nmeth.2688",
+      "primary_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3959825/",
+      "doi_url": "https://doi.org/10.1038/nmeth.2688",
+      "accessed_sections": [
+        "Author-manuscript Results: ATAC-seq probes chromatin accessibility with transposons; Figure 1 caption",
+        "Online Methods: prepare nuclei; transpose and purify; PCR; low cell number protocol; library QC and quantitation",
+        "Online Methods: primary data processing paragraph concerning 9-bp insertion geometry"
+      ],
+      "access_limits": "PMC author-manuscript title differs from the final journal title but identifies the same DOI. Supplement download did not expose readable content and is not counted as inspected.",
+      "supported_facts": [
+        {"id": "ATAC-F1", "status": "reported", "fact": "Adapter-loaded hyperactive Tn5 fragments and tags DNA in unfixed nuclei; less accessible chromatin reduces insertion probability."},
+        {"id": "ATAC-F2", "status": "reported", "fact": "Standard preparation tagmented the nuclei pellet, then used MinElute purification and PCR. Low-cell preparations instead entered PCR without that purification."},
+        {"id": "ATAC-F3", "status": "reported", "fact": "Size selection was avoided to preserve complexity. Insert positions and lengths support chromatin interpretations."},
+        {"id": "ATAC-F4", "status": "reported", "fact": "The analysis describes paired adapter insertion separated by nine bases and adjusts read starts accordingly."}
+      ],
+      "quoted_words": 0
+    },
+    {
+      "id": "CHIPMENTATION2015",
+      "citation": "Schmidl et al. 2015, ChIPmentation, doi:10.1038/nmeth.3542",
+      "primary_url": "https://cemm.at/fileadmin/img/Research/research/Schmidl_et_al_Nature_Methods_2015.pdf",
+      "doi_url": "https://doi.org/10.1038/nmeth.3542",
+      "accessed_sections": [
+        "Author-institution PDF, printed main-text pages 1-3: purified ChIP-DNA versus bead-bound chromatin comparison and stated limitations",
+        "Online Methods PDF page 4: standard ChIP-seq; ChIPmentation; ChIP-tagmentation with purified ChIP DNA; amplification and sequencing"
+      ],
+      "access_limits": "PMC returned a browser challenge; Nature returned an inaccessible redirect. Author-institution PDF was readable. Supplementary Note detailing the three upstream ChIP protocols was not inspected.",
+      "supported_facts": [
+        {"id": "CHIP-F1", "status": "reported", "fact": "Tagmentation acts on immunoprecipitated bead-bound chromatin before elution, cross-link reversal and DNA purification."},
+        {"id": "CHIP-F2", "status": "reported", "fact": "Pre-reaction washes remove detergent, salts and EDTA; the reaction contains magnesium. Post-reaction bead washes precede resumed ChIP processing."},
+        {"id": "CHIP-F3", "status": "reported", "fact": "Purified ChIP-DNA tagmentation was more sensitive to DNA/transposase ratio. Authors proposed chromatin protein protection and reported greater robustness on beads."},
+        {"id": "CHIP-F4", "status": "reported", "fact": "The comparison standard ChIP-seq route used end repair, A-tailing and T4-ligase adapter attachment. ChIPmentation used Nextera enzyme and custom Nextera PCR primers."},
+        {"id": "CHIP-F5", "status": "reported", "fact": "Low-input performance still depended on antibody quality and was not established for every target."}
+      ],
+      "quoted_words": 0
+    },
+    {
+      "id": "ADEY2010",
+      "citation": "Adey et al. 2010, high-density in vitro transposition library construction, doi:10.1186/gb-2010-11-12-r119",
+      "primary_url": "https://link.springer.com/article/10.1186/gb-2010-11-12-r119",
+      "doi_url": "https://doi.org/10.1186/gb-2010-11-12-r119",
+      "accessed_sections": [
+        "Background: ME-containing transposome and synthetic-adapter explanation",
+        "Materials and methods: genomic DNA; mechanical shearing; enzymatic fragmentation; post-fragmentation library preparation; transposase-based library preparation",
+        "Materials and methods: PCR-free library construction paragraphs concerning adapter assembly and nick translation",
+        "Results: exome-capture paragraph concerning custom adapter-blocking oligonucleotides"
+      ],
+      "access_limits": "Targeted sections only; additional files were not inspected. Reported protocols contain some numerical/textual irregularities, so this audit does not reproduce an execution recipe.",
+      "supported_facts": [
+        {"id": "ADEY-F1", "status": "reported", "fact": "Tn5 complexes use mosaic-end DNA; separate synthetic ME adapters yield fragmentation with adapter joining to target-DNA 5-prime ends. Limited PCR appends platform sequences."},
+        {"id": "ADEY-F2", "status": "reported", "fact": "A PCR-free variant instead incorporated platform sequences in loaded oligonucleotides and used nick translation."},
+        {"id": "ADEY-F3", "status": "reported", "fact": "The paper separately implemented sonication, Fragmentase, and transposase library routes."},
+        {"id": "ADEY-F4", "status": "reported", "fact": "Different adapter sequences required custom blocking oligonucleotides during exome capture."}
+      ],
+      "quoted_words": 0
+    },
+    {
+      "id": "NEXTERA2016",
+      "citation": "Illumina Nextera DNA Library Prep Reference Guide, document 15027987 v01, January 2016",
+      "primary_url": "https://support.illumina.com/content/dam/illumina-support/documents/documentation/chemistry_documentation/samplepreps_nextera/nexteradna/nextera-dna-library-prep-reference-guide-15027987-01.pdf",
+      "accessed_sections": [
+        "Printed pages 2-3: introduction and DNA input recommendations",
+        "Printed pages 9-12: tagment genomic DNA; cleanup of tagmented DNA; amplification overview",
+        "Printed page 15: library cleanup overview",
+        "Printed page 23: assay mechanism overview"
+      ],
+      "access_limits": "Version-specific manufacturer specification, not a universal statement about Tn5 variants or all Nextera products. No undisclosed reagent composition is inferred.",
+      "supported_facts": [
+        {"id": "NEX-F1", "status": "reported", "fact": "Engineered transposome fragments and tags genomic DNA; subsequent PCR adds indices, P5/P7 and sequencing-related sequences."},
+        {"id": "NEX-F2", "status": "reported", "fact": "For this assay, ssDNA, RNA and free oligonucleotides are not target substrates."},
+        {"id": "NEX-F3", "status": "reported", "fact": "Transposome removal prevents DNA-end binding from interfering with subsequent processing. Later bead cleanup removes short library fragments."},
+        {"id": "NEX-F4", "status": "reported", "fact": "The guide cautions that tagmentation cannot place adapters at distal pre-existing fragment ends and that DNA input affects the enzymatic fragmentation."}
+      ],
+      "quoted_words": 0
+    },
+    {
+      "id": "RAD2008",
+      "citation": "Baird et al. 2008, sequenced RAD markers, doi:10.1371/journal.pone.0003376",
+      "primary_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0003376",
+      "doi_url": "https://doi.org/10.1371/journal.pone.0003376",
+      "accessed_sections": [
+        "Results: RAD marker generation for sequencing; Figure 1 caption",
+        "Methods: isolation of RAD markers for Illumina sequencing"
+      ],
+      "access_limits": "Targeted library-construction sections; mapping analyses and supplemental data not audited.",
+      "supported_facts": [
+        {"id": "RAD-F1", "status": "reported", "fact": "EcoRI or SbfI cleavage precedes T4-ligase attachment of P1, which supplies sample barcode and amplification/sequencing interfaces."},
+        {"id": "RAD-F2", "status": "reported", "fact": "P1-ligated samples are pooled, randomly sheared and size-selected; polished ends are A-tailed before P2 attachment."},
+        {"id": "RAD-F3", "status": "reported", "fact": "P2 is divergent; productive reverse-primer binding follows forward extension from P1. This selectively amplifies P1-containing fragments."},
+        {"id": "RAD-F4", "status": "reported", "fact": "Published P1 designs distinguish EcoRI and SbfI overhang polarity and include phosphorylated oligonucleotides."}
+      ],
+      "quoted_words": 0
+    },
+    {
+      "id": "DDRAD2012",
+      "citation": "Peterson et al. 2012, ddRADseq, doi:10.1371/journal.pone.0037135",
+      "primary_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0037135",
+      "doi_url": "https://doi.org/10.1371/journal.pone.0037135",
+      "accessed_sections": [
+        "Methods: Double Digest Restriction Associated DNA Sequencing",
+        "Methods: Sample Multiplexing via Combinatorial Indexing",
+        "Supporting information descriptions identifying Protocol S1 and Sequences S1"
+      ],
+      "access_limits": "Targeted architecture sections; analytical performance sections and oligonucleotide spreadsheet were not fully inspected.",
+      "supported_facts": [
+        {"id": "DDRAD-F1", "status": "reported", "fact": "Double restriction digestion replaces random shearing and end repair. Libraries select fragments with one end from each enzyme and within the size window."},
+        {"id": "DDRAD-F2", "status": "reported", "fact": "Inline sample barcodes enter by adapter ligation before pooling; a second index enters during pooled-library PCR."},
+        {"id": "DDRAD-F3", "status": "reported", "fact": "Restriction choice and size selection jointly control the genomic subset represented."}
+      ],
+      "quoted_words": 0
+    },
+    {
+      "id": "DDRAD2012_S1",
+      "citation": "Peterson et al. 2012, Protocol S1, detailed ddRADseq laboratory protocol",
+      "primary_url": "https://doi.org/10.1371/journal.pone.0037135.s001",
+      "accessed_copy_url": "https://www.ufjf.br/pgcbio/files/2016/07/PLoS-ONE-2012-Peterson-1.pdf",
+      "accessed_sections": [
+        "Primary protocol reproduced as 7-page PDF: definitions; materials; adapter annealing; double digest; adapter ligation",
+        "Pooling before size selection; size selection; optional streptavidin removal; PCR",
+        "Appendix 1: oligonucleotide-end and overhang design notes"
+      ],
+      "access_limits": "Official PLOS .doc download failed via an expired/inaccessible signed redirect. The accessed document is an academic-site mirror of the primary supplement, not a new independent study. Its bytes were not matched to the inaccessible official .doc. Cost appendix not audited.",
+      "supported_facts": [
+        {"id": "DDS1-F1", "status": "reported_in_accessed_copy", "fact": "Annealed P1/P2 adapters are joined to digested DNA using T4 ligase; both enzymes require an appropriate shared digestion buffer."},
+        {"id": "DDS1-F2", "status": "reported_in_accessed_copy", "fact": "EcoRI/MspI adapter designs accommodate their 5-prime overhangs; SbfI substitution changes the oligonucleotide strand carrying the 3-prime overhang."},
+        {"id": "DDS1-F3", "status": "reported_in_accessed_copy", "fact": "Flexible adapters can accept SphI or NlaIII products, and EcoRI or MluCI products, despite different recognition-site lengths."},
+        {"id": "DDS1-F4", "status": "reported_in_accessed_copy", "fact": "P1/P1 products can amplify but do not form the desired sequencing clusters; optional biotinylated P2 permits their depletion. PCR completes other sequencing interfaces."}
+      ],
+      "quoted_words": 0
+    },
+    {
+      "id": "NEB_LIGASE",
+      "citation": "New England Biolabs, 2025-26 technical reference, T4 DNA Ligase Products",
+      "primary_url": "https://media.neb.com/m/bd28765a734dba9/original/us_neb_catalog_technicalreference_2025_26.pdf",
+      "accessed_sections": ["Manufacturer search-result excerpt for the T4 DNA Ligase Products section"],
+      "access_limits": "Auxiliary chemistry confirmation only. Full catalog fetch exceeded the web reader size limit and the product page timed out; no full-section or full-catalog inspection is claimed.",
+      "supported_facts": [
+        {"id": "NEB-F1", "status": "reported_in_manufacturer_excerpt", "fact": "T4 DNA ligase joins adjacent 5-prime phosphate and 3-prime hydroxyl termini, including cohesive/blunt substrates and nicks in specified duplex contexts."}
+      ],
+      "quoted_words": 0
+    }
+  ],
+  "proposed_rules": [
+    {
+      "id": "DNA-R0",
+      "name": "Declare what must be identical before comparison",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "Name the selected reaction or connected path and its exact incoming/outgoing states.",
+        "State whether the assertion concerns catalytic chemistry, a contextual material transformation, a genomic selection strategy, or an entire assay/module.",
+        "List which interfaces and information effects the definition includes; retain excluded differences explicitly as context."
+      ],
+      "decision_effect": "A shared broad chemistry can be true while a more specific transformation definition fails. Do not resolve an overly specific failed definition by silently dropping its consequential qualifiers.",
+      "profile_questions": ["State context", "Operation transformation", "Operation mechanism", "Operation information effect"],
+      "evidence_facts": ["ATAC-F1", "CHIP-F1", "NEX-F1", "DDRAD-F1"]
+    },
+    {
+      "id": "DNA-R1",
+      "name": "Read the actual substrate and association",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "Record duplex versus single-strand target, free versus nucleoprotein-associated DNA, native versus processed chromatin, bead association, and any prior fragmentation or enrichment when consequential to the asserted scope.",
+        "Determine whether access to DNA is itself the measured selection or only a constraint on library construction.",
+        "Use documented substrate presentation, not the reagent's name, to establish applicability. Restrict a manufacturer substrate statement to its exact assay/version."
+      ],
+      "decision_effect": "Different association can fit a broad Tn5 family yet contradict a definition requiring native-nuclear accessibility probing. An unreported association blocks only claims that need it. RNA use cannot be excluded merely from a reagent being called DNA ligase.",
+      "profile_questions": ["State entity", "State form or association", "State lineage", "Operation context"],
+      "evidence_facts": ["ATAC-F1", "CHIP-F1", "CHIP-F3", "NEX-F2", "NEB-F1"]
+    },
+    {
+      "id": "DNA-R2",
+      "name": "Discriminate the catalytic action",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "For tagmentation, establish an active adapter-loaded transposome, recognition-end-bearing oligonucleotides, target fragmentation and covalent adapter strand transfer within the selected reaction.",
+        "For restriction plus ligation, distinguish sequence-directed cleavage from subsequent ligase-mediated joining at existing fragment ends.",
+        "For a composite selection, identify each constituent process; shared use of one enzyme does not cover other selected transformations."
+      ],
+      "decision_effect": "Tn5 tagging and restriction-plus-T4 ligation can share a library-generation purpose. They fail identity at the fragmentation-and-attachment mechanism scope. They may share only an explicitly coarser joining category, which cannot be used to transfer a reaction recipe.",
+      "profile_questions": ["Operation transformation", "Operation mechanism"],
+      "evidence_facts": ["ADEY-F1", "RAD-F1", "CHIP-F4", "NEB-F1"]
+    },
+    {
+      "id": "DNA-R3",
+      "name": "Check end chemistry independently of labels",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "For a ligation handoff, compare overhang sequence, polarity, terminal phosphate/hydroxyl availability, duplex geometry and required preparation. Use actual adapter designs; a matching adapter label is insufficient.",
+        "For a tagmentation handoff, do not substitute the assumption of fully repaired duplex ends for the source's tagged intermediate and subsequent completion step.",
+        "Record pre-existing fragment ends and fragment-length constraints if the claim requires tagging or recovering those ends."
+      ],
+      "decision_effect": "An explicitly mismatched cohesive end contradicts the proposed direct sticky-end transfer until a supported conversion is added. Unknown end chemistry leaves that handoff unresolved. Adapter-compatible ends support a local interface, not identity of the enzyme's genomic selector.",
+      "profile_questions": ["State form or association", "State identity or information", "Operation transformation", "Operation context"],
+      "evidence_facts": ["RAD-F2", "RAD-F4", "DDS1-F2", "DDS1-F3", "ADEY-F2", "NEX-F4", "NEB-F1"]
+    },
+    {
+      "id": "DNA-R4",
+      "name": "Track oligonucleotide function and attachment time",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "Separate the transposase recognition end, amplification handle, sequencing-primer interface, platform/cluster interface, sample barcode and affinity handle. A single oligonucleotide can carry several functions.",
+        "Record whether each function enters through loaded-adapter strand transfer, end ligation, primer extension/PCR, or affinity labeling.",
+        "Check whether downstream primers or capture blockers recognize the actual resulting sequences and whether the desired combination occurs on a recoverable molecule."
+      ],
+      "decision_effect": "Same broad catalytic mechanism can tolerate different payloads. Functional output identity or transfer requires the necessary payload and downstream recognition. A transposition product is not automatically a completed indexed, cluster-ready library.",
+      "profile_questions": ["State identity or information", "State lineage", "Operation information effect", "Operation context"],
+      "evidence_facts": ["ADEY-F1", "ADEY-F2", "ADEY-F4", "NEX-F1", "RAD-F3", "DDRAD-F2", "DDS1-F4"]
+    },
+    {
+      "id": "DNA-R5",
+      "name": "Preserve the retained product and genomic ascertainment",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "Identify which material is retained through each cleanup, bead separation, elution and size gate.",
+        "Distinguish DNA merely fragmented, covalently tagged, amplifiable, and capable of producing the intended sequencing readout.",
+        "For reduced representation, record recognition-site requirements, one versus two restriction-defined ends, and the size-selection rule."
+      ],
+      "decision_effect": "A change in retained genomic subset contradicts identity at an ascertainment-specific scope even if the enzyme family is shared. Amplification alone does not prove the intended final adapter combination. A cleanup mechanism is separate from an adapter-tagging mechanism.",
+      "profile_questions": ["State entity", "State identity or information", "State lineage", "Operation transformation", "Operation information effect"],
+      "evidence_facts": ["RAD-F1", "RAD-F2", "RAD-F3", "DDRAD-F1", "DDRAD-F3", "DDS1-F4", "NEX-F3"]
+    },
+    {
+      "id": "DNA-R6",
+      "name": "Treat conditions according to their causal role and evidence",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "Retain reported temperature, duration, substrate/enzyme amounts, buffer/cofactor state, inhibitors, washing, quenching and downstream release/completion steps for the actual variant.",
+        "Ask whether a difference changes catalytic family, changes the selected substrate/product, or only leaves performance/compatibility untested.",
+        "For transfer, require support for the candidate reaction in the actual incoming matrix or a documented conversion; matching a few numerical conditions is insufficient."
+      ],
+      "decision_effect": "Condition differences alone neither refute a shared catalytic family nor prove transfer. An omitted condition is blocking only when the asserted scope or proposed handoff depends on it. No universal temperature, concentration, fragment-size or cleanup-equality threshold follows from these papers.",
+      "profile_questions": ["State context", "Operation context", "Operation mechanism"],
+      "evidence_facts": ["ATAC-F2", "CHIP-F2", "CHIP-F3", "NEX-F3", "NEX-F4", "DDS1-F1"]
+    },
+    {
+      "id": "DNA-R7",
+      "name": "Separate common mechanism from measurement identity",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "Describe which pre-existing biological property is selected or read out and which identities are preserved, introduced or lost.",
+        "Keep sample lineage, upstream antibody selection and native accessibility separate from downstream adapter addition.",
+        "Do not infer a biological footprint or an unbiased genomic representation merely from common tagmentation chemistry."
+      ],
+      "decision_effect": "A general adapter-generation purpose may span distinct mechanisms. A common Tn5 catalytic family can span different measurement purposes. Neither relation establishes identical information effects.",
+      "profile_questions": ["State identity or information", "State lineage", "Operation purpose", "Operation information effect"],
+      "evidence_facts": ["ATAC-F1", "ATAC-F3", "CHIP-F1", "NEX-F1", "DDRAD-F1"]
+    },
+    {
+      "id": "DNA-R8",
+      "name": "Judge substitution on directed interfaces",
+      "status": "rule_design_inference",
+      "necessary_checks": [
+        "Write the proposed donor operation, recipient input state, required output state and all planned conversions.",
+        "Evaluate substrate access, catalytic inputs, oligonucleotide/end compatibility, retained product and downstream completion/recognition separately.",
+        "Distinguish a directly demonstrated substitution in a stated context from a chemically plausible interface and from an untested condition change."
+      ],
+      "decision_effect": "A transfer is incompatible as proposed only where an explicit required interface is contradicted and no supported conversion is included. Otherwise missing consequential evidence yields unknown. A shared-mechanism edge supplies precedent; it supplies no general experimental interchangeability claim.",
+      "profile_questions": ["All selected input/output State questions", "Operation transformation", "Operation context"],
+      "evidence_facts": ["CHIP-F3", "CHIP-F5", "ADEY-F4", "NEX-F2", "DDS1-F2", "DDS1-F4"]
+    }
+  ],
+  "decision_sequence": [
+    "Bind the comparison to exact selections, source variant and explicit definition granularity.",
+    "Assess purpose separately; it cannot answer a mechanism question.",
+    "Check the catalytic/material invariant required by that definition, preserving contextual differences.",
+    "If only a proper broader mechanism family fits, propose that family explicitly or report the narrower membership as unsupported/contradicted; never silently weaken the definition.",
+    "If a necessary fact is absent or inaccessible, record that exact unknown rather than treating it as equality or inequality.",
+    "Only for a requested transfer, evaluate the directed interfaces and distinguish documented demonstration, candidate feasibility, unknown and incompatible-as-proposed."
+  ],
+  "cases": [
+    {
+      "id": "DNA-C1",
+      "kind": "positive_shared_mechanism_with_scope_limit",
+      "comparison": "Selected Tn5 fragmentation/tagging reactions in ATAC, ChIPmentation and Nextera",
+      "declared_scope": "Adapter-loaded Tn5 fragmentation with covalent adapter integration into DNA",
+      "expected_judgment": "Shared mechanism family supported by cross-source inference; contextual reaction and assay identity remain different.",
+      "relevant_differences": ["Native nuclei", "Immunoprecipitated bead-bound chromatin", "Purified genomic DNA"],
+      "transfer_judgment": "No general substitution claim follows.",
+      "facts": ["ATAC-F1", "CHIP-F1", "CHIP-F4", "ADEY-F1", "NEX-F1"],
+      "rules": ["DNA-R0", "DNA-R1", "DNA-R2", "DNA-R7", "DNA-R8"]
+    },
+    {
+      "id": "DNA-C2",
+      "kind": "negative_mechanism_identity",
+      "comparison": "Tagmentation versus restriction digestion followed by adapter ligation",
+      "declared_scope": "Physical fragmentation-and-adapter-attachment mechanism",
+      "expected_judgment": "Common library-generation purpose; different catalytic transformations.",
+      "facts": ["ADEY-F1", "RAD-F1", "DDRAD-F1", "DDS1-F1"],
+      "rules": ["DNA-R2", "DNA-R3"]
+    },
+    {
+      "id": "DNA-C3",
+      "kind": "counterexample_same_reagent_different_interface",
+      "comparison": "RAD P1 attachment versus RAD P2 attachment",
+      "declared_scope": "Adapter attachment to the same end state with the same functional outcome",
+      "expected_judgment": "Both involve ligation, but overhang preparation, timing and amplification role prevent this narrower identity.",
+      "facts": ["RAD-F1", "RAD-F2", "RAD-F3", "RAD-F4"],
+      "rules": ["DNA-R3", "DNA-R4"]
+    },
+    {
+      "id": "DNA-C4",
+      "kind": "counterexample_end_compatibility_not_selector_identity",
+      "comparison": "Flexible ddRAD adapter used with SphI versus NlaIII",
+      "declared_scope": "Local ligation interface versus genomic restriction selector",
+      "expected_judgment": "The reported adapter interface can be shared while the genomic selection differs. Supplement-copy provenance qualification applies.",
+      "facts": ["DDS1-F3", "DDRAD-F3"],
+      "rules": ["DNA-R3", "DNA-R5"]
+    },
+    {
+      "id": "DNA-C5",
+      "kind": "counterexample_universal_cleanup_rule",
+      "comparison": "Original ATAC standard versus low-cell route",
+      "declared_scope": "Tn5 tagging family",
+      "expected_judgment": "Different pre-PCR cleanup does not refute the shared tagging mechanism. Preserve the route-specific interface.",
+      "facts": ["ATAC-F2"],
+      "rules": ["DNA-R0", "DNA-R6"]
+    },
+    {
+      "id": "DNA-C6",
+      "kind": "negative_whole_selection_identity",
+      "comparison": "Single tagging reaction versus tagging plus transposome removal plus PCR",
+      "declared_scope": "Entire selected path has one shared tagging mechanism",
+      "expected_judgment": "Reject that whole-selection claim; only its tagging constituent fits. Do not add invented intermediates to force alignment.",
+      "facts": ["NEX-F1", "NEX-F3"],
+      "rules": ["DNA-R0", "DNA-R2", "DNA-R4"]
+    },
+    {
+      "id": "DNA-C7",
+      "kind": "incompatible_as_proposed",
+      "comparison": "Directly substitute an EcoRI-end P1 adapter onto a SbfI-cleaved substrate without redesign or end conversion",
+      "declared_scope": "Direct complementary-end ligation handoff",
+      "expected_judgment": "The explicit end interface is contradicted. This is a failure of the proposed direct route, not proof that no redesigned route could work.",
+      "facts": ["RAD-F4", "DDS1-F2"],
+      "rules": ["DNA-R3", "DNA-R8"]
+    },
+    {
+      "id": "DNA-C8",
+      "kind": "unknown_transfer",
+      "comparison": "Move a purified-DNA tagmentation recipe directly onto immunoprecipitated bead-bound chromatin",
+      "declared_scope": "Same chemistry implies the same usable operating conditions and output",
+      "expected_judgment": "Shared Tn5 family is supported; arbitrary condition transfer is unresolved. The paper's actual adapted bead protocol is a precedent, not evidence for every recipe.",
+      "facts": ["CHIP-F1", "CHIP-F2", "CHIP-F3"],
+      "rules": ["DNA-R1", "DNA-R6", "DNA-R8"]
+    },
+    {
+      "id": "DNA-C9",
+      "kind": "counterexample_payload_timing",
+      "comparison": "PCR-appended platform sequences versus PCR-free loaded platform sequences",
+      "declared_scope": "Tn5 tagging family versus completed-library transformation",
+      "expected_judgment": "Tagging family can be shared while platform completion enters at a different stage. The downstream handoff must name the actual product.",
+      "facts": ["ADEY-F1", "ADEY-F2"],
+      "rules": ["DNA-R4", "DNA-R5"]
+    },
+    {
+      "id": "DNA-C10",
+      "kind": "counterexample_amplifiable_not_sequencing_competent",
+      "comparison": "ddRAD P1/P1 versus P1/P2 adapter combinations",
+      "declared_scope": "Usable cluster-generating output",
+      "expected_judgment": "PCR amplification is insufficient to assert the desired sequencing output; verify the retained adapter combination. Supplement-copy provenance qualification applies.",
+      "facts": ["DDS1-F4"],
+      "rules": ["DNA-R4", "DNA-R5"]
+    },
+    {
+      "id": "DNA-C11",
+      "kind": "unknown_critical_end_state",
+      "comparison": "Transfer a reported adapter-ligation operation to an extracted state labeled only fragmented DNA",
+      "declared_scope": "Direct ligation without additional preparation",
+      "expected_judgment": "Unknown until the required overhang/terminal/duplex interface is supported. Do not invent blunt ends, A-tails or phosphorylation.",
+      "facts": ["RAD-F2", "RAD-F4", "NEB-F1"],
+      "rules": ["DNA-R3", "DNA-R8"]
+    },
+    {
+      "id": "DNA-C12",
+      "kind": "negative_assay_level_identity",
+      "comparison": "Single-enzyme RAD and ddRAD complete library paths",
+      "declared_scope": "Identical genomic-fragment selection architecture",
+      "expected_judgment": "A broader restriction-associated reduced-representation family is shared; random-sheared second ends versus two restriction-defined ends defeats this narrower identity.",
+      "facts": ["RAD-F2", "DDRAD-F1"],
+      "rules": ["DNA-R0", "DNA-R5", "DNA-R7"]
+    }
+  ],
+  "audit_limits": [
+    "These are curator-designed necessary checks for declared claims, not universally sufficient experimental compatibility rules.",
+    "A numeric tolerance is not supplied for buffer, temperature, substrate amount, enzyme loading or fragment-size differences. Reported conditions are source-specific observations.",
+    "Tn5 specificity, enzyme variation, methylation sensitivity, terminal damage and matrix effects need targeted primary evidence when a proposed definition or transfer depends on them; they were not exhaustively audited here.",
+    "Commercial reagent names do not disclose every loaded oligonucleotide or enzyme composition. Do not promote inferred identity to directly reported molecular detail.",
+    "The primary ddRAD supplement was inspected through an academic mirror with explicit provenance limitations; acquire and verify the official supplement before using its exact sequences for an execution claim.",
+    "The NEB chemistry excerpt is auxiliary and openly marked as such; obtain the full specification or primary biochemical study if an adjudication depends on a substrate configuration beyond the inspected protocol evidence.",
+    "No source here establishes general interchangeability across ATAC, ChIPmentation, Nextera or RAD/ddRAD. Reported successful protocols establish bounded precedents.",
+    "No software tests, biological experiments or fresh model-admission runs were performed. This artifact does not validate extraction accuracy or matching performance."
+  ]
+}

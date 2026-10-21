@@ -1,0 +1,239 @@
+{
+  "format_version": "domain_rule_audit/1.0",
+  "audit_date": "2026-10-21",
+  "domain": "Origin indexing during transcript-to-DNA construction",
+  "status": "primary_source_grounded_design_audit_with_explicit_access_limits",
+  "scope": "Scientific comparison rules, not a replacement State/Operation schema, registry admission, executable assay validation, or ancestry determination.",
+  "local_contract_frozen_before_recommendations": {
+    "ambiguity_class": "Consequence-bearing information semantics: what origin a product can identify and what chemical or physical operation creates that association.",
+    "observable_input": "Exact selected Operations, their actual input/output States and flows, source-bound open-text ComparisonProfile assertions, and original experimental evidence.",
+    "target": "Assess a declared shared-purpose or shared-mechanism claim at its stated scope; preserve each source workflow and its uncertainty.",
+    "invariants": [
+      "Do not invent intermediate States, missing barcode layers, pooling steps, physical isolation, or covalent attachments.",
+      "Different operation counts are allowed; a connected multi-operation selection may realize the comparison contract.",
+      "Purpose similarity, mechanism sharing, experimental interchangeability and historical reuse are different claims.",
+      "Unknown or unassessed details supply neither agreement nor evidence of absence."
+    ],
+    "success_controls": "The explicit positive, hard-negative and unknown questions below distinguish information-bearing origin indices from lexical barcode matches.",
+    "unidentifiable_claims": [
+      "Exact native molecular location cannot be recovered merely from a capture-site barcode.",
+      "An origin barcode does not certify one cell, zero contamination, a collision-free namespace, one RNA per UMI, or a finished library.",
+      "Matching chemistry or purpose does not establish method ancestry or that a proposed transfer will work experimentally."
+    ]
+  },
+  "local_context": {
+    "comparison_document": "docs/COMPARISON_PROFILES.md",
+    "comparison_document_sha256": "2e5d912f4d4cee89ad44f0c5e9b0fa5d3f3f0904deb0917b8623f931ed437c5a",
+    "concept_id": "origin_indexed_transcript_dna_construction",
+    "concept_snapshot": "../technology_atlas/v2/work/qiu_experiments_20261020/ten_method_overview_01/monitoring/final_archive_selected/phase/graph_with_shared_operations.json",
+    "concept_snapshot_sha256": "6b122a646db300655058e3c29140a62f15bc726b746fcfb61eb920ca853f3782",
+    "observed_relation": "shared_purpose",
+    "interpretation": "The existing definition explicitly permits different supports, tag schedules, origin scales and incomplete downstream layers. Its null common mechanism is intentional. The audit does not upgrade that definition to shared_mechanism.",
+    "member_scope_limit": "Drop-seq, DBiT-seq and SPLiT-seq chemistry were examined here. DR-seq membership was not independently audited in this file. ST and Slide-seq are reference comparisons, not newly admitted members."
+  },
+  "sources": [
+    {
+      "id": "dropseq_2015",
+      "title": "Macosko et al. Highly Parallel Genome-wide Expression Profiling of Individual Cells Using Nanoliter Droplets, Cell 2015",
+      "url": "https://mccarrolllab.org/wp-content/uploads/2014/12/Macosko_Cell_1-s2.0-S0092867415005498-main.pdf",
+      "doi": "10.1016/j.cell.2015.05.002",
+      "accessed_sections": ["Results: Split-Pool Synthesis; Sequencing and Analysis of Many STAMPs", "Figure 1B-D and Figure 2A-C", "Experimental Procedures: Drop-Seq Procedure, journal p. 1212"],
+      "access": "Author-laboratory copy of primary paper opened and searched, 2026-10-21.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "D1", "fact": "Cells lyse in droplets; released polyadenylated RNA hybridizes to bead oligo(dT) primers. Droplets are broken and beads washed before pooled reverse transcription produces covalently extended bead-linked cDNA."},
+        {"id": "D2", "fact": "Each primer contains a common handle, bead-shared 12-base cell barcode, variable 8-base UMI and oligo(dT). Split-pool barcode synthesis occurs during bead manufacture, before cell processing."},
+        {"id": "D3", "fact": "RT precedes exonuclease-I removal of unextended primers and cDNA PCR. Dilution during droplet breaking reduces post-breakage hybridization; single-cell attribution is evaluated using species mixing."}
+      ]
+    },
+    {
+      "id": "dropseq_protocol_v1",
+      "title": "Macosko and Goldman, Drop-seq Laboratory Protocol version 1.0, May 2015",
+      "url": "https://mccarrolllab.org/wp-content/uploads/2015/05/Drop-seq-Protocol-v1.0-May-2015.pdf",
+      "accessed_sections": ["Introductory version/scope statement", "Post-droplet bead recovery and reverse-transcription workflow"],
+      "access": "Original author protocol opened and searched, 2026-10-21.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "DP1", "fact": "The authors explicitly distinguish this optimized protocol from the exact experiments reported in the Cell paper. Protocol version must therefore remain attached to operational claims."}
+      ]
+    },
+    {
+      "id": "dbit_2020",
+      "title": "Liu et al. High-Spatial-Resolution Multi-Omics Sequencing via Deterministic Barcoding in Tissue, Cell 2020",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7736559/",
+      "doi": "10.1016/j.cell.2020.10.026",
+      "accessed_sections": ["Results and Figure 1A", "STAR Methods: In-tissue barcoding and reverse transcription; Adding the second set of barcodes and ligation; cDNA collection; Data processing", "Supplementary Figure S1A legend"],
+      "access": "Primary full text and detailed supplementary figure legend opened, 2026-10-21.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "B1", "fact": "Barcode-A oligo(dT) primers are delivered through parallel channels to formaldehyde-fixed tissue; in-tissue RT makes barcode-A-linked cDNA. A perpendicular second channel array delivers barcode B and a complementary linker for T4-DNA-ligase-mediated joining."},
+        {"id": "B2", "fact": "A identifies one channel; the ordered A/B combination identifies an intersection pixel. Barcode B contains the UMI, handle and biotin. Both barcode layers are installed before tissue digestion, cDNA recovery, template switching and PCR."},
+        {"id": "B3", "fact": "The supplementary chemistry legend identifies the ligated junction as DNA barcode A to DNA barcode B. Transcriptomic counts are grouped by the spatial A/B combination; antibody-derived tags additionally identify the measured protein."}
+      ]
+    },
+    {
+      "id": "dbit_protocol_2021",
+      "title": "Su et al. Spatial multi-omics sequencing for fixed tissue via DBiT-seq, STAR Protocols 2021",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8132129/",
+      "doi": "10.1016/j.xpro.2021.100532",
+      "accessed_sections": ["Summary", "Library preparation, steps 60-67", "Limitations"],
+      "access": "Official author protocol opened, 2026-10-21; separately dated contextual source.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "BP1", "fact": "The protocol explicitly says DBiT-seq does not directly resolve single cells. Pixel mixtures or fractions of cells require separate segmentation/deconvolution evidence; small nominal feature size alone does not establish cellular identity."},
+        {"id": "BP2", "fact": "Indexed P7 primers are used during sequencing-library PCR after spatially barcoded cDNA generation. This downstream index is a distinct layer from the A/B spatial address."}
+      ]
+    },
+    {
+      "id": "splitseq_2018",
+      "title": "Rosenberg et al. Single-cell profiling of the developing mouse brain and spinal cord with split-pool barcoding, Science 2018; author manuscript title differs",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7643870/",
+      "doi": "10.1126/science.aam8999",
+      "accessed_sections": ["Primary manuscript paragraphs preserved as p00135-p00136, p00140-p00141 and p00145 in local source packet", "Published Figure 1A via PubMed"],
+      "access": "Fresh PMC route returned a browser check; read existing source-bound primary-paper rendition and cross-checked the published Figure 1 description at https://pubmed.ncbi.nlm.nih.gov/29545511/.",
+      "local_packet": "../technology_atlas/v2/work/benchmark_20261020/grounding_inputs_local_01/splitseq-rosenberg-2018.json",
+      "local_packet_sha256": "61d0806a36793404b6749905e6627d0afdc007d4bfafbf4b0c86726c22467f82",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "S1", "fact": "Fixed cells or nuclei serve as compartments. RT writes the first well barcode; two further pool/redistribution rounds append DNA barcodes by ligation. The third barcode supplies the UMI."},
+        {"id": "S2", "fact": "After three rounds, intact barcoded compartments are pooled and allocated to sublibraries. Library PCR adds a fourth index; transcriptomes are assembled using the four-barcode combination."},
+        {"id": "S3", "fact": "The manuscript's generic 96-well description and the reported CNS experiment's 48-by-96-by-96-by-14 configuration are different levels of specification, not grounds to invent identical per-round schedules for every experiment."}
+      ]
+    },
+    {
+      "id": "splitseq_supplement_2018",
+      "title": "Rosenberg et al. original Science 2018 supplementary Materials and Methods",
+      "url": "https://ftp.ebi.ac.uk/pub/databases/biostudies/S-EPMC/870/S-EPMC7643870/Files/NIHMS1581077-supplement-Supp_Combined.pdf",
+      "accessed_sections": ["In situ reverse transcription p00016", "Ligation/barcoding oligos p00019-p00024", "Sublibrary allocation and lysis p00026", "Library PCR p00036; sequencing p00038; processing p00045"],
+      "access": "Fresh publisher/EBI access failed; read preserved supplement rendition in the same exact local packet as splitseq_2018. The URL identifies its recorded original, not a newly successful download.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "SS1", "fact": "Both random-hexamer and anchored poly(dT) RT primers are used. Ligation uses annealed barcode/linker DNA with complementary overhangs. Blocking precedes pooling to prevent unused barcode oligos from relabeling products."},
+        {"id": "SS2", "fact": "The third-round oligo provides UMI, universal PCR handle and biotin. Counted compartments are aliquoted to sublibraries before crosslink reversal and lysis; distinct PCR indices subsequently label those sublibraries."},
+        {"id": "SS3", "fact": "Read 2 covers UMI and three cellular barcode components; the index read records the fourth sublibrary barcode. Original cDNA is amplified before tagmentation, so one UMI/address combination may produce different transcript fragments."}
+      ]
+    },
+    {
+      "id": "splitseq_protocol_v3",
+      "title": "Seelig laboratory SPLiT-seq Protocol Version 3.0, October 27, 2017",
+      "url": "https://www.seeliglab.org/uploads/5/9/9/7/59974251/split-seq_protocol_v3.0",
+      "accessed_sections": ["DNA Barcoding Plate Generation, pp. 1-2", "Ligation, pp. 6-7", "Lysis, pp. 7-8", "Tagmentation/Illumina sequencing, p. 14"],
+      "access": "Official laboratory protocol opened and searched, 2026-10-21; supplement takes precedence for exact paper-specific claims.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "SP1", "fact": "The plate-preparation instructions distinguish RT primers from the two ligation plates, pool cells between ligations, and identify the sublibrary sequencing index as the fourth barcode. This corroborates the original supplementary schedule."}
+      ]
+    },
+    {
+      "id": "st_2016",
+      "title": "Ståhl et al. Visualization and analysis of gene expression in tissue sections by spatial transcriptomics, Science 2016",
+      "url": "https://doi.org/10.1126/science.aaf2403",
+      "accessed_sections": ["Primary report p. 78 workflow description", "Figure 2A and p. 79 capture/RT/array description", "Diffusion assessment, Figure 2E-F"],
+      "access": "Primary report read from preserved compound-reprint rendition; publisher route returned 403. Source host is a reprint, not an independent method account.",
+      "reprint_url": "https://s3-us-west-1.amazonaws.com/ptab-filings%2FIPR2024-01289%2F1019",
+      "local_packet": "../technology_atlas/v2/work/benchmark_20261020/grounding_inputs_local_01/spatial-stahl-2016.json",
+      "local_packet_sha256": "4159a067311dfde2ac094a60625451d34728d0780db1420541598be85f7bd936",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "T1", "fact": "Tissue is placed on immobilized oligo(dT) RT primers, fixed, stained, imaged and permeabilized. Captured RNA is reverse-transcribed to surface-linked cDNA; tissue removal leaves that cDNA on the array."},
+        {"id": "T2", "fact": "A feature's probe includes a cleavage region, T7/sequencing handle, positional barcode, UMI and oligo(dT)VN. Positional barcodes associate sequencing data with array features registered to tissue images; the paper assesses lateral diffusion rather than asserting exact molecular coordinates."}
+      ]
+    },
+    {
+      "id": "st_automation_2016",
+      "title": "Jemt et al. An automated approach to prepare tissue-derived spatially barcoded RNA-sequencing libraries, Scientific Reports 2016",
+      "url": "https://www.nature.com/articles/srep37137",
+      "doi": "10.1038/srep37137",
+      "accessed_sections": ["Results: Automation of spatial transcriptomics", "Figure 1 legend", "Methods: adaptation overview and Gingival tissue library (index PCR, spatial barcode and UMI processing)"],
+      "access": "Same-author-group primary adaptation opened, 2026-10-21; it is separately identified and does not substitute for the inaccessible original supplement.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "TA1", "fact": "The authors describe adaptation of the original ST protocol. Surface capture probes already contain spatial barcode and UMI. After on-array synthesis and release, second-strand synthesis and in-vitro transcription amplify the products; subsequent PCR indices multiplex different tissue sections."},
+        {"id": "TA2", "fact": "Adapter ligation to amplified RNA occurs downstream of origin encoding. The presence of RNA ligation in a library does not mean its spatial barcode was attached to original RNA by ligation."}
+      ]
+    },
+    {
+      "id": "slideseq_2019",
+      "title": "Rodriques et al. Slide-seq: A scalable technology for measuring genome-wide expression at high spatial resolution, Science 2019",
+      "url": "https://macoskolab.com/wp-content/uploads/2019/04/slideseq_full.pdf",
+      "doi": "10.1126/science.aaw1219",
+      "accessed_sections": ["Primary report p. 1 bead-array construction, tissue RNA transfer and cell-type mixtures", "Figure 1A-B, p. 2", "Data/code availability and references 5, 7 and 31"],
+      "access": "Author-laboratory primary-paper PDF opened; PMC primary full-text search also available. Original supplement routes returned 403/unavailable.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "L1", "fact": "DNA-barcoded beads are deposited randomly as a monolayer. SOLiD sequencing determines barcode identity at positions before tissue placement; released tissue RNA is captured on the beads. Figure 1B places RT/tissue digestion before tube transfer and amplification."},
+        {"id": "L2", "fact": "The paper explicitly compares its beads with Drop-seq beads and cites the Drop-seq library approach. Spatial profiles can contain contributions from multiple cell types; the readout is a bead location, not an identified original single cell."}
+      ]
+    },
+    {
+      "id": "slideseq_original_code",
+      "title": "broadchenf/Slideseq original author repository",
+      "url": "https://github.com/broadchenf/Slideseq/tree/392b6ed9d7283f36997bc33c1d258fbe9faae63a",
+      "commit": "392b6ed9d7283f36997bc33c1d258fbe9faae63a",
+      "tree": "a9055e7d04b04cfee70b3146a4a224cd2740d625",
+      "accessed_sections": ["BeadSeq Code/ReadMe.txt, Puck Processing and Barcode Matching", "PipelineFunctions/Puck_X_Pipeline.m, call to MapIlluminaToPuck at line 238", "BeadSeq Code/MapIlluminaToPuck.m, barcode filtering and reciprocal-unique mapping at lines 199-280", "BeadSeq Code/CompareBarcodes.m, legacy short script inspected but not relied on as final pipeline"],
+      "access": "Read through GitHub connector, 2026-10-21. Code not executed or copied; repository metadata reports no top-level license.",
+      "quoted_words": 0,
+      "reported_facts": [
+        {"id": "LC1", "fact": "The template pipeline actually calls MapIlluminaToPuck. That function joins sequencing barcodes to spatially decoded bead barcodes using distance and uniqueness filters, retains bead locations and matching DGE columns, and writes a bijective mapping. Barcode-to-coordinate decoding is an explicit operation with rejection rules, not an intrinsic coordinate embedded in arbitrary barcode text."}
+      ]
+    }
+  ],
+  "design_inference": {
+    "label": "Audit recommendations derived from the reported facts, not claims that the authors proposed these comparison rules.",
+    "decision": "Adopt the existing broad concept as shared_purpose. Adapt source-specific chemistry and provenance into existing profile assertions. Reject whole-cut mechanism equivalence based only on barcoded cDNA, split-pool terminology, ligation terminology, spatial resolution, or shared instrument names.",
+    "minimum_evidence_questions": [
+      {"id": "R1", "question": "What entity supplies biological origin, where is RNA at the moment of association, and what physically preserves that association until an address is readable?", "why": "Distinguish native cells/nuclei, bounded tissue regions, released RNA and capture supports. A compartment is mechanistic when its retention function is part of the asserted mechanism.", "facts": ["D1", "S1", "B1", "T1", "L1"]},
+      {"id": "R2", "question": "At each selected boundary, is the association hybridization, primer-extension incorporation, a covalent ligation, a physical allocation, or only recorded metadata?", "why": "Binding and covalent writing have different output contracts. Do not promote an RNA-primer duplex into barcode-bearing cDNA before synthesis.", "facts": ["D1", "B1", "SS1", "T1"]},
+      {"id": "R3", "question": "For a ligation claim, which molecular species are joined, at what termini, with which linker/templating arrangement, and for which information role?", "why": "A DNA-to-DNA barcode extension, ligation to RNA, and an adapter added after amplification are distinct candidates unless a narrowly declared mechanism deliberately spans them and the evidence supports that abstraction.", "facts": ["B3", "SS1", "TA2"]},
+      {"id": "R4", "question": "What is pooled or split, when, and what identity-bearing carrier survives each mixing event?", "why": "Track cells, nuclei, beads, free RNA, cDNA, amplified products and sublibraries separately. Manufacturing a reagent by split-pool synthesis does not establish that sample molecules underwent combinatorial cell routing.", "facts": ["D2", "S1", "SS1", "SS2"]},
+      {"id": "R5", "question": "What is the complete decoding key and its namespace, and which components are present or physically allocated at the selected output?", "why": "Distinguish cell key, UMI, spatial axis, capture feature, sample, antibody identity and sequencing handle. Record required sample/array/puck or sublibrary metadata; sequence equality across independent namespaces does not establish biological identity.", "facts": ["D2", "B2", "B3", "S2", "SS3", "T2", "LC1"]},
+      {"id": "R6", "question": "What address resolution is actually established here: one grouping component, a full combinatorial compartment key, one spatial axis, a pixel, or a capture site with a coordinate lookup?", "why": "A partial address can support partial origin preservation. It cannot satisfy a definition requiring a completed finer address. Judge completeness relative to the claim, without silently extending the selected cut.", "facts": ["B2", "S2", "T2", "LC1"]},
+      {"id": "R7", "question": "When is the molecule identifier installed relative to the first amplification, what molecular population does it identify, and how is it interpreted with the origin key?", "why": "Origin preservation and molecule counting are independent requirements. A pre-amplification UMI can support deduplication subject to collisions and assay biases; a fresh tag after amplification cannot restore original molecule identity. Equal UMI text alone is not a molecule identity claim.", "facts": ["D2", "D3", "B2", "SS2", "SS3", "T2", "TA1"]},
+      {"id": "R8", "question": "Does a claimed native spatial origin follow from a verified capture-to-tissue registration and adequately bounded transport, or only from a capture feature's measured location?", "why": "Keep measured address, inferred original location, tissue thickness, mixtures and transport uncertainty separate. Near-cell-sized features do not certify singlets or exact original molecular coordinates.", "facts": ["BP1", "T2", "L2", "LC1"]},
+      {"id": "R9", "question": "Does the index distinguish only bulk libraries, or does a documented physical allocation make it a necessary component of the origin decoding key?", "why": "Neither PCR introduction nor an index-read channel determines information role. Generic dual/sample indexing alone fails the existing cell/nuclear/spatial purpose requirement; an experimentally defined combinatorial component can contribute to it.", "facts": ["BP2", "S2", "SS2", "SS3", "TA1"]},
+      {"id": "R10", "question": "Which requirements are intrinsic to the declared mechanism, and which are context or implementation choices?", "why": "Require evidence for the transformation, substrate roles, association chemistry, causal order and information effect that define the mechanism. Equal barcode length, support material, number of Operations, fixation, UMI presence, biotin or final-library status is unnecessary unless included in that particular definition.", "facts": ["D1", "B1", "S1", "T1", "L1"]}
+    ],
+    "relation_decisions": [
+      {"relation": "shared_mechanism", "required": "Source-supported agreement on the principle-bearing transformation at the same declared granularity, with actual material and information continuity and no known contradiction in defining preconditions or outputs.", "boundary": "A narrowly scoped barcoded-primer extension may recur in different contexts. That alone does not make all the surrounding capture, routing, ligation and recovery steps one shared mechanism."},
+      {"relation": "shared_purpose", "required": "Evidence that each selected unit performs transcript-to-DNA construction while establishing or carrying a documented cell/nuclear/spatial grouping association at the declared completeness.", "boundary": "Different chemistry, operation counts and output carriers are compatible with this purpose. A selection containing only bulk multiplexing or only unindexed cDNA fails; a partial component must not be presented as a complete address."},
+      {"relation": "unknown", "required": "A required defining detail is absent, inaccessible, ambiguous or not assessed.", "boundary": "Report the missing fact and the source section needed. Do not infer compatibility, incompatibility, chemical absence or novelty from that gap."},
+      {"relation": "new_context_transfer_candidate", "required": "Identify a source-supported principle, a materially different proposed context, retained assumptions, changed interfaces and evidence needed for successful adaptation.", "boundary": "Existing use in another context is relevant evidence, not automatic occupation of every new context. A context transfer may share a submechanism while changing purpose, resolution or origin interpretation. No historical edge follows without separate provenance."}
+    ],
+    "example_comparisons": [
+      {"pair": "Drop-seq whole capture/recovery/RT cut versus DBiT A-RT/B-ligation cut", "assessment": "Shared purpose supported; whole-mechanism equality contradicted by different association and address-writing schedules. A common RT submechanism remains a separately scoped question."},
+      {"pair": "DBiT sequential barcoding versus SPLiT combinatorial barcoding", "assessment": "Same broad purpose does not erase fixed spatial intersection versus routed compartment history. DNA-ligation suboperations can be investigated at narrower scope, requiring the actual joins and outputs."},
+      {"pair": "Drop-seq bead chemistry versus Slide-seq spatial capture", "assessment": "Plausible component transfer and explicitly acknowledged related bead/library approach. New spatial context requires decoded coordinates and transport assumptions; it changes what the address means. The inspected evidence does not justify automatic whole-workflow equality or a new ancestry edge."},
+      {"pair": "ST array capture versus Slide-seq bead capture", "assessment": "Shared spatial-preservation purpose; candidate common surface-primed capture/RT principle. Deterministic printed addresses versus randomly placed, decoded bead identities and distinct library implementations must remain visible. Full mechanism/UMI equivalence is unresolved here."}
+    ]
+  },
+  "test_questions": [
+    {"id": "P1", "kind": "positive", "question": "Can different-length connected selections qualify for the same origin-preservation purpose when their real outputs and address-bearing transformations satisfy the definition?", "expected": "Yes; no one-to-one stage alignment or invented intermediate is required."},
+    {"id": "P2", "kind": "positive", "question": "Can a PCR-added index participate in cell identification when cells were allocated to sublibraries before lysis and the decoding key uses that index?", "expected": "Yes; distinguish this documented allocation from bulk multiplexing alone.", "facts": ["S2", "SS2", "SS3"]},
+    {"id": "P3", "kind": "positive", "question": "Can a partial spatial address support a claim explicitly limited to one axis or a bounded stripe?", "expected": "Yes, if source-supported and labeled partial; it does not establish a complete pixel."},
+    {"id": "P4", "kind": "positive", "question": "Can a bead-supported cDNA operation and an in-tissue cDNA operation share an explicitly narrow polymerase-extension principle?", "expected": "Potentially yes after source review; that decision does not merge their surrounding mechanisms."},
+    {"id": "P5", "kind": "positive", "question": "Can an origin-preserving operation qualify without a UMI when its definition does not require original-molecule counting?", "expected": "Yes; origin grouping and molecule counting are separate claims."},
+    {"id": "N1", "kind": "hard_negative", "question": "Does mRNA hybridized to a barcoded primer already constitute a covalently barcoded cDNA product?", "expected": "No; preserve the pre-RT duplex state."},
+    {"id": "N2", "kind": "hard_negative", "question": "Does RT necessarily occur inside Drop-seq droplets?", "expected": "No; original Drop-seq performs pooled RT after droplet breaking and washing.", "facts": ["D1", "D3"]},
+    {"id": "N3", "kind": "hard_negative", "question": "Does DBiT attach spatial barcode B directly to original RNA using RNA ligation?", "expected": "No; the reported barcode-writing join links DNA oligos A and B after RT.", "facts": ["B1", "B3"]},
+    {"id": "N4", "kind": "hard_negative", "question": "Do split-pool-manufactured Drop-seq beads establish the same sample-routing mechanism as SPLiT-seq?", "expected": "No; the entities and timing of the split/pool cycles differ."},
+    {"id": "N5", "kind": "hard_negative", "question": "Does DBiT barcode A alone identify the A/B intersection pixel?", "expected": "No; the second axis is absent. Preserve its valid coarser spatial information."},
+    {"id": "N6", "kind": "hard_negative", "question": "Does a selection ending after three SPLiT barcode rounds automatically contain the fourth molecular index?", "expected": "No; describe physical sublibrary allocation if present and the downstream molecular layer as incomplete."},
+    {"id": "N7", "kind": "hard_negative", "question": "Do two bulk Illumina sample indices by themselves identify cells or tissue pixels?", "expected": "No; index count and dual-index terminology are not origin evidence."},
+    {"id": "N8", "kind": "hard_negative", "question": "Does a barcode mapped to a bead coordinate prove the original RNA occupied that exact coordinate or came from one cell?", "expected": "No; registration, transfer and mixture limits remain separate."},
+    {"id": "N9", "kind": "hard_negative", "question": "Can random molecular labels added only after first amplification identify original transcripts?", "expected": "No; this loses the original-molecule counting contract."},
+    {"id": "N10", "kind": "hard_negative", "question": "Does downstream ligation of an amplified RNA adapter establish RNA-ligation-based origin barcode writing?", "expected": "No; information role and timing must be traced."},
+    {"id": "N11", "kind": "hard_negative", "question": "Are identical barcode strings across separate arrays, pucks or sublibraries sufficient to merge origin identities?", "expected": "No; retain the namespace and documented key."},
+    {"id": "N12", "kind": "hard_negative", "question": "Does a shared-purpose match establish component interchangeability, experimental success, or method descent?", "expected": "No; each needs independent evidence."},
+    {"id": "U1", "kind": "unknown_control", "question": "A paper says only 'barcoded' and does not identify its carrier, join or key. Can it receive shared-mechanism membership?", "expected": "Unknown pending original Methods/oligo evidence, not a positive match or supported absence."},
+    {"id": "U2", "kind": "unknown_control", "question": "Can the inaccessible original Slide-seq supplement be replaced silently with a later Slide-seqV2 protocol?", "expected": "No; later protocols can be separately scoped contextual evidence, not proof of the 2019 exact implementation."},
+    {"id": "T1", "kind": "context_transfer_control", "question": "Can moving an established barcoded-primer principle to a new compartment, analyte or origin scale be investigated despite another-context precedent?", "expected": "Yes; state retained principle, changed assumptions and falsification experiment. Do not declare novelty or ancestry from similarity alone."}
+  ],
+  "remaining_uncertainty": [
+    "Original ST supplementary Methods bodies are missing from the available text rendition; headings and cover do not count as reading them. Exact release chemistry, kinetics and complete oligo schedule were not independently recovered here. Jemt 2016 is a distinct primary adaptation.",
+    "Original Slide-seq supplementary routes were unavailable. Main-report evidence and pinned mapping code support spatial capture/decoding, but this audit does not certify exact original UMI introduction, linker architecture, RNA capture kinetics or all library variants.",
+    "SPLiT original Methods were read through preserved source-bound renditions rather than a fresh successful PMC/EBI download. This preserves factual access while avoiding a false claim of fresh binary custody.",
+    "No wet-lab experiment, error-rate reanalysis, source re-registration, candidate admission or model execution was performed. Passing future software questions would verify decision handling, not experimental validity."
+  ],
+  "implementation_boundary": "Use these as evidence questions in existing State/Operation profile assertions and reviewer prompts. Root agent owns any code changes. This worker writes only this audit JSON and leaves frozen records unchanged."
+}

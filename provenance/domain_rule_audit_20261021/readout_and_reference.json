@@ -1,0 +1,127 @@
+{
+  "format_version": "readout_reference_audit/1.0",
+  "audit_date": "2026-10-21",
+  "status": "Targeted primary-source reading and official-code inspection, not full protocol extraction or model evaluation.",
+  "primary_sources": [
+    {
+      "id": "GARALDE2018",
+      "url": "https://doi.org/10.1038/nmeth.4577",
+      "read_copy": "https://cmb.i-learn.unito.it/pluginfile.php/13256/mod_folder/content/0/Biblio_Nanopore_NatMethods2018.pdf",
+      "inspected_sections": [
+        "Main text: RNA strand translocation and ionic-current detection",
+        "Online Methods: screening translocases, adapter design, preparation of RNA for sequencing"
+      ],
+      "access_limit": "Publisher page offered subscription preview; full primary-paper PDF read at university mirror. No numeric recipe transcribed from OCR. Modern protocols were not substituted for this version.",
+      "facts": [
+        {
+          "id": "G1",
+          "reported": "This version describes ligating poly(A)+ RNA to a poly(T)-bearing adapter with T4 DNA ligase; a motor-loaded sequencing adapter is subsequently ligated."
+        },
+        {
+          "id": "G2",
+          "reported": "The method physically reads RNA through a nanopore ionic-current signal; RNA-compatible motor and signal interpretation are part of the readout architecture."
+        }
+      ],
+      "derived_rules": [
+        "Reagent names are insufficient substrate evidence.",
+        "Identify the molecule sensed and the decoder; do not impose RT, PCR or DNA barcodes on every sequencing technology.",
+        "An original protocol version and a later library-preparation variant are distinct evidence scopes."
+      ]
+    },
+    {
+      "id": "HIC2009",
+      "url": "https://doi.org/10.1126/science.1181369",
+      "read_copy": "https://web.mit.edu/kardar/www/teaching/IITS/lectures/lec6/Science-2009-Lieberman-Aiden-289-93.pdf",
+      "inspected_sections": [
+        "Target article main text workflow and Figure 1A; target begins after preceding article in compound PDF"
+      ],
+      "access_limit": "Original supplementary PDF exceeded web reader limit and was not read; no detailed reaction recipe is claimed here.",
+      "facts": [
+        {
+          "id": "H1",
+          "reported": "The reported sequence crosslinks chromatin, digests DNA, fills restriction ends with biotin labeling, ligates under dilution, then shears and enriches biotin-marked junctions for sequencing."
+        }
+      ],
+      "derived_rules": [
+        "The information role of a ligation junction can be genomic-pair proximity rather than an amplification or instrument handle.",
+        "A narrowly declared DNA-end-joining family must not establish equivalence of the larger information-recording transformation."
+      ]
+    }
+  ],
+  "implementation_references": {
+    "labop": [
+      {
+        "repository": "Bioprotocols/labop",
+        "commit": "2e2bd88150c71a440771fd369f40295dfd622324",
+        "file": "labop/protocol.py",
+        "local_path": "external/harness_references/protocol_structure_audit_20261014/labop/labop/protocol.py",
+        "sha256": "bb31f8dc26d5a4c3d9ef199e1b0be504a3168f7a7c72a0204f1f66e6f4c8037b",
+        "inspected_symbols": [
+          "Protocol.execute_primitive",
+          "Protocol.primitive_step"
+        ],
+        "copied_code": false
+      },
+      {
+        "repository": "Bioprotocols/labop",
+        "commit": "2e2bd88150c71a440771fd369f40295dfd622324",
+        "file": "uml/activity.py",
+        "local_path": "external/harness_references/protocol_structure_audit_20261014/labop/uml/activity.py",
+        "sha256": "24c5db8b4e6e40b7b8d75bed372394a5c3ffd5d346c2734ea1efa6dfddc6e43f",
+        "inspected_symbols": [
+          "Activity.call_behavior",
+          "Activity.order"
+        ],
+        "copied_code": false
+      }
+    ],
+    "autoprotocol": [
+      {
+        "repository": "autoprotocol/autoprotocol-python",
+        "commit": "4795408f8a814fc7e3e70d54ada64da5ca125161",
+        "file": "autoprotocol/instruction.py",
+        "url": "https://raw.githubusercontent.com/autoprotocol/autoprotocol-python/4795408f8a814fc7e3e70d54ada64da5ca125161/autoprotocol/instruction.py",
+        "local_path": "external/harness_references/domain_rules_20261021/autoprotocol/autoprotocol/instruction.py",
+        "sha256": "686a1750ad3cfb9eba3b7f37480b1e5a68ab7278cf69bb70668eba37b5f44fc7",
+        "bytes": 60356,
+        "verified_on": "2026-10-21"
+      },
+      {
+        "repository": "autoprotocol/autoprotocol-python",
+        "commit": "4795408f8a814fc7e3e70d54ada64da5ca125161",
+        "file": "autoprotocol/protocol.py",
+        "url": "https://raw.githubusercontent.com/autoprotocol/autoprotocol-python/4795408f8a814fc7e3e70d54ada64da5ca125161/autoprotocol/protocol.py",
+        "local_path": "external/harness_references/domain_rules_20261021/autoprotocol/autoprotocol/protocol.py",
+        "sha256": "12eca13f9a556ffe41d92e953a3da8a1302d1938a81b15ff1cd4d302a831c02a",
+        "bytes": 312443,
+        "verified_on": "2026-10-21"
+      },
+      {
+        "repository": "autoprotocol/autoprotocol-python",
+        "commit": "4795408f8a814fc7e3e70d54ada64da5ca125161",
+        "file": "LICENSE.rst",
+        "url": "https://raw.githubusercontent.com/autoprotocol/autoprotocol-python/4795408f8a814fc7e3e70d54ada64da5ca125161/LICENSE.rst",
+        "local_path": "external/harness_references/domain_rules_20261021/autoprotocol/LICENSE.rst",
+        "sha256": "c39227877b56fc41638434f781512c358a367d33da7a0f40cf9f30c4a515a02f",
+        "bytes": 1467,
+        "verified_on": "2026-10-21"
+      }
+    ]
+  },
+  "reference_rationale": [
+    {
+      "reference": "LabOP",
+      "adopt": "Separate material/object connections and control ordering.",
+      "reject": "Automatically ordered primitive calls or generic forks as sufficient evidence of biochemical flow, physical splitting or equivalence.",
+      "limitation": "Representation and executable protocol composition do not verify genomic chemistry."
+    },
+    {
+      "reference": "Autoprotocol",
+      "adopt": "Explicit instruction parameters and structural association of measurement output with sensor settings, e.g. Thermocycle dyes/dataref pairing.",
+      "reject": "Filling unreported publication details with executable defaults or mandatory discard/store choices.",
+      "license": "BSD-3-Clause inspected; no code copied.",
+      "limitation": "Runtime container/volume checks do not establish chemical compatibility or source entailment."
+    }
+  ],
+  "external_material_storage": "Reference code remains outside repository Git tree; URLs, pinned commits and exact file hashes preserved here. No implementation source copied."
+}

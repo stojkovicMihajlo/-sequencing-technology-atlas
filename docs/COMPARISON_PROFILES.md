@@ -21,6 +21,14 @@ typed evidence. `unknown` requires an explanation of the uncertainty;
 Supported absence and non-applicability are claims requiring evidence, rather
 than missing fields. Unknown interfaces do not imply matching or compatibility.
 
+The selection, annotation and registry proposal/review prompts now share
+[conditional genomics evidence questions](decisions/2026-10-21-genomics-comparison-rules.md).
+They make molecular ends, oligonucleotide roles, retained fractions, origin keys,
+label chemistry and readout explicit when those facts matter to the claim. They
+do not require every operation to have every molecular property, and do not add
+fields or change old workflows. This source-audited prompt policy remains a
+development candidate until evaluated in fresh native runs.
+
 ## Agent tools
 
 Use paths from the selected runtime and its environment. For example:

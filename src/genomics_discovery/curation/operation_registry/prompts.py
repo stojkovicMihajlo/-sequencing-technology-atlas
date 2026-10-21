@@ -3,6 +3,7 @@
 import shlex
 from pathlib import Path
 
+from genomics_discovery.curation.comparison_rules import GENOMICS_COMPARISON_RULES
 from genomics_discovery.curation.workflow_extraction.prompts import source_command
 
 
@@ -20,8 +21,8 @@ Read the annotations for each selection, including assertion status, applicabili
 lineage, scope and evidence. These are unreviewed interpretations, not additional
 sources or inherited verdicts. Reopen every passage relied on for a definition or
 membership. Unknown and not_assessed assertions are not agreement; explicit absence
-and non-applicability require evidence. A shared purpose can be supported while a
-mechanism is unknown; do not strengthen it into shared mechanism or substitution.
+and non-applicability require evidence. A shared purpose can be supported without
+asserting a common mechanism; do not strengthen it into shared mechanism or substitution.
 The annotations retain the exact selected operations and states. They cannot
 authorize dropping an inconvenient branch, merging aliquots or inventing an
 intermediate. Describe unresolved consequential distinctions in the decision.
@@ -102,6 +103,8 @@ physical_mechanism=null and explain this in mechanism_unknown_reason. That does
 not mean each individual operation's mechanism is scientifically unknown.
 Neither relation establishes experimental substitution, ancestry, literature
 novelty or a full reaction recipe.
+
+{GENOMICS_COMPARISON_RULES}
 
 Boundary examples must reference actual supplied occurrence IDs with member,
 non_member or unknown, a reason and exact evidence from that example's source packet.

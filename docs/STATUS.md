@@ -1,5 +1,23 @@
 # Deployment status
 
+## Source-derived comparison rules, 2026-10-21
+
+The development prompts now include conditional genomics evidence questions at
+unit selection, comparison annotation, shared-definition proposal/review and
+fixed-definition matching. The [decision record](decisions/2026-10-21-genomics-comparison-rules.md)
+links primary-source audits of DNA/chromatin, RNA labeling, cell/spatial identity
+and direct RNA readout. It distinguishes source facts from locally designed rules
+and preserves access limitations. No universal list of assay stages or new graph
+schema was introduced.
+
+Independent wording review corrected overbroad rules about UMI timing, PCR-added
+origin indices, stoichiometric reactions and assumed extraction order. The rule
+dependency is included in selection runtime pins; a changed policy prevents a
+completed selection result. **139 focused software checks passed.** The 54
+source-derived comparison cases are development expectations, not executed model
+successes. No fresh native model run or graph-edge promotion has validated this
+policy yet; the active atlas and frozen releases are unchanged.
+
 ## Current assessment and release goals, 2026-10-21
 
 **A bounded end-to-end research run works. Scientific reliability and useful

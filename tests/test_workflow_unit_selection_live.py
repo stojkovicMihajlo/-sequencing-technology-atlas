@@ -65,6 +65,27 @@ async def test_planner_replays_context_without_establishing_links(cases, tmp_pat
     assert "No network" in (tmp_path / "run/prompt.txt").read_text()
 
 
+async def test_changed_comparison_policy_prevents_completed_selection(cases, tmp_path, monkeypatch):
+    from playground import workflow_unit_selection_live as runtime
+
+    original_sha = runtime.sha
+    policy_reads = 0
+
+    def changed_policy_sha(path):
+        nonlocal policy_reads
+        if path.name == "comparison_rules.py":
+            policy_reads += 1
+            if policy_reads > 1:
+                return "0" * 64
+        return original_sha(path)
+
+    monkeypatch.setattr(runtime, "sha", changed_policy_sha)
+    state = await execute(parents_for(tmp_path), tmp_path / "run", worker=PlannerFixture())
+    assert policy_reads >= 2
+    assert state["status"] == "failed" and "units" not in state
+    assert "Frozen planner input or implementation changed" in state["error"]
+
+
 async def test_empty_selection_is_valid_and_creates_no_relations(cases, tmp_path):
     state = await execute(
         parents_for(tmp_path), tmp_path / "run", worker=PlannerFixture(empty=True))
