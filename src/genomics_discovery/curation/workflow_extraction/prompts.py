@@ -276,6 +276,13 @@ source-helper reads when helpful. After reading relevant Methods, save a small,
 structurally valid source-grounded draft, then refine it as evidence improves.
 Do not defer all output while exhaustively searching for unavailable details.
 Keep pending or unknown facts explicit; an early draft is not final acceptance.
+If a builder script is useful, save it inside your own attempt directory BEFORE
+executing it. Edit and rerun that saved file; avoid regenerating long inline
+builders after each error. Derive quotations directly from exact registered
+packet passage text, using bounded literal slices when appropriate. Preserve
+intervening headings and qualifications; do not clean, retype or reconstruct
+source quotations. Save the draft record before validation, then use the
+self-check below to report and repair errors without discarding your work.
 Use these bounded source helper commands from your attempt directory:
 {command} catalog {packet_arg} --focus methods
 {command} search {packet_arg} 'specific terms'
