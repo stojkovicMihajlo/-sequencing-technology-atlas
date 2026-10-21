@@ -1,5 +1,23 @@
 # Deployment status
 
+## Fresh extraction test submitted, 2026-10-21
+
+Qiu CPU job **48832345** tests fresh ATAC-seq, scBS-seq and DBiT-seq extraction
+with `gpt-6.1-sol` / `xhigh`, the ordered procedure and all three review profiles:
+source coverage, reader-finding coverage and factual-field review. Runtime
+`140cc20` is frozen separately from the development tree. The
+[experiment](../provenance/experiments/ordered_extraction_20261021/README.md) records
+inputs, launch and limits. At 18:10 UTC it was running on `sh04-05n13`: 232 startup
+checks passed, three fresh packets registered 12 documents/712 passages, and
+all three native source-obligation sessions had begun using the source tools.
+This is startup evidence, not an extraction result. Per-method candidates remain
+isolated from the canonical atlas.
+
+The launch audit found that `extraction_batch` recovery reconstructs acceptance
+without factual-field review. This experiment calls the existing extraction
+pipeline directly, preserving its combined review gate. Bulk batch deployment
+requires a separately tested recovery fix.
+
 ## Field contract and review enforcement in development, 2026-10-21
 
 The development extractor now carries semantic descriptions on every field in
