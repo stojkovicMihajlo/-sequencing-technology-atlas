@@ -144,9 +144,12 @@ common-word influence; a configurable per-method cap spreads results across meth
 Synonyms, different readouts and unusual analogies can be missed. Existing free-text
 operation/profile searches remain available. A non-hit must never close an inquiry.
 
-`playground.graph_candidate_evaluation` reports retrieval of operation seeds from
-already reviewed local comparisons, against the previous operation search. This
-is a small development replay, not held-out discovery or scientific accuracy.
+For current development evaluation, use the
+[small graph-usability procedure](../../../../docs/benchmark/GRAPH_USABILITY.md).
+The previously named `playground.graph_candidate_evaluation` module is absent
+from this checkout and is not an available evaluation entrypoint. Retrieval and
+consumer usability require measured controls; passing the software tests does
+not establish held-out discovery or scientific accuracy.
 `curation.workflow_followup` separately audits retained extraction gaps into specific
 repair/inspection/acquisition requests without mutating these graph records.
 

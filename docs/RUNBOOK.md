@@ -102,6 +102,13 @@ packet. It registers evidence; it does not launch an extraction agent.
 
 ## Plan and run live extraction
 
+For harness development, use the five-method pool and rerun only one or two
+methods per iteration, reusing saved comparator graphs. Include downstream
+retrieval and graph-navigation checks, not just extraction acceptance. The
+[small graph-usability procedure](benchmark/GRAPH_USABILITY.md) defines the cases,
+controls and reporting boundaries. This is a development policy, not a limit on
+future full-atlas production batches.
+
 Use the durable extraction-batch entrypoint for one or many methods. Create
 `inventory.json` beside the `outputs/` directory from the preparation example:
 

@@ -13,6 +13,14 @@ all three native source-obligation sessions had begun using the source tools.
 This is startup evidence, not an extraction result. Per-method candidates remain
 isolated from the canonical atlas.
 
+At 18:23 UTC all three source-obligation stages had validated and each method
+had launched its two readers. The source-only stage took 535–819 seconds per
+method. Future development uses a five-method pool with one or two fresh
+extractions per iteration; the
+[graph-usability procedure](benchmark/GRAPH_USABILITY.md) adds downstream retrieval,
+representation-variation and graph-navigation criteria. Those consumer controls
+are planned evaluations, not native successes from this run.
+
 The launch audit found that `extraction_batch` recovery reconstructs acceptance
 without factual-field review. This experiment calls the existing extraction
 pipeline directly, preserving its combined review gate. Development recovery now
