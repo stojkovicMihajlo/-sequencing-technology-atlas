@@ -17,9 +17,9 @@ export ATLAS_CODEX_BIN_DIR="$GROUP_HOME/mstojkov/software/codex/0.163.0/bin"
 source "$ATLAS_REPOSITORY/scripts/sherlock/environment.sh"
 export OMP_NUM_THREADS=1
 export TOKENIZERS_PARALLELISM=false
-stage="${1:?Use acquire or extract}"
+stage="${1:?Use acquire, recover-extract or extract}"
 method_root="${2:?Select a fresh per-method directory}"
-case "$stage" in acquire|extract) ;; *) exit 2 ;; esac
+case "$stage" in acquire|recover-extract|extract) ;; *) exit 2 ;; esac
 [[ "$method_root" == "$ATLAS_PROJECT_ROOT/technology_atlas/v2/work/method_experiments/"* ]] || exit 2
 mkdir -p "$method_root/audit"
 cd "$ATLAS_REPOSITORY"
@@ -71,6 +71,8 @@ if [[ "$stage" == acquire ]]; then
     "$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.curation.source_acquisition \
         "$method_root/inputs/worklist.json" --output "$method_root/acquisition" \
         --method scstamp-seq --scopes "$method_root/inputs/scopes.json" --concurrency 1
+elif [[ "$stage" == recover-extract ]]; then
+    "$ATLAS_ENV_DIR/bin/python" experiments/scstamp_seq_20261021/recover_and_extract.py "$method_root"
 else
     packet="${3:?Supply the inspected registered packet path}"
     "$ATLAS_ENV_DIR/bin/python" - "$packet" "$method_root/extraction/run_001" <<'PY'

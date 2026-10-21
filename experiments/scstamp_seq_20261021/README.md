@@ -51,6 +51,39 @@ Historical attempts and the canonical atlas are unchanged.
    Only a supported outcome produces `graph_candidate.json`, `protocol.txt` and
    overviews. A failed stage can leave a candidate without a supported export.
 
+## Recovery discovered by the fresh acquisition
+
+Job **48842938** completed public source finding and host acquisition, using
+frozen runtime **8810f53**. The finder produced 14 document candidates and 35
+search records in 568.7 seconds. Two primary-paper representations registered.
+The direct supplement response was HTML, and cited/manufacturer documents were
+retained without automatic registration. The originals and custody archive were
+preserved in Qiu group home; a completed acquisition did not establish a complete
+scientific packet.
+
+The same finder located the correct cited supplement inside the official
+Europe PMC ZIP and rejected a BioStudies route whose delivered PDF appeared to
+belong to another publication. A new generic post-acquisition archive helper
+preserves the real ZIP URL, exact member and ZIP-to-PDF-to-text custody, requiring
+an explicit content/version inspection before registration. The original finder
+artifact and acquisition ledger remain unchanged.
+
+`run.sbatch recover-extract METHOD_ROOT` applies that recovery, then uses one
+fresh native attachment inspector with a real rendered title-page image. This
+addresses the observed wrong-document failure; it is not an extra scientific
+ideation role. The inspector's exact prompt, request, schema, image bindings and
+trace are stored in `source_recovery/attempt_001/inspection/`. A positive decision
+is provisional model judgment, not an expert certificate or proof of figure
+readability. An uncertain/conflicting decision blocks registration.
+
+The bounded experiment driver also identity-checks the already acquired cited
+protocols and manufacturer guide, preserving their separate roles and actual
+original/rendition receipts. The primary's unspecified guide revision remains
+explicitly qualified. These documents are evidence for source-first applicability
+review; registering them does not establish use of every listed setting.
+Unavailable dependency supplements remain in the acquisition ledger. The final
+packet still requires the normal source-obligation and review gates.
+
 Both stages use `gpt-6.1-sol`, `xhigh`, the existing Codex login and managed
 execution policy. There is no per-stage model timeout. The four-hour Slurm
 allocation is a finite safety/resource boundary, not a promised method latency.
