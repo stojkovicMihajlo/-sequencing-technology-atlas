@@ -1,0 +1,52 @@
+{
+  "format_version": "ordered_extraction_experiment/1.0",
+  "harness_source_commit": "4f4eb05",
+  "general_scope": "Describe the general published assay introduced by the primary publication, from native specimen through the declared readout and its decoding. Preserve source-defined applicability, consequential interfaces, variants and control/calibration dependencies. Independent characterization or historical study execution belongs only where needed to explain the assay. Attribute manufacturer and cited-method material to its actual supported scope.",
+  "config": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "mode": "specialists",
+    "max_revisions": 1,
+    "require_coverage": true,
+    "require_source_coverage": true,
+    "require_field_review": true,
+    "timeout_seconds": null,
+    "concurrent_methods": 3,
+    "maximum_concurrent_native_sessions": 6,
+    "automatic_retries": 0
+  },
+  "source_boundary": "Inputs are registered primary literature, represented supplements/dependencies and frozen text renditions. Document presence is not completeness. Production extraction does not yet consume typed original-binding receipts as image context; preserved bindings establish custody only, not model visual inspection. No supplied prior extraction/reference/obligation seeds.",
+  "methods": [
+    {
+      "id": "atac-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/manual_sources_01/atac/packet.json",
+      "packet_sha256": "747c15dd9c3cfd25da3f1e6ae840bd7e59041556fb286025ce41c2755f168988",
+      "selection_reason": "Chromatin tagmentation and analytical feedback branch",
+      "original_bindings": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/original_source_closure_01/atac-seq/original_bindings.json",
+      "original_bindings_sha256": "52295c2d73c139a4d4b36a2452b7ee63eea33d7ab08ffee5ad0ace3b94021ea7"
+    },
+    {
+      "id": "scbs-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/reference_v1_01/work/sources/initial_packets/scbs-seq/packet.json",
+      "packet_sha256": "05a41b22a270a746797b96c97ee47b750d500ab99b342406990abdce2d1d987d",
+      "selection_reason": "Single-cell DNA conversion and library construction"
+    },
+    {
+      "id": "dbit-seq",
+      "packet": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/migration_to_xiaojie_20261019/validation_48532750/sources/dbit-seq/packet.json",
+      "packet_sha256": "d84366b85e7015367a1b21d3125ebcb48c0152479364e0ff16b2ba91900b2f64",
+      "selection_reason": "Spatial RNA/protein identity"
+    }
+  ],
+  "evaluation": [
+    "stage completion and latency",
+    "actual source-tool use",
+    "source and reader-finding coverage",
+    "field-review completeness and veto",
+    "branch and interface fidelity",
+    "unsupported additions and scope inflation"
+  ],
+  "publication": "Per-method candidates only after direct extractor acceptance; no canonical atlas update or cross-method matching.",
+  "controls": "No previous workflows, reference answers or case-specific corrections supplied to native agents.",
+  "batch_limitation": "Current extraction_batch recovery does not combine factual-field review; use extraction_pipeline.execute directly."
+}
