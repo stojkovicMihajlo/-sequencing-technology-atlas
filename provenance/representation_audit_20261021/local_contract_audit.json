@@ -1,0 +1,148 @@
+{
+  "audit": "Read-only local extraction/graph boundary audit; this report is not a proposed artifact schema",
+  "date": "2026-10-21",
+  "repository_head": "4c039d326a240f4bcf8d676d8a8a8f5536068733",
+  "scope": "Existing source-scoped Workflow, extraction runtime/compiler/review, downstream matching and graph consumers, and preserved genomics-rules diagnostic reports. No production edits, SSH, model runs or source reinterpretation.",
+  "conclusion": "The existing Workflow is already a suitable source-local handoff for later matching. Cross-method semantics are downstream. The largest demonstrated gap is failure to propagate known-negative claim qualifications into raw workflow consumption, not missing material/data graphs or I/O bindings. Reuse and wire existing accountability mechanisms before changing representation or moving files.",
+  "implemented_separation": [
+    {
+      "finding": "Extraction models and assembly depend only on scientific record/provenance helpers. Extraction runtime imports local projection but no registry, matching or atlas assembly/search module.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:10", "src/genomics_discovery/curation/workflow_extraction/assemble.py:5", "src/genomics_discovery/curation/workflow_extraction/runtime.py:11"]
+    },
+    {
+      "finding": "Runtime automatically renders graph_candidate after support; this is one source-local workflow projection, not cross-method graph construction or canonical atlas admission.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/runtime.py:530", "src/genomics_discovery/curation/workflow_extraction/projection.py:253", "src/genomics_discovery/curation/workflow_extraction/projection.py:326"]
+    },
+    {
+      "finding": "Downstream matching already accepts a registry of Workflow, packet and optional review paths. It rebuilds selected connected regions from these parents. A local graph_candidate.json is not required as the scientific handoff.",
+      "references": ["src/genomics_discovery/curation/workflow_matching/tools.py:35", "src/genomics_discovery/curation/workflow_extraction/transformations.py:141"]
+    },
+    {
+      "finding": "Atlas admission independently replays completed extraction runtime/review/custody gates. Isolated methods enter without comparison profiles, seeds or relationships.",
+      "references": ["src/genomics_discovery/curation/technology_graph/admission.py:153", "src/genomics_discovery/curation/technology_graph/admission.py:246", "src/genomics_discovery/curation/technology_graph/admission.py:326", "tests/test_technology_graph_admission.py:17"]
+    },
+    {
+      "finding": "An older playground batch orchestrator combines extraction and comparison by default but exposes --no-graph. transformations.py colocates downstream cut/membership logic in the extraction package; the extraction runtime does not call it. These are orchestration and packaging couplings rather than compulsory semantic coupling.",
+      "references": ["playground/workflow_graph_batch.py:38", "playground/workflow_graph_batch.py:112", "playground/workflow_graph_batch.py:155", "src/genomics_discovery/curation/workflow_extraction/transformations.py:323"]
+    }
+  ],
+  "existing_handoff": {
+    "scientific_record": "Unchanged protocol_workflow/1.0 Workflow with method_id, title, scope, variant, states, operations, flows, modules, unresolved and gap_resolutions.",
+    "provenance_and_judgment": "Exact source packet and registered originals; WorkflowReview and host-derived status; configured coverage sidecars and their exact source/native lineage. Graph admission already requires runtime custody beyond the minimal research loader.",
+    "not_required_for_extraction": ["Cross-method concept IDs or shared vocabularies", "Reusable mechanistic definitions", "Pairwise correspondences", "ComparisonProfile", "Embedding indexes", "Historical ancestry", "Transfer/interchangeability claims"],
+    "identity_boundary": "SHA256 binds exact canonical records and review/custody versions. It does not establish semantic equivalence across different decompositions, paraphrases or assays.",
+    "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:211", "src/genomics_discovery/curation/workflow_extraction/models.py:401", "src/genomics_discovery/curation/technology_graph/admission.py:246", "src/genomics_discovery/curation/workflow_matching/comparison_profiles.py:103"]
+  },
+  "mandatory_versus_optional": [
+    {
+      "item": "State",
+      "mandatory": "Unique local ID, material/data kind, nonempty description and evidence. It is a source/variant-specific interface, possibly a mixture or a distinct aliquot with composition shared by another state.",
+      "prose_only": "Molecule species, strands, termini, carrier, retained fraction, stage, indexing completeness, physical allocation and lineage are open descriptions; there is no fixed chemistry taxonomy.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:77", "src/genomics_discovery/curation/workflow_extraction/prompts.py:40", "src/genomics_discovery/curation/workflow_extraction/prompts.py:49"]
+    },
+    {
+      "item": "Operation",
+      "mandatory": "Unique ID, name, action, input tuple, at least one output, resources tuple, nonempty information_effect and evidence. Resources may be empty; inputs may be empty for a resource-driven operation.",
+      "prose_only": "Action/mechanism and information effect have no typed unknown/not-applicable state. Nonempty text is not a support guarantee and can invite overstatement unless uncertainty or unchanged information is stated faithfully. The prompt does not require every operation to create new information.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:126", "src/genomics_discovery/curation/workflow_extraction/prompts.py:55", "src/genomics_discovery/curation/workflow_extraction/prompts.py:70", "tests/test_workflow_extraction_contract.py:276"]
+    },
+    {
+      "item": "I/O bindings and flows",
+      "mandatory": "Typed material/data endpoints and exact agreement with operation I/O. Precedence/control connect operations; control requires a condition. A state has at most one producer. The workflow must be acyclic.",
+      "optional": "input_bindings/output_bindings may be absent in the legacy-compatible model. validate_io_bindings(require_bindings=True) exists but is not wired into extraction CLI/runtime. Legacy Flow association=None may pass ordinary support if evidence/review checks pass; explicitly unqualified flows cannot receive supported review. Optional or alternative qualified I/O needs conditions; alternatives need at least two group members.",
+      "compiler_boundary": "Assembler renders explicitly authored I/O and never derives topology from array order or supplies borrowed operation evidence. Without bindings it emits unqualified edges.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:84", "src/genomics_discovery/curation/workflow_extraction/models.py:135", "src/genomics_discovery/curation/workflow_extraction/models.py:162", "src/genomics_discovery/curation/workflow_extraction/models.py:248", "src/genomics_discovery/curation/workflow_extraction/models.py:332", "src/genomics_discovery/curation/workflow_extraction/models.py:479", "src/genomics_discovery/curation/workflow_extraction/assemble.py:8"]
+    },
+    {
+      "item": "Module",
+      "mandatory": "At least one; each operation belongs to exactly one; membership has a boundary rationale.",
+      "boundary": "Local organization interpreted by the curator, not a canonical mechanism, new transformation or requirement for a new state. Current ordinary review does not have module targets.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:204", "src/genomics_discovery/curation/workflow_extraction/models.py:234", "src/genomics_discovery/curation/workflow_extraction/prompts.py:66", "src/genomics_discovery/curation/workflow_extraction/projection.py:284"]
+    },
+    {
+      "item": "Gap",
+      "mandatory": "ID, description, blocking boolean and next_evidence. Reader gaps must be retained with blocking status or receive a source-backed resolution keyed by reader_role/gap_id.",
+      "representation_limit": "No machine-readable operation/state/flow/field target, affected comparison resolution, or evidence field on Gap itself. Scope and effect are prose. Blocking applies to the declared Workflow scope, not every possible later purpose, mechanism or substitution query. cut_transformation copies all Workflow gaps; query_workflow returns no unresolved list.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:42", "src/genomics_discovery/curation/workflow_extraction/models.py:498", "src/genomics_discovery/curation/workflow_extraction/models.py:549", "src/genomics_discovery/curation/workflow_extraction/transformations.py:211", "src/genomics_discovery/curation/workflow_extraction/projection.py:96"]
+    },
+    {
+      "item": "Review and completeness",
+      "mandatory": "Ordinary WorkflowReview covers each state, operation, flow and gap-resolution target exactly once, with exact Workflow/packet digests and inspected contextual evidence. Required record corrections block support even when omission.blocking=False.",
+      "optional": "Finding coverage and source-obligation coverage are existing runtime profiles defaulting False. Field review already inventories all factual fields, gap premises and module interpretation, but has no production runtime or CLI wiring and cannot authorize export alone. ComparisonProfile is downstream and optional; it already models reported, inferred, unknown, not_assessed, supported absence and not_applicable.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:361", "src/genomics_discovery/curation/workflow_extraction/models.py:407", "src/genomics_discovery/curation/workflow_extraction/models.py:454", "src/genomics_discovery/curation/workflow_extraction/runtime.py:49", "src/genomics_discovery/curation/workflow_extraction/field_review.py:1", "src/genomics_discovery/curation/workflow_extraction/field_review.py:78", "src/genomics_discovery/curation/workflow_matching/comparison_profiles.py:44"]
+    }
+  ],
+  "observed_parent_records": {
+    "source_graph": "../technology_atlas/v2/work/qiu_experiments_20261020/ten_method_overview_01/monitoring/final_archive_selected/phase/graph_with_shared_operations.json",
+    "source_graph_sha256": "6b122a646db300655058e3c29140a62f15bc726b746fcfb61eb920ca853f3782",
+    "method": "Read JSON using Python standard library, without importing Workflow models. Recomputed canonical SHA256 for every embedded Workflow and byte SHA256 for the graph.",
+    "all_nine_workflow_hashes_and_graph_hash_match": "provenance/experiments/genomics_rules_20261021/navigation_replay.json",
+    "workflows": 9,
+    "states": 310,
+    "operations": 223,
+    "flows": 592,
+    "io_flows": 588,
+    "modules": 57,
+    "operations_with_explicit_input_and_output_bindings": 223,
+    "io_flows_with_source_qualified_association_and_selection": 588,
+    "legacy_or_unqualified_io_flows": 0,
+    "operations_with_nonempty_information_effect": 223,
+    "gaps": 77,
+    "blocking_gaps": 0,
+    "gaps_with_exact_field_or_record_targets": 0,
+    "inference_limit": "This establishes representation/binding presence, not biochemical truth. Enforcing require_bindings would not change these nine parents or repair their demonstrated claim issues. All gaps being nonblocking means only the frozen general-assay scope was accepted; it does not make transfer or exact mechanism queries answerable."
+  },
+  "gap_classification": [
+    {
+      "kind": "gate_and_consumer_wiring",
+      "finding": "Current membership review explicitly declined three inherited ATAC/Drop non-return clauses, while raw parents and graph retained them. The audit sidecar has exact Workflow/packet hashes and JSON Pointers but no query/export integration. Positive membership does not certify all raw sentences.",
+      "reuse": "Existing WorkflowFieldReview field_bindings and affected_fields can bind known-negative fields, with an explicit rationale naming the affected clause. It groups records rather than automatically judging every sentence. Retrieval should carry applicable restrictions or the absence of field-level assessment; a correction creates a separately reviewed Workflow version.",
+      "references": ["provenance/experiments/genomics_rules_20261021/parent_claim_audit.json:6", "provenance/experiments/genomics_rules_20261021/parent_claim_audit.json:61", "src/genomics_discovery/curation/workflow_extraction/field_review.py:43", "src/genomics_discovery/curation/technology_graph/queries.py:37", "src/genomics_discovery/curation/technology_graph/queries.py:243"]
+    },
+    {
+      "kind": "representation_and_consumer_limit",
+      "finding": "Molecular and information properties are open prose. Gaps have no precise affected-target links, and the single-operation query omits them. The optional downstream ComparisonProfile already provides claim status and contextual questions where matching needs these distinctions; do not demand a new universal extraction schema.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/models.py:42", "src/genomics_discovery/curation/workflow_extraction/models.py:77", "src/genomics_discovery/curation/workflow_extraction/projection.py:96", "src/genomics_discovery/curation/workflow_matching/comparison_profiles.py:27"]
+    },
+    {
+      "kind": "scientific_entailment",
+      "finding": "Complete fields, exact quotes and positive source reviews did not resolve scBS adapter-origin wording. New syntax or field gates cannot establish which molecular sequence is primer-supplied versus copied; contextual source review must answer it. Likewise unknown mechanisms restrict mechanism claims without refuting supported purpose sharing.",
+      "references": ["provenance/experiments/genomics_rules_20261021/proposal_science_audit.json", "src/genomics_discovery/curation/comparison_rules.py:31", "src/genomics_discovery/curation/workflow_extraction/models.py:431"]
+    },
+    {
+      "kind": "downstream_selection",
+      "finding": "The latest diagnostic repeated selection misses for two shared library-preparation regions. This does not prove extraction lost those operations. Existing connected-region matching allows unequal decompositions and preserves external context; requiring matching extraction node counts would destroy source fidelity.",
+      "references": ["provenance/experiments/genomics_rules_20261021/selection_coverage.json:4", "provenance/experiments/genomics_rules_20261021/selection_coverage.json:27", "src/genomics_discovery/curation/workflow_extraction/transformations.py:141", "docs/decisions/2026-10-21-genomics-comparison-rules.md:35"]
+    },
+    {
+      "kind": "source_custody_handoff",
+      "finding": "Registered originals may themselves be text renditions. Current source packets bind their bytes, not an automatic PDF-to-text fidelity certificate. The comparison handoff omitted four existing binary/rendition ancestor bindings; additive recovery restored custody links without scientific rereview. Existing publication_sources receipt/pin helpers already carry declared source chains and should be reused.",
+      "references": ["src/genomics_discovery/curation/workflow_extraction/sources.py:52", "src/genomics_discovery/curation/publication_sources.py:56", "src/genomics_discovery/curation/publication_sources.py:131", "provenance/experiments/genomics_rules_20261021/lineage_recovery.json"]
+    }
+  ],
+  "single_smallest_next_implementation": {
+    "choice": "Make the existing field review travel with a fresh extraction through its existing consumer handoff.",
+    "implementation": "In a fresh opt-in extraction profile, have the existing reviewer fill WorkflowFieldReview alongside WorkflowReview; validate and pin it, combine its supported/negative/unassessed status into export eligibility, and retain it with Workflow/packet/review in publication and operation retrieval. Return field qualifications at their exact pointers rather than silently exposing a globally supported raw record. Preserve historical records unchanged and label missing field assessment explicitly. This is one end-to-end accountability change, not another extraction or matching agent.",
+    "why_first": "It addresses the demonstrated ATAC/Drop propagation failure with an existing model. Merely enabling require_bindings adds no protection to the nine inspected records because all already have qualified bindings. Moving transformations.py changes imports but does not repair evidence accountability.",
+    "bounded_followup": "For new-run policy hardening, expose and apply existing validate_io_bindings(require_bindings=True) in check/assemble/runtime/admission. Do not relabel legacy evidence-bearing flows or rewrite old hashes. Continue keeping matching profiles, candidate selection and shared definitions downstream.",
+    "limits": "Field review is still fallible, groups records rather than sentences, protects unchanged exact fields rather than semantic paraphrases, and does not replace source-to-record completeness checks or biochemical reasoning. Supplying a prior review/history remains the caller's responsibility.",
+    "references": ["src/genomics_discovery/curation/workflow_extraction/field_review.py:183", "src/genomics_discovery/curation/workflow_extraction/field_review.py:214", "src/genomics_discovery/curation/workflow_extraction/field_review.py:244", "src/genomics_discovery/curation/workflow_extraction/runtime.py:496", "src/genomics_discovery/curation/workflow_extraction/models.py:332"]
+  },
+  "failure_tests_for_that_change": [
+    "ATAC/Drop fixture: supported shared membership plus a negative exact parent action/state field must return that restriction in raw operation retrieval; concept support must not clear it.",
+    "Supported ordinary WorkflowReview plus unsupported, not_established or unassessed required field review cannot export a field-supported candidate.",
+    "An unrelated edit or record-array reorder cannot clear an unchanged prior negative field; changed/paraphrased content requires fresh assessment and is never automatically certified repaired.",
+    "A faithfully stated unknown recipe detail can pass field accuracy review while its blocking flag and later claim limitations remain intact.",
+    "Fresh strict-I/O profile rejects evidence-bearing legacy association=None and explicit unqualified edges, without changing historical load/digest behavior.",
+    "Single-method extraction can still finish and later enter a graph with zero comparisons, without importing a registry, embeddings or shared definitions.",
+    "Two distinct physical aliquot State IDs with identical descriptions remain distinct; reordering operation arrays never creates a flow; a one-operation versus connected multi-operation account is not declared equivalent by canonical hashes.",
+    "Handoff retains declared original/rendition/source-receipt chains; exact byte custody cannot upgrade a source-fidelity or scientific verdict."
+  ],
+  "validation_performed": [
+    "Inspected applicable local AGENTS.md and source/import relationships.",
+    "Inspected models, validators, compiler, runtime gates, review target inventories, downstream loaders, graph publication and raw retrieval.",
+    "Read latest frozen diagnostic reports and exact known-negative claim bindings.",
+    "Read all nine matching raw Workflow JSON objects; recomputed exact canonical record hashes and graph-byte hash against navigation replay.",
+    "No production tests or native jobs were run; existing test paths identify already implemented behavior but are not claimed as fresh execution."
+  ]
+}

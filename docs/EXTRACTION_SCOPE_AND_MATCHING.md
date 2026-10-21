@@ -6,6 +6,13 @@ precedent, tracing a material/information route, comparing a changed interface,
 and identifying what evidence is still needed. It is not yet a collection of
 execution-ready laboratory SOPs or experimentally interchangeable components.
 
+The [October 21 extraction/graph boundary audit](decisions/2026-10-21-extraction-graph-boundary.md)
+explains which contract belongs to extraction, which claims belong to atlas
+construction, and which published protocol representations we can adapt. It
+distinguishes current implementation from proposed release checks. Extraction
+already produces a local Workflow graph independently of atlas matching; the
+remaining priority is preserving scientific qualifications through that handoff.
+
 ## Completion of one assay record
 
 Extract one source-defined implementation/variant. The record must identify:
@@ -97,8 +104,10 @@ concepts. Neither text normalization nor an embedding/hash decides that mapping.
    boundaries instead of forcing all papers into one sequence or module list.
 2. Retrieve candidate comparisons using several indexed aspects of the whole
    transformation. The current registry uses lexical field indexes and exhaustive
-   fallback for small catalogues. Embedding retrieval is a future optional route,
-   not a demonstrated capability of the current matching pipeline.
+   fallback for small catalogues. Optional semantic retrieval now exists in
+   development; see [comparison profiles](COMPARISON_PROFILES.md) and
+   [operation discovery](SHARED_OPERATIONS.md). Its availability does not establish
+   adequate retrieval recall or a supported correspondence.
 3. Let a comparison select explicit connected operation groups on both sides.
    `cut_transformation` constructs and validates the retained boundaries. This
    permits one-operation versus multiple-operation comparisons.

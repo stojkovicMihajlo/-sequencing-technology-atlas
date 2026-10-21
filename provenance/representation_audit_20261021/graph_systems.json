@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-21",
+  "scope": "Read-only primary-paper and pinned-code inspection. No external model pipeline executed and no external code copied.",
+  "references": [
+    {
+      "name": "EDC",
+      "paper": "https://aclanthology.org/2024.emnlp-main.548/",
+      "inspected_paper": "https://aclanthology.org/2024.emnlp-main.548.pdf",
+      "paper_locations": ["Section 3, phases 1-3", "Section 4.1.1, separate target-alignment and self-canonicalization objectives", "Section 6 limitations"],
+      "repository": "https://github.com/clear-nus/edc",
+      "commit": "02aad17e2fc1e9845c84746b384e7fd3160edc1a",
+      "license": "MIT; local LICENSE inspected",
+      "local_snapshot": "external/semantic_alignment_refs_20261019/edc",
+      "local_snapshot_state": "git rev-parse HEAD matched recorded pin and git status --short was empty on 2026-10-21",
+      "inspected_symbols": [
+        "edc/edc_framework.py:EDC.oie",
+        "edc/edc_framework.py:EDC.schema_canonicalization",
+        "edc/schema_canonicalization.py:SchemaCanonicalizer.retrieve_similar_relations",
+        "edc/schema_canonicalization.py:SchemaCanonicalizer.llm_verify",
+        "edc/schema_canonicalization.py:SchemaCanonicalizer.canonicalize"
+      ],
+      "observed": [
+        "Extraction, relation definition and canonicalization are distinct stages.",
+        "The canonicalizer embeds relation definitions, retrieves candidates, and calls a contextual multiple-choice verifier with an unmatched option.",
+        "An exact relation-name lookup bypasses the verifier.",
+        "When canonicalization fails, enrich=True adds a definition; without enrichment it can return no canonicalized triple. The paper's target-alignment mode excludes unmatched triples."
+      ],
+      "adapt": "Downstream definition retrieval plus contextual scientific comparison, retaining exact source-local workflow occurrences.",
+      "reject": "Name equality as scientific equivalence, merging at extraction time, or dropping unmatched supported assay operations.",
+      "limit": "General relational-triple evaluation does not establish genomics workflow fidelity or biochemical interface compatibility."
+    },
+    {
+      "name": "Intern-Atlas",
+      "paper": "https://arxiv.org/html/2604.28158v1",
+      "paper_locations": ["Sections 3.1-3.3: construction separated from graph operators", "Section 3.2: quoted evidence and edge typing"],
+      "repository": "https://github.com/OpenRaiser/Intern-Atlas",
+      "commit": "1185dc36555c547b5b6e9553779cb498a15ce587",
+      "license": "MIT; local LICENSE inspected",
+      "local_snapshot": "external/harness_references/Intern-Atlas",
+      "local_snapshot_state": "git rev-parse HEAD matched recorded pin and git status --short was empty on 2026-10-21",
+      "inspected_symbols": [
+        "src/intern_atlas/models.py:PaperRecord, MethodMention, RelationEdge",
+        "src/intern_atlas/builder.py:infer_relations, select_candidate_pairs, pair_score, heuristic_relation, llm_relation, paper_brief",
+        "src/intern_atlas/io.py:load_records",
+        "src/intern_atlas/evidence.py:fetch_edges, search_relevant_paper_ids, expand_from_seed_papers"
+      ],
+      "observed": [
+        "The public local builder describes paper/method entities and relations, not detailed protocol material states.",
+        "Candidate pairs are selected using method-name and title/abstract overlap.",
+        "infer_relations falls back to heuristic_relation when an LLM relation call fails.",
+        "heuristic_relation can assign extends from shared terminology; this is an exploratory heuristic rather than source entailment.",
+        "The local graph query layer is distinct from construction and exposes filtered edges and neighborhoods.",
+        "The documented local PDF page limit defaults to eight; that does not establish methods/supplement coverage."
+      ],
+      "adapt": "Separate method-relation records, source evidence and query operators, preserving historical relations separately from shared workflow components.",
+      "reject": "Importing the public local heuristic fallback as an admission rule, or treating this local builder as a replication of every validation control in the paper.",
+      "limit": "The paper's evolution graph and released local builder do not provide a complete genomics protocol extraction contract."
+    },
+    {
+      "name": "W3C PROV-O",
+      "specification": "https://www.w3.org/TR/prov-o/",
+      "inspected_locations": ["Expanded terms: Plan", "Usage and generation", "Association and hadPlan"],
+      "adapt": "Distinguish a protocol plan from asserted activity provenance; attach evidence/provenance to extraction artifacts separately from biological material flow.",
+      "limit": "Using a provenance type does not certify an event occurred; PROV-O leaves plan specifications to applications."
+    },
+    {
+      "name": "LabCompiler",
+      "paper": "https://arxiv.org/html/2610.19550v1",
+      "publication_status": "October 14, 2026 preprint",
+      "inspected_locations": ["Section 3.3", "Appendix B.1-B.2", "Appendix C.1-C.3"],
+      "code_inspection": "No released implementation inspected in this audit; do not claim code reuse.",
+      "adapt": "Distinguish semantic procedure representation from downstream execution normalization; preserve source correspondence and unresolved values.",
+      "reject": "Treating 26 laboratory execution actions as an exhaustive vocabulary of genomics mechanisms, or silently repairing a published source into a different assay.",
+      "limit": "An execution-oriented recovery benchmark is not validation of our source-faithful extraction or cross-method graph."
+    }
+  ]
+}

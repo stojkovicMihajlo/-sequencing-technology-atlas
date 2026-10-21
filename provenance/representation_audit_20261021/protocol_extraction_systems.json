@@ -1,0 +1,345 @@
+{
+  "format_version": "protocol-extraction-audit-v1",
+  "audit_date": "2026-10-21",
+  "status": "research_only_no_runtime_changes",
+  "scope": "Scientific protocol information extraction and material-flow representation; downstream atlas graph generation, search and instrument execution are separate contracts.",
+  "audit_skill": "/Users/mihajlostojkovic/.codex/skills/reference-implementation-audit/SKILL.md",
+  "ambiguity_class": "law-level: whether nodes denote mentions, enduring physical objects, material states, or operations, and whether edges encode evidence, material flow, temporal precedence, coreference, or control flow",
+  "frozen_contract": {
+    "input": "Published assay methods/protocols, supplementary methods, and explicitly registered referenced sources; inference may use only source evidence in the packet, with unresolved references retained.",
+    "output": "Evidence-linked assertions about material states, operations, inputs/outputs, parameters, scope/variants, explicit alternatives/conditions, and state-sensitive coreference. Unstated science remains unknown or explicitly inferred.",
+    "invariants": [
+      "Do not require a universal assay stage sequence.",
+      "Do not turn text order into material dependency or inferred completion into source evidence.",
+      "Keep mention identity, physical lineage, material state, and canonical concept identity distinct.",
+      "Keep material-flow edges distinct from temporal/control edges and from evidence/support edges.",
+      "Do not merge alternative branches, variants, or parameter combinations into one realized procedure.",
+      "Keep required missing arguments unresolved rather than inventing them to satisfy a schema."
+    ],
+    "evaluation": "Source-held-out and assay-family-held-out expert adjudication, with operation/role/state/coreference/branch/parameter/source-coverage slices; missing or invalid outputs count against completeness.",
+    "not_identified": "A well-formed graph, schema validity, benchmark F1, or source agreement does not establish experimentally correct or robot-executable science."
+  },
+  "candidates": [
+    {
+      "id": "xwlp_peg",
+      "decision": "adapt",
+      "role": "Typed operations and arguments, document-level role assignment, time-sensitive coreference, and separate literal mention anchors.",
+      "paper": {
+        "title": "Process-Level Representation of Scientific Protocols with Interactive Annotation",
+        "url": "https://aclanthology.org/2021.eacl-main.187.pdf",
+        "year": 2021,
+        "inspected": "Sections 3-5 and Appendix ontology coverage; paper and real annotations/code inspected."
+      },
+      "repositories": [
+        {
+          "url": "https://github.com/ronentk/textlabs-xwlp-data",
+          "commit": "db06ed1f27f9e9ef86a7324df5a0ee3607956db1",
+          "license": "MIT",
+          "files": [
+            "definitions.py",
+            "types/types.csv",
+            "peg.py",
+            "peg_to_amr.py",
+            "call-graph-format.md",
+            "data/0/proto_0.peg",
+            "data/0/proto_0.amr",
+            "data/0/proto_0.txt",
+            "LICENSE"
+          ]
+        },
+        {
+          "url": "https://github.com/bflashcp3f/textlabs-xwlp-code",
+          "commit": "b099ec7382316f80355c453b4bd4aa742bf68359",
+          "license": "MIT",
+          "files": [
+            "code/pipeline_men_iden.py",
+            "code/pipeline_pred_ground.py",
+            "code/pipeline_re.py",
+            "code/pipeline_re_eval.py",
+            "scripts/train_xwlp_sliding.sh",
+            "LICENSE"
+          ]
+        }
+      ],
+      "conventions": {
+        "nodes": "Operation predicates and physical/abstract arguments anchored to explicit spans. PEGNode stores display_name, cleaned amr_name, spans, and word_spans; process events add typed inputs, outputs and simulator step.",
+        "operation_types": [
+          "transfer",
+          "temperature treatment",
+          "general",
+          "mix",
+          "spin",
+          "create",
+          "destroy",
+          "remove",
+          "measure",
+          "wash",
+          "time",
+          "seal",
+          "convert"
+        ],
+        "argument_types": [
+          "reagent",
+          "measurement",
+          "setting",
+          "location",
+          "modifier",
+          "device",
+          "method",
+          "seal"
+        ],
+        "roles": "ARG0/ARG1/ARG2 have operation-specific semantics. Spin distinguishes input, solid output and liquid output; Transfer uses source arguments plus destination site. Non-core roles include setting, usage, location, measure, modifier, part-of and coreference.",
+        "state_and_coreference": "Call graph routes arguments between events. co_ref_of is an implicit event with a simulator time because a later mention can denote a container-plus-contents composite after earlier transformations. This is stronger than global string deduplication.",
+        "evidence": "Explicit entities/operations have original character and word anchors. Implicit relation events may have no span; simulator-derived ordering/routing is not independently observed evidence.",
+        "branching": "Inspected schema lacks branch guards and loop objects. Reentrancy and multiple event connections do not themselves encode alternative control flow."
+      },
+      "code_trace": [
+        "Mention BIO classification -> predicate type classification -> typed mention-pair relation classification -> argmax labels; pipeline_re_eval.py separates gold-input and predicted-input evaluations.",
+        "PEG.to_amr reverses call-graph edges and roots at the last operation. AMR visual arrow direction must not be treated as physical forward material flow.",
+        "edge_to_amr converts routing into role relations plus dependency edges; the call-graph view retains simulator metadata omitted from AMR."
+      ],
+      "exact_observations": [
+        "call-graph-format.md explicitly inserts dummy temporal links between disconnected components, assuming textual order, to make one connected AMR-compatible graph.",
+        "Real SpinSmart plasmid protocol data/0/proto_0.peg contains no nodes anchored to source sentences 7 or 11 (negative vortex instructions), 13 (conditional repeat centrifugation), or 16 (Optional qualifier). A wash operation remains at sentence 17. This is a concrete fidelity boundary, not evidence that every annotation behaves this way.",
+        "The type system groups time/temperature/speed into setting. Preserve finer parameter types in the atlas rather than inherit this benchmark simplification."
+      ],
+      "limitations": [
+        "279 protocols were selected from WLP for ontology coverage, so coverage across arbitrary assays is not established.",
+        "Simulator constraints support annotation consistency, not scientific correctness of automatically predicted graphs.",
+        "Do not copy dummy connectivity or forced required-argument completion into the evidence graph.",
+        "No inspected representation provides assay-specific sample/cell/partition/barcode lineage or genomic coordinate/read structure semantics."
+      ],
+      "reuse": "Adopt source anchors and typed operation/argument role separation; adapt state-aware entity resolution and partial material flow. Add explicit evidence status, missingness, branch/variant scope, prohibitions and preservation of disconnected unknown fragments."
+    },
+    {
+      "id": "wlp_mstg_lsm",
+      "decision": "adapt",
+      "role": "Strongest direct wet-lab comparison for implicit input/output relationships and state-sensitive coreference.",
+      "paper": {
+        "title": "Learning Latent Structures for Cross Action Phrase Relations in Wet Lab Protocols",
+        "url": "https://aclanthology.org/2021.acl-long.525.pdf",
+        "year": 2021,
+        "inspected": "Task definition, annotation, methods, evaluation and Appendix relation conventions."
+      },
+      "repositories": [
+        {
+          "url": "https://github.com/chaitanya2334/wlp-mstg-dataset",
+          "commit": "2b40195b57b691a080399f8060ffb04b752c402d",
+          "license": "Apache-2.0",
+          "files": [
+            "train/annotation.conf",
+            "dev/annotation.conf",
+            "dev/protocol_101.ann",
+            "dev/protocol_101.txt",
+            "LICENSE"
+          ]
+        },
+        {
+          "url": "https://github.com/chaitanya2334/lsm",
+          "commit": "504c732238b419cd77e7e0a97af040778ee9c7dd",
+          "license": "MIT",
+          "files": [
+            "src/corpus/brat_file.py",
+            "src/corpus/proto_file.py",
+            "src/preprocessing/to_json.py",
+            "src/postprocessing/rel_group.py",
+            "src/trainers/igcn_trainer.py",
+            "src/pytorch_models/iterative_graph_framework.py",
+            "src/pytorch_models/r_gcn_decoder.py",
+            "src/configs/igcn.yaml",
+            "src/evaluator/ner.py",
+            "src/evaluator/re.py",
+            "LICENSE"
+          ],
+          "dataset_gitlink": "08c20d56304bbcd79ccf34bc91170f6df5bc438e",
+          "dataset_pin_note": "The model repository's dataset gitlink differs from separately inspected dataset HEAD; do not conflate them in reproduction."
+        }
+      ],
+      "conventions": {
+        "graph": "Material State Transfer Graph built from Action graphs and cross-action relations. It uses one broad Action label, 17 entity labels, local roles and cross-action temporal/causal relations.",
+        "entities": [
+          "Reagent",
+          "Location",
+          "Device",
+          "Mention",
+          "Seal",
+          "Amount",
+          "Concentration",
+          "Size",
+          "Time",
+          "Temperature",
+          "pH",
+          "Speed",
+          "Numerical",
+          "Generic-Measure",
+          "Modifier",
+          "Measure-Type",
+          "Method"
+        ],
+        "local_roles": [
+          "Acts-on",
+          "Site",
+          "Product",
+          "Using",
+          "Count",
+          "Measure-Type-Link",
+          "Mod-Link",
+          "Setting",
+          "Measure",
+          "Meronym",
+          "Or",
+          "Of-Type"
+        ],
+        "cross_action": "Acts-on, Site, Product, Coreference-Link, Overlaps, Enables.",
+        "implicit_cases": "I-I: both producing output and consuming input implicit, encoded via action-to-action relation. I-E: producer linked to later explicit product. E-I: consumer linked to earlier explicit product. E-E: explicit same-state mentions linked by coreference.",
+        "state_rule": "Appendix coreference is allowed only when the object remains in the same state, with no intervening transformation of that object; product links carry transformation.",
+        "branching": "Overlaps represents temporal concurrence; Or links alternatives. Neither is a full guarded branch/loop construct. The published scheme folds Prevents into Enables plus a negated action.",
+        "evidence": "BRAT T records preserve character spans, E records preserve trigger and argument roles, and R records preserve typed pair links. Relations lack separate source trigger spans."
+      },
+      "code_trace": [
+        "BRAT reader resolves event IDs to Action trigger IDs and reads T/E/R records; declared Confidence attributes are not parsed by the inspected reader, so their presence in annotation.conf is not model confidence support.",
+        "to_json.py lowercases and replaces digits for model input, creates inverse relations for Or/Overlaps/Coreference-Link, and tiles with window 5/stride 2. This preprocessing must not touch evidence text or quantitative values.",
+        "IterativeGraphFramework uses SciBERT span representations, span pruning, iterative graph decoding and multi-head relational graph convolution. Training combines binary span loss with label-smoothed entity/relation losses; config weights are 0.125/0.125/0.75 with smoothing 0.1.",
+        "Validation/test explicitly run with gold and predicted entities; document-level merging handles overlapping window predictions. RelationGroupFinder implements separate explicit/implicit relation slices."
+      ],
+      "exact_observations": [
+        "The locally supplied annotation example protocol_101 is an HPC BLAST workflow rather than a wet-lab assay, showing the corpus contains heterogeneous procedural content.",
+        "Its E2 links Create(directory) to prior Login via Acts-on:E1; the parser collapses E1 to its Action trigger. Such action-to-action edges are an encoding of implicit flow, not literal physical reagents.",
+        "annotation.conf permits Prevents, while the paper says published causal labels collapse it to Enables plus negation. A declared schema alone does not describe the exact supervised target."
+      ],
+      "limitations": [
+        "The original 622-protocol WLP corpus is sentence-local; WLP-MSTG extends 615 protocols with document-level links. The two corpora are not interchangeable benchmarks.",
+        "Same-state coreference is valuable but material identity, lineage and state still need explicit separate representation in genomics.",
+        "A finite context window and digit replacement are incidental model constraints, not principles to adopt.",
+        "Source statements outside action-prescribing text were removed for connected graphs; an atlas should retain relevant definitions and provenance separately.",
+        "Aggregate relation scores do not establish faithful branching or science across unseen assay families."
+      ],
+      "reuse": "Adopt the four explicit/implicit input-output evaluation cases and state-sensitive coreference rule as annotation guidance and negative controls. Retain a modern extractor; do not transplant this 2021 training pipeline as the atlas runtime."
+    },
+    {
+      "id": "matprov",
+      "decision": "adapt",
+      "role": "Recent LLM extraction reference for typed material/tool entities and transformation-linked intermediate states without a fixed stage inventory.",
+      "paper": {
+        "title": "MatPROV: A Provenance Graph Dataset of Material Synthesis Extracted from Scientific Literature",
+        "url": "https://arxiv.org/html/2509.01042v1",
+        "year": 2025,
+        "inspected": "Sections 2-5 and Appendix prompts/evaluation; pinned prompts, extraction, validation, evaluation and a real gold graph inspected."
+      },
+      "repositories": [
+        {
+          "url": "https://github.com/MatPROV-project/matprov-experiments",
+          "commit": "361c3705f11895b327d37fe56d91bccea6f05288",
+          "license": "MIT",
+          "files": [
+            "src/prompts/relevant_text_extraction.txt",
+            "src/prompts/synthesis_procedure_extraction.txt",
+            "src/inference/synthesis_procedure_extraction.py",
+            "src/evaluation/evaluate.py",
+            "data/ground-truth/10.1002_advs.201901598.json",
+            "LICENSE"
+          ]
+        },
+        {
+          "url": "https://github.com/MatPROV-project/matprov-schema",
+          "commit": "4aed08ced9541da25ce51232a184efc1c2192301",
+          "release": "1.0",
+          "license": "CC-BY-4.0",
+          "files": [
+            "releases/1.0/context.jsonld",
+            "LICENSE"
+          ]
+        }
+      ],
+      "conventions": {
+        "nodes": "Entity(material or tool) and Activity; Usage connects Entity to Activity, Generation connects Activity to Entity.",
+        "intermediates": "Prompt creates an intermediate product per transformation using a past-participle sample label; original precursor names are retained. This gives explicit state progression but intermediate labels are generated, not verbatim evidence.",
+        "branches": "Multiple inputs and multiple outputs are graph-representable. Explicit conditional guards and loops are absent from the inspected prompt/schema. Parameter-only variants are deliberately combined.",
+        "parameters": "Ten string-valued parameter classes: temperature, duration, pressure, mass, length, purity, concentration, rotation, atmosphere, form; start/end/rate and length-specific variants exist. Context JSON-LD maps vocabulary terms to xsd:string; it is not a JSON validation or unit ontology.",
+        "evidence": "Dataset links procedures to paper DOI; inspected extracted graph records have no per-assertion source span or citation locator."
+      },
+      "code_trace": [
+        "Relevant-text prompt selects actual synthesis paragraphs verbatim; synthesis prompt emits JSON graph list; chat.completions returns text; json.loads and validate_jsonld run afterward; normalize_jsonld injects fixed JSON-LD contexts and canonical parameter key aliases.",
+        "No response_format or schema-constrained decoding is passed by extract_synthesis_procedure; schema compliance is prompted and checked only afterward.",
+        "validate_jsonld checks four allowed types, uniqueness of present IDs, and referenced ID existence. It does not verify endpoint node classes, all required IDs, DAGness, connectivity, source support, units, or biological semantics.",
+        "write_json_output skips invalid responses. evaluate scores only filenames common to predictions and gold and skips invalid files. sample_match greedily pairs graph labels by string similarity up to the smaller count, without a threshold; node/edge scores omit unmatched procedures and parameter scores are conditional on matched nodes.",
+        "normalize_jsonld changes width/height/thickness/diameter keys, adds language and string types; it does not resolve synonyms, material identity, experimental scope, or unit conversion."
+      ],
+      "exact_observations": [
+        "Prompt says extract verbatim but also requires gerund action labels and templated intermediate labels; those are normalization/model-derived labels and need separate original-source evidence fields.",
+        "Prompt simultaneously requires a DAG and directed reachability from every node to every other node. Taken literally these are incompatible for a nontrivial DAG; use explicit weak connectivity/partial-order semantics instead.",
+        "Prompt combines identical topology/labels with differing parameters into one object and collects multiple values into one string. This loses condition-to-sample pairing needed for assay variants.",
+        "Relevant-text selection excludes characterization, measurement, analysis-only paragraphs and prior-work procedures. Those exclusions cannot transfer unchanged to sequencing assays.",
+        "The real gold sample contains alternate accepted strings in label values; evaluator normalizes punctuation/case rather than using an ontology identity mapping."
+      ],
+      "evidence_boundary": "The paper reports 2367 procedures, including 4 cyclic graphs and 41 graphs with isolated nodes. Reported performance uses one expert's small annotated set and benchmark-specific matching; no genomics validation.",
+      "reuse": "Adopt entity/activity usage-generation separation and versioned JSON-LD interchange only as an optional projection. Preserve local material states, evidence spans, explicit inference status, scope/variants and unknowns; replace validation and evaluation contracts.",
+      "reject": [
+        "Mandatory generated intermediate names as literal facts",
+        "Combining parameter variants",
+        "Forcing one connected workflow",
+        "Treating JSON-LD context or prompted syntax as semantic correctness",
+        "Reported F1 as end-to-end source coverage"
+      ]
+    }
+  ],
+  "additional_screening": [
+    {
+      "name": "Original WLP",
+      "primary_url": "https://aclanthology.org/N18-2016.pdf",
+      "repository": "https://github.com/chaitanya2334/WLP-Dataset",
+      "commit": "1f51ae6e620a5aa3590acf725713f430783f56d7",
+      "finding": "Useful span/action/role vocabulary and sentence-local annotation baseline; document material flow requires later extensions. Original relation evaluation used gold spans, so its score is not extraction-end-to-end."
+    },
+    {
+      "name": "Notes2Skills",
+      "primary_url": "https://arxiv.org/html/2606.11897v1",
+      "year": 2026,
+      "finding": "Methods and appendices distinguish author FACT/JUDGMENT/SUGGESTION, preserve source-linked directives through deterministic compilation, and separate preservation audit from extraction performance. Useful provenance/epistemic principle; downstream study concerns file decisions from laboratory notes and instrument traces, not assay material-flow extraction. No usable official repository link found during this bounded search, so implementation not audited and no code reuse recommendation."
+    },
+    {
+      "name": "Natural language processing for automated workflow and knowledge graph generation in self-driving labs",
+      "primary_url": "https://pubs.rsc.org/en/content/articlehtml/2025/dd/d5dd00063g",
+      "year": 2025,
+      "finding": "Methods explicitly separate action extraction from hardware mapping; the latter maps several extraction/purification operations to centrifugation with supernatant waste because of a nanomaterial platform. Strong counterexample to transferring hardware-conditioned mappings into general assay extraction. Code not audited here; not selected as implementation candidate."
+    },
+    {
+      "name": "Automated LLM based Extraction of Standardized Synthesis Procedures: an All-Domain, Zero-Shot Approach",
+      "primary_url": "https://www.researchsquare.com/article/rs-7860460/v1",
+      "data_url": "https://zenodo.org/records/17241571",
+      "year": 2025,
+      "finding": "Found primary preprint and 3.8 MB Zenodo result archive; preprint fetch returned 403 and archive was not downloaded. Insufficient methods/code access for adoption claim."
+    },
+    {
+      "name": "text2protocol",
+      "finding": "Exact-name and alternate text-to-protocol searches did not identify a clear scientific primary method under this name; results were largely unrelated. This is unresolved identity, not proof no method exists."
+    }
+  ],
+  "recommended_pattern": {
+    "extraction": "Produce atomic evidence-anchored assertions first: explicit operation mention, participant role, state/quantity, local source scope and relation evidence; keep missing versus inferred versus explicit distinct.",
+    "document_reasoning": "Resolve references using state and lineage, with explicit/implicit input-output cases; preserve alternatives, conditions, repeat semantics and prohibitions as first-class assertions.",
+    "validation": "Validate IDs/types, input/output role compatibility, branch scope, quantity/units, state and lineage continuity, source anchors and unresolved arguments. A graph may remain disconnected because evidence is incomplete.",
+    "normalization": "Keep verbatim mention, normalized label, canonical ID proposal, justification and status separate. Use assay/component-specific vocabularies only where supported; no universal stage order.",
+    "graph_boundary": "Publish a deterministic graph projection only after the evidence contract is adjudicated; do not let search-friendly topology or execution requirements retroactively alter extraction facts."
+  },
+  "falsification_controls": [
+    "Same reagent name in distinct tubes/branches must not merge; same material across renamed mentions can corefer only under compatible state and scope.",
+    "Centrifugation pellet and supernatant must remain different outputs; retained/discarded fractions require source evidence.",
+    "Post-transformation material cannot corefer as the same state solely because names match.",
+    "Conditional repeated operation and optional wash retain guards; prohibited operation cannot become performed operation.",
+    "Changed text order without changed dependencies should not alter material flow.",
+    "Parameter-only variants preserve sample/condition pairing.",
+    "Missing source argument remains missing instead of being filled by a known assay template.",
+    "Long-distance input-output links are scored separately from local NER and relation extraction.",
+    "Invalid/missing predictions and missing documents remain in coverage denominator.",
+    "Document-family and assay-family holdouts prevent memorized protocol structure from appearing as generalization."
+  ],
+  "provenance_checks": {
+    "prior_manifest": "sequencing-technology-atlas/provenance/benchmark_reference_implementations_20261020.json",
+    "local_snapshot_hash_check": "26 prior-manifest-pinned files across X-WLP data/model and WLP-MSTG data/LSM verified against existing SHA-256 records with zero mismatch; current remote HEAD commits match recorded commits.",
+    "code_copied_into_runtime": false,
+    "foreign_pipeline_executed": false,
+    "model_runs": false,
+    "ssh_or_deployment": false
+  }
+}

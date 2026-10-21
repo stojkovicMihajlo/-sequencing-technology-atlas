@@ -1,0 +1,110 @@
+{
+  "audit_date": "2026-10-21",
+  "status": "Research decision record; no implementation, model execution, SSH, or repository test execution performed.",
+  "local_contract": {
+    "observable_inputs": "Registered source packets and their identifiable text, tables, figures and explicitly resolved references.",
+    "target": "An evidence-grounded account of documented workflow operation occurrences, material and data states, parameter assertions and typed dependencies, scoped to a method variant or experimental arm.",
+    "unavailable_information": ["Unreported laboratory actions", "Actual historical execution times and intermediate measurements", "Implicit equipment choices and defaults", "Unstated causal relations or material composition"],
+    "invariants": ["Keep operation occurrences distinct from operation types", "Keep material/data flow distinct from control ordering", "Keep prescriptive protocol descriptions distinct from execution observations", "Keep source assertions distinct from normalization and inference", "Do not infer total order from prose order", "Preserve unresolved, contradictory and missing assertions"],
+    "deployment_map": "Source extraction release -> independently validated workflow construction -> separately versioned atlas indexing and graph search.",
+    "success_and_controls": "Measure source-supported node/argument/edge recovery, branch/arm scope, entity-state continuity and unsupported-edge rate. Negative controls include reordered prose, absent pooling, control-arm contrasts and omitted operating parameters.",
+    "non_identifiable_claims": "Literature extraction alone does not establish a complete executable SOP, the exact event log of an experiment, physical feasibility, or cross-method biological equivalence."
+  },
+  "material_ambiguity": {
+    "classification": "Law-level representation ambiguity: the modeled object changes between a documented partial workflow, a complete executable program, and an observed execution history.",
+    "alternatives": ["Linear robotic instruction stream", "Typed partially ordered activity and object-flow graph", "Execution provenance trace"],
+    "recommendation": "Adapt a small typed workflow contract informed by LabOP/UML, while retaining a separate evidence assertion layer and explicit unknowns. Do not make executable completeness the extraction acceptance criterion."
+  },
+  "systems": [
+    {
+      "name": "LabOP, formerly PAML",
+      "paper": {"title": "Building an Open Representation for Biological Protocols", "year": 2023, "doi": "10.1145/3604568", "url": "https://jakebeal.github.io/Publications/JETC23-LabOP.pdf"},
+      "repository": "https://github.com/Bioprotocols/labop",
+      "commit": "2e2bd88150c71a440771fd369f40295dfd622324",
+      "license": {"type": "MIT", "inspected": true, "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/LICENSE.txt"},
+      "observed_object_and_rationale": "An RDF protocol model extending UML Activity/Behavior concepts, with reusable laboratory primitives, object and control flows, and separately represented execution records. The paper motivates an intermediate level that can support human-readable procedures and multiple automation backends.",
+      "inspected_code": [
+        {"path": "labop/protocol.py", "symbols": ["Protocol", "execute_primitive", "primitive_step", "make_decision_node", "is_well_formed"], "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/labop/protocol.py", "observation": "Protocol extends Activity. execute_primitive creates a CallBehaviorAction. primitive_step additionally imposes predecessor ordering; its own documentation warns about unstable append order after deserialization."},
+        {"path": "uml/activity.py", "symbols": ["Activity.call_behavior", "Activity.order", "Activity.use_value", "Activity.add_call_behavior_action"], "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/uml/activity.py", "observation": "order builds ControlFlow; use_value builds ObjectFlow; call_behavior maps activity-valued arguments through input pins. This preserves the important difference between an ordering constraint and the transfer of an object/value."},
+        {"path": "uml/inner/uml.ttl", "symbols": ["ControlFlow", "ObjectFlow", "ForkNode", "JoinNode", "DecisionNode", "MergeNode", "InputPin", "OutputPin"], "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/uml/inner/uml.ttl", "observation": "Fork/join encode concurrent branching and synchronization; decision/merge encode alternatives and reunion without synchronization. These are distinct graph semantics."},
+        {"path": "labop/inner/labop.ttl", "symbols": ["Protocol", "Primitive", "BehaviorExecution", "ProtocolExecution", "SampleCollection", "SampleMap", "SampleData", "SampleMetadata"], "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/labop/inner/labop.ttl", "observation": "ProtocolExecution records node firings and edge-token movements. BehaviorExecution may describe real or simulated execution, so even an execution object is not automatically empirical evidence. SampleMap has source/target collections and serialized fan-in/fan-out mappings. SampleCollection is logical and does not itself uniquely identify physical labware."},
+        {"path": "labop/lib/liquid_handling.ttl", "symbols": ["Transfer", "TransferInto", "TransferByMap", "Provision"], "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/labop/lib/liquid_handling.ttl", "observation": "Named typed primitives distinguish measured transfer, mixing into destinations and mapped transfers. They provide useful operation signatures, without proving genomics-specific biological equivalence."},
+        {"path": "uml/decision_node.py", "symbols": ["DecisionNode.add_decision_output", "DecisionNode.next_tokens_callback"], "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/uml/decision_node.py", "observation": "Guards are attached to outgoing edges. The inspected engine implementation chooses the first matching non-else edge, which must not be mistaken for a general uncertainty-resolution rule."},
+        {"path": "test/test_decision_nodes.py", "symbols": ["test_create_protocol", "test_ludox_calibration_decision"], "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/test/test_decision_nodes.py", "observation": "Tests exercise decision-node examples through a ProtocolHarness. One enables overwrite_rubric; these are not independent extraction-quality benchmarks. Inspected, not run."},
+        {"path": "test/test_subprotocols.py", "symbols": ["test_subexecutions"], "url": "https://github.com/Bioprotocols/labop/blob/2e2bd88150c71a440771fd369f40295dfd622324/test/test_subprotocols.py", "observation": "Exercises nested behavior execution. Some subprotocol-record assertions are conditional on a synchronous mode the comments say is unavailable. Inspected, not run."}
+      ],
+      "paper_code_reconciliation": "The implementation realizes the paper's explicit flow types and protocol/execution separation. The inspected snapshot also contains convenience ordering and execution-specific assumptions; it does not warrant importing every UML feature or treating its execution engine as an uncertainty-aware literature graph builder.",
+      "decision": "adapt",
+      "transfer": ["Typed operation occurrences and argument roles", "Explicit partial ordering separate from material/data dependencies", "Guarded branches, concurrent branches and reusable subworkflows", "Separate protocol definition and execution/provenance record", "Explicit source-to-destination mapping as a model for aliquoting/pooling lineage"],
+      "do_not_import": ["Insertion order as scientific ordering", "Simulator timestamps as experiment observations", "Full RDF/UML/execution stack as a mandatory storage/runtime dependency", "First-matching-guard execution as resolution of ambiguous text", "Generic ControlFlow nodes as experimental control samples", "A synchronization join as proof of material pooling"],
+      "local_extensions_proposed_not_observed": ["Evidence spans and field-level assertion provenance", "Documented/normalized/inferred status", "Explicit missing and conflicting values", "Method-variant and experimental-arm scope", "Genomics-specific molecule/barcode/compartment state continuity", "Pool/split operations with explicit membership and amounts where stated", "Control-sample roles separate from workflow-control relations"]
+    },
+    {
+      "name": "Autoprotocol",
+      "specification": "https://autoprotocol.org/specification/",
+      "repository": "https://github.com/autoprotocol/autoprotocol-python",
+      "release": "v10.3.0",
+      "commit": "4795408f8a814fc7e3e70d54ada64da5ca125161",
+      "license": {"type": "BSD-3-Clause", "inspected": true, "url": "https://github.com/autoprotocol/autoprotocol-python/blob/4795408f8a814fc7e3e70d54ada64da5ca125161/LICENSE.rst"},
+      "observed_object_and_rationale": "JSON container references plus a linear instruction sequence, with quantities, data references and temporal constraints. The official design explicitly excludes runtime branching and loops and requires hardware-mappable instructions without human interpretation.",
+      "inspected_code": [
+        {"path": "autoprotocol/instruction.py", "symbols": ["Instruction.__init__", "Instruction._as_AST", "Instruction._remove_empty_fields", "IlluminaSeq"], "url": "https://github.com/autoprotocol/autoprotocol-python/blob/4795408f8a814fc7e3e70d54ada64da5ca125161/autoprotocol/instruction.py", "observation": "Instruction serializes an operation and structured arguments. Empty/None fields are removed. IlluminaSeq includes prepared aliquots, lanes, sequencing settings and dataref; this is a particular automation interface, not a complete sequencing-method ontology."},
+        {"path": "autoprotocol/protocol.py", "symbols": ["Protocol.ref", "Protocol.as_dict", "Protocol.transfer"], "url": "https://github.com/autoprotocol/autoprotocol-python/blob/4795408f8a814fc7e3e70d54ada64da5ca125161/autoprotocol/protocol.py", "observation": "as_dict serializes refs/instructions/outs and optional time constraints. It can update storage/disposal metadata while serializing. Such generated operational defaults are inappropriate as source assertions."}
+      ],
+      "decision": "adapt operation signatures; reject as the core workflow representation",
+      "transfer": ["Separate container/aliquot references and reagent roles", "Dimensioned quantities", "Output dataset references", "Per-operation argument validation"],
+      "do_not_import": ["Linearization that erases branches and partial ordering", "Mandatory concrete hardware/container identities for under-specified literature", "Defaults or omitted-null serialization that collapse absent/unknown/conflicting evidence", "Vendor-era sequencing enumerations as the atlas vocabulary"]
+    },
+    {
+      "name": "XDL / Chemputer",
+      "paper": {"title": "A universal system for digitization and automatic execution of the chemical synthesis literature", "year": 2020, "url": "https://eprints.gla.ac.uk/221626/1/221626.pdf"},
+      "official_repository": "https://gitlab.com/croningroup/chemputer/xdl",
+      "official_release": "v2.0.0",
+      "official_release_short_commit": "68038186",
+      "official_specification": "https://croningroup.gitlab.io/chemputer/xdl/standard/index.html",
+      "official_doc_build": "2.0.1.dev12+g8fdf586b",
+      "code_access_boundary": "Official v2.0.0 release metadata and LICENSE were accessible, but exact official implementation files could not be fetched. A lead author's explicitly labeled historical snapshot was inspected instead; it is not asserted to equal v2.0.0.",
+      "inspected_snapshot_repository": "https://github.com/mcrav/xdl",
+      "inspected_snapshot_commit": "a9b88f2032f714ce7c108b6e313365ae8155ebac",
+      "license": {"official_v2_release": "Apache-2.0", "official_url": "https://gitlab.com/croningroup/chemputer/xdl/-/raw/v2.0.0/LICENSE", "author_snapshot": "MIT", "snapshot_url": "https://github.com/mcrav/xdl/blob/a9b88f2032f714ce7c108b6e313365ae8155ebac/LICENSE", "caution": "Different inspected versions expose different licenses; no code copied or proposed for direct reuse."},
+      "observed_object_and_rationale": "Chemical process programs in abstract vessels are compiled against a separate hardware graph. The paper's SynthReader pipeline intentionally adds implicit process information before expert correction and execution; this is a different target from strictly source-grounded extraction.",
+      "inspected_code": [
+        {"path": "xdl/readwrite/xml_interpreter.py", "symbols": ["steps_from_xdl", "xdl_to_step"], "url": "https://github.com/mcrav/xdl/blob/a9b88f2032f714ce7c108b6e313365ae8155ebac/xdl/readwrite/xml_interpreter.py", "observation": "Parses procedure sections and recursively constructs typed step objects using a platform step library, validating step names and attributes."},
+        {"path": "xdl/xdl.py", "symbols": ["XDL.prepare_for_execution", "XDL.execute"], "url": "https://github.com/mcrav/xdl/blob/a9b88f2032f714ce7c108b6e313365ae8155ebac/xdl/xdl.py", "observation": "Preparation delegates hardware compatibility and compilation to an executor; execution requires a prepared/compiled program and controller. This supports a compiler-stage separation, not literature-evidence validation."}
+      ],
+      "additional_primary_evidence": [
+        {"url": "https://croningroup.gitlab.io/chemputer/xdl/development/making_new_step.html", "observation": "Step extension separates property types/limits, defaults, internal graph-derived properties, expansion into substeps and preparation/sanity checks."},
+        {"url": "https://croningroup.gitlab.io/chemputer/xdl/usage/the_graph.html", "observation": "The graph represents platform modules and physical connectivity. It is not a cross-paper workflow similarity graph."},
+        {"url": "https://gitlab.com/croningroup/chemputer/xdl/-/merge_requests/699", "observation": "XDL 2.0 adds concurrent execution queues and dependency/hardware-lock handling; describing all XDL as a strictly linear format would be inaccurate."},
+        {"url": "https://croningroup.gitlab.io/chemputer/xdl/standard/monitoring_with_repeat.html", "observation": "Documented monitoring loops use measurements and thresholds, with a beta-feature warning. These runtime conditions must not be inferred for a paper that merely reports sequential actions."}
+      ],
+      "decision": "adapt compiler separation and typed validation; reject synthesis/hardware assumptions as atlas requirements",
+      "transfer": ["Stable intermediate operation representation separate from target-specific lowering", "Operation-level property types and limits", "Explicit distinction between supplied properties and derived internal properties", "Optional named subworkflow templates"],
+      "do_not_import": ["Adding unreported steps/parameters to achieve executability", "Chemical synthesis section names as universal genomics stages", "Hardware graph topology as biological material lineage", "Reactor/solvent/product assumptions for all genomics methods", "Treating simulation success as evidence extraction correctness"]
+    }
+  ],
+  "selected_construction": {
+    "proposal": "Maintain an immutable evidence extraction record, then build a versioned typed workflow with operation instances, input/output states, parameter assertions and explicitly typed relations. The index/search layer consumes this graph without controlling what the extractor is allowed to observe.",
+    "node_semantics": ["Operation occurrence references a reusable operation type", "Material state identifies a stage-specific sample/molecule/compartment description", "Data state identifies a measurement or computational artifact", "Control role and experimental arm are scoped attributes/relations, not generic workflow-control nodes"],
+    "edge_semantics": ["Consumes/produces or input/output role", "Explicitly precedes", "Branch guard", "Concurrent fork and synchronization", "Split/pool lineage with membership", "Variant or arm applicability"],
+    "unknown_semantics": "Unknown order does not mean concurrency; a shared reagent does not imply sample continuity; a shared operation label does not imply identical input/output state; omitted values do not authorize library defaults.",
+    "scope_note": "These local design choices are proposals derived from the contract, not claims that the inspected systems already solve evidence-grounded genomics extraction."
+  },
+  "falsification_and_test_obligations": [
+    "Reordering independent prose sentences must not change inferred biological dependencies.",
+    "The same operation type occurring twice must remain two occurrences with distinct contexts.",
+    "Conditional and parallel arms must not collapse to a single executable chain.",
+    "A split into aliquots followed by pooling must retain membership; a synchronization join alone must not fabricate a pool.",
+    "A negative-control sample must remain separate from a treated sample even when both use identical operation types.",
+    "State transitions such as RNA to cDNA, ligated barcode state and compartment changes must not be inferred solely from a broad operation label.",
+    "If a source omits an operating parameter, a library default must not become a documented parameter.",
+    "No simulated or schema-generated execution record may be emitted as a historical experiment observation.",
+    "Every graph assertion must resolve to an extraction assertion or a named, versioned derivation rule; graph search must not silently rewrite extraction evidence."
+  ],
+  "remaining_uncertainty": [
+    "LabOP primitives and sample mappings were not evaluated on this genomics corpus; transfer requires the proposed source-grounded fixtures.",
+    "The exact official XDL v2.0 implementation was not retrieved, so snapshot-specific observations are labeled separately from current official documentation.",
+    "None of these three systems establishes automatic recovery of complete workflows from incomplete genomics papers or a benchmark for cross-method graph matching.",
+    "No claim of novelty follows from this bounded representation audit."
+  ]
+}
