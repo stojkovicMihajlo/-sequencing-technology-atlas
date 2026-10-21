@@ -8,6 +8,7 @@ import asyncio
 import argparse
 import json
 from pathlib import Path
+import shlex
 import subprocess
 import sys
 
@@ -21,6 +22,7 @@ from genomics_discovery.curation.source_acquisition.supplement_archive import In
 from genomics_discovery.curation.source_originals import bind_originals
 from genomics_discovery.curation.workflow_extraction.extraction_pipeline import execute
 from genomics_discovery.curation.workflow_extraction.sources import build_packet, load_packet
+from genomics_discovery.curation.workflow_extraction.prompts import source_command
 
 
 def prepare_dependencies(acquisition, recovery):
@@ -129,6 +131,8 @@ async def main(root, recovery_attempt=1):
         "method_id": packet["method_id"], "expected_variant": packet["variant"],
         "registered_primary": {k: source[k] for k in ("source_id", "document_identity", "original_path", "original_sha256")},
         "selected_pdf": str(original), "rendition": str(rendition),
+        "provided_visual_inputs": [{"pdf_page": 1, "path": str(attempt / "supplement-title.png"),
+                                    "sha256": sha(attempt / "supplement-title.png")}],
         "required_inspected_files": {str(original): sha(original), str(rendition): sha(rendition)}}
     write(attempt / "request.json", request)
     pins = {str(p): sha(p) for p in attempt.iterdir() if p.is_file()}
@@ -136,6 +140,10 @@ async def main(root, recovery_attempt=1):
     pins[str(recovery / "supplement/preparation.json")] = sha(recovery / "supplement/preparation.json")
     pins.update(custody)
     pins.update({str(p): sha(p) for p in recovery.rglob("*") if p.is_file()})
+    inspector_command = source_command(initial).removesuffix(".workflow_extraction") + ".source_acquisition.supplement_archive"
+    self_check = (f"{inspector_command} check-inspection --preparation "
+                  f"{shlex.quote(str(recovery / 'supplement/preparation.json'))} "
+                  f"--inspection {shlex.quote(str(attempt / 'artifact.json'))}")
     prompt = f"""ROLE: source_attachment_inspector
 Read {attempt / 'request.json'}, {attempt / 'schema.json'} and the preparation.
 Inspect the attached original title-page image and the actual selected PDF/text.
@@ -146,11 +154,26 @@ document. Do not certify scientific completeness, recipe correctness, visibility
 of all image details, or applicability of every experiment. Preserve uncertainty.
 Use consistent only when the actual content and version evidence justify it;
 otherwise use uncertain or conflict. State the basis and exact body witness.
-The image shows only page 1; further original pages can be rendered if necessary.
+content_witness must be exactly ONE contiguous verbatim substring of the supplied
+PDF text rendition body, including its actual whitespace/newlines. Do not include
+page labels, commentary, joined excerpts, ellipses or primary-XML text there.
+Put extra observations and their locators in content_basis/version_basis.
+The provided_visual_inputs inventory identifies the ONLY attached image: page 1.
+Distinguish image-supported observations from text-supported judgments. Captions,
+rendered-but-undelivered pages and base64 stdout do not establish visual inspection.
+Do not claim body-page visual checks. If additional visual input is necessary for
+the attachment decision, use uncertain and explain what is needed; do not invent
+an image delivery path or certify unreadable figures.
 Do not use web/network, prior finder opinions, old extractions or reviews. Do not
 launch agents or change sources, request, preparation, schema or image inputs.
 Write only {attempt / 'artifact.json'} with one schema-conforming Inspection.
 Copy exact frozen bindings from request; no generated source text or new protocol.
+Before finishing, run this nonmutating host self-check:
+{self_check}
+If integrity_valid is false, use its error to repair your own record and check
+again; never alter the inputs or validator. A valid uncertain/conflict decision
+can have registration_allowed=false. Do not change a negative scientific judgment
+to consistent merely to permit registration. The host checks again afterward.
 """
     worker = CodexWorker(model="gpt-6.1-sol", effort="xhigh", timeout_seconds=None,
                          web_search=False, network_access=False)

@@ -104,13 +104,31 @@ The first extraction remains `extraction/run_001/`, since no extraction began in
 the failed job. A used extraction destination is rejected before any paid call.
 Existing acquisition and recovery attempt 001 remain unchanged.
 
-Restart **job 48874338** was submitted on 2026-10-21 using frozen runtime
+Restart **job 48874338** failed on 2026-10-21 using frozen runtime
 **750ba29** (`gpt-6.1-sol`, `xhigh`, Qiu CPU partition, recovery attempt 2).
-Its first scheduler observation was `PENDING`; no new extraction outcome is
-established by submission. Scheduler output is in
+All six dependency checks passed. The attachment inspector returned `consistent`
+after 171.7 seconds, but registration rejected its `content_witness`: that field
+joined labels, disjoint PDF excerpts and primary-XML text instead of one literal
+PDF-body substring. No extraction began. Scheduler output is in
 `method_experiments/logs/scstamp-recover-extract-attempt002-48874338.log`.
 Three targeted regressions passed for reading-order identity versus layout,
 unchanged DOI rejection, and rejection of a used extraction destination.
+
+The same trace claimed visual checks of body pages despite only the title-page
+image being attached. Rendering body pages and printing base64 text does not
+establish image delivery. Those claims receive no visual-evidence credit; the
+trace is not an exhaustive audit of all possible model-side image access.
+
+The next restart uses `run.sbatch recover-extract METHOD_ROOT 3`, preserving both
+failed attempts. The shared Inspection schema now defines each field, and the
+inspector receives a nonmutating `check-inspection` command before finalization.
+The host repeats the same exact validation afterward; no witness rule is relaxed.
+The request inventories the sole attached image, and the prompt distinguishes
+visual observations from text-based identity judgments. Additional image needs
+must remain uncertain. This does not certify full figure or protocol recovery.
+The helper and adjacent converter/archive tests passed 108 checks; an independent
+focused audit passed eight checks and found no blockers. Native behavior still
+requires the fresh run.
 
 Both stages use `gpt-6.1-sol`, `xhigh`, the existing Codex login and managed
 execution policy. There is no per-stage model timeout. The four-hour Slurm

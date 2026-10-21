@@ -274,6 +274,64 @@ def test_existing_primary_ledger_is_preserved(fixture, tmp_path):
     assert load_originals(tmp_path / "registration/original_bindings.json")["unmapped_source_ids"] == []
 
 
+@requires_poppler
+@pytest.mark.parametrize("decision", ["consistent", "uncertain", "conflict"])
+def test_inspection_self_check_is_nonmutating_and_preserves_valid_negative_decisions(
+        fixture, tmp_path, capsys, decision):
+    directory, prepared = prepare(fixture, tmp_path)
+    report = inspection(directory, prepared, decision=decision)
+    before = {str(path): path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()}
+    result = helper.check_inspection(directory / "preparation.json", report)
+    assert result["integrity_valid"] is True
+    assert result["decision"] == decision
+    assert result["registration_allowed"] is (decision == "consistent")
+    assert result["scientific_resolution"] is False
+    assert helper.main(["check-inspection", "--preparation", str(directory / "preparation.json"),
+                        "--inspection", str(report)]) == 0
+    assert json.loads(capsys.readouterr().out) == result
+    if decision != "consistent":
+        with pytest.raises(ValueError, match="uncertain or conflicts"):
+            helper.register(directory / "preparation.json", report, tmp_path / "not_registered")
+    after = {str(path): path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()}
+    assert after == before
+    assert not (tmp_path / "not_registered").exists()
+
+
+@requires_poppler
+@pytest.mark.parametrize("witness", [
+    "PDF page 1: Original protocol v1 | Supplemental methods | Primary XML: Use the attached protocol.",
+    "Original protocol v1 ... A fixture procedure.",
+    "Use the attached protocol.",  # Exact primary XML text is not a PDF-body witness.
+    "Original protocol v1 Supplemental methods",  # Whitespace is deliberately not normalized.
+])
+def test_composite_labeled_primary_xml_and_nonverbatim_witnesses_fail_pure_self_check(
+        fixture, tmp_path, capsys, witness):
+    directory, prepared = prepare(fixture, tmp_path)
+    report = inspection(directory, prepared, content_witness=witness)
+    before = {str(path): path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()}
+    with pytest.raises(ValueError, match="witness is absent"):
+        helper.check_inspection(directory / "preparation.json", report)
+    assert helper.main(["check-inspection", "--preparation", str(directory / "preparation.json"),
+                        "--inspection", str(report)]) == 1
+    result = json.loads(capsys.readouterr().out)
+    assert result["integrity_valid"] is False and result["registration_allowed"] is False
+    assert "witness is absent" in result["error"]
+    assert {str(path): path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()} == before
+
+
+@requires_poppler
+def test_exact_raw_multiline_body_witness_passes_but_provenance_header_does_not(fixture, tmp_path):
+    directory, prepared = prepare(fixture, tmp_path)
+    raw = Path(prepared["source"]["path"]).read_text(encoding="utf-8")
+    body = raw.split("\n\n", 1)[-1].strip()
+    assert "\n" in body
+    report = inspection(directory, prepared, content_witness=body)
+    assert helper.check_inspection(directory / "preparation.json", report)["integrity_valid"]
+    report = inspection(directory, prepared, content_witness="Original cached file:")
+    with pytest.raises(ValueError, match="witness is absent"):
+        helper.check_inspection(directory / "preparation.json", report)
+
+
 def test_pmc_article_id_alias_is_normalized_without_changing_registered_identity(fixture):
     packet = load_packet(fixture[0])
     original = Path(packet["sources"][0]["original_path"])

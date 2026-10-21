@@ -38,7 +38,7 @@ Inspect the actual selected PDF and its text rendition. Write a separate record:
   "decision": "consistent",
   "content_basis": "Explain which inspected content belongs to this publication.",
   "version_basis": "Explain why the attachment is appropriate to this exact version; retain uncertainty honestly.",
-  "content_witness": "An exact quotation from the converted PDF body.",
+  "content_witness": "ONE contiguous raw verbatim excerpt from the converted PDF body.",
   "inspected_files": {
     "/project/recovery/attempt_001/supplements/selected.pdf": "PDF_SHA256",
     "/project/recovery/attempt_001/renditions/supplement_001.txt": "RENDITION_SHA256"
@@ -48,8 +48,28 @@ Inspect the actual selected PDF and its text rendition. Write a separate record:
 
 This record is an authored judgment, not proof of understanding. `uncertain` or
 `conflict` prevents registration; do not mark an unexamined version consistent.
-Registration verifies the content witness, exact variant and inspected file pins.
-It replays the ZIP selection and source association before adding the attachment.
+The witness must be one literal substring of the selected PDF text BODY. Preserve
+its actual whitespace/newlines using JSON escapes. Do not join excerpts, add page
+labels/commentary/ellipses, cite primary XML as the PDF witness, or quote the
+rendition's provenance header. Put additional grounds in the two basis fields.
+There is no whitespace normalization or fuzzy matching.
+
+Before finishing the inspection, run the nonmutating self-check:
+
+```bash
+python -m genomics_discovery.curation.source_acquisition.supplement_archive check-inspection \
+  --preparation /project/recovery/attempt_001/preparation.json \
+  --inspection /project/recovery/inspection.json
+```
+
+This creates no files or source packet. It shares registration's source/custody,
+schema, exact variant, inspected-file and literal witness checks. Exit zero and
+`integrity_valid: true` establish a structurally valid record, including a valid
+negative decision. `registration_allowed` separately reports whether this record's
+decision is `consistent`; `uncertain` and `conflict` remain false. These flags do
+not certify scientific correctness. Registration additionally checks its prior
+ledger and fresh output destination, and replays the same validation before
+adding the attachment.
 
 ```bash
 python -m genomics_discovery.curation.source_acquisition.supplement_archive register \

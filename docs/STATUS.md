@@ -2,12 +2,17 @@
 
 ## Fresh scSTAMP-seq recovery/extraction restart, 2026-10-21
 
-Qiu CPU job **48874338** is submitted with frozen runtime **750ba29** and
-`gpt-6.1-sol` / `xhigh`. It reuses the acquired 2025 v1 preprint sources and
-creates recovery attempt 002 before fresh extraction with all three review gates.
-Its first scheduler observation was `PENDING`; submission is not an extraction
-result. The [isolated experiment](../experiments/scstamp_seq_20261021/README.md)
-records exact publication scope, outputs, source failures and restart.
+Qiu CPU job **48874338** failed with frozen runtime **750ba29** and
+`gpt-6.1-sol` / `xhigh`. Six dependency checks passed, but supplement registration
+rejected the inspector's composite witness instead of accepting it as a literal
+PDF-body quote. No extraction began. Its claimed body-page visual checks are also
+not established by image-delivery evidence: only the title image was attached.
+The [isolated experiment](../experiments/scstamp_seq_20261021/README.md) records
+the exact failure and attempt-003 repair: semantic field descriptions, a
+nonmutating self-check using unchanged validation, and explicit visual-input
+inventory. All three extraction gates remain required. Helper and adjacent tests
+passed 108 checks, plus eight independent focused checks; these are software
+checks, not a native extraction result.
 
 Previous recovery job 48847411 failed before any new model call because a caller
 supplied two-column layout text to the PDF title/DOI verifier. Normal reading order

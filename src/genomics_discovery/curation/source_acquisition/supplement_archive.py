@@ -33,15 +33,24 @@ BOUNDARY = ("Publication association and exact-byte custody only. Explicit inspe
 
 
 class Inspection(StrictModel):
-    format_version: str = Field(pattern=r"^supplement_archive_inspection/1\.0$")
-    preparation_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    method_id: str = Field(min_length=1)
-    expected_variant: str = Field(min_length=1)
-    decision: str = Field(pattern=r"^(consistent|uncertain|conflict)$")
-    content_basis: str = Field(min_length=1)
-    version_basis: str = Field(min_length=1)
-    content_witness: str = Field(min_length=1)
-    inspected_files: dict[str, str]
+    format_version: str = Field(pattern=r"^supplement_archive_inspection/1\.0$",
+        description="Exact inspection-record format identifier.")
+    preparation_sha256: str = Field(pattern=r"^[0-9a-f]{64}$",
+        description="SHA256 of the exact supplied preparation.json bytes; copy the frozen request binding.")
+    method_id: str = Field(min_length=1,
+        description="Exact method_id from the supplied preparation and source packet.")
+    expected_variant: str = Field(min_length=1,
+        description="Exact declared packet variant, including its version qualification; do not paraphrase.")
+    decision: str = Field(pattern=r"^(consistent|uncertain|conflict)$",
+        description="Your content/version judgment. Preserve uncertain or conflict honestly; structural validity does not require a positive judgment.")
+    content_basis: str = Field(min_length=1,
+        description="Explain publication/content association. Put commentary, page labels, additional quotations and relevant primary-source grounds here, separately from the single content_witness.")
+    version_basis: str = Field(min_length=1,
+        description="Explain applicability to the declared version and any uncertainty. Primary JATS/XML grounds or other version evidence belong here, not in content_witness.")
+    content_witness: str = Field(min_length=1,
+        description="ONE contiguous raw verbatim excerpt from the selected PDF text rendition BODY only. Preserve exact whitespace/newlines as JSON escapes. No labels, commentary, joined excerpts, ellipses, primary XML or provenance-header text. Additional evidence belongs in content_basis/version_basis. The host checks literal substring presence, not scientific entailment.")
+    inspected_files: dict[str, str] = Field(
+        description="Exact inspected file paths mapped to SHA256 strings. Must include both the selected PDF and its text rendition, with the frozen request's bindings.")
 
 
 def _association(packet, source_id, url, member):
@@ -183,10 +192,10 @@ def prepare(packet_path, primary_source_id, archive_url, member, output, *, fetc
     return result
 
 
-def register(preparation_path, inspection_path, output, *, prior_ledger=None):
-    """Register a fresh expanded packet after a separately authored inspection."""
-    preparation_path, inspection_path, output = (Path(path).resolve()
-                                               for path in (preparation_path, inspection_path, output))
+def _validated_inspection(preparation_path, inspection_path):
+    """Replay read-only bindings and literal witness checks, without judging the decision."""
+    preparation_path, inspection_path = (Path(path).resolve()
+                                        for path in (preparation_path, inspection_path))
     prepared = json.loads(preparation_path.read_bytes())
     if prepared.get("format_version") != PREPARATION:
         raise ValueError("Expected supplement archive preparation")
@@ -227,8 +236,6 @@ def register(preparation_path, inspection_path, output, *, prior_ledger=None):
             or inspection.method_id != packet["method_id"]
             or inspection.expected_variant != packet["variant"]):
         raise ValueError("Content/version inspection is bound to another preparation or scope")
-    if inspection.decision != "consistent":
-        raise ValueError("Content/version inspection remains uncertain or conflicts; no registration")
     if not inspection.content_basis.strip() or not inspection.version_basis.strip():
         raise ValueError("Explicit content and version inspection bases are required")
     rendition = Path(prepared["source"]["path"])
@@ -239,6 +246,31 @@ def register(preparation_path, inspection_path, output, *, prior_ledger=None):
     text = rendition.read_text(encoding="utf-8").split("\n\n", 1)[-1]
     if not inspection.content_witness.strip() or inspection.content_witness not in text:
         raise ValueError("Inspection content witness is absent from the converted PDF body")
+    return prepared, packet, inspection
+
+
+def check_inspection(preparation_path, inspection_path):
+    """Check an authored record without creating files, a packet or a positive judgment."""
+    _, _, inspection = _validated_inspection(preparation_path, inspection_path)
+    return {"format_version": "supplement_archive_inspection_check/1.0",
+            "integrity_valid": True, "decision": inspection.decision,
+            "registration_allowed": inspection.decision == "consistent",
+            "witness_match": "raw_exact_contiguous_pdf_body",
+            "scientific_resolution": False,
+            "boundary": BOUNDARY + " Registration_allowed describes this inspection gate only; "
+                        "registration must still validate its ledger inputs and fresh destination."}
+
+
+def register(preparation_path, inspection_path, output, *, prior_ledger=None):
+    """Register a fresh expanded packet after a separately authored inspection."""
+    preparation_path, inspection_path, output = (Path(path).resolve()
+                                               for path in (preparation_path, inspection_path, output))
+    prepared, packet, inspection = _validated_inspection(preparation_path, inspection_path)
+    if inspection.decision != "consistent":
+        raise ValueError("Content/version inspection remains uncertain or conflicts; no registration")
+    packet_path = Path(prepared["source_packet"]["path"])
+    receipt_path = preparation_path.parent / "conversion_receipt.json"
+    receipt, source = prepared["conversion"], prepared["source"]
     ledger, inherited = [], {}
     if prior_ledger is not None:
         prior_ledger = Path(prior_ledger).resolve()
@@ -307,15 +339,24 @@ def main(argv=None):
     admit.add_argument("--inspection", type=Path, required=True)
     admit.add_argument("--prior-ledger", type=Path)
     admit.add_argument("--output", type=Path, required=True)
+    check = commands.add_parser("check-inspection", help="Validate exact bindings/witness without registration or writes")
+    check.add_argument("--preparation", type=Path, required=True)
+    check.add_argument("--inspection", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        result = (prepare(args.packet, args.primary_source_id, args.archive_url, args.member, args.output)
-                  if args.command == "prepare" else register(args.preparation, args.inspection,
-                      args.output, prior_ledger=args.prior_ledger))
-        print(json.dumps({key: result[key] for key in ("status", "scientific_resolution")}))
+        if args.command == "check-inspection":
+            print(json.dumps(check_inspection(args.preparation, args.inspection)))
+        else:
+            result = (prepare(args.packet, args.primary_source_id, args.archive_url, args.member, args.output)
+                      if args.command == "prepare" else register(args.preparation, args.inspection,
+                          args.output, prior_ledger=args.prior_ledger))
+            print(json.dumps({key: result[key] for key in ("status", "scientific_resolution")}))
         return 0
     except (ValueError, OSError, KeyError) as exc:
-        print(json.dumps({"status": "failed", "error": f"{type(exc).__name__}: {exc}"}))
+        error = {"status": "failed", "error": f"{type(exc).__name__}: {exc}"}
+        if args.command == "check-inspection":
+            error.update(integrity_valid=False, registration_allowed=False)
+        print(json.dumps(error))
         return 1
 
 
