@@ -34,6 +34,22 @@ perspectives are a local design choice, not an established optimum from ROBIN.
 `--mode baseline` allows their contribution to be tested without replacing the
 integration and review stages.
 
+Within reading and integration, `EXTRACTION_PROCEDURE` in `prompts.py` now gives
+an ordered, revisitable procedure: establish scope and applicable sources;
+recover transformations and material/data routes together; fill supported
+resources, conditions and information effects; trace continuity forward and
+backward; then finish the role's artifact. The integrator groups Operations into
+Modules after establishing the underlying Operations and connections. Readers
+still produce findings, not a competing Workflow. Reviewers retain their own
+independent review instructions.
+
+Only the outer stage transitions and gates are enforced by Python. The internal
+procedure is instructed, not mechanically certified. Source reading remains
+adaptive, scientific interpretations may vary across runs, and the biological
+workflow can branch. This change adds no model stage, artifact type or claim of
+deterministic scientific output. Its effect on extraction accuracy requires live
+evaluation; software checks alone cannot establish that it helps.
+
 ## Field meanings and acceptance
 
 `models.py` contains the authoritative per-field descriptions, alongside field

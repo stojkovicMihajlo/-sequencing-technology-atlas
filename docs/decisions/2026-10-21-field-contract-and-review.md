@@ -103,3 +103,28 @@ Sherlock run on source-checked positive and negative cases is still needed to
 measure model interpretation, false positive support, omissions and latency.
 There is no claim of zero hallucinations or bulk-release readiness from software
 tests alone.
+
+## Follow-up: ordered extraction procedure
+
+The stage order was already host controlled. To make within-stage work explicit,
+readers and the integrator now receive one ordered procedure in `prompts.py`:
+scope and source applicability, joint reconstruction of transformations and
+routes, supported operational details, forward/backward continuity checks, then
+role-specific completion. Only the integrator groups Operations into Modules.
+Source-obligation and review agents retain their distinct tasks.
+
+This is our task-specific instruction, not a protocol prescribed by ROBIN.
+Transformations and routes are recovered together because chemistry, selection
+and analytical aliquots can determine which material continues. Earlier decisions
+remain revisitable. Adding rigid topology-first stages would risk preserving a
+mistaken material route and would add model calls without demonstrated benefit.
+No new stages, checkpoint artifacts or enforced internal reading order are added.
+The outer orchestration is controlled; scientific extraction is not deterministic.
+Existing tests check compatibility, not whether this instruction improves model
+behavior. That comparison remains a live-evaluation question.
+
+Validation: 232 tests passed across extraction contract/runtime, completion
+runtime, field contract and field-review runtime suites. `git diff --check`
+passed. An independent code review checked role separation, revisitable route
+reconstruction and the distinction between instructed and enforced ordering.
+No native extraction was launched for this prompt change.

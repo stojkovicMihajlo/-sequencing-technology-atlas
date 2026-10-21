@@ -7,6 +7,34 @@ import shlex
 import sys
 from pathlib import Path
 
+EXTRACTION_PROCEDURE = """Ordered working procedure for reading and integration:
+1. Establish scope first: confirm the frozen scope and variant, identify the
+   source-supported specimen and intended output, and locate applicable Methods,
+   supplements and registered dependencies.
+   Do not silently expand the scope or substitute a different protocol version.
+2. Recover transformations and material/data routes together. Identify what
+   enters each consequential operation, what changes, and what continues or is
+   measured. Attach contextual evidence as you go. Keep branches, aliquots and
+   selected/retained fractions distinct; do not freeze topology before examining
+   the transformations that determine it.
+3. Fill supported resources, conditions and information effects at their actual
+   operations/interfaces. Investigate missing facts in the packet before calling
+   them gaps. Revisit provisional operations/routes when this evidence changes
+   their interpretation; never complete a recipe from customary defaults.
+4. Check continuity forward from the specimen and backward from each declared
+   output. Investigate missing interfaces and distinguish material/data flow
+   from reported precedence or a decision that controls another operation.
+5. Finalize only the artifact assigned to your role. Readers submit findings and
+   gaps, not a Workflow. The integrator resolves explicit State IDs and bindings,
+   then groups established Operations into Modules with boundary rationales,
+   assembles the Workflow and runs the structural/provenance check. Preserve
+   unresolved questions and their consequences for independent review.
+These are revisitable working passes, not a universal laboratory sequence or a
+requirement to read source passages in a fixed order. Do not add checkpoint
+artifacts. Python controls the outer stages and acceptance gates; this procedure
+guides your work within a stage and does not itself establish scientific support.
+"""
+
 CONTRACT = """Describe one general published protocol version/variant within the frozen
 scope. Historical samples, accession lists and experiment reconstruction are not
 the target. Preserve applicability limits and attribute manufacturer, dependency
@@ -276,6 +304,8 @@ output is not accepted by the host.
 
 {CONTRACT}
 """
+    if role in {"chemistry", "information", "integrator"}:
+        common += "\n" + EXTRACTION_PROCEDURE
     if role == "source_obligations":
         return common + f"""
 Prepare SourceObligations from the frozen sources BEFORE any candidate inspection.
