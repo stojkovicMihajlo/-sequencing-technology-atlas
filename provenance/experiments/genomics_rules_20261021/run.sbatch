@@ -16,13 +16,15 @@ mkdir checks
 export ATLAS_ENV_DIR="$GROUP_HOME/mstojkov/envs/sequencing-technology-atlas-py312"
 
 preserve() {
-    mkdir -p "$phase/work/bootstrap"
-    printf '%s\n' "$result_code" > "$phase/work/job_exit_code-$SLURM_JOB_ID.txt"
-    cp -R "$phase/checks" "$phase/work/software_checks"
+    mkdir -p "$phase/work/bootstrap" || return 1
+    printf '%s\n' "$result_code" > "$phase/work/job_exit_code-$SLURM_JOB_ID.txt" || return 1
+    cp -R "$phase/checks" "$phase/work/software_checks" || return 1
     for name in runtime.tar.gz inputs.sha256 run.py run.sbatch config.json container_embeddings.py; do
-        cp "$phase/$name" "$phase/work/bootstrap/$name"
+        cp "$phase/$name" "$phase/work/bootstrap/$name" || return 1
     done
-    [[ ! -f "$phase/driver.log" ]] || cp "$phase/driver.log" "$phase/work/driver.log"
+    if [[ -f "$phase/driver.log" ]]; then
+        cp "$phase/driver.log" "$phase/work/driver.log" || return 1
+    fi
     archive="$phase/genomics-rules-$SLURM_JOB_ID.tar.gz"
     if [[ -f "$phase/candidate/scripts/benchmark/archive_result.py" ]]; then
         PYTHONPATH="$phase/candidate/src" "$ATLAS_ENV_DIR/bin/python" \
@@ -30,20 +32,20 @@ preserve() {
             --experiment "$phase/work" --output "$archive" --project-root "$ATLAS_PROJECT_ROOT" \
             --ancestor-map /Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA "$ATLAS_PROJECT_ROOT" \
             --ancestor-map /scratch/groups/rbaltman/mstojkov/agents_snRNA "$ATLAS_PROJECT_ROOT" \
-            > "$phase/archive_receipt.json"
+            > "$phase/archive_receipt.json" || return 1
     else
-        [[ ! -e "$phase/work/selection" ]]
-        tar -czf "$archive" -C "$phase" work
-        printf '%s\n' '{"status":"bootstrap_failure_only"}' > "$phase/archive_receipt.json"
+        [[ ! -e "$phase/work/selection" ]] || return 1
+        tar -czf "$archive" -C "$phase" work || return 1
+        printf '%s\n' '{"status":"bootstrap_failure_only"}' > "$phase/archive_receipt.json" || return 1
     fi
     destination="$GROUP_HOME/mstojkov/atlas-results/genomics-rules-$SLURM_JOB_ID.tar.gz"
-    mkdir -p "$(dirname "$destination")"
-    [[ ! -e "$destination" && ! -L "$destination" ]]
-    (set -o noclobber; cat "$archive" > "$destination")
-    cmp -s "$archive" "$destination"
-    sha256sum "$destination" > "$phase/durable_archive.sha256"
-    (set -o noclobber; cat "$phase/durable_archive.sha256" > "$destination.sha256")
-    (set -o noclobber; cat "$phase/archive_receipt.json" > "$destination.receipt.json")
+    mkdir -p "$(dirname "$destination")" || return 1
+    [[ ! -e "$destination" && ! -L "$destination" ]] || return 1
+    (set -o noclobber; cat "$archive" > "$destination") || return 1
+    cmp -s "$archive" "$destination" || return 1
+    sha256sum "$destination" > "$phase/durable_archive.sha256" || return 1
+    (set -o noclobber; cat "$phase/durable_archive.sha256" > "$destination.sha256") || return 1
+    (set -o noclobber; cat "$phase/archive_receipt.json" > "$destination.receipt.json") || return 1
 }
 finish() {
     result_code=$?

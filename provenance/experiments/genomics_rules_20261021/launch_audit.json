@@ -1,0 +1,21 @@
+{
+  "job_id": "48793023",
+  "current_job_wrapper": "Frozen pre-fix wrapper, SHA256 63ff5b30e24c82f8ffd8d1623d13269c3b3279d56a9d8aa8da87b82c45000d40; not modified after submission.",
+  "issue": "Bash errexit is suppressed in a function called from a tested/negated context; preservation could mask an earlier failure.",
+  "fix": "Explicit || return 1 on each fallible preservation command.",
+  "fixed_wrapper_sha256": "77d973191a38fe2a8043fcc8072d6d4048f3fa526957e808fa09ba2d204c4c04",
+  "checks": [
+    {
+      "injected_failure": "copy",
+      "handler_exit": 42,
+      "outcome": "failure_propagated"
+    },
+    {
+      "injected_failure": "archive",
+      "handler_exit": 42,
+      "outcome": "failure_propagated"
+    }
+  ],
+  "current_job_acceptance": "Independently verify durable archive, receipt, every archived payload hash and driver/native outcome. A scheduler exit code alone is insufficient.",
+  "source_scope": "No model prompt, source, parent graph or current frozen runtime was changed."
+}
