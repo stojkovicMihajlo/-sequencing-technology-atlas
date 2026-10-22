@@ -13,6 +13,7 @@ from html.parser import HTMLParser
 from xml.etree import ElementTree as ET
 
 from genomics_discovery.curation.source_originals import FORMAT as ORIGINALS_FORMAT, load_originals
+from genomics_discovery.curation.source_derivations import preserve_derivations
 from genomics_discovery.curation.workflow_extraction.models import digest
 
 DENIED = {".ssh", ".aws", ".azure", ".git", ".codex", ".config", ".kube", ".gnupg",
@@ -70,8 +71,9 @@ def native_publication_format(path):
     return None
 
 
-def archive(experiment, output, project_root, *, ancestor_mappings=()):
+def archive(experiment, output, project_root, *, ancestor_mappings=(), derivation_ledgers=()):
     root = Path(project_root).resolve()
+    derivation_ledgers = tuple(derivation_ledgers)
 
     def forbidden(path):
         return any(part.lower() in DENIED or part.lower() == ".env"
@@ -215,6 +217,8 @@ def archive(experiment, output, project_root, *, ancestor_mappings=()):
         for row in packet["sources"]:
             source = pin(row["original_path"], row["original_sha256"], f"packet_source:{path}")
             selected_sources[source] = row["original_sha256"]
+    derivations, derived_sources = preserve_derivations(
+        derivation_ledgers, selected_sources, checked=checked, pin=pin, read_json=read_json)
     for path, expected in declared_originals.items():
         pin(path, expected, "declared_source_originals_binding")
         value = read_json(path)
@@ -274,7 +278,7 @@ def archive(experiment, output, project_root, *, ancestor_mappings=()):
         with source.open("rb") as handle:
             header = handle.read(4096).decode("utf-8", errors="replace")
         match = re.match(r"\[Rendition provenance, not publication content\]\r?\nOriginal cached file: (.+)\r?\nSHA256: ([0-9a-f]{64})", header)
-        found = False
+        found = source in derived_sources
         if match:
             pin(match[1].strip(), match[2], f"rendition_header:{source}", optional=True)
             found = True
@@ -312,6 +316,8 @@ def archive(experiment, output, project_root, *, ancestor_mappings=()):
         "native_originals": native_originals,
         "status": "incomplete_binary_provenance" if gaps else "declared_inputs_preserved",
         "boundary": "Exact available phase/source bytes; not scientific source completeness or successful model execution."}
+    if derivation_ledgers:
+        manifest["source_derivations"] = derivations
     target.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary = tempfile.mkstemp(prefix=target.name + ".partial-", dir=target.parent)
     try:
@@ -346,9 +352,12 @@ def main(argv=None):
     parser.add_argument("--ancestor-map", nargs=2, action="append", default=[],
                         metavar=("OLD_PREFIX", "NEW_PREFIX"),
                         help="Map only optional upstream ancestors; mapped bytes must match their pins")
+    parser.add_argument("--derivation-ledger", nargs=2, action="append", default=[],
+                        metavar=("PATH", "SHA256"),
+                        help="Explicit pinned acquisition derivations; preserve declared inputs without executing commands")
     args = parser.parse_args(argv)
     result = archive(args.experiment, args.output, args.project_root,
-                     ancestor_mappings=args.ancestor_map)
+                     ancestor_mappings=args.ancestor_map, derivation_ledgers=args.derivation_ledger)
     print(json.dumps({"archive": str(args.output), "status": result["status"], "members": len(result["members"])}))
 
 
