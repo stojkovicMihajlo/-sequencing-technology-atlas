@@ -202,8 +202,14 @@ class Operation(StrictModel):
         "consequential unavailable requirements as explicit unknowns or gaps.")
     information_effect: Text = Field(description=
         "Supported change, preservation, measurement or loss of biological/sample identity or "
-        "other information at this Operation. Distinguish physical encoding, observed data and "
-        "inference. If no effect is established, say so without inventing a purpose or claiming no effect.")
+        "other information at this Operation. Explain Before / Change / Information retained: "
+        "identify the information and its carrier or representation at the input; the physical or "
+        "computational change or inspection of that association; and what is recoverable afterward, "
+        "including introduced, measured or lost information and relevant attribution limits. "
+        "Distinguish existing labels from newly introduced encoding, and direct observations from "
+        "inference. An inspection may leave material unchanged. If an effect or mechanism is not "
+        "established, state that source limit; do not invent one or claim no effect. Vague statements "
+        "such as 'preserves identity' alone do not explain the carrier or association.")
     evidence: EvidenceSet = Field(description=
         "Contextual evidence for the action and stated information effect; resources and "
         "individual I/O associations also need their own support. Do not approve a whole description "

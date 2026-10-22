@@ -78,6 +78,20 @@ meaningful transformations, branches, identities and compatibility boundaries.
 Each operation must belong to exactly one module under the current schema. This is
 a representation choice, not a scientific claim about the only valid decomposition.
 
+For new extractions, `information_effect` uses a **Before → Change → Information
+retained** explanation within the existing text field. Before identifies the
+information and its input carrier/representation; Change explains the physical or
+computational change or inspection of that association; Information retained states
+what is recoverable afterward, including introduced, measured or lost information
+and relevant inference limits. A statement such as "preserves identity" alone is
+insufficient. Source limits remain explicit; the account must not invent a
+mechanism or require barcodes/covalent linkage for every operation.
+
+This is an instruction and review requirement, not three new JSON fields or a
+keyword-based truth check. Existing artifacts retain their original bytes. Software
+can check delivery of this contract and bind review to the current values; reliable
+scientific compliance still needs evaluation in new native runs.
+
 ## One real connection, end to end
 
 From the [ChIPmentation workflow](../examples/chipmentation/workflow.json):

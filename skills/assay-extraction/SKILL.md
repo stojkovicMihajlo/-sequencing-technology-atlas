@@ -43,6 +43,19 @@ about a transformation, not a required sequence or universal set of modules.
 | Connections | Source-supported material/data routes, reported precedence, decisions, aliquots, alternatives and optional branches. |
 | Evidence and limits | Contextual source support for claims, labelled inference, unresolved fact, scope consequence and exact next evidence needed. |
 
+For each Operation's information_effect, explain **Before → Change → Information
+retained**. Identify the relevant information and its carrier or representation
+before the Operation, the physical/computational change or inspection of that
+association, and what remains recoverable afterward. Include introduced, measured
+or lost information and consequential attribution limits where applicable.
+Distinguish pre-existing labels from newly written encoding, and observations from
+inferred biological identity. 'Preserves identity' or 'stabilizes association'
+alone is insufficient. This applies to physical compartments and data as well as
+molecules; do not require DNA barcodes or covalent linkage in every assay. An
+inspection can leave material unchanged. State unavailable source support honestly
+instead of inventing a molecular mechanism, an information gain or a negative claim.
+Keep the explanation concise and contextual; do not repeat the full recipe.
+
 Group operations into modules only after identifying their transformations and
 interfaces. Explain each boundary. A module may contain several operations; two
 assays need not have the same modules. A shared word or reagent does not establish
@@ -70,6 +83,9 @@ protocol sections: represented in the record, excluded with a scope reason, or
 limited by identified evidence. Trace every declared readout through its route and
 verify branch coherence. Check resources and conditions as well as the main actions.
 Reopen cited passages to check their meaning, not just their exact quote match.
+Review the Before / Change / Information retained explanation jointly with the
+Operation's actual inputs and outputs. Headings alone do not establish compliance;
+the carrier, association and supported limits must be understandable from the record.
 
 For a missing detail, identify which situation applies:
 

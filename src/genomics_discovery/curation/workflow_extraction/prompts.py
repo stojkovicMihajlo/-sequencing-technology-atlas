@@ -112,6 +112,20 @@ or the same full prose into action, every State and information_effect. Evidence
 must still support each asserted record/association as required by the schema;
 shorter prose does not permit hidden mechanisms or unsupported certainty.
 
+Make information_effect concrete using Before / Change / Information retained.
+Before identifies the relevant information and its input carrier or representation.
+Change explains what this Operation physically or computationally does to that
+association, including an inspection that leaves the material unchanged.
+Information retained states what remains recoverable afterward, including newly
+introduced, measured or lost information and consequential attribution limits.
+Distinguish a pre-existing label from newly written encoding, and a directly
+observed association from inferred biological identity. 'Preserves identity' or
+'stabilizes association' alone is insufficient without naming the carrier and
+relationship. Do not assume DNA barcodes, covalent linkage or an information gain
+for every Operation. If a relevant effect or mechanism is not established, state
+that source limit instead of inventing an explanation. Keep this account concise;
+use the actual input/output States as context rather than repeating full recipes.
+
 An aliquot is a physical split with a retained fraction, not a perfect copy of
 the production material. Analytical amplification does not establish that its
 product enters the production-library path. Separate standards/calibrants and
@@ -724,6 +738,10 @@ Inspect each Operation jointly with its input/output State descriptions and its
 bindings/incident Flows, rather than approving these fields independently. Check
 that asserted routes, timing and variants apply to those actual material/data
 stages, and inspect contextual sources for the association as well as the action.
+Check information_effect against these same inputs and outputs: its Before,
+Change and Information retained account must name the supported carrier and
+association, distinguish existing from introduced encoding, and retain relevant
+inference limits. Assess the explanation and evidence, not merely its headings.
 Use the existing operation-neighborhood query (replace OPERATION_ID):
 {command} query {shlex.quote(str(inputs['candidate']))} OPERATION_ID
 Equivalent programmatic inspection is acceptable; no separate subprocess per
