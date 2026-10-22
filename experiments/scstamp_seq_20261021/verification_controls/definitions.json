@@ -1,0 +1,212 @@
+{
+  "format_version": "workflow_verification_controls_spec/1.0",
+  "family": "spatial_photolabile_barcoding",
+  "split": "new_method_diagnostic_not_untouched_holdout",
+  "annotation_status": "model_authored_source_checked_candidate_not_expert_gold",
+  "scientific_scope": "Local claim support and explicit local coverage, not complete production-review sensitivity. Source applicability is frozen 2025 preprint v1.",
+  "release_criteria": {
+    "native_sessions": 2,
+    "source_and_contract_integrity": "All pass; no repairs or retries.",
+    "negative_controls": "No value labeled not_established or contradicted receives supported; unassessed does not count as detection.",
+    "supported_controls": "Every value labeled supported retained as supported. Original versus changed is not the label.",
+    "separate_reporting": [
+      "unsupported_acceptance",
+      "supported_retention",
+      "local_omission_rejection",
+      "abstention",
+      "label_accuracy",
+      "elapsed_seconds"
+    ],
+    "on_failure": "Retain failure; do not change labels/prompts to rescue the same run. A new version requires a new run.",
+    "claim_boundary": "Passing 8 controls is a regression sentinel, not calibrated whole-graph accuracy or a zero-error guarantee."
+  },
+  "controls": [
+    {
+      "id": "material_fate",
+      "kind": "field_support",
+      "phenomenon": "unsupported_material_fate",
+      "field_pointer": "/states/21/description",
+      "original_value_sha256": "a8c2b0d8527aad194636b6ec8bf1aef5bc1bf4dd6591a193ed2cf7d1892fe02d",
+      "changed_value": "Unsampled remainder of the 50-μL first spatial PCR after withdrawing 5 μL. No further production use is reported. The unsampled remainder is discarded before the second PCR.",
+      "passage_refs": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00043"
+        }
+      ],
+      "original_label": {
+        "outcome": "supported",
+        "rationale": "The stated 50 μL first PCR and withdrawal of 5 μL establish a remaining fraction. The inspected paragraph gives no subsequent use for that remainder; the original explicitly preserves this reporting limit.",
+        "decisive_passages": [
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00043"
+          }
+        ]
+      },
+      "changed_label": {
+        "outcome": "not_established",
+        "rationale": "The protocol says 5 μL from the first PCR receives ExoSAP and 7 μL enters the next PCR. It does not report disposal of the unsampled remainder. The added categorical disposal statement is not established, rather than shown experimentally false.",
+        "decisive_passages": [
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00043"
+          }
+        ]
+      }
+    },
+    {
+      "id": "capture_umi_length",
+      "kind": "field_support",
+      "phenomenon": "changed_numerical_detail",
+      "field_pointer": "/operations/9/resources/1/description",
+      "original_value_sha256": "dcb918bfe476d27040603fc40702efaf8632d20dd51e63e29e3c04bb11822dd4",
+      "changed_value": "Per well: 4 μL Vapor-Lock 981611; 100 nL uniquely barcoded RT primer 7.5 ng/μL with 8-nt UMI; 100 nL lysis mix: 0.175% IGEPAL CA-630, 1.75 mM dNTPs, 1:1,250,000 ERCC mix 4456740, 0.19 U RNase inhibitor 2313A. Primer architecture: poly-T, cell barcode, UMI, 5′ Illumina adapter and T7 promoter; exact nucleotide sequence not recovered.",
+      "passage_refs": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00007"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00041"
+        }
+      ],
+      "original_label": {
+        "outcome": "supported",
+        "rationale": "The selected primary plate-RNA route uses the six-nucleotide capture UMI and the stated lysis/primer resources. The primer architecture occurs in p00007 and quantities in p00041. No exact primer sequence is supplied in this visible context.",
+        "decisive_passages": [
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00007"
+          },
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00041"
+          }
+        ]
+      },
+      "changed_label": {
+        "outcome": "contradicted",
+        "rationale": "The eight-nucleotide UMI claim conflicts with the explicitly six-nucleotide UMI in this primary plate-RNA implementation. Do not import the older MAT four-nucleotide variant.",
+        "decisive_passages": [
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00007"
+          },
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00041"
+          }
+        ]
+      }
+    },
+    {
+      "id": "read_identity",
+      "kind": "field_support",
+      "phenomenon": "barcode_read_misassignment",
+      "field_pointer": "/operations/44/action",
+      "original_value_sha256": "dd57cdbba245e064b000883ef4a94d89a4872359e565b5f1b2e2a1c8bfc18710",
+      "changed_value": "Assign read2 cell barcode/capture UMI; read1 domain-specific primer, spatial barcode and oligo UMI. Distinguish optional MPOs by the extra read2 multiplex identifier; count joint-UMI combinations.",
+      "passage_refs": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00048"
+        }
+      ],
+      "original_label": {
+        "outcome": "supported",
+        "rationale": "The methods assign cell barcode/UMI to read 1 and inner/outer primer plus spatial barcode/UMI to read 2; MPO multiplex identifiers are in read 2 and counts use joint UMIs.",
+        "decisive_passages": [
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00048"
+          }
+        ]
+      },
+      "changed_label": {
+        "outcome": "contradicted",
+        "rationale": "The changed first clause assigns cell barcode/UMI to read 2 and domain-specific identity to read 1, reversing the explicit source assignments. Other unchanged details do not rescue the combined value.",
+        "decisive_passages": [
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00048"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plate_partition_coverage",
+      "kind": "local_coverage",
+      "phenomenon": "omitted_required_local_operation",
+      "operation_ids": [
+        "plate_pooling",
+        "plate_partition"
+      ],
+      "omit_operation_id": "plate_partition",
+      "requirement": "For the pooled plate-RNA products, explicitly represent pooling differently cell-barcoded wells and the first SPRI partition: transfer the short spatial-barcode supernatant into its separate route while retaining endogenous cDNA on the beads.",
+      "passage_refs": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00007"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00018"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00019"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00041"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00042"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00043"
+        }
+      ],
+      "original_label": {
+        "outcome": "supported",
+        "rationale": "The two selected operations explicitly pool barcoded wells and partition the pool into spatial-product supernatant and bead-bound endogenous cDNA. Typed flows connect the shared pool to partitioning and its two resulting states.",
+        "decisive_passages": [
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00042"
+          },
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00043"
+          }
+        ]
+      },
+      "changed_label": {
+        "outcome": "not_established",
+        "rationale": "The pooling operation remains, but the SPRI partition operation and its incident flows have been deleted. Retaining named disconnected material states does not represent the transformation or either handoff required by the source. No experimental impossibility is inferred.",
+        "decisive_passages": [
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00042"
+          },
+          {
+            "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+            "passage_id": "p00043"
+          }
+        ]
+      }
+    }
+  ],
+  "pre_inference_audit": {
+    "reviewer": "prototype_scstamp_fact_audit",
+    "corrections": [
+      "Remove hard-label control for ambiguous original MAT product wording; retain its clarification in targeted_scientific_audit.json.",
+      "Supply primary p7,p18,p19,p41 as well as p42,p43 for all retained molecular identity claims in local coverage neighborhood."
+    ],
+    "status": "four paired label sets accepted; expanded coverage context pending final confirmation"
+  }
+}

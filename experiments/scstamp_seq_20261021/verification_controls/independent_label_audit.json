@@ -1,0 +1,52 @@
+{
+  "format_version": "independent_control_label_audit/1.0",
+  "review_type": "Second source-checked model/engineering audit, not expert gold annotation",
+  "definitions_path": "experiments/scstamp_seq_20261021/verification_controls/definitions.json",
+  "definitions_raw_sha256": "8c374d206e32b197acd037e89a4e5a2cb6cecce925c5917878cadfae18cc87a8",
+  "prepared_cases_path_at_review": "/private/tmp/scstamp-verification-controls-local-02/cases.json",
+  "prepared_cases_raw_sha256": "be3ff6961be79ad6980ae855cd8014fe63a1fd381b3f3590f8a9d0025cd5edcb",
+  "source_packet_raw_sha256": "e99ce83cfd1b2d260a4097b180df65e50e5173b526a5f3be4f153a4c744ae70c",
+  "decision": "four_pairs_accepted_for_bounded_diagnostic",
+  "cases_reviewed": 8,
+  "labels": [
+    {
+      "definition_id": "material_fate",
+      "original_label": "supported",
+      "changed_label": "not_established",
+      "review_outcome": "accepted_for_local_diagnostic",
+      "reason": "Primary p00043 gives a 50-μL PCR1, 5-μL withdrawal, 7-μL treated continuation and no reported fate for the unsampled remainder. Explicit disposal is unsupported, rather than experimentally disproven."
+    },
+    {
+      "definition_id": "capture_umi_length",
+      "original_label": "supported",
+      "changed_label": "contradicted",
+      "review_outcome": "accepted_for_local_diagnostic",
+      "reason": "Primary p00007 and p00041 explicitly specify a six-nucleotide capture UMI for this plate-RNA route. Eight nucleotides contradict that version; the older MAT 4-nt dependency is inapplicable."
+    },
+    {
+      "definition_id": "read_identity",
+      "original_label": "supported",
+      "changed_label": "contradicted",
+      "review_outcome": "accepted_for_local_diagnostic",
+      "reason": "Primary p00048 explicitly assigns the cell barcode and capture UMI to read 1, and the inner/outer primer, spatial barcode and oligo UMI to read 2. Reversing these assignments contradicts the source."
+    },
+    {
+      "definition_id": "plate_partition_coverage",
+      "original_label": "supported",
+      "changed_label": "not_established",
+      "review_outcome": "accepted_for_local_diagnostic",
+      "reason": "Expanded visible context p00007, p00018, p00019, p00041, p00042 and p00043 supports the shown local State claims and pooling/SPRI handoff. Removing partitioning and its Flows leaves an unmet explicit coverage requirement, without making the remaining pooling experimentally false."
+    }
+  ],
+  "pre_freeze_corrections": [
+    "Excluded the ambiguous actual-candidate dsRNA wording from scored controls: possible shorthand for RNA-derived products is not an unequivocally contradicted polymer claim. Preserve the terminology clarification separately.",
+    "Expanded the positive local-coverage source context to cover UMI, ERCC, MPO and IVT claims present in the projected States."
+  ],
+  "limits": [
+    "Four positive/negative pairs are small hand-selected regression sentinels, not calibrated accuracy or full-graph production-review sensitivity.",
+    "Local coverage requirement is supplied explicitly; this does not test whether a model discovers every missing requirement from the whole paper.",
+    "Paired values share context; identifying their differences is easier than independently auditing a whole graph.",
+    "No outcome depends on reconstruction of original protocol or experimental success.",
+    "No original Workflow output or frozen sources were edited."
+  ]
+}

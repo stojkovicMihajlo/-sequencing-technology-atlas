@@ -113,6 +113,12 @@ Keep optional/alternative branches explicit and coherent; do not combine their
 incompatible recipes into a hybrid. Trace every declared output backward through
 the consequential transformations and consumed inputs, including within broad
 stages. Perspective boundaries do not impose a fixed module sequence.
+Distinguish combinations actually demonstrated from a proposed or general assay
+architecture. A demonstrated component does not establish every combination of
+optical design, specimen or library route. Preserve source-specific limits at
+the relevant route and endpoint. Name the material produced by a transformation,
+not merely its source analyte; check that molecular species and retained identity
+agree across the action, output State and downstream input.
 
 Every consequential claim needs contextual source evidence identifying source,
 passage, and the exact quoted support required by the schema. A quote match is

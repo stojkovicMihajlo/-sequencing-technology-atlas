@@ -19,6 +19,7 @@ from ..workflow_coverage import (
     validate_coverage_review,
 )
 from .authoring import authoring_schema
+from .boundaries import audit_boundaries
 from .field_review import (
     FIELD_REVIEW_POLICY, WorkflowFieldReview, field_review_outcome, make_field_review,
     validate_field_review,
@@ -608,6 +609,12 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
             value = pin(path)
             state.update({key: str(path), key + "_sha256": value})
             state["artifacts"][key] = {"path": str(path), "sha256": value}
+        # Inventory the declared interfaces even when scientific acceptance is withheld.
+        # Producerless/terminal States are not automatically errors or complete boundaries.
+        boundary_path = run / "boundary_audit.json"
+        write(boundary_path, audit_boundaries(workflow))
+        state["artifacts"]["boundary_audit"] = {
+            "path": str(boundary_path), "sha256": pin(boundary_path)}
         check()
         state["finished_at"] = now()
         save()

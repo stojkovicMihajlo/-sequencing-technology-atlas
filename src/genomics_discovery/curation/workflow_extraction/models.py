@@ -121,7 +121,9 @@ class State(StrictModel):
     description: Text = Field(description=
         "What material or data exists at this protocol boundary, including consequential stage, "
         "retained fraction, molecular/identity association and branch. This describes an interface, "
-        "not an observed historical sample or a full reaction recipe. Qualify unknown properties.")
+        "not an observed historical sample or a full reaction recipe. Name the resulting molecular "
+        "species separately from its source analyte (for example, RNA-derived cDNA after reverse "
+        "transcription is DNA). Qualify unknown properties.")
     evidence: EvidenceSet = Field(description=
         "Source support for the described interface identity and qualifications. A supported "
         "State does not by itself support every Flow connected to it.")

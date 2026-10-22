@@ -1,0 +1,378 @@
+{
+  "format_version": "workflow_boundary_audit/1.0",
+  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+  "boundary": "Graph topology and exact annotation coverage only. Dispositions are authored claims; this audit does not verify source support, completeness, compatibility or execution readiness.",
+  "annotation_coverage": "not_supplied",
+  "scientific_admission": "not_established_by_boundary_audit",
+  "manifest_errors": [],
+  "counts": {
+    "external_input": 7,
+    "terminal_output": 9,
+    "isolated": 0
+  },
+  "boundaries": [
+    {
+      "state_id": "bulk_HeLa_reference_input",
+      "boundary_kind": "external_input",
+      "state_kind": "material",
+      "description": "Separate bulk-HeLa material for the conditional genomic-region normalization reference; it is not mixed with the single-cell production sample.",
+      "producer_operations": [],
+      "consumer_operations": [
+        "bulk_isolate"
+      ],
+      "interfaces": [
+        {
+          "flow_id": "io:input:bulk_isolate:bulk_HeLa_reference_input",
+          "kind": "material_input",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": "Genomic regions within a sample will be reference-normalized."
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "cleavage_images",
+      "boundary_kind": "terminal_output",
+      "state_kind": "data",
+      "description": "Optional post-illumination fluorescence/QC data paired with pre-images; reports cleavage or joint-code visualization without consuming the encoded cells.",
+      "producer_operations": [
+        "image_after"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:image_after:cleavage_images",
+          "kind": "data_output",
+          "association": "source_qualified",
+          "selection": "optional",
+          "alternative_group": null,
+          "condition": "Fluorophore-bearing labels are imaged."
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "dose_accuracy",
+      "boundary_kind": "terminal_output",
+      "state_kind": "data",
+      "description": "Optional percent-correct assignment against known actual exposure labels; tied highest votes count as incorrect. No numerical accuracy is asserted for an unobserved sample.",
+      "producer_operations": [
+        "evaluate_dose"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:evaluate_dose:dose_accuracy",
+          "kind": "data_output",
+          "association": "source_qualified",
+          "selection": "optional",
+          "alternative_group": null,
+          "condition": "Optional known-dose evaluation."
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "droplet_cDNA_reserve",
+      "boundary_kind": "terminal_output",
+      "state_kind": "material",
+      "description": "Manufacturer nominal remaining 30 μL/75% endogenous cDNA reserve for additional libraries; exact residual after QC sampling is not asserted.",
+      "producer_operations": [
+        "droplet_library_aliquot_op"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:droplet_library_aliquot_op:droplet_cDNA_reserve",
+          "kind": "material_output",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": null
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "droplet_library_QC",
+      "boundary_kind": "terminal_output",
+      "state_kind": "data",
+      "description": "Final endogenous-library Bioanalyzer HS quality observations. No primary adaptive sequencing-loading decision is inferred.",
+      "producer_operations": [
+        "droplet_library_QC_measure"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:droplet_library_QC_measure:droplet_library_QC",
+          "kind": "data_output",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": null
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "external_DNase_sites",
+      "boundary_kind": "external_input",
+      "state_kind": "data",
+      "description": "External HeLa DNase-I hypersensitive-site genomic coordinates and detection scores from the UCSC table browser, grouped by score for conditional comparison.",
+      "producer_operations": [],
+      "consumer_operations": [
+        "compare_regions"
+      ],
+      "interfaces": [
+        {
+          "flow_id": "io:input:compare_regions:external_DNase_sites",
+          "kind": "data_input",
+          "association": "source_qualified",
+          "selection": "optional",
+          "alternative_group": null,
+          "condition": "Comparing accessibility around HeLa DNase-I sites."
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "illumination_design",
+      "boundary_kind": "external_input",
+      "state_kind": "data",
+      "description": "User-defined photomask or light-gradient design and its location-to-exposure association, or a uniform floodlight dose/cohort design. Uniform well exposure identifies a dose cohort and alone does not distinguish positions within that well.",
+      "producer_operations": [],
+      "consumer_operations": [
+        "encode_single",
+        "infer_position"
+      ],
+      "interfaces": [
+        {
+          "flow_id": "io:input:encode_single:illumination_design",
+          "kind": "data_input",
+          "association": "source_qualified",
+          "selection": "alternative",
+          "alternative_group": "single_design",
+          "condition": "A supplied DLP design or floodlight cohort design is selected."
+        },
+        {
+          "flow_id": "io:input:infer_position:illumination_design",
+          "kind": "data_input",
+          "association": "source_qualified",
+          "selection": "alternative",
+          "alternative_group": "position_design",
+          "condition": "Supplied DLP pattern/gradient or uniform exposure design."
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "known_dose_labels",
+      "boundary_kind": "external_input",
+      "state_kind": "data",
+      "description": "Known actual illumination-level labels for the multiple-PHO reference cohort; used to construct dose-conditioned ratio distributions and, separately, evaluate predictions. They are not supplied by transcript expression or inferred from the test ratio alone.",
+      "producer_operations": [],
+      "consumer_operations": [
+        "dose_reference",
+        "evaluate_dose"
+      ],
+      "interfaces": [
+        {
+          "flow_id": "io:input:dose_reference:known_dose_labels",
+          "kind": "data_input",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": "The optional known-dose voting estimator is used."
+        },
+        {
+          "flow_id": "io:input:evaluate_dose:known_dose_labels",
+          "kind": "data_input",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": "Actual exposure labels are available."
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "live_cells",
+      "boundary_kind": "external_input",
+      "state_kind": "material",
+      "description": "Live cultured cells, demonstrated with HeLa and U2OS. This variant does not establish delivery or positional accuracy in dense three-dimensional tissue.",
+      "producer_operations": [],
+      "consumer_operations": [
+        "culture"
+      ],
+      "interfaces": [
+        {
+          "flow_id": "io:input:culture:live_cells",
+          "kind": "material_input",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": null
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "mat_enrichment_discard",
+      "boundary_kind": "terminal_output",
+      "state_kind": "material",
+      "description": "Discarded supernatant from RNA-enrichment bead capture. No epigenomic production route is assigned to this fraction.",
+      "producer_operations": [
+        "mat_RNA_enrich"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:mat_RNA_enrich:mat_enrichment_discard",
+          "kind": "material_output",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": null
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "oligo_reagents",
+      "boundary_kind": "external_input",
+      "state_kind": "material",
+      "description": "Author-designed IDT PHOs and CMO anchor reagents, with optional MPOs. Each PHO retains covalently linked inner/outer 50-nt DNA domains, domain identity, a random 6-nt UMI per domain and poly-A capture tails. Select one reporter scheme: inner-Cy3/outer-Cy5, outer-only Cy3/Cy5/FAM, or no reporter. These are choices, not cumulative labels. Exact oligos are unavailable in the packet table rendition.",
+      "producer_operations": [],
+      "consumer_operations": [
+        "assemble"
+      ],
+      "interfaces": [
+        {
+          "flow_id": "io:input:assemble:oligo_reagents",
+          "kind": "material_input",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": null
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "regional_comparison",
+      "boundary_kind": "terminal_output",
+      "state_kind": "data",
+      "description": "Conditional comparative genomic profiles: cross-dataset CPM with a 75-bp moving average; within-sample region comparison additionally normalized by separate bulk-reference detected sites. DNase-site comparisons retain external score-group metadata.",
+      "producer_operations": [
+        "compare_regions"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:compare_regions:regional_comparison",
+          "kind": "data_output",
+          "association": "source_qualified",
+          "selection": "optional",
+          "alternative_group": null,
+          "condition": "The reported comparative endpoint is requested."
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "sequential_design",
+      "boundary_kind": "external_input",
+      "state_kind": "data",
+      "description": "Optional sequential combinatorial design: fresh uniquely barcoded PHOs per round and nested masks; reported three-round Q2–Q4, Q3–Q4, then Q4 code. This design preserves cumulative light sensitivity of previous PHOs rather than independent memories.",
+      "producer_operations": [],
+      "consumer_operations": [
+        "encode_sequential",
+        "infer_position"
+      ],
+      "interfaces": [
+        {
+          "flow_id": "io:input:encode_sequential:sequential_design",
+          "kind": "data_input",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": "Sequential combinatorial optical encoding is selected."
+        },
+        {
+          "flow_id": "io:input:infer_position:sequential_design",
+          "kind": "data_input",
+          "association": "source_qualified",
+          "selection": "alternative",
+          "alternative_group": "position_design",
+          "condition": "Sequential combinatorial implementation."
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "spatial_PCR1_remainder",
+      "boundary_kind": "terminal_output",
+      "state_kind": "material",
+      "description": "Unsampled remainder of the 50-μL first spatial PCR after withdrawing 5 μL. No further production use is reported.",
+      "producer_operations": [
+        "spatial_aliquot"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:spatial_aliquot:spatial_PCR1_remainder",
+          "kind": "material_output",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": null
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "spatial_QC",
+      "boundary_kind": "terminal_output",
+      "state_kind": "data",
+      "description": "Fragment-size distribution of the spatial library measured on a 2100 Bioanalyzer; no primary adaptive loading/cycle decision is assigned.",
+      "producer_operations": [
+        "spatial_QC_op"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:spatial_QC_op:spatial_QC",
+          "kind": "data_output",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": null
+        }
+      ],
+      "disposition": null
+    },
+    {
+      "state_id": "spatial_transcriptome_multiome",
+      "boundary_kind": "terminal_output",
+      "state_kind": "data",
+      "description": "Declared endpoint: cell-linked transcriptome and qualified optical exposure/region attribution; for the MAT alternative, linked DNA accessibility and endogenous methylation profiles. Optional known-dose vote predictions can accompany attribution. This is a source-described architecture, not reproduction of any historical numeric dataset.",
+      "producer_operations": [
+        "integrate_readouts"
+      ],
+      "consumer_operations": [],
+      "interfaces": [
+        {
+          "flow_id": "io:output:integrate_readouts:spatial_transcriptome_multiome",
+          "kind": "data_output",
+          "association": "source_qualified",
+          "selection": "required",
+          "alternative_group": null,
+          "condition": null
+        }
+      ],
+      "disposition": null
+    }
+  ]
+}

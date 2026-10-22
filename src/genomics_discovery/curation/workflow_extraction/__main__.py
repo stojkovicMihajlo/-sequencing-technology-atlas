@@ -59,6 +59,16 @@ def main() -> None:
     query = commands.add_parser("query", help="Inspect one operation and its explicit connections")
     query.add_argument("workflow", type=Path)
     query.add_argument("operation_id")
+    path_query = commands.add_parser(
+        "query-path", help="Inspect structural reachability without activating prose conditions")
+    path_query.add_argument("workflow", type=Path)
+    path_query.add_argument("source_id")
+    path_query.add_argument("target_id")
+    boundaries = commands.add_parser(
+        "audit-boundaries", help="Inventory starts/endpoints; no scientific completeness verdict")
+    boundaries.add_argument("workflow", type=Path)
+    boundaries.add_argument("--manifest", type=Path,
+                            help="Optional exact, Workflow-bound boundary dispositions")
     inspect = commands.add_parser("inspect", help="Show a lossless candidate with shared evidence")
     inspect.add_argument("workflow", type=Path)
     inspect.add_argument("--navigation", action="store_true",
@@ -131,6 +141,23 @@ def main() -> None:
 
             workflow = Workflow.model_validate_json(args.workflow.read_bytes())
             result = query_workflow(workflow, args.operation_id)
+        elif args.command in {"query-path", "audit-boundaries"}:
+            from .models import Workflow
+
+            workflow = Workflow.model_validate_json(args.workflow.read_bytes())
+            if args.command == "query-path":
+                from .navigation import query_path
+
+                result = query_path(workflow, args.source_id, args.target_id)
+            else:
+                from .boundaries import BoundaryManifest, audit_boundaries
+
+                manifest = (BoundaryManifest.model_validate_json(args.manifest.read_bytes())
+                            if args.manifest else None)
+                result = audit_boundaries(workflow, manifest)
+                if result["manifest_errors"]:
+                    print(json.dumps(result, indent=2, ensure_ascii=False))
+                    raise SystemExit(1)
         elif args.command == "inspect":
             from .inspection import inspection_view, navigation_view, workflow_pointer
             from .models import Workflow

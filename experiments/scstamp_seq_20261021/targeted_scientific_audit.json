@@ -1,0 +1,300 @@
+{
+  "format_version": "targeted_scientific_audit/1.0",
+  "method_id": "scstamp-seq",
+  "auditor_role": "independent engineering/scientific source audit; not a wet-lab expert certification",
+  "inputs": {
+    "workflow.json": {
+      "path": "experiments/scstamp_seq_20261021/outputs/job_48877794/workflow.json",
+      "raw_sha256": "948edf98e8d7e919678ff6f7f9ce1f3cad227fdecbb3a4861be6bc5e9e961f46",
+      "canonical_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd"
+    },
+    "source_packet.json": {
+      "path": "experiments/scstamp_seq_20261021/outputs/job_48877794/source_packet.json",
+      "raw_sha256": "e99ce83cfd1b2d260a4097b180df65e50e5173b526a5f3be4f153a4c744ae70c",
+      "canonical_sha256": "cb8c6f28f1917def1d1f5e68c773b737c864ddfca2259839d02cc8fb9f5395e0"
+    }
+  },
+  "checked_scope": {
+    "source_version": "bioRxiv v1 posted 2025-10-02, DOI 10.1101/2025.10.01.679703",
+    "primary_passages_read": [
+      "p00005",
+      "p00006",
+      "p00007",
+      "p00010",
+      "p00011",
+      "p00012",
+      "p00013",
+      "p00014",
+      "p00015",
+      "p00016",
+      "p00018",
+      "p00019",
+      "p00020",
+      "p00021",
+      "p00023",
+      "p00024",
+      "p00025",
+      "p00026",
+      "p00027",
+      "p00028",
+      "p00029",
+      "p00030",
+      "p00031",
+      "p00032",
+      "p00033",
+      "p00034",
+      "p00035",
+      "p00036",
+      "p00037",
+      "p00038",
+      "p00039",
+      "p00040",
+      "p00041",
+      "p00042",
+      "p00043",
+      "p00044",
+      "p00045",
+      "p00046",
+      "p00047",
+      "p00048",
+      "p00049",
+      "p00050",
+      "p00051",
+      "p00052",
+      "p00053"
+    ],
+    "supplement_passages_read": [
+      "p00019",
+      "p00020",
+      "p00021",
+      "p00022"
+    ],
+    "scmat_dependency_passages_read": [
+      "p00043",
+      "p00044",
+      "p00045",
+      "p00046",
+      "p00047",
+      "p00048",
+      "p00049",
+      "p00050",
+      "p00051",
+      "p00052",
+      "p00053",
+      "p00054",
+      "p00055",
+      "p00056",
+      "p00068"
+    ],
+    "candidate_fields_inspected": "All State descriptions and Operation action/input/output/information-effect/resource summaries; targeted detailed Evidence/Flow checks for optical design, capture, plate fractionation, droplet fractionation and manufacturer continuation, MAT copying/marking/protection/ligation/allocation/enrichment, read decoding and endpoint scope.",
+    "not_checked": "No exhaustive entailment judgment for every factual leaf. The full manufacturer guide, each dependency and each source figure were not independently re-read end to end. No new sources were registered or inferred into the frozen run."
+  },
+  "mechanical_checks": {
+    "evidence_occurrences_checked": 1788,
+    "literal_quote_or_locator_failures": [],
+    "meaning": "Every cited passage exists and every quote is a literal substring. This is quotation integrity, not entailment, truth, completeness or experimental validation."
+  },
+  "findings": [
+    {
+      "id": "SCSTAMP-AUDIT-01",
+      "severity": "terminology_ambiguity",
+      "record_id": "mat_copied_marked",
+      "field_pointer": "/states/41/description",
+      "current_text": "Within each MAT well: cell/mRNA-PHO-tagged double-stranded RNA/ERCC and PHO products coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic fragments are not yet adapter-barcoded; molecular origins remain distinct.",
+      "judgment": "The phrase double-stranded RNA/ERCC can be misread as dsRNA rather than cDNA derived from RNA; source chemistry is clear. This is not evidence that the extraction implemented an actual dsRNA reaction.",
+      "correction": "Within each MAT well, cell/mRNA-PHO-tagged double-stranded cDNA derived from mRNA/ERCC and copied PHO-derived DNA coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic fragments are not yet adapter-barcoded; molecular origins remain distinct.",
+      "evidence": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00013",
+          "quote": "mRNA is reverse transcribed and the ‘inner’ and ‘outer’ sequences of PHOs are copied using a poly-T primer with an overhang containing a cell- and mRNA/PHO-specific barcode, a UMI, a 5’ Illumina adapter and a T7 promoter"
+        },
+        {
+          "source_id": "dependency_scmat_cited_preprint_pdf",
+          "passage_id": "p00045",
+          "quote": "Thereafter, 1.75 µL of second strand synthesis mix (1.74x second strand buffer (Invitrogen, 10812-014), 0.35 mM dNTP, 0.14 U E.coli DNA Ligase (Invitrogen, 18052-019), 0.56 U E.coli DNA Polymerase I (Invitrogen, 18010-025), 0.03 U RNase H (Invitrogen, 18021- 071)) was added to each well and the plates were incubated at 16°C for 2 hours."
+        }
+      ],
+      "fillable_from_packet": true
+    },
+    {
+      "id": "SCSTAMP-AUDIT-02",
+      "severity": "demonstration_scope_not_explicit_per_route",
+      "record_ids": [
+        "illumination_design",
+        "io:input:droplet_capture:cell_suspension",
+        "io:input:mat_capture:cell_suspension",
+        "spatial_transcriptome_multiome"
+      ],
+      "field_pointers": [
+        "/states/5/description",
+        "/flows/53/condition",
+        "/flows/80/condition",
+        "/states/79/description"
+      ],
+      "current_text": {
+        "illumination_design": "User-defined photomask or light-gradient design and its location-to-exposure association, or a uniform floodlight dose/cohort design. Uniform well exposure identifies a dose cohort and alone does not distinguish positions within that well.",
+        "spatial_transcriptome_multiome": "Declared endpoint: cell-linked transcriptome and qualified optical exposure/region attribution; for the MAT alternative, linked DNA accessibility and endogenous methylation profiles. Optional known-dose vote predictions can accompany attribution. This is a source-described architecture, not reproduction of any historical numeric dataset."
+      },
+      "judgment": "The existing candidate qualifies a general architecture and correctly calls uniform exposure a cohort. It does not explicitly bind the primary demonstration design to each downstream library route. Do not claim the Cartesian product of optical designs and capture routes was experimentally demonstrated.",
+      "correction": "Add source-backed route demonstration metadata: droplet demonstration used uniform floodlight at 0/1/10 minutes; MAT demonstration used uniform floodlight at no light/1 minute. Preserve the broader author-proposed patterned architecture separately, without treating all combinations as demonstrated.",
+      "evidence": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033",
+          "quote": "For the experiments determining the adaptability of scSTAMP-seq with droplet-based single cell sequencing (Fig. 2e,f and Supplementary Fig. 11a,b), and simultaneous multiomics sequencing with scSTAMP-MAT-seq (Fig. 2g,h, Supplementary Fig. 13,14), we used floodlight illumination, as patterned light was not necessary for determining the feasibility of the aspects above, and allowed for a larger sample of cells to be illuminated in a more convenient time frame than can be achieved via DMD light projection."
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033",
+          "quote": "exposed to 0, 1, or 10 minutes of floodlight illumination"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033",
+          "quote": "illuminated with no light or 1 minute of light"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00013",
+          "quote": "After labeling cells with PHOs and spatially imposed light gradients, single cells from dissociated samples are sorted into 384-well plates"
+        }
+      ],
+      "fillable_from_packet": true
+    },
+    {
+      "id": "SCSTAMP-AUDIT-03",
+      "severity": "structural_navigation_limitation",
+      "record_ids": [
+        "spatial_enrichment",
+        "spatial_eluate",
+        "spatial_PCR1_op",
+        "spatial_library",
+        "sequence_RNA"
+      ],
+      "judgment": "Shared operation/state nodes retain route qualification in natural language, but unguarded graph reachability can mix incompatible route-specific inputs, recipes or outputs. This is a representation/use limitation, not proof that a source-described chemical step is false.",
+      "correction": "Fail closed for conditional paths; a source-reviewed machine-readable route mapping is required before claiming globally consistent route traversal. Local alternative_group names alone do not establish cross-operation identity.",
+      "fillable_from_packet": true,
+      "needs_new_structured_annotation": true
+    }
+  ],
+  "gap_group_triage": [
+    {
+      "group": "exact_oligos",
+      "gap_ids": [
+        "chemistry:G01",
+        "information:G01"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Primary points to Supplementary Table 1, but inspected packet renditions contain its label without the complete table. Later repository files were excluded by provenance."
+    },
+    {
+      "group": "delegated_library_recipes",
+      "gap_ids": [
+        "chemistry:G02",
+        "information:G04"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Registered scMAT p00045 and p00051 delegate post-IVT construction to references 6 and 7; these sources are not separately registered. scMAT p00068 identifies the exact references."
+    },
+    {
+      "group": "droplet_timing",
+      "gap_ids": [
+        "droplet_timing_detail",
+        "droplet_handoff_detail"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Primary p00044 and supplement p00019 retain different amplification/separation order wording; packet does not establish stage equivalence."
+    },
+    {
+      "group": "droplet_bead_ratio_transfer",
+      "gap_ids": [
+        "chemistry:G04"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Primary p00044 invokes the plate strategy after a 0.6x split without an explicit numerical handoff; do not concatenate recipes."
+    },
+    {
+      "group": "mat_capture_umi",
+      "gap_ids": [
+        "chemistry:G05",
+        "information:G01"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Primary plate-RNA 6-nt and older scMAT 4-nt capture UMIs have different applicability. The exact MAT capture sequence is not assigned."
+    },
+    {
+      "group": "mat_enriched_unenriched_allocation",
+      "gap_ids": [
+        "chemistry:G06",
+        "information:G05"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Distinct analytical preparations are supported; physical reservation/split volumes and exact boundary are not. Discarded enrichment supernatant is not a proven epigenomic source."
+    },
+    {
+      "group": "spatial_decoding_numerics",
+      "gap_ids": [
+        "information:G03"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Read roles, counting and reference voting are described; exact frozen normalization/matching/zero handling/code revision are absent."
+    },
+    {
+      "group": "epigenome_qc_variable",
+      "gap_ids": [
+        "information:G06"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Primary p00053 states a minimum of 15,000 without assigning its threshold variable; the figure caption does not uniquely resolve it."
+    },
+    {
+      "group": "genomic_calling_internals",
+      "gap_ids": [
+        "genomic_calling_detail"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "The context rule is supported in scMAT p00052; exact mapping and calling internals are delegated to Sen et al."
+    },
+    {
+      "group": "primary_actual_read_cycles",
+      "gap_ids": [
+        "primary_read_cycles"
+      ],
+      "fillable_from_existing_packet": false,
+      "reason": "Actual primary cycles are not reported in inspected packet. Guide recommendations and scMAT minima are not primary execution settings."
+    }
+  ],
+  "known_supported_high_impact_distinctions": [
+    "The plate 0.7x partition retains spatial products in the supernatant and endogenous cDNA on beads (primary p00043).",
+    "The 5-μL spatial PCR1 aliquot is distinct from the unsampled remainder; no rejoining of leftover material is asserted (primary p00043).",
+    "Enriched and unenriched MAT preparations remain distinct; discarded enrichment supernatant is not invented as epigenomic library input (scMAT p00047 and p00049).",
+    "Droplet timing is explicitly unresolved rather than silently reconciled (primary p00044; supplement p00019).",
+    "The MAT mark-origin assignment uses preceding-base exclusions as stated in the delegated scMAT source (p00052)."
+  ],
+  "limits": [
+    "No confirmed major material-fate or ordering fabrication found in the checked portions; absence of a found error is not proof of whole-graph correctness.",
+    "Fourteen unresolved records overlap and are not fourteen independent scientific errors.",
+    "General architecture extraction is not an execution-ready recipe.",
+    "No expert wet-lab review, prospective result, full-graph reviewer sensitivity estimate or correctness guarantee established.",
+    "No original output was edited."
+  ],
+  "supplemental_code_review": {
+    "files": {
+      "src/genomics_discovery/curation/workflow_extraction/boundaries.py": {
+        "raw_sha256": "85057bfedad398e4ccc717bd106ee60a9cb1b72e81a2e3698934eb726ebf4d6b"
+      },
+      "src/genomics_discovery/curation/workflow_extraction/navigation.py": {
+        "raw_sha256": "8f287c264a84e83a8885d919df8690fd74ec22cb714ffbd50ccc6e36277fb1d9"
+      }
+    },
+    "review_type": "Independent static inspection; focused tests are owned by parent or implementation agent, not rerun here.",
+    "assessment": "No blocking scientific-admission overclaim found at inspected versions. Boundary manifest checks exact topology annotation and workflow pin without interpreting disposition prose. Navigation blocks conditional/optional/alternative edges, reports a conditional candidate without claiming route validity, and explicitly disclaims complete required inputs.",
+    "limitations": [
+      "Boundary annotation_coverage=complete is not source support or gap closure; callers must preserve scientific_admission disclaimer.",
+      "Starting queries at an Operation or downstream State can omit guarded incoming prerequisites, so unconditional_structural_path must never be exposed as a feasible route certificate. Current boundary text accurately warns about unestablished required inputs.",
+      "source_id==target_id yields a zero-edge structural path; no action or assay capability follows from that result.",
+      "Local alternative groups cannot establish globally consistent route identity, and this API correctly does not attempt it."
+    ]
+  }
+}
