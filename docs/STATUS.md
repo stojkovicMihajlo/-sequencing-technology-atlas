@@ -1,5 +1,27 @@
 # Deployment status
 
+## Fresh scSTAMP-seq run completed, 2026-10-21 PDT
+
+Qiu CPU job **48877794**, frozen runtime **ae2c1a1**, completed in **85m12s** with
+`gpt-6.1-sol` / `xhigh`. All seven extraction attempts validated, and combined
+review gates returned `supported` after one correction and fresh review. The
+result has 63 Operations, 80 States, 168 Flows and 13 Modules. Fourteen gap records
+remain qualified as nonblocking for a general method description; they are not
+fourteen independent author omissions or a fully specified execution. The
+[experiment report](../experiments/scstamp_seq_20261021/README.md) and
+[measured results](../experiments/scstamp_seq_20261021/completion_report.json)
+record the actual stages, output pins and durable 314-member archive.
+
+**Bulk deployment remains withheld.** The timing excludes earlier acquisition and
+failed recovery jobs. Unsaved inline builders caused avoidable quote-repair work;
+a small development prompt edit encourages persistent scripts and literal-text
+quotes, with 121 existing software checks passing and no native speedup claim.
+An independent engineering audit also found positive-template State/Flow and
+field judgments in the first reviewer despite substantive operation-specific
+notes. Passing counts do not establish independent entailment assessment; targeted
+unsupported-claim controls must calibrate verification before scaling. The
+canonical graph and all frozen attempts remain unchanged.
+
 ## Fresh scSTAMP-seq recovery/extraction restart, 2026-10-21
 
 Qiu CPU job **48874338** failed with frozen runtime **750ba29** and

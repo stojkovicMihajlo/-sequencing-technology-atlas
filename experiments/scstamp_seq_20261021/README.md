@@ -1,5 +1,55 @@
 # Fresh-method diagnostic: scSTAMP-seq
 
+## Completed run
+
+Qiu CPU job **48877794** completed with exit `0:0` in **85 minutes 12 seconds**.
+Frozen runtime **ae2c1a1**, `gpt-6.1-sol` / `xhigh`, returned `supported` after
+one correction and a fresh review. This is the current model-gate outcome, not an
+expert accuracy certificate. The canonical atlas was not changed.
+
+The Workflow contains **63 Operations, 80 States, 168 Flows and 13 Modules** across
+three source-described library routes. It retains **14 nonblocking gap records**
+(including overlapping reader questions) and two explicit scope resolutions.
+The repair preserved all States, Flows and Modules; it qualified one Operation
+and corrected the consequence of two timing gaps for this general-description
+scope. It did not resolve their experimental timing.
+
+The [completion report](completion_report.json) records timings, hashes, usage,
+counts and limitations; [tracking.json](tracking.json) records dated observations.
+The successful job used already acquired materials: source acquisition and two
+failed recovery jobs are additional to the 85-minute timing. Source requirements
+took 16.4 minutes; parallel readers took 15.0 minutes; integration 21.0 minutes;
+first review 11.1 minutes; correction 4.3 minutes; final review 13.7 minutes.
+
+Local copied outputs are under `outputs/job_48877794/`: `workflow.json` is the
+unaltered final integrator artifact under a readable filename; `graph_candidate.json`,
+`protocol.txt` and the overviews are deterministic exports. Their bytes were checked
+against native state hashes. Generated outputs remain ignored by Git; the report
+records their pins and the durable full archive in Qiu group home. The archive
+preserves 314 members, including the failed attempts and source originals.
+
+### Limits before bulk deployment
+
+- **Latency:** this is too slow as a bulk default. The source stage rebuilt long
+  unsaved inline builders after quote mismatches. Seven development prompt lines
+  now encourage persistent builders and exact-text-derived quotations; 121
+  existing software tests passed, but the edit was not used by the frozen run
+  and its native latency effect is unmeasured.
+- **Verification:** the first reviewer wrote substantive operation-specific
+  rationales and two negative gap-criticality judgments, but its builder broadly
+  defaulted State/Flow and field judgments to supported while reusing candidate
+  evidence. That limits auditability. It proves neither absent reasoning nor false
+  claims; check counts are not independent scientific-validation counts. Planted
+  unsupported-claim controls are needed before relying on these gates at scale.
+- **Sources:** the original finder had already found the authors' protocol PDF
+  and workbooks, checked their July 2026 upload history and excluded them because
+  applicability to the October 2025 preprint was unestablished. A later host API
+  audit confirmed that history. These are intentionally excluded leads, not missed
+  links or proof the authors never provided the information. Spreadsheet ingestion
+  remains a separate general acquisition capability gap.
+
+## Experiment definition
+
 This is one new-to-project extraction, not a new benchmark gold example or a
 claim that the method is absent from model training. No previous record matched
 scSTAMP, the primary/preprint DOIs, PMCID or title aliases in the project search
