@@ -114,6 +114,13 @@ These choices and their paper/code precedents are recorded in the
 The tools are actual CLI commands invoked through the native worker's shell tool:
 `catalog`, `search`, `read`, `read-batch`, `inspect`, `query`, `assemble`,
 `expand-authoring` and `check`. They are not a separately registered MCP tool set.
+The separate CLI-only `review_worklist` module navigates prior review feedback by
+exact pinned record and JSON Pointer, with bounded child/text pages. It preserves
+positive context, required omissions, advisories and separate judgments. Its
+[contract and tests](../../../../docs/decisions/2026-10-22-bounded-review-worklist.md)
+do not add a reviewer or change acceptance. It is not yet routed into worker
+prompts; the current frozen native runs cannot use this new tool.
+
 Source acquisition runs separately: extraction can adaptively search its frozen
 packet but cannot silently add external literature to the evidence set. A missing
 dependency requires acquisition, a new packet and a new bound review.

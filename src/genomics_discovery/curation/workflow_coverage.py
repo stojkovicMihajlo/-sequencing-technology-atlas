@@ -16,7 +16,7 @@ from typing import Annotated, Literal
 from pydantic import Field
 
 from genomics_discovery.core.artifacts import StrictModel
-from genomics_discovery.curation.evidence_views import inspect_pointer
+from genomics_discovery.curation.evidence_views import bounded_json_value, inspect_pointer
 from genomics_discovery.curation.workflow_extraction.models import (
     Evidence,
     Omission,
@@ -365,28 +365,8 @@ def coverage_review_read(
               "readers": [binding.model_dump(mode="json") for binding in coverage.readers],
               "reader_role": reader_role, "finding_id": finding_id, "pointer": pointer,
               "value_sha256": digest({"value": value}), "boundary": BOUNDARY}
-    if isinstance(value, str):
-        if start > len(value):
-            raise ValueError("Read start is outside the string")
-        stop = min(start + chars, len(value))
-        result.update(kind="text", text=value[start:stop], start=start,
-                      total_characters=len(value), next_start=stop if stop < len(value) else None)
-    elif isinstance(value, (dict, list)):
-        items = list(value.items()) if isinstance(value, dict) else list(enumerate(value))
-        if start > len(items):
-            raise ValueError("Read start is outside the container")
-        stop = min(start + limit, len(items))
-        result.update(kind="object" if isinstance(value, dict) else "array", start=start,
-                      total_children=len(items), next_start=stop if stop < len(items) else None,
-                      children=[{"pointer": pointer + "/" + str(key).replace("~", "~0").replace("/", "~1"),
-                                 "kind": "object" if isinstance(child, dict) else "array" if
-                                 isinstance(child, list) else "text" if isinstance(child, str)
-                                 else "scalar"}
-                                for key, child in items[start:stop]])
-    else:
-        if start:
-            raise ValueError("Scalar values require start=0")
-        result.update(kind="scalar", value=value)
+    result.update(bounded_json_value(value, pointer, start=start, limit=limit, chars=chars,
+                                     max_entries=MAX_VIEW_ENTRIES, max_chars=MAX_READ_CHARS))
     if len(json.dumps(result, ensure_ascii=False)) > MAX_VIEW_CHARS:
         raise ValueError(f"Coverage review read exceeds {MAX_VIEW_CHARS} characters; "
                          "request fewer children or a smaller text window")
