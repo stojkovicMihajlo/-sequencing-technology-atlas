@@ -12,10 +12,10 @@ This package handles the scientific representation and stage order:
 ```text
 registered source files
     → reproducible source passages + frozen scope
-    → chemistry reader ───┐
-    → information reader ─┴→ workflow integrator → fresh source reviewer
-                                 ↑                      │
-                                 └─ at most one repair ─┘
+    → source requirements* ─┐
+    → chemistry reader ────┼→ workflow integrator → fresh source reviewer
+    → information reader ──┘         ↑                      │
+                                      └─ at most one repair ─┘
     → supported within scope: protocol.txt + graph_candidate.json
     → valid nonpositive review: protocol_diagnostic.txt + graph_diagnostic.json
     → operational failure: saved failure state and native archives
@@ -27,6 +27,15 @@ the candidate and sources. The optional finding-coverage profile also provides
 unaccepted reader findings and proposed dispositions, while withholding reader
 gap opinions and prior review verdicts. This is candidate-visible review, so
 anchoring and shared model errors remain risks.
+
+`*` When fresh source coverage is enabled in specialist mode, source requirements
+and both readers run concurrently from sources alone. Integration waits for all
+three validated artifacts. Readers do not receive the source requirements, which
+are frozen before a candidate exists. A preparation failure or cancellation stops
+and awaits its siblings. State/configuration record the selected schedule.
+Baseline, supplied-requirement and repair paths retain their respective ordering.
+This scheduling change has software controls; native latency improvement still
+needs measurement. Earlier frozen experiments preserve their recorded schedule.
 
 The execution order is prescribed by Python; agents choose what to search/read
 and how to describe the supported protocol within each stage. The two reader

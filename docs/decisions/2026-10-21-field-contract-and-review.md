@@ -154,3 +154,28 @@ ownership, repair history, persistent research outcomes, policy downgrade and
 historical profiles. A source-obligations-only interruption before configuration
 creation can still reuse validated obligations. Independent review reproduced
 the policy-flag bypass and confirmed its rejection after the correction.
+
+## Follow-up: overlap independent source preparation, 2026-10-22
+
+The fresh source-only run exposed an avoidable dependency in execution order:
+source requirements took about 10–13 minutes before two source-only readers
+could start. Those readers do not consume the requirement artifact. The scientific
+dependency is that all preparation must validate before integration, rather than
+that one source reader must finish before another starts.
+
+For fresh specialist runs with source coverage, start those three passes together
+and join them before integration. Assign the source ledger only after that join,
+preserving its absence from reader inputs and candidate-blind authorship. Reuse
+the existing cancellation-and-await behavior for all three tasks, retain their
+separate archives and record the schedule in state/configuration. Supplied-ledger,
+baseline and repair paths retain their existing ordering. Frozen jobs do not change.
+
+Barrier controls check concurrency, both completion orders, sibling cleanup after
+failure/cancellation, source/prompt/reader validation and unchanged supplied-input
+behavior. This preserves enforced data dependencies; it does not establish
+identical stochastic model outputs or a measured end-to-end speedup. No agent,
+review gate, retry, scientific shortcut or new orchestration framework is added.
+
+Validation: 2,401 software tests passed, three skipped, after both the scope
+clarification and scheduling change. Live evaluation requires a separately
+frozen source-only run; the still-running `dfe6cae` experiment is its baseline.

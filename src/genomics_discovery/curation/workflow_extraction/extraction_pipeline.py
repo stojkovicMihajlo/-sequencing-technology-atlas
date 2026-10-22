@@ -88,13 +88,24 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
         raise ValueError("Run must be fresh; workflow v1 does not resume existing artifacts")
     run.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
+    parallel_preparation = (mode == "specialists" and require_source_coverage
+                            and source_obligations is None)
+    preparation_schedule = []
+    if require_source_coverage and source_obligations is None:
+        preparation_schedule.append(["source_obligations"])
+    if mode == "specialists":
+        if parallel_preparation:
+            preparation_schedule[0].extend(("chemistry", "information"))
+        else:
+            preparation_schedule.append(["chemistry", "information"])
     state = {"format_version": "workflow_run/1.0", "run": str(run), "status": "preparing",
              "started_at": now(), "revision": 0, "attempts": [], "artifacts": {},
              "require_coverage": require_coverage,
              "require_field_review": require_field_review,
              "field_review_policy": FIELD_REVIEW_POLICY if require_field_review else None,
              "field_review_history": "same_run_revisions_only" if require_field_review else None,
-             "require_source_coverage": require_source_coverage}
+             "require_source_coverage": require_source_coverage,
+             "preparation_schedule": preparation_schedule}
     # Exclusive initial creation prevents two orchestrators claiming an empty run.
     with (run / "state.json").open("x", encoding="utf-8") as handle:
         json.dump(state, handle, indent=2)
@@ -107,6 +118,7 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
     field_review_records: dict[Path, WorkflowFieldReview] = {}
     prior_field_review = prior_field_workflow = prior_field_path = prior_field_candidate = None
     obligations = obligations_path = None
+    prepared_readers = None
     readers = {}
     old_feedback_sources = None
     repair_gap_baseline = None
@@ -322,6 +334,20 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
             attempt["finished_at"] = now()
             save()
 
+    async def prepare(specifications):
+        nonlocal active
+        active = [asyncio.create_task(stage(role, model)) for role, model in specifications]
+        try:
+            return await asyncio.gather(*active)
+        except BaseException:
+            for task in active:
+                if not task.done():
+                    task.cancel()
+            await asyncio.gather(*active, return_exceptions=True)
+            raise
+        finally:
+            active = []
+
     try:
         packet_sha256 = pin(packet_path)
         packet = load_packet(packet_path)
@@ -377,11 +403,18 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                  "sha256": snapshot_skill_sha256},
             ))
         # Freeze source obligations before copying or passing any seed/candidate.
-        # This is one source pass, independent of optional specialist readers.
+        # Fresh source/reader passes are independent. Assign the obligations only
+        # after all validate, so concurrent readers never receive the source ledger.
         obligations_input = None
         if require_source_coverage:
             if source_obligations is None:
-                obligations, obligations_path = await stage("source_obligations", SourceObligations)
+                if parallel_preparation:
+                    prepared = await prepare((("source_obligations", SourceObligations),
+                                              ("chemistry", ReadingReport),
+                                              ("information", ReadingReport)))
+                    (obligations, obligations_path), *prepared_readers = prepared
+                else:
+                    obligations, obligations_path = await stage("source_obligations", SourceObligations)
             else:
                 origin = Path(source_obligations).resolve()
                 original_digest = pin(origin)
@@ -455,6 +488,7 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                   "field_review_policy": FIELD_REVIEW_POLICY if require_field_review else None,
                   "field_review_history": "same_run_revisions_only" if require_field_review else None,
                   "require_source_coverage": require_source_coverage,
+                  "preparation_schedule": preparation_schedule,
                   "source_obligations_input": obligations_input,
                   "initial_workflow": seed, "repair_review": feedback,
                   "repair_feedback_packet": feedback_sources,
@@ -474,17 +508,8 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
         check()
         readers = {}
         if mode == "specialists":
-            active = [asyncio.create_task(stage(role, ReadingReport))
-                      for role in ("chemistry", "information")]
-            try:
-                reports = await asyncio.gather(*active)
-            except BaseException:
-                for task in active:
-                    if not task.done():
-                        task.cancel()
-                await asyncio.gather(*active, return_exceptions=True)
-                raise
-            active = []
+            reports = (prepared_readers if prepared_readers is not None else await prepare(
+                (("chemistry", ReadingReport), ("information", ReadingReport))))
             readers = {role: output[1] for role, output in
                        zip(("chemistry", "information"), reports, strict=True)}
             reader_reports = {role: output[0] for role, output in
