@@ -1,0 +1,239 @@
+{
+  "format_version": "workflow_prototype_completion/1.0",
+  "recorded_at": "2026-10-22T04:56:50.270533+00:00",
+  "status": "bounded_prototype_validation_completed",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "frozen_runtime_commit": "14271c5335078794d74a0d9e54693f02ff3431a4",
+  "canonical_atlas_changed": false,
+  "bulk_deployment_validated": false,
+  "main_job": {
+    "job_id": "48925060",
+    "slurm_state": "COMPLETED",
+    "exit_code": "0:0",
+    "slurm_elapsed": "00:21:30",
+    "peak_batch_rss_kb": 575328,
+    "operation": "same_source_repair_and_fresh_review",
+    "not_a_fresh_extraction": true,
+    "started_at": "2026-10-22T04:27:24.453778+00:00",
+    "finished_at": "2026-10-22T04:48:31.348929+00:00",
+    "repair_status": "supported",
+    "attempts": [
+      {
+        "role": "integrator",
+        "elapsed_seconds": 423.3175514980685,
+        "thread_id": "01a161dd-2a7d-7d13-bbdd-688566578cd8",
+        "transport_complete": true
+      },
+      {
+        "role": "reviewer",
+        "elapsed_seconds": 832.4908096510917,
+        "thread_id": "01a161e3-a1f1-7ca0-997c-38c2a84c3ea1",
+        "transport_complete": true
+      }
+    ],
+    "workflow_raw_sha256": "9005fd90568e133b9854fe668bda88b7f386dd9da8e789e04ea71d2d79f643ec",
+    "workflow_canonical_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+    "counts": {
+      "operations": 63,
+      "states": 80,
+      "flows": 168,
+      "modules": 13,
+      "gap_records": 14,
+      "scope_resolutions": 2
+    },
+    "changed_records": {
+      "operations": 5,
+      "states": 2,
+      "flows": 4
+    },
+    "topology_changed": false,
+    "reader_coverage": "not rerun in repair mode",
+    "review_result": "supported for general source-described architecture, not execution-ready SOP",
+    "review_advisories": 1,
+    "durable_archive": "/home/groups/xiaojie/mstojkov/atlas-results/prototype-48925060.tar.gz",
+    "archive_sha256": "6807882c52a02f82ea5777f8e00dee96594d18a8c727d1c6678756ab9713a4a3",
+    "archive_bytes": 22419957,
+    "archive_members": 139
+  },
+  "small_controls": {
+    "basic_review": {
+      "case_count": 8,
+      "failure_item_count": 0,
+      "unassessed_item_count": 0,
+      "judged_item_count": 8,
+      "unsupported_acceptance": {
+        "numerator": 0,
+        "denominator": 4,
+        "rate": 0.0
+      },
+      "supported_retention": {
+        "numerator": 4,
+        "denominator": 4,
+        "rate": 1.0
+      },
+      "abstention": {
+        "numerator": 0,
+        "denominator": 8,
+        "rate": 0.0
+      },
+      "label_accuracy": {
+        "numerator": 8,
+        "denominator": 8,
+        "rate": 1.0
+      }
+    },
+    "field_accountable_review": {
+      "case_count": 8,
+      "failure_item_count": 0,
+      "unassessed_item_count": 0,
+      "judged_item_count": 8,
+      "unsupported_acceptance": {
+        "numerator": 0,
+        "denominator": 4,
+        "rate": 0.0
+      },
+      "supported_retention": {
+        "numerator": 4,
+        "denominator": 4,
+        "rate": 1.0
+      },
+      "abstention": {
+        "numerator": 0,
+        "denominator": 8,
+        "rate": 0.0
+      },
+      "label_accuracy": {
+        "numerator": 8,
+        "denominator": 8,
+        "rate": 1.0
+      }
+    }
+  },
+  "small_control_comparison": "Both 8/8; no observed advantage from the longer contract in this ceiling diagnostic.",
+  "actual_production_reviewer_challenge": {
+    "job_id": "48926094",
+    "slurm_state": "COMPLETED",
+    "exit_code": "0:0",
+    "slurm_elapsed": "00:15:06",
+    "peak_batch_rss_kb": 316104,
+    "review_elapsed_seconds": 876.2415850479156,
+    "thread_id": "01a161e6-51bf-7a90-b12f-b443b137966f",
+    "passed": true,
+    "checks": {
+      "native_complete": true,
+      "all_seeded_fields_detected": true,
+      "all_seeded_omissions_detected": true,
+      "withheld_as_needs_revision": true,
+      "no_supported_export": true
+    },
+    "field_controls": [
+      {
+        "target_id": "state:spatial_PCR1_remainder",
+        "field_pointer": "/states/21/description",
+        "detected": true,
+        "verdict": "not_established"
+      },
+      {
+        "target_id": "operation:decode_spatial",
+        "field_pointer": "/operations/43/action",
+        "detected": true,
+        "verdict": "unsupported"
+      }
+    ],
+    "omission_controls": [
+      {
+        "obligation_id": "SO-PLATE-SIZE-FRACTIONS",
+        "detected": true,
+        "disposition": "partial",
+        "selected": true
+      }
+    ],
+    "actual_status": "needs_revision",
+    "expected_answers_passed_to_reviewer": false,
+    "supported_exports": false,
+    "diagnostic_exports": true,
+    "durable_archive": "/home/groups/xiaojie/mstojkov/atlas-results/full-review-probe-48926094.tar.gz",
+    "archive_sha256": "5247784cca5ad0f5b7cd3dfb1d6cc4d3e6c18c56c06d09dedf8e4a7b2d6ac8d1",
+    "archive_bytes": 22004336,
+    "archive_members": 101,
+    "driver_commit": "9b783d9b4a10a8dbd4965b7c82b7e5a1de58605a",
+    "driver_sha256": "10e9e1d16294376117ed2b0b2a49b1d1c766cca00c20779a1330d23c4274abc5",
+    "mutation_limit": "The planted edits also leave inconsistencies in unchanged fields/evidence; detection combines consistency checking and source review. This does not calibrate acceptance of coherently fabricated full designs."
+  },
+  "distributed_example": {
+    "workflow": {
+      "path": "examples/scstamp-seq/workflow.json",
+      "sha256": "9005fd90568e133b9854fe668bda88b7f386dd9da8e789e04ea71d2d79f643ec"
+    },
+    "overview": {
+      "path": "examples/scstamp-seq/overview.html",
+      "sha256": "d9bfafbe82efe394e1094bcb8c22c2aa7a0fa2e70eb65b92849317dba827c63c"
+    }
+  },
+  "audits": {
+    "targeted_scientific_audit.json": {
+      "path": "experiments/scstamp_seq_20261021/targeted_scientific_audit.json",
+      "sha256": "2d1d139b4321f3a489eda7c73b0f81c3b1bb87f9156cd644ae327e881df6aa0d"
+    },
+    "repair_diff_audit.json": {
+      "path": "experiments/scstamp_seq_20261021/repair_diff_audit.json",
+      "sha256": "fc3314b25b05660b1f1f5e571ce953941609911a5cba7d988030d5757c990688"
+    },
+    "repair_source_audit.json": {
+      "path": "experiments/scstamp_seq_20261021/repair_source_audit.json",
+      "sha256": "3b4f30bad9660f7a03093864e7e8fb2f51b28181d89201ea360e5dd20dff7b32"
+    },
+    "completion_integrity_audit.json": {
+      "path": "experiments/scstamp_seq_20261021/completion_integrity_audit.json",
+      "sha256": "c6e7b986f62cf09d2e92abeec06335fc09fe4a26cb9307ca0ee9ad70bc2a1e3f"
+    },
+    "smallcontrol_audit.json": {
+      "path": "experiments/scstamp_seq_20261021/smallcontrol_audit.json",
+      "sha256": "44acf51324a4a5b18f2587ff7939f117ad8d5f72adf3c7d3415f94e7744e5f66"
+    },
+    "full_review_probe_integrity.json": {
+      "path": "experiments/scstamp_seq_20261021/full_review_probe_integrity.json",
+      "sha256": "74ee380a1bf310710abeaa4a63fba77d444a8c5efa8b5dfe0049830b18ebca89"
+    },
+    "full_review_probe_result.json": {
+      "path": "experiments/scstamp_seq_20261021/full_review_probe_result.json",
+      "sha256": "8eaf19d9719c187a72424a5a145f31b0b188fb2b93a6b182d1ea9c855c9e445e"
+    },
+    "prototype_tool_smoke.json": {
+      "path": "experiments/scstamp_seq_20261021/prototype_tool_smoke.json",
+      "sha256": "e4c1acd596355cf1e849368f750f9eec426db97e1aeacd7c5e10c43542fc912f"
+    },
+    "full_review_control_audit.json": {
+      "path": "experiments/scstamp_seq_20261021/full_review_control_audit.json",
+      "sha256": "f591bd5dfcdbd26ffb1e0c2fceef03167391c1d86d91e5bd4d1d43eb70d77446"
+    }
+  },
+  "software_validation": {
+    "command": ".venv/bin/python -m pytest -q",
+    "passed": 2356,
+    "skipped": 3,
+    "elapsed_seconds": 147.8,
+    "scope": "development tree including default-off shell profile and exact-diff helper; software behavior, not scientific accuracy",
+    "code_commit_tested": "2b7bd3b"
+  },
+  "deterministic_controls": [
+    "typed/unique graph record IDs and endpoints",
+    "exact qualified I/O and binding/Flow agreement",
+    "single producers, DAG and Module coverage",
+    "source quote/locator integrity",
+    "exact candidate/source/review content bindings and required field/coverage completion",
+    "withhold supported exports on unresolved negative required review",
+    "boundary inventory and guarded path refusal",
+    "stable-ID change inventory"
+  ],
+  "remaining_limits": [
+    "These model-authored/source-checked controls are development diagnostics, not expert gold or family holdouts.",
+    "No zero-error, source-entailment or whole-graph accuracy guarantee.",
+    "Fourteen overlapping scoped gap records remain; no new dependency acquisition occurred.",
+    "Route prose is not a globally executable routing plan.",
+    "Full-atlas shared-component matching remains a separate unvalidated task.",
+    "Recovered interpreter/namespace/draft errors remain in native traces; completion did not mean zero retries.",
+    "The new opt-in pinned-shell profile was not used by these jobs and has no native performance evidence."
+  ]
+}

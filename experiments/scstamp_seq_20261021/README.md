@@ -1,5 +1,56 @@
 # Fresh-method diagnostic: scSTAMP-seq
 
+## Completed prototype validation
+
+Qiu job **48925060** completed in **21m30s**, using frozen runtime **14271c5**,
+`gpt-6.1-sol` / `xhigh`. It repaired the preserved candidate against the same
+source packet, obtained a fresh `supported` review, and generated graph and
+readable outputs. This was a repair/review run, not a new acquisition or full
+extraction. The [distributed example](../../examples/scstamp-seq/README.md) contains
+byte-identical Workflow JSON and the standalone HTML view.
+
+The [source audit](repair_source_audit.json) and [exact diff](repair_diff_audit.json)
+show two clarifications: name the physical cDNA/PHO-derived DNA products clearly,
+and distinguish the droplet/MAT floodlight demonstrations from the broader
+patterned-light architecture. Eleven existing records changed; graph topology,
+Modules, all fourteen unresolved records and the two scope resolutions did not.
+The [completion integrity audit](completion_integrity_audit.json) independently
+checks native transport, input/output hashes and exact current review coverage.
+The fresh reviewer retained one optional calibration-documentation advisory.
+
+Both smaller eight-case diagnostics rejected four negative cases and retained
+four supported cases, with no abstentions. The
+[independent diagnostic audit](smallcontrol_audit.json) checks their labels,
+source context and recorded input separation. This ceiling result provides no
+evidence that the longer prompt is better.
+
+Qiu job **48926094** then tested the **actual production reviewer**, once, on a
+full Workflow with two changed factual fields and one deleted required Operation.
+It caught unsupported disposal, reversed read assignments and the missing plate
+partition, returned `needs_revision`, and withheld supported exports. The job
+completed in **15m06s**. Expected defects were retained in host metadata and were
+not passed as review inputs. These controls are source-checked development tests,
+not human gold, an untouched holdout or a whole-graph accuracy estimate.
+The edits also leave cross-field/evidence inconsistencies, so this challenge
+measures consistency checking together with source review. Coherently fabricated
+designs and harder unsupported transfers remain outside these measurements.
+
+The [completion report](prototype_completion_report.json) records both jobs,
+output/archive hashes, measured controls and limitations. The
+[full-review result](full_review_probe_result.json) is copied unchanged from the
+native host report; the [independent replay](full_review_probe_integrity.json)
+recomputes its score from the actual reviewer artifacts. The
+[independent source/trace audit](full_review_control_audit.json) checks the actual
+reasons, affected fields, source reads and recorded expected-answer separation.
+
+The [tool smoke check](prototype_tool_smoke.json) uses the completed output:
+boundary inventory returns seven external inputs, nine terminal outputs and no
+isolated States. A plate-library-to-droplet-read query returns
+`needs_route_selection` with the exact guarded edges. HTML anchors resolve, but
+no browser visual inspection was performed. See [PROTOTYPE.md](../../docs/PROTOTYPE.md)
+for the enforced stage order, exact commands and remaining guarantees/limits.
+The canonical atlas is unchanged; bulk extraction remains withheld.
+
 ## Completed run
 
 Qiu CPU job **48877794** completed with exit `0:0` in **85 minutes 12 seconds**.

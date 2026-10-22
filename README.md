@@ -9,6 +9,28 @@ document registration, inventory, immutable batch planning and per-method execut
 Saved experiment launchers under `provenance/` record particular runs and are not
 the general extraction entrypoint.
 
+**Current prototype, 2026-10-21 PDT:** the
+[scSTAMP-seq example](examples/scstamp-seq/README.md) contains the actual corrected
+Workflow and standalone HTML view from a completed Qiu run. It has 63 Operations,
+80 States, 168 Flows and 13 Modules, preserving three alternative library routes.
+The fresh model review returned `supported` for a general method description;
+fourteen overlapping gap records remain explicit. This is not an execution-ready SOP.
+
+The actual production reviewer also rejected a full Workflow with three planted
+defects: unsupported disposal, reversed read assignments and a deleted partition.
+All three were identified and supported exports were withheld. Both smaller
+eight-case diagnostics retained four supported cases and rejected four negative
+cases. These are source-checked development controls, not expert accuracy estimates.
+
+Start with the [prototype walkthrough and exact commands](docs/PROTOTYPE.md).
+The [results and audits](experiments/scstamp_seq_20261021/README.md) distinguish
+repair timing, scientific judgment and deterministic checks. Development code
+passes **2,356 software tests, three skipped**. Bulk deployment and canonical
+promotion remain withheld; full-atlas shared-component matching remains unvalidated.
+
+<details>
+<summary>Earlier development checkpoints and preserved results</summary>
+
 **Current stage: protocol and shared-operation benchmark development, 2026-10-20.**
 The new [protocol reference benchmark](benchmarks/protocol_graph_v1/README.md)
 defines 12 cases across six technology strata, permits different valid graph
@@ -119,6 +141,8 @@ default remains the earlier frozen `targeted_selection_18` runtime.
 Earlier extractions, graph publications and live controls remain preserved in
 [current status](docs/STATUS.md). See also
 [what extraction and matching must establish](docs/EXTRACTION_SCOPE_AND_MATCHING.md).
+
+</details>
 
 ## Start here
 

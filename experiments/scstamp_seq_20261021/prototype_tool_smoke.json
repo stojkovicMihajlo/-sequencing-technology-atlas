@@ -1,0 +1,50 @@
+{
+  "format_version": "prototype_tool_smoke/1.0",
+  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+  "job_id": "48925060",
+  "cross_route_query": {
+    "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+    "source_id": "plate_RNA_library",
+    "target_id": "droplet_RNA_FASTQ",
+    "status": "needs_route_selection",
+    "path_flow_ids": null,
+    "conditional_candidate_path_flow_ids": [
+      "io:input:sequence_RNA:plate_RNA_library",
+      "io:output:sequence_RNA:droplet_RNA_FASTQ"
+    ],
+    "blocked_conditional_edges": [
+      {
+        "flow_id": "io:input:sequence_RNA:plate_RNA_library",
+        "source": "plate_RNA_library",
+        "target": "sequence_RNA",
+        "kind": "material_input",
+        "condition": "Plate RNA implementation.",
+        "selection": "alternative",
+        "alternative_group": "RNA_library_origin"
+      },
+      {
+        "flow_id": "io:output:sequence_RNA:droplet_RNA_FASTQ",
+        "source": "sequence_RNA",
+        "target": "droplet_RNA_FASTQ",
+        "kind": "data_output",
+        "condition": "Droplet RNA library sequenced.",
+        "selection": "alternative",
+        "alternative_group": "RNA_read_origin"
+      }
+    ],
+    "boundary": "Structural navigation only, not an execution schedule or a scientific validity judgment. Conditional candidate paths may mix incompatible routes. No natural-language guard was evaluated; no globally consistent route or complete set of required inputs was established."
+  },
+  "boundary_inventory_counts": {
+    "external_input": 7,
+    "terminal_output": 9,
+    "isolated": 0
+  },
+  "html_checks": {
+    "unique_id_count": 144,
+    "internal_reference_count": 400,
+    "broken_internal_references": [],
+    "article_count": 63,
+    "visual_inspection_performed": false
+  },
+  "boundary": "Actual completed output checked by Python; HTML anchor integrity is not a browser rendering test or scientific verification."
+}

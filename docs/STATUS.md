@@ -1,5 +1,35 @@
 # Deployment status
 
+## Prototype repair and actual-review challenge completed, 2026-10-21 PDT
+
+Qiu CPU jobs **48925060** and **48926094** completed with `0:0`, using frozen
+runtime **14271c5**, `gpt-6.1-sol` / `xhigh`. The first performed a same-source
+scSTAMP repair and fresh field/source review in **21m30s**, returned `supported`
+and generated graph/reading exports. The second challenged the actual production
+reviewer with three seeded defects in a full Workflow: all three were identified,
+the result was `needs_revision`, and supported exports were withheld. It completed
+in **15m06s**. This repair timing is not a new full-extraction timing result.
+
+The [runnable prototype guide](PROTOTYPE.md) and
+[completed example](../examples/scstamp-seq/README.md) show the actual outputs.
+The [experiment report](../experiments/scstamp_seq_20261021/README.md) links source
+audits, exact changes, native controls and limitations. Both smaller eight-case
+diagnostics also rejected all four negative controls and retained all four
+supported controls; neither configuration outperformed the other on those cases.
+
+The new boundary and path tools operate on exact graph IDs and refuse to activate
+natural-language conditions. The source audit corrected product terminology and
+demonstration-scope qualifications without changing topology or silently resolving
+the fourteen overlapping gaps. The native archives are preserved outside scratch.
+
+Development validation: **2,356 software tests passed, three skipped** after the
+additional stable-ID diff and opt-in pinned-shell profile changes. That shell
+profile remains disabled by default and was not used by either frozen job; no
+native speedup or environment guarantee is claimed for it. Scientific entailment,
+family generalization, global route selection and cross-method matching remain
+empirical evaluation problems. **Bulk deployment and canonical promotion remain
+withheld.**
+
 ## Fresh scSTAMP-seq run completed, 2026-10-21 PDT
 
 Qiu CPU job **48877794**, frozen runtime **ae2c1a1**, completed in **85m12s** with
