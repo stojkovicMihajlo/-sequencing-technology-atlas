@@ -29,11 +29,11 @@ canonical promotion follows automatically.
 
 ## Completed native observations
 
-Job48941049 completed scSTAMP as `supported` at08:11UTC after its own correction
-and fresh review: **112m00s**,63 Operations,76 States,163 Flows,11 Modules and13
+Job **48941049** completed scSTAMP as `supported` at 08:11 UTC after its own correction
+and fresh review: **112m00s**, with 63 Operations, 76 States, 163 Flows, 11 Modules and 13
 qualified unknowns. The [frozen-runtime replay](frozen_gates_replay.json) validated
 all seven native attempts and all four review gates without integrity errors.
-The baseline was108m52s; this pair provides no observed overall speedup, and the
+The baseline took 108m52s; this pair provides no observed overall speedup, and the
 combined changes and model variability preclude attributing timing to scheduling.
 
 The DBiT information-reader archive ends with a typed provider-capacity failure.
@@ -48,3 +48,8 @@ and the [auditor response](host_initial_fidelity_response.json) withdrew that
 classification. The observations establish partial optional lookup coverage and
 ambiguous reporter wording, not confirmed false numeric or statistical claims.
 The original audit remains unchanged. No host findings reached native workers.
+
+The pinned [completion report](completion_report.json) summarizes the final mixed
+outcomes, native correction and gate results, consumer checks, and limits. The
+[revision audit](native_revision_audit.json) records every changed field and the
+separate original-source replay receipt without rewriting native artifacts.
