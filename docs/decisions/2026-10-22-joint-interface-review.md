@@ -31,3 +31,13 @@ only. Count localized detection and supported-interface retention separately;
 generic rejection and blanket abstention cannot pass both. One exposed case and
 one sample per configuration cannot establish a general improvement. No current
 source-only extraction receives this new instruction retroactively.
+
+## Observed evaluation
+
+The [matched native pair](../../provenance/experiments/joint_interface_review_20261022/paired_native_results.json)
+completed in job48948650. Both configurations caught the same timing defect and
+retained all four supported connections. The revised reviewer visibly executed
+joint Operation/State/incident-Flow inspection programmatically, but this did not
+yield a detection advantage in the single pair. Retain the instruction as explicit
+use of an existing tool and test it within fresh extraction; do not present it as
+a validated accuracy improvement. No further agent or review round is added.

@@ -1,0 +1,80 @@
+{
+  "format_version": "host_initial_fidelity_response/1.0",
+  "created_at": "2026-10-22T08:06:57.416993+00:00",
+  "case_id": "scstamp-seq",
+  "status": "response_frozen_before_any_native_005_006_007_inspection",
+  "authority": "Bounded host-judge calibration response; model/engineering interpretation, not expert gold or a native verdict.",
+  "inputs": {
+    "original_host_audit": {
+      "path": "provenance/experiments/clean_extraction_parallel_20261022/host_initial_fidelity_audit.json",
+      "raw_sha256": "487e86ebb75ccacaf269daeb72d4494f64f21714181d4a6cdcf856d2776deeca"
+    },
+    "adjudication": {
+      "path": "provenance/experiments/clean_extraction_parallel_20261022/host_initial_fidelity_adjudication.json",
+      "raw_sha256": "9f43880c213d5cacee6947aa8a70828a1fe479484a2dadb3592af8d4963f64c7"
+    },
+    "initial_workflow": {
+      "path": "provenance/experiments/clean_extraction_parallel_20261022/outputs/job_48941049/scstamp/004_integrator/artifact.json",
+      "raw_sha256": "080e59688d54818155cd58072ce3bdec994f7432eb469e0c0c60b70b97de1a18"
+    },
+    "registered_packet": {
+      "path": "experiments/scstamp_seq_20261021/outputs/job_48877794/source_packet.json",
+      "raw_sha256": "e99ce83cfd1b2d260a4097b180df65e50e5173b526a5f3be4f153a4c744ae70c"
+    },
+    "host_evaluation": {
+      "path": "provenance/experiments/clean_extraction_20261022/host_evaluation.json",
+      "raw_sha256": "b24211c73a56695713ab0a70b3a43111c4d4ff86bf106e5537e35eb6a4a72873"
+    }
+  },
+  "position": "Accept the peer adjudication. The original required_local_correction classifications for F01 and F02 were stronger than the evidence and declared general-description scope. Retain the concrete quality concerns with narrower classifications. Do not count either as a confirmed false scientific assertion.",
+  "findings": [
+    {
+      "finding_id": "F01",
+      "revised_classification": "incomplete_optional_inline_decision_table_coverage",
+      "literal_false_claim_established": false,
+      "source_fact_retained": "The four listed numeric rows match dependency_10x_lt_v31_guide p00381–p00384. The same table also has p00385: 1000–1500 ng → 6–8 cycles, and p00386: >1500 ng → 5 cycles.",
+      "candidate_pointer": "/operations/35/resources/0/description",
+      "candidate_scope_wording": "The resource starts with “Guide input-to-cycle ranges”; /operations/35/action says “Complete manufacturer sample-index PCR using the guide’s carry-forward-cDNA cycle-selection rule.”",
+      "why_original_required_classification_is_withdrawn": "Complete modifies the experimental operation. It does not explicitly make the inline resource string an exhaustive table. The operation delegates to the guide, the source itself says cycles should be optimized, and neither a primary-run input above 1000 ng nor a wrong numeric recommendation was established.",
+      "contract_assessment": "The allowed host D6 question asks preservation of consequential reported quantities; D7 asks evidence for a decision edge. These support scrutiny, but do not explicitly require a full inline transcription of every manufacturer decision-table row under the general-assay scope. I have no additional exact contract or source obligation establishing exhaustiveness.",
+      "remaining_concern": "A consumer using only the inline rows has no recommendation above 1000 ng despite available source rows. That is a conditional self-contained usability limitation.",
+      "proportionate_resolution": "Recommended: mark the inline rows partial, or include the adjacent rows if a complete lookup is desired. Required revision would need an explicit complete-table contract, an exhaustive-policy claim, or an actual downstream decision in an omitted range. No new operation or branch is implied."
+    },
+    {
+      "finding_id": "F02",
+      "revised_classification": "ambiguous_potentially_overstrong_property_wording",
+      "literal_false_claim_established": false,
+      "source_fact_retained": "Primary p00010 hypothesizes random rather than systematic variability and reports improvement from multiple uniquely barcoded PHOs; p00049 describes reporter-wise effective-region voting. Neither passage establishes statistical independence of reporter errors. Neither proves dependence either.",
+      "candidate_pointer": "/operations/46/information_effect",
+      "exact_candidate_sentence": "Combines independent reporter measurements without treating the six PHOs as separate sequential optical bits.",
+      "why_original_required_classification_is_withdrawn": "In scientific measurement prose independent measurements can imply statistical independence, which motivated my initial concern. Here the sentence contrasts simultaneous reporters with sequential optical bits, so separately identifiable reporters is also a plausible meaning. The action introduces no error distribution, covariance, likelihood product or independence-based guarantee. I did not establish that the technical reading was intended or uniquely entailed.",
+      "contract_assessment": "No inspected field contract uniquely defines independent in this sentence as statistical error independence. I have no additional source obligation that makes this ambiguous phrase a confirmed false statistical assertion.",
+      "remaining_concern": "The statistical interpretation must not be reused as a proven property or an error-reduction transfer guarantee. Reporters are supported as distinct/uniquely barcoded; error independence remains unestablished.",
+      "proportionate_resolution": "Recommended clarification to distinct or uniquely barcoded reporter measurements. A policy requiring unambiguous property prose may require this editorial correction, but that policy should be stated separately from a claim of experimentally refuted or invented independence."
+    }
+  ],
+  "effect_on_original_audit": {
+    "preservation": "The original audit remains byte-identical; this response supersedes only its mandatory/falsity interpretation of F01/F02. It does not silently rewrite the historical judgment.",
+    "overall_required_revision_on_basis_of_these_two_findings": "Not established under the declared general-description/delegated scope. The earlier overall needs_revision label cannot rest solely on treating these two observations as confirmed required fidelity corrections.",
+    "broader_candidate_status": "This response is not a fresh whole-candidate acceptance and does not resolve acknowledged droplet ordering, sequence-resolution or delegated-recipe limits. It makes no statement about native acceptance or later revisions.",
+    "counting": {
+      "confirmed_false_numeric_rows": 0,
+      "confirmed_statistical_independence_assertions_from_phrase_alone": 0,
+      "conditional_inline_coverage_limits": 1,
+      "ambiguous_wording_findings": 1
+    }
+  },
+  "calibration_lesson": "Distinguish an actual contradicted assertion, an unsupported assertion with a clear technical meaning, incomplete selected detail, and ambiguous wording. Do not infer an exhaustive executable contract from a general workflow description or convert a strongest plausible reading into an established claim.",
+  "input_separation": {
+    "read_for_this_response": [
+      "Specified peer adjudication",
+      "Exact initial004 candidate fields needed to verify adjudication quotations",
+      "Original registered packet and original audit for pinned identity/context"
+    ],
+    "not_inspected": [
+      "Any native005/006/007 artifact, review, revision or event",
+      "Ongoing worker discussions"
+    ],
+    "actions": "Local read-only inspection and this separate response file only. No original audit/native/source edit, worker feedback, SSH or model/extraction launch."
+  }
+}

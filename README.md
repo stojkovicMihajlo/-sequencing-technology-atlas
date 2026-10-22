@@ -9,20 +9,38 @@ document registration, inventory, immutable batch planning and per-method execut
 Saved experiment launchers under `provenance/` record particular runs and are not
 the general extraction entrypoint.
 
-**Current harness validation, 2026-10-21 PDT:** Qiu CPU job **48932552** starts
-scSTAMP and DBiT extraction from literature only, without prior graphs, reviews
-or correction answers. The [frozen clean-input experiment](provenance/experiments/clean_extraction_20261022/README.md)
-tests all extraction/review stages and independently evaluates source fidelity.
-No native success is claimed before those results. The general prompt-archive
-gate and actual oversized-finding replay passed software checks; the complete
-development suite passed **2,381 tests, three skipped**.
+**Completed source-only validation, 2026-10-22:** Qiu CPU job **48932552** extracted
+scSTAMP and DBiT from registered literature, without previous graphs, reviews or
+host correction answers. The two outcomes differ:
 
-**Completed repaired example:** the
+- **scSTAMP reached `supported` after one normal correction**, in **108m52s**.
+  Its reviewer caught source-attribution and coverage-accounting errors; the final
+  graph has 67 Operations, 79 States, 169 Flows and 12 Modules. Thirteen qualified
+  gaps and one nonblocking characterization advisory remain explicit.
+- **DBiT remained `needs_revision` after the one-correction cap**, in **87m56s**.
+  The final reviewer caught a preexisting optional-imaging timing/input mismatch
+  that the first reviewer missed. Supported exports were withheld.
+
+The [experiment record](provenance/experiments/clean_extraction_20261022/README.md)
+separates native verdicts, source audits and consumer checks. Local audit receipts
+are `provenance/experiments/clean_extraction_20261022/host_cases/scstamp_source_only_completion_audit.json`
+and `host_cases/dbit_revised_candidate_audit.json` under the same experiment.
+These are model/engineering audits, not human expert gold or proof of zero errors.
+
+**Development remains under evaluation.** Independent source/chemistry/information
+passes now run concurrently before an integration barrier. The joint-interface
+review prompt change in **`4fd13da`** has no demonstrated improvement yet; follow-up
+runs remain pending. The latest custody adapter **`90934f7`** passed **2,485 software
+tests, three skipped**. Software results do not establish scientific accuracy or
+a native speedup. Bulk deployment and canonical promotion remain withheld.
+
+**Older repaired example:** the
 [scSTAMP-seq example](examples/scstamp-seq/README.md) contains the actual corrected
 Workflow and standalone HTML view from a completed Qiu run. It has 63 Operations,
 80 States, 168 Flows and 13 Modules, preserving three alternative library routes.
-The fresh model review returned `supported` for a general method description;
-fourteen overlapping gap records remain explicit. This is not an execution-ready SOP.
+That run used supplied source-backed correction feedback; it is separate from the
+source-only result above. Its model review returned `supported` within a general
+description scope, with fourteen overlapping gaps. It is not an execution-ready SOP.
 
 The actual production reviewer also rejected a full Workflow with three planted
 defects: unsupported disposal, reversed read assignments and a deleted partition.
@@ -32,9 +50,8 @@ cases. These are source-checked development controls, not expert accuracy estima
 
 Start with the [prototype walkthrough and exact commands](docs/PROTOTYPE.md).
 The [results and audits](experiments/scstamp_seq_20261021/README.md) distinguish
-repair timing, scientific judgment and deterministic checks. Development code
-passes **2,356 software tests, three skipped**. Bulk deployment and canonical
-promotion remain withheld; full-atlas shared-component matching remains unvalidated.
+the older repair timing, scientific judgment and deterministic checks. Full-atlas
+shared-component matching remains unvalidated.
 
 <details>
 <summary>Earlier development checkpoints and preserved results</summary>
@@ -217,16 +234,22 @@ Neither mode equates matching names with equivalent reactions.
 flowchart TD
     S[Registered primary paper, supplements and dependencies] --> P[Frozen source packet]
     P --> C[Source requirements: candidate-blind reading]
-    C --> W[Extractor: structured protocol draft]
+    P --> CR[Chemistry reader]
+    P --> IR[Information reader]
+    C --> V[Barrier: all three preparation artifacts validate]
+    CR --> V
+    IR --> V
+    V --> W[Integrator: structured protocol draft]
     W --> A[Python: materialize declared input/output edges]
-    A --> R[Fresh source reviewer]
+    A --> R[Fresh native source, reader-coverage and field review]
     P --> R
     C --> R
     R -->|needs revision: at most one repair| W
-    R -->|supported within scope| J[Reviewed extraction JSON]
+    R -->|all configured gates pass| J[Model-supported Workflow]
+    R -->|unresolved or allowance exhausted| X[Withhold supported exports]
     J --> T[Readable protocol.txt]
     J --> G[Standalone graph_candidate.json]
-    J --> B[Combined atlas assembly]
+    J -->|separate publication stage| B[Combined atlas assembly]
     H[Existing historical claims] --> B
     M[Separately reviewed cross-protocol comparisons] --> B
     J --> L[Property lookup, concept proposal and source/utility review]
@@ -234,10 +257,15 @@ flowchart TD
     K --> B
 ```
 
-The integrator writes the descriptions and declares the relationships. Python
-checks the structure, references and quotations, and renders the records. Scientific
-support is judged by a separate model reviewer. A valid quotation is not proof
-that the interpretation is correct.
+This diagram shows the current fresh-specialist path. The completed `48932552`
+baseline prepared source requirements before its parallel readers; later development
+overlaps those independent passes. Readers do not receive the source-requirement
+ledger. The barrier checks their artifacts before integration.
+
+The integrator writes the descriptions and declares relationships. Python checks
+structure, exact bindings and quotations, then renders the records. Source support
+and completeness still depend on fallible model judgments. Neither a valid quote
+nor a passed structural check proves that its interpretation is correct.
 
 ## Recorded atlas snapshot
 

@@ -1,5 +1,51 @@
 # Deployment status
 
+## Current development check, 2026-10-22 UTC
+
+The target is a reusable **source-only extraction harness**, not a manually
+repaired example. Clean Qiu job **48932552** finished with two different outcomes:
+
+- **scSTAMP: supported after its own one revision and fresh final review**, in
+  **108m52s**. The initial candidate added unsupported cross-variant assertions;
+  its reviewer independently found them. No host corrections were supplied.
+  The final graph has 67 Operations, 79 States, 169 Flows and 12 Modules.
+- **DBiT: needs_revision after the one-revision cap**, in **87m56s**. The second
+  reviewer found an unchanged optional imaging timing/input mismatch that the
+  first missed. Its supported export was withheld. It is not a successful case.
+
+Host source/diff/consumer audits remain separate from native verdicts. Their
+[experiment records](../provenance/experiments/clean_extraction_20261022/README.md)
+preserve initial errors, native detections, host reassessment and exact hashes.
+Frozen full-gate replay confirms all four scSTAMP outcomes are supported and all
+DBiT gates remain nonpositive, with no mechanical integrity errors. These are
+finite model/engineering audits, not expert gold or wet-lab validation.
+
+Development **4fd13da** adds eight reviewer-instruction lines directing joint
+Operation–State–binding–Flow inspection through the existing query tool; no new
+agent, graph format or scientific acceptance waiver. The previous release also
+clarified coverage necessity, overlapped independent source passes, enforced
+prompt archives and fixed oversized review access. **2,485 software tests pass,
+three skipped**, including explicitly pinned multi-input source-derivation
+archival controls. The completed [custody replay](../provenance/experiments/source_custody_20261022/README.md)
+preserved the original upstream files in a separate durable archive, without
+changing any native scientific verdict. Those tests do not measure scientific entailment.
+
+The [matched reviewer sentinel](../provenance/experiments/joint_interface_review_20261022/README.md)
+completed as job **48948650**. The repeated baseline itself detected the timing
+mismatch and retained four source-supported routes. The paired revised arm
+detected the same defect and retained the same controls. Its observed joint
+inspection did not demonstrate a detection improvement in this one pair; see
+[the completed audit](../provenance/experiments/joint_interface_review_20261022/paired_native_results.json). The
+[concurrent-preparation extraction](../provenance/experiments/clean_extraction_parallel_20261022/README.md)
+completed scSTAMP as `supported` in **112m00s**, retaining thirteen qualified
+unknowns. Its [frozen gate replay](../provenance/experiments/clean_extraction_parallel_20261022/frozen_gates_replay.json)
+passed all four review outcomes with no integrity errors. This run does not show
+an overall speedup. Its DBiT reader hit a provider-capacity failure before
+integration, not a missing-paper or graph error. A
+[fresh single-method follow-up](../provenance/experiments/clean_extraction_followup_20261022/README.md)
+(**48950227**) began at08:13UTC with sources alone; its scientific result is pending. No result is
+inferred from submission. **Bulk deployment and canonical promotion remain held.**
+
 ## General harness revision under live evaluation, 2026-10-21 PDT
 
 Qiu CPU job **48941049** is running frozen **f82d93f**, after **2,401 software
@@ -15,8 +61,10 @@ scientific and elapsed-time outcomes remain pending; no speedup is yet claimed.
 Baseline job **48932552** remains unchanged. Its first DBiT candidate entered
 independent review with 29 Operations, 42 States, 81 Flows and 14 overlapping gap
 records. A separate host audit found all 19 fixed source checks represented and
-no consequential core error in the checked scope. One advisory concerns optional
-imaging prose broader than its post-B input occurrence. Navigation, lossless
+no consequential core error in the checked scope. The initial host audit called the optional
+imaging mismatch advisory; subsequent native review showed that this understated
+a real internal contradiction. The original host assessment is preserved and
+the current audit marks the mismatch as requiring repair. Navigation, lossless
 inspection and guard-preserving path checks pass; this initial candidate has no
 inherited scientific acceptance. The scSTAMP initial candidate and final native
 reviews were still pending at the last observation. This is evaluation of fresh

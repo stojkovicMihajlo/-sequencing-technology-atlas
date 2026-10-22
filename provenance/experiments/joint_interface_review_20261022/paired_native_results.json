@@ -1,0 +1,1380 @@
+{
+  "format_version": "paired_native_review_results/1.0",
+  "completed_at": "2026-10-22T08:10:32.223264+00:00",
+  "job_id": "48948650",
+  "evaluation_scope": "One matched independent review_only pair on a previously exposed development Workflow; host-authored, source-checked controls, not expert gold. No fresh extraction or full-graph accuracy estimate.",
+  "authority": {
+    "host_labels": {
+      "path": "provenance/experiments/joint_interface_review_20261022/HOST_LABELS.json",
+      "sha256": "f7534b1e2f32fa5fc910288c8e674ddaa1d12a4ae167e09187c55e4c48b1486f"
+    },
+    "native_plan": {
+      "path": "provenance/experiments/joint_interface_review_20261022/native_plan.json",
+      "sha256": "a9aaaad0c569aea9f9ecc283dd146004d7e1c5889a1387787ac04ddce395b48f"
+    },
+    "runtime_receipts": {
+      "path": "provenance/experiments/joint_interface_review_20261022/runtime_receipts.json",
+      "sha256": "ad74057538c1df5f59c22e1348ddecc643b227475f4dfc23093f6a9d3f7b2286"
+    }
+  },
+  "matched_profile_checks": {
+    "identical_candidate_source_requirements_raw_pins": true,
+    "cli_identical_after_run_path_normalization": true,
+    "normalized_prompt_added_lines": [
+      "Inspect each Operation jointly with its input/output State descriptions and its",
+      "bindings/incident Flows, rather than approving these fields independently. Check",
+      "that asserted routes, timing and variants apply to those actual material/data",
+      "stages, and inspect contextual sources for the association as well as the action.",
+      "Use the existing operation-neighborhood query (replace OPERATION_ID):",
+      "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=<RUNTIME>/src /home/groups/xiaojie/mstojkov/envs/sequencing-technology-atlas-py312/bin/python -m genomics_discovery.curation.workflow_extraction query <RUN>/attempts/001_reviewer/candidate.json OPERATION_ID",
+      "Equivalent programmatic inspection is acceptable; no separate subprocess per",
+      "Operation is required. This view preserves declared claims, not source support."
+    ],
+    "normalized_prompt_removed_lines": [],
+    "prompt_change_matches_eight_line_intervention": true,
+    "mode": "review_only",
+    "max_revisions": 0,
+    "factual_field_and_source_coverage_enabled_in_both": true,
+    "reader_coverage_enabled_in_either": false,
+    "previous_review_supplied_in_either": false,
+    "host_labels_supplied_as_native_scientific_input": false,
+    "boundary": "Profiles checked from config/native command/prompt copies. Host label non-supply follows pinned plan/driver and archived commands; no private-context attestation."
+  },
+  "arms": {
+    "baseline": {
+      "status": "needs_revision",
+      "native_transport_complete": true,
+      "gates_valid": true,
+      "integrity_checks": {
+        "file_pin_checks": 55,
+        "mismatches": [],
+        "implementation_receipt_errors": [],
+        "host_label_pin_errors": [],
+        "validator_errors": {
+          "primary": [],
+          "factual_fields": [],
+          "source_coverage": []
+        },
+        "primary_target_checks": 152,
+        "expected_primary_targets": 152,
+        "field_groups": 175,
+        "field_unassessed": 0,
+        "source_checks": 38,
+        "expected_source_obligations": 38,
+        "prior_field_review_declared": false,
+        "primary_outcome": "needs_revision",
+        "field_outcome": "not_established",
+        "source_outcome": "needs_revision",
+        "cli_checks": {
+          "requested_model_matches": true,
+          "effort_matches": true,
+          "web_disabled": true,
+          "network_disabled": true,
+          "sandbox_workspace_write": true,
+          "managed_approval_preserved": true
+        }
+      },
+      "elapsed_seconds": 1384.4934563089628,
+      "native_elapsed_seconds": 1381.7613352760673,
+      "usage": {
+        "input_tokens": 4783489,
+        "cached_input_tokens": 4608640,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37872,
+        "reasoning_output_tokens": 9225
+      },
+      "reported_input_minus_cached_tokens": 174849,
+      "negative_controls": [
+        {
+          "target_id": "operation:o_image",
+          "primary_verdict": "unresolved",
+          "field_verdict": "not_established",
+          "affected_fields": [
+            "/operations/4/inputs",
+            "/operations/4/input_bindings/0/condition"
+          ],
+          "localized_detection": true,
+          "rationale": "Same-slide microscopy and the EVOS instrument are supported. However, the operation/condition allows imaging during either flow while its only input is s_encoded, defined after completed B flow. The source explicitly places first-flow images before first-chip removal. Narrow this occurrence to the post-B imaging instance or bind earlier imaging to the corresponding stage; equipment availability alone does not support this temporal association.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00010"
+            ],
+            [
+              "liu2020_primary",
+              "p00042"
+            ],
+            [
+              "liu2020_primary",
+              "p00043"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_adjudication": "The scope mismatch is real: the resource says during either flow and binding permits during/after flow, while sole input is the output of completed A/B barcoding. Primary p00042 permits first-flow imaging before first-chip removal; p00126 gives a distinct compatible post-B image. This is not a claim that early imaging is impossible."
+        },
+        {
+          "target_id": "flow:io:input:o_image:s_encoded",
+          "primary_verdict": "unresolved",
+          "field_verdict": "not_established",
+          "affected_fields": [
+            "/flows/12/source",
+            "/flows/12/condition"
+          ],
+          "localized_detection": true,
+          "rationale": "The post-B optical inspection is supported, but the binding condition also permits first-flow imaging when this completed-B state does not yet exist. Restrict this occurrence to post-B imaging or represent the earlier stage explicitly.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00010"
+            ],
+            [
+              "liu2020_primary",
+              "p00042"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_adjudication": "The scope mismatch is real: the resource says during either flow and binding permits during/after flow, while sole input is the output of completed A/B barcoding. Primary p00042 permits first-flow imaging before first-chip removal; p00126 gives a distinct compatible post-B image. This is not a claim that early imaging is impossible."
+        }
+      ],
+      "positive_controls": [
+        {
+          "target_id": "flow:io:input:o_recover:s_encoded",
+          "field_pointer": "/flows/14",
+          "primary_verdict": "supported",
+          "field_verdict": "supported",
+          "affected_fields": [],
+          "retained": true,
+          "rationale": "The gasket defines destructive lysis specifically over the already flow-barcoded region.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00044"
+            ]
+          ],
+          "source_support_checked": true
+        },
+        {
+          "target_id": "flow:io:output:o_recover:s_lysate",
+          "field_pointer": "/flows/15",
+          "primary_verdict": "supported",
+          "field_verdict": "supported",
+          "affected_fields": [],
+          "retained": true,
+          "rationale": "Proteinase K digestion yields the collected encoded regional lysate, optionally stored.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00044"
+            ]
+          ],
+          "source_support_checked": true
+        },
+        {
+          "target_id": "flow:io:input:o_B:s_A",
+          "field_pointer": "/flows/9",
+          "primary_verdict": "supported",
+          "field_verdict": "supported",
+          "affected_fields": [],
+          "retained": true,
+          "rationale": "The second chip acts on the same A-bearing tissue for covalent joining at intersections.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00010"
+            ],
+            [
+              "liu2020_primary",
+              "p00060"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_support_checked": true
+        },
+        {
+          "target_id": "flow:io:output:o_B:s_encoded",
+          "field_pointer": "/flows/11",
+          "primary_verdict": "supported",
+          "field_verdict": "supported",
+          "affected_fields": [],
+          "retained": true,
+          "rationale": "After B ligation and chip removal the intact tissue retains the joined spatial molecules.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00010"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_support_checked": true
+        }
+      ],
+      "navigation_observations": {
+        "named_query_calls_observed": 0,
+        "named_query_event_lines": [],
+        "completed_command_records": 43,
+        "helper_path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/review_nav.py",
+        "helper_sha256": "996415cc9dbc8513ed2d5d62ef262aa75c66c01d1dd0fb5b449b6a831f887f2f",
+        "programmatic_joint_neighborhood_batches": [],
+        "interpretation": "The saved helper prints Operation slices and State slices separately. No equivalent explicit per-Operation State+incident-Flow join was observed in that helper. The final source-backed review nevertheless correctly cross-compares the stages; no private reasoning inference."
+      },
+      "other_primary_negative_targets": [],
+      "other_field_negative_groups": [],
+      "source_nonpositive_checks": [
+        {
+          "obligation_id": "SO-DEVICE-FABRICATION",
+          "disposition": "partial",
+          "selected": true
+        },
+        {
+          "obligation_id": "SO-SPATIAL-REGISTRATION",
+          "disposition": "partial",
+          "selected": true
+        },
+        {
+          "obligation_id": "SO-REAGENT-INVENTORY",
+          "disposition": "partial",
+          "selected": true
+        }
+      ],
+      "omission_summary": [
+        {
+          "blocking": true,
+          "action": "revise_record",
+          "description": "Imaging stage/association repair: o_image and flow:io:input:o_image:s_encoded allow inspection during either flow, but s_encoded is the output of completed A/B ligation and second-chip removal. First-flow imaging occurs before the first chip is removed. Narrow this represented occurrence and its condition to the supported completed-B/post-second-chip image, or represent earlier inspections with their actual input stages. Keep the general during-flow capability source-qualified; do not imply completed A/B material already exists during A flow. This corrects an asserted material-stage association used by the optional anatomy-registration route.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00010"
+            ],
+            [
+              "liu2020_primary",
+              "p00042"
+            ],
+            [
+              "liu2020_primary",
+              "p00043"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ]
+        },
+        {
+          "blocking": false,
+          "action": "revise_record",
+          "description": "SO-REAGENT-INVENTORY is only partially represented: the record retains Nextera FC-131-1024 but omits most available Table S3/primary-key-resource vendor/catalogue metadata for the named RT, dNTPs, inhibitors, ligase/buffers, AMPure, C1 beads, KAPA, Proteinase K and dye resources. Add source-attributed identities to the corresponding existing resources without treating inventory co-occurrence as a cumulative reaction recipe. Preserve EP7051 (supplement) versus EP0751 (primary) as differing source spellings, and keep the supplemental 65001/65002 and B&W-number layout qualified; the primary explicitly identifies C1 65001. This is a required frozen-ledger record repair, although it does not erase the already supported general specimen-to-library interfaces.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00134"
+            ],
+            [
+              "liu2020_supp_tables",
+              "p00005"
+            ],
+            [
+              "liu2020_supp_tables",
+              "p00007"
+            ]
+          ]
+        },
+        {
+          "blocking": false,
+          "action": "revise_record",
+          "description": "The selected source-described fabrication resource in o_A/o_B omits the available 50 μm chrome-photomask specification and explicit cut/peel/punch finishing of the cured PDMS slab. Add these to the existing equipment/fabrication descriptions to satisfy selected SO-DEVICE-FABRICATION, preserving manufacturer-delegated SU-8 internals and the finished-chip boundary. Separate specimen-path fabrication nodes are unnecessary. This is a resource-description completeness repair, not a missing production-material transformation.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00034"
+            ],
+            [
+              "liu2020_primary",
+              "p00035"
+            ]
+          ]
+        }
+      ],
+      "supported_exports_present": {
+        "graph_candidate.json": false,
+        "protocol.txt": false
+      },
+      "pins": {
+        "state.json": "f9795e91ff357c80ab5d0ed49b982b2e6d79851042d11dd452b4455ccaf27c54",
+        "config.json": "79d4be15f6c5262e1f9a0c2ef432c3e58ba1543796a6a60d5347ac27266c7df8",
+        "initial_workflow.json": "57ea4c83d53a0542e6aecb21722370d414c917227440f0b3914e53134de2ffdb",
+        "source_packet.json": "485cefa0e32e37eb259dcf2c69cab224076d36e07a9072a4e2faa2f54af48b27",
+        "source_obligations.json": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3",
+        "attempts/001_reviewer/artifact.json": "ac3d6dc81f88d8e09cf0720c137b0153797bba8f7a5947f30936583e7e5e97e6",
+        "attempts/001_reviewer/field_review.json": "9fa54a085587bba7eec2886aaa6caeff27973985059cb7216e68e8e3d3b856b5",
+        "attempts/001_reviewer/source_coverage_review.json": "9d91b9b3d26a4e6c940a08ffbfee54c7ee509cf08da8ca7e7fb19f5147b4fad5",
+        "attempts/001_reviewer/prompt.txt": "756469f5de8b7b7c3b830f44a6e4a0847184bac4efed0cfc4a2be282a13cbfd7",
+        "attempts/001_reviewer/stage_prompt.txt": "756469f5de8b7b7c3b830f44a6e4a0847184bac4efed0cfc4a2be282a13cbfd7",
+        "attempts/001_reviewer/command.json": "8405edcb644f1d4aec2bef389715f3a6ed14d0315dc8aa80054bcaba204877dd",
+        "attempts/001_reviewer/events.jsonl": "3cd2d5dc60d01020c4dbec2a186d08e08e0a6f847772b0b2ab19e83d48347197",
+        "attempts/001_reviewer/result.json": "60379aa701c63e717c1626be31f841c9c1a6e5fbb05209f2160269cae733a5b3"
+      },
+      "all_checked_file_pins": [
+        {
+          "kind": "config",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/config.json",
+          "sha256": "79d4be15f6c5262e1f9a0c2ef432c3e58ba1543796a6a60d5347ac27266c7df8",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:source_obligations",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/source_obligations.json",
+          "sha256": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:initial_workflow",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/initial_workflow.json",
+          "sha256": "57ea4c83d53a0542e6aecb21722370d414c917227440f0b3914e53134de2ffdb",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:field_review",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/field_review.json",
+          "sha256": "9fa54a085587bba7eec2886aaa6caeff27973985059cb7216e68e8e3d3b856b5",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:source_coverage_review",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/source_coverage_review.json",
+          "sha256": "9d91b9b3d26a4e6c940a08ffbfee54c7ee509cf08da8ca7e7fb19f5147b4fad5",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:reviewer",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/artifact.json",
+          "sha256": "ac3d6dc81f88d8e09cf0720c137b0153797bba8f7a5947f30936583e7e5e97e6",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:graph_diagnostic",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/graph_diagnostic.json",
+          "sha256": "8e22e8ecfad7a96065bd47fa8b3ef00dc5df2cf69e4c7675996325aac9064e39",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:protocol_diagnostic",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/protocol_diagnostic.txt",
+          "sha256": "657fda5853e3d6dfb0054debdb5fda4b832b7f8fd8868e1b46ab19b6c07fd737",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:overview_diagnostic",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/overview_diagnostic.json",
+          "sha256": "ed67d57bb3e0e3efc1891800d7995df0316581dcb1a666c62f9b2497d918ef7d",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:overview_diagnostic_text",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/overview_diagnostic.txt",
+          "sha256": "362ad5091f8bf2bd0aa0ac8d6754fcbc4c06a70b2a8c53eef132e6368ae14d20",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:overview_diagnostic_html",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/overview_diagnostic.html",
+          "sha256": "10eedbc4bf865ff14eeadbb439b493cccb7c1fedb641e5f794deb581d1d50131",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:boundary_audit",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/boundary_audit.json",
+          "sha256": "3b865385078f8b72915d1d42ad522dd387e57aff0abe4c6a2b7e81773b1d6bac",
+          "matches": true
+        },
+        {
+          "kind": "attempt_input:candidate",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/candidate.json",
+          "sha256": "57ea4c83d53a0542e6aecb21722370d414c917227440f0b3914e53134de2ffdb",
+          "matches": true
+        },
+        {
+          "kind": "attempt_input:field_review_scaffold",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/field_review_scaffold.json",
+          "sha256": "213b7f1de6b6b1a0eda0dd022bc46db3519a80591e73ad7b41546b978414d065",
+          "matches": true
+        },
+        {
+          "kind": "attempt_input:source_obligations",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/source_obligations.json",
+          "sha256": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:result.json",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/result.json",
+          "sha256": "60379aa701c63e717c1626be31f841c9c1a6e5fbb05209f2160269cae733a5b3",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:events.jsonl",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/events.jsonl",
+          "sha256": "3cd2d5dc60d01020c4dbec2a186d08e08e0a6f847772b0b2ab19e83d48347197",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:final.txt",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/final.txt",
+          "sha256": "8c4d99a67d12ac7b8349553c1e9b154a45bc1b0cc00a518bc9ae794920d5db52",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:command.json",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/command.json",
+          "sha256": "8405edcb644f1d4aec2bef389715f3a6ed14d0315dc8aa80054bcaba204877dd",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:started.json",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/started.json",
+          "sha256": "257a80b216f91f097e501393cbd10e8e1f2c0196a5af3070d74e5ce8a40efba6",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:stderr.log",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/stderr.log",
+          "sha256": "6e992b39520b5852902b1194a57794c548e2635add8b9592f05d2f2262d3809b",
+          "matches": true
+        },
+        {
+          "kind": "native_prompt",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/prompt.txt",
+          "sha256": "756469f5de8b7b7c3b830f44a6e4a0847184bac4efed0cfc4a2be282a13cbfd7",
+          "matches": true
+        },
+        {
+          "kind": "stage_prompt",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/attempts/001_reviewer/stage_prompt.txt",
+          "sha256": "756469f5de8b7b7c3b830f44a6e4a0847184bac4efed0cfc4a2be282a13cbfd7",
+          "matches": true
+        },
+        {
+          "kind": "preregistered:workflow",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/initial_workflow.json",
+          "sha256": "57ea4c83d53a0542e6aecb21722370d414c917227440f0b3914e53134de2ffdb",
+          "matches": true
+        },
+        {
+          "kind": "preregistered:source_packet",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/source_packet.json",
+          "sha256": "485cefa0e32e37eb259dcf2c69cab224076d36e07a9072a4e2faa2f54af48b27",
+          "matches": true
+        },
+        {
+          "kind": "preregistered:source_requirements",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/source_obligations.json",
+          "sha256": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/core/artifacts.py",
+          "sha256": "82e222960e8bdebc9ac526f44de5afbe123a00e7084dd1055c43edb0f5bcd7f6",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/codex_worker.py",
+          "sha256": "c66654b587f7208fdd33b0215e48ced8be1d6104af6f36dc91f802bfc0f8c231",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/document_manifest.py",
+          "sha256": "896a2a66599f581e180fbad4dd2e338b66d73d4dfe7e51afea70af4553274c47",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/evidence_views.py",
+          "sha256": "421e090049e0c709ae1e0d0d7eecf05a4c2b644d79a23d72400b0600c23d6180",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/run_state.py",
+          "sha256": "d55561d8981802dcb582778182599f938659461741d194235ccb54278c50e546",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/validation.py",
+          "sha256": "4f47f93ae175cce02db23bc12008e0c2df5f2c40fc777677fef55861af4a03e8",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_coverage.py",
+          "sha256": "7992da93208851016524130cf50d747740fe91f1fea92d949c786d7117b3ed24",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/__init__.py",
+          "sha256": "9eb2b78208fbfe66549280ec9054708a1b1bc76f82d88c2933e3e081a2f28505",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/__main__.py",
+          "sha256": "ef33f885494334c85910571e76d682a70cd805e8d4f480d7d911a47437f803e6",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/assemble.py",
+          "sha256": "a54327046dbb4f53a3645867acfefc28fde36fad4eec813bb751c050c76f3c52",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/authoring.py",
+          "sha256": "a5d054bb69bf307fb4632de3ce74d418e991365e40941fc62e70b9c3544759d1",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/boundaries.py",
+          "sha256": "85057bfedad398e4ccc717bd106ee60a9cb1b72e81a2e3698934eb726ebf4d6b",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/changes.py",
+          "sha256": "bca1454034faea6d3f73184848e88279c726ffdba39fcc7311904f6e093f9318",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/extraction_pipeline.py",
+          "sha256": "26eb4f642facf31eb023c2c565fb5fc8ca0ab7959581773d3f8ebab46fb9d179",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/field_review.py",
+          "sha256": "218e8463205f88201d5da2b870ed47b3952ec542cd43e64f5b0027473e877148",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/inspection.py",
+          "sha256": "a8bdff0066709738d135a21ee0003979cbbe322702a2c0999ba8a929b56026fb",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/jats_text.py",
+          "sha256": "23952f30fabf4f0f597bcaa8c571c985a4d9d88e636a14853fee3fa866a4862f",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/models.py",
+          "sha256": "3253e8a28731e8cad49923ee5236b66117caa4e60245c0893b3a8464a7fcd8d3",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/navigation.py",
+          "sha256": "8f287c264a84e83a8885d919df8690fd74ec22cb714ffbd50ccc6e36277fb1d9",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/obligations.py",
+          "sha256": "34db0582e7c9c300e566b6fc824672665f72e110c87fc5e7d19b87a8e374fbe2",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/overview.py",
+          "sha256": "93bc49a6e38c0556d395b794b6934f30a4777c76b6a3c44790d9c4042700fcbc",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/overview_html.py",
+          "sha256": "8f45dc7f59eab3eed52c6a5c7974d3a3f0274dabc05feb59036108ca029dcf94",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/projection.py",
+          "sha256": "16eaa2d1a152f9ba9fc8458a571e006d5a1559afec885df1f2e3e41247afbbbe",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/prompts.py",
+          "sha256": "d4cb286f743c3653805ce605b7fd5426acebaf61e23270a8555e577eed335267",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/runtime.py",
+          "sha256": "57dad3119265f8cadb3dd335114b810a8f9821c07851f640fe63bc0e190d81dc",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/sources.py",
+          "sha256": "5606afee05e7b1054e0ce035c23fd97b1915c25557b0e14b5d79408bd85a1222",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/transformations.py",
+          "sha256": "ca72bc658e28df507820b0f4a108afc6ad527f6778b500c87afc38927141d137",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/verification_controls.py",
+          "sha256": "ca4492b21ef6f593100618dd66cb466722d7520d847dd2f6907d54b401b63884",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/baseline/execution/implementation/genomics_discovery/curation/workflow_extraction/workflow_mutation_controls.py",
+          "sha256": "2e9337b51c10638cb2c4f8dd1b4ead42653601c95c42c3739840015ab7883aef",
+          "matches": true
+        }
+      ]
+    },
+    "joint_interface": {
+      "status": "needs_revision",
+      "native_transport_complete": true,
+      "gates_valid": true,
+      "integrity_checks": {
+        "file_pin_checks": 55,
+        "mismatches": [],
+        "implementation_receipt_errors": [],
+        "host_label_pin_errors": [],
+        "validator_errors": {
+          "primary": [],
+          "factual_fields": [],
+          "source_coverage": []
+        },
+        "primary_target_checks": 152,
+        "expected_primary_targets": 152,
+        "field_groups": 175,
+        "field_unassessed": 0,
+        "source_checks": 38,
+        "expected_source_obligations": 38,
+        "prior_field_review_declared": false,
+        "primary_outcome": "needs_revision",
+        "field_outcome": "unsupported",
+        "source_outcome": "needs_revision",
+        "cli_checks": {
+          "requested_model_matches": true,
+          "effort_matches": true,
+          "web_disabled": true,
+          "network_disabled": true,
+          "sandbox_workspace_write": true,
+          "managed_approval_preserved": true
+        }
+      },
+      "elapsed_seconds": 1549.021627923008,
+      "native_elapsed_seconds": 1546.337117764866,
+      "usage": {
+        "input_tokens": 5177637,
+        "cached_input_tokens": 5022976,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 40953,
+        "reasoning_output_tokens": 9204
+      },
+      "reported_input_minus_cached_tokens": 154661,
+      "negative_controls": [
+        {
+          "target_id": "operation:o_image",
+          "primary_verdict": "unsupported",
+          "field_verdict": "unsupported",
+          "affected_fields": [
+            "/operations/4/action",
+            "/operations/4/resources/0/description",
+            "/operations/4/input_bindings/0/condition"
+          ],
+          "localized_detection": true,
+          "rationale": "Post-B imaging is supported, but the only material input is the intact tissue after B encoding and second-chip removal. The action/resource/condition also claim imaging during either flow, including the first flow when this state does not exist. The source’s general capability does not support that stage-specific association. Restrict this occurrence to the post-B interface or represent early-flow inspection at its actual tissue stage.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00010"
+            ],
+            [
+              "liu2020_primary",
+              "p00042"
+            ],
+            [
+              "liu2020_primary",
+              "p00043"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_adjudication": "The scope mismatch is real: the resource says during either flow and binding permits during/after flow, while sole input is the output of completed A/B barcoding. Primary p00042 permits first-flow imaging before first-chip removal; p00126 gives a distinct compatible post-B image. This is not a claim that early imaging is impossible."
+        },
+        {
+          "target_id": "flow:io:input:o_image:s_encoded",
+          "primary_verdict": "unsupported",
+          "field_verdict": "unsupported",
+          "affected_fields": [
+            "/flows/12/condition"
+          ],
+          "localized_detection": true,
+          "rationale": "The encoded post-B/post-chip-removal tissue can support later imaging, but this binding condition also includes imaging during the first flow. That earlier source-supported inspection has a different tissue stage and cannot use this sole fully B-encoded input.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00010"
+            ],
+            [
+              "liu2020_primary",
+              "p00042"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_adjudication": "The scope mismatch is real: the resource says during either flow and binding permits during/after flow, while sole input is the output of completed A/B barcoding. Primary p00042 permits first-flow imaging before first-chip removal; p00126 gives a distinct compatible post-B image. This is not a claim that early imaging is impossible."
+        }
+      ],
+      "positive_controls": [
+        {
+          "target_id": "flow:io:input:o_recover:s_encoded",
+          "field_pointer": "/flows/14",
+          "primary_verdict": "supported",
+          "field_verdict": "supported",
+          "affected_fields": [],
+          "retained": true,
+          "rationale": "The gasket confines destructive digestion to the already flow-barcoded region; it does not capture released unbarcoded mRNA.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00044"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_support_checked": true
+        },
+        {
+          "target_id": "flow:io:output:o_recover:s_lysate",
+          "field_pointer": "/flows/15",
+          "primary_verdict": "supported",
+          "field_verdict": "supported",
+          "affected_fields": [],
+          "retained": true,
+          "rationale": "The Proteinase K reservoir contents are explicitly collected as lysate for cDNA purification, retaining encoded material from that region.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00044"
+            ]
+          ],
+          "source_support_checked": true
+        },
+        {
+          "target_id": "flow:io:input:o_B:s_A",
+          "field_pointer": "/flows/9",
+          "primary_verdict": "supported",
+          "field_verdict": "supported",
+          "affected_fields": [],
+          "retained": true,
+          "rationale": "The second orthogonal flow encounters the existing A-bearing molecules in the same region and ligates B to A, matching the input’s molecular stage.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00043"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_support_checked": true
+        },
+        {
+          "target_id": "flow:io:output:o_B:s_encoded",
+          "field_pointer": "/flows/11",
+          "primary_verdict": "supported",
+          "field_verdict": "supported",
+          "affected_fields": [],
+          "retained": true,
+          "rationale": "A/B ligation defines the intersections and the source explicitly retains intact spatially barcoded tissue after removing the second chip.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ],
+          "source_support_checked": true
+        }
+      ],
+      "navigation_observations": {
+        "named_query_calls_observed": 0,
+        "named_query_event_lines": [],
+        "completed_command_records": 49,
+        "helper_path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/review_work.py",
+        "helper_sha256": "e61c8d88a8ed3781fe808501be7dc16640ae2461a2f167f0d12755c572cf3b8f",
+        "programmatic_joint_neighborhood_batches": [
+          {
+            "event_line": 28,
+            "event_sha256": "d5e0883b01a26613811d9c17fc95097fb32a822f655a6214974bf6fd2d6b2d7d",
+            "exit_code": 0,
+            "includes_o_image": false,
+            "includes_s_encoded": false
+          },
+          {
+            "event_line": 30,
+            "event_sha256": "26e726e967804e389cc0100d4ddff61dda0bbb70a8fb304edc60e76dea685139",
+            "exit_code": 0,
+            "includes_o_image": false,
+            "includes_s_encoded": false
+          },
+          {
+            "event_line": 32,
+            "event_sha256": "b534a86a4b6c9b03cee678dbff0dc6d0f026b259a02af8c5680e785a99f8045b",
+            "exit_code": 0,
+            "includes_o_image": false,
+            "includes_s_encoded": true
+          },
+          {
+            "event_line": 34,
+            "event_sha256": "627e686c853061f3c6169825dccb7eeb8657dbfec2d02a49e6b2c8d2407cecd8",
+            "exit_code": 0,
+            "includes_o_image": true,
+            "includes_s_encoded": true
+          },
+          {
+            "event_line": 36,
+            "event_sha256": "dab652fe1cd6b98f7f42f4ef3a8dabeb259ff8b43d7bfed28bb89b22a000e01d",
+            "exit_code": 0,
+            "includes_o_image": false,
+            "includes_s_encoded": false
+          },
+          {
+            "event_line": 38,
+            "event_sha256": "07dc908b2e5dc80fb026dc0965c621f7302b148311cf81d1e020e5a1f244ae99",
+            "exit_code": 0,
+            "includes_o_image": false,
+            "includes_s_encoded": false
+          },
+          {
+            "event_line": 45,
+            "event_sha256": "23e9bac1c0b360100e49d917164ec825259b9636ad02930585facce20c2bd6f0",
+            "exit_code": 0,
+            "includes_o_image": false,
+            "includes_s_encoded": false
+          },
+          {
+            "event_line": 47,
+            "event_sha256": "c8981f1b463e948183f34aad81e878a5db550ff89a46df28d234539da1294d19",
+            "exit_code": 0,
+            "includes_o_image": false,
+            "includes_s_encoded": false
+          },
+          {
+            "event_line": 49,
+            "event_sha256": "1f92d2371471a099bb666c64ae6350fe3aa4469da108dcc307be79e06b1f7918",
+            "exit_code": 0,
+            "includes_o_image": false,
+            "includes_s_encoded": false
+          }
+        ],
+        "interpretation": "The saved helper joins each Operation to its input/output States and incident Flows, and completed command outputs show these sections, including the image neighborhood."
+      },
+      "other_primary_negative_targets": [],
+      "other_field_negative_groups": [],
+      "source_nonpositive_checks": [
+        {
+          "obligation_id": "SO-DEVICE-FABRICATION",
+          "disposition": "partial",
+          "selected": true
+        },
+        {
+          "obligation_id": "SO-SPATIAL-REGISTRATION",
+          "disposition": "partial",
+          "selected": true
+        },
+        {
+          "obligation_id": "SO-REAGENT-INVENTORY",
+          "disposition": "partial",
+          "selected": true
+        }
+      ],
+      "omission_summary": [
+        {
+          "blocking": true,
+          "action": "revise_record",
+          "description": "Repair o_image and flow:io:input:o_image:s_encoded: their only input is intact A/B-encoded tissue after second-chip removal, but the action/resource/input condition extend this occurrence to imaging during either flow. First-flow imaging occurs before B encoding. Restrict this occurrence to the source-supported post-B image, or associate any retained early-flow observation with its actual material stage. Preserve same-slide image-to-map registration and nonconsuming tissue inspection; no new routine-handling nodes are required.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00010"
+            ],
+            [
+              "liu2020_primary",
+              "p00042"
+            ],
+            [
+              "liu2020_primary",
+              "p00043"
+            ],
+            [
+              "liu2020_primary",
+              "p00126"
+            ]
+          ]
+        },
+        {
+          "blocking": false,
+          "action": "revise_record",
+          "description": "Complete the selected source-reported equipment-fabrication summary attached to o_A/o_B. It currently gives SU-8 inventory/mold thickness and PDMS recipe, but omits the 50 μm chrome photomask/soft-lithography boundary, manufacturer-delegated photolithography/development/hard-bake steps and cut/peel/punch completion. These facts are available in primary p00034–35 and required by selected SO-DEVICE-FABRICATION. They may remain equipment provenance; a separate production route is not needed. The finished-chip assay interface is already supported, so this is a nonblocking detail repair.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00034"
+            ],
+            [
+              "liu2020_primary",
+              "p00035"
+            ]
+          ]
+        },
+        {
+          "blocking": false,
+          "action": "revise_record",
+          "description": "Retain the available reagent inventory catalogue identities required by SO-REAGENT-INVENTORY in the relevant source-qualified resources or inventory annotations. Apart from Nextera XT FC-131-1024, most listed catalogue identities are missing (including dNTP R0192, inhibitors Y9240L/AM2694, ligase M0202L, AMPure A63880, KAPA KK2601, Proteinase K EO0491, and the primary buffer identities B7203S/B0202S). Preserve the source-specific Maxima strings EP7051 in Table S3 and EP0751 in the primary key resources table without silently choosing a historical product; preserve the supplement’s displaced C1/65001/65002 layout while separately noting the primary’s explicit C1 65001 entry. Inventory identities must not become new mandatory recipe inputs or unsupported stock concentrations. Known reagent roles and interfaces remain supported, so this detail repair is nonblocking for architecture but still requires record revision.",
+          "evidence_refs": [
+            [
+              "liu2020_primary",
+              "p00134"
+            ],
+            [
+              "liu2020_supp_tables",
+              "p00005"
+            ]
+          ]
+        }
+      ],
+      "supported_exports_present": {
+        "graph_candidate.json": false,
+        "protocol.txt": false
+      },
+      "pins": {
+        "state.json": "4b81c1e3b8bd09fd0389e8520ebcf2df85a2f2fc533d618d62090885d36341ec",
+        "config.json": "258a818fba0ddb5bee9f32de32b61b6c658e2d5179da4b9c5982baa6964d21d7",
+        "initial_workflow.json": "57ea4c83d53a0542e6aecb21722370d414c917227440f0b3914e53134de2ffdb",
+        "source_packet.json": "485cefa0e32e37eb259dcf2c69cab224076d36e07a9072a4e2faa2f54af48b27",
+        "source_obligations.json": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3",
+        "attempts/001_reviewer/artifact.json": "e2114ad6958a75733e76f982c269b9e8afc1a9a841515ac3efd1d4834273308f",
+        "attempts/001_reviewer/field_review.json": "fc6a1f1c12c8044089e65ddff202406172386939a9d3395b93ebe4e0ba0759ef",
+        "attempts/001_reviewer/source_coverage_review.json": "0b647299057db3c8c293211aed919bfb1a4302d0666c20c621d04064fde4d26c",
+        "attempts/001_reviewer/prompt.txt": "bfb30a23e412e8c856c9b0e3dd52ae5f93d2f637cdded5ca4a92463f1f9e186e",
+        "attempts/001_reviewer/stage_prompt.txt": "bfb30a23e412e8c856c9b0e3dd52ae5f93d2f637cdded5ca4a92463f1f9e186e",
+        "attempts/001_reviewer/command.json": "4cd6f513946aad1e059bd23ceae7b898e5624603cc4b032e9a318a9ce5a48b1b",
+        "attempts/001_reviewer/events.jsonl": "d60e7399a07e28296b20db2e7831caf73107da3a3188178e6a9d24c614e05eb3",
+        "attempts/001_reviewer/result.json": "2ba0d538a0c3dd805b7781e0df61d9dfcb709d65b479d69069255e48b286ef35"
+      },
+      "all_checked_file_pins": [
+        {
+          "kind": "config",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/config.json",
+          "sha256": "258a818fba0ddb5bee9f32de32b61b6c658e2d5179da4b9c5982baa6964d21d7",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:source_obligations",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/source_obligations.json",
+          "sha256": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:initial_workflow",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/initial_workflow.json",
+          "sha256": "57ea4c83d53a0542e6aecb21722370d414c917227440f0b3914e53134de2ffdb",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:field_review",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/field_review.json",
+          "sha256": "fc6a1f1c12c8044089e65ddff202406172386939a9d3395b93ebe4e0ba0759ef",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:source_coverage_review",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/source_coverage_review.json",
+          "sha256": "0b647299057db3c8c293211aed919bfb1a4302d0666c20c621d04064fde4d26c",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:reviewer",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/artifact.json",
+          "sha256": "e2114ad6958a75733e76f982c269b9e8afc1a9a841515ac3efd1d4834273308f",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:graph_diagnostic",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/graph_diagnostic.json",
+          "sha256": "8f985e9767bc921a854b16a9a123b57cbca0a17e669e9923ecdc6c7157a472ad",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:protocol_diagnostic",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/protocol_diagnostic.txt",
+          "sha256": "8a709fc152cad92293911bb83c622fbb98b222ba022b6920a37715990fae3b8b",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:overview_diagnostic",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/overview_diagnostic.json",
+          "sha256": "8f66cffcb6afde397a5fb3025d6e5510c14a104f5982804612b79b68cc62769c",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:overview_diagnostic_text",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/overview_diagnostic.txt",
+          "sha256": "4da5326ca8bd2ac908a90cb0298352d514ed74a9ecd793767d14acb9dfbd75ff",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:overview_diagnostic_html",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/overview_diagnostic.html",
+          "sha256": "219bdc9cfbde09f33644d549336b75628104f7a880e3d6533d74be4f18ddd2f1",
+          "matches": true
+        },
+        {
+          "kind": "state_artifact:boundary_audit",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/boundary_audit.json",
+          "sha256": "3b865385078f8b72915d1d42ad522dd387e57aff0abe4c6a2b7e81773b1d6bac",
+          "matches": true
+        },
+        {
+          "kind": "attempt_input:candidate",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/candidate.json",
+          "sha256": "57ea4c83d53a0542e6aecb21722370d414c917227440f0b3914e53134de2ffdb",
+          "matches": true
+        },
+        {
+          "kind": "attempt_input:field_review_scaffold",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/field_review_scaffold.json",
+          "sha256": "213b7f1de6b6b1a0eda0dd022bc46db3519a80591e73ad7b41546b978414d065",
+          "matches": true
+        },
+        {
+          "kind": "attempt_input:source_obligations",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/source_obligations.json",
+          "sha256": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:result.json",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/result.json",
+          "sha256": "2ba0d538a0c3dd805b7781e0df61d9dfcb709d65b479d69069255e48b286ef35",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:events.jsonl",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/events.jsonl",
+          "sha256": "d60e7399a07e28296b20db2e7831caf73107da3a3188178e6a9d24c614e05eb3",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:final.txt",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/final.txt",
+          "sha256": "93bb0d597f11d03c43675b85118617657fe78f2c0fca525b3a37545b7f8e874f",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:command.json",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/command.json",
+          "sha256": "4cd6f513946aad1e059bd23ceae7b898e5624603cc4b032e9a318a9ce5a48b1b",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:started.json",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/started.json",
+          "sha256": "a1de8bf65b284b8e5921efae4065853c3bdd92df8c88051b659dcd091b8545fc",
+          "matches": true
+        },
+        {
+          "kind": "native_archive:stderr.log",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/stderr.log",
+          "sha256": "6e992b39520b5852902b1194a57794c548e2635add8b9592f05d2f2262d3809b",
+          "matches": true
+        },
+        {
+          "kind": "native_prompt",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/prompt.txt",
+          "sha256": "bfb30a23e412e8c856c9b0e3dd52ae5f93d2f637cdded5ca4a92463f1f9e186e",
+          "matches": true
+        },
+        {
+          "kind": "stage_prompt",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/attempts/001_reviewer/stage_prompt.txt",
+          "sha256": "bfb30a23e412e8c856c9b0e3dd52ae5f93d2f637cdded5ca4a92463f1f9e186e",
+          "matches": true
+        },
+        {
+          "kind": "preregistered:workflow",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/initial_workflow.json",
+          "sha256": "57ea4c83d53a0542e6aecb21722370d414c917227440f0b3914e53134de2ffdb",
+          "matches": true
+        },
+        {
+          "kind": "preregistered:source_packet",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/source_packet.json",
+          "sha256": "485cefa0e32e37eb259dcf2c69cab224076d36e07a9072a4e2faa2f54af48b27",
+          "matches": true
+        },
+        {
+          "kind": "preregistered:source_requirements",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/source_obligations.json",
+          "sha256": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/core/artifacts.py",
+          "sha256": "82e222960e8bdebc9ac526f44de5afbe123a00e7084dd1055c43edb0f5bcd7f6",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/codex_worker.py",
+          "sha256": "c66654b587f7208fdd33b0215e48ced8be1d6104af6f36dc91f802bfc0f8c231",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/document_manifest.py",
+          "sha256": "896a2a66599f581e180fbad4dd2e338b66d73d4dfe7e51afea70af4553274c47",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/evidence_views.py",
+          "sha256": "421e090049e0c709ae1e0d0d7eecf05a4c2b644d79a23d72400b0600c23d6180",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/run_state.py",
+          "sha256": "d55561d8981802dcb582778182599f938659461741d194235ccb54278c50e546",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/validation.py",
+          "sha256": "4f47f93ae175cce02db23bc12008e0c2df5f2c40fc777677fef55861af4a03e8",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_coverage.py",
+          "sha256": "7992da93208851016524130cf50d747740fe91f1fea92d949c786d7117b3ed24",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/__init__.py",
+          "sha256": "9eb2b78208fbfe66549280ec9054708a1b1bc76f82d88c2933e3e081a2f28505",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/__main__.py",
+          "sha256": "ef33f885494334c85910571e76d682a70cd805e8d4f480d7d911a47437f803e6",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/assemble.py",
+          "sha256": "a54327046dbb4f53a3645867acfefc28fde36fad4eec813bb751c050c76f3c52",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/authoring.py",
+          "sha256": "a5d054bb69bf307fb4632de3ce74d418e991365e40941fc62e70b9c3544759d1",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/boundaries.py",
+          "sha256": "85057bfedad398e4ccc717bd106ee60a9cb1b72e81a2e3698934eb726ebf4d6b",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/changes.py",
+          "sha256": "bca1454034faea6d3f73184848e88279c726ffdba39fcc7311904f6e093f9318",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/extraction_pipeline.py",
+          "sha256": "26eb4f642facf31eb023c2c565fb5fc8ca0ab7959581773d3f8ebab46fb9d179",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/field_review.py",
+          "sha256": "218e8463205f88201d5da2b870ed47b3952ec542cd43e64f5b0027473e877148",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/inspection.py",
+          "sha256": "a8bdff0066709738d135a21ee0003979cbbe322702a2c0999ba8a929b56026fb",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/jats_text.py",
+          "sha256": "23952f30fabf4f0f597bcaa8c571c985a4d9d88e636a14853fee3fa866a4862f",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/models.py",
+          "sha256": "3253e8a28731e8cad49923ee5236b66117caa4e60245c0893b3a8464a7fcd8d3",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/navigation.py",
+          "sha256": "8f287c264a84e83a8885d919df8690fd74ec22cb714ffbd50ccc6e36277fb1d9",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/obligations.py",
+          "sha256": "34db0582e7c9c300e566b6fc824672665f72e110c87fc5e7d19b87a8e374fbe2",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/overview.py",
+          "sha256": "93bc49a6e38c0556d395b794b6934f30a4777c76b6a3c44790d9c4042700fcbc",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/overview_html.py",
+          "sha256": "8f45dc7f59eab3eed52c6a5c7974d3a3f0274dabc05feb59036108ca029dcf94",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/projection.py",
+          "sha256": "16eaa2d1a152f9ba9fc8458a571e006d5a1559afec885df1f2e3e41247afbbbe",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/prompts.py",
+          "sha256": "f129aa3379c7cc3f638bf93fe4911d2cd2735a92a6b8bdc399474eb16ce3db72",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/runtime.py",
+          "sha256": "57dad3119265f8cadb3dd335114b810a8f9821c07851f640fe63bc0e190d81dc",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/sources.py",
+          "sha256": "5606afee05e7b1054e0ce035c23fd97b1915c25557b0e14b5d79408bd85a1222",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/transformations.py",
+          "sha256": "ca72bc658e28df507820b0f4a108afc6ad527f6778b500c87afc38927141d137",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/verification_controls.py",
+          "sha256": "ca4492b21ef6f593100618dd66cb466722d7520d847dd2f6907d54b401b63884",
+          "matches": true
+        },
+        {
+          "kind": "implementation_snapshot",
+          "path": "provenance/experiments/joint_interface_review_20261022/outputs/job_48948650/joint_interface/execution/implementation/genomics_discovery/curation/workflow_extraction/workflow_mutation_controls.py",
+          "sha256": "2e9337b51c10638cb2c4f8dd1b4ead42653601c95c42c3739840015ab7883aef",
+          "matches": true
+        }
+      ]
+    }
+  },
+  "paired_result": {
+    "both_gates_valid": true,
+    "localized_negative_targets": {
+      "baseline": 2,
+      "joint_interface": 2
+    },
+    "negative_target_denominator_per_arm": 2,
+    "retained_supported_control_flows": {
+      "baseline": 4,
+      "joint_interface": 4
+    },
+    "positive_control_denominator_per_arm": 4,
+    "detection_gain_observed": false,
+    "conclusion": "Both arms detected both localized timing-mismatch targets and retained all four source-supported route controls. Revised severity labels differ, but this pair demonstrates no detection gain. Revised arm visibly used joined neighborhood inspection; baseline succeeded with separate views.",
+    "native_elapsed_difference_seconds": 164.57578248879872,
+    "causal_latency_or_reliability_inference": false
+  },
+  "additional_findings_assessment": [
+    {
+      "issue": "Reagent catalogue inventory completeness",
+      "assessment": "Both reviewers identify actual missing catalogue annotations that are available in primary p00134 and supplemental p00005/p00007. The frozen unconditional SO-REAGENT-INVENTORY requests them. This is a ledger-specific detail completeness observation, not an added chemical/routing error or an independently established requirement for the general assay architecture. Do not count it as a false positive or a new invention failure without defining evaluation scope."
+    },
+    {
+      "issue": "Device fabrication summary completeness",
+      "assessment": "Both reviewers identify absent photomask and cut/peel/punch details available in primary p00034/p00035 under the selected optional fabrication obligation. The candidate already describes manufacturer-delegated SU-8 processing, so the revised request to enumerate named delegated substeps may ask for finer wording within that existing boundary. These are nonblocking equipment-detail suggestions, not evidence that finished-chip interfaces are missing."
+    },
+    {
+      "issue": "Nonblocking revise_record semantics",
+      "assessment": "Both primary reviews mark the two detail additions blocking=false but action=revise_record. Current review_outcome treats any revise_record action as needs_revision. The timing defect independently warrants revision here, so this pair cannot establish the detail-only gate effect or optimal scope policy."
+    }
+  ],
+  "limitations": [
+    "One unreplicated sequential pair on an exposed development case; no reliability estimate, significance test or causal prompt-performance claim.",
+    "Control labels were model-authored then source-checked; they are not independent wet-lab expert gold.",
+    "Mechanical target/field/quote completeness is distinct from semantic truth of every positive claim. Only the named controls and additional findings were source-assessed in this audit.",
+    "The source-requirement ledger can itself overstate necessary granularity; both arms were held to the same frozen ledger, not tuned to their outputs.",
+    "Reported token usage is native aggregate accounting across context turns, including repeated/cached input; this audit establishes neither unique-paper tokens nor billed account/cost.",
+    "No named query call was observed; equivalent programmatic neighborhood inspection is directly visible in the revised arm. Presence of a prompt alone is not evidence of compliance or private reasoning.",
+    "Audit maps recorded remote execution prefixes to local copied outputs and rechecks their pinned bytes. It does not independently inspect live Sherlock or claim original-document closure beyond these copied evidence inputs.",
+    "The two negative targets are correlated representations of one timing-association defect, not two independent error discoveries."
+  ],
+  "native_artifacts_modified": false,
+  "new_model_calls": 0
+}
