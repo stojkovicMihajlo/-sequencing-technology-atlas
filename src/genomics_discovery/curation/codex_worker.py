@@ -202,6 +202,90 @@ def assess_archived_attempt(attempt_dir: Path) -> ArchivedAttemptAssessment:
     return assessment(None)
 
 
+def classify_archived_terminal_failure(attempt_dir: Path) -> dict[str, Any]:
+    """Nonaccepting diagnosis from typed terminal records, never model/tool text.
+
+    Only a final turn.failed, not superseded by a later start, can supply a known
+    category. Earlier error records can be recoverable; even explicit capacity
+    is evidence about this attempt, not global load or a reason to retry/change
+    models. Raw messages remain in the archive. Invalid archives remain unknown.
+    """
+    diagnosis: dict[str, Any] = {"category": "unknown", "basis": "no_terminal_failure",
+                               "event": None, "archive_sha256": {}}
+    try:
+        result_raw = (Path(attempt_dir) / "result.json").read_bytes()
+        diagnosis["archive_sha256"]["result.json"] = hashlib.sha256(result_raw).hexdigest()
+        result = json.loads(result_raw)
+        if not isinstance(result, dict) or type(result.get("exit_code")) is not int:
+            diagnosis["basis"] = "invalid_result_archive"
+            return diagnosis
+        thread_id = result.get("thread_id")
+        if thread_id is not None and (not isinstance(thread_id, str) or not thread_id):
+            diagnosis["basis"] = "invalid_result_archive"
+            return diagnosis
+        last_terminal = None
+        malformed = False
+        thread_mismatch = False
+        archive_hash = hashlib.sha256()
+        with (Path(attempt_dir) / "events.jsonl").open("rb") as handle:
+            line = 0
+            while raw := handle.readline(_MAX_EVENT_BYTES + 1):
+                line += 1
+                if len(raw) > _MAX_EVENT_BYTES:
+                    diagnosis["basis"] = "oversized_event_archive"
+                    return diagnosis
+                archive_hash.update(raw)
+                try:
+                    event = json.loads(raw)
+                except (ValueError, UnicodeDecodeError):
+                    malformed = True
+                    continue
+                if not isinstance(event, dict) or not isinstance(event.get("type"), str):
+                    malformed = True
+                    continue
+                # Only native top-level identity is authoritative; item payloads
+                # can contain arbitrary model/tool-authored thread identifiers.
+                if "thread_id" in event or event["type"] == "thread.started":
+                    event_thread = event.get("thread_id")
+                    if not isinstance(event_thread, str) or not event_thread:
+                        malformed = True
+                    elif thread_id is not None and event_thread != thread_id:
+                        thread_mismatch = True
+                    else:
+                        thread_id = event_thread
+                if event["type"] in {"thread.started", "turn.started"}:
+                    # A prior failure cannot diagnose a new unfinished turn.
+                    last_terminal = None
+                elif event["type"] in {"turn.completed", "turn.failed"}:
+                    last_terminal = (line, raw, event)
+        diagnosis["archive_sha256"]["events.jsonl"] = archive_hash.hexdigest()
+        if malformed:
+            diagnosis["basis"] = "invalid_event_archive"
+            return diagnosis
+        if thread_mismatch:
+            diagnosis["basis"] = "thread_identity_mismatch"
+            return diagnosis
+        if last_terminal is None or last_terminal[2]["type"] != "turn.failed":
+            return diagnosis
+        line, raw, event = last_terminal
+        diagnosis["event"] = {"type": "turn.failed", "line": line,
+                               "sha256": hashlib.sha256(raw).hexdigest(),
+                               "error_pointer": "/error"}
+        error = event.get("error")
+        if not isinstance(error, dict) or not isinstance(error.get("message"), str):
+            diagnosis["basis"] = "invalid_terminal_error"
+            return diagnosis
+        # This exact uncoded message is pinned from CLI 0.163.0. Other provider
+        # codes/phrases (including quota/auth/output errors) are not inferred.
+        observed_capacity = ("code" not in error and error["message"] ==
+            "Selected model is at capacity. Please try a different model.")
+        diagnosis.update(category="provider_capacity" if observed_capacity else "unknown",
+                         basis="terminal_error_record")
+    except (OSError, ValueError, UnicodeDecodeError):
+        diagnosis["basis"] = "unreadable_or_invalid_archive"
+    return diagnosis
+
+
 def _process_start_identity(pid: int) -> dict[str, str] | None:
     """Best-effort PID-reuse evidence; never inspect process arguments or credentials.
 

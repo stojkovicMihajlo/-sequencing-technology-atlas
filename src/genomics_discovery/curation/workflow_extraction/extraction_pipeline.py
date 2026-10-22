@@ -8,7 +8,10 @@ import math
 import time
 from pathlib import Path
 
-from ..codex_worker import DEFAULT_EFFORT, DEFAULT_MODEL, CodexWorker, assess_archived_attempt
+from ..codex_worker import (
+    DEFAULT_EFFORT, DEFAULT_MODEL, CodexWorker, assess_archived_attempt,
+    classify_archived_terminal_failure,
+)
 from ..run_state import now, read, sha, write
 from ..workflow_coverage import (
     CoverageReview,
@@ -230,6 +233,12 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
                            completed_turns=assessment.completed_turns,
                            transport_complete=assessment.complete)
             if not assessment.complete:
+                diagnostic = classify_archived_terminal_failure(directory)
+                attempt["terminal_failure"] = diagnostic
+                state.setdefault("terminal_failures", []).append({
+                    "attempt_index": index, "role": role, "directory": str(directory),
+                    **diagnostic})
+                state["terminal_failures"].sort(key=lambda item: item["attempt_index"])
                 raise ValueError(assessment.error or "Native transport did not complete")
             if (type(result.exit_code) is not int or result.exit_code != 0
                     or result.error is not None):
