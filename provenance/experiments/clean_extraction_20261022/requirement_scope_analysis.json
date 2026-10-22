@@ -1,0 +1,714 @@
+{
+  "format_version": "requirement_scope_analysis/1.0",
+  "created_at": "2026-10-22T05:55:13.838321+00:00",
+  "status": "development_proposal_only_pending_root_review",
+  "baseline_preservation": "Current dfe6cae runtime, prompts, frozen input packets and job48932552 remain unchanged. This document is host-only and must not become method-specific feedback in the frozen comparison.",
+  "question": "How can model-authored candidate-blind completeness expectations remain challengeable without allowing a candidate reviewer to waive genuinely missing assay interfaces?",
+  "decision": "Clarify the shared contract and atomize coverage expectations. Prompt clarification is necessary but cannot by itself resolve an already frozen mistaken unconditional requirement. Add an opt-in, on-demand source-only scope-dispute route in a later development release; no extra default model calls and no automatic reviewer self-waiver.",
+  "inspected_inputs": [
+    {
+      "path": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/scstamp.json",
+      "raw_sha256": "25c8474a4d600442359fc4f29fa61085493703350aabd5431cc51af855242065"
+    },
+    {
+      "path": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/dbit.json",
+      "raw_sha256": "0fa0d4b34a95d0dbf7d9324d36bc990b39c251f3ad3bab45153d6cd6946eb6e3"
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/prompts.py",
+      "raw_sha256": "045cab830017061f8a6bab4e6d5a0a80c607be4d5755f05d7d95eacc8b6dabe2"
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/obligations.py",
+      "raw_sha256": "5efe7b5bd829138d45fbc4224874fa9c841fb28469b805a545e064bbdfc117b8"
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/extraction_pipeline.py",
+      "raw_sha256": "815c94e0186acf4a6f6da6fc2752b8fb045500125b157179035eefd0225be6ac"
+    }
+  ],
+  "inspection_boundary": "Inspected the fresh candidate-blind source-stage artifacts and shared contracts/validators. No fresh initial or final Workflow candidate was inspected. These are scope/representation assessments, not proof that a later reviewer actually overrejected a scientifically complete candidate.",
+  "confirmed_mechanics": [
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/obligations.py",
+      "lines": [
+        25,
+        32
+      ],
+      "finding": "SourceObligation records model-authored applicability and condition alongside reported content. Evidence matching establishes the reported content's provenance; it does not logically establish its necessity for every declared output."
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/obligations.py",
+      "lines": [
+        164,
+        173
+      ],
+      "finding": "validate_source_coverage_review rejects not_applicable/selected=false for unconditional required items. This is deliberate fail-closed anti-waiver behavior, not a schema bug by itself."
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/obligations.py",
+      "lines": [
+        227,
+        231
+      ],
+      "finding": "selected partial/missing leads to needs_revision; selected uncertain leads to research_needed. Therefore a reviewer can express a source/scope dispute as uncertain, but cannot clear the positive-requirement veto through an accepted source-only adjudication."
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/obligations.py",
+      "lines": [
+        73,
+        82,
+        183,
+        191,
+        220,
+        225
+      ],
+      "finding": "Existing SourceLimitAdjudication accepts only /source_limits/N or /source_scope/N, and changes only the source-limit veto. It is not a mechanism to adjudicate /obligations/N, split a mixed requirement or qualify a mistaken necessity judgment."
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/prompts.py",
+      "lines": [
+        608,
+        631
+      ],
+      "finding": "The reviewer is told both that unconditional requirements cannot be waived and that overreaching requirements should be reported as uncertainty. That offers a safe stop, not a resolution path; a fallible preparation judgment can remain an authoritative acceptance blocker."
+    }
+  ],
+  "shared_prompt_ambiguities": [
+    {
+      "specific_text": "Capture actual reported quantities, units, sequences, settings and conditions when available.",
+      "path": "src/genomics_discovery/curation/workflow_extraction/prompts.py",
+      "lines": [
+        53,
+        57
+      ],
+      "tension_with": "Historical samples and experiment reconstruction are not the target; characterization is not automatically part of the protocol.",
+      "interpretation": "The broad preservation instruction can reasonably be read as making every available number part of minimum graph completeness, whereas it can also mean that any chosen factual detail must be accurate. The harness does not explicitly separate those meanings."
+    },
+    {
+      "specific_text": "Do not combine alternatives into cumulative inputs or omit their sequences to make a smaller graph.",
+      "path": "src/genomics_discovery/curation/workflow_extraction/prompts.py",
+      "lines": [
+        62,
+        67
+      ],
+      "tension_with": "A named delegated operation with supported input, output and role can be complete at its reported boundary.",
+      "interpretation": "The desired retention of exact identity is legitimate. The missing distinction is between retaining an accessible source/resource inventory and requiring every row to be duplicated into each core operation graph."
+    },
+    {
+      "specific_text": "Do not require a module/operation count, every study-specific number, unreported defaults or complete commercial recipes.",
+      "path": "src/genomics_discovery/curation/workflow_extraction/prompts.py",
+      "lines": [
+        344,
+        354
+      ],
+      "tension_with": "All required clauses of a combined prose obligation share one applicability flag and one condition.",
+      "interpretation": "An instruction to author concise consequential obligations does not prevent mixing an indispensable handoff with an optional exact recipe or downstream study analysis. Generic 'consequential interface' rationales do not establish why each bundled clause is required."
+    }
+  ],
+  "fresh_artifact_examples": [
+    {
+      "case": "scstamp",
+      "source_stage": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/scstamp.json",
+      "obligation_id": "SO-DOSE-CONDITIONS",
+      "pointer": "/obligations/8",
+      "applicability": "required",
+      "condition": null,
+      "requirement": "Bind reported illumination conditions to their actual demonstrations: complete cleavage around 25–30 s with DLP versus around 10 min with floodlight; these are apparatus-specific observations, not a universal interchangeable dose. Retain floodlight 0/1/10-min droplet feasibility and no-light/1-min multiomic tests as demonstration conditions, while treating general patterned-light compatibility separately.",
+      "rationale": "Avoids converting calibration observations and feasibility experiments into universal stages or conflating optical/library combinations.",
+      "source_refs": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00028"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00028"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033"
+        }
+      ],
+      "host_scope_assessment": "The distinction between device-specific observations and demonstrated combinations is consequential. Mandating every demonstration exposure duration is a different requirement from preserving that qualification in a general method graph.",
+      "coverage_core": "Preserve the optical-exposure-to-readout interface and do not advertise patterned droplet/MAT experiments as directly demonstrated by uniform-floodlight feasibility tests.",
+      "included_claim_accuracy": "Every exposure duration, hardware association and complete-cleavage claim actually included must agree with its source and context.",
+      "appropriate_scope_condition": "Exact demonstration durations become coverage requirements when that dose-response/feasibility experiment or its numerical performance is part of the declared output; otherwise retain them as source-associated detail rather than mandatory main-route content.",
+      "diagnosis": "A core applicability qualification is bundled with supporting characterization settings under one unconditional required flag.",
+      "use": "Host evidence for a general contract issue only; do not put these method names, values or proposed classifications into native prompts."
+    },
+    {
+      "case": "scstamp",
+      "source_stage": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/scstamp.json",
+      "obligation_id": "SO-RNA-QC-AND-ANALYSIS",
+      "pointer": "/obligations/35",
+      "applicability": "required",
+      "condition": null,
+      "requirement": "Retain source-described analytical selection and normalization with variant limits: plate cells >1000 genes and >1000 transcripts and <20% ERCC; droplet cells >200 genes and >200 transcripts and <5% mitochondrial counts. Seurat 4.3.0 log NormalizeData, 2000 variable genes, elbow-selected PCs and FindNeighbors/FindClusters/RunUMAP produce expression structure; cell annotation uses known markers and, where stated, PHO/MPO counts. These are reported analysis rules, not universal assay-intrinsic viability or light-dose feedback controls.",
+      "rationale": "Preserves a consequential transformation or attribution interface in the frozen general-method scope.",
+      "source_refs": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00051"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00051"
+        }
+      ],
+      "host_scope_assessment": "Expression-count decoding, production QC, filtering of an analyzed subset and downstream biological clustering are not automatically the same endpoint. The packet asks for the assay through molecular readout and decoding, not every study visualization.",
+      "coverage_core": "Preserve the source-supported mapping/counting and attribution needed for the claimed cell-resolved transcriptomic output; preserve necessary selection/calibration if that output explicitly depends on it.",
+      "included_claim_accuracy": "If the record asserts the authors' filtered-cell set, normalized expression, clusters or UMAP, it must preserve the relevant route-specific rules, dependencies and qualifications. These facts must not be called wrong merely because they are downstream.",
+      "appropriate_scope_condition": "Make the specific selection/normalization/clustering procedure required for a claim to reproduce that selected or analyzed output, rather than for every core library/readout description.",
+      "diagnosis": "An unconditional bundle spans several output levels, while its own text correctly calls these reported analysis rules rather than universal assay controls.",
+      "use": "Host evidence for a general contract issue only; do not put these method names, values or proposed classifications into native prompts."
+    },
+    {
+      "case": "dbit",
+      "source_stage": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/dbit.json",
+      "obligation_id": "SO-POOL-SEQUENCE",
+      "pointer": "/obligations/24",
+      "applicability": "required",
+      "condition": null,
+      "requirement": "Retain the separate RNA-derived and ADT-derived libraries through pooling at ADT:RNA = 1:9 and HiSeq 4000 paired-end 100×100 sequencing. Preserve physical barcoded libraries as material inputs and paired sequencing reads as the data output. Do not invent whether the reported pooling ratio is molar, mass-based or volume-based.",
+      "rationale": "Preserves a consequential transformation, interface or interpretation within the frozen joint RNA/ADT assay.",
+      "source_refs": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046"
+        }
+      ],
+      "host_scope_assessment": "Separate library identities and a readout capable of decoding their tags are consequential. The original example pooling ratio, platform and cycle count are true source details, but their omission alone is not identical to a missing material or information handoff.",
+      "coverage_core": "Retain separate RNA/ADT libraries, their source-described combination where represented, paired reads and the analyte/spatial identity needed by decoding.",
+      "included_claim_accuracy": "If 1:9, HiSeq4000 or 100x100 are stated as reported conditions, preserve them accurately. Do not invent whether the ratio denotes mass, volume or molarity. Specific read coverage may become consequential for a claimed raw layout.",
+      "appropriate_scope_condition": "Require the original numerical/platform settings when reproducing that sequencing execution or a setting-dependent claim; a source-qualified sequencing boundary with valid read roles can satisfy a general architecture scope.",
+      "diagnosis": "Required readout architecture and source-reported historical settings share one indivisible coverage item.",
+      "use": "Host evidence for a general contract issue only; do not put these method names, values or proposed classifications into native prompts."
+    },
+    {
+      "case": "dbit",
+      "source_stage": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/dbit.json",
+      "obligation_id": "SO-AUTHOR-RNA-REFORMAT",
+      "pointer": "/obligations/26",
+      "applicability": "required",
+      "condition": null,
+      "requirement": "Represent the frozen author RNA preprocessing rule as a documented rule, not proof that all historical samples used it: zero-based substrings of raw Read 2 take B at (32,8), A at (70,8), and UMI at (22,10); both A and B must exactly exist in the referenced whitelist to be retained. The accepted output R1 is B+A+UMI with correspondingly rearranged qualities, while output R2 contains original R1. Preserve retained and rejected read-pair routes when this documented reformat boundary is used; primer/linker mismatch statistics in stat.pl are not demonstrated reformat acceptance criteria.",
+      "rationale": "The available pinned code supplies concrete information transformations beyond the paper’s named preprocessing boundary; its historical applicability and external lookup identity remain qualified.",
+      "source_refs": [
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00009"
+        },
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00047"
+        },
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00048"
+        },
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00049"
+        },
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00066"
+        },
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00068"
+        }
+      ],
+      "host_scope_assessment": "The exact script is useful and may be essential to verify a claim about its raw read-layout transformation. A named source-supported decoding boundary does not necessarily claim to execute that script.",
+      "coverage_core": "Preserve the molecular-tag-to-transcript/pixel information mapping and any reformat actually needed by the specifically represented decoder interface.",
+      "included_claim_accuracy": "If the author script boundary is selected, its offsets, read swap, whitelist rule and retained/rejected read-pair handling must remain faithful. Do not replace them with a generic algorithm while claiming the exact documented rule.",
+      "appropriate_scope_condition": "The requirement already says 'when this documented reformat boundary is used' inside prose, but structured condition is null. Move that true antecedent into the dedicated condition and keep general decoding coverage separately required.",
+      "diagnosis": "A semantic qualifier in requirement prose is inconsistent with a mechanically unconditional flag; source truth and universal minimum coverage are conflated.",
+      "use": "Host evidence for a general contract issue only; do not put these method names, values or proposed classifications into native prompts."
+    },
+    {
+      "case": "dbit",
+      "source_stage": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/dbit.json",
+      "obligation_id": "SO-ADT-IDENTITY",
+      "pointer": "/obligations/5",
+      "applicability": "required",
+      "condition": null,
+      "requirement": "Retain the original 22-marker TotalSeq-A ADT panel as a finite targeted protein readout, including each specificity, clone and exact 15-base identity barcode in Table S1. Preserve the polyadenylated-tail capture mechanism; ADT-derived cDNA measures antibody tag identity associated with a protein target, not a protein amino-acid sequence or an unbiased whole proteome.",
+      "rationale": "Preserves a consequential transformation, interface or interpretation within the frozen joint RNA/ADT assay.",
+      "source_refs": [
+        {
+          "source_id": "liu2020_supp_tables",
+          "passage_id": "p00004"
+        },
+        {
+          "source_id": "liu2020_supp_tables",
+          "passage_id": "p00004"
+        },
+        {
+          "source_id": "liu2020_supp_tables",
+          "passage_id": "p00004"
+        },
+        {
+          "source_id": "liu2020_supp_tables",
+          "passage_id": "p00004"
+        },
+        {
+          "source_id": "liu2020_supp_tables",
+          "passage_id": "p00004"
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00010"
+        }
+      ],
+      "host_scope_assessment": "The finite targeted panel and its mapping from tags to protein targets are central to what is measured. This is not automatically irrelevant inventory. Clone and complete sequence detail may also matter for binding specificity, implementation or cross-method comparison.",
+      "coverage_core": "Preserve targeted rather than whole-proteome measurement, poly-A capture, ADT identity-to-target association and source-scoped panel identity.",
+      "included_claim_accuracy": "Any asserted target/clone/barcode association must match the table. A claim to reproduce the full original panel must retain its whole mapping in an accessible exact inventory, not merely say 'protein barcodes'.",
+      "appropriate_scope_condition": "A digest-bound, readable table inventory can preserve full panel identity without duplicating every row in every Operation or State; full panel reconstruction is stricter than describing the general targeted-protein architecture.",
+      "diagnosis": "The relevant decision is consequence and accessible identity, not a blanket rule to omit or enumerate all rows in the graph.",
+      "use": "Host evidence for a general contract issue only; do not put these method names, values or proposed classifications into native prompts."
+    },
+    {
+      "case": "dbit",
+      "source_stage": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/dbit.json",
+      "obligation_id": "SO-A-OLIGOS",
+      "pointer": "/obligations/8",
+      "applicability": "required",
+      "condition": null,
+      "requirement": "Preserve the exact 50 barcode-A oligos in the original Table S2 as resources for their corresponding first-flow channels, including /5Phos/, linker, each spatial sequence, oligo-dT stretch and VN bases. The oligo inventory need not create 50 separate material states, but identifiers alone must not erase the source-provided molecular identities.",
+      "rationale": "Preserves a consequential transformation, interface or interpretation within the frozen joint RNA/ADT assay.",
+      "source_refs": [
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00003"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00004"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00005"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00006"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00007"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00008"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00009"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00010"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00011"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00012"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00013"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00014"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00015"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00016"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00017"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00018"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00019"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00020"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00021"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00022"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00023"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00024"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00025"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00026"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00027"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00028"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00029"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00030"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00031"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00032"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00033"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00034"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00035"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00036"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00037"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00038"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00039"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00040"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00041"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00042"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00043"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00044"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00045"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00046"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00047"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00048"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00049"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00050"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00051"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00052"
+        }
+      ],
+      "host_scope_assessment": "The A-family phosphorylation, ligation region, capture tail and channel/code association matter to the interface. Complete source-provided sequences should stay retrievable for exact design comparison; operation graph duplication is not the only way to retain them.",
+      "coverage_core": "Preserve barcode-A capture/ligation architecture and the code-to-channel identity that decoding uses. Where exact sequence complementarity or original reagent identity is claimed, retain the needed complete sequences/modifications.",
+      "included_claim_accuracy": "If any of the 50 exact oligos are named, transcribed or assigned to a channel, verify that actual association. A readable inventory reference must resolve to exact rows; a bare table label or checksum alone is insufficient.",
+      "appropriate_scope_condition": "For source-original reagent reconstruction, all 50 oligos are legitimately required as an accessible resource inventory. For architecture comparison, do not require 50 duplicated graph States or full strings repeated across fields when an exact source-bound inventory resolves them.",
+      "diagnosis": "Preserving identity is necessary at the claimed use level; serialization duplication and universal execution completeness are separate questions.",
+      "use": "Host evidence for a general contract issue only; do not put these method names, values or proposed classifications into native prompts."
+    },
+    {
+      "case": "dbit",
+      "source_stage": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/dbit.json",
+      "obligation_id": "SO-PRIMER-INVENTORY-ASSIGNMENT",
+      "pointer": "/obligations/22",
+      "applicability": "required",
+      "condition": null,
+      "requirement": "Retain the exact Table S2 ligation linker, template-switch primer, primers 1/2/3, P5, P5 CITE and P7 701–706 sequences with their modifications. Bind only source-supported roles: primers 1/2/3 to initial PCR, template-switch primer to template switching, complementary linker to ligation, P5 CITE and a P7 choice to ADT library PCR. Keep P7 alternatives as alternatives, and the ordinary P5 as an inventory entry unless its exact operation assignment is supported; do not require all P7 indices in one reaction or invent per-sample assignments.",
+      "rationale": "Preserves a consequential transformation, interface or interpretation within the frozen joint RNA/ADT assay.",
+      "source_refs": [
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00004"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00005"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00006"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00007"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00008"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00009"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00010"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00011"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00012"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00013"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00014"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00015"
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00016"
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00036"
+        }
+      ],
+      "host_scope_assessment": "Exact primer handles/modifications can determine compatibility, while mutually exclusive P7 alternatives do not become cumulative reaction inputs. The fresh obligation already gets this association distinction right.",
+      "coverage_core": "Keep operation-specific primer roles, chosen index identity where selected and the source boundary on unassigned alternatives; maintain access to exact sequence definitions for a claimed compatibility check.",
+      "included_claim_accuracy": "Any concrete primer assignment or compatibility claim remains individually source-checked, including modifications. No scope adjudication can turn an unassigned inventory item into a supported reagent assignment.",
+      "appropriate_scope_condition": "Original complete-inventory reproduction may require all rows in a shared readable resource; a general protocol need not copy every alternative into every active reaction.",
+      "diagnosis": "A positive example of source-qualified assignment that should be preserved; avoid treating all lengthy inventory obligations as errors.",
+      "use": "Host evidence for a general contract issue only; do not put these method names, values or proposed classifications into native prompts."
+    },
+    {
+      "case": "scstamp",
+      "source_stage": "provenance/experiments/clean_extraction_20261022/outputs/job_48932552/source_stages/scstamp.json",
+      "obligation_id": "SO-SPATIAL-READ-DECODING",
+      "pointer": "/obligations/30",
+      "applicability": "required",
+      "condition": null,
+      "requirement": "Retain spatial-library decoding using a custom Perl script: R1 supplies cell barcode/UMI; R2 distinguishes inner versus outer primers and downstream spatial barcode/UMI. MPO reads additionally carry the R2 multiplex identifier. Unique molecules are unique combinations of R1 and R2 UMIs; do not deduplicate by only one UMI or treat physical barcodes as already-derived spatial coordinates.",
+      "rationale": "Preserves a consequential transformation or attribution interface in the frozen general-method scope.",
+      "source_refs": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00048"
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00048"
+        }
+      ],
+      "host_scope_assessment": "Read1/read2 roles and the joint UMI key are the actual decoding interface. These are not expendable historical trivia merely because they are detailed.",
+      "coverage_core": "Cell/PHO identity and molecular deduplication must agree with the claimed spatial readout. Swapped read roles or single-UMI counting cannot satisfy the original decoder claim.",
+      "included_claim_accuracy": "An included read assignment or UMI rule must be accurate even if a source-scope dispute elsewhere is upheld.",
+      "appropriate_scope_condition": "The core PHO sequencing endpoint makes this decoding interface applicable; only optional MPO-specific details are conditional on that sample-multiplexing branch.",
+      "diagnosis": "Counterexample to blanket relaxation: a source-backed information interface must remain required, with optional subclaims separated.",
+      "use": "Host evidence for a general contract issue only; do not put these method names, values or proposed classifications into native prompts."
+    }
+  ],
+  "two_separate_tests": {
+    "assertion_fidelity": "For every fact actually asserted in the Workflow, check source entailment, applicability, resource assignment and uncertainty. An optional or historical fact can still be false, and source-scope adjudication cannot excuse it. Existing ordinary and factual-field reviews remain responsible for this test.",
+    "minimum_scope_coverage": "Ask what must remain represented to support the unchanged declared specimen-to-output scope: transformations, interfaces, identities, routing/selection, measurement meaning and consequential conditions/dependencies. Source presence alone is not a necessity proof; absence of a historical setting alone is not automatically a missing interface.",
+    "required_reasoning": "For each required coverage atom, explain which unchanged scope claim would become unsupported or ambiguous if that atom were omitted or replaced by the explicitly permitted delegated boundary. If no such consequence is established, retain the reported fact as optional/attributed detail rather than asserting universal necessity.",
+    "caution": "This is a source-grounded necessity judgment, not an algorithm that proves biochemical replaceability. Missing selected identity, tag-to-target mapping, chemical product identity, retained fraction or necessary decoding information must not be downgraded just because they are detailed."
+  },
+  "minimal_prompt_contract_change_for_future_release": [
+    "State explicitly that reported-detail fidelity and minimum scope coverage are different requirements. Preserve exact supported values when included and accessible source-defined identities, without declaring every source paragraph or analysis setting mandatory for the general graph.",
+    "Use one obligation per independently judged coverage predicate, not one per experimental verb. Split a core interface from separable characterization/example settings; keep coupled facts together only when they have the same applicability, condition and consequence.",
+    "Use existing applicability/condition/rationale fields first. A condition belongs in the condition field, not only inside prose. A required rationale must state the affected output/interface and consequence rather than repeat a generic 'consequential' phrase.",
+    "Distinguish a required source-defined route/variant from one historical execution's chosen settings. The absence of a route from the candidate is not itself evidence that a scope-required route is unselected.",
+    "Allow an exact, readable, source-bound inventory to preserve full reagent/code/panel identity without requiring duplicated States or repeated full sequences in every record. A label, unresolved citation or checksum with no accessible rows is not an inventory witness.",
+    "Do not name these development methods, their disputed values, expected graph outputs or source-check answers in the generic clarification."
+  ],
+  "minimal_dispute_route_for_future_release": {
+    "reuse_assessment": "Reuse the existing pattern of immutable original records, exact pointers, contextual Evidence, digest bindings and host-derived outcomes. Do not overload SourceLimitAdjudication directly: its present semantics are limit-only, candidate-linked and authored within the candidate review turn. A positive-requirement necessity dispute needs an explicit separate source-only decision.",
+    "trigger": "Only an explicit source/scope necessity dispute raised by review or a host source-only audit. Missing real evidence, an ordinary unsupported claim or an author dislike of an obligation does not trigger a waiver. Zero extra calls when there is no dispute.",
+    "initial_safe_behavior": "Keep the original source coverage item uncertain/selected and withhold supported export. Preserve a host-only dispute receipt pointing to the original /obligations/N, its exact hash, unchanged scope and source witnesses. This uses the existing safe stop until the new opt-in path is implemented.",
+    "adjudication_visibility": "A fresh source-only thread receives only the frozen packet/originals, unchanged method/scope/variant, generic scope contract and the full original source ledger. No candidate, missing target IDs, prior candidate verdicts, graph counts, host expected answers, desired pass result or proposed candidate-specific replacement is supplied. The trigger must be recorded; it can reveal that some scope issue arose, so blindness is input separation rather than a proof of statistical independence.",
+    "decision_scope": "The adjudicator reassesses the selected batch of scope questions against source and declared use; it can retain, qualify an antecedent, split independent coverage predicates or reclassify ancillary content. Retain source facts and inventory access even when they are not universal minimum coverage. An unresolved scientific necessity remains unresolved; do not force acceptance.",
+    "artifact": {
+      "proposed_name": "RequirementScopeAdjudication",
+      "binding_fields": [
+        "format_version",
+        "source_packet_sha256",
+        "original_obligations_sha256",
+        "scope_contract_sha256",
+        "method_id",
+        "scope",
+        "variant",
+        "inspected_passages"
+      ],
+      "per_item_fields": [
+        "original_obligation_id",
+        "original_obligation_sha256",
+        "disposition",
+        "scope_rationale",
+        "source_evidence",
+        "replacement_coverage_items_if_qualified_or_split",
+        "retained_reported_detail_or_inventory_references"
+      ],
+      "forbidden_fields": [
+        "workflow_sha256",
+        "candidate_targets",
+        "candidate_missing_fields",
+        "desired_status"
+      ],
+      "note": "This is a design sketch, not an implemented schema. Preserve original records and write a separately hashed effective ledger only after validation; never edit the original in place. Every replaced item must be explicitly accounted for, and every unrelated item stays unchanged. Mechanical accounting cannot prove semantic exhaustiveness of a natural-language split."
+    },
+    "resuming_review": "Do not simply change obligations_sha256 in an old coverage review or relabel partial as satisfied. Any changed/split effective coverage item must be assessed against the actual candidate with the same ordinary/field-review protections and new bindings. Reuse the existing review_only path or a separately validated focused reassessment in a later release; no author extraction is necessary solely to assess a corrected scope expectation.",
+    "bounded_cost": "No default call. Batch all disputes into at most one source-only adjudication per packet/scope/original-ledger binding, not one call per obligation. If the adjudication changes coverage requirements, budget one existing review-only reassessment; do not claim the scope judgment alone can validate newly split candidate coverage. This can cost one or two extra turns on a disputed case and must be reported.",
+    "no_iteration_to_pass": "If adjudication retains the requirement, ordinary missing-interface repair remains necessary. If it cannot resolve scope, stop as research_needed. Any second adjudication attempt requires an explicit new evidence/contract version; do not repeatedly rewrite obligations until a candidate passes."
+  },
+  "gates_that_must_remain_independent": [
+    "Exact original document/rendition and packet bindings; no source changes hidden in a scope correction.",
+    "Workflow schema/reference/topology integrity and native transport/archive validation.",
+    "All included-claim source and factual-field review findings, with prior negative-field history preserved across revision.",
+    "All unrelated and retained required source coverage items; a scope decision is local, not an approval of the candidate.",
+    "Critical unsupported interfaces, omitted selected fractions, wrong product species, incorrect read roles and unavailable evidence essential to a claimed mechanism remain blockers.",
+    "Supported export only after an actual final review bound to the effective ledger/candidate permits it; pending disputes cannot export supported."
+  ],
+  "affected_development_paths_if_approved": [
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/prompts.py",
+      "change": "Clarify common fidelity-versus-coverage semantics and source-stage atomization/conditions; add generic dispute instructions only in a new version. Keep examples out of native text."
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/obligations.py",
+      "change": "A separate scope-adjudication model/validator and explicit effective-ledger binding or companion module; preserve old SourceLimitAdjudication meaning and old formats. Do not merely relax unconditional-required exclusion."
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/extraction_pipeline.py",
+      "change": "Opt-in dispute detection, preserved receipt, fresh source-only bounded turn and re-review with new ledger bindings before publication. Existing mode must not silently change."
+    },
+    {
+      "path": "src/genomics_discovery/curation/workflow_extraction/__main__.py",
+      "existing_lines": [
+        87,
+        199,
+        230
+      ],
+      "change": "If exposing a new artifact checker, follow the verified existing source_obligations/source_coverage schema/check dispatch and exact-packet evidence tools."
+    },
+    {
+      "path": "tests/test_workflow_source_obligations.py",
+      "change": "Keep old mandatory-exclusion and source-limit-only tests. Add new-format fail-closed tests and separate semantic challenge cases; never rewrite old tests to redefine the frozen baseline."
+    }
+  ],
+  "compatibility": {
+    "existing_formats": "source_obligations/1.0, source_coverage_review/1.0 and existing frozen coverage digests retain their current meaning. Optional omitted fields must preserve legacy serialization if a new companion path is added.",
+    "new_binding": "A changed effective ledger is a new scientific input and requires a distinct digest, release/run identity and recorded adjudication. Old results cannot be retroactively called supported by changing their requirements.",
+    "current_run": "Do not interrupt or alter dfe6cae/job48932552. Treat any scope overprescription it produces as a baseline limitation with actual source witnesses and an explicit outcome."
+  },
+  "proposed_checks_before_enabling": [
+    "An ordinary required omission still cannot be waived by selected=false; unsupported claim or blocking interface survives any unrelated scope reclassification.",
+    "A pending, transport-failed, malformed, stale or source-unbound scope decision never gives detection/acceptance credit and cannot publish supported output.",
+    "No dispute means exactly the current stage/call count. Several disputes cause one batched source-only turn rather than a new agent for each item.",
+    "The adjudication prompt/archive contains no candidate path, content, missing targets or host labels; inspect native tool traces for input separation. Do not claim OS-enforced secrecy from a prompt alone.",
+    "A mixed optional-analysis/core-decoding bundle is split without losing the required readout interface; actual inclusion of wrong analysis settings still fails assertion fidelity.",
+    "A readable exact inventory can satisfy declared identity retention without graph duplication, but a bare label cannot; a selected wrong oligo/target mapping still fails.",
+    "New or split coverage items are actually reassessed against candidate evidence before export, not mechanically marked satisfied from an old bundle's verdict.",
+    "Run the same frozen generic policy on more than one development family; report upheld and rejected disputes and extra latency separately. Do not call this a scientific-error rate or an optimal architecture ablation."
+  ],
+  "not_recommended": [
+    "Automatically require every number or paragraph merely because its exact text is available.",
+    "Blanket-remove full barcode inventories, exact sequence/modification identities or downstream analysis from scientific relevance.",
+    "Let the candidate author/reviewer silently edit the frozen checklist, downgrade an unconditional item or self-approve a scope waiver.",
+    "Make all requirements optional to avoid blocking, or use natural-language substring heuristics as a necessity oracle.",
+    "Add a permanent team of scope agents or repeated debate by default before this concrete disputed-requirement path is evaluated."
+  ],
+  "remaining_uncertainty": [
+    "The fresh source artifacts show bundled or structurally misqualified expectations, not yet a demonstrated false rejection of a completed fresh Workflow.",
+    "The exact intended detail level remains a declared-use decision. If the desired deliverable is an execution-ready reconstruction of original reagents and software rather than a general assay graph, some inventories/settings become legitimately required.",
+    "Evidence entailment, atomization adequacy and scope necessity are still semantic judgments. Deterministic hashes, enums and accounting constrain the process but do not prove scientific correctness."
+  ]
+}
