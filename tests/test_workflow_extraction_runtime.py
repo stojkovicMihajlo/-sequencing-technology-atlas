@@ -6,6 +6,7 @@ import asyncio
 import copy
 import json
 import re
+import shlex
 from dataclasses import asdict
 from pathlib import Path
 
@@ -234,6 +235,22 @@ async def run_case(source_case, tmp_path, *, mode="specialists", initial_workflo
     state = await execute(source_case[1], tmp_path / "run", worker=worker, mode=mode,
                           initial_workflow=initial_workflow)
     return state, worker
+
+
+def test_reviewer_advertises_joint_interface_query_with_exact_quoted_candidate(source_case, tmp_path):
+    from genomics_discovery.curation.workflow_extraction.prompts import build_prompt
+
+    packet, packet_path, _ = source_case
+    candidate = tmp_path / "candidate with spaces" / "workflow.json"
+    prompt = build_prompt("reviewer", tmp_path / "review", packet_path, packet,
+                          tmp_path / "review.schema.json", inputs={"candidate": candidate})
+    query = next(line for line in prompt.splitlines()
+                 if " query " in line and line.endswith(" OPERATION_ID"))
+    assert shlex.split(query)[-3:] == ["query", str(candidate), "OPERATION_ID"]
+    assert "Operation jointly with its input/output State descriptions" in prompt
+    assert "bindings/incident Flows" in prompt
+    assert "contextual sources for the association as well as the action" in prompt
+    assert "Equivalent programmatic inspection is acceptable" in prompt
 
 
 async def test_specialists_parallel_then_integration_and_fresh_source_review(source_case, tmp_path):

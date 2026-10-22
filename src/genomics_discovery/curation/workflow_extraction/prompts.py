@@ -720,6 +720,14 @@ Start with this lossless inspection view, which registers identical evidence onc
 All claims/resources/routes remain present with exact evidence references; this
 is encoding, not a summary. The complete original remains available above for
 details. Avoid repeated whole-candidate dumps and independently reread sources.
+Inspect each Operation jointly with its input/output State descriptions and its
+bindings/incident Flows, rather than approving these fields independently. Check
+that asserted routes, timing and variants apply to those actual material/data
+stages, and inspect contextual sources for the association as well as the action.
+Use the existing operation-neighborhood query (replace OPERATION_ID):
+{command} query {shlex.quote(str(inputs['candidate']))} OPERATION_ID
+Equivalent programmatic inspection is acceptable; no separate subprocess per
+Operation is required. This view preserves declared claims, not source support.
 Candidate workflow_sha256 (canonical digest, required in the review): {workflow_sha256}
 Frozen source_packet_sha256 (canonical digest, required in the review): {source_packet_sha256}
 Required target_id values (check each exactly once): {json.dumps(review_targets)}
