@@ -1,6 +1,28 @@
 # Deployment status
 
-## Clean source-only harness validation submitted, 2026-10-21 PDT
+## General harness revision under live evaluation, 2026-10-21 PDT
+
+Qiu CPU job **48941049** is running frozen **f82d93f**, after **2,401 software
+tests passed, three skipped**. It clarifies source-requirement necessity and
+overlaps three independent source-only passes before integration. At 06:20 UTC
+all three preparation calls were active for each paper. It uses the same source
+bytes, `gpt-6.1-sol` / `xhigh`, review gates and bounded revision policy as the
+baseline, with no previous graph or scientific correction supplied. The
+[follow-up record](../provenance/experiments/clean_extraction_parallel_20261022/README.md)
+separates software controls, live results and interpretation limits. Native
+scientific and elapsed-time outcomes remain pending; no speedup is yet claimed.
+
+Baseline job **48932552** remains unchanged. Its first DBiT candidate entered
+independent review with 29 Operations, 42 States, 81 Flows and 14 overlapping gap
+records. A separate host audit found all 19 fixed source checks represented and
+no consequential core error in the checked scope. One advisory concerns optional
+imaging prose broader than its post-B input occurrence. Navigation, lossless
+inspection and guard-preserving path checks pass; this initial candidate has no
+inherited scientific acceptance. The scSTAMP initial candidate and final native
+reviews were still pending at the last observation. This is evaluation of fresh
+extraction behavior, distinct from the repaired example below.
+
+## Clean source-only harness validation running, 2026-10-21 PDT
 
 Qiu CPU job **48932552** tests fresh scSTAMP and DBiT extraction from registered
 literature only, using frozen **dfe6cae**, `gpt-6.1-sol` / `xhigh`. It supplies no
