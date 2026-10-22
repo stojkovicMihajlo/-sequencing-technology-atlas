@@ -13,10 +13,12 @@ import hashlib
 import json
 import math
 import os
+import shlex
 import signal
 import socket
 import stat
 import subprocess
+import sys
 import time
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
@@ -36,6 +38,44 @@ _SHUTDOWN_GRACE_SECONDS = 2.0
 _PROCESS_EXIT_POLL_SECONDS = 0.05
 _STREAM_ERROR = "Codex emitted error; see events.jsonl"
 _PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+
+def pinned_shell_environment(*, python_executable=None, environment=None) -> dict[str, str]:
+    """Explicit nonsecret overrides; preserve virtualenv paths without resolving symlinks."""
+    environment = os.environ if environment is None else environment
+    python = Path(python_executable or sys.executable).absolute()
+    path = str(python.parent) + (os.pathsep + environment["PATH"] if environment.get("PATH") else "")
+    return {"PATH": path, **{key: environment[key] for key in ("PYTHONPATH", "LD_LIBRARY_PATH")
+                             if key in environment}}
+
+
+def preflight_pinned_shell_environment(*, overrides=None, python_executable=None) -> dict:
+    """Optional caller-run Bash probe, not automatic worker integration or a model call.
+
+    Compare the intended interpreter with bare python under the same pinned env.
+    BASH_ENV and other startup behavior are retained: a mismatch fails, never gets
+    silently repaired. Arbitrary later commands can still override the environment.
+    """
+    python = Path(python_executable or sys.executable).absolute()
+    env = dict(os.environ)
+    env.update(pinned_shell_environment(python_executable=python) if overrides is None else overrides)
+    code = "import json,sys; print(json.dumps({'executable':sys.executable,'version':list(sys.version_info[:3]),'prefix':sys.prefix}))"
+    expected = subprocess.run([str(python), "-c", code], env=env, capture_output=True, text=True, check=True)
+    observed = subprocess.run(["/bin/bash", "-c", "command -v python; python -c " + shlex.quote(code)],
+                              env=env, capture_output=True, text=True, check=True)
+    try:
+        reference = json.loads(expected.stdout)
+        resolved, fingerprint = observed.stdout.strip().split("\n")
+        actual = json.loads(fingerprint)
+        valid = (Path(resolved).absolute().parent == python.parent
+                 and Path(actual["executable"]).absolute().parent == python.parent
+                 and actual["version"] == reference["version"] and actual["prefix"] == reference["prefix"])
+    except (ValueError, KeyError, TypeError) as exc:
+        raise ValueError("Pinned Python preflight produced an invalid fingerprint") from exc
+    if not valid:
+        raise ValueError("Bare python does not match the pinned interpreter/version/prefix")
+    return {"passed": True, "python_resolution": resolved, "fingerprint": actual,
+            "boundary": "This Bash startup passed; later commands can explicitly override interpreter or environment."}
 
 
 @dataclass
@@ -244,6 +284,7 @@ class CodexWorker:
         timeout_seconds: float | None = 1800,
         web_search: bool = True,
         network_access: bool = True,
+        pin_shell_environment: bool = False,
     ) -> None:
         if not executable or not model or not effort:
             raise ValueError("executable, model, and effort must be nonempty")
@@ -257,6 +298,11 @@ class CodexWorker:
         self.timeout_seconds = timeout_seconds
         self.web_search = web_search
         self.network_access = network_access
+        if type(pin_shell_environment) is not bool:
+            raise ValueError("pin_shell_environment must be a boolean")
+        self.pin_shell_environment = pin_shell_environment
+        self._shell_python = str(Path(sys.executable).absolute()) if pin_shell_environment else None
+        self._shell_overrides = pinned_shell_environment() if pin_shell_environment else {}
 
     def _command(self, attempt_dir: Path, image_paths=()) -> list[str]:
         command = [
@@ -290,6 +336,10 @@ class CodexWorker:
             "--config",
             f"sandbox_workspace_write.network_access={str(self.network_access).lower()}",
         ]
+        if self.pin_shell_environment:
+            command.extend(("--config", "allow_login_shell=false", "--disable", "shell_snapshot"))
+            for key, value in self._shell_overrides.items():
+                command.extend(("--config", f"shell_environment_policy.set.{key}={json.dumps(value)}"))
         if self.model != "default":
             command.extend(("--model", self.model))
         for path in image_paths:
@@ -326,6 +376,11 @@ class CodexWorker:
             json.dumps({
                 "argv": command,
                 "cwd": str(attempt_dir),
+                **({"shell_environment_profile": {"enabled": True, "python_executable": self._shell_python,
+                    "pinned_variable_names": list(self._shell_overrides), "automatic_preflight": False,
+                    "guarantee": "Codex default shell uses non-login semantics, snapshots are disabled and declared environment values are explicitly injected.",
+                    "limits": "BASH_ENV and managed policy remain intact; startup or explicit commands may override interpreter/environment. This is not a universal Python-execution guarantee."}}
+                   if self.pin_shell_environment else {}),
                 **({"image_inputs": images, "image_input_boundary":
                     "Explicit CLI attachments only; caller owns PDF/page/source identity. "
                     "Attachment does not establish image understanding or entailment."} if images else {}),

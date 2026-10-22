@@ -1,0 +1,917 @@
+{
+  "format_version": "workflow_repair_diff_audit/1.0",
+  "auditor": "Independent deterministic diff and targeted source-context inspection; not new model or expert certification",
+  "inputs": {
+    "before": {
+      "path": "experiments/scstamp_seq_20261021/outputs/job_48877794/workflow.json",
+      "raw_sha256": "948edf98e8d7e919678ff6f7f9ce1f3cad227fdecbb3a4861be6bc5e9e961f46",
+      "canonical_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd"
+    },
+    "after": {
+      "path": "experiments/scstamp_seq_20261021/outputs/prototype_repair_48925060/workflow.json",
+      "raw_sha256": "9005fd90568e133b9854fe668bda88b7f386dd9da8e789e04ea71d2d79f643ec",
+      "canonical_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69"
+    },
+    "source_packet": {
+      "path": "experiments/scstamp_seq_20261021/outputs/job_48877794/source_packet.json",
+      "raw_sha256": "e99ce83cfd1b2d260a4097b180df65e50e5173b526a5f3be4f153a4c744ae70c",
+      "canonical_sha256": "cb8c6f28f1917def1d1f5e68c773b737c864ddfca2259839d02cc8fb9f5395e0"
+    }
+  },
+  "requested_audit_raw_sha256": "2d1d139b4321f3a489eda7c73b0f81c3b1bb87f9156cd644ae327e881df6aa0d",
+  "counts_before": {
+    "states": 80,
+    "operations": 63,
+    "flows": 168,
+    "modules": 13,
+    "unresolved": 14,
+    "gap_resolutions": 2
+  },
+  "counts_after": {
+    "states": 80,
+    "operations": 63,
+    "flows": 168,
+    "modules": 13,
+    "unresolved": 14,
+    "gap_resolutions": 2
+  },
+  "changed_record_ids": {
+    "states": [
+      "mat_copied_marked",
+      "spatial_transcriptome_multiome"
+    ],
+    "operations": [
+      "droplet_capture",
+      "encode_single",
+      "mat_capture",
+      "mat_copy_mark",
+      "mat_protect_digest"
+    ],
+    "flows": [
+      "io:input:droplet_capture:cell_suspension",
+      "io:input:mat_capture:cell_suspension",
+      "io:input:mat_protect_digest:mat_copied_marked",
+      "io:output:mat_copy_mark:mat_copied_marked"
+    ],
+    "modules": [],
+    "unresolved": [],
+    "gap_resolutions": []
+  },
+  "deterministic_checks": {
+    "workflow_model_valid": true,
+    "source_qualified_io_errors": [],
+    "quote_and_reference_errors": [],
+    "scope_metadata_matches_frozen_packet": true,
+    "scope_metadata_unchanged": true,
+    "record_id_sets_unchanged": true,
+    "flow_endpoints_types_selection_and_groups_unchanged": true,
+    "operation_input_output_references_unchanged": true,
+    "modules_unchanged": true,
+    "gaps_unchanged": true,
+    "gap_resolutions_unchanged": true,
+    "blocking_gap_counts": {
+      "before": 0,
+      "after": 0
+    },
+    "requested_audit_input_pins_match": true
+  },
+  "targeted_findings": [
+    {
+      "request_id": "SCSTAMP-AUDIT-01",
+      "assessment": "Addressed in candidate, awaiting fresh independent source review",
+      "details": "mat_copied_marked now names double-stranded DNA/cDNA instead of ambiguous double-stranded RNA/ERCC; mat_copy_mark action/output binding and mat_protect_digest input binding agree. The added evidence explicitly attributes ERCC and second-strand synthesis to the delegated scMAT source and marks consequential deductions inferred."
+    },
+    {
+      "request_id": "SCSTAMP-AUDIT-02",
+      "assessment": "Addressed in candidate, awaiting fresh independent source review",
+      "details": "Droplet/MAT input route conditions and final endpoint now distinguish uniform floodlight feasibility demonstrations from broader source-described patterned-light architectures; encode_single gains one qualified condition resource. Droplet 0/1/10-min and MAT no-light/1-min distinctions cite primary p00033."
+    },
+    {
+      "request_id": "SCSTAMP-AUDIT-03",
+      "assessment": "Host navigation limitation is separate from scientific candidate repair",
+      "details": "No new globally consistent route annotation was added and graph topology was not rewritten. Local alternative groups still do not define global routes. The separate guarded query_path tool is required; bare reachability remains unsafe as a feasibility certificate."
+    }
+  ],
+  "unrequested_drift_review": {
+    "outcome": "No unrelated edits identified in complete stable-ID diff",
+    "reviewed": "Every changed scalar and every added compound Evidence/Resource value was inspected. All 11 changed records correspond to the two source-backed clarification requests or exact binding/Flow mirrors.",
+    "notable_additions": "ERCC lysis support and primary scMAT delegation citation strengthen the requested cDNA clarification; the single new illumination condition resource supports route-demonstration qualification. No new operations, States, Flow relations, module memberships, gaps or resolutions were introduced."
+  },
+  "boundary_inventory_summary": {
+    "before_counts": {
+      "external_input": 7,
+      "terminal_output": 9,
+      "isolated": 0
+    },
+    "after_counts": {
+      "external_input": 7,
+      "terminal_output": 9,
+      "isolated": 0
+    },
+    "changed_state_ids": [
+      "spatial_transcriptome_multiome"
+    ],
+    "meaning": "Only the final endpoint description changed; no external/terminal State was added, removed or reclassified."
+  },
+  "limits": [
+    "Schema, quote matching and exact change accounting do not establish entailment or scientific completeness.",
+    "The original 14 unresolved records remain exactly unchanged as structured values; no gap was solved by this repair.",
+    "This local audit used the copied frozen packet; it did not replay original remote document custody.",
+    "Fresh model review was still running when this candidate audit was requested."
+  ],
+  "exact_changes": {
+    "format_version": "workflow_changes/1.0",
+    "before_workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+    "after_workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+    "before_normalized_sha256": "6dc4bd8c656ab164b2c0da633b93c37717424b48e7d2095ef2c413d5eedab582",
+    "after_normalized_sha256": "ba3ed3e5968007096e5a82a390c123f11c53a083006396717269baa76717b720",
+    "stable_record_content_changed": true,
+    "metadata_changes": [],
+    "records": {
+      "states": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          {
+            "record_id": "mat_copied_marked",
+            "old_record_sha256": "f71c478a86a36bac7921b1f15ea99cfda264a2bcb910a57801437baa022ca6f2",
+            "new_record_sha256": "91492d4c6c13b9ea28621e244b3ce331dadcbec2dfb8cd36ef6028310c1c8e97",
+            "value_changes": [
+              {
+                "pointer": "/states/mat_copied_marked/description",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/description",
+                  "view": "normalized_workflow",
+                  "value_sha256": "9b3b51701ae78067fbba2cc4b75442ab835290f6e52bc936d38c70e7642931e4"
+                },
+                "old_value": "Within each MAT well: cell/mRNA-PHO-tagged double-stranded RNA/ERCC and PHO products coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic fragments are not yet adapter-barcoded; molecular origins remain distinct.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/description",
+                  "view": "normalized_workflow",
+                  "value_sha256": "5f4be9f8c1c9e66bbe9d9b1f2e8c8e340bfb9a0b663a571f01d7c14491863552"
+                },
+                "new_value": "Within each MAT well: cell/mRNA-PHO-tagged double-stranded DNA products, comprising cDNA derived from mRNA/ERCC and copied PHO-derived DNA, coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic adapters have not yet been ligated; molecular origins remain distinct."
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/0/rationale",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/evidence/0/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "3e0e867f29cd02956ef27f4909649ae8f2a2bf182e6777f9a9e86c2c2cb19dd0"
+                },
+                "old_value": "Interface: Within each MAT well: cell/mRNA-PHO-tagged double-stranded RNA/ERCC and PHO products coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic fragments are not yet adapter-barcoded; molecular origins remain distinct.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/0/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "6e9f5b9782a081daed6b512106db6336b4241d9797a7c98f362dbdaaf56adca4"
+                },
+                "new_value": "The primary assigns reverse-transcribed mRNA and copied PHO sequences a cell/mRNA-PHO capture barcode. Together with second-strand synthesis in the same described route, this identifies the products as RNA-derived cDNA and copied PHO-derived DNA, rather than source RNA species."
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/0/support",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/evidence/0/support",
+                  "view": "normalized_workflow",
+                  "value_sha256": "36b84be12058f4554187f6791e60977eeb914bd0499ec013a68ed8c238db9d25"
+                },
+                "old_value": "reported",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/0/support",
+                  "view": "normalized_workflow",
+                  "value_sha256": "4801bd68f63f2d835f2000cf214ddd84f29a6023f3900d19fb6821253e3f926f"
+                },
+                "new_value": "inferred"
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/1/rationale",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/evidence/1/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "3e0e867f29cd02956ef27f4909649ae8f2a2bf182e6777f9a9e86c2c2cb19dd0"
+                },
+                "old_value": "Interface: Within each MAT well: cell/mRNA-PHO-tagged double-stranded RNA/ERCC and PHO products coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic fragments are not yet adapter-barcoded; molecular origins remain distinct.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/1/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "a80fb910c83b2652de6a32ab1819a404357f26943a4b4e7d13b122095e9406c5"
+                },
+                "new_value": "The primary explicitly places M.CviPI methylation of accessible GpC cytosines alongside copying in this MAT well; marked genomic DNA is distinct from the capture-barcoded RNA/PHO-derived DNA products."
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/2/rationale",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/evidence/2/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "3e0e867f29cd02956ef27f4909649ae8f2a2bf182e6777f9a9e86c2c2cb19dd0"
+                },
+                "old_value": "Interface: Within each MAT well: cell/mRNA-PHO-tagged double-stranded RNA/ERCC and PHO products coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic fragments are not yet adapter-barcoded; molecular origins remain distinct.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/2/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "0f42e4994c4ee3b39e75b73c7cb186d1bb7921a3c2f94587f1307bde6a54dd50"
+                },
+                "new_value": "The simultaneous timing of copying and chromatin marking anchors this MAT interface to the initial per-cell lysate, before subsequent genomic treatment."
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/3/rationale",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/evidence/3/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "3e0e867f29cd02956ef27f4909649ae8f2a2bf182e6777f9a9e86c2c2cb19dd0"
+                },
+                "old_value": "Interface: Within each MAT well: cell/mRNA-PHO-tagged double-stranded RNA/ERCC and PHO products coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic fragments are not yet adapter-barcoded; molecular origins remain distinct.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/3/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "4b075b9be13f9844545f5fb5414c55045052c4d1e6d448ddfe114d275989113a"
+                },
+                "new_value": "The delegated scMAT DNA polymerase/ligase second-strand reaction supports identifying the post-copy products as double-stranded DNA. The primary scSTAMP-MAT description supplies the RNA/PHO origins and the primary Methods expressly delegate this portion to scMAT; no double-stranded RNA product is asserted."
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/3/support",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/evidence/3/support",
+                  "view": "normalized_workflow",
+                  "value_sha256": "36b84be12058f4554187f6791e60977eeb914bd0499ec013a68ed8c238db9d25"
+                },
+                "old_value": "reported",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/3/support",
+                  "view": "normalized_workflow",
+                  "value_sha256": "4801bd68f63f2d835f2000cf214ddd84f29a6023f3900d19fb6821253e3f926f"
+                },
+                "new_value": "inferred"
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/4/rationale",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/evidence/4/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "3e0e867f29cd02956ef27f4909649ae8f2a2bf182e6777f9a9e86c2c2cb19dd0"
+                },
+                "old_value": "Interface: Within each MAT well: cell/mRNA-PHO-tagged double-stranded RNA/ERCC and PHO products coexist with gDNA bearing M.CviPI-introduced accessible-GpC methylation and endogenous methylation. Genomic fragments are not yet adapter-barcoded; molecular origins remain distinct.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/4/rationale",
+                  "view": "normalized_workflow",
+                  "value_sha256": "35abe139899a8a9b4dcf619f417ec39403c7579956fb5ed3f3055d774f6f6132"
+                },
+                "new_value": "The primary places genomic adapter ligation after the later MspJI digestion. Thus genomic adapter barcodes have not yet been ligated at this earlier post-copy/marking, pre-digestion MAT interface."
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/4/support",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/mat_copied_marked/evidence/4/support",
+                  "view": "normalized_workflow",
+                  "value_sha256": "36b84be12058f4554187f6791e60977eeb914bd0499ec013a68ed8c238db9d25"
+                },
+                "old_value": "reported",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/4/support",
+                  "view": "normalized_workflow",
+                  "value_sha256": "4801bd68f63f2d835f2000cf214ddd84f29a6023f3900d19fb6821253e3f926f"
+                },
+                "new_value": "inferred"
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/5",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/5",
+                  "view": "normalized_workflow",
+                  "value_sha256": "b77fd8b3f864cfb4e1b5c089c16a3cf60f1810a8a42d8039802c29c7f028f2ca"
+                }
+              },
+              {
+                "pointer": "/states/mat_copied_marked/evidence/6",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/mat_copied_marked/evidence/6",
+                  "view": "normalized_workflow",
+                  "value_sha256": "9216d863385fba966776cb0e7c097931018fecf085e059951b95f99590b5c2e0"
+                }
+              }
+            ]
+          },
+          {
+            "record_id": "spatial_transcriptome_multiome",
+            "old_record_sha256": "2eb86e7ff288ff4820e5b9e599da82ffd07c04b85506320743117a8d9a529ed1",
+            "new_record_sha256": "9eb1176f709cb72cfbf01879c5ac44b3a5d8d3fc6ca51e48ebcb99a2435972d4",
+            "value_changes": [
+              {
+                "pointer": "/states/spatial_transcriptome_multiome/description",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/states/spatial_transcriptome_multiome/description",
+                  "view": "normalized_workflow",
+                  "value_sha256": "452eff41b3d0b4efed08c80365b104112dbac2bf516794bbd991493e0999aabf"
+                },
+                "old_value": "Declared endpoint: cell-linked transcriptome and qualified optical exposure/region attribution; for the MAT alternative, linked DNA accessibility and endogenous methylation profiles. Optional known-dose vote predictions can accompany attribution. This is a source-described architecture, not reproduction of any historical numeric dataset.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/spatial_transcriptome_multiome/description",
+                  "view": "normalized_workflow",
+                  "value_sha256": "18b62f0be7ea543facc86b015d752fd8ee6ecfab18e2a6d04154c996abfe6512"
+                },
+                "new_value": "Declared endpoint: cell-linked transcriptome and qualified optical exposure/region attribution; for the MAT alternative, linked DNA accessibility and endogenous methylation profiles. Optional known-dose vote predictions can accompany attribution. The demonstrated droplet (0/1/10-min) and MAT (no-light/1-min) floodlight designs supply exposure-cohort attribution, not within-well position; the broader patterned-light/capture combinations are source-described architecture rather than all experimentally demonstrated combinations. This is not reproduction of any historical numeric dataset."
+              },
+              {
+                "pointer": "/states/spatial_transcriptome_multiome/evidence/3",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/spatial_transcriptome_multiome/evidence/3",
+                  "view": "normalized_workflow",
+                  "value_sha256": "d338579222dc2fcabb5f7a93d09ca79b469667ff27f231d3e696c42306cfa7c0"
+                }
+              },
+              {
+                "pointer": "/states/spatial_transcriptome_multiome/evidence/4",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/spatial_transcriptome_multiome/evidence/4",
+                  "view": "normalized_workflow",
+                  "value_sha256": "2057d268ad26602134e534e613f17ab648020075b61adb69e793dc22595d4991"
+                }
+              },
+              {
+                "pointer": "/states/spatial_transcriptome_multiome/evidence/5",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/states/spatial_transcriptome_multiome/evidence/5",
+                  "view": "normalized_workflow",
+                  "value_sha256": "a717bebf0a065cf45bd50ba1e14fd77b793dd290082ecae5036adde4288ccd3a"
+                }
+              }
+            ]
+          }
+        ],
+        "unchanged_count": 78
+      },
+      "operations": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          {
+            "record_id": "droplet_capture",
+            "old_record_sha256": "714f232263d6f57bbfe181e749dd69b19c8e8c4f4e9b16578611e902df30a8fc",
+            "new_record_sha256": "f6402bed1c472b662bd27e34b3bca7db833f518fb0222851eeb4b7b5775e7499",
+            "value_changes": [
+              {
+                "pointer": "/operations/droplet_capture/input_bindings/0/basis",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/operations/droplet_capture/input_bindings/0/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "fec6956b36cd7656c780bafd47de3f2d7958e0d8b6a58aa1525915c6360286f9"
+                },
+                "old_value": "The filtered suspension is processed on a Chromium Controller for droplet capture.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/droplet_capture/input_bindings/0/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "0a5fdba6dec197c93d1b73fe27644094ee98015be6348793404cce899b25dfd2"
+                },
+                "new_value": "The filtered suspension is processed on a Chromium Controller for droplet capture. The source describes modular optical encoding generally; its direct droplet demonstration used uniform floodlight dose cohorts, without establishing every patterned or sequential optical-design/droplet combination."
+              },
+              {
+                "pointer": "/operations/droplet_capture/input_bindings/0/condition",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/operations/droplet_capture/input_bindings/0/condition",
+                  "view": "normalized_workflow",
+                  "value_sha256": "b2a7a3745f83e29b9b4b6897a7a36c3ffef727e4f486acddf60fd391e286420f"
+                },
+                "old_value": "Droplet transcriptomic implementation selected; alternative to plate RNA/MAT capture.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/droplet_capture/input_bindings/0/condition",
+                  "view": "normalized_workflow",
+                  "value_sha256": "72ea44d9cecb219dea7f440cd339e1ff398ec19c827b3c82dfc8cb3f08001043"
+                },
+                "new_value": "Droplet transcriptomic implementation selected; alternative to plate RNA/MAT capture. The demonstrated preceding exposure was uniform floodlight at 0, 1 or 10 min; broader patterned-light compatibility is retained as the authors' general architecture."
+              },
+              {
+                "pointer": "/operations/droplet_capture/input_bindings/0/evidence/1",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/droplet_capture/input_bindings/0/evidence/1",
+                  "view": "normalized_workflow",
+                  "value_sha256": "57f560ded19d89cd1d521cca557c02195bfc698c9a11533162bf50b5b2a19e75"
+                }
+              },
+              {
+                "pointer": "/operations/droplet_capture/input_bindings/0/evidence/2",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/droplet_capture/input_bindings/0/evidence/2",
+                  "view": "normalized_workflow",
+                  "value_sha256": "501baf2263f9610f21c88d54075be04853b60d24e974eb8bd32a047f0d058f16"
+                }
+              }
+            ]
+          },
+          {
+            "record_id": "encode_single",
+            "old_record_sha256": "a3f3dcdf39647ff57152181ced11ea4bc06a31f6d1380657fc83507859ddd816",
+            "new_record_sha256": "7bc184cb8ec6b14b92567318e37e6a5d83c5c22831480a25a381efddf8911a01",
+            "value_changes": [
+              {
+                "pointer": "/operations/encode_single/resources/2",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/encode_single/resources/2",
+                  "view": "normalized_workflow",
+                  "value_sha256": "f4a916fb61f077c34922f3d1689fe9ee101b4139471554f5f8737b8f897f0751"
+                }
+              }
+            ]
+          },
+          {
+            "record_id": "mat_capture",
+            "old_record_sha256": "8d7abf7d155af8e0556cbbed07525ec618d0da2a320b97f9bf1551194c3a5465",
+            "new_record_sha256": "49754de0532ab112ccd6c90077c7e18e3b8360057a13c59c73f5ef65455b8029",
+            "value_changes": [
+              {
+                "pointer": "/operations/mat_capture/input_bindings/0/basis",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/operations/mat_capture/input_bindings/0/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "6df36ddc0e7c645f21228a25ef987978fdd154b53c51f1956ad0c021e778c0f0"
+                },
+                "old_value": "Dissociated optically encoded cells are sorted for the MAT alternative.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_capture/input_bindings/0/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "a383e493e22d779ac49e4cd11a5ed6ea4196a4d2873dc1f3de84129935ca36e3"
+                },
+                "new_value": "Dissociated optically encoded cells are sorted for the MAT alternative. The primary describes imposed light gradients in its general MAT architecture; the direct MAT feasibility demonstration used uniform no-light/1-min cohorts, without establishing every patterned or sequential optical-design/MAT combination."
+              },
+              {
+                "pointer": "/operations/mat_capture/input_bindings/0/condition",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/operations/mat_capture/input_bindings/0/condition",
+                  "view": "normalized_workflow",
+                  "value_sha256": "570bd9c10b87b31996b5c3faeda2edf9988ab9df2a3a321e2ec29759b27aea4e"
+                },
+                "old_value": "scSTAMP-MAT implementation selected; alternative to plate-RNA/droplet capture.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_capture/input_bindings/0/condition",
+                  "view": "normalized_workflow",
+                  "value_sha256": "0a0f216a3e387b5689f9f7c7b69dc5a7ee76c286d1a3dc53ccded53bf066082f"
+                },
+                "new_value": "scSTAMP-MAT implementation selected; alternative to plate-RNA/droplet capture. The demonstrated preceding exposure was uniform floodlight with no light or 1 min; the primary's patterned-light MAT route is retained as source-described architecture."
+              },
+              {
+                "pointer": "/operations/mat_capture/input_bindings/0/evidence/1",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_capture/input_bindings/0/evidence/1",
+                  "view": "normalized_workflow",
+                  "value_sha256": "f4e7f0e61d4ff744985e546478568f1a9d8f8c771799b37c9f8abfff6e46d63e"
+                }
+              },
+              {
+                "pointer": "/operations/mat_capture/input_bindings/0/evidence/2",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_capture/input_bindings/0/evidence/2",
+                  "view": "normalized_workflow",
+                  "value_sha256": "80f0b815c88547441614338fc88b43fd55d68523ee457ac6f086e2256ec0df2c"
+                }
+              },
+              {
+                "pointer": "/operations/mat_capture/input_bindings/0/evidence/3",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_capture/input_bindings/0/evidence/3",
+                  "view": "normalized_workflow",
+                  "value_sha256": "0459eb9572283267828f5da80d4e8e55c26771744c99e4f553d711670615a959"
+                }
+              }
+            ]
+          },
+          {
+            "record_id": "mat_copy_mark",
+            "old_record_sha256": "e760e9431cbbf518fca0baa05f893124d000d8a31fec1621494961813ebd3287",
+            "new_record_sha256": "fa08568af704d3ebcae877f867c6140ea207b86f8d439930bac79d0bf49c7038",
+            "value_changes": [
+              {
+                "pointer": "/operations/mat_copy_mark/action",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/operations/mat_copy_mark/action",
+                  "view": "normalized_workflow",
+                  "value_sha256": "5fa2cdb1d6a3018d77db4d75796ded9498dd9116e5bd11ba9703f5936cdcd626"
+                },
+                "old_value": "Simultaneously reverse-transcribe RNA/copy PHO DNA and methylate accessible GpC cytosines with M.CviPI/SAM at the initial lysate state; then synthesize second strands.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_copy_mark/action",
+                  "view": "normalized_workflow",
+                  "value_sha256": "265c0f2fbf3729e574d9a84df1ff476c14b6c378960fa6361c5c26696540fc3a"
+                },
+                "new_value": "Simultaneously reverse-transcribe RNA/copy PHO DNA and methylate accessible GpC cytosines with M.CviPI/SAM at the initial lysate state; then synthesize second-strand DNA."
+              },
+              {
+                "pointer": "/operations/mat_copy_mark/evidence/4",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_copy_mark/evidence/4",
+                  "view": "normalized_workflow",
+                  "value_sha256": "987f2217b9f07f813fbf2ad3a47da3cb3551fed7a044c708eaedde629af42c52"
+                }
+              },
+              {
+                "pointer": "/operations/mat_copy_mark/output_bindings/0/basis",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/operations/mat_copy_mark/output_bindings/0/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "37496b780ebdd3adc8683e9484296521e7b17d60602f2457a31e29d0f441b0de"
+                },
+                "old_value": "Simultaneous copying/marking followed by second strand yields the well-resolved mixed-origin material.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_copy_mark/output_bindings/0/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "f2205ba7adc3ac07c3ac33a59d54d83a7e214cd3f82c00cc03ee2826a7e2e294"
+                },
+                "new_value": "Simultaneous copying/marking followed by second-strand DNA synthesis yields cell-tagged RNA-derived cDNA and PHO-derived DNA with marked gDNA retained in the same well."
+              },
+              {
+                "pointer": "/operations/mat_copy_mark/output_bindings/0/evidence/4",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_copy_mark/output_bindings/0/evidence/4",
+                  "view": "normalized_workflow",
+                  "value_sha256": "feecc8d3ce597db549e70eb8aaf80c199c82c6e7d122e5aeb306b23a02382c22"
+                }
+              }
+            ]
+          },
+          {
+            "record_id": "mat_protect_digest",
+            "old_record_sha256": "7f8480761d5cfec2cf411cadbe9063c4e4dba5bcd27a5c99db74cbb7e5e9a008",
+            "new_record_sha256": "dbf9d58368a2aa1ab2ec900f8c0b22efcc7ebb944c700e9cfbf70538763e83c1",
+            "value_changes": [
+              {
+                "pointer": "/operations/mat_protect_digest/input_bindings/0/basis",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/operations/mat_protect_digest/input_bindings/0/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "d2ee919d318675dcb35f15357a5bae7748b43886ccfe35940753eca1f01f5cc8"
+                },
+                "old_value": "Marked gDNA and copied RNA/PHO products continue within their original wells through genomic treatment.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_protect_digest/input_bindings/0/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "92a1af842ce546403687538ee7dcf69559043fc7127a11ccca9bf69df42bc9a8"
+                },
+                "new_value": "Marked gDNA and the cell-tagged RNA-derived cDNA/PHO-derived DNA continue within their original wells through genomic treatment."
+              },
+              {
+                "pointer": "/operations/mat_protect_digest/input_bindings/0/evidence/3",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/operations/mat_protect_digest/input_bindings/0/evidence/3",
+                  "view": "normalized_workflow",
+                  "value_sha256": "ce3f61924c6b43c5d37912c4040a438b2880e1fd4c0d7ab326d01210d8ed6ee4"
+                }
+              }
+            ]
+          }
+        ],
+        "unchanged_count": 58
+      },
+      "flows": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          {
+            "record_id": "io:input:droplet_capture:cell_suspension",
+            "old_record_sha256": "7fbc29ed926468d09b386cf6b599b7d03a6ec3df54445ad9eb320213d0c3ae0e",
+            "new_record_sha256": "50478d07f43d72edd57141066e312752fbf075c0a1ecc0e087cd7a8e92fcfa38",
+            "value_changes": [
+              {
+                "pointer": "/flows/io:input:droplet_capture:cell_suspension/basis",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/flows/io:input:droplet_capture:cell_suspension/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "fec6956b36cd7656c780bafd47de3f2d7958e0d8b6a58aa1525915c6360286f9"
+                },
+                "old_value": "The filtered suspension is processed on a Chromium Controller for droplet capture.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:droplet_capture:cell_suspension/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "0a5fdba6dec197c93d1b73fe27644094ee98015be6348793404cce899b25dfd2"
+                },
+                "new_value": "The filtered suspension is processed on a Chromium Controller for droplet capture. The source describes modular optical encoding generally; its direct droplet demonstration used uniform floodlight dose cohorts, without establishing every patterned or sequential optical-design/droplet combination."
+              },
+              {
+                "pointer": "/flows/io:input:droplet_capture:cell_suspension/condition",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/flows/io:input:droplet_capture:cell_suspension/condition",
+                  "view": "normalized_workflow",
+                  "value_sha256": "b2a7a3745f83e29b9b4b6897a7a36c3ffef727e4f486acddf60fd391e286420f"
+                },
+                "old_value": "Droplet transcriptomic implementation selected; alternative to plate RNA/MAT capture.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:droplet_capture:cell_suspension/condition",
+                  "view": "normalized_workflow",
+                  "value_sha256": "72ea44d9cecb219dea7f440cd339e1ff398ec19c827b3c82dfc8cb3f08001043"
+                },
+                "new_value": "Droplet transcriptomic implementation selected; alternative to plate RNA/MAT capture. The demonstrated preceding exposure was uniform floodlight at 0, 1 or 10 min; broader patterned-light compatibility is retained as the authors' general architecture."
+              },
+              {
+                "pointer": "/flows/io:input:droplet_capture:cell_suspension/evidence/1",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:droplet_capture:cell_suspension/evidence/1",
+                  "view": "normalized_workflow",
+                  "value_sha256": "57f560ded19d89cd1d521cca557c02195bfc698c9a11533162bf50b5b2a19e75"
+                }
+              },
+              {
+                "pointer": "/flows/io:input:droplet_capture:cell_suspension/evidence/2",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:droplet_capture:cell_suspension/evidence/2",
+                  "view": "normalized_workflow",
+                  "value_sha256": "501baf2263f9610f21c88d54075be04853b60d24e974eb8bd32a047f0d058f16"
+                }
+              }
+            ]
+          },
+          {
+            "record_id": "io:input:mat_capture:cell_suspension",
+            "old_record_sha256": "2656f956b0568dafa3c71ec90fdb26d3347936d76601b797d4013457c4f100be",
+            "new_record_sha256": "b29b3f79c28066216a85bf62b2dd35a9ee144d974691363ff70c1f02b6bb2c7c",
+            "value_changes": [
+              {
+                "pointer": "/flows/io:input:mat_capture:cell_suspension/basis",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/flows/io:input:mat_capture:cell_suspension/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "6df36ddc0e7c645f21228a25ef987978fdd154b53c51f1956ad0c021e778c0f0"
+                },
+                "old_value": "Dissociated optically encoded cells are sorted for the MAT alternative.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:mat_capture:cell_suspension/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "a383e493e22d779ac49e4cd11a5ed6ea4196a4d2873dc1f3de84129935ca36e3"
+                },
+                "new_value": "Dissociated optically encoded cells are sorted for the MAT alternative. The primary describes imposed light gradients in its general MAT architecture; the direct MAT feasibility demonstration used uniform no-light/1-min cohorts, without establishing every patterned or sequential optical-design/MAT combination."
+              },
+              {
+                "pointer": "/flows/io:input:mat_capture:cell_suspension/condition",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/flows/io:input:mat_capture:cell_suspension/condition",
+                  "view": "normalized_workflow",
+                  "value_sha256": "570bd9c10b87b31996b5c3faeda2edf9988ab9df2a3a321e2ec29759b27aea4e"
+                },
+                "old_value": "scSTAMP-MAT implementation selected; alternative to plate-RNA/droplet capture.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:mat_capture:cell_suspension/condition",
+                  "view": "normalized_workflow",
+                  "value_sha256": "0a0f216a3e387b5689f9f7c7b69dc5a7ee76c286d1a3dc53ccded53bf066082f"
+                },
+                "new_value": "scSTAMP-MAT implementation selected; alternative to plate-RNA/droplet capture. The demonstrated preceding exposure was uniform floodlight with no light or 1 min; the primary's patterned-light MAT route is retained as source-described architecture."
+              },
+              {
+                "pointer": "/flows/io:input:mat_capture:cell_suspension/evidence/1",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:mat_capture:cell_suspension/evidence/1",
+                  "view": "normalized_workflow",
+                  "value_sha256": "f4e7f0e61d4ff744985e546478568f1a9d8f8c771799b37c9f8abfff6e46d63e"
+                }
+              },
+              {
+                "pointer": "/flows/io:input:mat_capture:cell_suspension/evidence/2",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:mat_capture:cell_suspension/evidence/2",
+                  "view": "normalized_workflow",
+                  "value_sha256": "80f0b815c88547441614338fc88b43fd55d68523ee457ac6f086e2256ec0df2c"
+                }
+              },
+              {
+                "pointer": "/flows/io:input:mat_capture:cell_suspension/evidence/3",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:mat_capture:cell_suspension/evidence/3",
+                  "view": "normalized_workflow",
+                  "value_sha256": "0459eb9572283267828f5da80d4e8e55c26771744c99e4f553d711670615a959"
+                }
+              }
+            ]
+          },
+          {
+            "record_id": "io:input:mat_protect_digest:mat_copied_marked",
+            "old_record_sha256": "b4e58a54de578142dfdde6ee40c2a57c4c82f11af289cc2add27a34053189f04",
+            "new_record_sha256": "7515825ed07cf371d05f575ae29fbc5c8a2076d3cd31071a87bc860f6a44e0f5",
+            "value_changes": [
+              {
+                "pointer": "/flows/io:input:mat_protect_digest:mat_copied_marked/basis",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/flows/io:input:mat_protect_digest:mat_copied_marked/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "d2ee919d318675dcb35f15357a5bae7748b43886ccfe35940753eca1f01f5cc8"
+                },
+                "old_value": "Marked gDNA and copied RNA/PHO products continue within their original wells through genomic treatment.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:mat_protect_digest:mat_copied_marked/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "92a1af842ce546403687538ee7dcf69559043fc7127a11ccca9bf69df42bc9a8"
+                },
+                "new_value": "Marked gDNA and the cell-tagged RNA-derived cDNA/PHO-derived DNA continue within their original wells through genomic treatment."
+              },
+              {
+                "pointer": "/flows/io:input:mat_protect_digest:mat_copied_marked/evidence/3",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:input:mat_protect_digest:mat_copied_marked/evidence/3",
+                  "view": "normalized_workflow",
+                  "value_sha256": "ce3f61924c6b43c5d37912c4040a438b2880e1fd4c0d7ab326d01210d8ed6ee4"
+                }
+              }
+            ]
+          },
+          {
+            "record_id": "io:output:mat_copy_mark:mat_copied_marked",
+            "old_record_sha256": "61f6512abf5c0fd685ff34c8f0bbf7855369a119bb6c4937a04ba91aba7f5cd6",
+            "new_record_sha256": "09eeaa29eaffa19d5620b686abdaaf785a4904e3804e17bd1ba038aa47d3cd4a",
+            "value_changes": [
+              {
+                "pointer": "/flows/io:output:mat_copy_mark:mat_copied_marked/basis",
+                "change": "replaced",
+                "old_ref": {
+                  "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                  "pointer": "/flows/io:output:mat_copy_mark:mat_copied_marked/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "37496b780ebdd3adc8683e9484296521e7b17d60602f2457a31e29d0f441b0de"
+                },
+                "old_value": "Simultaneous copying/marking followed by second strand yields the well-resolved mixed-origin material.",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:output:mat_copy_mark:mat_copied_marked/basis",
+                  "view": "normalized_workflow",
+                  "value_sha256": "f2205ba7adc3ac07c3ac33a59d54d83a7e214cd3f82c00cc03ee2826a7e2e294"
+                },
+                "new_value": "Simultaneous copying/marking followed by second-strand DNA synthesis yields cell-tagged RNA-derived cDNA and PHO-derived DNA with marked gDNA retained in the same well."
+              },
+              {
+                "pointer": "/flows/io:output:mat_copy_mark:mat_copied_marked/evidence/4",
+                "change": "added",
+                "new_ref": {
+                  "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                  "pointer": "/flows/io:output:mat_copy_mark:mat_copied_marked/evidence/4",
+                  "view": "normalized_workflow",
+                  "value_sha256": "feecc8d3ce597db549e70eb8aaf80c199c82c6e7d122e5aeb306b23a02382c22"
+                }
+              }
+            ]
+          }
+        ],
+        "unchanged_count": 164
+      },
+      "modules": {
+        "added": [],
+        "removed": [],
+        "changed": [],
+        "unchanged_count": 13
+      },
+      "unresolved": {
+        "added": [],
+        "removed": [],
+        "changed": [],
+        "unchanged_count": 14
+      },
+      "gap_resolutions": {
+        "added": [],
+        "removed": [],
+        "changed": [],
+        "unchanged_count": 2
+      }
+    },
+    "boundary_inventory_delta": {
+      "before_counts": {
+        "external_input": 7,
+        "terminal_output": 9,
+        "isolated": 0
+      },
+      "after_counts": {
+        "external_input": 7,
+        "terminal_output": 9,
+        "isolated": 0
+      },
+      "added": [],
+      "removed": [],
+      "changed": [
+        {
+          "record_id": "spatial_transcriptome_multiome",
+          "old_record_sha256": "9c6ee4fe188d29c4a9fbaeade4013f0d61f19a6578e32eb13516d9c1dce0b5d5",
+          "new_record_sha256": "80bfeb0011e51daf58aabf5230743b18988d40470de9c513db8867a5677fb36d",
+          "value_changes": [
+            {
+              "pointer": "/boundaries/spatial_transcriptome_multiome/description",
+              "change": "replaced",
+              "old_ref": {
+                "workflow_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd",
+                "pointer": "/boundaries/spatial_transcriptome_multiome/description",
+                "view": "boundary_audit_by_state_id",
+                "value_sha256": "452eff41b3d0b4efed08c80365b104112dbac2bf516794bbd991493e0999aabf"
+              },
+              "old_value": "Declared endpoint: cell-linked transcriptome and qualified optical exposure/region attribution; for the MAT alternative, linked DNA accessibility and endogenous methylation profiles. Optional known-dose vote predictions can accompany attribution. This is a source-described architecture, not reproduction of any historical numeric dataset.",
+              "new_ref": {
+                "workflow_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69",
+                "pointer": "/boundaries/spatial_transcriptome_multiome/description",
+                "view": "boundary_audit_by_state_id",
+                "value_sha256": "18b62f0be7ea543facc86b015d752fd8ee6ecfab18e2a6d04154c996abfe6512"
+              },
+              "new_value": "Declared endpoint: cell-linked transcriptome and qualified optical exposure/region attribution; for the MAT alternative, linked DNA accessibility and endogenous methylation profiles. Optional known-dose vote predictions can accompany attribution. The demonstrated droplet (0/1/10-min) and MAT (no-light/1-min) floodlight designs supply exposure-cohort attribution, not within-well position; the broader patterned-light/capture combinations are source-described architecture rather than all experimentally demonstrated combinations. This is not reproduction of any historical numeric dataset."
+            }
+          ]
+        }
+      ],
+      "unchanged_count": 15
+    },
+    "pointer_space": "RFC 6901 pointers into normalized_workflow: record collections keyed by ID; gap_resolutions keyed by reader_role:gap_id. Boundary delta pointers address audit_boundaries indexed by State ID.",
+    "boundary": "Exact structural/value changes only. No edit is approved or classified scientifically; unchanged records are not independently validated. No unrelated-edit whitelist or semantic ID matching was imposed."
+  }
+}

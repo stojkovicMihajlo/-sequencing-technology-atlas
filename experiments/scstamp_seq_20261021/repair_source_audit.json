@@ -1,0 +1,207 @@
+{
+  "format_version": "repair_source_audit/1.0",
+  "audited_at_utc": "2026-10-22T04:46:12.057845+00:00",
+  "audit_type": "Independent source check of the repaired candidate and complete JSON difference inventory; no SSH, model calls or original-output edits.",
+  "inputs": {
+    "experiments/scstamp_seq_20261021/outputs/job_48877794/workflow.json": {
+      "raw_sha256": "948edf98e8d7e919678ff6f7f9ce1f3cad227fdecbb3a4861be6bc5e9e961f46",
+      "canonical_sha256": "5c2a76d2458a2bab9a16d30831a3a9b82b291278973849b8e175a182a87ee4fd"
+    },
+    "experiments/scstamp_seq_20261021/outputs/prototype_repair_48925060/workflow.json": {
+      "raw_sha256": "9005fd90568e133b9854fe668bda88b7f386dd9da8e789e04ea71d2d79f643ec",
+      "canonical_sha256": "32652da533c2d2ff2858d483bdad713314fd48787bda9e86c3e0b81d851dab69"
+    },
+    "experiments/scstamp_seq_20261021/outputs/job_48877794/source_packet.json": {
+      "raw_sha256": "e99ce83cfd1b2d260a4097b180df65e50e5173b526a5f3be4f153a4c744ae70c",
+      "canonical_sha256": "cb8c6f28f1917def1d1f5e68c773b737c864ddfca2259839d02cc8fb9f5395e0"
+    }
+  },
+  "decision": "requested_repairs_supported_for_declared_general_architecture_scope",
+  "not_a_production_review_outcome": "The fresh production reviewer is separate; this audit does not assert its acceptance or publish the candidate.",
+  "mechanical_checks": {
+    "workflow_schema": "valid",
+    "evidence_integrity_errors": [],
+    "graph_topology_and_record_ids": "unchanged",
+    "unchanged_collections_and_scope": {
+      "format_version": true,
+      "method_id": true,
+      "title": true,
+      "scope": true,
+      "variant": true,
+      "modules": true,
+      "unresolved": true,
+      "gap_resolutions": true
+    },
+    "record_counts": {
+      "states": 80,
+      "operations": 63,
+      "flows": 168,
+      "modules": 13,
+      "unresolved": 14,
+      "gap_resolutions": 2
+    }
+  },
+  "changed_record_ids": {
+    "states": [
+      "mat_copied_marked",
+      "spatial_transcriptome_multiome"
+    ],
+    "operations": [
+      "encode_single",
+      "droplet_capture",
+      "mat_capture",
+      "mat_copy_mark",
+      "mat_protect_digest"
+    ],
+    "flows": [
+      "io:input:droplet_capture:cell_suspension",
+      "io:input:mat_capture:cell_suspension",
+      "io:output:mat_copy_mark:mat_copied_marked",
+      "io:input:mat_protect_digest:mat_copied_marked"
+    ]
+  },
+  "changed_json_paths": [
+    "/flows/53/basis",
+    "/flows/53/condition",
+    "/flows/53/evidence/added_or_removed_items",
+    "/flows/80/basis",
+    "/flows/80/condition",
+    "/flows/80/evidence/added_or_removed_items",
+    "/flows/83/basis",
+    "/flows/83/evidence/added_or_removed_items",
+    "/flows/84/basis",
+    "/flows/84/evidence/added_or_removed_items",
+    "/operations/5/resources/added_or_removed_items",
+    "/operations/20/input_bindings/0/basis",
+    "/operations/20/input_bindings/0/condition",
+    "/operations/20/input_bindings/0/evidence/added_or_removed_items",
+    "/operations/32/input_bindings/0/basis",
+    "/operations/32/input_bindings/0/condition",
+    "/operations/32/input_bindings/0/evidence/added_or_removed_items",
+    "/operations/33/action",
+    "/operations/33/evidence/added_or_removed_items",
+    "/operations/33/output_bindings/0/basis",
+    "/operations/33/output_bindings/0/evidence/added_or_removed_items",
+    "/operations/34/input_bindings/0/basis",
+    "/operations/34/input_bindings/0/evidence/added_or_removed_items",
+    "/states/41/description",
+    "/states/41/evidence/0/rationale",
+    "/states/41/evidence/0/support",
+    "/states/41/evidence/1/rationale",
+    "/states/41/evidence/2/rationale",
+    "/states/41/evidence/3/rationale",
+    "/states/41/evidence/3/support",
+    "/states/41/evidence/4/rationale",
+    "/states/41/evidence/4/support",
+    "/states/41/evidence/added_or_removed_items",
+    "/states/79/description",
+    "/states/79/evidence/added_or_removed_items"
+  ],
+  "source_judgments": [
+    {
+      "topic": "post_copy_MAT_product_identity",
+      "records": [
+        "state:mat_copied_marked",
+        "operation:mat_copy_mark",
+        "operation:mat_protect_digest",
+        "flow:io:output:mat_copy_mark:mat_copied_marked",
+        "flow:io:input:mat_protect_digest:mat_copied_marked"
+      ],
+      "judgment": "supported_with_explicit_mechanistic_deduction",
+      "reason": "Reverse transcription plus DNA second-strand synthesis supports double-stranded cDNA derived from mRNA/ERCC and PHO-derived DNA. ERCC is explicitly introduced in the delegated lysis mixture. Genomic adapters are ligated later, after protection/digestion. The repaired State names the produced polymer rather than ambiguously naming the source analyte. It does not invent a new reaction or assert a measured purity/composition.",
+      "evidence": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00013",
+          "quote": "mRNA is reverse transcribed and the ‘inner’ and ‘outer’ sequences of PHOs are copied using a poly-T primer with an overhang containing a cell- and mRNA/PHO-specific barcode, a UMI, a 5’ Illumina adapter and a T7 promoter"
+        },
+        {
+          "source_id": "dependency_scmat_cited_preprint_pdf",
+          "passage_id": "p00045",
+          "quote": "Thereafter, 1.75 µL of second strand synthesis mix (1.74x second strand buffer (Invitrogen, 10812-014), 0.35 mM dNTP, 0.14 U E.coli DNA Ligase (Invitrogen, 18052-019), 0.56 U E.coli DNA Polymerase I (Invitrogen, 18010-025), 0.03 U RNase H (Invitrogen, 18021- 071)) was added to each well and the plates were incubated at 16°C for 2 hours."
+        },
+        {
+          "source_id": "dependency_scmat_cited_preprint_pdf",
+          "passage_id": "p00045",
+          "quote": "Next, 100 nL of lysis buffer (0.175% IGEPAL CA-630, 1.75 mM dNTPs, 1:1,250,000 ERCC RNA spike-in mix (Ambion, 4456740), and 0.19 U RNase inhibitor (Clontech, 2313A)) was added to each well."
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00045",
+          "quote": "The DNA accessibility and DNA methylation sequencing pipeline was performed as described previously in the scMAT-seq methods by Chialastri et al.^(31) up to the first SPRI bead clean up."
+        }
+      ]
+    },
+    {
+      "topic": "droplet_demonstration_scope",
+      "records": [
+        "operation:encode_single",
+        "operation:droplet_capture",
+        "flow:io:input:droplet_capture:cell_suspension",
+        "state:spatial_transcriptome_multiome"
+      ],
+      "judgment": "supported_with_scope_preserved",
+      "reason": "The added illumination resource and capture binding faithfully identify the direct droplet demonstration as outer-Cy5-PHO-labeled HeLa exposed to 0, 1 or 10 minutes of floodlight. Durations are presented as demonstration metadata, not mandatory settings for the general assay. The broader author-described modular architecture is retained without turning all optical/capture combinations into demonstrated results.",
+      "evidence": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033",
+          "quote": "For the droplet-based single cell sequencing experiment (Fig. 2e,f and Supplementary Fig. 11 a,b), HeLa cells were seeded in multiple wells of a 96-well plate, incubated with an ‘outer’-Cy5 conjugated PHO (Supplementary Fig1b – scheme (ii)), imaged for Cy5 fluorescence, exposed to 0, 1, or 10 minutes of floodlight illumination, and imaged again for Cy5 fluorescence post illumination."
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00012",
+          "quote": "This modularity enables us to combine scSTAMP-seq with any single-cell sequencing technology that also captures poly-adenylated molecules."
+        }
+      ]
+    },
+    {
+      "topic": "MAT_demonstration_scope",
+      "records": [
+        "operation:encode_single",
+        "operation:mat_capture",
+        "flow:io:input:mat_capture:cell_suspension",
+        "state:spatial_transcriptome_multiome"
+      ],
+      "judgment": "supported_with_scope_preserved",
+      "reason": "The added resource and MAT binding faithfully identify separate HeLa/U2OS wells, outer-Cy5 PHOs and no-light/one-minute exposure. The preceding contextual sentence establishes floodlight for this demonstration. The primary general gradient architecture remains a distinct source-described claim. This does not assert that patterned MAT combinations are physically impossible or that no future evidence could demonstrate them.",
+      "evidence": [
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033",
+          "quote": "For the experiments determining the adaptability of scSTAMP-seq with droplet-based single cell sequencing (Fig. 2e,f and Supplementary Fig. 11a,b), and simultaneous multiomics sequencing with scSTAMP-MAT-seq (Fig. 2g,h, Supplementary Fig. 13,14), we used floodlight illumination, as patterned light was not necessary for determining the feasibility of the aspects above, and allowed for a larger sample of cells to be illuminated in a more convenient time frame than can be achieved via DMD light projection."
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00033",
+          "quote": "For the scSTAMP-MAT-seq experiment (Fig. 2g,h, Supplementary Fig. 13,14), HeLa and U2OS cells were seeded in four separate wells of a glass-bottom 96-well plate. Each well was incubated with an ‘outer’ Cy5 conjugated PHO (Supplementary Fig1b – scheme (ii)), imaged for Cy5 fluorescence, illuminated with no light or 1 minute of light, imaged again, and then processed for sequencing."
+        },
+        {
+          "source_id": "acquired_scstamp-preprint-jats_86bfece5",
+          "passage_id": "p00013",
+          "quote": "After labeling cells with PHOs and spatially imposed light gradients, single cells from dissociated samples are sorted into 384-well plates"
+        }
+      ]
+    },
+    {
+      "topic": "endpoint_attribution_limit",
+      "records": [
+        "state:spatial_transcriptome_multiome"
+      ],
+      "judgment": "supported_inference",
+      "reason": "A uniform per-well exposure supplies a dose cohort; it does not itself encode distinctions between locations within that well. The repaired endpoint explicitly separates this inference from the authors’ broader spatial architecture. It does not claim exact numerical reconstruction or universal spatial inversion."
+    },
+    {
+      "topic": "other_edits_and_preserved_unknowns",
+      "judgment": "no_unrelated_scientific_edit_detected",
+      "reason": "The complete JSON comparison shows only the requested product clarification, coherent adjacent material-handoff wording, route demonstration qualifications and their Evidence additions. Scope, variant, Modules, all fourteen unresolved records and two existing gap resolutions remain unchanged. No new source, reaction, State, Operation or Flow was inserted, and no unresolved question was silently declared solved."
+    }
+  ],
+  "limits": [
+    "This audit checks the changed claims and their surrounding context, not every unchanged factual clause in the full Workflow.",
+    "Evidence literal matching and schema validity do not prove scientific entailment; the listed judgments additionally use the cited contextual procedures and explicit reasoning.",
+    "The original MAT wording was ambiguous shorthand, not an established explicit claim that a dsRNA reaction occurred. The repair is a clarification, not proof of a previously fabricated experiment.",
+    "Route-specific qualifications remain natural language. They do not themselves implement globally consistent machine-readable route selection; structural navigation must remain fail-closed.",
+    "The retained fourteen gap records overlap and remain subject to their original scoped limitations. This candidate is not an execution-ready protocol or experimental validation."
+  ]
+}
