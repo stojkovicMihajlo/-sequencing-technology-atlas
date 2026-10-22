@@ -1,0 +1,171 @@
+{
+  "format_version": "host_graph_consumer_check_plan/1.0",
+  "audience": "HOST ONLY; never supplied to native extraction stages",
+  "prepared_without_inspecting_clean_workflows": true,
+  "purpose": "Check preservation, publication policy and query/render behavior of each fresh initial and final Workflow using existing tools. Python does not judge scientific correctness.",
+  "inputs_at_execution": [
+    "Exact candidate artifact path and raw/canonical hashes from archived stage/run state",
+    "Frozen registered source packet and its raw/canonical hashes",
+    "For final publication: exact primary review, field review, source coverage, reader coverage and their sidecars/config/state pins",
+    "Frozen runtime implementation snapshots for reproduction; original source custody archive/manifest"
+  ],
+  "checks": [
+    {
+      "id": "C1_identity_and_source_binding",
+      "apply_to": [
+        "initial",
+        "final"
+      ],
+      "existing_cli": [
+        "python",
+        "-m",
+        "genomics_discovery.curation.workflow_extraction",
+        "check",
+        "WORKFLOW",
+        "--packet",
+        "PACKET",
+        "--kind",
+        "workflow"
+      ],
+      "exact_checks": [
+        "Raw Workflow bytes match the archived artifact pin; canonical digest matches the stage/run binding.",
+        "Workflow method_id/title/scope/variant match the frozen packet; no rescoping or substitution of source version.",
+        "Workflow model validates typed IDs/I/O/Flows/acyclicity/module membership. validate_evidence checks every source_id/passage_id/quote against the packet.",
+        "Check original/rendition bytes through declared custody pins; preserve logical original paths in frozen artifacts."
+      ],
+      "limits": "CLI check replays registered original-file paths and therefore belongs where those originals exist. For a copied archive, use validated original-path/member mappings for byte custody plus the existing in-memory validators; do not rewrite historical paths or claim custody from quote matching alone."
+    },
+    {
+      "id": "C2_publication_policy",
+      "apply_to": [
+        "final"
+      ],
+      "existing_apis": [
+        "validate_review",
+        "validate_field_review",
+        "validate_coverage_review",
+        "validate_source_coverage_review",
+        "field_review_outcome",
+        "source_coverage_outcome"
+      ],
+      "exact_checks": [
+        "Use the full execute() decision with source, reader and field gates fixed on, their exact sidecars and same-run revision lineage. A valid negative review is a completed scientific outcome, not a supported candidate.",
+        "Positive graph_candidate.json/protocol.txt/overview.json/overview.txt/overview.html may exist only for a final supported pipeline outcome with all configured gates satisfied.",
+        "Nonpositive primary review may have diagnostic exports. A source/reader/field veto over a positive primary review must have no positive export; current pipeline may withhold all production exports in that case.",
+        "Initial integrator artifacts have no inherited support verdict; any host preview must retain unreviewed status."
+      ],
+      "limits": "export_candidate() and review_outcome() alone check the primary review, not all pipeline gates. Do not use them as independent whole-pipeline admission. No atlas/canonical publication follows from a candidate export."
+    },
+    {
+      "id": "C3_exact_boundaries",
+      "apply_to": [
+        "initial",
+        "final"
+      ],
+      "existing_cli": [
+        "python",
+        "-m",
+        "genomics_discovery.curation.workflow_extraction",
+        "audit-boundaries",
+        "WORKFLOW"
+      ],
+      "existing_api": "audit_boundaries(workflow)",
+      "exact_checks": [
+        "Report exact external-input, terminal-output and isolated State IDs, their attached Operations and conditions.",
+        "Compare any archived boundary_audit with recomputation from the same pinned Workflow.",
+        "Use diff_workflows(initial,final) to record exact boundary-inventory and stable-ID edits, without an arbitrary edit whitelist."
+      ],
+      "limits": "Producerless roots may be specimens, resources, designs or references; terminal States may be products, QC, reserves or discards. Topology neither supplies their fate nor establishes a source-backed boundary disposition."
+    },
+    {
+      "id": "C4_operation_and_evidence_navigation",
+      "apply_to": [
+        "initial",
+        "final"
+      ],
+      "existing_cli": [
+        "python",
+        "-m",
+        "genomics_discovery.curation.workflow_extraction",
+        "query",
+        "WORKFLOW",
+        "OPERATION_ID"
+      ],
+      "existing_apis": [
+        "query_workflow(workflow,operation_id)",
+        "expand_inspection(inspection_view(workflow))",
+        "workflow_pointer(workflow,json_pointer)"
+      ],
+      "exact_checks": [
+        "For every Operation query, verify exact input/output State records, resource/Flow IDs, binding selection/conditions and Module membership agree with the Workflow.",
+        "Expand the existing lossless inspection view and require the same Workflow canonical hash.",
+        "Resolve every overview detail_pointer against the same original Workflow; reopen referenced evidence rather than treating display summaries as new source text."
+      ],
+      "limits": "Queries and lossless round trips establish identity/preservation only; they do not decide entailment or whether the chemical description is sufficient."
+    },
+    {
+      "id": "C5_fail_closed_paths",
+      "apply_to": [
+        "initial",
+        "final"
+      ],
+      "existing_cli": [
+        "python",
+        "-m",
+        "genomics_discovery.curation.workflow_extraction",
+        "query-path",
+        "WORKFLOW",
+        "SOURCE_ID",
+        "TARGET_ID"
+      ],
+      "existing_api": "query_path(workflow,source_id,target_id)",
+      "exact_checks": [
+        "Choose pairs from the actual graph, including guarded Flow endpoints and input/output pairs around shared alternative Operations; no preselected biological record IDs or expected topology.",
+        "Any returned unconditional path contains only declared directed Flows with no condition and no optional/alternative selection.",
+        "Where only a guarded structural path exists, status is needs_route_selection, path_flow_ids is null, and the conditional candidate and blocked edge IDs/conditions remain explicit.",
+        "Disconnected directions report no_declared_path; unknown IDs raise rather than silently becoming empty nodes."
+      ],
+      "limits": "The algorithm never evaluates natural-language guards or correlates local alternative groups into a globally consistent route. A structural path, especially one starting downstream of a guard, is not a complete protocol: other required inputs may be absent. Do not claim biochemical compatibility or feasibility."
+    },
+    {
+      "id": "C6_pinned_protocol_and_render",
+      "apply_to": [
+        "initial",
+        "final"
+      ],
+      "existing_cli_preview": [
+        "python",
+        "-m",
+        "genomics_discovery.curation.workflow_extraction",
+        "overview",
+        "WORKFLOW",
+        "--format",
+        "html",
+        "--output",
+        "NEW_PREVIEW.html"
+      ],
+      "existing_apis": [
+        "workflow_overview(workflow,review=bound_review)",
+        "overview_text(workflow,review=bound_review)",
+        "overview_html(workflow,review=bound_review)",
+        "_protocol_text(workflow,bound_review,diagnostic=diagnostic)"
+      ],
+      "exact_checks": [
+        "For an initial preview, use no review and retain unreviewed_projection.",
+        "For archived final exports, regenerate their content with the exact bound review and diagnostic status; compare exact overview JSON/text/HTML and protocol text without overwriting original exports.",
+        "CLI overview omits review context by design, so do not compare it against an archived reviewed overview as though they were identical calls.",
+        "Every overview State/Operation/Flow remains present with exact IDs, qualifications and detail pointers. HTML data-flow-id occurrences cover each declared Flow exactly once.",
+        "For a graph export, embedded Workflow/review/source_registry equal the bound inputs; original node/edge records and source refs retain the same IDs, quote locators, selection and conditions."
+      ],
+      "limits": "A deterministic render is not an LLM graph-to-protocol reconstruction, a visual-quality certificate, renewed review, completeness proof or executable schedule. Listed order is not execution order."
+    }
+  ],
+  "report_contract": [
+    "Exact input paths, raw/canonical pins, frozen runtime identity and stage (initial/final).",
+    "Each check status and any mismatched record IDs/field pointers; missing artifacts are not successful checks.",
+    "Export grade and actual gate outcomes separate from source-backed host scientific judgments.",
+    "Boundary inventory and sampled/complete query denominators; no accuracy claim from counts.",
+    "Scientific limits and unresolved route assumptions retained in every user-facing view."
+  ],
+  "decision": "Existing CLI and pure APIs are sufficient; no additional runner or duplicated validator is introduced."
+}
