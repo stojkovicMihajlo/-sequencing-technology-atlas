@@ -5,6 +5,13 @@ represented as a typed method graph and a readable protocol. New assay invention
 is a later consumer. A working graph reader does not establish experimental
 execution readiness or full scientific correctness.
 
+The completed scSTAMP example below was corrected using supplied source-backed
+audit feedback. It demonstrates a repaired artifact and review/export behavior,
+not independent prevention of those problems by a fresh extractor. The
+[clean-input test](../provenance/experiments/clean_extraction_20261022/README.md)
+starts both scSTAMP and DBiT from sources alone, with no previous graph or audit
+answers. Its outcome is separate from the repaired-example results.
+
 ## Fixed extraction order
 
 The host, rather than the model, controls these stages:

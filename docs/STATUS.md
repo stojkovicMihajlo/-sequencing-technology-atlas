@@ -1,5 +1,23 @@
 # Deployment status
 
+## Clean source-only harness validation submitted, 2026-10-21 PDT
+
+Qiu CPU job **48932552** tests fresh scSTAMP and DBiT extraction from registered
+literature only, using frozen **dfe6cae**, `gpt-6.1-sol` / `xhigh`. It supplies no
+previous Workflow, requirements, review or correction. The runner fixes fresh
+source requirements, two readers, integration, all three review gates and one
+normal within-run correction. The code-only runtime excludes example graphs,
+benchmarks, tests and historical experiment artifacts. This is input separation,
+not OS isolation. See the [experiment](../provenance/experiments/clean_extraction_20261022/README.md).
+
+The general archive gate now rejects missing/changed/symlinked native prompt
+files; six regression cases reproduce the former acceptance path. The actual
+prior DBiT size failure also replays: the old runtime rejects 18/56 finding views,
+whereas current bounded access prepares all 56. No scientific values are repaired
+in either check. **2,381 software tests passed, three skipped.** Native clean
+extraction and independent source evaluation remain pending; the earlier repaired
+example below is not credited as success on this new test.
+
 ## Prototype repair and actual-review challenge completed, 2026-10-21 PDT
 
 Qiu CPU jobs **48925060** and **48926094** completed with `0:0`, using frozen

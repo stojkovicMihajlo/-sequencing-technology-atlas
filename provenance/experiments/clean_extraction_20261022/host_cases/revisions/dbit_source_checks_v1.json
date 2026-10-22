@@ -1,0 +1,594 @@
+{
+  "format_version": "host_source_checklist/1.0",
+  "prepared_at_utc": "2026-10-22T05:27:01.770319+00:00",
+  "case_id": "dbit-seq",
+  "packet_method_id": "dbit_seq_2020",
+  "annotation_status": "model_authored_source_checked_candidate_reference_not_expert_gold",
+  "audience": "HOST ONLY. Never place this checklist or expected scientific content in native extraction/review inputs.",
+  "authoring_boundary": "Prepared from the exact packet before inspecting any candidate from the clean evaluation. No prior DBiT Workflow, review, old source-obligation set or repair answer was opened for this task. The method and family have prior project exposure; this is not an unused holdout.",
+  "source_binding": {
+    "path": "provenance/experiments/clean_extraction_20261022/outputs/prior_dbit_failure/packet.json",
+    "raw_sha256": "485cefa0e32e37eb259dcf2c69cab224076d36e07a9072a4e2faa2f54af48b27",
+    "canonical_sha256": "a64283f200f38fe837e95d890be8b75b05ce5b89bab07e34040edaaca49f7411",
+    "title": "DBiT-seq (Liu et al., Cell 2020): original joint spatial RNA and antibody-derived-tag assay",
+    "scope": "Describe the general published assay introduced by the primary publication, from native specimen through the declared readout and its decoding. Preserve source-defined applicability, consequential interfaces, variants and control/calibration dependencies. Independent characterization or historical study execution belongs only where needed to explain the assay. Attribute manufacturer and cited-method material to its actual supported scope.",
+    "variant": "original_2020_joint_rna_adt_fresh_frozen_formaldehyde_fixed_50um",
+    "sources": 7,
+    "passages": 368
+  },
+  "evaluation_policy": {
+    "no_reference_graph": "Evaluate scientific content and qualified interfaces, not exact names, record IDs, operation counts, Module boundaries or node order.",
+    "applicability": "Mandatory and conditional checks are distinguished in each item. A source-qualified coarse/delegated boundary may satisfy a requirement without inventing its unrepresented internal recipe.",
+    "judgments": [
+      "supported_in_checked_scope",
+      "needs_revision",
+      "research_needed",
+      "not_applicable",
+      "unassessed"
+    ],
+    "required_audit_fields_after_candidate": [
+      "source_check_id",
+      "candidate_record_ids_and_field_pointers",
+      "judgment",
+      "source_refs",
+      "reason",
+      "consequence",
+      "remaining_unknown"
+    ],
+    "no_accuracy_claim": "The checklist is a finite host audit scaffold. Matching it does not establish exhaustive coverage, whole-graph precision, experimental success or zero hallucinations."
+  },
+  "source_checks": [
+    {
+      "id": "DBIT_SOURCE_01",
+      "dimensions": [
+        "D1_scope_and_specimen",
+        "D2_specimen_to_readout"
+      ],
+      "required_scientific_content": "The molecular assay starts from tissue sections on glass and performs barcoding on formaldehyde-fixed tissue. Fresh-frozen sections require the reported fixation preparation before barcoding; fixed and stored-frozen input alternatives must not become an unfixed live-cell execution.",
+      "applicability": "Required starting-material and preparation account for the frozen joint RNA/ADT variant.",
+      "why_consequential": "Substrate state governs permeability, spatial retention and every downstream interface.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00037",
+          "quote": "Tissue block was then sectioned into thickness of ~7 μm and placed in the center of a poly-L-lysine coated glass slide (CatLog no. 63478-AS, electron microscopy sciences). The frozen slides were then fixed with 4% formaldehyde or directly kept at −80 °C if a long-time storage is needed."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00038",
+          "quote": "If the tissue slides were frozen sections, they were first fixed by immersing in 4% formaldehyde (Sigma) for 20 minutes."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "No exact graph layout, operation count or Module boundary is prescribed."
+    },
+    {
+      "id": "DBIT_SOURCE_02",
+      "dimensions": [
+        "D2_specimen_to_readout",
+        "D6_resources_conditions_and_assignment"
+      ],
+      "required_scientific_content": "Spatial encoding uses a pair of PDMS microfluidic chips with orthogonal channels on the same tissue. An acrylic clamp seals the tissue/chip interface and vacuum moves reagent through the channels. Distinct channel-width designs are alternatives, not cumulative handling steps.",
+      "applicability": "Required physical apparatus and spatial-delivery mechanism. Preserve the frozen 50-μm implementation while attributing other reported widths as alternatives/context.",
+      "why_consequential": "A generic reagent incubation without the delivery geometry would lose the two spatial addresses and their interface requirements.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00035",
+          "quote": "A pair of microfluidic chips with the same location of inlets and outlets but orthogonal microfluidic channels in the center were fabricated as a complete set of devices for flow barcoding a tissue slide."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00035",
+          "quote": "a custom-designed acrylic clamp was used to firmly hold the PDMS against the tissue specimen to prevent leakage across microfluidic channels without the need for harsh bonding processed such as thermal bonding or plasma bonding(Temiz et al., 2015)."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00010",
+          "quote": "The outlet holes were roofed with a global cover connected to a house vacuum to pull the reagents all the way from the inlets to the outlets through the tissue surface, which took several seconds for a 50μm chip and up to 3min for a 10μm chip."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "Device fabrication may be summarized as a supported preparation boundary; recreating every lithography action is unnecessary. Do not import thermal/plasma bonding onto the tissue interface."
+    },
+    {
+      "id": "DBIT_SOURCE_03",
+      "dimensions": [
+        "D2_specimen_to_readout",
+        "D6_resources_conditions_and_assignment"
+      ],
+      "required_scientific_content": "For the joint protein/RNA variant, stain the fixed tissue with DNA-antibody conjugates before microfluidic barcoding. This introduces the antibody-derived DNA identity; it is not direct sequencing of protein. The source reports a 22-ADT panel and conditional protein processing.",
+      "applicability": "Required for the frozen joint RNA/ADT scope; conditional for an explicitly separate RNA-only use.",
+      "why_consequential": "Without the DNA-antibody labeling origin, the protein-count library has no justified biological attribution.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00041",
+          "quote": "In order to obtain spatial proteomic information, we incubated the fixed tissue slide with a cocktail of DNA-antibody conjugates prior to microfluidic spatial barcoding."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00041",
+          "quote": "The cocktail was prepared by combining 0.1 μg of each DNA-antibody conjugates (see Table S1). The tissue slide was first blocked with 1% BSA/PBS plus RNase inhibitor, and then incubated with the cocktail for 30 minutes at 4°C."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00010",
+          "quote": "To co-measure proteins and mRNAs, the tissue slide was stained with a cocktail of 22 antibody-derived DNA tags (ADTs) (Stoeckius et al., 2017) (see Table S1) prior to microfluidic flow barcoding."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "No exact graph layout, operation count or Module boundary is prescribed."
+    },
+    {
+      "id": "DBIT_SOURCE_04",
+      "dimensions": [
+        "D3_analyte_product_and_interface",
+        "D4_information_carrier_and_decoding"
+      ],
+      "required_scientific_content": "The first spatial barcode carries an oligo-dT capture region, a spatial identity and a ligation region. In-tissue reverse transcription/copying incorporates its spatial address into RNA- and ADT-derived DNA products; poly-A recognition is not indiscriminate capture of all molecular species.",
+      "applicability": "Required first encoding mechanism and product identity for the selected joint route.",
+      "why_consequential": "The common spatial address has to remain attached to the molecule-derived library after the tissue is destroyed.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00010",
+          "quote": "Barcode A is composed of an oligo-dT sequence for binding mRNAs, a distinct spatial barcode Ai (i=1–50, 8mer), and a ligation linker (15mer). Reverse transcription was conducted during the first flow for in situ synthesis of first strand cDNAs that immediately incorporate barcode A."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00060",
+          "quote": "The oligo-dT region recognizes the poly-A tail of mRNAs and ADTs."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "Distinguish RNA-derived cDNA from copied ADT DNA. Functional parts may be described together; no requirement to create a separate node for each domain."
+    },
+    {
+      "id": "DBIT_SOURCE_05",
+      "dimensions": [
+        "D3_analyte_product_and_interface",
+        "D4_information_carrier_and_decoding"
+      ],
+      "required_scientific_content": "The second chip delivers the second spatial barcode orthogonally. T4 ligase and a complementary linker join the two barcode regions at intersections. The second barcode also carries UMI/PCR-handle/biotin functions needed downstream.",
+      "applicability": "Required second encoding and purification interface.",
+      "why_consequential": "Both spatial coordinates and the biotin capture interface must be introduced before the later bulk recovery.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00010",
+          "quote": "each containing a ligation linker(15mer), a distinct spatial barcode Bj (j=1–50, 8mer), a unique molecular identifier (UMI), and a PCR handle (22mer) functionalized with biotin, which was used later to perform cDNA purification with streptavidin-coated magnetic beads."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00010",
+          "quote": "Also added to the barcode B reagents were T4 ligase and a complementary ligation linker to perform in situ ligation at the intersections, resulting in a mosaic of tissue pixels, each containing a distinct combination of barcodes Ai and Bj (i=1–50, j=1–50)."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00043",
+          "quote": "Reaction was allowed to occur at 37 °C for 30 minutes and then the microfluidic channels were washed by flowing 1X PBS supplemented with 0.1% Triton X-100 and 0.25% SUPERase In RNase Inhibitor for 10 minutes."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "No exact graph layout, operation count or Module boundary is prescribed."
+    },
+    {
+      "id": "DBIT_SOURCE_06",
+      "dimensions": [
+        "D2_specimen_to_readout",
+        "D4_information_carrier_and_decoding"
+      ],
+      "required_scientific_content": "The consequential order is spatial barcoding in the tissue, then collection/destruction of that barcoded tissue region. The record must retain how positional identity survives into the pooled material; it must not replace this with capture onto a prebarcoded bead/array.",
+      "applicability": "Required general workflow architecture.",
+      "why_consequential": "A plausible but different capture architecture would misrepresent this assay and its reusable transformation.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00060",
+          "quote": "When finished, the 2^(nd) PDMS chip was removed and a PDMS gasket was placed on the tissue slide to define a reservoir to load tissue digestion solution. cDNA and ADT derived cDNA were collected and purified using streptavidin coated magnetic beads."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "No exact graph layout, operation count or Module boundary is prescribed."
+    },
+    {
+      "id": "DBIT_SOURCE_07",
+      "dimensions": [
+        "D2_specimen_to_readout",
+        "D3_analyte_product_and_interface"
+      ],
+      "required_scientific_content": "After spatial encoding, digest the selected tissue region with Proteinase K lysis solution and purify the biotin-bearing DNA products with streptavidin beads. Keep the retained bead-bound product available for the next reaction.",
+      "applicability": "Required material recovery boundary.",
+      "why_consequential": "The tissue-to-purified-DNA handoff and affinity-capture handle connect intact-tissue encoding to library preparation.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00044",
+          "quote": "Depending on the area of this region, the typical amount of buffer is 10 – 100 μL of Proteinase K lysis solution, which contains 2 mg/mL proteinase K (Thermo Fisher), 10 mM Tris (pH = 8.0), 200 mM NaCl, 50 mM EDTA and 2% SDS. Lysis was carried out at 55 °C for 2 hours."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00044",
+          "quote": "The cDNAs in the lysate were purified using streptavidin beads (Dynabeads MyOne Streptavidin C1 beads, Thermo Fisher)."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00045",
+          "quote": "The cDNAs bound to beads were cleaned and resuspended into the template switch solution."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "No exact graph layout, operation count or Module boundary is prescribed."
+    },
+    {
+      "id": "DBIT_SOURCE_08",
+      "dimensions": [
+        "D2_specimen_to_readout",
+        "D3_analyte_product_and_interface"
+      ],
+      "required_scientific_content": "The recovered bead-bound DNA products undergo template switching with the stated template-switch primer and reverse transcriptase before amplification. Do not substitute a generic RNA-seq conversion pathway for this molecular interface.",
+      "applicability": "Required captured-DNA-to-amplifiable-product transformation.",
+      "why_consequential": "The template-switch step supplies a consequential amplification interface, even if represented within a composite operation.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00045",
+          "quote": "The cDNAs bound to beads were cleaned and resuspended into the template switch solution."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00045",
+          "quote": "11 μL of Maxima H Minus Reverse Transcriptase (Thermo Fisher), and 5.5 μL of a template switch primer (100 μM)."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00045",
+          "quote": "The reaction was conducted at room temperature for 30 minutes followed by an additional incubation at 42 °C for 90 minutes."
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00008",
+          "quote": "A6=Template Switch Primer | B6=AAGCAGTGGTATCAACGCAGAGTGAATrGrG+G | C6="
+        }
+      ],
+      "representation_or_uncertainty_boundary": "The primary reaction mixture supplies the enzyme/primer context. The workbook modification notation is preserved verbatim; do not invent a new interpretation of its chemical symbols."
+    },
+    {
+      "id": "DBIT_SOURCE_09",
+      "dimensions": [
+        "D6_resources_conditions_and_assignment"
+      ],
+      "required_scientific_content": "Amplification uses primers 1 and 2; primer 3 is additionally assigned when protein detection is included. Relevant primer identities are available in the registered Table S2, rather than merely an inaccessible citation.",
+      "applicability": "Required primer-role assignment for joint amplification; exact values are assessable if the candidate records them.",
+      "why_consequential": "An oligo inventory does not establish that every listed primer is combined in every reaction.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00045",
+          "quote": "In the first step, a mixture of 110 μL Kapa HiFi HotStart Master Mix (Kapa Biosystems), 8.8 μL of 10 μM stocks of primers 1 and 2, and 92.4 μL of water was added to the cleaned beads. If the protein detection was conducted in conjunction using a process similar to CITE-seq, a primer 3 solution (1.1 μL, 10 μM) was also added at this step."
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00004",
+          "quote": "A2=Primer 1 | B2=CAAGCGTTGGCTTCTCGCATCT | C2="
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00005",
+          "quote": "A3=Primer 2 | B3=AAGCAGTGGTATCAACGCAGAGT | C3="
+        },
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00006",
+          "quote": "A4=Primer 3 (cite-seq) | B4=CCTTGGCACCCGAGAATT*C*C | C4="
+        }
+      ],
+      "representation_or_uncertainty_boundary": "No exact graph layout, operation count or Module boundary is prescribed."
+    },
+    {
+      "id": "DBIT_SOURCE_10",
+      "dimensions": [
+        "D5_branches_fractions_and_choices",
+        "D7_observation_calibration_and_control"
+      ],
+      "required_scientific_content": "The initial five-cycle amplification is followed by magnetic removal of beads. Evagreen is added to the retained supernatant for the second PCR, and fluorescence reaching the stated plateau is a reported stopping rule. Preserve this real control decision without inventing a sampled amount or a return of analytical material.",
+      "applicability": "Required consequential amplification handoff and reported production-control rule.",
+      "why_consequential": "A generic QC-only observation or an invented aliquot-return route would change the described amplification workflow.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00045",
+          "quote": "PCR reaction was then done using the following conditions: first incubate at 95°C for 3 mins, then cycle five times at 98°C for 20 seconds, 65°C for 45 seconds, 72°C for 3 minutes and then the beads were removed from the solution by magnet."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00045",
+          "quote": "Evagreen (20X, Biotium) was added to the supernatant with 1:20 ratio, and a vial of the resultant solution was loaded into a qPCR machine (BioRad) to perform a second PCR step"
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00045",
+          "quote": "The reaction was stopped when the fluorescence signal just reached the plateau."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "The text does not specify the vial volume or establish a sampled-copy/return mechanism. Keep that execution detail unknown instead of turning it into a new material claim."
+    },
+    {
+      "id": "DBIT_SOURCE_11",
+      "dimensions": [
+        "D5_branches_fractions_and_choices"
+      ],
+      "required_scientific_content": "The 0.6x AMPure cleanup separates mRNA-derived longer cDNA retained on beads from smaller cDNA in the supernatant. The latter is retained for the joint protein-derived library route, rather than automatically discarded.",
+      "applicability": "Required origin/fraction routing for the joint assay.",
+      "why_consequential": "The two fractions carry different molecular origins and require separate downstream library continuations.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046",
+          "quote": "The PCR product was then purified by Ampure XP beads (Beckman Coulter) at 0.6×ratio. The mRNA-derived cDNAs (>300 bp) were then collected from the beads. If the cDNAs were less than 300 bp, they remained in the supernatant fraction. If the protein detection was conducted like CITE-seq, this fraction was used instead."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "Retain the reported size/fraction qualification; do not invent a sharp equality rule at exactly 300 bp or perfect physical separation."
+    },
+    {
+      "id": "DBIT_SOURCE_12",
+      "dimensions": [
+        "D2_specimen_to_readout",
+        "D5_branches_fractions_and_choices"
+      ],
+      "required_scientific_content": "The ADT-derived supernatant receives additional 2x bead purification and targeted P7/P5-cite PCR with final cleanup. The mRNA-derived fraction is assessed and made into a library with Nextera XT. Do not force both branches through an identical invented library recipe.",
+      "applicability": "Required distinct library continuations in the selected joint scope.",
+      "why_consequential": "Origin-specific interfaces and amplification choices determine what reaches each sequenced library.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046",
+          "quote": "For sequencing antibody-DNA conjugate-derived cDNAs, we further purified the supernatant using 2X Ampure XP beads."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046",
+          "quote": "The purified cDNA was then amplified using a PCR reaction mix containing 45 μL purified cDNA fraction, 50 μL 2x KAPA Hifi PCR Master Mix(Kapa Biosystems), 2.5 μl P7 primer of 10 μM and 2.5 μL P5 cite primer at 10 μM."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046",
+          "quote": "The PCR product was further purified by 1.6X Ampure XP beads."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046",
+          "quote": "For sequencing mRNA-derived cDNAs, the quality of amplicon was analyzed firstly using Qubit (Life Technologies) and then using an Agilent Bioanalyzer High Sensitivity Chip. The sequencing library was then built with a Nextera XT kit (Illumina)"
+        }
+      ],
+      "representation_or_uncertainty_boundary": "Detailed branch-specific Methods govern this comparison; a broad schematic saying standard library preparation does not establish identical reactions for both branches. A Nextera XT kit name alone does not supply all internal recipe settings."
+    },
+    {
+      "id": "DBIT_SOURCE_13",
+      "dimensions": [
+        "D2_specimen_to_readout",
+        "D5_branches_fractions_and_choices"
+      ],
+      "required_scientific_content": "Joint profiling pools the antibody-derived and mRNA-derived libraries at the reported 1:9 ratio and sequences using the stated paired-end platform/read mode. Keep the two library identities explicit at their pooling boundary.",
+      "applicability": "Required joint sequencing endpoint; sequencing settings are source-reported conditions, not universal defaults for later variants.",
+      "why_consequential": "The counted signals arise from distinct libraries sharing a spatial address, not direct protein sequencing or a single undifferentiated preparation.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046",
+          "quote": "The sequencing library was then built with a Nextera XT kit (Illumina) and sequenced using a HiSeq 4000 sequencer using a pair-end 100×100 mode."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046",
+          "quote": "To conduct joint profiling of proteins and mRNAs, the DNA-antibody conjugate-derived sequencing library was combined with mRNA-derived cDNA library at a 1:9 ratio, which is sufficient to detect the finite set of proteins and minimally affects the sequencing depth required for mRNAs."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "The source gives a ratio without a mass-versus-molar basis in this passage. Do not invent that basis or a sample-specific loading amount."
+    },
+    {
+      "id": "DBIT_SOURCE_14",
+      "dimensions": [
+        "D4_information_carrier_and_decoding"
+      ],
+      "required_scientific_content": "Transcript analysis extracts UMI and both spatial barcodes from raw read 2, while transcript sequence is handled from raw read 1. Protein analysis extracts the antibody and spatial barcode information. The resulting matrices are indexed by spatial pixels, with genes or proteins as their other dimension.",
+      "applicability": "Required readout/decoding account for the joint assay.",
+      "why_consequential": "Read roles and barcode-linked matrix rows connect molecular identity back to the tissue rather than to individual cells.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00050",
+          "quote": "To obtain transcriptomics data, the Read 2 was processed by extracting the UMI, Barcode A and Barcode B."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00050",
+          "quote": "The rows of the gene matrix correspond to pixels, defined by their location info (barcode A × barcode B) and columns correspond to genes."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00051",
+          "quote": "For proteomics data, the Read 2 was processed by extracting the antibody-derived barcode, spatial Barcode A and Barcode B."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00051",
+          "quote": "Similar to the gene expression matrix, the rows correspond to pixels, defined by (barcode A × barcode B) and columns correspond to proteins."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "No exact graph layout, operation count or Module boundary is prescribed."
+    },
+    {
+      "id": "DBIT_SOURCE_15",
+      "dimensions": [
+        "D4_information_carrier_and_decoding",
+        "D9_gap_accuracy_and_completeness"
+      ],
+      "required_scientific_content": "If exact registered preprocessing is described, distinguish raw reads from the author code’s reformatted ST-pipeline inputs. The pinned example swaps original read 1 into output read 2 and creates output read 1 from B+A+UMI. Attribute this to the code snapshot, not proof of every historical library execution.",
+      "applicability": "Required qualification whenever exact read layout/reformatting is asserted. A source-qualified general decoding boundary need not reproduce every script statement.",
+      "why_consequential": "Otherwise two correctly sourced read-role descriptions could be wrongly called contradictory or combined into a corrupted parser.",
+      "evidence": [
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00009",
+          "quote": "In our datasets, read2 contains the barcode and UMI, so we need to reformat the read file for compatibility with st-pipeline."
+        },
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00047",
+          "quote": "my $valueA = substr($line2_2,70,8); my $valueB = substr($line2_2,32,8);"
+        },
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00048",
+          "quote": "#attention ,switch reads here print OUT_2 \"$header_split_1[0]\\n$line1_2\\n$header_split_1_Q[0]\\n$line1_4\\n\"; print OUT_1 \"$header_split_2[0]\\n$valueB$valueA$UMI\\n$header_split_2_Q[0]\\n$valueB_Q$valueA_Q$UMI_Q\\n\";"
+        }
+      ],
+      "representation_or_uncertainty_boundary": "Primary p00050/p00012 prints a mouse-reference label GRCh38; the pinned repository example p00013 names GRCm38_86 and gencode.vM11. Preserve attribution or leave exact historical reference selection unresolved. Do not silently rewrite the source or infer a historical run from a repository example."
+    },
+    {
+      "id": "DBIT_SOURCE_16",
+      "dimensions": [
+        "D6_resources_conditions_and_assignment",
+        "D9_gap_accuracy_and_completeness"
+      ],
+      "required_scientific_content": "Exact PCR/linker/template-switch and spatial-barcode sequences, plus the pixel-code mapping, are represented in this packet. An assertion that these inventories or barcode mapping are wholly unavailable would require correction. Inventory membership still does not establish that every index choice was combined or historically selected.",
+      "applicability": "Required source-access/gap accuracy check, with exact sequence assignments relevant to the represented operations.",
+      "why_consequential": "The extraction must investigate available supporting tables before declaring an essential primitive unknown.",
+      "evidence": [
+        {
+          "source_id": "liu2020_s2_pcr",
+          "passage_id": "p00007",
+          "quote": "A5=Ligation Linker | B5=CGAATGCTCTGGCCTCTCAAGCACGTGGAT | C5="
+        },
+        {
+          "source_id": "liu2020_s2_barcode_a",
+          "passage_id": "p00003",
+          "quote": "A1=Barcode A-1 | B1=/5Phos/AGGCCAGAGCATTCGAACGTGATTTTTTTTTTTTTTTTVN"
+        },
+        {
+          "source_id": "liu2020_s2_barcode_b",
+          "passage_id": "p00003",
+          "quote": "A1=barcode B-1 | B1=/5Biosg/CAAGCGTTGGCTTCTCGCATCTNNNNNNNNNNAACGTGATATCCACGTGCTTGAG"
+        },
+        {
+          "source_id": "liu2020_author_pixel_codes",
+          "passage_id": "p00001",
+          "quote": "AACGTGATAACGTGAT 1 1 AACGTGATAAACATCG 1 2"
+        }
+      ],
+      "representation_or_uncertainty_boundary": "These witnesses demonstrate available inventory, not interchangeable adapters, exact index selection or all manufacturer recipe internals. The pixel-code source is registered plain TSV content despite its original .xls filename."
+    },
+    {
+      "id": "DBIT_SOURCE_17",
+      "dimensions": [
+        "D1_scope_and_specimen",
+        "D8_demonstration_and_transfer_scope"
+      ],
+      "required_scientific_content": "The measured spatial unit is a tissue pixel; the source explicitly says DBiT-seq does not directly resolve single cells. Proposed segmentation/deconvolution, theoretical smaller pixels and increased channel designs must remain distinct from the selected implementation and demonstrated capability.",
+      "applicability": "Required biological measurement and demonstration-scope limit.",
+      "why_consequential": "An apparently reasonable single-cell or arbitrary-resolution claim would overstate what the molecular spatial code establishes.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00025",
+          "quote": "First, although it is close to single-cell level spatial mapping, it does not directly resolve single cells. Our approach potentially allows for high resolution immunofluorescence or FISH on the same tissue slide to facilitate cell segmentation and the deconvolution of spatial omics data to computationally derive single-cell spatial omics."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00025",
+          "quote": "It can be increased by increasing the number of barcodes to 100×100 or 200×200. Alternatively, a serpentine microfluidic channel design can increase the mapping area without the need to increase the number of DNA barcodes."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "No exact graph layout, operation count or Module boundary is prescribed."
+    },
+    {
+      "id": "DBIT_SOURCE_18",
+      "dimensions": [
+        "D7_observation_calibration_and_control",
+        "D8_demonstration_and_transfer_scope"
+      ],
+      "required_scientific_content": "Imaging can record channel positions relative to tissue morphology. Fluorescent-antibody validation or an adjacent histology slide is distinct from the DNA-antibody sequencing-payload route, and must not be invented as a mandatory production controller or an extra sequencing library input.",
+      "applicability": "Required separation if imaging/histology/validation is represented. Supporting experiments may remain outside the main molecular route.",
+      "why_consequential": "Keeping observation, spatial-reference data and material production distinct prevents false control edges and wrong specimen attribution.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00042",
+          "quote": "During the flow barcoding step, optical images could be taken to record the exact positions of these microfluidic channels in relation to the tissue section subjected to spatial barcoding."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00040",
+          "quote": "Immunofluorescence staining was performed either on the same tissue slide or an adjacent slide to yield validation data."
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00039",
+          "quote": "An adjacent tissue section was also requested from the same commercial resource which could be used to perform tissue histology examination using H&E staining."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "The source also permits fluorescence staining before continuation of DBiT-seq (p00047). Do not wrongly prohibit that supported option, or infer a fluorescence-governed PCR/loading decision without a reported rule."
+    },
+    {
+      "id": "DBIT_SOURCE_19",
+      "dimensions": [
+        "D2_specimen_to_readout",
+        "D3_analyte_product_and_interface",
+        "D6_resources_conditions_and_assignment"
+      ],
+      "required_scientific_content": "The fixed tissue is permeabilized through the first chip before the reverse-transcription/barcode-A reaction. Preserve this preparation transformation and its tissue/flow context, even if it is grouped with adjacent preparation or capture steps.",
+      "applicability": "Required consequential specimen preparation for the source-defined first barcoding route.",
+      "why_consequential": "A connected-looking tissue-to-cDNA graph can still omit preparation needed to expose the captured molecules to reaction reagents.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00042",
+          "quote": "This tissue section was then permeabilized by loading 0.5% Triton X-100 in PBS into each of the 50 channels followed by incubation for 20 minutes and finally were cleaned thoroughly by flowing through 20μL of 1X PBS."
+        }
+      ],
+      "representation_or_uncertainty_boundary": "Permeabilization is not dissociation into a cell suspension or recovery of bulk RNA before spatial encoding. It need not become a standalone node if its transformation and ordering remain explicit."
+    }
+  ],
+  "legitimate_unresolved_boundaries": [
+    {
+      "topic": "manufacturer_or_kit_internals",
+      "boundary": "The primary explicitly invokes a Nextera XT kit and manufacturer B&W buffer directions. Those mentions support qualified library/purification boundaries; they do not establish every kit component, loaded adapter identity, internal concentration or historical guide revision.",
+      "evidence": [
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00046",
+          "quote": "The sequencing library was then built with a Nextera XT kit (Illumina)"
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00044",
+          "quote": "The beads (40 μL) were first washed three times with 1X B&W buffer (Ref to manufacturer’s manual) with 0.05% Tween-20"
+        }
+      ]
+    },
+    {
+      "topic": "readout_execution_specificity",
+      "boundary": "The registered author code is a pinned implementation example, not proof of all historical sample executions. Preserve raw/reformatted read distinctions, coordinate conventions and reference-label attribution. Do not fill unsupported historical selections from familiarity.",
+      "evidence": [
+        {
+          "source_id": "liu2020_author_decoding",
+          "passage_id": "p00013",
+          "quote": "MAP=/database/GRCm38_86/StarIndex ANN=/database/GRCm38_86/gencode.vM11.annotation.gtf"
+        },
+        {
+          "source_id": "liu2020_primary",
+          "passage_id": "p00050",
+          "quote": "The processed read 1 was trimmed, mapped against the mouse genome(GRCh38), demultiplexed and annotated (Gencode release M11) using the ST pipeline v1.7.2 (Navarro et al., 2017), which generated the digital gene expression matrix for down-stream analysis."
+        }
+      ]
+    }
+  ],
+  "literal_witness_validation": {
+    "all_quotes_are_exact_substrings": true,
+    "maximum_quote_characters": 600,
+    "source_check_witness_count": 52,
+    "additional_boundary_witness_count": 4,
+    "total_witness_count": 56
+  },
+  "limits": [
+    "The source checks were authored by a model/engineering evaluator, not independently adjudicated wet-lab experts.",
+    "The source packet is frozen; quoted code and paper claims remain source-qualified and are not accepted as experimentally true merely because they are present.",
+    "Detailed optional analyses or every study-specific experiment are not mandatory main-route content.",
+    "Any later correction to this checklist must be versioned with its reason; do not silently change expectations after seeing a clean-run candidate."
+  ]
+}

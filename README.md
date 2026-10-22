@@ -9,7 +9,15 @@ document registration, inventory, immutable batch planning and per-method execut
 Saved experiment launchers under `provenance/` record particular runs and are not
 the general extraction entrypoint.
 
-**Current prototype, 2026-10-21 PDT:** the
+**Current harness validation, 2026-10-21 PDT:** Qiu CPU job **48932552** starts
+scSTAMP and DBiT extraction from literature only, without prior graphs, reviews
+or correction answers. The [frozen clean-input experiment](provenance/experiments/clean_extraction_20261022/README.md)
+tests all extraction/review stages and independently evaluates source fidelity.
+No native success is claimed before those results. The general prompt-archive
+gate and actual oversized-finding replay passed software checks; the complete
+development suite passed **2,381 tests, three skipped**.
+
+**Completed repaired example:** the
 [scSTAMP-seq example](examples/scstamp-seq/README.md) contains the actual corrected
 Workflow and standalone HTML view from a completed Qiu run. It has 63 Operations,
 80 States, 168 Flows and 13 Modules, preserving three alternative library routes.
