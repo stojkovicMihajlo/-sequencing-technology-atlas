@@ -23,13 +23,26 @@ EvidenceSet = Annotated[tuple[Evidence, ...], Field(min_length=1)]
 
 
 class SourceObligation(StrictModel):
-    id: Text
-    requirement: Text
-    applicability: Literal["required", "optional", "outside_scope"]
+    id: Text = Field(description="Stable unique identity within this source-obligation ledger.")
+    requirement: Text = Field(description=
+        "One independently applicable coverage predicate in the frozen scope, not one verb or "
+        "graph node. Separate clauses with different applicability or conditions; source presence "
+        "alone does not establish minimum necessary coverage.")
+    applicability: Literal["required", "optional", "outside_scope"] = Field(description=
+        "Source-grounded coverage necessity for the declared scope, distinct from the accuracy "
+        "of any detail actually asserted. Included optional detail still needs faithful evidence.")
     # A required item may be conditional; otherwise required cannot be waived.
-    condition: Text | None = None
-    rationale: Text
-    evidence: EvidenceSet
+    condition: Text | None = Field(default=None, description=
+        "Actual scope/route antecedent, recorded here rather than only in requirement prose. "
+        "Null leaves this expectation unqualified; a candidate omission does not itself make "
+        "a scope-required route unselected.")
+    rationale: Text = Field(description=
+        "Contextual scope justification. For required coverage, state the declared output or "
+        "interface that would become unsupported or ambiguous if the predicate were omitted; "
+        "do not merely repeat that the source reports it.")
+    evidence: EvidenceSet = Field(description=
+        "Contextual source evidence for the reported fact and its applicability. Literal quote "
+        "matching establishes provenance, not scientific necessity or semantic completeness.")
 
 
 class SourceScope(StrictModel):
@@ -62,12 +75,23 @@ class SourceObligations(StrictModel):
 
 
 class SourceCoverageCheck(StrictModel):
-    obligation_id: Text
-    disposition: Literal["satisfied", "partial", "missing", "uncertain", "not_applicable"]
-    selected: bool
-    targets: tuple[Text, ...] = ()
-    rationale: Text
-    evidence: EvidenceSet
+    obligation_id: Text = Field(description="Exact identity of the frozen source obligation assessed.")
+    disposition: Literal["satisfied", "partial", "missing", "uncertain", "not_applicable"] = Field(
+        description="Assess actual coverage: missing/partial denotes a genuine candidate omission; "
+        "uncertain can retain an unresolved source/scope dispute. A disputed unconditional "
+        "required item stays selected and uncertain, never silently waived or marked satisfied.")
+    selected: bool = Field(description=
+        "Whether the requirement's route applies under the unchanged scope. Unconditional "
+        "required items must remain selected, including when their necessity is disputed.")
+    targets: tuple[Text, ...] = Field(default=(), description=
+        "Actual workflow target IDs witnessing the assessed coverage. IDs or matching quotes "
+        "alone do not establish that the predicate is represented.")
+    rationale: Text = Field(description=
+        "Independent contextual assessment of actual coverage, applicability and scope. "
+        "Distinguish a candidate omission from uncertainty about the requirement itself.")
+    evidence: EvidenceSet = Field(description=
+        "Inspected contextual source witnesses for this coverage or scope judgment; not proof "
+        "of acceptance merely because quotations and identifiers match.")
 
 
 class SourceLimitAdjudication(StrictModel):

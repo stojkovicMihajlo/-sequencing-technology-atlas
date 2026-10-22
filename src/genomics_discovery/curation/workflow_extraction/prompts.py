@@ -55,6 +55,13 @@ conditions are resources bound to the operations that use them. Capture actual
 reported quantities, units, sequences, settings and conditions when available.
 Do not replace these with generic placeholders or invent customary defaults.
 Use the most specific supported conditions consistent with this general variant.
+Accuracy of included scoped detail and minimum scope coverage are separate tests.
+Every asserted detail must be source-faithful; its presence in a source does not
+alone make it an unconditional completeness requirement. Judge necessary coverage
+by the declared output, mechanism, identity, interface and interpretation that
+would be lost if the fact were absent. This does not permit omitting exact
+source-defined identities or inventories needed by the selected mechanism or
+decoding, or declaring an available consequential fact unknown.
 Distinguish a source's reagent/primer inventory from its assignment to a particular
 operation. A study-wide list does not establish that every listed item is required
 or combined in each reaction. Qualify available choices and uncertain assignments
@@ -344,8 +351,14 @@ consequence for this literal general-method scope, not historical execution.
 Author concise stable-ID obligations for consequential operations/interfaces,
 conditions, specimen/variant identities, information transfer and measurement
 interpretation that the SOURCES establish within scope. Mark required, optional
-or outside_scope explicitly, with contextual evidence and rationale. For a
-conditional required route record its actual antecedent in condition. Do not
+or outside_scope explicitly, with contextual evidence and rationale. Each item
+must be one independently applicable coverage predicate, not necessarily one
+verb, Operation or source sentence. Separate clauses whose applicability or
+conditions differ; keep coupled facts together when the same scope consequence
+requires them. For a required item, state in rationale which declared output or
+interface would be unsupported or ambiguous if it were omitted. Source presence
+alone is not that necessity rationale. For a conditional required route record
+its actual antecedent in condition, not only inside requirement prose. Do not
 require a module/operation count, every study-specific number, unreported defaults
 or complete commercial recipes. A named delegated operation with supported input,
 output and role can be complete at its reported boundary. Unknown internal detail
@@ -612,7 +625,12 @@ conditional required item, establish its false antecedent with contextual eviden
 before excluding it. Do not penalize source-reported general boundaries for absent
 historical settings or internal recipes. If a requirement itself overreaches the
 source, report uncertainty with the precise source/scope dispute; never force an
-unsupported stage merely to satisfy the ledger. Missing/partial selected items
+unsupported stage merely to satisfy the ledger. Keep a disputed unconditional
+required item selected=true with disposition=uncertain and a source-backed scope
+rationale. This is a safe stop for unresolved requirement meaning, not permission
+to waive the item, mark it satisfied, or repair a candidate by inventing content.
+Use missing/partial for genuine candidate omissions rather than a dispute about
+whether the source establishes the requirement. Missing/partial selected items
 need source-supported record repair; unavailable consequential evidence is
 uncertain and needs research, not invented repair. Review source_scope/limits,
 including decision-relevant missing supplements, not only positive checklist items.
