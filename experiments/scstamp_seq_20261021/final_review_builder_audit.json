@@ -1,0 +1,102 @@
+{
+  "format_version": "recorded_review_builder_audit/1.0",
+  "audited_builder": {
+    "local_snapshot": "/private/tmp/scstamp-final-review-builder-48877794.py",
+    "raw_sha256": "ee87c77392e57cda0e45bf315445ebb117c9ecb253eaf577718d512e10f3787c",
+    "lines": 445
+  },
+  "bound_workflow_raw_sha256": "948edf98e8d7e919678ff6f7f9ce1f3cad227fdecbb3a4861be6bc5e9e961f46",
+  "audit_type": "Independent static inspection of the recorded final-review authoring script. The script was not executed.",
+  "assessment": "The final review records materially more specific scientific reasoning than the first reviewer builder. It includes individual Operation and State rationales; it must not be characterized as having only generic State approvals. Remaining limitations concern grouped all-positive verdict serialization, generated Flow rationales and candidate-selected witnesses, rather than established absence of reasoning.",
+  "counts": {
+    "operations_with_specific_authored_rationale": 63,
+    "states_with_specific_authored_rationale": 80,
+    "gap_specific_adjudications": 14,
+    "finding_specific_rationales": 60,
+    "source_obligation_mappings": 44,
+    "flows_total": 168,
+    "flows_with_bespoke_control_rationale": 2,
+    "flows_with_generated_state_and_selection_rationale": 166
+  },
+  "findings": [
+    {
+      "id": "FINAL-REVIEW-01",
+      "category": "substantive_operation_review_record",
+      "line_start": 45,
+      "line_end": 109,
+      "observation": "The OP dictionary contains 63 different Operation-specific rationales discussing recipes, source attribution, alternatives, material identity, readout and uncertainty."
+    },
+    {
+      "id": "FINAL-REVIEW-02",
+      "category": "substantive_state_review_record",
+      "line_start": 110,
+      "line_end": 193,
+      "observation": "STATE_TEXT contains 80 State-specific authored descriptions of scientific support, limitations and material/data meaning. These are bound to candidate State order after a length assertion. They are not merely a single positive template reused for every State.",
+      "limitation": "Length checking verifies count, not semantic correspondence if candidate State ordering changes. The recorded candidate was frozen."
+    },
+    {
+      "id": "FINAL-REVIEW-03",
+      "category": "generated_flow_rationales",
+      "line_start": 265,
+      "line_end": 276,
+      "observation": "Two named control Flows receive bespoke rationale. Remaining Flow rationales interpolate the State support text, endpoints and selection category, then assert that the association agrees with the source.",
+      "limitation": "The code does not itself demonstrate an independent entailment test of every particular Flow basis, direction, condition and association. This does not prove that such reasoning did not occur before serialization."
+    },
+    {
+      "id": "FINAL-REVIEW-04",
+      "category": "all_positive_target_serialization",
+      "line_start": 279,
+      "line_end": 288,
+      "observation": "All assembled target checks receive verdict=supported in the same loop, with target-specific rationale and Evidence references. The review records no omissions.",
+      "limitation": "All-positive serialization is not itself proof of rubber stamping or invalidity. It does not provide calibrated evidence that unsupported additions would be detected."
+    },
+    {
+      "id": "FINAL-REVIEW-05",
+      "category": "grouped_field_approvals",
+      "line_start": 291,
+      "line_end": 306,
+      "observation": "Every field-review scaffold group receives verdict=supported and affected_fields=[]; target groups reuse target rationale/Evidence. Workflow, Module and gap groups receive their corresponding authored support.",
+      "limitation": "This is a group-level assessment. It must not be reported as a separately reasoned entailment adjudication for every factual leaf."
+    },
+    {
+      "id": "FINAL-REVIEW-06",
+      "category": "evidence_selection_and_literal_checks",
+      "line_start": 19,
+      "line_end": 42,
+      "observation": "The independent()/ev_for() functions assert that candidate Evidence passages are in the read cache and quotations occur literally. They preserve source_id, passage_id, quote and support from selected Evidence, replacing rationale with a source-context summary.",
+      "limitation": "Literal matching and a contextualized rationale do not prove that each candidate claim follows from its witness. Reusing candidate-selected witnesses can be legitimate review; this code does not independently reselect every witness."
+    },
+    {
+      "id": "FINAL-REVIEW-07",
+      "category": "additional_context_selection",
+      "line_start": 245,
+      "line_end": 257,
+      "observation": "For gap/context witnesses, es_at() uses explicit special quotes when provided, otherwise prefers an existing candidate/obligation quote, otherwise takes a short passage prefix.",
+      "limitation": "This records contextual support selection, not a deterministic scientific entailment function."
+    },
+    {
+      "id": "FINAL-REVIEW-08",
+      "category": "substantive_coverage_review_record",
+      "line_start": 314,
+      "line_end": 444,
+      "observation": "The script records 60 finding-specific rationales and 44 source-obligation mappings to actual candidate targets. Findings are marked supported; applicable obligations are marked satisfied.",
+      "limitation": "A mapped target and authored rationale support auditability but do not independently establish completeness or reviewer error sensitivity."
+    },
+    {
+      "id": "FINAL-REVIEW-09",
+      "category": "prior_correction_accountability",
+      "line_start": 307,
+      "line_end": 310,
+      "observation": "A deterministic assertion rejects unchanged bindings previously marked negative; the two prior negative blocking flags had changed.",
+      "limitation": "The assertion checks stale negative binding reuse, not whether the revised scientific judgment is correct."
+    }
+  ],
+  "calibration_consequence": "Use known source-backed positive, unsupported-addition, contradiction and omission controls to test the reviewer. Preserve its specific reasoning and avoid treating the existence of a positive loop as evidence of absent thought.",
+  "limits": [
+    "The audit concerns recorded code and serialized rationale, not private internal model reasoning.",
+    "No claim is made that final-review target judgments are scientifically false merely because verdicts are assigned programmatically.",
+    "The first-review builder and final-review builder are different artifacts. The earlier finding of broadly templated State approvals applies to the first reviewer, not this final State rationale table.",
+    "No full source re-audit, human-expert validation or experimental validation is established by this code inspection.",
+    "No original Workflow, source packet, builder or review output was modified."
+  ]
+}
