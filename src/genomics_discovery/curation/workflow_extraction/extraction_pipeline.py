@@ -230,10 +230,11 @@ async def execute(packet_path: Path, run: Path, *, worker=None,
             ):
                 raise ValueError("Each stage must have a fresh native thread")
             worker_prompt = directory / "prompt.txt"
-            if worker_prompt.exists():
-                if worker_prompt.read_text(encoding="utf-8") != prompt:
-                    raise ValueError("Archived native prompt differs from stage instructions")
-                pin(worker_prompt)
+            if not worker_prompt.is_file() or worker_prompt.is_symlink():
+                raise ValueError("Archived native prompt is missing or is not a regular archive file")
+            if worker_prompt.read_text(encoding="utf-8") != prompt:
+                raise ValueError("Archived native prompt differs from stage instructions")
+            pin(worker_prompt)
             attempt["archive_sha256"] = {
                 name: pin(directory / name) for name in
                 ("result.json", "events.jsonl", "final.txt", "command.json", "started.json",
