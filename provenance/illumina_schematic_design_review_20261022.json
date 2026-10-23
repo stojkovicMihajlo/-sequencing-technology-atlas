@@ -1,0 +1,98 @@
+{
+  "record_type": "design_review",
+  "date": "2026-10-22",
+  "status": "proposed_not_implemented_or_experimentally_evaluated",
+  "question": "Can Illumina schematics anchor a manageable assay architecture graph, with targeted primary-source enrichment for distinctions and interfaces?",
+  "assessment_scope": "Inspection of cached Illumina inventory and scraper, current DNA/RNA poster text, supplied diagram images, selected primary-paper passages, graph code and representation standards. Not a complete audit of every diagram or a new model extraction run.",
+  "observations": [
+    "The original scrape saved diagram URLs but did not extract their graphical content.",
+    "The cached inventory has 154 source cards, 153 substantive/image-bearing cards and 152 unique PNG URLs. Source cards are not one-to-one with atlas technology entities.",
+    "Both inspected DNA/RNA posters state Current as of 10 November 2016. Current hosting/search dates are not scientific coverage dates.",
+    "Some poster rows combine methods, including ChIP-seq/ChIP-exo/HT-ChIP/Mint-ChIP. A shown operation cannot automatically be assigned to every named method.",
+    "Illumina's selected reference may be a later protocol or application rather than the original method publication.",
+    "A modified RASL assay retains broad anneal/ligate/amplify stages but changes the ligase and acceptor-probe terminal chemistry. Broad stage labels alone can hide a consequential distinction."
+  ],
+  "proposed_contract": {
+    "target": "An evidence-supported assay architecture that preserves the measurement logic, consequential interfaces and supported differences from named baselines.",
+    "starting_sources": "Illumina method schematic and description; larger methods-collection schematic or original-paper schematic when needed. Register method/variant scope and diagram region.",
+    "retain_for_each_transformation": [
+      "Input material and relevant molecular/physical features",
+      "Action or mechanism, with catalyst/enabling reagent when consequential",
+      "Output material and relevant features",
+      "Information introduced, retained, lost or selected",
+      "Order, branches and relevant input/output interfaces",
+      "Source passage or figure-region evidence"
+    ],
+    "expand_from_primary_sources_when": [
+      "A grouped schematic does not resolve which steps apply to the method variant",
+      "The claimed difference is hidden inside a broad stage",
+      "Substrate ends, attachment, compartment or information association are needed to understand a transformation",
+      "The next stage's relevant requirements cannot be assessed",
+      "The biological interpretation or selectivity would otherwise be misleading",
+      "Historical development or comparative performance is asserted"
+    ],
+    "detail_relevance_rule": "Retain a detail when omitting it changes target/selectivity, encoding, a consequential interface or the supported distinction being recorded. This rule is a proposed engineering criterion requiring evaluation.",
+    "omission_policy": "Distinguish detail outside architecture scope from unresolved architecture-critical evidence. Never promote missing evidence to a claim of biological impossibility.",
+    "stopping_rule": "All in-scope diagram transformations and branches are accounted for; the supported assay distinction and relevant interfaces are explicit; unresolved consequential claims remain flagged. Full executable protocol completeness is a different target."
+  },
+  "chemical_representation": {
+    "adopt_principle": "Rhea reactive-part representation for macromolecules; BioPAX molecular identity plus relevant features; SBGN separation of entities, processes and catalysts.",
+    "optional_identifiers": "Established chemical identifiers or structure strings for known molecules/local reactive structures. Do not require a complete atom-level representation of arbitrary polymers or specimens.",
+    "limitation": "A molecular formula does not specify connectivity, sequence, compartment, bead attachment or barcode correspondence. Structure matching and reaction balancing do not establish assay compatibility.",
+    "example": "ClickSeq: 3-prime azido cDNA and a 5-prime alkyne-modified adapter undergo copper-catalyzed azide-alkyne cycloaddition to produce a triazole-linked product, with downstream amplification supported in the reported workflow."
+  },
+  "connection_policy": {
+    "historical": "Use verified method/version dates and cited methodological relationships to retrieve candidate predecessors. Require evidence for directed development; chronology and similarity alone are insufficient.",
+    "shared_transformations": "Compare input/transformation/output and relevant information/context features. Preserve purpose similarity separately from shared mechanism. Neither implies interchangeability or descent.",
+    "comparison": "Record shared features, specific changes and their supported consequences against a named baseline. A pairwise difference is not proof of global novelty.",
+    "scaling": "Chronological processing avoids duplicate directions but leaves 20,100 unique method pairs for 201 methods. Use citation and contextual retrieval before expensive alignment.",
+    "alignment": "Allow one-to-many connected-operation correspondences. Use graph algorithms to check topology and summarize reviewed correspondences, not to infer biochemical equivalence from labels.",
+    "representation": "Retain multiple relationship types and multiple parents. A tree can be a display projection; the underlying scientific representation remains a graph."
+  },
+  "minimal_harness_change": [
+    "Add a diagram-and-caption source path with region-based provenance and preserved originals.",
+    "Change extraction completion criteria to architecture scope with explicit expansion triggers.",
+    "Reuse the current State/Operation/Flow representation, source tools, independent review and graph assembly.",
+    "Give the extractor diagram context plus primary papers; have a fresh reviewer check omitted distinctions, unsupported expansions and variant leakage.",
+    "Use detailed existing extractions as linked refinements rather than silently replacing or claiming a new evaluation of them.",
+    "Keep matching as a separate reviewed stage. Do not add specialist agents until a measured failure motivates them."
+  ],
+  "proposed_pilot": {
+    "cases": [
+      "ClickSeq: clear diagram-level architecture with consequential chemical interface",
+      "cP-RNA-seq: terminal-state-dependent selection and specificity qualifications",
+      "ChIP-seq and ChIP-exo: grouped-diagram trap and added exonuclease distinction",
+      "Original and Rnl2-based RASL: similar stage names hiding probe/ligase changes"
+    ],
+    "comparison": "Existing paper-first extraction versus diagram-first extraction with targeted enrichment; same model and available sources. Independently annotate necessary facts and distinctions before running.",
+    "measures": [
+      "Required-fact and distinguishing-change recall",
+      "Unsupported-claim and incorrect-variant-assignment rates",
+      "Shared-mechanism precision and false historical connections",
+      "Number of records, additional source reads and elapsed time"
+    ],
+    "interpretation": "A smaller graph is useful only if it preserves required distinctions and evidence. Faster extraction alone does not validate the representation or establish improved invention performance."
+  },
+  "sources": [
+    "https://www.illumina.com/science/sequencing-method-explorer.html",
+    "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+    "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-dna.pdf",
+    "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/dna-sequencing-methods-review-web.pdf",
+    "https://pubmed.ncbi.nlm.nih.gov/26116762/",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC4132746/",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC4852555/",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC3243364/",
+    "https://www.rhea-db.org/help/reaction-participant",
+    "https://www.biopax.org/owldoc/Level3/classes/PhysicalEntity___548603235.html",
+    "https://sbgn.github.io/symbols",
+    "https://www2.informatik.hu-berlin.de/~weidlima/pubs/weidlich_caise_2010_icop_framework.pdf"
+  ],
+  "local_evidence": [
+    "../technology_atlas/data/manifest.json (relative to repository root)",
+    "../technology_atlas/data/methods.jsonl (relative to repository root)",
+    "../technology_atlas/scripts/scrape_illumina.py (relative to repository root)",
+    "docs/GRAPH.md",
+    "docs/SHARED_OPERATIONS.md",
+    "src/genomics_discovery/curation/workflow_matching/README.md"
+  ]
+}
