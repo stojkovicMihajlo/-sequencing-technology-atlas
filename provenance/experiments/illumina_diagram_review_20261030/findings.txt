@@ -1,0 +1,154 @@
+Illumina schematic review - 30 October 2026
+
+What was done
+
+Rechecked the previously cached 154 source catalogue records. Downloaded and
+visually inspected 16 original Illumina workflow PNGs. Examined selected primary
+paper and protocol passages to investigate specific comparisons and discrepancies.
+Wrote six comparison records in manual_comparisons.json, identifying shared
+features, changes, interpretation limits and evidence. These are manual research
+annotations, not independently reviewed graph admissions or a model-run evaluation.
+
+The catalogue audit and diagram download receipts preserve source URLs and SHA-256
+hashes. Earlier failed urllib TLS downloads remain recorded. The successful curl
+downloads used the system certificate store; certificate verification was not
+disabled. Original transparent PNGs were preserved. Some needed compositing on
+white to be readable in the inspection tool, which was a rendering issue rather
+than missing scientific content.
+
+1. Shared prefix and one changed branch: G&T-seq and scM&T-seq
+
+Both diagrams show isolation/lysis, oligo(dT)-based physical separation of RNA
+and DNA, and a Smart-seq2 transcriptome branch. The G&T diagram shows MDA on the
+DNA branch; scM&T shows scBS-seq. The scM&T paper explicitly applies scBS-seq to
+DNA purified with the G&T procedure. Physical separation allows DNA conversion
+without exposing the transcriptome to bisulfite.
+
+Useful graph correspondence:
+
+  cell -> lysis -> separate RNA and DNA
+                       | RNA -> Smart-seq2 branch
+                       | DNA -> MDA branch [shown G&T implementation]
+                              OR scBS-seq branch [scM&T]
+
+This is a supported development relationship and a local branch replacement,
+not merely two similarly named workflows. MDA is the displayed implementation,
+not a universal restriction on G&T-seq. Other published G&T implementations can
+use alternative genome amplification.
+
+2. Same broad purpose, different physical carrier: Drop-seq and inDrop
+
+The Drop-seq schematic says Pool all beads from droplets. The original paper
+specifies breaking droplets, recovering RNA-bound beads and reverse transcription
+in bulk. The inDrop schematic says UV primer release and Pool all droplets.
+The original inDrop Figure 1 specifies photo-released primers and barcoding RT
+inside droplets before their breakup.
+
+Two collections of droplets may be pooled while their contents remain separated.
+Therefore the phrase pooling cannot establish that molecules have been mixed or
+that RT is performed in bulk. A useful comparison must retain the pooled object,
+compartment persistence, primer attachment/release and encoding timing.
+
+Similarity here does not establish a directed history edge between the methods.
+
+3. Biological analyte versus sequenced proxy: RASL-seq and ClickSeq
+
+RASL uses target RNA to align synthetic DNA probe pairs. Those probes are ligated,
+released and amplified into the sequenced product. The original protocol maps
+reads to intended ligation-product sequences. Reverse transcription is not a
+universal requirement for an assay measuring RNA abundance.
+
+ClickSeq instead makes RNA-derived cDNA with azido-modified ends, then joins a
+modified adapter by click chemistry. Both include joining reactions, but they
+join different molecular participants and generate different readout carriers.
+The term ligation is therefore a retrieval clue, not a sufficient definition of
+a shared mechanism or interchangeable stage.
+
+4. Terminal chemistry determines selection: cP-RNA-seq and CIP-TAP
+
+Both schematics include phosphatase treatment, ligation and library generation.
+cP-RNA-seq shows alternative 3-prime end states, periodate treatment and T4 PNK.
+CIP-TAP shows alternative 5-prime end states, including a cap, with TAP and
+adapter attachment positioned in its selection sequence. This common reagent
+does not make the full selection procedures equivalent.
+
+The cP-RNA-seq paper's Limitations section adds a consequential qualification:
+terminal 2-prime-O-methylated RNAs can resist periodate despite lacking cyclic
+phosphate and can enter the library. Thus resistant RNA must not automatically
+be described as exclusively cP-containing RNA. This is a measurement-interpretation
+limit, not a reason to recover every buffer ingredient.
+
+CIP-TAP in this comparison remains schematic-level; a complete primary-protocol
+verification of CIP-TAP was not performed in this review.
+
+5. An actual schematic-order discrepancy: RAD and ddRAD
+
+The downloaded ddRAD diagram displays:
+  restriction digestion -> add barcoded adapters -> second restriction digest.
+The grouped RAD diagram similarly places Second restriction digest in ddRADseq
+at the position occupied by shearing after initial adapter attachment.
+
+The cited Peterson et al. 2012 paper instead specifies a simultaneous two-enzyme
+digest, adapter ligation and precise size selection; the paper explicitly
+describes eliminating random shearing/end repair. The local cached JATS paragraph
+and the publisher's text agree. Its separate protocol likewise starts with a
+double digest before ligation.
+
+Resolution for the Peterson implementation: use the primary protocol's ordering
+in the scientific graph and retain a note that literal transcription of the
+Illumina schematic would give a different order. Do not claim all subsequent
+ddRAD variants are identical. This discrepancy has an available primary-source
+resolution; it is not an unexplained biological impossibility.
+
+6. Reuse with a changed interface: ChIPmentation
+
+The ChIPmentation diagram places Tn5 adapter insertion after immunoprecipitation.
+The primary paper identifies bead-bound immunoprecipitated chromatin as the
+substrate. The meaningful change is adapter insertion at that point and in that
+material context, not the existence of Tn5 alone.
+
+The grouped ChIP-seq/ChIP-exo/HT-ChIP diagram includes exonuclease digestion and
+cannot supply a universal baseline for all members. Its first listed ChIP-seq
+reference is a 1988 foundational ChIP study, not sequencing-based ChIP-seq.
+A chronology built from the first listed reference would conflate component
+history with assay history. A 2007 primary sequencing-based ChIP paper provides
+a direct counterexample to interpreting 1988 as the sequencing assay's date.
+
+Other confirmed catalogue/representation issues
+
+- 24 of 153 titled records list multiple names. This includes aliases and
+  genuine method families; it is not a count of 24 incorrect diagrams.
+- 3--seq and 3prime-seq share the title 3'-Seq and exactly the same image URL.
+  The separate 3seq card has a different diagram and targets degraded FFPE RNA;
+  typography alone must not merge it with 3'-Seq.
+- CaptureSeq delegates several library-construction transformations to one
+  TruSeq stranded mRNA sample preparation block. Correspondence can be one to
+  several operations and should not require identical numbers of boxes.
+- Generic UMI/component entries and complete assay entries have different scope.
+- Similar Nuc-Seq names describe RNA and DNA workflows in different cards.
+
+What these findings imply for the extraction target
+
+The diagrams remain a good default architecture scaffold. Required detail is
+the detail needed to identify the transformed material, its important features,
+the readout carrier, retained associations, branches and supported difference.
+The review does not justify maximal experimental reconstruction for every assay.
+
+A diagram extraction should be checked for both faithful transcription and
+scientific agreement with its cited implementation. Those can diverge, as the
+ddRAD example shows. The graph should identify the chosen implementation and
+the source supporting its order, instead of silently combining incompatible
+descriptions or accepting the diagram as infallible.
+
+Matching needs explicit context and evidence rather than identical stage names:
+  shared prefix/branch -> G&T/scM&T positive case
+  preserved compartment -> Drop-seq/inDrop boundary case
+  different readout carrier -> RASL/ClickSeq negative mechanism case
+  reagent versus selection -> cP-RNA/CIP-TAP partial-match case
+  source order -> RAD/ddRAD correction case
+  substrate/interface placement -> ChIPmentation reuse case
+
+No extraction prompts, runtime, frozen runs, existing workflow artifacts or
+canonical atlas edges were changed by this research review. No new native model
+run was launched. The next software evaluation can use these documented cases;
+the present review itself does not establish that the harness passes them.
