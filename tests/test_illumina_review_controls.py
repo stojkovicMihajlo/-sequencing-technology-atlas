@@ -87,6 +87,32 @@ def test_positive_control_is_supported(control):
     assert review_outcome(positive_review(candidate, image), candidate, sources) == "supported"
 
 
+def test_card_level_background_citation_need_not_invent_a_member_assignment(control):
+    data, sources, image, _, metadata = control
+    data['paper_matches'].append({'id': 'unassigned', 'source_id': 'metadata:p',
+        'methods': [], 'assessment': 'identity_verified', 'relationship': 'background',
+        'evidence': [metadata]})
+    candidate = DiagramExtraction.model_validate(data)
+    assert not validate_extraction(candidate, sources, require_paper_matches=True)
+    assert review_outcome(positive_review(candidate, image), candidate, sources) == 'supported'
+
+
+@pytest.mark.parametrize('relationship', ['supports_architecture', 'supports_variant'])
+def test_positive_scientific_support_cannot_omit_the_supported_method(control, relationship):
+    data, _, _, _, _ = control
+    data['paper_matches'][0].update(methods=[], relationship=relationship)
+    with pytest.raises(ValueError, match='must identify a named method'):
+        DiagramExtraction.model_validate(data)
+
+
+def test_unassigned_background_does_not_satisfy_method_paper_coverage(control):
+    data, sources, _, _, _ = control
+    data['paper_matches'][0].update(methods=[], relationship='background')
+    candidate = DiagramExtraction.model_validate(data)
+    assert any('Named method lacks a paper-match assessment' in error
+               for error in validate_extraction(candidate, sources, require_paper_matches=True))
+
+
 @pytest.mark.parametrize("collection", ["states", "operations", "flows"])
 def test_metadata_cannot_be_sole_evidence_for_a_scientific_record(control, collection):
     data, sources, _, _, metadata = control

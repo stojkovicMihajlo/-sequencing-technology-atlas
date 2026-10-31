@@ -59,6 +59,12 @@ an unshown adaptation may be background; its presence does not create another
 method scope or require extracting that adaptation. Keep its assessment and
 evidence level explicit. A supported shared schematic does not establish identical
 complete experimental implementations or interchangeability of grouped names.
+For a card-level background, catalogue or unresolved citation whose supplied
+content does not identify a particular in-scope member, retain its PaperMatch
+with methods=[] rather than inventing a member assignment. A claim that a paper
+supports an architecture or variant must name the method(s) its content supports.
+Unassigned background citations do not satisfy the separate requirement to assess
+the paper association for every actual target method.
 
 REPRESENTATION RULES
 1. Read the complete diagram before deciding its decomposition. Represent its
@@ -71,6 +77,13 @@ REPRESENTATION RULES
 3. Connect records through explicit IDs and evidenced routes. Drawing order alone
    does not prove a material transfer. Distinguish consumption/production from a
    catalyst, reagent addition, inspection, alternative or merely visual proximity.
+   An Operation is a local transformation or inspection instance, not a reusable
+   label. When independent branches are processed separately under a shared or
+   repeated caption, record distinct Operation instances with branch-specific
+   inputs and outputs, retaining the source caption on each. A common caption
+   does not establish pooling or a joint transformation. Keep genuine mixing,
+   splitting and data-integration operations multi-input/output when supported;
+   do not automatically split every such operation.
 4. Preserve consequential end groups, modifications, attachment and compartment.
    Pooling intact compartments differs from mixing their contents. An unchanged
    molecule in a different attachment or compartment state may have a different
@@ -83,6 +96,18 @@ REPRESENTATION RULES
    diagram, explicitly qualify which operations apply to which member. When the
    source cannot resolve that scope, preserve a family-level depiction and the
    exact unresolved applicability rather than assigning every step to all members.
+   An operation's fixed input State includes its stated preparation history.
+   Excluding a preceding operation from one method's scope does not change that
+   input history for a downstream operation. Do not assign that downstream local
+   instance to an incompatible variant merely because the action has the same
+   name. Retain a paper-supported purpose correspondence in the interpretation,
+   or represent a separate supported local interface; preserve the drawn route.
+   Resolve applicability at this record's declared schematic/implementation
+   scope. A supported implementation can sit within a broader assay family;
+   explain that inclusion without claiming every family member has the same
+   preparation. An umbrella label alone neither proves applicability nor makes
+   an otherwise supported local depiction impossible to resolve. Distinct
+   grouped assays still need their own source-supported applicability.
 7. Preserve selection and measurement limitations. Surviving a chemical selection
    does not establish perfect biological specificity. Do not generalize a supported
    interface to all enzymes, substrates, specimens or implementations.
@@ -139,6 +164,14 @@ joint interfaces: an operation's output state must agree with its outgoing route
 and the receiving operation's input and scope. Check compartment persistence,
 carrier identity, end-group changes, branch association and alternatives together.
 A locally plausible operation does not validate contradictory surrounding edges.
+For every multi-input/multi-output Operation, check whether the source denotes
+one joint operation or separate processing compressed under a shared caption.
+Follow each retained branch through its correct output. Request revision if
+independent processing has been collapsed, even when prose says the fractions
+remain separate. Graph reachability alone does not establish input-to-output
+molecular attribution. For method applicability, inspect each assigned local
+operation's actual input history, including upstream operations excluded from
+that method; a prose correction does not resolve an unchanged incompatible route.
 Check scope in both directions: retain every actual diagram/title/caption target,
 and reject extra method scopes introduced solely from descriptive or background
 mentions. Correctable scope expansion needs a candidate revision; unavailable

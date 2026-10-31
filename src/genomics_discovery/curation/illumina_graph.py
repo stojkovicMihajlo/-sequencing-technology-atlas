@@ -7,6 +7,7 @@ instances, and no historical/equivalence edge is inferred by this module.
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import re
 from collections import Counter
@@ -20,6 +21,23 @@ from .illumina_diagrams import (DiagramExtraction, DiagramReview, digest, export
                                review_outcome, validate_extraction)
 
 FLOW_KINDS = frozenset({"material_input", "material_output", "data_input", "data_output", "precedes"})
+INCIDENCE_SEMANTICS = (
+    "Declared State/Operation incidence and dependency links only. A path does not establish "
+    "molecular lineage or pair a particular input with a particular output."
+)
+
+
+def _source_scope(card):
+    """Retain source-depiction identity without assigning canonical assay identity."""
+    fields = ("scope_kind", "source_row_id", "source_method_labels", "verified_method_names",
+              "canonical_technology_id", "source_category", "source_category_path")
+    scope = {key: copy.deepcopy(card[key]) for key in fields if key in card}
+    scope.setdefault("scope_kind", "source_card_kind_not_recorded")
+    poster = card.get("poster_scope", {})
+    context_fields = ("grouped_source_row", "literal_label_fragments", "line_wrap_reconstruction", "context_scope_warning")
+    if poster:
+        scope["poster_context"] = {key: copy.deepcopy(poster[key]) for key in context_fields if key in poster}
+    return scope
 
 
 def _load_card(row, card):
@@ -98,7 +116,10 @@ def build_graph(batch_directory: Path, inventory_path: Path) -> dict:
         entry = {"record_id": ident, "title": card_title(card), "status": row["status"],
                  "reason": row.get("reason"), "workflow_id": None, "operation_ids": [],
                  "publication_ids": [], "source_reference_count": len(card_references(card)),
-                 "source_page_url": card.get("source_page_url")}
+                 "source_page_url": card.get("source_page_url"), "source_scope": _source_scope(card),
+                 "source_provenance": {"inventory": copy.deepcopy(pins["inventory"]),
+                     **{key: copy.deepcopy(card[key]) for key in ("source_id", "source_url", "source_page_url",
+                         "source_title", "recovered_title", "diagram_asset_ids") if key in card}}}
         cards[ident] = entry
         if row["status"] not in {"supported", "needs_revision", "research_needed"}:
             continue
@@ -156,6 +177,31 @@ def build_graph(batch_directory: Path, inventory_path: Path) -> dict:
             "relationship_boundary": "Within-workflow/source links only; no automatic ancestry, equivalence or interchangeability."}
 
 
+def _record_context(graph, node, incident):
+    """Expose exact-target caveats without reading or repeating paper bodies."""
+    card = graph["cards"][node["record_id"]]
+    targets = {node["node_type"] + ":" + node["original"]["id"]}
+    targets.update("flow:" + e["original"]["id"] for e in incident
+                   if e["kind"] in FLOW_KINDS and e.get("original", {}).get("id"))
+    corrections = [{"node_id": n["id"], **copy.deepcopy(n["original"])} for n in graph["nodes"]
+        if n.get("record_id") == node["record_id"] and n["node_type"] == "correction" and
+        n["original"]["target_id"] in targets]
+    unknowns = card.get("unknowns", [])
+    affected = [copy.deepcopy(u) for u in unknowns if set(u.get("affected_ids", [])) & targets]
+    general = [copy.deepcopy(u) for u in unknowns if not (set(u.get("affected_ids", [])) & targets) and
+               (not u.get("affected_ids") or "record" in u["affected_ids"])]
+    registry_pin = card.get("artifact_pins", {}).get("source_registry.json")
+    registry_artifact = ({"path": str(Path(card["attempt_directory"]) / "source_registry.json"),
+                         "sha256": registry_pin, "status": "recorded_custody_pointer_verify_before_read"}
+                        if registry_pin and card.get("attempt_directory") else None)
+    return {"source_scope": copy.deepcopy(card.get("source_scope", {})),
+            "source_provenance": copy.deepcopy(card.get("source_provenance", {})),
+            "context_target_ids": sorted(targets), "affected_corrections": corrections,
+            "affected_unknowns": affected, "record_unknowns": general,
+            "context_matching": "Exact record target and incident Flow target IDs; whole-record unknowns are separate. No inferred equivalence or new scientific edges.",
+            "full_source_registry_artifact": registry_artifact}
+
+
 def get_record(graph: dict, kind: str, ident: str, *, include_diagnostic=False) -> dict:
     if kind == "card":
         return graph["cards"][ident]
@@ -171,6 +217,7 @@ def get_record(graph: dict, kind: str, ident: str, *, include_diagnostic=False) 
             include_diagnostic or e.get("admission") == "supported")]
         result.update(flows=[e for e in incident if e["kind"] in FLOW_KINDS], links=incident,
             provenance=graph["cards"][node["record_id"]]["source_registry"])
+        result.update(_record_context(graph, node, incident))
         if kind == "operation":
             result.update(inputs=[registry[e["source"]] for e in incident
                 if e["target"] == ident and e["kind"].endswith("_input")],
@@ -231,6 +278,40 @@ def _incident_routes(edges, ident, direction):
             direction in {"in", "both"} and e["target"] == ident]
 
 
+def _routing_ambiguities(graph, nodes, include_diagnostic):
+    """Detect missing input/output pairing, not whether an operation is a join.
+
+    Inspect all I/O kinds even when the caller filters traversal kinds. A filter
+    must not hide another input/output and create apparent routing certainty.
+    """
+    inputs, outputs, incident = {}, {}, {}
+    for edge in graph["edges"]:
+        if edge["kind"] not in FLOW_KINDS - {"precedes"} or (
+                not include_diagnostic and edge.get("admission") != "supported"):
+            continue
+        source, target = nodes.get(edge["source"]), nodes.get(edge["target"])
+        if not source or not target or (not include_diagnostic and any(
+                n.get("admission") != "supported" for n in (source, target))):
+            continue
+        if edge["kind"].endswith("_input") and target["node_type"] == "operation":
+            operation, state = target["id"], source["id"]
+            inputs.setdefault(operation, set()).add(state)
+        elif edge["kind"].endswith("_output") and source["node_type"] == "operation":
+            operation, state = source["id"], target["id"]
+            outputs.setdefault(operation, set()).add(state)
+        else:
+            continue
+        incident.setdefault(operation, []).append(edge)
+    return {operation: {"operation_id": operation,
+        "input_state_ids": sorted(inputs.get(operation, ())),
+        "output_state_ids": sorted(outputs.get(operation, ())),
+        "incident_flows": sorted(incident[operation], key=lambda e: e["id"]),
+        "status": "input_output_pairing_not_encoded",
+        "interpretation": "Structural many-to-many incidence, not evidence of mixing, independent processing, a source error, or a valid molecular-lineage route."}
+        for operation in sorted(set(inputs) & set(outputs))
+        if len(inputs[operation]) > 1 and len(outputs[operation]) > 1}
+
+
 def neighbors(graph: dict, ident: str, *, direction="out", limit=20,
               edge_kinds=None, include_diagnostic=False) -> dict:
     """Inspect one Flow hop, retaining evidence and actual arrow orientation."""
@@ -240,24 +321,42 @@ def neighbors(graph: dict, ident: str, *, direction="out", limit=20,
     routes = _incident_routes(edges, ident, direction)
     selected = routes[:limit]
     records = {nodes[n]["record_id"] for _, n in selected} | {nodes[ident]["record_id"]}
+    ambiguity = _routing_ambiguities(graph, nodes, include_diagnostic)
+    shown = {ident, *(n for _, n in selected)}
     return {"start_id": ident, "direction": direction, "edge_kinds": sorted(kinds),
             "neighbor_ids": sorted({n for _, n in selected}),
             "nodes": [nodes[n] for n in sorted({n for _, n in selected})],
             "flows": [e for e, _ in selected], "truncated": len(routes) > limit,
+            "semantics": INCIDENCE_SEMANTICS,
+            "routing_ambiguities": [ambiguity[n] for n in sorted(shown & set(ambiguity))],
             "provenance": {r: graph["cards"][r]["source_registry"] for r in sorted(records)}}
 
 
 def walk(graph: dict, ident: str, *, direction="out", depth=4, limit=50,
-         edge_kinds=None, include_diagnostic=False) -> dict:
-    """Bounded breadth-first inspection; a reported route is not an execution plan."""
+         edge_kinds=None, include_diagnostic=False, expand_ambiguous_incidence=False) -> dict:
+    """Inspect incidence; stop at unpaired many-to-many boundaries by default.
+
+    The opt-in only expands raw declared links; it never supplies input/output
+    pairing or upgrades a route into a molecular-lineage or mixing claim.
+    """
     if not 0 <= depth <= 12 or not 1 <= limit <= 200:
         raise ValueError("Use a depth from 0 to 12 and a Flow limit from 1 to 200")
+    if not isinstance(expand_ambiguous_incidence, bool):
+        raise ValueError("expand_ambiguous_incidence must be a boolean, not a routing interpretation")
     nodes, edges, kinds = _route_context(graph, ident, direction, edge_kinds, include_diagnostic)
+    ambiguity = _routing_ambiguities(graph, nodes, include_diagnostic)
     queue, depths, selected = [ident], {ident: 0}, {}
+    routing_frontier, routing_options = set(), {}
     truncated = False
     while queue:
         current = queue.pop(0)
         if depths[current] >= depth:
+            continue
+        if current in ambiguity and not expand_ambiguous_incidence:
+            options = [e for e, _ in _incident_routes(edges, current, direction) if e["id"] not in selected]
+            if options:
+                routing_frontier.add(current)
+                routing_options[current] = options
             continue
         for edge, target in _incident_routes(edges, current, direction):
             if edge["id"] not in selected:
@@ -276,7 +375,13 @@ def walk(graph: dict, ident: str, *, direction="out", depth=4, limit=50,
     return {"start_id": ident, "direction": direction, "depth": depth, "edge_kinds": sorted(kinds),
             "nodes": [nodes[n] for n in sorted(depths, key=lambda n: (depths[n], n))],
             "flows": list(selected.values()), "node_depths": depths, "truncated": truncated,
-            "frontier_ids": sorted(frontier), "depth_limited": bool(frontier) and not truncated,
+            "frontier_ids": sorted(frontier),
+            "depth_limited": any(depths[n] >= depth for n in frontier) and not truncated,
+            "semantics": INCIDENCE_SEMANTICS,
+            "expand_ambiguous_incidence": expand_ambiguous_incidence,
+            "routing_limited": bool(routing_frontier), "routing_frontier_ids": sorted(routing_frontier),
+            "untraversed_incidence_options": routing_options,
+            "routing_ambiguities": [ambiguity[n] for n in sorted(set(depths) & set(ambiguity))],
             "provenance": {r: graph["cards"][r]["source_registry"] for r in sorted(records)}}
 
 
@@ -401,7 +506,10 @@ def main(argv=None):
             p.add_argument("--direction", choices=("out", "in", "both"), default="out")
             p.add_argument("--kind", action="append", choices=sorted(FLOW_KINDS))
             p.add_argument("--limit", type=int, default=50 if command == "walk" else 20)
-        if command == "walk": p.add_argument("--depth", type=int, default=4)
+        if command == "walk":
+            p.add_argument("--depth", type=int, default=4)
+            p.add_argument("--expand-ambiguous-incidence", action="store_true", help=
+                "Expand raw many-to-many incidence only; does not establish input-output pairing or molecular lineage")
     for command in ("list", "get", "search"):
         p = sub.add_parser(command); p.add_argument("graph", type=Path)
         p.add_argument("--include-diagnostic", action="store_true")
@@ -423,7 +531,8 @@ def main(argv=None):
     elif args.command in {"neighbors", "walk"}:
         options = dict(direction=args.direction, limit=args.limit, edge_kinds=args.kind,
                        include_diagnostic=args.include_diagnostic)
-        value = (walk(graph, args.id, depth=args.depth, **options) if args.command == "walk" else
+        value = (walk(graph, args.id, depth=args.depth,
+                      expand_ambiguous_incidence=args.expand_ambiguous_incidence, **options) if args.command == "walk" else
                  neighbors(graph, args.id, **options))
     elif args.command == "get": value = get_record(graph, args.kind, args.id, include_diagnostic=args.include_diagnostic)
     elif args.command == "search":

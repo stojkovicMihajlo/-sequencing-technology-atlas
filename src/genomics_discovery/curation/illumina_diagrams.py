@@ -100,7 +100,10 @@ class MethodScope(StrictModel):
 class PaperMatch(StrictModel):
     id: Text
     source_id: Text = Field(description="Publication or publication-metadata source ID in registry.")
-    methods: tuple[Text, ...]
+    methods: tuple[Text, ...] = Field(description=
+        "In-scope methods that the inspected source actually establishes. Use an empty list "
+        "for card-level background, catalogue or unresolved citations with no supported member "
+        "assignment. Architecture/variant support must identify the supported method(s).")
     assessment: Literal["listed_not_read", "identity_verified", "content_checked"]
     relationship: Literal["catalogue_citation", "supports_architecture", "supports_variant",
                           "background", "unresolved"]
@@ -209,8 +212,10 @@ class DiagramExtraction(StrictModel):
             if scope.status == "resolved" and (not scope.operation_ids or not scope.evidence):
                 raise ValueError("Resolved applicability requires operations and source evidence")
         for paper in self.paper_matches:
-            if not paper.methods or set(paper.methods) - set(names):
+            if set(paper.methods) - set(names):
                 raise ValueError("Paper match must refer to named methods in this record")
+            if not paper.methods and paper.relationship in {"supports_architecture", "supports_variant"}:
+                raise ValueError("Architecture/variant support must identify a named method")
         targets = review_targets(self)
         for correction in self.corrections:
             if correction.target_id not in targets or not correction.target_id.startswith(
