@@ -1,0 +1,167 @@
+Illumina source-to-graph harness: the product and its missing handoff
+Decision date: 31 October 2026
+Status: design contract plus implemented graph-selection tool. Cross-method claim
+writing/review/publication for the new diagram records is NOT yet wired end to end.
+
+Goal
+Build an agent-usable, evidence-grounded graph of sequencing technologies that
+explains what each assay does, which transformations it shares with other assays,
+what differs at those interfaces, and which historical design moves are documented.
+Extraction is one stage of that harness. More completed extractions alone do not
+establish successful graph construction or useful scientific connections.
+
+Observed implementation boundary
+- illumina_batch.py produces image-led DiagramExtraction and fresh DiagramReview.
+- illumina_graph.py imports those records and exposes explicit local Flows.
+- operation_registry/ already contains definition retrieval, source membership
+  review, duplicate-definition reconciliation, versioning and publication controls.
+- Its occurrence/evidence interfaces expect the earlier Workflow + text-passage
+  packet format; operation_registry/graph.py expects graph['workflows'] and Modules.
+  The new diagram atlas instead has cards and image-or-text Evidence. These cannot
+  be silently cast into the old format without losing or inventing information.
+- The new operation_group() tool prepares connected exact occurrences from the
+  diagram graphs, preserving input/output boundaries, side branches, original
+  evidence, relevant scope and uncertainty. It does not assign a shared label,
+  determine biochemical equivalence or publish an edge.
+
+Inputs and scientific object
+Inputs are actual source diagrams, their literal captions, paper identity/content
+at its declared evidence level, reviewed source graphs and existing shared
+transformation definitions. The target is a set of scoped scientific claims over
+unchanged source occurrences. Neither a string cluster nor a maximum-overlap graph
+alignment is itself the scientific object.
+
+A source group may contain one Operation in one method and several in another.
+Grouping is a query over source records, not a new mandatory Module hierarchy.
+Connectedness is necessary for this query, but does not prove the group forms a
+reusable biochemical transformation. Whole-method alternatives, independent
+branches and physical/data integration retain their source distinctions.
+
+Three kinds of graph connection
+1. Within-method Flows: exact material/data input and output, or precedence.
+   Their source and target IDs refer to that method's own occurrence records.
+2. Shared transformations: each method occurrence links to a defined function or
+   mechanism. Shared purpose and shared mechanism remain separate assertions.
+   Two such memberships can support a method-level comparison, but never create
+   a physical material-flow path between methods or establish substitution safety.
+3. Historical change: a source-backed development/component-transfer event names
+   contributors, affected operations, limitation, design move and reported gain/
+   trade-off where known. Multiple contributors are possible. Date/citation/name
+   similarity only nominates candidates; none is proof of historical transfer.
+Unconnected methods remain valid graph records. A common caption is not a shared
+local Operation; independent repeated uses retain distinct instances.
+
+The cross-method harness, in execution order
+A. Register and extract a source depiction, then independently review it.
+   Output: source-bound State/Operation/Flow records, scope and paper assessments.
+   Required interface facts are preserved where shown or supported by paper text;
+   no complete unshown kit recipe or every experimental parameter is required.
+B. Retrieve possible shared transformations and comparison groups.
+   Reuse the existing definition-content lexical/optional semantic retrieval.
+   The retrieval text includes substrates, transformation, mechanism, outputs,
+   information effect and context. A score only ranks inspection candidates.
+   Explicit source references nominate possible historical predecessors separately.
+   Avoid evaluating every whole-method pair just to find a shared operation.
+C. Prepare a comparison with operation_group() on each candidate side.
+   Inputs/outputs, internal states, side outputs, adjacent outside routes,
+   applicability, corrections and unknowns travel with the selected operations.
+   Missing detail required by the proposed relation triggers focused lookup;
+   it does not justify completing a hidden reaction from memory or invalidating
+   an otherwise adequate source diagram. A discovered extraction error requests
+   a newly reviewed source version instead of editing the original in place.
+D. Propose a scientific claim, then conduct a fresh source-first review.
+   Reuse the existing TransformationDefinition fields:
+   substrate, operation, physical_mechanism, output, information_effect, purpose,
+   context_requirements. Unknown mechanism is explicit, not inferred from labels.
+   Each proposed membership identifies exact operation IDs and source versions,
+   evidence from its own side, consequential differences and unsupported transfers.
+   The reviewer must check the common definition against BOTH complete groups and
+   their boundaries, not just confirm two individually plausible descriptions.
+   Permit no-established-relation and needs-evidence outcomes. Do not infer a
+   common mechanism from common purpose, or history from either shared relation.
+E. Publish admitted claims and query them without merging source occurrences.
+   Reuse an existing definition only after contextual verification. A new one
+   requires a stated distinction and a current-registry duplicate check. Bind
+   publication to the reviewed source/claim versions. Pending comparisons remain
+   separate from accepted graph relationships. Keep model work outside write locks.
+
+Minimal next implementation
+Retain the old definition and candidate-retrieval logic. Add a source-occurrence
+adapter supporting the diagram Evidence type natively, including actual images.
+Do not invent text passages standing in for an image, fabricate missing Resources/
+Modules, or rename the new record as the old Workflow merely to satisfy a schema.
+Add a comparison-author/reviewer path using the existing CodexWorker and source
+helpers; it runs on Qiu Slurm with the same managed policy. Publish only after
+separate structural/source checks AND the reviewed scientific relationship.
+This is a bounded addition, not a new team hierarchy or framework rewrite.
+
+What a shared claim must answer
+- Which complete transformation is asserted to be common, at what abstraction?
+- Which exact operation groups and input/output states instantiate it?
+- What evidence establishes each membership and its mechanism, if claimed?
+- What differs: substrate, compartment, selection, label/readout association,
+  order, resources or downstream requirements?
+- Which differences are observed, which are inferred, and which remain unknown?
+- What is NOT established about substitutability or historical development?
+A reviewer may reject a label-only or scientifically uninformative definition.
+A general classification is a retrieval aid, not evidence of a reusable component.
+
+Examples for development, not preloaded answers to inference agents
+- ATAC/ChIPmentation: inspect Tn5 fragmentation/adapter tagging, while retaining
+  accessible-chromatin versus immunoprecipitated bead-bound contexts. The original
+  ChIPmentation paper independently discusses why purified-DNA tagmentation was
+  difficult and why moving it onto bead-bound chromatin helped. That design move
+  is richer than sharing a reagent. Do not infer all context transfers are safe.
+- Enzymatic adapter ligation/click-based adapter addition: possible common purpose,
+  with different mechanisms and end-group requirements. A common word must not
+  produce shared-mechanism or interchangeability claims.
+- RAD/ddRAD: assess a documented modification using the primary Methods and
+  explicit predecessor discussion, separately from similarity of their diagrams.
+- Retain a no-match case and a whole-group versus split-group example. A different
+  number of operation nodes must not alone change the scientific conclusion.
+
+Evaluation milestone before scaling connection generation
+A useful demo must start from reviewed depictions and finish with inspectable
+cross-method claims, a rejected misleading comparison and source-qualified graph
+queries. Count correct connections and false connections on a small separately
+annotated development set, retrieval misses, unresolved cases and source-read/
+latency cost. Include paraphrase and benign-regrouping stability. Reserve a
+technology family before tuning prompts. Matching labels, node counts, model
+agreement or a successful native call is not the scientific accuracy metric.
+No software test or same-model review supplies a zero-hallucination guarantee.
+
+Agent use after graph construction
+Find demonstrated transformations satisfying a required input/output property;
+inspect where the same mechanism was used in different contexts; retrieve the
+specific design move and trade-off between assays; and reopen the evidence or
+interface uncertainty before proposing a new arrangement. A graph search returns
+precedent and candidate components, not an experimentally validated new assay.
+
+Reference implementation audit
+Material ambiguity: occurrence identity versus semantic alignment. Directly
+merging similar nodes destroys contextual identities and can create false paths.
+Selected: preserve occurrences; retrieve definitions; verify scoped membership;
+represent history as a separately supported event. No upstream source copied.
+
+EDC, EMNLP2024: https://aclanthology.org/2024.emnlp-main.548/
+Official code inspected at02aad17e2fc1e9845c84746b384e7fd3160edc1a:
+edc/schema_canonicalization.py (retrieve_similar_relations, llm_verify, canonicalize).
+Adopt definition-based retrieval followed by contextual verification and a no-match
+outcome. Reject its exact-label verification bypass and target-alignment deletion
+of unmatched source facts. Its flat-relation canonicalization is not biochemical
+compatibility verification. Prior pinned audit is in docs/REFERENCE_IMPLEMENTATIONS.json.
+
+LabOP: https://doi.org/10.1145/3604568 and author PDF
+https://jakebeal.github.io/Publications/JETC23-LabOP.pdf, sections4.3/5.3/5.4/5.5.
+Adopt explicit operation inputs/outputs and partial-order/branch semantics, plus
+separation of protocol specification and actual execution. Do not claim its
+execution/serialization machinery solves semantic common-component discovery or
+historical inference. This closely related representation is an independent
+comparison to EDC's flat relation object.
+
+Current implemented proof
+operation_group() and CLI group have offline negative controls for side-branch
+loss, hidden outside-operation connectivity, missing/duplicate exact IDs,
+diagnostic status and unrelated-record changes. These test structural comparison
+input preparation only. A native end-to-end cross-method claim/review/publication
+experiment on these new diagram records remains required.

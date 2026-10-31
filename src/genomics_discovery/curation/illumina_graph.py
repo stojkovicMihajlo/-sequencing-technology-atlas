@@ -254,6 +254,79 @@ def workflow(graph: dict, record_id: str, *, include_diagnostic=False) -> dict:
             "provenance": card.get("source_registry", {})}
 
 
+def operation_group(graph: dict, record_id: str, operation_ids, *, include_diagnostic=False) -> dict:
+    """Prepare exact connected source occurrences for a later scientific comparison.
+
+    The host retains side outputs and surrounding routes. It neither defines a
+    reusable component nor compares meanings, assigns a label, or admits an edge.
+    """
+    view = workflow(graph, record_id, include_diagnostic=include_diagnostic)
+    card = view["card"]
+    if card.get("admission") != "supported" and not include_diagnostic:
+        raise ValueError("Comparison needs a supported workflow or explicit diagnostic access")
+    requested = list(operation_ids)
+    selected = set(requested)
+    operations = {n["id"]: n for n in view["nodes"] if n["node_type"] == "operation"}
+    if not selected or len(selected) != len(requested) or selected - operations.keys():
+        raise ValueError("Choose distinct exact Operation IDs from this workflow")
+    flows = view["flows"]
+    touching = [e for e in flows if selected & {e["source"], e["target"]}]
+    state_ids = {n["id"] for n in view["nodes"] if n["node_type"] == "state"}
+    node_ids = selected | (state_ids & {x for e in touching for x in (e["source"], e["target"])})
+    incident = [e for e in flows if e["source"] in node_ids and e["target"] in node_ids]
+    nodes = {n["id"]: n for n in view["nodes"] if n["id"] in node_ids}
+    # Connectivity describes recorded topology, not a common biochemical role.
+    adjacency = {key: set() for key in node_ids}
+    for edge in incident:
+        adjacency[edge["source"]].add(edge["target"])
+        adjacency[edge["target"]].add(edge["source"])
+    reached, pending = set(), [min(selected)]
+    while pending:
+        current = pending.pop()
+        if current not in reached:
+            reached.add(current)
+            pending.extend(adjacency[current] - reached)
+    if not selected <= reached:
+        raise ValueError("Operations must form one connected source group")
+    producers, consumers = {}, {}
+    for edge in flows:
+        if edge["kind"].endswith("_output"):
+            producers.setdefault(edge["target"], set()).add(edge["source"])
+        elif edge["kind"].endswith("_input"):
+            consumers.setdefault(edge["source"], set()).add(edge["target"])
+    states = {key for key, node in nodes.items() if node["node_type"] == "state"}
+    inputs, outputs, internal = [], [], []
+    for state in sorted(states):
+        made, used = producers.get(state, set()), consumers.get(state, set())
+        if used & selected and (not made & selected or made - selected): inputs.append(state)
+        if made & selected and (not used & selected or used - selected): outputs.append(state)
+        if made & selected and used & selected: internal.append(state)
+    boundary = [e for e in flows if (e["source"] in node_ids) != (e["target"] in node_ids)]
+    context_ids = {x for e in boundary for x in (e["source"], e["target"])} - node_ids
+    identity = {"record_id": record_id, "operation_ids": sorted(selected),
+        "candidate_sha256": card.get("candidate_sha256"), "review_sha256": card.get("review_sha256"),
+        "artifact_pins": card.get("artifact_pins", {})}
+    caveats = get_record(graph, "operation", min(selected), include_diagnostic=include_diagnostic)
+    return {"format_version": "illumina_operation_group/1.0", "selection_sha256": digest(identity),
+        **identity, "scope": card.get("scope"), "source_scope": card.get("source_scope", {}),
+        "admission": card.get("admission"), "nodes": [copy.deepcopy(nodes[k]) for k in sorted(nodes)],
+        "flows": copy.deepcopy(incident), "input_state_ids": inputs, "output_state_ids": outputs,
+        "internal_state_ids": internal, "boundary_flows": copy.deepcopy(boundary),
+        "surrounding_operations": [copy.deepcopy(n) for n in view["nodes"] if n["id"] in context_ids],
+        "method_scopes": [copy.deepcopy(n["original"]) for n in view["nodes"]
+                          if n["node_type"] == "method_scope"],
+        "corrections": [copy.deepcopy(n["original"]) for n in view["nodes"]
+                        if n["node_type"] == "correction"],
+        "unknowns": copy.deepcopy(card.get("unknowns", [])),
+        "full_source_registry_artifact": caveats["full_source_registry_artifact"],
+        "routing_ambiguities": [row for key, row in
+            _routing_ambiguities(graph, {n["id"]: n for n in graph["nodes"]}, include_diagnostic).items()
+            if key in selected],
+        "provenance": copy.deepcopy(view["provenance"]),
+        "status": "source_group_only; scientific_comparison_not_performed",
+        "boundary": "Connectivity is not a shared transformation, substitute compatibility or ancestry claim. A boundary State may also be internal when a side branch exits the selected group."}
+
+
 def _route_context(graph, ident, direction, edge_kinds, include_diagnostic):
     if direction not in {"out", "in", "both"}:
         raise ValueError("Direction must be out, in or both")
@@ -499,6 +572,10 @@ def main(argv=None):
     build = sub.add_parser("build"); build.add_argument("batch", type=Path)
     build.add_argument("inventory", type=Path); build.add_argument("--output", type=Path, required=True)
     protocol = sub.add_parser("protocol"); protocol.add_argument("graph", type=Path)
+    group = sub.add_parser("group"); group.add_argument("graph", type=Path)
+    group.add_argument("id", help="Exact workflow record ID")
+    group.add_argument("--operation", action="append", required=True, help="Exact global Operation ID; repeat for a connected group")
+    group.add_argument("--include-diagnostic", action="store_true")
     for command in ("workflow", "neighbors", "walk"):
         p = sub.add_parser(command); p.add_argument("graph", type=Path); p.add_argument("id")
         p.add_argument("--include-diagnostic", action="store_true")
@@ -528,6 +605,8 @@ def main(argv=None):
     if args.command == "protocol":
         print(protocol_text(graph), end=""); return 0
     if args.command == "workflow": value = workflow(graph, args.id, include_diagnostic=args.include_diagnostic)
+    elif args.command == "group":
+        value = operation_group(graph, args.id, args.operation, include_diagnostic=args.include_diagnostic)
     elif args.command in {"neighbors", "walk"}:
         options = dict(direction=args.direction, limit=args.limit, edge_kinds=args.kind,
                        include_diagnostic=args.include_diagnostic)
