@@ -1,0 +1,83 @@
+Illumina schematic extraction and graph construction
+
+Purpose
+Read Illumina's supplied method schematics, identify their actual target methods,
+match supporting papers, and create source-grounded architecture graphs that an
+agent can retrieve and inspect. These are outlines, with primary-paper details
+where they resolve an important transformation or interface. They are not full
+laboratory execution recipes. The earlier detailed-protocol experiments remain
+preserved separately.
+
+Unit and scope
+A catalogue card, a depicted workflow and a canonical technology are different
+records. The live catalogue contains 154 cards, including grouped names and an
+empty MDA card whose actual public diagram was recovered. Three posters contain 285
+source rowgroups. Those counts do not establish distinct assay counts. A source
+can mention additional related techniques without depicting their workflows.
+Titles, captions and explicit alternatives define the extraction target; papers
+and surrounding text clarify it. Source grouping never proves experimental
+interchangeability or historical development.
+
+Read these code files in this order
+1. src/genomics_discovery/curation/illumina_prompts.py
+   Exact shared, author and independent-reviewer instructions. build_prompt()
+   assembles the stage text and caller context; it does not invoke a model.
+2. src/genomics_discovery/curation/illumina_diagrams.py
+   The actual State, Operation, Flow, MethodScope, PaperMatch, Correction and
+   Unknown definitions, followed by structural/source/review gates.
+3. src/genomics_discovery/curation/illumina_batch.py
+   card_sources() registers actual images and available text; extract_card()
+   invokes author then fresh reviewer, validates the archives and gives a
+   correctable candidate one bounded revision. run() distributes cards, preserves
+   attempts and updates state.json plus CHECKLIST.csv.
+4. src/genomics_discovery/curation/illumina_graph.py
+   Reopens completed artifact/source pins before assembly. Provides card,
+   Operation, State, workflow, search, neighbors and walk queries, plus a
+   deterministic readable protocol_text() view.
+5. src/genomics_discovery/curation/illumina_sources.py
+   Website inventory, asset acquisition and publication/fulltext retrieval.
+   scripts/illumina_*sources.py and illumina_poster_citations.py handle explicit
+   cache recovery, source registration, poster rendering and bibliography leads.
+
+What the graph records
+State: material or data at a particular boundary, with relevant supported features.
+Operation: a transformation or inspection, naming its input and output State IDs.
+Flow: an explicit directed edge, with material_input/material_output,
+      data_input/data_output or precedes semantics and source support.
+For example, RNA State -> capture Operation -> captured-RNA State. These are
+separate records; Flow stores the exact source/target IDs and the edge type.
+There is no required fixed list of Modules. A depicted branch remains a branch.
+
+Output order and files
+Each native stage first writes artifact.json. The host validates it against the
+schema, registered sources, exact source quotes and graph/reference rules.
+After an independent review, the host records final extraction.json and
+review.json and derives graph.json. Python can then render the structured fields
+as readable text without making another scientific interpretation.
+Every attempt preserves stage_prompt.txt, schema.json, image_delivery.json and
+native transport records. Image originals and display renditions have separate
+pins. All of this is written under the assigned Qiu scratch attempt directory.
+
+What is checked and what is not guaranteed
+Mechanical checks include graph IDs, typed endpoints, I/O agreement, acyclicity,
+quote presence, source levels, paper/method coverage, exact review targets,
+fresh threads, actual image arguments, unchanged input/output bytes and custody.
+The reviewer separately assesses scientific support and omitted diagram content.
+Passing these controls cannot guarantee semantic truth or experimental feasibility;
+fresh sessions of the same model can still make correlated errors. The source
+artifacts and explicit unknowns remain available for further expert inspection.
+
+Queries and identity
+Hashes identify source bytes and stable depiction records. They do not measure
+biochemical equivalence. Search returns comparison candidates. Route tools follow
+only declared Flows and report truncation/frontiers. Shared words, dates, paper
+citations or deposited diagrams create no automatic method-development or
+shared-mechanism edge.
+
+Deployment
+New extraction/review calls run under Slurm on Qiu Sherlock, gpt-6.1-sol/xhigh,
+CLI 0.163.0. Exact root and active jobs are in CURRENT.json and INDEX.txt. Read
+RESUME.txt and the authoritative remote state before resuming or repeating work.
+Install the optional image dependency with uv sync --extra dev --extra diagrams;
+real poster conversion also needs Poppler. The tested Qiu environment already
+provides these components.

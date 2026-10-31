@@ -12,6 +12,7 @@ dependencies = ["pydantic>=2.10,<3"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "pytest-asyncio>=0.24,<2"]
+diagrams = ["Pillow==12.0.0"]
 semantic = [
     "fastembed>=0.9,<0.10",
 ]
@@ -28,6 +29,8 @@ atlas-deploy = "genomics_discovery.curation.deployment:main"
 atlas-worklist = "genomics_discovery.curation.source_worklist:main"
 atlas-progress = "genomics_discovery.curation.batch_report:main"
 atlas-acquire = "genomics_discovery.curation.source_acquisition.__main__:main"
+atlas-diagrams = "genomics_discovery.curation.illumina_batch:main"
+atlas-diagram-graph = "genomics_discovery.curation.illumina_graph:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/genomics_discovery"]
