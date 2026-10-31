@@ -1,0 +1,35 @@
+{
+  "format_version": "illumina_poster_source_preparation_controls/1.0",
+  "tests": {
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=src /Users/mihajlostojkovic/anaconda3/bin/python -m pytest tests/test_illumina_poster_sources.py -q",
+    "passed": 19,
+    "skipped": 0,
+    "transport": "tinyfakePDFpage rasters and mockedPoppler; no native/modelcalls orheavyactualrendering"
+  },
+  "implementation": {
+    "scripts/illumina_poster_sources.py": "25baa8920f75621cc2364df09f0660dabdf00afb45fea361effebd8dc37cf962",
+    "tests/test_illumina_poster_sources.py": "d9003bc5cedef6c6c6f9d091bf99bd2acb734b43c4f5cdb4c6cba63399608812"
+  },
+  "actual_overlay_validation": {
+    "path": "provenance/experiments/illumina_full_20261031/poster_visual_review_01/inventory_overlay_proposals.json",
+    "sha256": "976b711f808e0d31e6cccb15bd8ac81cb78ae6355aaad97a2f2e60c3876201c9",
+    "rows": 285,
+    "distinct_record_ids": 285,
+    "unique_pdf_pages": 3,
+    "scope": "Structuralrow/member/labelcontainment checks only; productionrasterization andfullsourcepoolreuse mustexecuteinSlurm."
+  },
+  "guarantees_tested": [
+    "One144dpirenderandonePNGdecode peruniquePDFpage, evenwhen source rowsinterleave; originaloverlayorder restored.",
+    "Distinctper-depictionrowIDs preserveallsource rows andgroupedmemberlabelswithoutcanonicalmerging.",
+    "PDFkind/URL/SHA mustmatch acquiredparentresource; sourcefilescheckedbeforeandafter.",
+    "PDFpoint\u2192pixelcoordinates useexplicitoutwardrounding andfinitepagegeometry; targetlabels mustremaininsidecrop.",
+    "Literalposterreferences retainpmid=null; candidatePMIDs remainseparateunverifiedassociations withcandidate-specificreferenceIDs.",
+    "Metadataonlyisnotpromotedtofulltext; currentmetadata/fulltextfilepinsrequired.",
+    "ProductionrenderingguardedbySlurm; actualraster/cropfilesandcommandsrecorded."
+  ],
+  "limits": [
+    "Doesnotverifychemicalmechanism, workflowedges, historicalpriority orpaper-to-methodapplicability.",
+    "The285source rowsaredepictions, not285uniqueassays.",
+    "No nativebatchhasbeenrunbythishelperaudit."
+  ]
+}

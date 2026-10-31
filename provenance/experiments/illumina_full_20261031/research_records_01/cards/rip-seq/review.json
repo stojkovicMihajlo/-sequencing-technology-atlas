@@ -1,0 +1,1941 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "rip-seq",
+  "candidate_sha256": "a38160b819b2d2364e7c83a9d55a717f51aef9fd9118ae42228f74068f77683b",
+  "inspected_sources": [
+    "card:rip-seq",
+    "diagram:asset_3ca314ac9cea8c7cd6b26034",
+    "metadata:21172659",
+    "paper:21172659",
+    "metadata:26859437",
+    "paper:26859437",
+    "metadata:26883671",
+    "paper:26883671",
+    "metadata:27151434",
+    "paper:27151434",
+    "metadata:26967018",
+    "paper:26967018",
+    "metadata:26752519",
+    "paper:26752519",
+    "metadata:27220277",
+    "paper:27220277",
+    "metadata:27229370",
+    "paper:27229370",
+    "metadata:27210763",
+    "paper:27210763",
+    "metadata:26807845",
+    "paper:26807845",
+    "reference:rip-seq:related_publications:3"
+  ],
+  "checks": [
+    {
+      "target": "correction:c_native_readout",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The diagram ends at cDNA and the card claims single-base resolution. The correction appropriately distinguishes RNA sequence/genomic resolution from protein-contact-site resolution for the native PRC2 library. Opposite-strand interpretation, the production route without reported footprint generation and separate direct-interaction validation support the conservative n_library → native_readout → n_reads interface; the diagram/card claims remain recorded as source statements.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNA extraction → Reverse transcription (parallel purple/black lines) → final black cDNA segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing of cDNA provides single-base resolution of protein-bound RNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], read orientation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because library construction and sequencing generate sequence from the opposite strand of the PRC2-bound RNA, in all further analysis, we treated each read as if it were reverse-complemented.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": "Native capture and strand-preserving sequencing establish associated RNA identity and origin. No contact-site encoding transformation is reported in the native production route [b00041]; the paper separately uses UV-crosslink RIP to test direct interactions [b00026]. Nucleotide-resolved sequence does not itself identify a protein-contact nucleotide."
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00026], separate direct-interaction validation and reassociation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Third, we performed UV-crosslink RIP, an alternative method of testing RNA-protein interactions in vivo based on the ability of UV to covalently link RNA to protein at near-zero Angstroms (Ule et al., 2005). Because crosslinking occurs only at short range and complexes are isolated with disruptive sonication and high-salt washes, this method better detects direct RNA-protein interactions and may avoid reassociation artifacts during RNA isolation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:c_native_rnase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The correction retains the diagram RNase route while deriving native_extract from the declared native PRC2 implementation. Inspection of the full production paragraph supports the precise claim that trimming is not reported there; [b00027] describes RNase pretreatment as validation. n_ip → native_extract → n_RNA and all native scope assignments consistently implement this distinction.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Arrow from immunoprecipitated complex into RNase digestion: yellow/orange symbols flank blue protein and retained purple RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.333,
+            0.0,
+            0.593,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": "The inspected library-production paragraph [b00041] proceeds from IP to RNA extraction and template-switch cDNA construction without reporting RNase trimming. The RNase pretreatments in [b00027] are explicitly validation of recovered nucleic acid identity, not production of the sequenced library."
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00027], RNase pretreatment validation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To confirm the nature of nucleic acids precipitated by α-Ezh2, we pretreated nuclear extracts with RNases of different substrate specificities. Digesting with single-stranded RNase (RNase I) and double-stranded RNase (RNAse V1) abolished RNA pulldown, whereas digesting with RNase H (which degrades the RNA strand in RNA:DNA hybrids) and DNase I had no effect (Fig. 4E).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_n_RNA_native_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Recovered RNA and Adaptor1 are the reported first-strand-synthesis substrate and primer. This route supplies native RNA to the strand-preserving library block rather than supplying the schematic RNase-trimmed RNA.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Adaptor1 priming",
+          "basis": "text",
+          "support": "reported",
+          "quote": "20–150 ng RNA and Adaptor1 (5′-CTTTCCCTACACGACGCTCTTCCGATCTNNNNNN-3′) were used for first-strand cDNA synthesis using Superscript II Reverse Transcription Kit (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], strand preservation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To preserve strand information, template switching was used for the library construction (Cloonan et al., 2008).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_n_input_native_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Nuclear lysates incubated with α-Ezh2 are the reported native IP substrate. The receiving operation and this input state share the same mouse ES-cell/native scope, with no compartment pooling or cross-component mixing claim.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], nuclear lysate and antibody input",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct RIP-seq libraries, cell nuclei were isolated, nuclear lysates were prepared, treated with 400 U/ml DNAse, and incubated with α-Ezh2 antibodies (Active Motif) or control IgG (Cell Signaling Technology).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_n_ip_native_extract",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The primary methods explicitly connect immunoprecipitated complexes to RNA extraction. This is a direct native-route input, with no inserted RNase footprint transformation from the Illumina component.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": "The inspected library-production paragraph [b00041] proceeds from IP to RNA extraction and template-switch cDNA construction without reporting RNase trimming. The RNase pretreatments in [b00027] are explicitly validation of recovered nucleic acid identity, not production of the sequenced library."
+        }
+      ]
+    },
+    {
+      "target": "flow:f_n_library_native_readout",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The primary methods sequence the selected cDNA samples on GAII. This is a DNA material input to sequencing, consistent with both n_library and native_readout, and does not claim direct sequencing of RNA or protein.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], selection of library products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "PCR products were loaded on 3% NuSieve gel for size-selection and 200–1,200 bp products were excised and extracted by QIAEX II Agarose Gel Extraction Kit (Qiagen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Illumina GAII readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5–10 μl of 2 – 20 nM cDNA samples were sequenced by the Sequencing Core Facility of the Dept. of Molecular Biology, MGH, on the Illumina GAII.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_native_extract_n_RNA",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Trizol extraction produces recovered RNA, which is subsequently used for cDNA synthesis. The route agrees with n_RNA and does not preserve bead/protein attachment as a library carrier.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Adaptor1 priming",
+          "basis": "text",
+          "support": "reported",
+          "quote": "20–150 ng RNA and Adaptor1 (5′-CTTTCCCTACACGACGCTCTTCCGATCTNNNNNN-3′) were used for first-strand cDNA synthesis using Superscript II Reverse Transcription Kit (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_native_ip_n_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Protein A agarose immunoprecipitation produces RNA-protein complexes. The receiving state retains this attachment/association for extraction rather than treating antibody addition as a free-RNA output.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00009], nuclear RNA source and sequencing libraries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nuclear RNAs immunoprecipitated by α-Ezh2 antibodies were isolated from mouse ES cells (Lee and Lu, 1999) and an Ezh2−/− control (Shen et al., 2008) (Fig. 1B), cDNAs created using strand-specific adaptors, and those from 200–1,200 nt were purified and subjected to Illumina sequencing (Fig. 1C).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_native_library_n_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Template-switch synthesis, Illumina-primer amplification and product selection yield the adaptor-bearing cDNA library. The output state is selected DNA, agreeing with the input to native_readout.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], cDNA 3′ CCC and GGG template-switch interface",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Superscript II adds non-template CCC 3′ overhangs, which were used to hybridize to Adaptor2-GGG template-switch primer (5′-CAAGCAGAAGACGGCATACGAGCTCTTCCGATCTGGG-3′).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], cDNA amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Resulting cDNAs were amplified by forward (5′-AATGATACGGCGACCACCGAGATCTACACTCTTTCCCTACACGACGCTCTTCCGATCT-3′) and reverse (5′-CAAGCAGAAGACGGCATACGAGCTCTTCCGATCT-3′) Illumina primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], selection of library products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "PCR products were loaded on 3% NuSieve gel for size-selection and 200–1,200 bp products were excised and extracted by QIAEX II Agarose Gel Extraction Kit (Qiagen).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_native_readout_n_reads",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Sequencing and genomic alignment produce data, with read orientation interpreted opposite the original RNA. The data_output route agrees with n_reads and does not propagate a molecule into a data state.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Illumina GAII readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5–10 μl of 2 – 20 nM cDNA samples were sequenced by the Sequencing Core Facility of the Dept. of Molecular Biology, MGH, on the Illumina GAII.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Remaining sequences were then aligned to the mm9 mouse reference genome using shortQueryLookup (Batzoglou et al., 2002).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], read orientation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because library construction and sequencing generate sequence from the opposite strand of the PRC2-bound RNA, in all further analysis, we treated each read as if it were reverse-complemented.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_extract_s_RNA",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extraction endpoint is a purple RNA segment without the blue protein icon. This output matches both s_RNA and the RNA substrate of the subsequent RT step.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNase digestion → RNA extraction: blue protein-associated purple RNA becomes an isolated purple segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.505,
+            0.0,
+            0.74,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_ip_s_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The immunoprecipitation product is the antibody-associated RNA-protein complex. The route preserves its protein/RNA association as required by the next RNase input.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "First gray arrow into Immunoprecipitate RNA-protein complex; magenta Y-shaped symbols contact blue protein with purple RNA retained",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.285,
+            0.0,
+            0.435,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, RNA-protein complexes are immunoprecipitated with antibodies targeted to the protein of interest.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_rnase_s_trimmed",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The retained product under RNase digestion still contains blue protein and purple RNA. The protected-RNA interpretation comes from the card; RNase acts on the material rather than becoming the retained readout carrier.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Arrow from immunoprecipitated complex into RNase digestion: yellow/orange symbols flank blue protein and retained purple RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.333,
+            0.0,
+            0.593,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_rt_s_cDNA",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The gray arrow from Reverse transcription to the black cDNA endpoint supports the final DNA material output. It does not establish a complete sequencing-library interface, and the candidate leaves that interface unassigned.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNA extraction → Reverse transcription (parallel purple/black lines) → final black cDNA segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_RNA_op_rt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The explicit arrow from isolated RNA into the paired purple/black Reverse transcription region supports RNA as the conversion substrate; the incoming route carries the prior capture/digestion selection.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNA extraction → Reverse transcription (parallel purple/black lines) → final black cDNA segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_complex_op_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The first main-chain gray arrow supplies the RNA-protein complex to immunoprecipitation. It does not originate from the disconnected RIP overview, and matches the input declared by op_ip.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Main-chain RNA-protein complex: purple line through blue protein, before the first gray arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.168,
+            0.0,
+            0.272,
+            0.87
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "First gray arrow into Immunoprecipitate RNA-protein complex; magenta Y-shaped symbols contact blue protein with purple RNA retained",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.285,
+            0.0,
+            0.435,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, RNA-protein complexes are immunoprecipitated with antibodies targeted to the protein of interest.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_ip_op_rnase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The explicit arrow from the captured complex to RNase digestion supports this input transfer. The card independently confirms IP precedes RNase-protected RNA recovery.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Arrow from immunoprecipitated complex into RNase digestion: yellow/orange symbols flank blue protein and retained purple RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.333,
+            0.0,
+            0.593,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, RNA-protein complexes are immunoprecipitated with antibodies targeted to the protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_trimmed_op_extract",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The arrow from RNase digestion into RNA extraction transfers the retained protein-associated RNA to extraction. No route to the paper-derived native extraction component is asserted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNase digestion → RNA extraction: blue protein-associated purple RNA becomes an isolated purple segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.505,
+            0.0,
+            0.74,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:native_extract",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The primary production route reports captured complexes followed by Trizol RNA extraction. The candidate connects n_ip directly to n_RNA and confines omission of RNase trimming to this reported native route; separate nuclease validation does not supply a production step.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": "The inspected library-production paragraph [b00041] proceeds from IP to RNA extraction and template-switch cDNA construction without reporting RNase trimming. The RNase pretreatments in [b00027] are explicitly validation of recovered nucleic acid identity, not production of the sequenced library."
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00027], RNase pretreatment validation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To confirm the nature of nucleic acids precipitated by α-Ezh2, we pretreated nuclear extracts with RNases of different substrate specificities. Digesting with single-stranded RNase (RNase I) and double-stranded RNase (RNAse V1) abolished RNA pulldown, whereas digesting with RNase H (which degrades the RNA strand in RNA:DNA hybrids) and DNase I had no effect (Fig. 4E).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:native_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Native nuclear lysate, α-Ezh2 and protein A agarose are explicitly reported for the PRC2 implementation. Its RNA-associated bead-captured output is consistent with n_ip and subsequent extraction; the interpretation does not require each selected RNA to contact Ezh2 directly.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], nuclear lysate and antibody input",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct RIP-seq libraries, cell nuclei were isolated, nuclear lysates were prepared, treated with 400 U/ml DNAse, and incubated with α-Ezh2 antibodies (Active Motif) or control IgG (Cell Signaling Technology).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00026], separate direct-interaction validation and reassociation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Third, we performed UV-crosslink RIP, an alternative method of testing RNA-protein interactions in vivo based on the ability of UV to covalently link RNA to protein at near-zero Angstroms (Ule et al., 2005). Because crosslinking occurs only at short range and complexes are isolated with disruptive sonication and high-salt washes, this method better detects direct RNA-protein interactions and may avoid reassociation artifacts during RNA isolation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:native_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The broad library block accurately consumes recovered RNA and produces selected, amplified adaptor-bearing cDNA. Adaptor1 priming and the cDNA 3′ CCC/GGG template-switch interface are explicitly supported and scoped to this implementation; no internal chemistry is exported to op_rt.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Adaptor1 priming",
+          "basis": "text",
+          "support": "reported",
+          "quote": "20–150 ng RNA and Adaptor1 (5′-CTTTCCCTACACGACGCTCTTCCGATCTNNNNNN-3′) were used for first-strand cDNA synthesis using Superscript II Reverse Transcription Kit (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], cDNA 3′ CCC and GGG template-switch interface",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Superscript II adds non-template CCC 3′ overhangs, which were used to hybridize to Adaptor2-GGG template-switch primer (5′-CAAGCAGAAGACGGCATACGAGCTCTTCCGATCTGGG-3′).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], strand preservation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To preserve strand information, template switching was used for the library construction (Cloonan et al., 2008).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], cDNA amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Resulting cDNAs were amplified by forward (5′-AATGATACGGCGACCACCGAGATCTACACTCTTTCCCTACACGACGCTCTTCCGATCT-3′) and reverse (5′-CAAGCAGAAGACGGCATACGAGCTCTTCCGATCT-3′) Illumina primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], selection of library products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "PCR products were loaded on 3% NuSieve gel for size-selection and 200–1,200 bp products were excised and extracted by QIAEX II Agarose Gel Extraction Kit (Qiagen).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:native_readout",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The native DNA library is the sequencing substrate; GAII sequencing, mouse-genome placement and opposite-strand interpretation are reported. The resulting data represent PRC2-associated RNA sequences and origins, with single-nucleotide protein-contact inference expressly withheld.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Illumina GAII readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5–10 μl of 2 – 20 nM cDNA samples were sequenced by the Sequencing Core Facility of the Dept. of Molecular Biology, MGH, on the Illumina GAII.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Remaining sequences were then aligned to the mm9 mouse reference genome using shortQueryLookup (Batzoglou et al., 2002).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], read orientation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because library construction and sequencing generate sequence from the opposite strand of the PRC2-bound RNA, in all further analysis, we treated each read as if it were reverse-complemented.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": "Native capture and strand-preserving sequencing establish associated RNA identity and origin. No contact-site encoding transformation is reported in the native production route [b00041]; the paper separately uses UV-crosslink RIP to test direct interactions [b00026]. Nucleotide-resolved sequence does not itself identify a protein-contact nucleotide."
+        }
+      ]
+    },
+    {
+      "target": "operation:op_extract",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The arrow into RNA extraction converts the retained digested complex to isolated RNA. The input s_trimmed and output s_RNA preserve the selection history while removing the depicted protein association; no unshown extraction sequence is supplied.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNase digestion → RNA extraction: blue protein-associated purple RNA becomes an isolated purple segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.505,
+            0.0,
+            0.74,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The first arrow and antibody-bearing complex support s_complex → op_ip → s_ip. Antibodies act as capture reagents; the candidate preserves RNA-protein association and the card-supported limits of specificity and complex stability.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "First gray arrow into Immunoprecipitate RNA-protein complex; magenta Y-shaped symbols contact blue protein with purple RNA retained",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.285,
+            0.0,
+            0.435,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, RNA-protein complexes are immunoprecipitated with antibodies targeted to the protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Cons: antibody specificity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nonspecific antibodies will precipitate nonspecific complexes",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Cons: complex stability",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Lack of crosslinking or stabilization of the complexes may lead to false negatives",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_rnase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The drawing and card place RNase digestion after IP and before extraction, retaining protein-protected RNA in s_trimmed. The candidate assigns no enzyme subtype, end chemistry or perfect biological specificity, and does not carry the yellow/orange acting-reagent icons forward as products.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Arrow from immunoprecipitated complex into RNase digestion: yellow/orange symbols flank blue protein and retained purple RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.333,
+            0.0,
+            0.593,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Cons: RNase digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNase digestion must be controlled carefully",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Cons: antibody specificity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nonspecific antibodies will precipitate nonspecific complexes",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_rt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extracted RNA enters Reverse transcription, shown by paired purple/black lines, and the next arrow ends at black cDNA. Treating this as one schematic conversion preserves the full depicted interface while leaving separation of RNA and cDNA unspecified.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNA extraction → Reverse transcription (parallel purple/black lines) → final black cDNA segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_21172659",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The retrieved metadata identify Zhao et al., Molecular Cell 2010, PMID 21172659, DOI 10.1016/j.molcel.2010.12.011, and the card lists this as its method reference. The inspected full-text Results and Experimental Procedures support the native PRC2 variant, rather than experimentally verifying the diagram-specific RNase route. This is an implementation match, not a priority claim.",
+      "evidence": [
+        {
+          "source_id": "metadata:21172659",
+          "locator": "PubMed metadata: title and identifiers",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide identification of polycomb-associated RNAs by RIP-seq.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Method reference, Zhao et al. (2010)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RIP-Seq: Zhao J., Ohsumi T. K., Kung J. T., Ogawa Y., Grau D. J., et al. (2010) Genome-wide identification of polycomb-associated RNAs by RIP-seq. Mol Cell 40: 939-953",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], strand preservation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To preserve strand information, template switching was used for the library construction (Cloonan et al., 2008).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26752519",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify the Cloonan et al. lung-disease study, whose supplied abstract explicitly reports a RIP-seq application integrated with other assays. Background/application status is supported; the abstract does not establish the schematic RNase timing or library chemistry, and the candidate does not claim it does.",
+      "evidence": [
+        {
+          "source_id": "metadata:26752519",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Mitochondrial iron chelation ameliorates cigarette smoke-induced bronchitis and emphysema in mice.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26752519",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "By integrating RNA immunoprecipitation followed by sequencing (RIP-seq), RNA sequencing (RNA-seq), and gene expression and functional enrichment clustering analysis, we identified Irp2 as a regulator of mitochondrial function in the lungs of mice.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26807845",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify the CNOT7 metastasis study. Its abstract reports CNOT7 RIP plus integrated transcriptome analyses but no detailed RNase/library pathway. Background/application status and the explicit abstract-only limit are supported, with no new method variant inferred.",
+      "evidence": [
+        {
+          "source_id": "metadata:26807845",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Post-transcriptional Control of Tumor Cell Autonomous Metastatic Potential by CCR4-NOT Deadenylase CNOT7.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26807845",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "CNOT7 ribonucleoprotein-immunoprecipitation (RIP) and integrated transcriptome wide analyses reveal that CNOT7-regulated transcripts are enriched for a tripartite 3'UTR motif bound by RNA-binding proteins known to complex with CNOT7, TOB1, and CNOT1.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26859437",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify the McFadden/Hargrove biochemical-methods review. Its supplied abstract describes a review of lncRNA/protein methods, so background is supported; the candidate explicitly limits content_checked to the abstract and does not claim full-text reaction-order verification.",
+      "evidence": [
+        {
+          "source_id": "metadata:26859437",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Biochemical Methods To Investigate lncRNA and the Influence of lncRNA:Protein Complexes on Chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26859437",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This review will provide an overview of the methods and progress made to date as well as highlight new methods that promise to further inform the molecular recognition, specificity, and function of lncRNAs.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26883671",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify the Fang/Fullwood lncRNA-cancer review. The supplied abstract supports background status, with no independently verified RNase/library implementation; the candidate clearly states abstract-only evidence.",
+      "evidence": [
+        {
+          "source_id": "metadata:26883671",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Roles, Functions, and Mechanisms of Long Non-coding RNAs in Cancer.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26883671",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This review summarizes the characteristics of lncRNAs, including their roles, functions, and working mechanisms, describes methods for identifying and annotating lncRNAs, and discusses future opportunities for lncRNA-based therapies using antisense oligonucleotides.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26967018",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata and abstract identify MAPS, an RNA-tagging/MS2-affinity approach. The candidate correctly retains this related publication as background and does not equate its affinity architecture with protein-directed antibody RIP or derive interchangeability/history from the card listing. Full text was not supplied.",
+      "evidence": [
+        {
+          "source_id": "metadata:26967018",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A game of tag: MAPS catches up on RNA interactomes.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26967018",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this, we used an in vivo tagging MS2-affinity purification protocol coupled with RNA sequencing technology, namely MAPS, to assemble full bacterial small RNAs targetomes.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27151434",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify the Kim/Shiekhattar review of lncRNA regulatory interactions. Its abstract supports background, not a protocol or origin claim. The candidate records the supplied content level and assigns no additional implementation.",
+      "evidence": [
+        {
+          "source_id": "metadata:27151434",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Diverse regulatory interactions of long noncoding RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27151434",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This review discusses notable functional properties and mechanisms of action of lncRNAs that have resulted from recent progress made in the field.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27210763",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify the IGF2BP3/RISC study, and the abstract explicitly identifies iCLIP. The candidate correctly treats it as related background rather than a paper establishing native RIP or the diagram RNase architecture; abstract-only content_checked is explicitly qualified.",
+      "evidence": [
+        {
+          "source_id": "metadata:27210763",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "IGF2BP3 Modulates the Interaction of Invasion-Associated Transcripts with RISC.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27210763",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Individual nucleotide resolution crosslinking immunoprecipitation (iCLIP) revealed significant overlap of IGF2BP3 and microRNA (miRNA) binding sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27220277",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify the sortilin/TLR study. Its abstract discusses PCBP1 recognition and transcript stability, supporting related biological background but supplying no RNase/library production sequence. The candidate explicitly limits this check to the abstract.",
+      "evidence": [
+        {
+          "source_id": "metadata:27220277",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "TLR signals posttranscriptionally regulate the cytokine trafficking mediator sortilin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27220277",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Poly-rC-binding protein 1 (PCBP1) recognized the C-rich element (CRE) in the 3' UTR of sortilin mRNA, and depletion of PCBP1 enhanced the degradation of sortilin transcripts, suggesting that PCBP1 can act as a trans-acting factor to stabilize sortilin transcripts.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27229370",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify the CsrA-FliW study. The abstract reports co-immunoprecipitation with RNA sequencing, supporting application background; it does not establish a diagram-specific RNase-trimming variant. The candidate preserves that limit and does not assign its steps to both graph components.",
+      "evidence": [
+        {
+          "source_id": "metadata:27229370",
+          "locator": "Retrieved PubMed metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The CsrA-FliW network controls polar localization of the dual-function flagellin mRNA in Campylobacter jejuni.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27229370",
+          "locator": "Supplied abstract only; no full-text protocol inspection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We use genome-wide co-immunoprecipitation combined with RNA sequencing to show that CsrA primarily binds flagellar mRNAs and identify the major flagellin mRNA (flaA) as the main CsrA target.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_related_chapter",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The source is only the Illumina-related citation for Goeman and Fanciulli. listed_not_read/background honestly preserves the lack of independent DOI/content verification and supplies no experimental architecture.",
+      "evidence": [
+        {
+          "source_id": "reference:rip-seq:related_publications:3",
+          "locator": "Related-publication metadata listing only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Goeman F. and Fanciulli M. Application of RNA-Seq Technology in Cancer Chemoprevention. Cancer Chemoprevention: Methods and Protocols. 2016;31-43",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "record",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "All 52 supplied targets were checked against the attached image and the available source text, including both directions of coverage and each operation/state/route interface. The complete diagram is retained without a fabricated overview transfer, branch, end chemistry or library interface. The paper-supported native component stays distinct, with RNA → cDNA → sequencing-data carrier identity, bead attachment release, strand interpretation, selection limits and both consequential corrections consistent throughout. All listed PMIDs and the chapter are covered at their actual evidence levels; provenance/interface questions are explicitly nonblocking for schematic extraction. No consequential unsupported assertion or omitted depicted transformation remains.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Complete attached diagram, including far-left RIP overview, five gray arrows, all operation labels, parallel purple/black RT lines, and final cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, RNA-protein complexes are immunoprecipitated with antibodies targeted to the protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], strand preservation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To preserve strand information, template switching was used for the library construction (Cloonan et al., 2008).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Illumina GAII readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5–10 μl of 2 – 20 nM cDNA samples were sequenced by the Sequencing Core Facility of the Dept. of Molecular Biology, MGH, on the Illumina GAII.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], read orientation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because library construction and sequencing generate sequence from the opposite strand of the PRC2-bound RNA, in all further analysis, we treated each read as if it were reverse-complemented.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00027], RNase pretreatment validation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To confirm the nature of nucleic acids precipitated by α-Ezh2, we pretreated nuclear extracts with RNases of different substrate specificities. Digesting with single-stranded RNase (RNase I) and double-stranded RNase (RNAse V1) abolished RNA pulldown, whereas digesting with RNase H (which degrades the RNA strand in RNA:DNA hybrids) and DNase I had no effect (Fig. 4E).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00026], separate direct-interaction validation and reassociation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Third, we performed UV-crosslink RIP, an alternative method of testing RNA-protein interactions in vivo based on the ability of UV to covalently link RNA to protein at near-zero Angstroms (Ule et al., 2005). Because crosslinking occurs only at short range and complexes are isolated with disruptive sonication and high-salt washes, this method better detects direct RNA-protein interactions and may avoid reassociation artifacts during RNA isolation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Native PRC2 RIP-seq (Zhao et al., 2010; PMID 21172659)",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The primary text supports native_ip, native_extract, native_library and native_readout as one production route. RNase pretreatment and UV-crosslink RIP/RT-PCR are distinct validation experiments. Keeping this component separate preserves the diagram instead of rewriting its RNase step or importing native template switching into the schematic.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], strand preservation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To preserve strand information, template switching was used for the library construction (Cloonan et al., 2008).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], read orientation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because library construction and sequencing generate sequence from the opposite strand of the PRC2-bound RNA, in all further analysis, we treated each read as if it were reverse-complemented.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00027], RNase pretreatment validation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To confirm the nature of nucleic acids precipitated by α-Ezh2, we pretreated nuclear extracts with RNases of different substrate specificities. Digesting with single-stranded RNase (RNase I) and double-stranded RNase (RNAse V1) abolished RNA pulldown, whereas digesting with RNase H (which degrades the RNA strand in RNA:DNA hybrids) and DNase I had no effect (Fig. 4E).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / UV-crosslink RIP, [b00052], separate RT-PCR validation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "UV-crosslink IP was performed as described (Ule et al., 2005), except that transcripts in the RNA-protein complexes were not trimmed by RNAse treatment prior to RNA isolation in order to preserve full-length RNA for RT-PCR.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:RIP-Seq (Illumina RNase-digestion schematic)",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "op_ip, op_rnase, op_extract and op_rt cover the complete labeled main chain through bare cDNA. The far-left overview is not an extra inlet or operation; yellow/orange digestion icons are acting reagents, not a retained branch. Resolved schematic applicability does not claim resolution of the experimental provenance or a library-adaptor interface.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Complete attached diagram, including far-left RIP overview, five gray arrows, all operation labels, parallel purple/black RT lines, and final cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, RNA-protein complexes are immunoprecipitated with antibodies targeted to the protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:n_RNA",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "RNA extraction from the bead-captured complexes supports released RNA as the substrate for cDNA synthesis. The candidate restricts the no-trimming statement to what is reported in native library production and does not relabel this material as an RNase footprint.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Adaptor1 priming",
+          "basis": "text",
+          "support": "reported",
+          "quote": "20–150 ng RNA and Adaptor1 (5′-CTTTCCCTACACGACGCTCTTCCGATCTNNNNNN-3′) were used for first-strand cDNA synthesis using Superscript II Reverse Transcription Kit (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": "The inspected library-production paragraph [b00041] proceeds from IP to RNA extraction and template-switch cDNA construction without reporting RNase trimming. The RNase pretreatments in [b00027] are explicitly validation of recovered nucleic acid identity, not production of the sequenced library."
+        }
+      ]
+    },
+    {
+      "target": "state:n_input",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The primary paper explicitly uses native RIP of nuclear material from mouse ES cells and α-Ezh2 capture. This is a source-defined input boundary for the native component; it is not connected to the diagram component or treated as a new pooled specimen.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00009], nuclear RNA source and sequencing libraries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nuclear RNAs immunoprecipitated by α-Ezh2 antibodies were isolated from mouse ES cells (Lee and Lu, 1999) and an Ezh2−/− control (Shen et al., 2008) (Fig. 1B), cDNAs created using strand-specific adaptors, and those from 200–1,200 nt were purified and subjected to Illumina sequencing (Fig. 1C).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], nuclear lysate and antibody input",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct RIP-seq libraries, cell nuclei were isolated, nuclear lysates were prepared, treated with 400 U/ml DNAse, and incubated with α-Ezh2 antibodies (Active Motif) or control IgG (Cell Signaling Technology).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:n_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The primary methods identify RNA-protein complexes captured on protein A agarose; results identify α-Ezh2 and PRC2. Its attached complex state agrees with native_ip output and native_extract input.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00009], nuclear RNA source and sequencing libraries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nuclear RNAs immunoprecipitated by α-Ezh2 antibodies were isolated from mouse ES cells (Lee and Lu, 1999) and an Ezh2−/− control (Shen et al., 2008) (Fig. 1B), cDNAs created using strand-specific adaptors, and those from 200–1,200 nt were purified and subjected to Illumina sequencing (Fig. 1C).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:n_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The reported Adaptor1 priming, CCC/GGG template-switch interface, Illumina-primer amplification and product selection support this strand-preserving DNA library. Its inserts represent selected RNA; Ezh2 identity remains an IP-context association rather than an encoded protein tag.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], strand preservation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To preserve strand information, template switching was used for the library construction (Cloonan et al., 2008).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], cDNA 3′ CCC and GGG template-switch interface",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Superscript II adds non-template CCC 3′ overhangs, which were used to hybridize to Adaptor2-GGG template-switch primer (5′-CAAGCAGAAGACGGCATACGAGCTCTTCCGATCTGGG-3′).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], cDNA amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Resulting cDNAs were amplified by forward (5′-AATGATACGGCGACCACCGAGATCTACACTCTTTCCCTACACGACGCTCTTCCGATCT-3′) and reverse (5′-CAAGCAGAAGACGGCATACGAGCTCTTCCGATCT-3′) Illumina primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], selection of library products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "PCR products were loaded on 3% NuSieve gel for size-selection and 200–1,200 bp products were excised and extracted by QIAEX II Agarose Gel Extraction Kit (Qiagen).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:n_reads",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The paper reports GAII sequencing, genome alignment and opposite-to-RNA read orientation. The state is data produced from DNA, preserving an interpretation of RNA origin and strand without asserting contact-site resolution or direct binding for every recovered RNA.",
+      "evidence": [
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Illumina GAII readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5–10 μl of 2 – 20 nM cDNA samples were sequenced by the Sequencing Core Facility of the Dept. of Molecular Biology, MGH, on the Illumina GAII.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Remaining sequences were then aligned to the mm9 mouse reference genome using shortQueryLookup (Batzoglou et al., 2002).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / Bioinformatic analysis, [b00043], read orientation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because library construction and sequencing generate sequence from the opposite strand of the PRC2-bound RNA, in all further analysis, we treated each read as if it were reverse-complemented.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, Capturing the PRC2 transcriptome by RIP-seq, [b00009]",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Here, we developed a method of capturing the genome-wide pool bound to PRC2 by combining native RIP (Zhao et al., 2008) and RNA-seq (Cloonan et al., 2008)(RIP-seq; Fig. 1A).",
+          "bbox": null,
+          "rationale": "Native capture and strand-preserving sequencing establish associated RNA identity and origin. No contact-site encoding transformation is reported in the native production route [b00041]; the paper separately uses UV-crosslink RIP to test direct interactions [b00026]. Nucleotide-resolved sequence does not itself identify a protein-contact nucleotide."
+        }
+      ]
+    },
+    {
+      "target": "state:s_RNA",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The RNA extraction product is the isolated purple segment, downstream of the protein-associated digestion product and upstream of reverse transcription. No terminal groups or complete-transcript claim is assigned.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNase digestion → RNA extraction: blue protein-associated purple RNA becomes an isolated purple segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.505,
+            0.0,
+            0.74,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_cDNA",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The terminal black segment is labeled cDNA, with parallel purple/black lines at reverse transcription. It carries a DNA copy of selected RNA; library adaptors and RNA-removal chemistry are not shown or invented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNA extraction → Reverse transcription (parallel purple/black lines) → final black cDNA segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing of cDNA provides single-base resolution of protein-bound RNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_complex",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The main-chain input is a blue protein associated with purple RNA. The separate far-left RIP overview is acknowledged without inventing a connecting transfer or identifying its unkeyed yellow marks; neither region labels RNA termini.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Main-chain RNA-protein complex: purple line through blue protein, before the first gray arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.168,
+            0.0,
+            0.272,
+            0.87
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Far-left RNA immunoprecipitation (RIP) icon and the separate RNA-protein complex; no transfer arrow between them",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.272,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The antibody-decorated complex retains both blue protein and purple RNA. Selection through the protein is stated by the card; this state feeds RNase digestion, rather than directly becoming free RNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "First gray arrow into Immunoprecipitate RNA-protein complex; magenta Y-shaped symbols contact blue protein with purple RNA retained",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.285,
+            0.0,
+            0.435,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, RNA-protein complexes are immunoprecipitated with antibodies targeted to the protein of interest.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_trimmed",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "RNase digestion retains a blue-protein/purple-RNA complex, and the card explicitly calls the recovered RNA protein-protected. The candidate correctly avoids inferring antibody removal from the omitted antibody icons at this stage.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Arrow from immunoprecipitated complex into RNase digestion: yellow/orange symbols flank blue protein and retained purple RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.333,
+            0.0,
+            0.593,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_rnase_provenance",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The exact experimental attribution of the diagram-specific RNase-protection route is not established by the supplied native production methods or the related abstracts. The candidate asks for a protocol/figure-specific link and marks this nonblocking because the diagram and card establish the schematic transformation without assigning it to the native implementation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "Arrow from immunoprecipitated complex into RNase digestion: yellow/orange symbols flank blue protein and retained purple RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.333,
+            0.0,
+            0.593,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:rip-seq",
+          "locator": "Description, sentence 3",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RNase digestion, RNA protected by protein binding is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], capture followed by extraction",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "RNA-protein complexes were immunoprecipitated with protein A agarose beads and RNA extracted using Trizol (Invitrogen).",
+          "bbox": null,
+          "rationale": "The inspected library-production paragraph [b00041] proceeds from IP to RNA extraction and template-switch cDNA construction without reporting RNase trimming. The RNase pretreatments in [b00027] are explicitly validation of recovered nucleic acid identity, not production of the sequenced library."
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "RESULTS, [b00027], RNase pretreatment validation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To confirm the nature of nucleic acids precipitated by α-Ezh2, we pretreated nuclear extracts with RNases of different substrate specificities. Digesting with single-stranded RNase (RNase I) and double-stranded RNase (RNAse V1) abolished RNA pulldown, whereas digesting with RNase H (which degrades the RNA strand in RNA:DNA hybrids) and DNase I had no effect (Fig. 4E).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_schematic_library_interface",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The schematic ends at bare cDNA without adaptor structures or a library-preparation block. The primary native paper does supply a template-switch interface, but no inspected source ties that chemistry to the schematic RNase route. Leaving this nonblocking interface unspecified is appropriate for the declared schematic scope.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_3ca314ac9cea8c7cd6b26034",
+          "locator": "RNA extraction → Reverse transcription (parallel purple/black lines) → final black cDNA segment",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], Adaptor1 priming",
+          "basis": "text",
+          "support": "reported",
+          "quote": "20–150 ng RNA and Adaptor1 (5′-CTTTCCCTACACGACGCTCTTCCGATCTNNNNNN-3′) were used for first-strand cDNA synthesis using Superscript II Reverse Transcription Kit (Invitrogen).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21172659",
+          "locator": "EXPERIMENTAL PROCEDURES / RIP-seq, [b00041], cDNA 3′ CCC and GGG template-switch interface",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Superscript II adds non-template CCC 3′ overhangs, which were used to hybridize to Adaptor2-GGG template-switch primer (5′-CAAGCAGAAGACGGCATACGAGCTCTTCCGATCTGGG-3′).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

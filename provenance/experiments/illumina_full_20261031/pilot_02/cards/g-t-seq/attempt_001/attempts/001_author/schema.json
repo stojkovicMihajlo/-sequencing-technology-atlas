@@ -1,0 +1,610 @@
+{
+  "$defs": {
+    "Correction": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "target_id": {
+          "description": "Exact review target affected by the discrepancy.",
+          "minLength": 1,
+          "title": "Target Id",
+          "type": "string"
+        },
+        "diagram_observation": {
+          "description": "What the source drawing depicts, preserved faithfully.",
+          "minLength": 1,
+          "title": "Diagram Observation",
+          "type": "string"
+        },
+        "primary_statement": {
+          "description": "What the inspected primary source reports instead.",
+          "minLength": 1,
+          "title": "Primary Statement",
+          "type": "string"
+        },
+        "disposition": {
+          "description": "use_primary means the affected candidate record is explicitly authored from the primary source and cites it. It does not instruct software to rewrite free text. keep_unresolved withholds a supported scientific outcome.",
+          "enum": [
+            "use_primary",
+            "keep_unresolved"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "Both diagram and primary text support are required.",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "target_id",
+        "diagram_observation",
+        "primary_statement",
+        "disposition",
+        "evidence"
+      ],
+      "title": "Correction",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "description": "Exact ID in the supplied source registry.",
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "locator": {
+          "description": "Figure region/caption or text section actually inspected.",
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "basis": {
+          "enum": [
+            "image",
+            "text"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "support": {
+          "description": "depicted for visible diagram content; reported for source text; inferred for an explicit deduction from these sources, requiring its own rationale.",
+          "enum": [
+            "depicted",
+            "reported",
+            "inferred"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "maxLength": 800,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Exact bounded source-text excerpt for text evidence; never a reconstructed quotation.",
+          "title": "Quote"
+        },
+        "bbox": {
+          "anyOf": [
+            {
+              "maxItems": 4,
+              "minItems": 4,
+              "prefixItems": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional image region [left, top, right, bottom], normalized to image dimensions.",
+          "title": "Bbox"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the cited content supports this claim; mandatory for an inference.",
+          "title": "Rationale"
+        }
+      },
+      "required": [
+        "source_id",
+        "locator",
+        "basis",
+        "support"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Flow": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "material_input",
+            "material_output",
+            "data_input",
+            "data_output",
+            "precedes"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "Support for this route or ordering. Proximity on the page alone does not establish flow.",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target",
+        "kind",
+        "evidence"
+      ],
+      "title": "Flow",
+      "type": "object"
+    },
+    "MethodScope": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "operation_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Operation Ids",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "resolved",
+            "unresolved"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "rationale": {
+          "description": "Which operations apply to this named method. Do not assign every step of a grouped diagram to all names. Explain unresolved applicability honestly.",
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "method",
+        "operation_ids",
+        "status",
+        "rationale",
+        "evidence"
+      ],
+      "title": "MethodScope",
+      "type": "object"
+    },
+    "Operation": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "description": "Preserve the source caption where available.",
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "description": {
+          "description": "What changes or is inspected at schematic scope. Do not expand routine execution details.",
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "inputs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Inputs",
+          "type": "array"
+        },
+        "outputs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "mechanism": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Only a source-supported mechanism, not an inferred enzyme or invented chemical recipe.",
+          "title": "Mechanism"
+        },
+        "information_effect": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What association or information is introduced, retained or lost and its physical carrier, when supported. The biological analyte need not be the molecule sequenced.",
+          "title": "Information Effect"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "description",
+        "inputs",
+        "outputs",
+        "evidence"
+      ],
+      "title": "Operation",
+      "type": "object"
+    },
+    "PaperMatch": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "source_id": {
+          "description": "Publication or publication-metadata source ID in registry.",
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "methods": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Methods",
+          "type": "array"
+        },
+        "assessment": {
+          "enum": [
+            "listed_not_read",
+            "identity_verified",
+            "content_checked"
+          ],
+          "title": "Assessment",
+          "type": "string"
+        },
+        "relationship": {
+          "enum": [
+            "catalogue_citation",
+            "supports_architecture",
+            "supports_variant",
+            "background",
+            "unresolved"
+          ],
+          "title": "Relationship",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "Identity support differs from protocol-content support. A PMID or title alone cannot establish an operation, variant, origin date or historical development.",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "methods",
+        "assessment",
+        "relationship",
+        "evidence"
+      ],
+      "title": "PaperMatch",
+      "type": "object"
+    },
+    "State": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "description": "Material or data at this boundary, not a laboratory action.",
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "material",
+            "data"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "features": {
+          "default": [],
+          "description": "Only consequential supported features: ends, attachment, compartment, barcode association. Unknown chemistry is not supplied from convention.",
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Features",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "kind",
+        "evidence"
+      ],
+      "title": "State",
+      "type": "object"
+    },
+    "Unknown": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "blocking": {
+          "description": "True only if an unresolved point prevents the scoped interpretation. Missing routine execution settings need not block a schematic architecture.",
+          "title": "Blocking",
+          "type": "boolean"
+        },
+        "affected_ids": {
+          "default": [],
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Affected Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "question",
+        "blocking"
+      ],
+      "title": "Unknown",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "const": "illumina_diagram/1.0",
+      "default": "illumina_diagram/1.0",
+      "title": "Format Version",
+      "type": "string"
+    },
+    "record_id": {
+      "minLength": 1,
+      "title": "Record Id",
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "method_names": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Method Names",
+      "type": "array"
+    },
+    "scope": {
+      "description": "Exact assay implementation, component illustration or grouped family described; not a claim that all protocols follow the same sequence or that this is an execution recipe.",
+      "minLength": 1,
+      "title": "Scope",
+      "type": "string"
+    },
+    "inspected_sources": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Inspected Sources",
+      "type": "array"
+    },
+    "states": {
+      "items": {
+        "$ref": "#/$defs/State"
+      },
+      "minItems": 1,
+      "title": "States",
+      "type": "array"
+    },
+    "operations": {
+      "items": {
+        "$ref": "#/$defs/Operation"
+      },
+      "minItems": 1,
+      "title": "Operations",
+      "type": "array"
+    },
+    "flows": {
+      "items": {
+        "$ref": "#/$defs/Flow"
+      },
+      "minItems": 1,
+      "title": "Flows",
+      "type": "array"
+    },
+    "method_scopes": {
+      "items": {
+        "$ref": "#/$defs/MethodScope"
+      },
+      "minItems": 1,
+      "title": "Method Scopes",
+      "type": "array"
+    },
+    "paper_matches": {
+      "items": {
+        "$ref": "#/$defs/PaperMatch"
+      },
+      "title": "Paper Matches",
+      "type": "array"
+    },
+    "corrections": {
+      "items": {
+        "$ref": "#/$defs/Correction"
+      },
+      "title": "Corrections",
+      "type": "array"
+    },
+    "unknowns": {
+      "items": {
+        "$ref": "#/$defs/Unknown"
+      },
+      "title": "Unknowns",
+      "type": "array"
+    }
+  },
+  "required": [
+    "record_id",
+    "title",
+    "method_names",
+    "scope",
+    "inspected_sources",
+    "states",
+    "operations",
+    "flows",
+    "method_scopes",
+    "paper_matches",
+    "corrections",
+    "unknowns"
+  ],
+  "title": "DiagramExtraction",
+  "type": "object"
+}

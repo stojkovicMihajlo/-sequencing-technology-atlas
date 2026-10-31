@@ -1,0 +1,130 @@
+{
+  "format_version": "illumina_scientific_graph_audit/1.0",
+  "date": "2026-10-31",
+  "task": "Independent review of completed pilot scientific representation, before generalizing to full catalogue/poster outputs.",
+  "scope": {
+    "records": [
+      "clickseq",
+      "g-t-seq"
+    ],
+    "new_model_calls": 0,
+    "accepted_or_frozen_artifacts_modified": false,
+    "working_schema_or_query_code_modified_by_this_audit": false,
+    "original_images_independently_inspected": true,
+    "source_image_receipt": "image_receipt.json",
+    "paper_support_limit": "Paper evidence was inspected in archived extraction/review quotations. Original full source packets are remote and were not fully replayed locally. No claim of full-paper independent verification."
+  },
+  "contract": {
+    "State": "A material or data boundary with source-supported consequential features; it is not an operation.",
+    "Operation": "A local transformation or inspection instance with explicit State inputs and outputs, at schematic granularity.",
+    "Flow": "A typed incident input/output or ordering connection. A chain of incident Flows alone does not prove per-molecule or per-input/output attribution.",
+    "success": "Preserve depicted transformations, separate retained branches, supported readout identity and scoped applicability without adding unshown execution details.",
+    "not_identified": "Experimental execution equivalence, causal ancestry, molecular recovery completeness and independent branch routing are not established by common names or generic graph reachability."
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "classification": "confirmed_representation_ambiguity",
+      "severity": "consequential_for_agent_queries",
+      "record_id": "g-t-seq",
+      "target_ids": [
+        "operation:o_sequence",
+        "state:s_transcriptome_product",
+        "state:s_genome_product",
+        "state:s_rna_reads",
+        "state:s_dna_reads"
+      ],
+      "observation": "One Operation combines the two separately amplified branches as two inputs and two outputs. Its information_effect correctly disclaims physical mixing, but the incident graph does not encode the input/output pairing.",
+      "source_support": {
+        "source_id": "diagram:asset_03536d63fdafc80d0529c268",
+        "locator": "Upper Smart-seq2 amplification branch and lower MDA amplification branch have separate rightward arrows under the shared Sequence caption; same-cell data are subsequently aligned.",
+        "url": "https://www.illumina.com/content/dam/illumina-marketing/images/tools/sequencing/g-t-seq.png",
+        "sha256": "fd4aced234208001d6f47a1cca5e6404ad873d1d9c12edb373b7a3c4721283e6",
+        "independent_inspection": "Original reacquired bytes match the archived source hash. Transparent original and white-background rendition inspected."
+      },
+      "deterministic_reproduction": "probe_result.json records a depth-two incidence route from s_transcriptome_product through o_sequence to s_dna_reads, and the converse cross-branch route.",
+      "host_detection": "Not detected: current DiagramExtraction graph checks accept all endpoints, I/O agreement and DAG topology. They do not infer the scientific meaning of joint versus independent processing.",
+      "fresh_archived_review_detection": "Not detected: operation:o_sequence was accepted with the rationale that the shared operation record does not imply material pooling. This addresses prose but leaves structural branch attribution ambiguous.",
+      "why_it_matters": "An agent using reachability as molecular lineage or as proof of which branch produces a readout could make a wrong attribution. The artifact does not literally assert an RNA-to-genomic-DNA conversion, so this is not classified as a chemistry hallucination.",
+      "minimal_remedy": "Future extraction/review prompts must treat an Operation as an instance: independent repeated processing under a shared caption gets distinct branch-specific Operation instances; source-supported true joins/splits stay joint. Query results must describe incidence and surface unresolved pairing rather than claim molecular lineage.",
+      "deployment_boundary": "Preserve pilot and frozen main/poster outputs. Repair G&T in a new version and audit completed multi-input/multi-output Operations for the same general ambiguity."
+    }
+  ],
+  "supported_behaviors": [
+    {
+      "id": "P01",
+      "record_id": "clickseq",
+      "targets": [
+        "operation:op_click",
+        "state:s_click_product",
+        "correction:c_click_junction"
+      ],
+      "observation": "The output distinguishes retained source drawing symbols from primary-paper triazole product chemistry. It does not treat the N3 and alkyne symbols as unreacted free end groups after completed ligation.",
+      "evidence_basis": "Original independently inspected ClickSeq image, plus paper:26116762 archived quotations at b00006-b00007 explicitly describing cycloaddition and the triazole-linked backbone.",
+      "host_role": "Checks correction source types, target primary evidence and target-specific reviewer evidence, not chemical entailment.",
+      "reviewer_role": "Archived fresh reviewer explicitly evaluated both the visual symbols and primary-paper product interpretation."
+    },
+    {
+      "id": "P02",
+      "record_id": "clickseq",
+      "targets": [
+        "operation:op_purify",
+        "operation:op_pcr"
+      ],
+      "observation": "No unsupported RNA-destruction operation was added when RNA disappears from the schematic. PCR remains broad while polymerase read-through and capture limitations are supported and qualified.",
+      "evidence_basis": "Independently inspected four-transformation diagram and archived paper:26116762 b00006-b00007/b00019 quotations.",
+      "limit": "This audit does not independently re-establish every biochemical statement from full paper text."
+    },
+    {
+      "id": "P03",
+      "record_id": "g-t-seq",
+      "targets": [
+        "state:s_bound_rna",
+        "state:s_transcriptome_product",
+        "operation:o_transcriptome",
+        "scope:G&T-seq"
+      ],
+      "observation": "The graph retains bead-bound captured RNA before amplification and explicitly qualifies the cDNA carrier interpretation. It does not assume final bead attachment, add a UMI/cell barcode, or import the related scM&T-seq bisulfite branch.",
+      "evidence_basis": "Independently inspected bead/primer and split-branch diagram; quoted G&T abstract and related implementation paper:26752769 with inferred support and limitations explicitly labeled.",
+      "limit": "The carrier transfer is a qualified interpretation; the archived evidence does not verify unshown Smart-seq2 reaction details."
+    },
+    {
+      "id": "P04",
+      "record_ids": [
+        "clickseq",
+        "g-t-seq"
+      ],
+      "observation": "Every saved Flow endpoint/type is preserved in per-card graph projection. Local IDs are namespaced and every Operation has declared method applicability. No historical or equivalence edge was inferred.",
+      "evidence_basis": "Deterministic probe over archived extraction.json and graph.json. See probe_result.json."
+    }
+  ],
+  "general_limits": [
+    "An exact source quote and a matching source ID establish traceability, not entailment of every feature, mechanism or information-effect statement.",
+    "Typed material/data endpoints cannot by themselves enforce molecular species identity or barcode/compartment conservation expressed in natural language.",
+    "Fresh reviewer sessions reduce direct conversational dependence but do not guarantee independent error modes; F01 survived a fresh review.",
+    "One observed failure in two pilot records is not a catalogue-wide error-rate estimate. Completed main/poster multi-input/output cases still require audit.",
+    "No new experimental infeasibility or unsupported chemistry was confirmed from the two inspected source diagrams and archived evidence. This is bounded evidence, not a guarantee that the records are error-free."
+  ],
+  "prompt_proposal": {
+    "shared": "An Operation is a local transformation or inspection instance, not a reusable label. When independent retained branches are processed separately under one shared or repeated caption, record distinct Operation instances with branch-specific inputs and outputs, retaining that source caption on each. A common caption does not establish pooling or a joint transformation. Keep genuine mixing, splitting and data-integration operations multi-input/output when supported; do not automatically split every such operation.",
+    "reviewer": "For every multi-input/multi-output Operation, check whether it denotes one joint operation or separate processing compressed under a shared caption. Follow each branch through its correct output. If the candidate collapses independent branch operations, request revision even when prose says the fractions remain separate. Do not infer input-to-output molecular attribution solely from graph reachability."
+  },
+  "software_checks": {
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=src /Users/mihajlostojkovic/anaconda3/bin/python -m pytest -q tests/test_illumina_diagrams.py tests/test_illumina_graph.py tests/test_illumina_review_controls.py tests/test_illumina_batch_controls.py",
+    "passed": 66,
+    "seconds": 0.75,
+    "warning": "Unknown asyncio_mode config under plugin-autoload-disabled pytest; all selected tests executed.",
+    "meaning": "Software regression controls, not a scientific accuracy estimate."
+  },
+  "reproduction": {
+    "script": "probe.py",
+    "baseline": "probe_result.json",
+    "baseline_preserved": true,
+    "after_query_guard": "probe_result_after_query_guard.json, if generated after query-guard implementation by runtime-audit agent"
+  },
+  "development_code_at_audit": {
+    "src/genomics_discovery/curation/illumina_diagrams.py": "a09c91a58dd8ffd5c5454f803a5de2c1b043cdb29b47e0f1991bcba4e6e32d8c",
+    "src/genomics_discovery/curation/illumina_graph.py": "038716484c228bce84cab6016cb2ae9948bea082b7da7dfbbc3647ce3321a4a1",
+    "src/genomics_discovery/curation/illumina_prompts.py": "724f44616d3ef234350aae29513beabbc3159667f6a03b83da1331087cca07c4"
+  }
+}

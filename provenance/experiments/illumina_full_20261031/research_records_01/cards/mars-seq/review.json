@@ -1,0 +1,1963 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "mars-seq",
+  "candidate_sha256": "20fa03297c4354505908416b715065a426c49d32f2cba6302cc12789c0a323ea",
+  "inspected_sources": [
+    "card:mars-seq",
+    "diagram:asset_c352d22a192610d268a86775",
+    "metadata:24531970",
+    "paper:24531970",
+    "metadata:25727184",
+    "paper:25727184",
+    "metadata:27198714",
+    "paper:27198714",
+    "metadata:27083874",
+    "paper:27083874",
+    "metadata:26627738",
+    "paper:26627738",
+    "metadata:26779813",
+    "paper:26779813"
+  ],
+  "checks": [
+    {
+      "target": "record",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Accept at the declared explanatory-schematic scope. Independently checked all material states, nine operations, twenty routes, method applicability, six paper matches, correction and unknowns. Every drawn transformation is represented, including adapter addition and final P5/P7 interfaces; fragmentation pieces are not mistaken for alternative workflows. Initial RT and pooling are explicitly sourced to catalogue text. The unlabeled DNA-to-RNA bridge is supported by the catalogue and a review explicitly naming MARS-Seq, without claiming original-supplement verification. DNA/RNA carrier changes and pooled-content continuity agree across adjacent records. Unspecified barcode coordinates and strand orientation are bounded omissions, not asserted chemistry. No consequential unsupported assertion or omitted depicted branch remains.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Complete supplied diagram: single left-to-right MARS-Seq route, gray arrows and colored strand icons; no alternative or compartment branches.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00007]: molecule, cell and plate associations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our methodology employs three levels of barcoding (molecular, cellular, and plate level tags) to facilitate molecule counting with high degree of multiplexing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:MARS-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The image depicts one MARS-Seq path, and the original article names that framework. All listed operations belong to that single schematic route; the candidate marks the three unpictured interfaces as text-supported. Neither the similar-method list nor the TruSeq product mention establishes another depicted version, equivalence or a development edge. The resolved scope does not claim resolution of exact oligonucleotide chemistry.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Complete supplied diagram: single left-to-right MARS-Seq route, gray arrows and colored strand icons; no alternative or compartment branches.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00006]: method identification and pointer to supplementary methods",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We developed an automated massively parallel RNA single-cell sequencing framework (MARS-Seq, figures S1 to S6 and Supplementary methods (21)) that is designed for in vivo sampling of thousands of cells by multiplexing RNA sequencing while maintaining tight control over amplification biases and labeling errors.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The AA(A)n/AAAAA icons support polyadenylated RNA as the chemical substrate, and the catalogue supplies single-cell lysis in individual wells. The unlabeled yellow outline supplies no evidence for beads, attachment or an intact compartment.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Far left: purple RNA icon ending AA(A)n, yellow outline, and the expanded MARS-Seq name; next RNA strand ends AAAAA.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.15,
+            0.19,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: single-cell isolation, lysis and mRNA-end targeting",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Single cells are first isolated into individual wells using FACS. Each cell is lysed, and the 3' ends of mRNAs are annealed to unique molecular identifiers containing a T7 promoter.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_primer",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The TTTTT tract, UMI/T7 labels and partial-T7 caption support a poly(A)-targeting primer, rather than an added poly(A) tail. The review explicitly establishes oligo(dT) introduction of T7 during RT. Exact sequence, reactive modifications and cell/plate barcode coordinates are not asserted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Left primer-addition region: TTTTT oligo with red UMI and green T7 labels; caption Add polyA primer with partial T7 promoter and UMI.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.1,
+            0.0,
+            0.29,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_first_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "First-strand cDNA before pooling is explicitly supplied by the catalogue. Its primer-associated label/T7 linkage follows the drawn primer and the review description of introducing T7 with oligo(dT) during RT. Individual-well separation ends only at the subsequent pooling record.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: single-cell isolation, lysis and mRNA-end targeting",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Single cells are first isolated into individual wells using FACS. Each cell is lysed, and the 3' ends of mRNAs are annealed to unique molecular identifiers containing a T7 promoter.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: initial reverse transcription",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The mRNA is reverse-transcribed to generate the first cDNA strand and treated with exonuclease I to remove leftover RT primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Left primer-addition region: TTTTT oligo with red UMI and green T7 labels; caption Add polyA primer with partial T7 promoter and UMI.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.1,
+            0.0,
+            0.29,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_pooled",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue pools cellular lysates after first-strand synthesis and before double-stranded cDNA synthesis. Thus this is mixed lysate contents containing labeled cDNA, not pooled intact cells or compartments. Primary text independently supports pooled labeled material and three barcode levels without supplying their sequence map.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: initial reverse transcription",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The mRNA is reverse-transcribed to generate the first cDNA strand and treated with exonuclease I to remove leftover RT primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00006]: FACS and pooled labeled processing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is based on FACS sorting of single cells into 384-well plates and subsequent automated processing that is done mostly on pooled and labeled material, leading to a dramatic increase in throughput and reproducibility.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00007]: molecule, cell and plate associations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our methodology employs three levels of barcoding (molecular, cellular, and plate level tags) to facilitate molecule counting with high degree of multiplexing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_dscdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The paired-strand icon and second-strand caption agree with double-stranded cDNA from pooled first strands. Its template role is established by catalogue transcription and review T7 amplification; no internal second-strand enzyme sequence is invented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Second strand synthesis: paired purple strands, opposing AAAAA/TTTTT tracts, and red UMI/green T7 end segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.29,
+            0.0,
+            0.405,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_ivt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue explicitly places transcription before removal of leftover DNA templates, supporting an RNA-containing transcription mixture with residual template DNA. The review supports amplified cRNA generation after double-stranded cDNA. The candidate correctly identifies this boundary as text-supported, not a separate drawn icon.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00183]: Figure 4(c) caption, general T7-based single-cell workflow",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(c) cDNA synthesis introduces the T7 promoter sequence at the 5′ end. After second strand cDNA synthesis, cRNA copies are generated by in vitro transcription. Finally, the second adapter is ligated to the 3′ end of the cRNA and libraries are constructed by PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_clean_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "RNA remains after DNA-template digestion and proceeds to RNA fragmentation in the catalogue sequence. The state does not assign RNA synthesis to DNaseI or assert absolute analytical purity.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Arrow between second-strand product and RNA-fragmentation region is captioned DNaseI. No transcription operation is separately labeled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.42,
+            0.1,
+            0.46,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_fragments",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The three purple pieces and retained red/green region are visible. Their single onward route illustrates a labeled-end fragment in the ligation product; no separate physical selection, alternate method or fate of unpictured fragments is established. The candidate preserves graphical colors without asserting an intact promoter sequence in RNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "RNA fragmentation region: three separate purple pieces; the middle piece retains red/green terminal segments. One onward arrow enters adapter ligation.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.05,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_adapter",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The orange partial-rd1 oligo and RNA to ssDNA ligation caption support a DNA adapter added to RNA. No phosphate, adenylation, blocking group, ligase or exact end modification is depicted or claimed.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_ligated",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The joined orange/purple/red/green product and ligation caption support an RNA-DNA adapter conjugate. The candidate preserves its displayed end association while avoiding a 5-prime/3-prime assignment from horizontal position alone.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The RT label and subsequent PCR route support cDNA-containing material carrying the RNA-derived representation and adapter interface. The two-line icon does not resolve an RNA:cDNA hybrid versus a completed DNA duplex. The candidate retains that ambiguity and does not invent a second DNA-synthesis step here.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Reverse transcription region: two parallel strands with orange left segments and red/green right segments; no explicit RNA/DNA strand key.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.15,
+            0.83,
+            0.98
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "PCR and purification arrow and final cDNA icon: P5 at left, P7 at right, with orange, pale-blue, red and green internal segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.83,
+            0.1,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "P5, P7 and cDNA identify the sequenced DNA carrier. Primary text supports barcode-associated cellular RNA-molecule counts; poly(A)-end targeting and labeled-fragment continuity support the qualified 3-prime-associated representation. No exact read allocation, perfect capture, label uniqueness, full-length coverage or strand orientation is claimed.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "PCR and purification arrow and final cDNA icon: P5 at left, P7 at right, with orange, pale-blue, red and green internal segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.83,
+            0.1,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00007]: molecule, cell and plate associations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our methodology employs three levels of barcoding (molecular, cellular, and plate level tags) to facilitate molecule counting with high degree of multiplexing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00007]: cell-associated RNA-molecule readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "As shown in Fig. 1A, multiplexing 1536 cells in one sequencing lane provided an average of 22 thousands aligned reads per cell, and following extensive normalization, these can be used to unambiguously define 200–1500 distinct RNA molecules from each cell.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: mRNA 3-prime-end targeting, read with the diagram primer, tagged fragment and final cDNA icon",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Each cell is lysed, and the 3' ends of mRNAs are annealed to unique molecular identifiers containing a T7 promoter.",
+          "bbox": null,
+          "rationale": "Poly(A)-targeted initiation and continuity of the depicted labeled end support an mRNA 3-prime-associated representation. This does not identify exact read coordinates, full-length coverage or strand orientation."
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "RNA fragmentation region: three separate purple pieces; the middle piece retains red/green terminal segments. One onward arrow enters adapter ligation.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.05,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_prime",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The visible primer-addition block and catalogue initial RT justify the combined priming/first-strand operation. Its RNA and DNA-primer inputs produce labeled first-strand cDNA before pooling; oligo(dT)/T7 linkage is explicitly supported by the review. Initial RT remains distinguished from the separately depicted later RT.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Left primer-addition region: TTTTT oligo with red UMI and green T7 labels; caption Add polyA primer with partial T7 promoter and UMI.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.1,
+            0.0,
+            0.29,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: initial reverse transcription",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The mRNA is reverse-transcribed to generate the first cDNA strand and treated with exonuclease I to remove leftover RT primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_pool",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue explicitly places pooling of lysate contents between first-strand and double-stranded cDNA synthesis. Adjacent states preserve cDNA identity while changing compartment state; primary barcode/counting statements support the pooled readout without an invented barcode installation site.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: initial reverse transcription",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The mRNA is reverse-transcribed to generate the first cDNA strand and treated with exonuclease I to remove leftover RT primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00006]: FACS and pooled labeled processing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is based on FACS sorting of single cells into 384-well plates and subsequent automated processing that is done mostly on pooled and labeled material, leading to a dramatic increase in throughput and reproducibility.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00007]: molecule, cell and plate associations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our methodology employs three levels of barcoding (molecular, cellular, and plate level tags) to facilitate molecule counting with high degree of multiplexing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_second",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Second strand synthesis produces the paired DNA icon. Catalogue order supports pooled first-strand input and double-stranded output, and the review supports its downstream transcription-template role. No unshown enzyme-level mechanism is required.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Second strand synthesis: paired purple strands, opposing AAAAA/TTTTT tracts, and red UMI/green T7 end segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.29,
+            0.0,
+            0.405,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00183]: Figure 4(c) caption, general T7-based single-cell workflow",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(c) cDNA synthesis introduces the T7 promoter sequence at the 5′ end. After second strand cDNA synthesis, cRNA copies are generated by in vitro transcription. Finally, the second adapter is ligated to the 3′ end of the cRNA and libraries are constructed by PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_ivt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Catalogue text explicitly transcribes DNA to RNA before DNase, and the review explicitly names T7-directed IVT amplification for MARS-Seq. This supports the added RNA-production bridge at schematic level. The absent image label and lack of original supplementary-method verification are disclosed; neither exact promoter-to-transcript boundaries nor primary-verified reaction order is claimed.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Arrow between second-strand product and RNA-fragmentation region is captioned DNaseI. No transcription operation is separately labeled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.42,
+            0.1,
+            0.46,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00183]: Figure 4(c) caption, general T7-based single-cell workflow",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(c) cDNA synthesis introduces the T7 promoter sequence at the 5′ end. After second strand cDNA synthesis, cRNA copies are generated by in vitro transcription. Finally, the second adapter is ligated to the 3′ end of the cRNA and libraries are constructed by PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_dnase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The image labels DNaseI and the catalogue identifies removal of leftover DNA templates after transcription. Acting on the mixed transcription product and retaining RNA agrees with both neighboring interfaces. DNase is treated as a catalyst, not a material carrier or a DNA-to-RNA conversion.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Arrow between second-strand product and RNA-fragmentation region is captioned DNaseI. No transcription operation is separately labeled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.42,
+            0.1,
+            0.46,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_fragment",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "RNA fragmentation and separate RNA pieces are drawn and supported by catalogue order after DNA removal. The output retains graphical labeled-end continuity for the subsequent conjugate. No cleavage-end chemistry, physical selection or strand-loss conclusion is added.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "RNA fragmentation region: three separate purple pieces; the middle piece retains red/green terminal segments. One onward arrow enters adapter ligation.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.05,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_ligate",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The RNA to ssDNA ligation caption establishes joining the added orange DNA oligo to the RNA fragment. The product preserves the label-bearing RNA region. This appropriately follows the diagram when catalogue prose uses the less specific word annealed; no ligase or modified adapter end is inferred.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_rt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The depicted Reverse transcription block and catalogue RNA-to-cDNA library description support copying adapter-bearing RNA into cDNA-containing material. Its output feeds PCR without assigning a resolved duplex identity or inserting an unshown strand-completion reaction.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Reverse transcription region: two parallel strands with orange left segments and red/green right segments; no explicit RNA/DNA strand key.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.15,
+            0.83,
+            0.98
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_pcr",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The PCR and purification arrow leads to P5/P7 cDNA. The operation stays at the breadth shown and does not invent adapter-completion substeps, purification conditions or analysis settings. Primary molecule-counting context supports distinguishing amplified copies from sampled original molecules.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Reverse transcription region: two parallel strands with orange left segments and red/green right segments; no explicit RNA/DNA strand key.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.15,
+            0.83,
+            0.98
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "PCR and purification arrow and final cDNA icon: P5 at left, P7 at right, with orange, pale-blue, red and green internal segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.83,
+            0.1,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00007]: molecule, cell and plate associations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our methodology employs three levels of barcoding (molecular, cellular, and plate level tags) to facilitate molecule counting with high degree of multiplexing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_rna_prime",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The poly(A)-tailed RNA icon is the substrate in the primer-addition region; catalogue text identifies annealing at mRNA 3-prime ends before first-strand RT.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Far left: purple RNA icon ending AA(A)n, yellow outline, and the expanded MARS-Seq name; next RNA strand ends AAAAA.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.15,
+            0.19,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Left primer-addition region: TTTTT oligo with red UMI and green T7 labels; caption Add polyA primer with partial T7 promoter and UMI.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.1,
+            0.0,
+            0.29,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: single-cell isolation, lysis and mRNA-end targeting",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Single cells are first isolated into individual wells using FACS. Each cell is lysed, and the 3' ends of mRNAs are annealed to unique molecular identifiers containing a T7 promoter.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: initial reverse transcription",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The mRNA is reverse-transcribed to generate the first cDNA strand and treated with exonuclease I to remove leftover RT primers.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_primer_prime",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The T-containing UMI/T7 oligo is added at the primer-addition block. It is incorporated material, not a catalyst or a separate alternative route.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Left primer-addition region: TTTTT oligo with red UMI and green T7 labels; caption Add polyA primer with partial T7 promoter and UMI.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.1,
+            0.0,
+            0.29,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_prime_first",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Catalogue initial RT explicitly produces the first cDNA strand; review oligo(dT)/T7 introduction and the primer icon support primer-derived labeling of that product.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: initial reverse transcription",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The mRNA is reverse-transcribed to generate the first cDNA strand and treated with exonuclease I to remove leftover RT primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Left primer-addition region: TTTTT oligo with red UMI and green T7 labels; caption Add polyA primer with partial T7 promoter and UMI.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.1,
+            0.0,
+            0.29,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_first_pool",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Catalogue order places first-strand synthesis before pooling cellular lysates, establishing first-strand cDNA in the lysate contents as the material entering pooling.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: initial reverse transcription",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The mRNA is reverse-transcribed to generate the first cDNA strand and treated with exonuclease I to remove leftover RT primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_pool_pooled",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The pooled-lysate output is explicit in catalogue prose. This route changes compartment state while preserving cDNA-containing contents, rather than transferring intact wells or cells.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00006]: FACS and pooled labeled processing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is based on FACS sorting of single cells into 384-well plates and subsequent automated processing that is done mostly on pooled and labeled material, leading to a dramatic increase in throughput and reproducibility.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_pooled_second",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The same catalogue sentence places conversion to double-stranded cDNA after lysate pooling, directly supporting pooled material entering second-strand synthesis.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Second strand synthesis: paired purple strands, opposing AAAAA/TTTTT tracts, and red UMI/green T7 end segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.29,
+            0.0,
+            0.405,
+            0.9
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_second_ds",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The second-strand caption and paired-strand icon, together with the catalogue statement, support double-stranded cDNA as this operation output.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Second strand synthesis: paired purple strands, opposing AAAAA/TTTTT tracts, and red UMI/green T7 end segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.29,
+            0.0,
+            0.405,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_ds_ivt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue places transcription of the DNA strands after double-stranded cDNA production. The review caption independently places cRNA generation after second-strand synthesis; its general schematic is not used to infer exact MARS-Seq oligonucleotide chemistry.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: pooling before double-stranded cDNA synthesis",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the cellular lysates are pooled together and converted to double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00183]: Figure 4(c) caption, general T7-based single-cell workflow",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(c) cDNA synthesis introduces the T7 promoter sequence at the 5′ end. After second strand cDNA synthesis, cRNA copies are generated by in vitro transcription. Finally, the second adapter is ligated to the 3′ end of the cRNA and libraries are constructed by PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_ivt_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue explicitly produces RNA while retaining DNA templates for subsequent DNase removal. Thus the operation output is the mixed cRNA/template state, not purified RNA or an asserted direct diagram arrow.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00183]: Figure 4(c) caption, general T7-based single-cell workflow",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(c) cDNA synthesis introduces the T7 promoter sequence at the 5′ end. After second strand cDNA synthesis, cRNA copies are generated by in vitro transcription. Finally, the second adapter is ligated to the 3′ end of the cRNA and libraries are constructed by PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_ivtrna_dnase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue explicitly subjects the transcription mixture to DNase to remove leftover templates. This route carries both the retained RNA and the DNA substrate for digestion.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_dnase_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "After template digestion, the RNA representation remains for the next fragmentation block. This output route does not imply that DNase generates RNA from DNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Arrow between second-strand product and RNA-fragmentation region is captioned DNaseI. No transcription operation is separately labeled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.42,
+            0.1,
+            0.46,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_rna_fragment",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue sequentially places RNA fragmentation after transcription and template removal; the image labels the receiving operation RNA fragmentation. Both interfaces carry amplified RNA.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "RNA fragmentation region: three separate purple pieces; the middle piece retains red/green terminal segments. One onward arrow enters adapter ligation.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.05,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_fragment_fragments",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Separate purple fragments, one with the colored labeled end, are the visible fragmentation product. They are grouped products of one operation, not separately retained workflow branches.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "RNA fragmentation region: three separate purple pieces; the middle piece retains red/green terminal segments. One onward arrow enters adapter ligation.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.05,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_fragments_ligate",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The single arrow from the fragmentation region into RNA to ssDNA ligation and the joined product establish onward RNA-fragment transfer. The candidate qualifies that only the labeled-end example is drawn downstream and does not assert physical selection of all or only such fragments.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "RNA fragmentation region: three separate purple pieces; the middle piece retains red/green terminal segments. One onward arrow enters adapter ligation.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.05,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_adapter_ligate",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The orange partial-read oligo enters at the ligation arrow and appears joined in the product, supporting an added DNA material input rather than catalytic action or proximity alone.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_ligate_ligated",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The caption specifies ligation, and the continuous orange/purple/red/green line shows the conjugate output. Carrier identity and label association agree with the receiving RT record.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Reverse transcription region: two parallel strands with orange left segments and red/green right segments; no explicit RNA/DNA strand key.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.15,
+            0.83,
+            0.98
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_ligated_rt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The gray arrow links the adapter-bearing RNA product to the Reverse transcription region, corroborated by catalogue adapters followed by RT. The same conjugate is the chemical input to RNA-templated DNA synthesis.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Orange oligo labeled partial rd1 with rev suffix is added at the arrow into RNA to ssDNA ligation; product joins orange to the purple/red/green strand.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.57,
+            0.0,
+            0.71,
+            0.87
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Reverse transcription region: two parallel strands with orange left segments and red/green right segments; no explicit RNA/DNA strand key.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.15,
+            0.83,
+            0.98
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_rt_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The RT caption, paired product and catalogue cDNA-library description support cDNA-containing output. The route does not require an unsupported decision between hybrid and complete DNA duplex.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Reverse transcription region: two parallel strands with orange left segments and red/green right segments; no explicit RNA/DNA strand key.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.15,
+            0.83,
+            0.98
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: fragmentation, adapters, RT and cDNA-library output",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The RNA strands are fragmented and annealed to sequencing adapters, followed by RT to generate barcoded cDNA libraries that are ready for sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_cdna_pcr",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The arrow following the RT product is captioned PCR and purification. Thus the cDNA-containing product proceeds into that broad block, without requiring an unshown intermediate or a separately specified strand-completion mechanism.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Reverse transcription region: two parallel strands with orange left segments and red/green right segments; no explicit RNA/DNA strand key.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.15,
+            0.83,
+            0.98
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "PCR and purification arrow and final cDNA icon: P5 at left, P7 at right, with orange, pale-blue, red and green internal segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.83,
+            0.1,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_pcr_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The PCR/purification arrow ends at the multicolor cDNA strand labeled P5 and P7. This is a DNA-library output with sequencing interfaces, not a sequenced RNA output or a new analysis branch.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "PCR and purification arrow and final cDNA icon: P5 at left, P7 at right, with orange, pale-blue, red and green internal segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.83,
+            0.1,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:c_unlabeled_ivt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The missing IVT label is real: DNaseI is the next labeled arrow after second-strand synthesis. The catalogue explicitly supplies transcription before DNA removal, and the inspected secondary review explicitly attributes T7/oligo(dT)-based IVT to MARS-Seq. The original main article establishes implementation identity and points to supplementary methods, but does not supply this reaction sequence in the available text. The correction honestly keeps primary-source verification unresolved while supporting the coarse bridge from catalogue/review evidence; this bounded limitation does not invalidate the depicted architecture or assert unverified exact chemistry.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Second strand synthesis: paired purple strands, opposing AAAAA/TTTTT tracts, and red UMI/green T7 end segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.29,
+            0.0,
+            0.405,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Arrow between second-strand product and RNA-fragmentation region is captioned DNaseI. No transcription operation is separately labeled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.42,
+            0.1,
+            0.46,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Description: RNA production followed by DNA-template removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA strands are transcribed to RNA and treated with DNase to remove leftover DNA templates in the mixture.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00183]: Figure 4(c) caption, general T7-based single-cell workflow",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(c) cDNA synthesis introduces the T7 promoter sequence at the 5′ end. After second strand cDNA synthesis, cRNA copies are generated by in vitro transcription. Finally, the second adapter is ligated to the 3′ end of the cRNA and libraries are constructed by PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00006]: method identification and pointer to supplementary methods",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We developed an automated massively parallel RNA single-cell sequencing framework (MARS-Seq, figures S1 to S6 and Supplementary methods (21)) that is designed for in vivo sampling of thousands of cells by multiplexing RNA sequencing while maintaining tight control over amplification biases and labeling errors.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_tag_map",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Accept the nonblocking boundary: the diagram labels UMI and T7 at the primer and continues colors, while primary text establishes three barcode levels without mapping them onto these icons. The candidate assigns neither an intact transcribed T7 promoter nor exact cellular/plate barcode coordinates. Original oligonucleotide sequences, transcription-start mapping and read layout would be needed for those finer claims; they are not needed to accept the qualified carrier/counting architecture.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "Left primer-addition region: TTTTT oligo with red UMI and green T7 labels; caption Add polyA primer with partial T7 promoter and UMI.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.1,
+            0.0,
+            0.29,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "RNA fragmentation region: three separate purple pieces; the middle piece retains red/green terminal segments. One onward arrow enters adapter ligation.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.05,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "PCR and purification arrow and final cDNA icon: P5 at left, P7 at right, with orange, pale-blue, red and green internal segments.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.83,
+            0.1,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00007]: molecule, cell and plate associations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our methodology employs three levels of barcoding (molecular, cellular, and plate level tags) to facilitate molecule counting with high degree of multiplexing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_strandedness",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Accept the nonblocking uncertainty. The catalogue claims strand-information loss, whereas the diagram explicitly fragments RNA and the review sentence describes cDNA fragmentation in an adjacent discussion. Those are not sufficient to assign strand loss or retention to this adapter/RT implementation. The candidate states no such conclusion and specifies the primer/adapter orientations and read layout needed to resolve it.",
+      "evidence": [
+        {
+          "source_id": "card:mars-seq",
+          "locator": "Cons: catalogue strandedness claim",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Fragmentation step eliminates strand-specific information2",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_c352d22a192610d268a86775",
+          "locator": "RNA fragmentation region: three separate purple pieces; the middle piece retains red/green terminal segments. One onward arrow enters adapter ligation.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.05,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: sentence after template-switching/poly(A)-tailing discussion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These methods, however, do not provide strand-specific information, because the cDNA is subsequently fragmented and ligated to a second set of adapters.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_24531970",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title/DOI identify the Jaitin et al. MARS-Seq report (10.1126/science.1247651). Inspected main full text explicitly names MARS-Seq, pooled labeled processing, barcode levels and cell-associated RNA counts, supporting architecture within those limits. The candidate does not claim that publication metadata or the unavailable supplementary protocol verifies reaction order, exact barcode design or historical priority.",
+      "evidence": [
+        {
+          "source_id": "metadata:24531970",
+          "locator": "PubMed metadata: exact PMID/title/DOI and publication-type fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Massively parallel single-cell RNA-seq for marker-free decomposition of tissues into cell types.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00006]: method identification and pointer to supplementary methods",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We developed an automated massively parallel RNA single-cell sequencing framework (MARS-Seq, figures S1 to S6 and Supplementary methods (21)) that is designed for in vivo sampling of thousands of cells by multiplexing RNA sequencing while maintaining tight control over amplification biases and labeling errors.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00006]: FACS and pooled labeled processing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is based on FACS sorting of single cells into 384-well plates and subsequent automated processing that is done mostly on pooled and labeled material, leading to a dramatic increase in throughput and reproducibility.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24531970",
+          "locator": "[b00007]: molecule, cell and plate associations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our methodology employs three levels of barcoding (molecular, cellular, and plate level tags) to facilitate molecule counting with high degree of multiplexing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_25727184",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Verified bibliographic identity separately from scientific support. The inspected abstract is a broad immunology/single-cell review. Background status is supported; neither MARS-Seq reaction chemistry nor the catalogue cost claim is verified. The content_checked label is explicitly confined to the abstract, not full text.",
+      "evidence": [
+        {
+          "source_id": "metadata:25727184",
+          "locator": "PubMed metadata: exact PMID/title/DOI and publication-type fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Each cell counts: Hematopoiesis and immunity research in the era of single cell genomics.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25727184",
+          "locator": "Abstract: single-cell genomics in immunology",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A critical mass of technological advances in molecular biology and genomics has enabled genome-wide measurements of single cells - the fundamental unit of immunity.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27198714",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title/DOI identify a review (10.1002/wrna.1364), not the original implementation paper. Inspected full-text [b00042] explicitly names MARS-Seq and T7/oligo(dT)/IVT; Figure 4(c) supplies a general matching architecture. The candidate identifies this secondary evidence level and does not transfer exact adapter orientation or the nearby cDNA-fragmentation strand-loss claim to the RNA-fragmentation drawing.",
+      "evidence": [
+        {
+          "source_id": "metadata:27198714",
+          "locator": "PubMed metadata: exact PMID/title/DOI and publication-type fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNA-Seq methods for transcriptome analysis.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: review explicitly naming CEL-Seq and MARS-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Some methods, such as CEL-Seq and MARS-Seq, introduce a T7 promoter sequence with oligo(dT) during RT, which enables linear amplification of input RNA by in vitro transcription.87,88",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00183]: Figure 4(c) caption, general T7-based single-cell workflow",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(c) cDNA synthesis introduces the T7 promoter sequence at the 5′ end. After second strand cDNA synthesis, cRNA copies are generated by in vitro transcription. Finally, the second adapter is ligated to the 3′ end of the cRNA and libraries are constructed by PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27198714",
+          "locator": "[b00042]: sentence after template-switching/poly(A)-tailing discussion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These methods, however, do not provide strand-specific information, because the cDNA is subsequently fragmented and ligated to a second set of adapters.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27083874",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Verified bibliographic identity separately from scientific support. The inspected abstract describes a general stem-cell sequencing review. Background status is appropriate; it does not establish a distinct MARS-Seq implementation. The candidate explicitly confines content checking to the supplied abstract even though PubMed metadata contains a PMC identifier.",
+      "evidence": [
+        {
+          "source_id": "metadata:27083874",
+          "locator": "PubMed metadata: exact PMID/title/DOI and publication-type fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Single-cell sequencing in stem cell biology.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27083874",
+          "locator": "Abstract: stem-cell sequencing review",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this review, we discuss the recent progress as well as future perspectives in the methodologies and applications of single-cell omic sequencing technologies.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26627738",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Verified bibliographic identity separately from scientific support. The inspected abstract supports a biological single-cell application, but does not name an independently verifiable MARS-Seq reaction sequence or version. The candidate treats it as related background and explicitly limits content checking to the abstract.",
+      "evidence": [
+        {
+          "source_id": "metadata:26627738",
+          "locator": "PubMed metadata: exact PMID/title/DOI and publication-type fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transcriptional Heterogeneity and Lineage Commitment in Myeloid Progenitors.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26627738",
+          "locator": "Abstract: myeloid-progenitor biological study",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we comprehensively map myeloid progenitor subpopulations by transcriptional sorting of single cells from the bone marrow.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26779813",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Verified bibliographic identity separately from scientific support. The inspected abstract reports a biological immune-checkpoint study and provides no MARS-Seq chemistry or version evidence. The candidate appropriately keeps it as background and explicitly labels abstract-only inspection, without claiming full-text scientific verification.",
+      "evidence": [
+        {
+          "source_id": "metadata:26779813",
+          "locator": "PubMed metadata: exact PMID/title/DOI and publication-type fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "PD-1 immune checkpoint blockade reduces pathology and improves memory in mouse models of Alzheimer's disease.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26779813",
+          "locator": "Abstract: immune-checkpoint biological study",
+          "basis": "text",
+          "support": "reported",
+          "quote": "By using mouse models of Alzheimer's disease (AD), we show that immune checkpoint blockade directed against the programmed death-1 (PD-1) pathway evokes an interferon (IFN)-γ-dependent systemic immune response, which is followed by the recruitment of monocyte-derived macrophages to the brain.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

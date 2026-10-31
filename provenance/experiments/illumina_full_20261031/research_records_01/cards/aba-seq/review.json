@@ -1,0 +1,1802 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "aba-seq",
+  "candidate_sha256": "4621ecc35a9c73c79d9eda378e6e0bb07b18e0c893964bf07684b0ad5c313930",
+  "inspected_sources": [
+    "diagram:asset_2ef8f2e2dd62881aa7769e21",
+    "card:aba-seq",
+    "metadata:23352666",
+    "paper:23352666",
+    "metadata:27347753",
+    "paper:27347753",
+    "metadata:25639471",
+    "paper:25639471",
+    "metadata:27025842",
+    "paper:27025842",
+    "metadata:25159599",
+    "paper:25159599"
+  ],
+  "checks": [
+    {
+      "target": "correction:c_primer_label",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The visible label is retained, and the primary implementation resolves the ligated oligonucleotide as biotinylated P1b adaptor with its randomized two-base 3′ overhang. The corrected state and ligation input agree; no base-linked biotin is introduced.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Incoming short magenta/blue reagent labeled Biotinylated primers is above the arrow; Ligate product has tags at the ends of the DNA duplexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.66,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:c_target_identity",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The schematic names 5hmC as the target. The catalogue 5mC-coverage statement is specifically separated from the paper-supported inference of 5hmC through glucosylation-dependent cuts; it is not silently retained as another analyte. The specificity statement remains limited to the reported conditions.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Far-left target summary: highlighted red sites labeled 5hmc residues; caption identifies AbaSI coupled with sequencing (Aba-seq) and the hydroxymethylome (5hmC). No arrow connects this summary icon to the preparation input.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.14,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:aba-seq",
+          "locator": "Pros, second item",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Covers 5mC in dense and less dense repeat regions",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, specificity under the study conditions",
+          "basis": "text",
+          "support": "reported",
+          "quote": "AbaSI does not digest 5mC or C under the conditions used",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, inference of putative target sites",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Putative 5hmC sites can be deduced by checking the presence of cytosine at expected distances (N13/N11,N12/N10,N11/N9) from either side of the mapped cleavage sites",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:c_terminal_interface",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The generic DNA endpoint is preserved as the diagram observation. The primary caption and Methods justify a broad completion interface with on-bead preparation/P2 ligation and PCR followed by bead separation. The candidate correctly avoids presenting these as visible Illumina substeps or as simple release of an already complete captured library.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Rightmost arrow connects the bead icon to short blue lines labeled DNA; no separate second-adaptor, amplification, sequencing, or elution panel is drawn.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.835,
+            0.0,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00034], Experimental Procedures, library construction, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The beads were then removed from the PCR and the library was extracted by gel purification as described above.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_01",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_hmc_dna is the DNA substrate entering o_glucosylate; the enzyme label is treated as the catalyst rather than a material intermediate. The red-site input and the documented conversion agree.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Hydroxy-methyl-ated DNA: blue line with three red sites, followed by the arrow labeled T4-βGT.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.142,
+            0.05,
+            0.302,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, conversion before AbaSI-coupled library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Conversion of genomic 5hmC to 5gmC was completed by using the T4 β-glucosyltransferase",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_02",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_glucosylate produces s_gmc_dna with the same DNA target positions in glucosylated form. The destination matches both the next depicted material and the primary conversion statement.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "T4-βGT arrow leads to Glucosylated 5-hmC; blue flag-like marks appear at the red sites.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.265,
+            0.04,
+            0.418,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, conversion before AbaSI-coupled library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Conversion of genomic 5hmC to 5gmC was completed by using the T4 β-glucosyltransferase",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_03",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_gmc_dna enters o_digest. Glucosylated DNA, rather than unmodified DNA or the isolated enzyme, is the evidenced substrate for the AbaSI arrow.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "AbaSI arrow leads from glucosylated DNA to two separated duplex fragments with visibly staggered strand ends.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.315,
+            0.04,
+            0.52,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, AbaSI recognition and cleavage",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA modification-dependent restriction endonuclease AbaSI recognizes 5gmC with high specificity and generates double-stranded breaks at the 3′ side of the binding sites",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_04",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_digest produces s_cut_dna: the separated duplex fragments retain a cut-boundary association to nearby recognized sites. This agrees with the DNA subsequently receiving P1b.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "AbaSI arrow leads from glucosylated DNA to two separated duplex fragments with visibly staggered strand ends.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.315,
+            0.04,
+            0.52,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, AbaSI recognition and cleavage",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA modification-dependent restriction endonuclease AbaSI recognizes 5gmC with high specificity and generates double-stranded breaks at the 3′ side of the binding sites",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_05",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_cut_dna is the DNA substrate of o_ligate. The paper explicitly specifies P1b ligation to AbaSI-digested DNA, resolving the route implied by the diagram.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Incoming short magenta/blue reagent labeled Biotinylated primers is above the arrow; Ligate product has tags at the ends of the DNA duplexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.66,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_06",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_biotin_adaptor is incorporated by o_ligate as an added reagent. The incoming labeled icon is correctly represented as an adaptor input, not as an alternative DNA branch or a catalyst.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Incoming short magenta/blue reagent labeled Biotinylated primers is above the arrow; Ligate product has tags at the ends of the DNA duplexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.66,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_07",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_ligate produces s_ligated_dna bearing biotinylated P1b at cut ends. The retained tags support both downstream capture and the stated sequencing entry end.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Incoming short magenta/blue reagent labeled Biotinylated primers is above the arrow; Ligate product has tags at the ends of the DNA duplexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.66,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_08",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_ligated_dna enters o_fragment after end tagging. The depicted arrow and numbered primary sequence independently establish this order; the route does not place fragmentation before P1b ligation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Ligate-to-Fragment arrow: tagged long duplexes become tagged short terminal pieces and bare interior pieces.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.588,
+            0.0,
+            0.786,
+            0.93
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 2–4",
+          "basis": "text",
+          "support": "reported",
+          "quote": "2: digested DNA was ligated to a biotinylated adaptor P1b with 2-base 3′-overhang. 3: DNA fragmentation by sonication. 4: capture of the biotinylated DNA onto avidin-coated beads.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_09",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_fragment yields s_fragment_mixture, including tagged terminal pieces and bare interior pieces. The output preserves the P1b-marked boundary in the terminal pieces passed to selection.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Ligate-to-Fragment arrow: tagged long duplexes become tagged short terminal pieces and bare interior pieces.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.588,
+            0.0,
+            0.786,
+            0.93
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 2–4",
+          "basis": "text",
+          "support": "reported",
+          "quote": "2: digested DNA was ligated to a biotinylated adaptor P1b with 2-base 3′-overhang. 3: DNA fragmentation by sonication. 4: capture of the biotinylated DNA onto avidin-coated beads.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_10",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The entire s_fragment_mixture is the input to o_capture. The diagram and Methods connect fragmentation to capture of P1-ligated fragments; no separate unseen biological substrate is substituted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Fragment mixture passes through a rightward arrow to Streptavidin magnetic bead pull down; the bead icon carries tagged DNA.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.715,
+            0.0,
+            0.935,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 2–4",
+          "basis": "text",
+          "support": "reported",
+          "quote": "2: digested DNA was ligated to a biotinylated adaptor P1b with 2-base 3′-overhang. 3: DNA fragmentation by sonication. 4: capture of the biotinylated DNA onto avidin-coated beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00034], Experimental Procedures, capture after sonication",
+          "basis": "text",
+          "support": "reported",
+          "quote": "P1-ligated DNA was then captured by mixing 50 μl of fragmented DNA with 12.5 μl of Dynabeads MyOne Streptavidin C1 beads",
+          "bbox": null,
+          "rationale": "The excerpt identifies the captured fragmented P1-ligated DNA and the streptavidin support; quantities are not architecture claims or execution instructions."
+        }
+      ]
+    },
+    {
+      "target": "flow:f_11",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_capture produces s_captured_dna in the bead-bound state. That attachment persists into the following completion input; the bead step does not directly read 5hmC or turn the DNA into data.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Fragment mixture passes through a rightward arrow to Streptavidin magnetic bead pull down; the bead icon carries tagged DNA.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.715,
+            0.0,
+            0.935,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00034], Experimental Procedures, capture after sonication",
+          "basis": "text",
+          "support": "reported",
+          "quote": "P1-ligated DNA was then captured by mixing 50 μl of fragmented DNA with 12.5 μl of Dynabeads MyOne Streptavidin C1 beads",
+          "bbox": null,
+          "rationale": "The excerpt identifies the captured fragmented P1-ligated DNA and the streptavidin support; quantities are not architecture claims or execution instructions."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        }
+      ]
+    },
+    {
+      "target": "flow:f_12",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The o_capture-to-s_nonretained_dna route is an explicitly marked inference from tag-selective retention of a mixed population. No waste arrow is falsely claimed visible, no perfect partition is asserted, and this material does not rejoin the retained library route.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Fragment shows both tagged and bare DNA; the following bead panel shows tagged DNA. There is no separately drawn nonretained output arrow.",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.71,
+            0.0,
+            0.935,
+            0.95
+          ],
+          "rationale": "A tag-selective pull down of this mixed material implies a nonretained fraction. This does not imply complete retention of every tagged molecule or absence of nonspecific capture."
+        }
+      ]
+    },
+    {
+      "target": "flow:f_13",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_captured_dna enters o_library_complete while bead-bound. The primary on-bead operations establish the input interface; the generic terminal arrow alone is not treated as proof of these internal steps.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Rightmost arrow connects the bead icon to short blue lines labeled DNA; no separate second-adaptor, amplification, sequencing, or elution panel is drawn.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.835,
+            0.0,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        }
+      ]
+    },
+    {
+      "target": "flow:f_14",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_library_complete produces s_library after completion and amplification, with bead separation supported by Methods. Its outgoing library state therefore agrees with the readout input without an unsupported pre-PCR release.",
+      "evidence": [
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00034], Experimental Procedures, library construction, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The beads were then removed from the PCR and the library was extracted by gel purification as described above.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_15",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_library supplies DNA to o_readout. Sequencing from P1b is primary-text evidence, not a visible sequencer panel; its entry-end association agrees with the earlier end-tagging and completion states.",
+      "evidence": [
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        }
+      ]
+    },
+    {
+      "target": "flow:f_16",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_readout produces s_5hmc_calls as data rather than another material fraction. Reference-mapped cut boundaries plus expected nearby cytosines support putative 5hmC locations, retaining the documented assignment ambiguity.",
+      "evidence": [
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, inference of putative target sites",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Putative 5hmC sites can be deduced by checking the presence of cytosine at expected distances (N13/N11,N12/N10,N11/N9) from either side of the mapped cleavage sites",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, assignment ambiguity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "There is assignment ambiguity to the exact cytosine base in categories such as 2CGs or 2CHs and accounts for 13% of all identified cleavage sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_capture",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The operation acts on fragmented tagged/untagged DNA and selects biotin-P1-bearing pieces onto streptavidin beads. Both retained attachment and implicit nonretention are represented, and the candidate does not equate tag survival with perfect 5hmC specificity. Methods resolves the caption’s generic avidin wording to the depicted streptavidin support.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Fragment mixture passes through a rightward arrow to Streptavidin magnetic bead pull down; the bead icon carries tagged DNA.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.715,
+            0.0,
+            0.935,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00034], Experimental Procedures, capture after sonication",
+          "basis": "text",
+          "support": "reported",
+          "quote": "P1-ligated DNA was then captured by mixing 50 μl of fragmented DNA with 12.5 μl of Dynabeads MyOne Streptavidin C1 beads",
+          "bbox": null,
+          "rationale": "The excerpt identifies the captured fragmented P1-ligated DNA and the streptavidin support; quantities are not architecture claims or execution instructions."
+        },
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Fragment shows both tagged and bare DNA; the following bead panel shows tagged DNA. There is no separately drawn nonretained output arrow.",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.71,
+            0.0,
+            0.935,
+            0.95
+          ],
+          "rationale": "A tag-selective pull down of this mixed material implies a nonretained fraction. This does not imply complete retention of every tagged molecule or absence of nonspecific capture."
+        }
+      ]
+    },
+    {
+      "target": "operation:o_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The glucosylated DNA input, offset double-stranded cleavage, and cut DNA output agree across adjacent operations. The primary source supports conditional specificity and dependence on cytosine arrangement; the candidate preserves those sampling limitations.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "AbaSI arrow leads from glucosylated DNA to two separated duplex fragments with visibly staggered strand ends.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.315,
+            0.04,
+            0.52,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, AbaSI recognition and cleavage",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA modification-dependent restriction endonuclease AbaSI recognizes 5gmC with high specificity and generates double-stranded breaks at the 3′ side of the binding sites",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, specificity under the study conditions",
+          "basis": "text",
+          "support": "reported",
+          "quote": "AbaSI does not digest 5mC or C under the conditions used",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, cytosine arrangement and cutting efficiency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "AbaSI prefers sites with two cytosines positioned symmetrically around the cleavage site: one is 5gmC and the other can be modified or not (Figure 1A). AbaSI cleaves with a lower efficiency when only one 5gmC is present",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_fragment",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The operation acts after P1b ligation and yields the visibly mixed tagged-terminal and untagged-interior fragments. Sonication is explicitly a primary-caption identification, and the tagged boundary remains associated with the selected pieces.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Ligate-to-Fragment arrow: tagged long duplexes become tagged short terminal pieces and bare interior pieces.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.588,
+            0.0,
+            0.786,
+            0.93
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 2–4",
+          "basis": "text",
+          "support": "reported",
+          "quote": "2: digested DNA was ligated to a biotinylated adaptor P1b with 2-base 3′-overhang. 3: DNA fragmentation by sonication. 4: capture of the biotinylated DNA onto avidin-coated beads.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_glucosylate",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "T4-βGT transforms DNA 5hmC to the glucosylated state recognized in the next operation. It preserves the genomic target association and does not attach the later biotin capture handle to the modified base.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "T4-βGT arrow leads to Glucosylated 5-hmC; blue flag-like marks appear at the red sites.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.265,
+            0.04,
+            0.418,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, conversion before AbaSI-coupled library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Conversion of genomic 5hmC to 5gmC was completed by using the T4 β-glucosyltransferase",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, AbaSI recognition and cleavage",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA modification-dependent restriction endonuclease AbaSI recognizes 5gmC with high specificity and generates double-stranded breaks at the 3′ side of the binding sites",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_library_complete",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "This broad primary-supported interface correctly receives bead-bound DNA, completes the other end with P2, and uses PCR to generate a library subsequently separated from beads. It is explicitly distinguished from the unexpanded final arrow in Illumina; unshown routine substeps need not become additional graph operations.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Rightmost arrow connects the bead icon to short blue lines labeled DNA; no separate second-adaptor, amplification, sequencing, or elution panel is drawn.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.835,
+            0.0,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00034], Experimental Procedures, library construction, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The beads were then removed from the PCR and the library was extracted by gel purification as described above.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_ligate",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The operation combines AbaSI-cleaved DNA with biotinylated P1b, preserving the primary-supported two-base randomized 3′-overhang feature. The resulting adaptor is both the capture handle carrier and the later sequencing entry interface; ligation does not label the 5hmC base itself.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Incoming short magenta/blue reagent labeled Biotinylated primers is above the arrow; Ligate product has tags at the ends of the DNA duplexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.66,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_readout",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The readout is sequencing of library DNA from the P1b end followed by cut-coordinate interpretation, supported by primary text beyond the drawn preparation panels. It correctly infers candidate 5hmC positions rather than directly reading a chemical modification and retains nonunique assignments and enzyme-dependent sampling.",
+      "evidence": [
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, inference of putative target sites",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Putative 5hmC sites can be deduced by checking the presence of cytosine at expected distances (N13/N11,N12/N10,N11/N9) from either side of the mapped cleavage sites",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, assignment ambiguity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "There is assignment ambiguity to the exact cytosine base in categories such as 2CGs or 2CHs and accounts for 13% of all identified cleavage sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, cytosine arrangement and cutting efficiency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "AbaSI prefers sites with two cytosines positioned symmetrically around the cleavage site: one is 5gmC and the other can be modified or not (Figure 1A). AbaSI cleaves with a lower efficiency when only one 5gmC is present",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_23352666",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/DOI identity is independently matched. Inspected full-text Introduction, Results, library-construction Methods, and Figure 1 caption establish this as the primary bulk Aba-seq implementation and support its linked library/readout architecture; metadata is not used as chemistry or priority evidence.",
+      "evidence": [
+        {
+          "source_id": "metadata:23352666",
+          "locator": "PubMed metadata, pmid/title and identifiers.doi",
+          "basis": "text",
+          "support": "reported",
+          "quote": "10.1016/j.celrep.2013.01.001",
+          "bbox": null,
+          "rationale": "Confirms bibliographic identity for PMID 23352666; metadata alone does not verify the reaction sequence, chemistry, or method origin."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00008], Introduction, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we report the genome-wide high-resolution hydroxymethylome of the mouse E14 ESCs using AbaSI-coupled sequencing (Aba-seq).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 2–4",
+          "basis": "text",
+          "support": "reported",
+          "quote": "2: digested DNA was ligated to a biotinylated adaptor P1b with 2-base 3′-overhang. 3: DNA fragmentation by sonication. 4: capture of the biotinylated DNA onto avidin-coated beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_25159599",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/DOI identity is matched. The available content is an abstract describing a broad review, so its background role is appropriate; the candidate explicitly limits inspection to that abstract and does not use it as a primary Aba-seq protocol.",
+      "evidence": [
+        {
+          "source_id": "metadata:25159599",
+          "locator": "PubMed metadata, pmid/title and identifiers.doi",
+          "basis": "text",
+          "support": "reported",
+          "quote": "10.1038/nrg3772",
+          "bbox": null,
+          "rationale": "Confirms bibliographic identity for PMID 25159599; metadata alone does not verify the reaction sequence, chemistry, or method origin."
+        },
+        {
+          "source_id": "paper:25159599",
+          "locator": "Supplied abstract, review scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This Review discusses the principles behind recently developed techniques, compares their respective strengths and limitations and provides general guidelines for selecting appropriate methods for specific experimental contexts.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_25639471",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/DOI identity is matched. The inspected abstract actually describes the separately named PvuRts1I-plus-chemical-enrichment method and a 5fC application. Its background relationship to the pictured AbaSI route is appropriate only with the candidate’s explicit association to this distinct related method and its abstract-only limitations; no full route or enzyme interchangeability is asserted.",
+      "evidence": [
+        {
+          "source_id": "metadata:25639471",
+          "locator": "PubMed metadata, pmid/title and identifiers.doi",
+          "basis": "text",
+          "support": "reported",
+          "quote": "10.1016/j.molcel.2014.12.035",
+          "bbox": null,
+          "rationale": "Confirms bibliographic identity for PMID 25639471; metadata alone does not verify the reaction sequence, chemistry, or method origin."
+        },
+        {
+          "source_id": "paper:25639471",
+          "locator": "Supplied abstract, method description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a cost-efficient mapping method that combines 5hmC-specific restriction enzyme PvuRts1I with a 5hmC chemical labeling enrichment method.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25639471",
+          "locator": "Supplied abstract, 5fC application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method generated a genome-wide 5fC map at single-base resolution.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27025842",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/DOI identity is matched. The inspected full-text Background identifies SCL-exo as this paper’s method and discusses Aba-seq as an earlier comparator, including the cited 13% ambiguity. The candidate appropriately uses it as background and does not import its exonuclease workflow.",
+      "evidence": [
+        {
+          "source_id": "metadata:27025842",
+          "locator": "PubMed metadata, pmid/title and identifiers.doi",
+          "basis": "text",
+          "support": "reported",
+          "quote": "10.1186/s13059-016-0919-y",
+          "bbox": null,
+          "rationale": "Confirms bibliographic identity for PMID 27025842; metadata alone does not verify the reaction sequence, chemistry, or method origin."
+        },
+        {
+          "source_id": "paper:27025842",
+          "locator": "[b00008], Background, method introduced by this paper",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This new procedure, called SCL-exo, is shown here to be suited to obtain single-CpG resolution data.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27025842",
+          "locator": "[b00007], Background, Aba-seq limitation and citation [16]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ambiguity might exist in 13 % of the cleaved molecules in the Aba-seq assay [16].",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27347753",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/DOI identity is matched and the catalogue links it to scAba-seq. The supplied abstract supports a single-cell, strand-specific technology using glucosylation and glucosylation-dependent DNA digestion, while the candidate explicitly declines to claim full-text verification of its enzyme, library, or cell-association architecture.",
+      "evidence": [
+        {
+          "source_id": "metadata:27347753",
+          "locator": "PubMed metadata, pmid/title and identifiers.doi",
+          "basis": "text",
+          "support": "reported",
+          "quote": "10.1038/nbt.3598",
+          "bbox": null,
+          "rationale": "Confirms bibliographic identity for PMID 27347753; metadata alone does not verify the reaction sequence, chemistry, or method origin."
+        },
+        {
+          "source_id": "card:aba-seq",
+          "locator": "Description, scAba-seq and numbered reference 1",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A single-cell variation, scAba-seq, is also available1.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27347753",
+          "locator": "Supplied abstract, technology description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a single-cell, genome-wide and strand-specific 5hmC sequencing technology, based on 5hmC glucosylation and glucosylation-dependent digestion of DNA",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "record",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "All candidate states, operations, routes, method scopes, paper matches, corrections, and declared unknowns were checked individually against the full image and relevant supplied evidence. The single depicted route and its tagged/bare selection outcome are covered; the carrier remains DNA through capture and library completion before a data readout. No consequential unsupported assertion or omitted depicted branch remains within this scope. The separately named variants retain nonblocking abstract-level applicability limits.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Entire schematic: target summary at far left, then one route through hydroxymethylated DNA, T4-βGT, glucosylated 5-hmC, AbaSI, biotinylated primers/Ligate, Fragment, streptavidin magnetic bead pull down, and terminal DNA. There are no depicted single-cell or alternative-enzyme branches.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, inference of putative target sites",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Putative 5hmC sites can be deduced by checking the presence of cytosine at expected distances (N13/N11,N12/N10,N11/N9) from either side of the mapped cleavage sites",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Aba-seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The diagram explicitly names Aba-seq and AbaSI, and the primary full text identifies the bulk E14 DNA implementation. The five visible preparation operations plus clearly distinguished primary-supported completion/readout interfaces belong to this scope. No single-cell compartment or alternate enzyme branch is invented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Entire schematic: target summary at far left, then one route through hydroxymethylated DNA, T4-βGT, glucosylated 5-hmC, AbaSI, biotinylated primers/Ligate, Fragment, streptavidin magnetic bead pull down, and terminal DNA. There are no depicted single-cell or alternative-enzyme branches.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00008], Introduction, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we report the genome-wide high-resolution hydroxymethylome of the mouse E14 ESCs using AbaSI-coupled sequencing (Aba-seq).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:PvuRts1I-based related method (Sun et al., 2015)",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Accepted as unresolved applicability, not a completed second architecture. The catalogue and supplied abstract establish a distinct PvuRts1I/chemical-enrichment approach, including a reported 5fC application, but do not establish order, handle location, or local equivalence to the depicted P1b route. Assigning no illustrated operation IDs is appropriately conservative.",
+      "evidence": [
+        {
+          "source_id": "card:aba-seq",
+          "locator": "Description, related method and numbered reference 2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A related method uses PvuRts1I to overcome the sequence bias in AbaSI2.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25639471",
+          "locator": "Supplied abstract, method description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a cost-efficient mapping method that combines 5hmC-specific restriction enzyme PvuRts1I with a 5hmC chemical labeling enrichment method.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25639471",
+          "locator": "Supplied abstract, 5fC application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method generated a genome-wide 5fC map at single-base resolution.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:scAba-seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Accepted as unresolved applicability, not a fully verified single-cell workflow. Catalogue naming and abstract content support the common glucosylation/digestion principle but do not specify the enzyme identity, P1b route, or cell-association interface. No depicted compartment or operation is incorrectly assigned to the variant.",
+      "evidence": [
+        {
+          "source_id": "card:aba-seq",
+          "locator": "Description, scAba-seq and numbered reference 1",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A single-cell variation, scAba-seq, is also available1.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27347753",
+          "locator": "Supplied abstract, technology description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a single-cell, genome-wide and strand-specific 5hmC sequencing technology, based on 5hmC glucosylation and glucosylation-dependent digestion of DNA",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Entire schematic: target summary at far left, then one route through hydroxymethylated DNA, T4-βGT, glucosylated 5-hmC, AbaSI, biotinylated primers/Ligate, Fragment, streptavidin magnetic bead pull down, and terminal DNA. There are no depicted single-cell or alternative-enzyme branches.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_5hmc_calls",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The final data state correctly carries mapped AbaSI boundaries and putative original 5hmC locations. The nearby-cytosine inference, study-specific 13% ambiguity, and enzyme-dependent sampling support its limitations; it is not a 5mC map or a claim of universal recovery.",
+      "evidence": [
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, inference of putative target sites",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Putative 5hmC sites can be deduced by checking the presence of cytosine at expected distances (N13/N11,N12/N10,N11/N9) from either side of the mapped cleavage sites",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, assignment ambiguity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "There is assignment ambiguity to the exact cytosine base in categories such as 2CGs or 2CHs and accounts for 13% of all identified cleavage sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, specificity under the study conditions",
+          "basis": "text",
+          "support": "reported",
+          "quote": "AbaSI does not digest 5mC or C under the conditions used",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, cytosine arrangement and cutting efficiency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "AbaSI prefers sites with two cytosines positioned symmetrically around the cleavage site: one is 5gmC and the other can be modified or not (Figure 1A). AbaSI cleaves with a lower efficiency when only one 5gmC is present",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_biotin_adaptor",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The material preserves the diagram’s Biotinylated primers label while resolving its actual role and consequential end feature as biotinylated P1b adaptor with a randomized two-base 3′ overhang. Its identity agrees with the added ligation input and the downstream capture handle.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Incoming short magenta/blue reagent labeled Biotinylated primers is above the arrow; Ligate product has tags at the ends of the DNA duplexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.66,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_captured_dna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The captured product is tagged genomic DNA attached to streptavidin beads through its adaptor-associated handle. It remains bead-bound for the next operation; capture does not directly detect the modified base or change the readout carrier.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Fragment mixture passes through a rightward arrow to Streptavidin magnetic bead pull down; the bead icon carries tagged DNA.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.715,
+            0.0,
+            0.935,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00034], Experimental Procedures, capture after sonication",
+          "basis": "text",
+          "support": "reported",
+          "quote": "P1-ligated DNA was then captured by mixing 50 μl of fragmented DNA with 12.5 μl of Dynabeads MyOne Streptavidin C1 beads",
+          "bbox": null,
+          "rationale": "The excerpt identifies the captured fragmented P1-ligated DNA and the streptavidin support; quantities are not architecture claims or execution instructions."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        }
+      ]
+    },
+    {
+      "target": "state:s_cut_dna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "AbaSI-cleaved double-stranded DNA is the appropriate output after glucosylation and input for end ligation. The candidate preserves the modification-to-boundary association without inventing atom-level chemistry from the staggered-line icon; the specific ligation-end feature is supplied in the adjacent P1b state.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "AbaSI arrow leads from glucosylated DNA to two separated duplex fragments with visibly staggered strand ends.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.315,
+            0.04,
+            0.52,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, AbaSI recognition and cleavage",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA modification-dependent restriction endonuclease AbaSI recognizes 5gmC with high specificity and generates double-stranded breaks at the 3′ side of the binding sites",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00012], Results, inference of putative target sites",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Putative 5hmC sites can be deduced by checking the presence of cytosine at expected distances (N13/N11,N12/N10,N11/N9) from either side of the mapped cleavage sites",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_fragment_mixture",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The state includes both visibly tagged terminal pieces and untagged interior DNA, rather than depicting every short fragment as selected. The P1b-marked original boundary and new opposite fragmentation end agree with the subsequent capture and library-completion interfaces.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Ligate-to-Fragment arrow: tagged long duplexes become tagged short terminal pieces and bare interior pieces.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.588,
+            0.0,
+            0.786,
+            0.93
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 2–4",
+          "basis": "text",
+          "support": "reported",
+          "quote": "2: digested DNA was ligated to a biotinylated adaptor P1b with 2-base 3′-overhang. 3: DNA fragmentation by sonication. 4: capture of the biotinylated DNA onto avidin-coated beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        }
+      ]
+    },
+    {
+      "target": "state:s_gmc_dna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "This is DNA containing glucosylated 5hmC, the substrate of AbaSI. The visible marks and primary conversion statement support that interpretation; the candidate correctly distinguishes this modification from later adaptor-associated biotin.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "T4-βGT arrow leads to Glucosylated 5-hmC; blue flag-like marks appear at the red sites.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.265,
+            0.04,
+            0.418,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, conversion before AbaSI-coupled library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Conversion of genomic 5hmC to 5gmC was completed by using the T4 β-glucosyltransferase",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_hmc_dna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The biological substrate is hydroxymethylated DNA with red target sites. The far-left highlighted-residue summary has no incoming/outgoing preparation arrow and is correctly not made a separate branch. E14 genomic DNA is attributed to the primary implementation rather than to an unspecified specimen in the cartoon.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Far-left target summary: highlighted red sites labeled 5hmc residues; caption identifies AbaSI coupled with sequencing (Aba-seq) and the hydroxymethylome (5hmC). No arrow connects this summary icon to the preparation input.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.14,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Hydroxy-methyl-ated DNA: blue line with three red sites, followed by the arrow labeled T4-βGT.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.142,
+            0.05,
+            0.302,
+            0.9
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00008], Introduction, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we report the genome-wide high-resolution hydroxymethylome of the mouse E14 ESCs using AbaSI-coupled sequencing (Aba-seq).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The terminal drawing is generic DNA, and the candidate explicitly labels its completed-library interpretation as primary-supported. P2/P1b-specific amplification and subsequent bead separation establish the material state, while P1b-end sequencing establishes preservation of the cut-boundary association.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Rightmost arrow connects the bead icon to short blue lines labeled DNA; no separate second-adaptor, amplification, sequencing, or elution panel is drawn.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.835,
+            0.0,
+            1.0,
+            0.95
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00105], Figure 1B caption, steps 5–8",
+          "basis": "text",
+          "support": "reported",
+          "quote": "5 and 6: on-bead DNA end-repair and dA-tailing. 7: on-bead ligation with adaptor P2 containing one blunt end and one unligatable end. 8: PCR using primers specific to the P1b and P2.",
+          "bbox": null,
+          "rationale": "Used for the broad on-bead completion/PCR interface, without adopting an unshown detailed end-structure model for P2."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00034], Experimental Procedures, library construction, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The beads were then removed from the PCR and the library was extracted by gel purification as described above.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_ligated_dna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The state is genomic DNA bearing the ligated biotinylated adaptor at the marked cut ends. The visible tags, primary ligation statement, and P1b-initiated sequencing support its combined capture and information-carrying roles through fragmentation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Incoming short magenta/blue reagent labeled Biotinylated primers is above the arrow; Ligate product has tags at the ends of the DNA duplexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.66,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, sequencing entry end and mapped boundary",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was initiated from the P1b end, and the AbaSI cleavage sites were revealed after mapping the reads to the reference genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_nonretained_dna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "This is a justified implicit selection outcome, not a purported visible waste branch. Bare interior fragments lack the intended biotin handle, and the candidate avoids assumptions of perfect exclusion or complete tag capture. The state correctly terminates outside the retained library route.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Fragment shows both tagged and bare DNA; the following bead panel shows tagged DNA. There is no separately drawn nonretained output arrow.",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.71,
+            0.0,
+            0.935,
+            0.95
+          ],
+          "rationale": "A tag-selective pull down of this mixed material implies a nonretained fraction. This does not imply complete retention of every tagged molecule or absence of nonspecific capture."
+        },
+        {
+          "source_id": "paper:23352666",
+          "locator": "[b00011], Results, first adaptor ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The AbaSI-digested DNA was first ligated to a biotinylated DNA adaptor P1b containing 2-base randomized 3′-overhang",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_pvu_route",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The unknown precisely identifies architecture-changing questions the supplied abstract does not answer: restriction/chemical-labeling order, capture-handle carrier, and the 5fC-specific arm. Resolving these would require primary Methods or a method figure before adding a separate route. Its nonblocking status is appropriate because the candidate makes no detailed Pvu route or substitution claim.",
+      "evidence": [
+        {
+          "source_id": "paper:25639471",
+          "locator": "Supplied abstract, method description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a cost-efficient mapping method that combines 5hmC-specific restriction enzyme PvuRts1I with a 5hmC chemical labeling enrichment method.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25639471",
+          "locator": "Supplied abstract, 5fC application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method generated a genome-wide 5fC map at single-base resolution.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Entire schematic: target summary at far left, then one route through hydroxymethylated DNA, T4-βGT, glucosylated 5-hmC, AbaSI, biotinylated primers/Ligate, Fragment, streptavidin magnetic bead pull down, and terminal DNA. There are no depicted single-cell or alternative-enzyme branches.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_sc_variant",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The unknown appropriately asks for enzyme/reagent identities, library steps, and the cell-association interface missing from the supplied abstract. Primary Methods and a library figure would be needed to assign the depicted local operations to scAba-seq. It does not block the explicitly bulk diagram route.",
+      "evidence": [
+        {
+          "source_id": "card:aba-seq",
+          "locator": "Description, scAba-seq and numbered reference 1",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A single-cell variation, scAba-seq, is also available1.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27347753",
+          "locator": "Supplied abstract, technology description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a single-cell, genome-wide and strand-specific 5hmC sequencing technology, based on 5hmC glucosylation and glucosylation-dependent digestion of DNA",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_2ef8f2e2dd62881aa7769e21",
+          "locator": "Entire schematic: target summary at far left, then one route through hydroxymethylated DNA, T4-βGT, glucosylated 5-hmC, AbaSI, biotinylated primers/Ligate, Fragment, streptavidin magnetic bead pull down, and terminal DNA. There are no depicted single-cell or alternative-enzyme branches.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

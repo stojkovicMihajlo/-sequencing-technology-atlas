@@ -1,0 +1,1955 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "atac-seq",
+  "title": "ATAC-Seq",
+  "method_names": [
+    "ATAC-seq",
+    "Fast-ATAC",
+    "ATAC-seq on cryopreserved iPSC-derived motor neurons",
+    "ATAC-seq on biobanked B cells",
+    "scATAC-seq (microfluidic single-cell ATAC-seq)",
+    "single-cell ATAC-seq by combinatorial cellular indexing"
+  ],
+  "scope": "Illumina ATAC-Seq explanatory schematic and the explicitly cited adaptations, at the shared molecular-architecture level. The graph extracts the unbranched depicted route from native chromatin through Tn5 tagmentation and the combined DNA purification/amplification block to a DNA library. The initial assay overview and repeated \"Open DNA\" panel illustrate the same accessibility target, without a depicted chromatin-opening operation. Blue Tn5 icons bearing colored adapter marks are reagents; insertion and \"Fragmented and primed\" depict one coupled transformation. The drawing contains no cell-isolation, compartment-pooling, barcode-assignment or sequencing operation. Named adaptations are qualified in method_scopes rather than expanded into unshown workflows. The two single-cell references describe distinct implementations, not interchangeable names for the same cell-handling architecture. THS-seq is a cited comparator, not a depicted ATAC-seq variant.",
+  "inspected_sources": [
+    "card:atac-seq",
+    "diagram:asset_d58dd2c61046500f9e625c8d",
+    "paper:24097267",
+    "paper:27526324",
+    "paper:27146274",
+    "paper:27249108",
+    "paper:26083756",
+    "paper:25953818",
+    "paper:26846207",
+    "metadata:24097267",
+    "metadata:27526324",
+    "metadata:27146274",
+    "metadata:27249108",
+    "metadata:26083756",
+    "metadata:25953818",
+    "metadata:26846207",
+    "metadata:27297499",
+    "metadata:26721890",
+    "metadata:26928226",
+    "metadata:27386823",
+    "metadata:27309802",
+    "metadata:26977395",
+    "metadata:27315481",
+    "metadata:27498878",
+    "metadata:26814966",
+    "metadata:26878240",
+    "metadata:27397025",
+    "metadata:27477909",
+    "metadata:27376235",
+    "metadata:27381023",
+    "metadata:26823433",
+    "metadata:27156452",
+    "metadata:27259149",
+    "metadata:27239026",
+    "metadata:27346425",
+    "metadata:27114036",
+    "metadata:27156451",
+    "metadata:26956608",
+    "metadata:26912704",
+    "metadata:27507714"
+  ],
+  "states": [
+    {
+      "id": "s_chromatin",
+      "label": "Native chromatin with exposed DNA (\"Open DNA\")",
+      "kind": "material",
+      "features": [
+        "Genomic DNA is packaged with gray nucleosome icons and exposed between them; the far-left assay overview highlights an exposed segment in yellow.",
+        "\"Open DNA\" denotes accessible DNA within native chromatin. The original ATAC-seq implementation acts on unfixed nuclei; it is not a naked-DNA accessibility assay.",
+        "No cell-identity barcode or compartment boundary is specified in the Illumina drawing."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Left assay overview (yellow exposed DNA) and repeated input labelled \"Open DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.375,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq probes chromatin accessibility with transposons, [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_tagged",
+      "label": "Fragmented and primed chromatin DNA",
+      "kind": "material",
+      "features": [
+        "The genomic DNA has acquired Tn5-delivered sequencing-adapter tags and fragmentation boundaries preferentially at accessible regions.",
+        "Pink and yellow-green short marks accompany blue Tn5 icons and the primed DNA products. These depict adapter payloads; the figure gives no legend assigning their exact sequences, index identities, strand polarity or chemical end groups.",
+        "The \"Fragmented and primed\" panel shows a detached short fragment together with nucleosome-associated flanking pieces. No separate recovery arrow or branch is drawn for the flanks.",
+        "The tagmented material is not asserted to be exclusively nucleosome-free: the original method also recovers fragments spanning nucleosomes."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Blue \"Tn5 Transposome\" icon and \"Insert in regions of open chromatin\" panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.375,
+            0.0,
+            0.65,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Arrow from insertion panel to \"Fragmented and primed\": separated DNA with colored end marks and nucleosome-associated flanks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.65,
+            0.0,
+            0.86,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq probes chromatin accessibility with transposons, [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ATAC-seq uses Tn5 transposase to integrate its adapter payload into regions of accessible chromatin, whereas steric hindrance less accessible chromatin makes transposition less probable. Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq insert sizes disclose nucleosome positions, [b00011]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We found that ATAC-seq paired-end reads produce detailed information about nucleosome packing and positioning. The insert size distribution of sequenced fragments from human chromatin has clear periodicity of approximately 200 base pairs, suggesting many fragments are protected by integer multiples of nucleosomes (Fig 2a).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Insertion panel through fragmented-product panel",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.475,
+            0.0,
+            0.86,
+            1.0
+          ],
+          "rationale": "The labels and connecting arrow show the conversion from transposome action to fragmented/primed DNA. The residual nucleosome-associated drawings have no independent outgoing route, so they are represented within the tagmented material rather than as a second retained branch."
+        }
+      ]
+    },
+    {
+      "id": "s_library",
+      "label": "Purified, amplified DNA library (terminal \"DNA\")",
+      "kind": "material",
+      "features": [
+        "Terminal parallel linear DNA fragments carry colored adapter end marks and are labelled \"DNA\"; nucleosome icons are absent from the final product panel.",
+        "This is a DNA sequencing library. Genomic DNA inserts and their insertion boundaries carry the accessibility information into sequencing; no RNA intermediate or protein readout is depicted.",
+        "The card describes deep sequencing as the downstream readout. In the primary implementation, mapped insertion positions locate preferentially accessible chromatin, while paired-end insert lengths support inference of nucleosome organization.",
+        "Footprint patterns can support inference of DNA-binding-protein occupancy, as shown by the primary paper; protein identity and occupancy are not directly read as a sequenced protein molecule.",
+        "Recovery is selective: PCR-compatible adapter pairing and spacing affect which transposition products enter the amplified library. The card also warns that sample processing can expose previously bound chromatin."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Rightward arrow labelled \"DNA purification Amplification\" and terminal parallel, colored-ended DNA lines labelled \"DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Discussion, [b00021]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These insights are derived from both the position of insertion and the distribution of insert lengths captured during the transposition reaction.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq insert sizes disclose nucleosome positions, [b00011]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We found that ATAC-seq paired-end reads produce detailed information about nucleosome packing and positioning. The insert size distribution of sequenced fragments from human chromatin has clear periodicity of approximately 200 base pairs, suggesting many fragments are protected by integer multiples of nucleosomes (Fig 2a).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq footprints infer factor occupancy genome-wide, [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We reasoned that DNA sequences directly occupied by DNA-binding proteins are protected from transposition; the resulting sequence “footprint” reveals the presence of the DNA-binding protein at each site, analogous to DNase digestion footprints24.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Description, sequencing readout; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Deep sequencing of the purified regions provides base-pair resolution of nucleosome-free regions in the genome.",
+          "bbox": null,
+          "rationale": "The card states the intended readout. Interpreted together with the primary paper, this refers to genomic localization of accessibility-enriched DNA fragments; it does not establish exclusive recovery of nucleosome-free fragments or complete measurement of every base."
+        },
+        {
+          "source_id": "paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, the Tn5 transposome complex inserts adaptors in random orientation, such that only half of the molecules contain the adaptors in the orientation required for PCR amplification. Second, only approximately 1 % of the genome is accessible in typical cells, and the regions in which two adjacent transposition events are too far apart cannot be amplified by PCR.",
+          "bbox": null,
+          "rationale": "This is the cited THS-seq paper’s account of limitations in the ATAC-seq design it compares against; the half-molecule statement is not a universal measured yield for every ATAC variant."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Limitations; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "During mechanical sample processing, bound chromatin regions might open and be tagged by the transposome",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq probes chromatin accessibility with transposons and ATAC-seq insert sizes disclose nucleosome positions, [b00008], [b00011]",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a).",
+          "bbox": null,
+          "rationale": "The accessible-region cartoon and the primary paper’s recovered nucleosome-spanning fragments are compatible when accessibility refers to preferred insertion sites, not a requirement that every base of every recovered insert be nucleosome-free."
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_tagment",
+      "label": "Insert in regions of open chromatin → Fragmented and primed",
+      "description": "Adapter-loaded Tn5 transposomes act on accessible portions of native chromatin DNA, simultaneously fragmenting it and inserting sequencing-adapter tags. The central insertion panel and the arrow to \"Fragmented and primed\" show reagent action and its product within this single coupled transformation; no prior chromatin-opening reaction is drawn.",
+      "inputs": [
+        "s_chromatin"
+      ],
+      "outputs": [
+        "s_tagged"
+      ],
+      "mechanism": "Tn5 transposase delivers its adapter payload to chromatin DNA. Steric hindrance makes transposition less probable in less accessible chromatin, so tagging is preferential rather than perfectly exclusive. The blue enzyme icon denotes the catalytic reagent; it is not an additional biological analyte or a separate workflow operation.",
+      "information_effect": "Genomic sequence, insertion boundaries and distances between insertion events encode a sample of accessibility in the original chromatin. Protection by nucleosomes or bound proteins can alter this fragmentation pattern, allowing subsequent inference rather than direct sequencing of those proteins.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Blue \"Tn5 Transposome\" icon and \"Insert in regions of open chromatin\" panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.375,
+            0.0,
+            0.65,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Arrow from insertion panel to \"Fragmented and primed\": separated DNA with colored end marks and nucleosome-associated flanks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.65,
+            0.0,
+            0.86,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq probes chromatin accessibility with transposons, [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq probes chromatin accessibility with transposons, [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ATAC-seq uses Tn5 transposase to integrate its adapter payload into regions of accessible chromatin, whereas steric hindrance less accessible chromatin makes transposition less probable. Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq footprints infer factor occupancy genome-wide, [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We reasoned that DNA sequences directly occupied by DNA-binding proteins are protected from transposition; the resulting sequence “footprint” reveals the presence of the DNA-binding protein at each site, analogous to DNase digestion footprints24.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Description; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, gDNA is incubated with Tn5 transposomes, which fragments it and adds adapters simultaneously, in open chromatin regions.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_library",
+      "label": "DNA purification / Amplification",
+      "description": "The \"Fragmented and primed\" material passes through the depicted combined DNA purification/amplification block, producing purified, amplified linear DNA library fragments. Purification recovers tagged DNA, and PCR increases the abundance of amplifiable fragments. The graph retains this as one broad operation rather than reconstructing internal cleanup steps.",
+      "inputs": [
+        "s_tagged"
+      ],
+      "outputs": [
+        "s_library"
+      ],
+      "mechanism": "PCR copies fragments carrying compatible sequencing-adapter sites. The original bulk ATAC-seq protocol explicitly describes purification after transposition followed by PCR; this block is a schematic abstraction, not a fixed cleanup order for every input or named adaptation.",
+      "information_effect": "The amplified genomic inserts retain their origin and insertion-boundary information, enabling sequence-based mapping of accessible regions. Amplification filters the tagged population by adapter compatibility and spacing; read recovery does not imply perfect accessibility specificity or recovery of every insertion event.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Rightward arrow labelled \"DNA purification Amplification\" and terminal parallel, colored-ended DNA lines labelled \"DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Online methods, Transpose and purify, [b00026]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Directly following transposition the sample was purified using a Qiagen Minelute kit.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Online methods, Low cell number protocol, [b00029]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Also, we eliminated the Qiagen Minelute purification prior to PCR and instead took the 5 μL reaction immediately after transposition directly into the 50 μL PCR.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, the Tn5 transposome complex inserts adaptors in random orientation, such that only half of the molecules contain the adaptors in the orientation required for PCR amplification. Second, only approximately 1 % of the genome is accessible in typical cells, and the regions in which two adjacent transposition events are too far apart cannot be amplified by PCR.",
+          "bbox": null,
+          "rationale": "This is the cited THS-seq paper’s account of limitations in the ATAC-seq design it compares against; the half-molecule statement is not a universal measured yield for every ATAC variant."
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, ATAC-seq probes chromatin accessibility with transposons, [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ATAC-seq uses Tn5 transposase to integrate its adapter payload into regions of accessible chromatin, whereas steric hindrance less accessible chromatin makes transposition less probable. Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Limitations; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "During mechanical sample processing, bound chromatin regions might open and be tagged by the transposome",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_input",
+      "source": "s_chromatin",
+      "target": "op_tagment",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Description; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, gDNA is incubated with Tn5 transposomes, which fragments it and adds adapters simultaneously, in open chromatin regions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Blue \"Tn5 Transposome\" icon and \"Insert in regions of open chromatin\" panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.375,
+            0.0,
+            0.65,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_tagged",
+      "source": "op_tagment",
+      "target": "s_tagged",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Arrow from insertion panel to \"Fragmented and primed\": separated DNA with colored end marks and nucleosome-associated flanks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.65,
+            0.0,
+            0.86,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_recovery",
+      "source": "s_tagged",
+      "target": "op_library",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Rightward arrow labelled \"DNA purification Amplification\" and terminal parallel, colored-ended DNA lines labelled \"DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Online methods, Transpose and purify, [b00026]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Directly following transposition the sample was purified using a Qiagen Minelute kit.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_library",
+      "source": "op_library",
+      "target": "s_library",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Rightward arrow labelled \"DNA purification Amplification\" and terminal parallel, colored-ended DNA lines labelled \"DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "ATAC-seq",
+      "operation_ids": [
+        "op_tagment",
+        "op_library"
+      ],
+      "status": "resolved",
+      "rationale": "ATAC-seq is the named core method; ATAC-Seq capitalization and the expanded Assay for Transposase Accessible Chromatin using sequencing are aliases. Both graph operations apply at figure scope. The primary paper establishes native chromatin tagmentation followed by PCR, and supports insertion-position, insert-length and footprint readouts. The figure does not show nuclei preparation or sequencing. Its combined purification/amplification block does not require pre-PCR purification in every low-input implementation; the original paper expressly omits that cleanup in its low-cell-number version.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Left assay overview (yellow exposed DNA) and repeated input labelled \"Open DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.375,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Blue \"Tn5 Transposome\" icon and \"Insert in regions of open chromatin\" panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.375,
+            0.0,
+            0.65,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+          "locator": "Rightward arrow labelled \"DNA purification Amplification\" and terminal parallel, colored-ended DNA lines labelled \"DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Online methods, Low cell number protocol, [b00029]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Also, we eliminated the Qiagen Minelute purification prior to PCR and instead took the 5 μL reaction immediately after transposition directly into the 50 μL PCR.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "Fast-ATAC",
+      "operation_ids": [
+        "op_tagment",
+        "op_library"
+      ],
+      "status": "resolved",
+      "rationale": "The card maps Fast-ATAC to the Corces blood-cell paper. Its Tn5 tagging and purified/amplified DNA output fit both operations at the depicted level. The distinct upstream interface is combined digitonin-mediated membrane permeabilization and transposition on blood cells; it is not an additional depicted branch or a universal sample-preparation replacement for other cell types.",
+      "evidence": [
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Description, named adaptations; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is commonly used, and optimized protocols are available for tissues, such as blood (Fast-ATAC)1, neurons2, biobank specimens3, and single cells (scATAC-seq4 and single-cell ATAC-seq5).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27526324",
+          "locator": "Results, Fast-ATAC is an optimized ATAC-seq protocol for blood cells, [b00013]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We developed an optimized protocol for use on primary blood cells, termed Fast-ATAC, which relies on a 1-step membrane permeabilization and transposition using the lysis reagent digitonin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27526324",
+          "locator": "Online methods, Fast-ATAC sequencing, [b00067]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transposed DNA was purified using a QIAgen MinElute Reaction Cleanup kit (Cat# 28204) and purified DNA was eluted in 10 ul elution buffer (10 mM Tris-HCl, pH 8). Transposed fragments were amplified and purified as described previously48 with modified primers23.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27526324",
+          "locator": "Online methods, Fast-ATAC sequencing, [b00067]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This protocol has been optimized for blood cells. We note that digitonin is a gentle detergent and this protocol may not be ideal for cell lines and other cell types that are more resistant to lysis.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "ATAC-seq on cryopreserved iPSC-derived motor neurons",
+      "operation_ids": [
+        "op_tagment",
+        "op_library"
+      ],
+      "status": "resolved",
+      "rationale": "The Milani paper describes a sample-preservation adaptation of ATAC-seq, not a new assay alias. Slow-cooled cryopreservation of the tested iPSC-derived motor neurons preserves usable nuclei, whereas flash-freezing failed in that comparison. Tagmentation, DNA purification and PCR map to the graph at its broad level. This implementation additionally selects nucleosome-free fragments for single-end sequencing; the generic library state is therefore not a claim that its sequenced size distribution equals the original paired-end ATAC library. Preservation and size selection are paper-supported scope distinctions, not extra operations drawn by Illumina.",
+      "evidence": [
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Description, named adaptations; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is commonly used, and optimized protocols are available for tissues, such as blood (Fast-ATAC)1, neurons2, biobank specimens3, and single cells (scATAC-seq4 and single-cell ATAC-seq5).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27146274",
+          "locator": "Abstract, [b00003]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We found that while flash-frozen iMNs are not suitable for ATAC-Seq, the assay is successful with slow-cooled cryopreserved cells. Using this method, we were able to isolate high quality, intact nuclei, and we verified that epigenetic results from fresh and cryopreserved iMNs quantitatively agree.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27146274",
+          "locator": "Results and Discussion, Description of experimental design and overview of the protocol, [b00012]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, as we were principally interested in open-chromatin profiling and not in nucleosome positioning, we introduced a size-selection step to enrich for nucleosome-free fragments. After size-selection, libraries were PCR-amplified and submitted for single-end sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27146274",
+          "locator": "Methods, Chromatin tagmentation and sequencing, [b00043]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We subsequently purified the samples with the DNA Clean & Concentrator–5 Kit (Zymo Research) and eluted them with 20 μl of Elution Buffer (Qiagen).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "ATAC-seq on biobanked B cells",
+      "operation_ids": [
+        "op_tagment",
+        "op_library"
+      ],
+      "status": "resolved",
+      "rationale": "The Scharer paper applies ATAC-seq to freshly processed and biobanked B-cell specimens, including the studied SLE samples. Native chromatin tagmentation, PCR and DNA recovery support both broad figure operations. The specimen interface is biobanked cells processed to nuclei, not an inferred preservation method applicable to every specimen. Its internal cleanup and selection steps are not separately depicted by Illumina.",
+      "evidence": [
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Description, named adaptations; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is commonly used, and optimized protocols are available for tissues, such as blood (Fast-ATAC)1, neurons2, biobank specimens3, and single cells (scATAC-seq4 and single-cell ATAC-seq5).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27249108",
+          "locator": "Introduction, [b00005]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The Assay for Transposase Accessible Chromatin (ATAC-seq) utilizes a sequencing adapter-coupled Tn5 transposase to simultaneously tag and fragment native chromatin, thereby generating a high-resolution map of accessible loci from cells2.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27249108",
+          "locator": "Introduction, [b00005]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, the ATAC-seq assay was applied to both biobanked and freshly processed specimens and an indistinguishable chromatin accessibility pattern was observed.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27249108",
+          "locator": "Methods, ATAC-seq, [b00037]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To remove primers and high molecular weight DNA following PCR amplification, a dual SPRI-size selection was performed",
+          "bbox": null,
+          "rationale": "This inspected methods passage establishes post-PCR DNA recovery in the biobanked B-cell implementation; it does not make that internal procedure part of the Illumina drawing."
+        }
+      ]
+    },
+    {
+      "method": "scATAC-seq (microfluidic single-cell ATAC-seq)",
+      "operation_ids": [
+        "op_tagment"
+      ],
+      "status": "resolved",
+      "rationale": "The card’s scATAC-seq citation is Buenrostro 2015: individual cells are captured on a microfluidic circuit, transposed and PCR-amplified there; collected libraries undergo PCR with cell-identifying barcoded primers before library pooling. Tagmentation maps to op_tagment. The whole op_library block is not assigned as an identical local workflow: Extended Data Fig. 1 describes Tn5 release enabling downstream reactions without DNA purification. The paper supports PCR, but its compartment, release and cell-barcode interfaces are not in the Illumina drawing. Cell association comes from separate capture and indexed amplification, not from the generic colored adapter marks.",
+      "evidence": [
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Description, named adaptations; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is commonly used, and optimized protocols are available for tissues, such as blood (Fast-ATAC)1, neurons2, biobank specimens3, and single cells (scATAC-seq4 and single-cell ATAC-seq5).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26083756",
+          "locator": "Main text, single-cell workflow and Fig. 1a reference, [b00006]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In scATAC-seq individual cells are captured and assayed using a programmable microfluidics platform (C1 single-cell Auto Prep System, Fluidigm) with methods optimized for this task (Fig. 1a and Extended Data Fig. 1 and Supplemental Discussion).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26083756",
+          "locator": "Main text, single-cell workflow, [b00006]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After transposition and PCR on the Integrated Fluidics Circuit (IFC), libraries are collected and PCR amplified with cell-identifying barcoded primers. Single-cell libraries are then pooled and sequenced on a high-throughput sequencing instrument.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26083756",
+          "locator": "Extended Data Figure 1 caption, Methods development for assaying single epigenomes, [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The development of an efficient Tn5 release protocol designed to permit downstream enzymatic reactions without DNA purification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "single-cell ATAC-seq by combinatorial cellular indexing",
+      "operation_ids": [
+        "op_tagment"
+      ],
+      "status": "unresolved",
+      "rationale": "The card’s single-cell ATAC-seq citation is Cusanovich 2015, a distinct combinatorial cellular-indexing implementation. Adapter-loaded transposase tagging maps to op_tagment, using barcoded transposase complexes in this implementation. Populations of intact nuclei are first tagged, then intact nuclei are pooled and redistributed; nuclei are subsequently lysed and a second barcode is added by PCR. PCR products are pooled for sequencing. This preserves nucleus-to-fragment association through a combination of indexes, with possible barcode collisions. The main text supports PCR but does not establish a full match to the figure’s combined purification/amplification block, so op_library is not assigned wholesale. These unshown compartment/indexing operations do not become branches of the Illumina graph. The unresolved point is whole-block applicability, not the established tagmentation or indexed-PCR transformations.",
+      "evidence": [
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Description, named adaptations; jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The method is commonly used, and optimized protocols are available for tissues, such as blood (Fast-ATAC)1, neurons2, biobank specimens3, and single cells (scATAC-seq4 and single-cell ATAC-seq5).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25953818",
+          "locator": "Main text, integration of combinatorial cellular indexing and ATAC-seq, [b00006]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In ATAC-seq, permeabilized nuclei are exposed to transposase loaded with sequencing adapters (‘tagmentation’; (4, 20)). In the context of chromatin, the transposase preferentially inserts adapters into nucleosome-free regions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25953818",
+          "locator": "Main text, combinatorial indexing architecture, [b00005]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, we molecularly barcode populations of nuclei in each of many wells. We then pool, dilute and redistribute intact nuclei to a second set of wells, introduce a second barcode and complete library construction.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25953818",
+          "locator": "Main text, integrated method and Fig. 1A reference, [b00007]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After lysing nuclei, a second barcode is introduced during PCR with indexed primers complementary to the transposase-introduced adapters. Finally, all PCR products are pooled and sequenced, with the expectation that most sequence reads bearing the same combination of barcodes will be derived from a single cell",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25953818",
+          "locator": "Main text, combinatorial indexing architecture, [b00005]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The rate of “collisions”, i.e. nuclei coincidentally receiving the same combination of indexes, can be tuned by adjusting how many nuclei are distributed to the second set of wells (Fig. S1; (19)).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_24097267",
+      "source_id": "paper:24097267",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:24097267",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Transposition of native chromatin for fast and sensitive epigenomic profiling of open chromatin, DNA-binding proteins and nucleosome position.\",",
+          "bbox": null,
+          "rationale": "Primary ATAC-seq paper: inspected full-text Results and Online methods establish the tagmentation/PCR architecture. Publication metadata identifies the paper; it is not used to infer reaction order or historical priority."
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Results, \"ATAC-seq probes chromatin accessibility with transposons\", [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24097267",
+          "locator": "Discussion, [b00021]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These insights are derived from both the position of insertion and the distribution of insert lengths captured during the transposition reaction.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27526324",
+      "source_id": "paper:27526324",
+      "methods": [
+        "Fast-ATAC"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:27526324",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Lineage-specific and single-cell chromatin accessibility charts human hematopoiesis and leukemia evolution.\",",
+          "bbox": null,
+          "rationale": "Full text describes Fast-ATAC for blood cells. Although this paper also contains single-cell applications, it is not substituted for either of the card’s two separately cited single-cell method papers."
+        },
+        {
+          "source_id": "paper:27526324",
+          "locator": "Results, Fast-ATAC is an optimized ATAC-seq protocol for blood cells, [b00013]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We developed an optimized protocol for use on primary blood cells, termed Fast-ATAC, which relies on a 1-step membrane permeabilization and transposition using the lysis reagent digitonin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27526324",
+          "locator": "Online methods, Fast-ATAC sequencing, [b00067]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transposed DNA was purified using a QIAgen MinElute Reaction Cleanup kit (Cat# 28204) and purified DNA was eluted in 10 ul elution buffer (10 mM Tris-HCl, pH 8). Transposed fragments were amplified and purified as described previously48 with modified primers23.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27526324",
+          "locator": "Online methods, Fast-ATAC sequencing, [b00067]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This protocol has been optimized for blood cells. We note that digitonin is a gentle detergent and this protocol may not be ideal for cell lines and other cell types that are more resistant to lysis.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27146274",
+      "source_id": "paper:27146274",
+      "methods": [
+        "ATAC-seq on cryopreserved iPSC-derived motor neurons"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:27146274",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Cell freezing protocol suitable for ATAC-Seq on motor neurons derived from human induced pluripotent stem cells.\",",
+          "bbox": null,
+          "rationale": "The cryopreserved motor-neuron adaptation is supported by inspected full-text protocol and results, not merely its publication title."
+        },
+        {
+          "source_id": "paper:27146274",
+          "locator": "Abstract, [b00003]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We found that while flash-frozen iMNs are not suitable for ATAC-Seq, the assay is successful with slow-cooled cryopreserved cells. Using this method, we were able to isolate high quality, intact nuclei, and we verified that epigenetic results from fresh and cryopreserved iMNs quantitatively agree.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27146274",
+          "locator": "Results and Discussion, Description of experimental design and overview of the protocol, [b00012]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, as we were principally interested in open-chromatin profiling and not in nucleosome positioning, we introduced a size-selection step to enrich for nucleosome-free fragments. After size-selection, libraries were PCR-amplified and submitted for single-end sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27146274",
+          "locator": "Methods, Chromatin tagmentation and sequencing, [b00043]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We subsequently purified the samples with the DNA Clean & Concentrator–5 Kit (Zymo Research) and eluted them with 20 μl of Elution Buffer (Qiagen).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27249108",
+      "source_id": "paper:27249108",
+      "methods": [
+        "ATAC-seq on biobanked B cells"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:27249108",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"ATAC-seq on biobanked specimens defines a unique chromatin accessibility structure in naïve SLE B cells.\",",
+          "bbox": null,
+          "rationale": "Inspected full text supports the tested biobanked B-cell application and its DNA-library architecture; no universal equivalence of fresh and biobanked specimens is asserted."
+        },
+        {
+          "source_id": "paper:27249108",
+          "locator": "Introduction, [b00005]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The Assay for Transposase Accessible Chromatin (ATAC-seq) utilizes a sequencing adapter-coupled Tn5 transposase to simultaneously tag and fragment native chromatin, thereby generating a high-resolution map of accessible loci from cells2.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27249108",
+          "locator": "Introduction, [b00005]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, the ATAC-seq assay was applied to both biobanked and freshly processed specimens and an indistinguishable chromatin accessibility pattern was observed.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27249108",
+          "locator": "Methods, ATAC-seq, [b00037]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To remove primers and high molecular weight DNA following PCR amplification, a dual SPRI-size selection was performed",
+          "bbox": null,
+          "rationale": "This inspected methods passage establishes post-PCR DNA recovery in the biobanked B-cell implementation; it does not make that internal procedure part of the Illumina drawing."
+        }
+      ]
+    },
+    {
+      "id": "pm_26083756",
+      "source_id": "paper:26083756",
+      "methods": [
+        "scATAC-seq (microfluidic single-cell ATAC-seq)"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:26083756",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Single-cell chromatin accessibility reveals principles of regulatory variation.\",",
+          "bbox": null,
+          "rationale": "Inspected main text and Extended Data Figure 1 caption identify the microfluidic single-cell implementation and its cell-indexed PCR/release interface. The card’s scATAC-seq label is associated with this paper."
+        },
+        {
+          "source_id": "paper:26083756",
+          "locator": "Main text, single-cell workflow and Fig. 1a reference, [b00006]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In scATAC-seq individual cells are captured and assayed using a programmable microfluidics platform (C1 single-cell Auto Prep System, Fluidigm) with methods optimized for this task (Fig. 1a and Extended Data Fig. 1 and Supplemental Discussion).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26083756",
+          "locator": "Main text, single-cell workflow, [b00006]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After transposition and PCR on the Integrated Fluidics Circuit (IFC), libraries are collected and PCR amplified with cell-identifying barcoded primers. Single-cell libraries are then pooled and sequenced on a high-throughput sequencing instrument.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26083756",
+          "locator": "Extended Data Figure 1 caption, Methods development for assaying single epigenomes, [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The development of an efficient Tn5 release protocol designed to permit downstream enzymatic reactions without DNA purification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25953818",
+      "source_id": "paper:25953818",
+      "methods": [
+        "single-cell ATAC-seq by combinatorial cellular indexing"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:25953818",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Multiplex single cell profiling of chromatin accessibility by combinatorial cellular indexing.\",",
+          "bbox": null,
+          "rationale": "Inspected main text identifies the combinatorial-indexing single-cell implementation, including intact-nucleus pooling and two barcode stages. Supplementary laboratory detail is not reconstructed."
+        },
+        {
+          "source_id": "paper:25953818",
+          "locator": "Main text, integration of combinatorial cellular indexing and ATAC-seq, [b00006]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In ATAC-seq, permeabilized nuclei are exposed to transposase loaded with sequencing adapters (‘tagmentation’; (4, 20)). In the context of chromatin, the transposase preferentially inserts adapters into nucleosome-free regions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25953818",
+          "locator": "Main text, combinatorial indexing architecture, [b00005]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, we molecularly barcode populations of nuclei in each of many wells. We then pool, dilute and redistribute intact nuclei to a second set of wells, introduce a second barcode and complete library construction.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25953818",
+          "locator": "Main text, integrated method and Fig. 1A reference, [b00007]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After lysing nuclei, a second barcode is introduced during PCR with indexed primers complementary to the transposase-introduced adapters. Finally, all PCR products are pooled and sequenced, with the expectation that most sequence reads bearing the same combination of barcodes will be derived from a single cell",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25953818",
+          "locator": "Main text, combinatorial indexing architecture, [b00005]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The rate of “collisions”, i.e. nuclei coincidentally receiving the same combination of indexes, can be tuned by adjusting how many nuclei are distributed to the second set of wells (Fig. S1; (19)).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26846207",
+      "source_id": "paper:26846207",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26846207",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Characterization of chromatin accessibility with a transposome hypersensitive sites sequencing (THS-seq) assay.\",",
+          "bbox": null,
+          "rationale": "The paper actually describes THS-seq and compares it with ATAC-seq. Illumina cites it for ATAC adapter-orientation and spacing limitations. This background comparison does not make THS-seq an ATAC-seq alias or import its T7/transcription chemistry into the figure-derived architecture."
+        },
+        {
+          "source_id": "paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, the Tn5 transposome complex inserts adaptors in random orientation, such that only half of the molecules contain the adaptors in the orientation required for PCR amplification. Second, only approximately 1 % of the genome is accessible in typical cells, and the regions in which two adjacent transposition events are too far apart cannot be amplified by PCR.",
+          "bbox": null,
+          "rationale": "This is the cited THS-seq paper’s account of limitations in the ATAC-seq design it compares against; the half-molecule statement is not a universal measured yield for every ATAC variant."
+        },
+        {
+          "source_id": "paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+          "bbox": null,
+          "rationale": "THS-seq is the distinct method described by this paper. Its T7-promoter/linear-transcription library architecture is not shown in the Illumina ATAC-seq figure and is not imported into this graph."
+        }
+      ]
+    },
+    {
+      "id": "pm_27297499",
+      "source_id": "metadata:27297499",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27297499",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Next generation sequencing technology and genomewide data analysis: Perspectives for retinal research.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. Full text is supplied in the registry but was not inspected for this background match. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Chaitankar V., Karakulah G., Ratnapriya R., Giuste F. O., Brooks M. J., et al. Next generation sequencing technology and genomewide data analysis: Perspectives for retinal research. Prog Retin Eye Res. 2016;55:1-31",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26721890",
+      "source_id": "metadata:26721890",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26721890",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Genome-Wide Epigenetic Studies in Human Disease: A Primer on -Omic Technologies.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Yan H., Tian S., Slager S. L., Sun Z. and Ordog T. Genome-Wide Epigenetic Studies in Human Disease: A Primer on -Omic Technologies. Am J Epidemiol. 2016;183:96-109",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26928226",
+      "source_id": "metadata:26928226",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26928226",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Active DNA demethylation at enhancers during the vertebrate phylotypic period.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Bogdanovic O., Smits A. H., de la Calle Mustienes E., Tena J. J., Ford E., et al. Active DNA demethylation at enhancers during the vertebrate phylotypic period. Nat Genet. 2016;48:417-426",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27386823",
+      "source_id": "metadata:27386823",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27386823",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Integrative functional genomics identifies regulatory mechanisms at coronary artery disease loci.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Miller C. L., Pjanic M., Wang T., et al. Integrative functional genomics identifies regulatory mechanisms at coronary artery disease loci. Nat Commun. 2016;7:12092",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27309802",
+      "source_id": "metadata:27309802",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27309802",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"The landscape of accessible chromatin in mammalian preimplantation embryos.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Wu J., Huang B., Chen H., et al. The landscape of accessible chromatin in mammalian preimplantation embryos. Nature. 2016;534:652-657",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26977395",
+      "source_id": "metadata:26977395",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26977395",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Integration of ATAC-seq and RNA-seq identifies human alpha cell and beta cell signature genes.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Ackermann A. M., Wang Z., Schug J., Naji A. and Kaestner K. H. Integration of ATAC-seq and RNA-seq identifies human alpha cell and beta cell signature genes. Mol Metab. 2016;5:233-244",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27315481",
+      "source_id": "metadata:27315481",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27315481",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"A Long Noncoding RNA lincRNA-EPS Acts as a Transcriptional Brake to Restrain Inflammation.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Atianand M. K., Hu W., Satpathy A. T., et al. A Long Noncoding RNA lincRNA-EPS Acts as a Transcriptional Brake to Restrain Inflammation. Cell. 2016;165:1672-1685",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27498878",
+      "source_id": "metadata:27498878",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27498878",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"The Transcriptional Repressor Polycomb Group Factor 6, PCGF6, Negatively Regulates Dendritic Cell Activation and Promotes Quiescence.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Boukhaled G. M., Cordeiro B., Deblois G., et al. The Transcriptional Repressor Polycomb Group Factor 6, PCGF6, Negatively Regulates Dendritic Cell Activation and Promotes Quiescence. Cell Rep. 2016;16:1829-1837",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26814966",
+      "source_id": "metadata:26814966",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26814966",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Genome-wide nucleosome specificity and function of chromatin remodellers in ES cells.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "de Dieuleveult M., Yen K., Hmitou I., Depaux A., Boussouar F., et al. Genome-wide nucleosome specificity and function of chromatin remodellers in ES cells. Nature. 2016;530:113-116",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26878240",
+      "source_id": "metadata:26878240",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26878240",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"7SK-BAF axis controls pervasive transcription at enhancers.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Flynn R. A., Do B. T., Rubin A. J., et al. 7SK-BAF axis controls pervasive transcription at enhancers. Nat Struct Mol Biol. 2016;23:231-238",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27397025",
+      "source_id": "metadata:27397025",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27397025",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Leukaemia cell of origin identified by chromatin landscape of bulk tumour cells.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "George J., Uyar A., Young K., et al. Leukaemia cell of origin identified by chromatin landscape of bulk tumour cells. Nat Commun. 2016;7:12166",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27477909",
+      "source_id": "metadata:27477909",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27477909",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"A Highly Sensitive and Robust Method for Genome-wide 5hmC Profiling of Rare Cell Populations.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Han D., Lu X., Shih A. H., et al. A Highly Sensitive and Robust Method for Genome-wide 5hmC Profiling of Rare Cell Populations. Mol Cell. 2016;63:711-719",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27376235",
+      "source_id": "metadata:27376235",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27376235",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Genetic dissection of the α-globin super-enhancer in vivo.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Hay D., Hughes J. R., Babbs C., Davies J. O., Graham B. J., et al. Genetic dissection of the alpha-globin super-enhancer in vivo. Nat Genet. 2016;48:895-903",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27381023",
+      "source_id": "metadata:27381023",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27381023",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Enhancers reside in a unique epigenetic environment during early zebrafish development.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Kaaij L. J., Mokry M., Zhou M., Musheev M., Geeven G., et al. Enhancers reside in a unique epigenetic environment during early zebrafish development. Genome Biol. 2016;17:146",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26823433",
+      "source_id": "metadata:26823433",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26823433",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"A zebrafish melanoma model reveals emergence of neural crest identity during melanoma initiation.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Kaufman C. K., Mosimann C., Fan Z. P., et al. A zebrafish melanoma model reveals emergence of neural crest identity during melanoma initiation. Science. 2016;351:aad2197",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27156452",
+      "source_id": "metadata:27156452",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27156452",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Distinct Gene Regulatory Pathways for Human Innate versus Adaptive Lymphoid Cells.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Koues O. I., Collins P. L., Cella M., et al. Distinct Gene Regulatory Pathways for Human Innate versus Adaptive Lymphoid Cells. Cell. 2016;165:1134-1146",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27259149",
+      "source_id": "metadata:27259149",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27259149",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Establishing Chromatin Regulatory Landscape during Mouse Preimplantation Development.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. Full text is supplied in the registry but was not inspected for this background match. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Lu F., Liu Y., Inoue A., Suzuki T., Zhao K., et al. Establishing Chromatin Regulatory Landscape during Mouse Preimplantation Development. Cell. 2016;165:1375-1388",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27239026",
+      "source_id": "metadata:27239026",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27239026",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Active and Inactive Enhancers Cooperate to Exert Localized and Long-Range Control of Gene Regulation.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Proudhon C., Snetkova V., Raviram R., et al. Active and Inactive Enhancers Cooperate to Exert Localized and Long-Range Control of Gene Regulation. Cell Rep. 2016;15:2159-2169",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27346425",
+      "source_id": "metadata:27346425",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27346425",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Chromatin accessibility maps of chronic lymphocytic leukaemia identify subtype-specific epigenome signatures and transcription regulatory networks.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Rendeiro A. F., Schmidl C., Strefford J. C., et al. Chromatin accessibility maps of chronic lymphocytic leukaemia identify subtype-specific epigenome signatures and transcription regulatory networks. Nat Commun. 2016;7:11938",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27114036",
+      "source_id": "metadata:27114036",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27114036",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"The Dynamic Regulatory Genome of Capsaspora and the Origin of Animal Multicellularity.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sebe-Pedros A., Ballare C., Parra-Acero H., et al. The Dynamic Regulatory Genome of Capsaspora and the Origin of Animal Multicellularity. Cell. 2016;165:1224-1237",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27156451",
+      "source_id": "metadata:27156451",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27156451",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Developmental Acquisition of Regulomes Underlies Innate Lymphoid Cell Functionality.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Shih H. Y., Sciume G., Mikami Y., et al. Developmental Acquisition of Regulomes Underlies Innate Lymphoid Cell Functionality. Cell. 2016;165:1120-1133",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26956608",
+      "source_id": "metadata:26956608",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26956608",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Quantitative CRISPR interference screens in yeast identify chemical-genetic interactions and new rules for guide RNA design.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Smith J. D., Suresh S., Schlecht U., et al. Quantitative CRISPR interference screens in yeast identify chemical-genetic interactions and new rules for guide RNA design. Genome Biol. 2016;17:45",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26912704",
+      "source_id": "metadata:26912704",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26912704",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"Foxc1 reinforces quiescence in self-renewing hair follicle stem cells.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Wang L., Siegenthaler J. A., Dowell R. D. and Yi R. Foxc1 reinforces quiescence in self-renewing hair follicle stem cells. Science. 2016;351:613-617",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27507714",
+      "source_id": "metadata:27507714",
+      "methods": [
+        "ATAC-seq"
+      ],
+      "assessment": "identity_verified",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27507714",
+          "locator": "Retrieved PubMed publication metadata: PMID and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "\"title\": \"MEF2C protects bone marrow B-lymphoid progenitors during stress haematopoiesis.\",",
+          "bbox": null,
+          "rationale": "Publication identity checked from metadata only. The supplied paper evidence is abstract-only; no full-text protocol claim is made. Its association with this record comes from Illumina’s Related publications list, not an assertion that this paper describes the extracted ATAC workflow."
+        },
+        {
+          "source_id": "card:atac-seq",
+          "locator": "Related publications; jcr:content/par/text_4/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Wang W., Org T., Montel-Hagen A., et al. MEF2C protects bone marrow B-lymphoid progenitors during stress haematopoiesis. Nat Commun. 2016;7:12376",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "corrections": [],
+  "unknowns": [
+    {
+      "id": "u_combinatorial_recovery",
+      "question": "Can the depicted combined DNA purification/amplification block be assigned as a whole to the Cusanovich combinatorial single-cell implementation? The inspected primary main text establishes indexed PCR, but the detailed library preparation is in supplementary materials not included in the inspected evidence. That primary supplementary workflow would resolve the recovery-interface mapping; the core Illumina architecture is unaffected.",
+      "blocking": false,
+      "affected_ids": [
+        "scope:single-cell ATAC-seq by combinatorial cellular indexing",
+        "operation:op_library"
+      ]
+    }
+  ]
+}

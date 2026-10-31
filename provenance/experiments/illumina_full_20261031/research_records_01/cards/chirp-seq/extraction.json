@@ -1,0 +1,1955 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "chirp-seq",
+  "title": "ChIRP-Seq",
+  "method_names": [
+    "ChIRP-seq",
+    "ChIRP",
+    "dChIRP"
+  ],
+  "scope": "Illumina explanatory ChIRP schematic, specifically the RNA-directed chromatin capture to genomic-DNA readout path supported by Chu et al. (PMID 21963238). ChIRP is the capture method and ChIRP-seq its sequencing readout; the card uses the names interchangeably. The image ends at extracted DNA; broad library construction and sequencing/genomic localization are explicitly marked text-supported extensions. The related dChIRP publication (PMID 24997788) establishes a distinct domain-level variant only at abstract level; its implementation is not assigned the depicted operations. Protein/RNA assay branches from the primary paper, early morpholino optimization and catalogue kit names are not depicted workflows and are not added. No origin/priority or equivalence to other capture methods is asserted.",
+  "inspected_sources": [
+    "card:chirp-seq",
+    "diagram:asset_2c06b50710b9a60a8991e3e6",
+    "metadata:21963238",
+    "paper:21963238",
+    "metadata:27489248",
+    "paper:27489248",
+    "metadata:27070700",
+    "paper:27070700",
+    "metadata:26381323",
+    "paper:26381323",
+    "metadata:26500759",
+    "paper:26500759",
+    "metadata:25565030",
+    "paper:25565030",
+    "metadata:25813522",
+    "paper:25813522",
+    "metadata:25664725",
+    "paper:25664725",
+    "metadata:25772072",
+    "paper:25772072",
+    "metadata:25908244",
+    "paper:25908244",
+    "metadata:25891907",
+    "paper:25891907",
+    "metadata:24997788",
+    "paper:24997788",
+    "metadata:24371310",
+    "paper:24371310",
+    "metadata:25083870",
+    "paper:25083870"
+  ],
+  "states": [
+    {
+      "id": "s_chromatin",
+      "label": "Chromatin associated with target ncRNA and RNA-binding protein",
+      "kind": "material",
+      "features": [
+        "Purple ncRNA and blue RNA-binding protein are shown over a black chromatin DNA line flanked by grey nucleosome-like bodies.",
+        "The far-left title vignette repeats the input arrangement and contains a short yellow DNA highlight. No legend defines that highlight, and no arrow connects the two left-hand drawings as separate transformations.",
+        "The target ncRNA supplies the capture identity; genomic DNA associated with that RNA is the eventual sequenced analyte."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Left overview and input vignettes: ncRNA, RNA-binding protein, nucleosome-like grey bodies and continuous black chromatin line; title Chromatin Isolation by RNA Purification (ChIRP)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.1,
+            0.37,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, cultured cells are crosslinked in vivo, and their chromatin extracted and homogenized. Biotinylated complementary oligonucleotides that tile the RNA of interest were hybridized to target RNAs, and isolated using magnetic streptavidin beads.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_fragmented",
+      "label": "Crosslinked, fragmented RNA-protein-chromatin preparation",
+      "kind": "material",
+      "features": [
+        "Chromatin is shown as separated pieces; the retained target RNA/protein assembly remains associated with a short DNA fragment.",
+        "Sonication can fragment the target RNA as well as chromatin, explaining the use of tiling probes across the RNA rather than assuming an intact full-length RNA after fragmentation."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Crosslink / Fragment arrow between intact chromatin input and separated chromatin pieces",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.19,
+            0.08,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description; card.json description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, samples are first crosslinked and sonicated. Biotinylated tiling oligos are hybridized to the RNAs of interest, and the complexes are captured with streptavidin magnetic beads. After treatment with RNase H, the DNA is extracted and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00010], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Importantly, we found that the HOTAIR transcript was sheared into the size range of ~100nt to 500nt during sonication, a step necessary for the solubilization of chromatin (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_probes",
+      "label": "Biotinylated complementary DNA tiling oligonucleotides",
+      "kind": "material",
+      "features": [
+        "Orange oligo symbols with blue terminal marks are identified by the Biotinylated tiling oligos legend.",
+        "Complementarity to the known target RNA provides sequence-directed capture.",
+        "The primary implementation uses antisense DNA probes with 3′ biotin attached through a spacer; the drawing does not label 3′ or 5′ ends."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Central Biotinylated tiling oligos / Hybridize label and small probe symbol: orange segments with blue terminal marks aligned along purple ncRNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.12,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00011], Results: tiling complementary DNA probes",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thus, we designed 48 complementary DNA oligonucleotides that were 20mer each and tiled the entire length of HOTAIR across 2.2 kb (~50% tiled) (Fig. 1C).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00037], Experimental procedures: probe design",
+          "basis": "text",
+          "support": "reported",
+          "quote": "All probes were biotinylated at the 3’ end with an 18-carbon spacer arm (Protein and Nucleic Acid Facility, Stanford University).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Limitations; card.json limitations_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nonspecific oligonucleotide interactions can lead to misinterpretation of binding sites\nChromatin can be disrupted during the preparation stage\nThe sequence of the RNA of interest must be known",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_hybridized",
+      "label": "Probe-hybridized target RNA with associated protein and chromatin DNA",
+      "kind": "material",
+      "features": [
+        "Several biotinylated probes are shown along the purple RNA; the probes supply the bead attachment handle.",
+        "The RNA remains the molecular bridge between affinity probes and the associated chromatin assembly."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Central Biotinylated tiling oligos / Hybridize label and small probe symbol: orange segments with blue terminal marks aligned along purple ncRNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.12,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, cultured cells are crosslinked in vivo, and their chromatin extracted and homogenized. Biotinylated complementary oligonucleotides that tile the RNA of interest were hybridized to target RNAs, and isolated using magnetic streptavidin beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00012], Results: RNA-bridged DNA elution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We gently eluted DNA off of beads using a combination of RNase A and RNase H so that only DNA retrieved via a RNA bridge, but not direct probe-DNA interaction, could be preferentially released.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_beads",
+      "label": "Streptavidin magnetic beads",
+      "kind": "material",
+      "features": [
+        "The large grey bead in the capture region provides the affinity support for biotinylated probes."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Capture on Streptavidin magnetic beads: arrow to large grey bead attached through blue/orange probe marks; flanking nucleosome bodies fade",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.79,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, cultured cells are crosslinked in vivo, and their chromatin extracted and homogenized. Biotinylated complementary oligonucleotides that tile the RNA of interest were hybridized to target RNAs, and isolated using magnetic streptavidin beads.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_captured",
+      "label": "Bead-attached probe-RNA-protein-chromatin complexes",
+      "kind": "material",
+      "features": [
+        "Attachment route is streptavidin bead to biotinylated probe to target RNA to associated chromatin.",
+        "Faded flanking chromatin icons illustrate enrichment of target-associated material. No separately retained alternative branch is drawn.",
+        "Affinity selection can also recover off-target material and does not establish perfect biological specificity."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Capture on Streptavidin magnetic beads: arrow to large grey bead attached through blue/orange probe marks; flanking nucleosome bodies fade",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.79,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00042], Experimental procedures: hybridization and capture",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Beads:biotin-probes:RNA:chromatin adducts were captured by magnets (Invitrogen)",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00013], Results: split-probe specificity strategy",
+          "basis": "text",
+          "support": "reported",
+          "quote": "One potential source of noise in ChIRP-seq is the precipitation of non-specific DNA fragments from off-target hybridization of the pool of oligonucleotide probes.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_eluted",
+      "label": "Released RNA-associated chromatin DNA with associated protein",
+      "kind": "material",
+      "features": [
+        "After the RNase H arrow, the drawing retains the blue protein and short black DNA fragment; purple RNA, probes and bead are absent from this product.",
+        "The primary implementation preferentially releases DNA that was captured through an RNA bridge using RNase A plus RNase H.",
+        "This is an eluate before DNA extraction, rather than already purified naked DNA."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "RNase H arrow: bead/probe/purple RNA assembly becomes a blue protein on a short black DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.71,
+            0.05,
+            0.91,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00012], Results: RNA-bridged DNA elution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We gently eluted DNA off of beads using a combination of RNase A and RNase H so that only DNA retrieved via a RNA bridge, but not direct probe-DNA interaction, could be preferentially released.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00048], Experimental procedures: ChIRP DNA Elution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "For non-reversible crosslinking, eluted chromatin was pK treated with 0.2U/ul pK at 65C for 45’. In either case, DNA was then extracted with equal volume of phenol:chloroform:isoamyl (Invitrogen) and precipitated with ethanol at -80C overnight.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_dna",
+      "label": "Extracted ChIRP-enriched genomic DNA",
+      "kind": "material",
+      "features": [
+        "The final visible product is the horizontal line labeled DNA, with the blue protein icon removed.",
+        "This DNA represents genomic fragments co-purified through the selected ncRNA; it is neither cDNA copied from the ncRNA nor the capture probes as the intended readout carrier."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "DNA extraction arrow from protein-associated black fragment to far-right blue horizontal line labeled DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.87,
+            0.2,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00040], Experimental procedures: chromatin preparation; interpreted with [b00052] genomic mapping",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "and sonicated using Bioruptor (Diagenode) until most chromatin has solubilized and DNA is in the size range of 100-500bp.",
+          "bbox": null,
+          "rationale": "The sequenced molecules are recovered chromatin DNA fragments. Their genomic positions report enrichment associated with the selected RNA. Neither fragmentation plus sequencing nor the schematic identifies the exact nucleotide of a physical RNA contact or distinguishes direct RNA-DNA binding from protein-mediated association."
+        }
+      ]
+    },
+    {
+      "id": "s_library",
+      "label": "Sequencing library prepared from ChIRP-enriched genomic DNA",
+      "kind": "material",
+      "features": [
+        "Library construction is reported in the primary text but its internal operations and adapter architecture are not depicted.",
+        "The library carries genomic DNA sequence; target-RNA identity is supplied by the capture experiment. No molecular barcode association is shown."
+      ],
+      "evidence": [
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00040], Experimental procedures: chromatin preparation; interpreted with [b00052] genomic mapping",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "and sonicated using Bioruptor (Diagenode) until most chromatin has solubilized and DNA is in the size range of 100-500bp.",
+          "bbox": null,
+          "rationale": "The sequenced molecules are recovered chromatin DNA fragments. Their genomic positions report enrichment associated with the selected RNA. Neither fragmentation plus sequencing nor the schematic identifies the exact nucleotide of a physical RNA contact or distinguishes direct RNA-DNA binding from protein-mediated association."
+        }
+      ]
+    },
+    {
+      "id": "d_occupancy",
+      "label": "Genomic DNA reads and RNA-associated chromatin occupancy profile",
+      "kind": "data",
+      "features": [
+        "Sequencing and genomic mapping locate the recovered DNA fragments and support enrichment-based localization of the target RNA on chromatin.",
+        "The readout does not itself identify the associated blue protein, establish a direct RNA-DNA contact, or prove functional regulation at every enriched site.",
+        "The card claims single-base resolution; genomic read coordinates do not by themselves establish single-nucleotide resolution of physical RNA/protein contact.",
+        "The cited implementation uses concordant signals from separate even- and odd-probe experiments to reduce probe-specific artifacts; this is not a branch drawn in the Illumina image."
+      ],
+      "evidence": [
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: read mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Raw reads were uniquely mapped to reference genome (hg18 assembly for HOTAIR, TERC, LacZ and EZH2 ChIRP-seq samples, and dm3 for roX2) using Bowtie (Langmead et al., 2009).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00013], Results: split-probe specificity strategy",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we performed two independent ChIRP-seq runs with “even” and “odd” probes separately, and focused our analysis exclusively on the overlap between their signals.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00013], Results: split-probe specificity strategy",
+          "basis": "text",
+          "support": "reported",
+          "quote": "One potential source of noise in ChIRP-seq is the precipitation of non-specific DNA fragments from off-target hybridization of the pool of oligonucleotide probes.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00028], Discussion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Like ChIP-seq, not all binding events are necessarily functional, and additional studies are required to ascertain the biological consequences of RNA occupancy on chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description / jcr:content/par/text_1/text; catalogue resolution claim",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing can determine the lncRNA/protein interaction site at single-base resolution.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00040], Experimental procedures: chromatin preparation; interpreted with [b00052] genomic mapping",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "and sonicated using Bioruptor (Diagenode) until most chromatin has solubilized and DNA is in the size range of 100-500bp.",
+          "bbox": null,
+          "rationale": "The sequenced molecules are recovered chromatin DNA fragments. Their genomic positions report enrichment associated with the selected RNA. Neither fragmentation plus sequencing nor the schematic identifies the exact nucleotide of a physical RNA contact or distinguishes direct RNA-DNA binding from protein-mediated association."
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_crosslink_fragment",
+      "label": "Crosslink / Fragment",
+      "description": "Stabilize the ncRNA-protein-chromatin associations and fragment the chromatin preparation. The continuous chromatin input becomes shorter pieces while a target-associated RNA/protein/DNA assembly remains recoverable. The card identifies sonication as the fragmentation operation.",
+      "inputs": [
+        "s_chromatin"
+      ],
+      "outputs": [
+        "s_fragmented"
+      ],
+      "mechanism": "Crosslinking retains associations present in cells; sonication solubilizes and fragments chromatin and can also shear the RNA.",
+      "information_effect": "The retained association between selected RNA and genomic DNA is carried forward in fragmented complexes; the drawing does not encode a particular crosslinker.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Crosslink / Fragment arrow between intact chromatin input and separated chromatin pieces",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.19,
+            0.08,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description; card.json description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, samples are first crosslinked and sonicated. Biotinylated tiling oligos are hybridized to the RNAs of interest, and the complexes are captured with streptavidin magnetic beads. After treatment with RNase H, the DNA is extracted and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, cultured cells are crosslinked in vivo, and their chromatin extracted and homogenized. Biotinylated complementary oligonucleotides that tile the RNA of interest were hybridized to target RNAs, and isolated using magnetic streptavidin beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00010], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Importantly, we found that the HOTAIR transcript was sheared into the size range of ~100nt to 500nt during sonication, a step necessary for the solubilization of chromatin (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_hybridize",
+      "label": "Biotinylated tiling oligos / Hybridize",
+      "description": "Hybridize complementary biotinylated tiling DNA oligos to the target RNA in the fragmented preparation. RNA-associated protein and DNA are retained while the assembly gains an affinity handle.",
+      "inputs": [
+        "s_fragmented",
+        "s_probes"
+      ],
+      "outputs": [
+        "s_hybridized"
+      ],
+      "mechanism": "Sequence complementarity places multiple DNA capture probes along the target RNA; their biotin groups mediate the subsequent bead interface.",
+      "information_effect": "RNA sequence selects the biological target. Tiling supports recovery across RNA fragments; it does not sequence the RNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Central Biotinylated tiling oligos / Hybridize label and small probe symbol: orange segments with blue terminal marks aligned along purple ncRNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.12,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, cultured cells are crosslinked in vivo, and their chromatin extracted and homogenized. Biotinylated complementary oligonucleotides that tile the RNA of interest were hybridized to target RNAs, and isolated using magnetic streptavidin beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00011], Results: tiling complementary DNA probes",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thus, we designed 48 complementary DNA oligonucleotides that were 20mer each and tiled the entire length of HOTAIR across 2.2 kb (~50% tiled) (Fig. 1C).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00010], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Importantly, we found that the HOTAIR transcript was sheared into the size range of ~100nt to 500nt during sonication, a step necessary for the solubilization of chromatin (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_capture",
+      "label": "Capture on Streptavidin magnetic beads",
+      "description": "Bind biotinylated probe-RNA complexes to streptavidin magnetic beads and retain their associated chromatin. The input complexes become attached to an affinity support; fading surrounding chromatin illustrates selection without a retained second product path.",
+      "inputs": [
+        "s_hybridized",
+        "s_beads"
+      ],
+      "outputs": [
+        "s_captured"
+      ],
+      "mechanism": "Streptavidin-biotin attachment and magnetic capture of bead:probe:RNA:chromatin adducts.",
+      "information_effect": "Enriches genomic DNA associated with the chosen RNA; nonspecific oligo interactions remain a potential source of false localization.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Capture on Streptavidin magnetic beads: arrow to large grey bead attached through blue/orange probe marks; flanking nucleosome bodies fade",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.79,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00042], Experimental procedures: hybridization and capture",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Beads:biotin-probes:RNA:chromatin adducts were captured by magnets (Invitrogen)",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00013], Results: split-probe specificity strategy",
+          "basis": "text",
+          "support": "reported",
+          "quote": "One potential source of noise in ChIRP-seq is the precipitation of non-specific DNA fragments from off-target hybridization of the pool of oligonucleotide probes.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_rnase_release",
+      "label": "RNase H",
+      "description": "The depicted bead-attached assembly loses its RNA/probe/bead connection and yields a protein-associated DNA fragment. For the cited Chu et al. implementation, interpret this as RNase A plus RNase H elution, explicitly resolving the schematic RNase H-only label.",
+      "inputs": [
+        "s_captured"
+      ],
+      "outputs": [
+        "s_eluted"
+      ],
+      "mechanism": "RNA-directed nuclease elution disrupts the RNA bridge and preferentially releases RNA-associated chromatin from the capture support. The RNases are treatment reagents, not readout products.",
+      "information_effect": "Physical RNA linkage is disrupted after it has selected the DNA. The recovered DNA retains the genomic localization information; preferential RNA-bridge release does not establish absolute exclusion of off-target DNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "RNase H arrow: bead/probe/purple RNA assembly becomes a blue protein on a short black DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.71,
+            0.05,
+            0.91,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00012], Results: RNA-bridged DNA elution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We gently eluted DNA off of beads using a combination of RNase A and RNase H so that only DNA retrieved via a RNA bridge, but not direct probe-DNA interaction, could be preferentially released.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_extract_dna",
+      "label": "DNA extraction",
+      "description": "Recover DNA from the released chromatin material. The drawing changes a protein-associated DNA fragment into the DNA-only endpoint; the primary DNA-elution section supports protein/crosslink processing within this broad extraction block.",
+      "inputs": [
+        "s_eluted"
+      ],
+      "outputs": [
+        "s_dna"
+      ],
+      "mechanism": "Protein/crosslink processing appropriate to the implementation followed by DNA extraction; no unshown extraction substeps are expanded here.",
+      "information_effect": "The genomic DNA sequence is retained while RNA/protein association is no longer physically present in the purified product.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "DNA extraction arrow from protein-associated black fragment to far-right blue horizontal line labeled DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.87,
+            0.2,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00048], Experimental procedures: ChIRP DNA Elution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "For non-reversible crosslinking, eluted chromatin was pK treated with 0.2U/ul pK at 65C for 45’. In either case, DNA was then extracted with equal volume of phenol:chloroform:isoamyl (Invitrogen) and precipitated with ethanol at -80C overnight.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description; card.json description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, samples are first crosslinked and sonicated. Biotinylated tiling oligos are hybridized to the RNAs of interest, and the complexes are captured with streptavidin magnetic beads. After treatment with RNase H, the DNA is extracted and sequenced.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_library",
+      "label": "DNA sequencing-library construction (primary-text extension)",
+      "description": "Convert recovered ChIRP DNA into a high-throughput sequencing library. This operation follows the diagram DNA endpoint in the cited paper; the figure does not depict its internal library-preparation sequence.",
+      "inputs": [
+        "s_dna"
+      ],
+      "outputs": [
+        "s_library"
+      ],
+      "mechanism": "The paper reports library construction according to a cited ChIP-seq protocol. No adapter ligation, amplification or end-repair sequence is reconstructed from that citation.",
+      "information_effect": "The library represents enriched genomic DNA fragments associated with the captured RNA, rather than reverse-transcribed target RNA or synthesized probe products.",
+      "evidence": [
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_sequence_map",
+      "label": "DNA sequencing and genomic localization (text extension)",
+      "description": "Sequence the DNA library and map reads to the genome to localize recovered fragments. Sequencing is stated by the card; library sequencing and mapping are reported by the primary paper and are beyond the drawn DNA endpoint.",
+      "inputs": [
+        "s_library"
+      ],
+      "outputs": [
+        "d_occupancy"
+      ],
+      "mechanism": "High-throughput sequencing of recovered DNA followed by reference-genome mapping, kept at readout scope without analysis settings.",
+      "information_effect": "Genomic enrichment reports target-RNA-associated chromatin occupancy. It does not directly measure target-RNA sequence, identify the captured protein, prove direct binding, or guarantee single-base physical-contact resolution. Separate nonoverlapping even/odd probe experiments and concordance are an important primary-paper safeguard against probe-specific signal, not a depicted material split.",
+      "evidence": [
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description; card.json description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, samples are first crosslinked and sonicated. Biotinylated tiling oligos are hybridized to the RNAs of interest, and the complexes are captured with streptavidin magnetic beads. After treatment with RNase H, the DNA is extracted and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: read mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Raw reads were uniquely mapped to reference genome (hg18 assembly for HOTAIR, TERC, LacZ and EZH2 ChIRP-seq samples, and dm3 for roX2) using Bowtie (Langmead et al., 2009).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00013], Results: split-probe specificity strategy",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we performed two independent ChIRP-seq runs with “even” and “odd” probes separately, and focused our analysis exclusively on the overlap between their signals.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00013], Results: split-probe specificity strategy",
+          "basis": "text",
+          "support": "reported",
+          "quote": "One potential source of noise in ChIRP-seq is the precipitation of non-specific DNA fragments from off-target hybridization of the pool of oligonucleotide probes.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00028], Discussion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Like ChIP-seq, not all binding events are necessarily functional, and additional studies are required to ascertain the biological consequences of RNA occupancy on chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00040], Experimental procedures: chromatin preparation; interpreted with [b00052] genomic mapping",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "and sonicated using Bioruptor (Diagenode) until most chromatin has solubilized and DNA is in the size range of 100-500bp.",
+          "bbox": null,
+          "rationale": "The sequenced molecules are recovered chromatin DNA fragments. Their genomic positions report enrichment associated with the selected RNA. Neither fragmentation plus sequencing nor the schematic identifies the exact nucleotide of a physical RNA contact or distinguishes direct RNA-DNA binding from protein-mediated association."
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_s_chromatin_to_op_crosslink_fragment",
+      "source": "s_chromatin",
+      "target": "op_crosslink_fragment",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Crosslink / Fragment arrow between intact chromatin input and separated chromatin pieces",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.19,
+            0.08,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_crosslink_fragment_to_s_fragmented",
+      "source": "op_crosslink_fragment",
+      "target": "s_fragmented",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Crosslink / Fragment arrow between intact chromatin input and separated chromatin pieces",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.19,
+            0.08,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_fragmented_to_op_hybridize",
+      "source": "s_fragmented",
+      "target": "op_hybridize",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Central Biotinylated tiling oligos / Hybridize label and small probe symbol: orange segments with blue terminal marks aligned along purple ncRNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.12,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_probes_to_op_hybridize",
+      "source": "s_probes",
+      "target": "op_hybridize",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Central Biotinylated tiling oligos / Hybridize label and small probe symbol: orange segments with blue terminal marks aligned along purple ncRNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.12,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_hybridize_to_s_hybridized",
+      "source": "op_hybridize",
+      "target": "s_hybridized",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Central Biotinylated tiling oligos / Hybridize label and small probe symbol: orange segments with blue terminal marks aligned along purple ncRNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.12,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_hybridized_to_op_capture",
+      "source": "s_hybridized",
+      "target": "op_capture",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Capture on Streptavidin magnetic beads: arrow to large grey bead attached through blue/orange probe marks; flanking nucleosome bodies fade",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.79,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_beads_to_op_capture",
+      "source": "s_beads",
+      "target": "op_capture",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Capture on Streptavidin magnetic beads: arrow to large grey bead attached through blue/orange probe marks; flanking nucleosome bodies fade",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.79,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_capture_to_s_captured",
+      "source": "op_capture",
+      "target": "s_captured",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Capture on Streptavidin magnetic beads: arrow to large grey bead attached through blue/orange probe marks; flanking nucleosome bodies fade",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.79,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_captured_to_op_rnase_release",
+      "source": "s_captured",
+      "target": "op_rnase_release",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "RNase H arrow: bead/probe/purple RNA assembly becomes a blue protein on a short black DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.71,
+            0.05,
+            0.91,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_rnase_release_to_s_eluted",
+      "source": "op_rnase_release",
+      "target": "s_eluted",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "RNase H arrow: bead/probe/purple RNA assembly becomes a blue protein on a short black DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.71,
+            0.05,
+            0.91,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_eluted_to_op_extract_dna",
+      "source": "s_eluted",
+      "target": "op_extract_dna",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "DNA extraction arrow from protein-associated black fragment to far-right blue horizontal line labeled DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.87,
+            0.2,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_extract_dna_to_s_dna",
+      "source": "op_extract_dna",
+      "target": "s_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "DNA extraction arrow from protein-associated black fragment to far-right blue horizontal line labeled DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.87,
+            0.2,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_dna_to_op_library",
+      "source": "s_dna",
+      "target": "op_library",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_library_to_s_library",
+      "source": "op_library",
+      "target": "s_library",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_library_to_op_sequence_map",
+      "source": "s_library",
+      "target": "op_sequence_map",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description; card.json description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, samples are first crosslinked and sonicated. Biotinylated tiling oligos are hybridized to the RNAs of interest, and the complexes are captured with streptavidin magnetic beads. After treatment with RNase H, the DNA is extracted and sequenced.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_sequence_map_to_d_occupancy",
+      "source": "op_sequence_map",
+      "target": "d_occupancy",
+      "kind": "data_output",
+      "evidence": [
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description; card.json description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, samples are first crosslinked and sonicated. Biotinylated tiling oligos are hybridized to the RNAs of interest, and the complexes are captured with streptavidin magnetic beads. After treatment with RNase H, the DNA is extracted and sequenced.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "ChIRP-seq",
+      "operation_ids": [
+        "op_crosslink_fragment",
+        "op_hybridize",
+        "op_capture",
+        "op_rnase_release",
+        "op_extract_dna",
+        "op_library",
+        "op_sequence_map"
+      ],
+      "status": "resolved",
+      "rationale": "The diagram and named primary reference support this DNA-readout architecture. The first five operations account for every depicted transformation; the last two are supported by text beyond the final DNA icon. The two left vignettes are descriptive repetition, not two capture branches. The cited primary implementation uses separate even/odd probe experiments; their concordance is recorded as a readout safeguard without inventing a split arrow in this figure.",
+      "evidence": [
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIRP, also commonly referred to as ChIRP-seq, is a protocol to detect the locations on the genome where ncRNAs, such as lncRNAs, and their proteins are bound.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Left overview and input vignettes: ncRNA, RNA-binding protein, nucleosome-like grey bodies and continuous black chromatin line; title Chromatin Isolation by RNA Purification (ChIRP)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.1,
+            0.37,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description; card.json description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, samples are first crosslinked and sonicated. Biotinylated tiling oligos are hybridized to the RNAs of interest, and the complexes are captured with streptavidin magnetic beads. After treatment with RNase H, the DNA is extracted and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, cultured cells are crosslinked in vivo, and their chromatin extracted and homogenized. Biotinylated complementary oligonucleotides that tile the RNA of interest were hybridized to target RNAs, and isolated using magnetic streptavidin beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00013], Results: split-probe specificity strategy",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we performed two independent ChIRP-seq runs with “even” and “odd” probes separately, and focused our analysis exclusively on the overlap between their signals.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "ChIRP",
+      "operation_ids": [
+        "op_crosslink_fragment",
+        "op_hybridize",
+        "op_capture",
+        "op_rnase_release",
+        "op_extract_dna"
+      ],
+      "status": "resolved",
+      "rationale": "Chromatin Isolation by RNA Purification is the named capture assay. Here only its depicted DNA-recovery path is extracted. The primary paper also permits protein and RNA readouts, but this diagram selects DNA extraction; ChIRP-seq denotes the library/sequencing extension of that path.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Left overview and input vignettes: ncRNA, RNA-binding protein, nucleosome-like grey bodies and continuous black chromatin line; title Chromatin Isolation by RNA Purification (ChIRP)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.1,
+            0.37,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIRP, also commonly referred to as ChIRP-seq, is a protocol to detect the locations on the genome where ncRNAs, such as lncRNAs, and their proteins are bound.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, cultured cells are crosslinked in vivo, and their chromatin extracted and homogenized. Biotinylated complementary oligonucleotides that tile the RNA of interest were hybridized to target RNAs, and isolated using magnetic streptavidin beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: possible downstream assays, not all depicted here",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Co-purified chromatin was eluted for protein, RNA, or DNA, which was then subject to downstream assays for identification and quantitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "DNA extraction arrow from protein-associated black fragment to far-right blue horizontal line labeled DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.87,
+            0.2,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "dChIRP",
+      "operation_ids": [],
+      "status": "unresolved",
+      "rationale": "The related abstract explicitly names domain-specific ChIRP and establishes analysis at individual RNA-domain level, so it is a distinct variant rather than an alias for whole-RNA tiling ChIRP. The Illumina image has no dChIRP label or domain-selection branch. Abstract-only evidence does not establish which depicted fragmentation, probe, capture or elution operations apply unchanged; none is assigned to this variant.",
+      "evidence": [
+        {
+          "source_id": "paper:24997788",
+          "locator": "Abstract only; full text not acquired",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we describe domain-specific chromatin isolation by RNA purification (dChIRP), a scalable technique to dissect pairwise RNA-RNA, RNA-protein and RNA-chromatin interactions at the level of individual RNA domains in living cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "Central Biotinylated tiling oligos / Hybridize label and small probe symbol: orange segments with blue terminal marks aligned along purple ncRNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.12,
+            0.59,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_21963238",
+      "source_id": "paper:21963238",
+      "methods": [
+        "ChIRP",
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:21963238",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic maps of long noncoding RNA occupancy reveal principles of RNA-chromatin interactions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00009], Results: Development and optimization of ChIRP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, cultured cells are crosslinked in vivo, and their chromatin extracted and homogenized. Biotinylated complementary oligonucleotides that tile the RNA of interest were hybridized to target RNAs, and isolated using magnetic streptavidin beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00012], Results: RNA-bridged DNA elution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We gently eluted DNA off of beads using a combination of RNase A and RNase H so that only DNA retrieved via a RNA bridge, but not direct probe-DNA interaction, could be preferentially released.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00052], Experimental procedures: high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing libraries were constructed from ChIRPed DNA according the ChIP-seq protocol as described(Johnson et al., 2007), and sequenced on Genome Analyzer IIx (Illumina), with read length of 36bp.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:references:0; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIRP-Seq: Chu C., Qu K., Zhong F. L., Artandi S. E. and Chang H. Y. (2011) Genomic maps of long noncoding RNA occupancy reveal principles of RNA-chromatin interactions. Mol Cell 44: 667-678",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27489248",
+      "source_id": "paper:27489248",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27489248",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Roles of long noncoding RNAs in chromosome domains.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27489248",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We discuss the novel noncoding RNA clusters, Eleanors, which are derived from a large chromatin domain.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:0; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tomita S., Abdalla M. O., Fujiwara S., et al. Roles of long noncoding RNAs in chromosome domains. Wiley Interdiscip Rev RNA. 2017;8:n/a-n/a",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27070700",
+      "source_id": "paper:27070700",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27070700",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Long Noncoding RNAs in Cancer Pathways.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27070700",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we now understand that lncRNAs drive many important cancer phenotypes through their interactions with other cellular macromolecules including DNA, protein, and RNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:1; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Schmitt A. M. and Chang H. Y. Long Noncoding RNAs in Cancer Pathways. Cancer Cell. 2016;29:452-463",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26381323",
+      "source_id": "paper:26381323",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26381323",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Insight into lncRNA biology using hybridization capture analyses.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26381323",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These hybridization capture approaches can reveal the genomic localization of lncRNAs, as well as the proteins and RNAs with which they interact.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:2; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Simon M. D. Insight into lncRNA biology using hybridization capture analyses. Biochim Biophys Acta. 2016;1859:121-127",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26500759",
+      "source_id": "paper:26500759",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26500759",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Unveiling the hidden function of long non-coding RNA by identifying its major partner-protein.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26500759",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Overall, this review provides strategies for probing interactions between lncRNAs and protein.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:3; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Yang Y., Wen L. and Zhu H. Unveiling the hidden function of long non-coding RNA by identifying its major partner-protein. Cell Biosci. 2015;5:59",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25565030",
+      "source_id": "paper:25565030",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25565030",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Technologies to probe functions and mechanisms of long noncoding RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25565030",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we review emerging RNA-centric methods to interrogate the intrinsic structure of lncRNAs as well as their genomic localization and biochemical partners.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:4; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Chu C., Spitale R. C. and Chang H. Y. Technologies to probe functions and mechanisms of long noncoding RNAs. Nat Struct Mol Biol. 2015;22:29-35",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25813522",
+      "source_id": "paper:25813522",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25813522",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide profiling of p53-regulated enhancer RNAs uncovers a subset of enhancers controlled by a lncRNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25813522",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Chromatin-binding and eRNA expression analyses show that LED associates with and activates strong enhancers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:5; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Leveille N., Melo C. A., Rooijers K., Diaz-Lagares A., Melo S. A., et al. (2015) Genome-wide profiling of p53-regulated enhancer RNAs uncovers a subset of enhancers controlled by a lncRNA. Nat Commun 6: 6520",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25664725",
+      "source_id": "paper:25664725",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25664725",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Exon-intron circular RNAs regulate transcription in the nucleus.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664725",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "EIciRNAs predominantly localize in the nucleus, interact with U1 snRNP and promote transcription of their parental genes.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:6; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Li Z., Huang C., Bao C., Chen L., Lin M., et al. (2015) Exon-intron circular RNAs regulate transcription in the nucleus. Nat Struct Mol Biol 22: 256-264",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25772072",
+      "source_id": "paper:25772072",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25772072",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Long non-coding RNAs control hematopoietic stem cell function.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25772072",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We mapped the genomic binding sites of one of these candidates and found enrichment for key hematopoietic transcription factor binding sites, especially E2A.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:7; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Luo M., Jeong M., Sun D., Park H. J., Rodriguez B. A., et al. (2015) Long Non-Coding RNAs Control Hematopoietic Stem Cell Function. Cell Stem Cell 16: 426-438",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25908244",
+      "source_id": "paper:25908244",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25908244",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The lncRNA MIR31HG regulates p16(INK4A) expression to modulate senescence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25908244",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We show that MIR31HG interacts with both INK4A and MIR31HG genomic regions and with Polycomb group (PcG) proteins, and that MIR31HG is required for PcG-mediated repression of the INK4A locus.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:8; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Montes M., Nielsen M. M., Maglieri G., Jacobsen A., Hojfeldt J., et al. (2015) The lncRNA MIR31HG regulates p16(INK4A) expression to modulate senescence. Nat Commun 6: 6967",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25891907",
+      "source_id": "paper:25891907",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25891907",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Opposing Roles for the lncRNA Haunt and Its Genomic Locus in Regulating HOXA Gene Activation during Embryonic Stem Cell Differentiation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25891907",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The Haunt DNA locus contains potential enhancers of HOXA activation, whereas Haunt RNA acts to prevent aberrant HOXA expression.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:9; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Yin Y., Yan P., Lu J., Song G., Zhu Y., et al. (2015) Opposing Roles for the lncRNA Haunt and Its Genomic Locus in Regulating HOXA Gene Activation during Embryonic Stem Cell Differentiation. Cell Stem Cell 16: 504-516",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_24997788",
+      "source_id": "paper:24997788",
+      "methods": [
+        "dChIRP"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:24997788",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Revealing long noncoding RNA architecture and functions using domain-specific chromatin isolation by RNA purification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24997788",
+          "locator": "Abstract only; full text not acquired",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we describe domain-specific chromatin isolation by RNA purification (dChIRP), a scalable technique to dissect pairwise RNA-RNA, RNA-protein and RNA-chromatin interactions at the level of individual RNA domains in living cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:10; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Quinn J. J., Ilik I. A., Qu K., Georgiev P., Chu C., et al. (2014) Revealing long noncoding RNA architecture and functions using domain-specific chromatin isolation by RNA purification. Nat Biotechnol 32: 933-940",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_24371310",
+      "source_id": "paper:24371310",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:24371310",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The long noncoding RNA THRIL regulates TNFα expression through its interaction with hnRNPL.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24371310",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Linc1992 bound specifically to heterogenous nuclear ribonucleoprotein L (hnRNPL) and formed a functional linc1992-hnRNPL complex that regulated transcription of the TNFα gene by binding to its promoter.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:11; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Li Z., Chao T. C., Chang K. Y., Lin N., Patil V. S., et al. (2014) The long noncoding RNA THRIL regulates TNFalpha expression through its interaction with hnRNPL. Proc Natl Acad Sci U S A 111: 1002-1007",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25083870",
+      "source_id": "paper:25083870",
+      "methods": [
+        "ChIRP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25083870",
+          "locator": "Publication metadata: PMID, title and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide mapping and characterization of Notch-regulated long noncoding RNAs in acute leukemia.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25083870",
+          "locator": "Abstract only; full text not acquired; background context rather than verification of ChIRP operations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally we have shown that one specific Notch-regulated lncRNA, LUNAR1, is required for efficient T-ALL growth in vitro and in vivo due to its ability to enhance IGF1R mRNA expression and sustain IGF1 signaling.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Card reference listing: chirp-seq:related_publications:12; catalogue association only, not protocol verification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Trimarchi T., Bilal E., Ntziachristos P., Fabbri G., Dalla-Favera R., et al. (2014) Genome-wide mapping and characterization of Notch-regulated long noncoding RNAs in acute leukemia. Cell 158: 593-606",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "c_rnase_cocktail",
+      "target_id": "operation:op_rnase_release",
+      "diagram_observation": "The arrow after streptavidin bead capture is labeled RNase H; its product is a blue protein on a short black DNA line, with the purple RNA and bead no longer drawn. The card also mentions RNase H alone.",
+      "primary_statement": "The inspected primary paper reports RNase A plus RNase H for DNA elution and explains that this preferentially releases DNA recovered through an RNA bridge rather than direct probe-DNA binding. The operation and released-material state explicitly use that primary implementation while preserving the source label.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_2c06b50710b9a60a8991e3e6",
+          "locator": "RNase H arrow: bead/probe/purple RNA assembly becomes a blue protein on a short black DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.71,
+            0.05,
+            0.91,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chirp-seq",
+          "locator": "Description; card.json description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this method, samples are first crosslinked and sonicated. Biotinylated tiling oligos are hybridized to the RNAs of interest, and the complexes are captured with streptavidin magnetic beads. After treatment with RNase H, the DNA is extracted and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21963238",
+          "locator": "[b00012], Results: RNA-bridged DNA elution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We gently eluted DNA off of beads using a combination of RNase A and RNase H so that only DNA retrieved via a RNA bridge, but not direct probe-DNA interaction, could be preferentially released.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u_dchirp_applicability",
+      "question": "Which specific depicted fragmentation, probe-targeting, capture and release operations also apply to dChIRP? The available related abstract establishes domain-level measurement but not that implementation. A dChIRP primary workflow/methods source is needed before assigning those operations; this does not block the depicted ChIRP-seq architecture.",
+      "blocking": false,
+      "affected_ids": [
+        "scope:dChIRP"
+      ]
+    }
+  ]
+}

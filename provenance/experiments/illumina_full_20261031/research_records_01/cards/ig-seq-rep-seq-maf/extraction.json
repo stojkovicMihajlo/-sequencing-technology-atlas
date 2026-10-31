@@ -1,0 +1,1464 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "ig-seq-rep-seq-maf",
+  "title": "Ig-Seq/Rep-Seq/MAF",
+  "method_names": [
+    "Ig-Seq",
+    "Rep-Seq",
+    "MAF"
+  ],
+  "scope": "Illumina explanatory schematic and explicitly supported method variants. One RNA-derived immunoglobulin target route is drawn: reverse transcription with a UID-bearing primer, second-strand synthesis with a second UID-bearing primer, PCR, then purification to DNA. The catalogue identifies the drawing as MAF; primary-paper interpretation is restricted to Khan et al.'s mouse IgG heavy-chain MAF. Ig-Seq and Rep-Seq remain broader names, with the separately cited Vollmers implementation supported here only at abstract level. The CDR3 key is descriptive; no alternative material branch is drawn. Sequencing and computational correction are described only as supported downstream readout interfaces.",
+  "inspected_sources": [
+    "diagram:asset_78ea00f8b65adeac460c8e65",
+    "card:ig-seq-rep-seq-maf",
+    "metadata:23898164",
+    "paper:23898164",
+    "metadata:22043864",
+    "paper:22043864",
+    "metadata:26998518",
+    "paper:26998518",
+    "metadata:24441474",
+    "paper:24441474"
+  ],
+  "states": [
+    {
+      "id": "s_rna",
+      "label": "Extracted RNA: rearranged immunoglobulin transcripts",
+      "kind": "material",
+      "features": [
+        "The labelled target contains V, D, J and Constant regions. The separate left key highlights the CDR3 junction region; it is a descriptive target map, not another material stream.",
+        "The illustrated input is RNA, despite the grouped caption mentioning DNA sequencing. The paper-supported MAF implementation targets mouse IgG heavy-chain transcripts.",
+        "Dotted strand continuations indicate omitted extent; no specific terminal chemical group, surface attachment or cell compartment is identified."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Extracted RNA panel, labels V / D / J / Constant",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.153,
+            0.0,
+            0.296,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Left descriptive key: CDR3 junction region and grouped assay caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.206,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, cDNA synthesis [b00048]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "TAK_402 binds a conserved portion of mouse IgG1, IgG2a, IgG2b, and IgG2c. TAK_403 binds the less biologically present mouse IgG3.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_rt_primer",
+      "label": "8N UID primer at reverse transcription; MAF interpretation: RID-bearing IgG-specific primer",
+      "kind": "material",
+      "features": [
+        "Depicted as an angled oligonucleotide at the Constant side of the RNA with an 8N UID label and a synthetic terminal segment.",
+        "In the primary MAF implementation the primer contains an IgG-binding region, reverse UID (RID), spacers and a partial Illumina adapter. Its sequence design uses partial degeneracy and spacers; the diagram label is not an exact eight-N specification."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Reverse transcription panel: constant-side angled primer labelled 8N UID; leftward extension arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.341,
+            0.12,
+            0.491,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, cDNA synthesis [b00048]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "TAK_402 binds a conserved portion of mouse IgG1, IgG2a, IgG2b, and IgG2c. TAK_403 binds the less biologically present mouse IgG3.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We did not use a typical degenerate nucleotide design for UIDs (that is, NNNN…) (25, 27), which can often result in various artifacts such as nonspecific amplification, strand invasion, and primer-dimers (32, 38). Instead, we aimed to minimize these effects by the incorporation of spacer sequences and partial degeneracy",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_cdna",
+      "label": "First-strand immunoglobulin cDNA carrying a reverse UID",
+      "kind": "material",
+      "features": [
+        "RNA sequence information, including the rearranged VDJ/CDR3 target, is copied into DNA.",
+        "The RID and primer-derived partial adapter are physically incorporated in the cDNA. RID association marks a transcript-derived first-strand molecule for downstream grouping."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Reverse transcription panel: constant-side angled primer labelled 8N UID; leftward extension arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.341,
+            0.12,
+            0.491,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MAF starts with single molecule tagging of first-strand cDNA during reverse transcription with a reverse-UID (RID), providing a unique tag to each transcript.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_second_primer",
+      "label": "8N UID primer at second-strand synthesis; MAF interpretation: FID-bearing forward primer set",
+      "kind": "material",
+      "features": [
+        "Depicted as an opposite-end angled primer labelled 8N UID; the cartoon shows a representative primer rather than the full multiplex set.",
+        "The paper identifies forward primers carrying an FID and partial Illumina adapter, used during multiplex PCR. FID/RID designs have spacers and partial degeneracy rather than literal runs of eight random bases."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Second strand synthesis panel: opposite-side angled primer labelled 8N UID and extended target",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.541,
+            0.0,
+            0.655,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We did not use a typical degenerate nucleotide design for UIDs (that is, NNNN…) (25, 27), which can often result in various artifacts such as nonspecific amplification, strand invasion, and primer-dimers (32, 38). Instead, we aimed to minimize these effects by the incorporation of spacer sequences and partial degeneracy",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_tagged_dna",
+      "label": "Complementary-strand target DNA with RID and forward-UID associations",
+      "kind": "material",
+      "features": [
+        "Boundary represented by the diagram's Second strand synthesis stage: complementary DNA is generated from the RID-bearing first strand using an FID-bearing forward primer.",
+        "The two UID regions flank the same immunoglobulin-derived target. For MAF this is an early extension boundary within multiplex PCR; FID addition continues during that amplification."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Second strand synthesis panel: opposite-side angled primer labelled 8N UID and extended target",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.541,
+            0.0,
+            0.655,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, MAF continues by tagging each DNA-RID molecule during multiplex PCR amplification with a forward-UID (FID), whereby overamplified molecules receive more FIDs than underamplified molecules. This fingerprint of amplification for each molecule allowed us to implement an algorithm to normalize multiplex amplification bias effects.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015], interpreted alongside the diagram Second strand synthesis panel",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": "The diagram places a forward UID-bearing primer on first-strand cDNA before its PCR block, while the paper places forward FID addition within multiplex PCR. Interpreting the depicted second-strand stage as the early forward-primer extension within that multiplex amplification reconciles the boundary without claiming an independently reported reaction."
+        }
+      ]
+    },
+    {
+      "id": "s_pcr_dna",
+      "label": "Amplified immunoglobulin DNA with molecular tags and Illumina adapter ends",
+      "kind": "material",
+      "features": [
+        "The schematic PCR product retains the target and terminal synthetic regions. The primary MAF workflow specifies multiplex PCR followed by adapter extension PCR.",
+        "Copies sharing an RID may acquire multiple FIDs during multiplex amplification. FID diversity associated with an RID provides an amplification fingerprint; raw amplicon counts are not independent transcript counts.",
+        "Adapter extension incorporates the Illumina sequencing interface. The diagram does not label the exact identities of each coloured terminal segment."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "PCR panel: target with synthetic terminal regions on opposing strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.712,
+            0.15,
+            0.834,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Fig. 2A caption [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(A) Workflow for library preparation by MAF consists of reverse transcription (RT), multiplex PCR, and adapter extension PCR and results in amplicons ready for Ig-seq.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Assessment of Ig-Seq errors and biases [b00011]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We quantified our master pool of standards by sequencing five independently prepared libraries generated by adapter extension PCR, which incorporates Illumina adapters by PCR.",
+          "bbox": null,
+          "rationale": "Establishes the role of adapter extension, rather than adding an independent ligation step."
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, MAF continues by tagging each DNA-RID molecule during multiplex PCR amplification with a forward-UID (FID), whereby overamplified molecules receive more FIDs than underamplified molecules. This fingerprint of amplification for each molecule allowed us to implement an algorithm to normalize multiplex amplification bias effects.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_final_dna",
+      "label": "DNA: purified, tagged immunoglobulin sequencing library",
+      "kind": "material",
+      "features": [
+        "The final labelled DNA product follows Purify. DNA is the sequenced carrier of the original RNA-derived immunoglobulin sequence and RID/FID associations.",
+        "In paper-supported MAF, Illumina sequencing supplies reads for RID-based consensus, VDJ/CDR3 repertoire characterization and FID/RID-based amplification-bias correction. Sequencing and computation are downstream interfaces, not additional operations drawn here.",
+        "The library supports transcript-derived sequence diversity and relative abundance estimates. RNA abundance does not directly establish the number of cells expressing a clone; the bulk workflow does not preserve native VH:VL pairing."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Arrow labelled Purify leading to the rightmost DNA product",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.848,
+            0.16,
+            1.0,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, NGS with Illumina MiSeq [b00058]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "NGS was performed on the Illumina MiSeq platform",
+          "bbox": null,
+          "rationale": "Only the Illumina DNA-sequencing interface is used here; instrument execution settings are outside the extracted architecture."
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, Error correction by consensus building [b00066]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consensus building was performed on sequences, trimmed of their FID and primer-binding region (CLC preprocessing). Here, the most abundant sequence belonging to an RID was used as a seed, and all other sequences in the RID group were aligned to this sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, VDJ annotation [b00068]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "VDJ annotation was performed on both the consensus built and nonconsensus built sequences (trimmed of FID and primer binding regions).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, MAF continues by tagging each DNA-RID molecule during multiplex PCR amplification with a forward-UID (FID), whereby overamplified molecules receive more FIDs than underamplified molecules. This fingerprint of amplification for each molecule allowed us to implement an algorithm to normalize multiplex amplification bias effects.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24441474",
+          "locator": "High-throughput sequencing, Experimental design [b00020]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "On the other hand, using mRNA as a template can provide an estimate of the relative expression level of various immunoglobulin sequences in the repertoire. However, because immunoglobulin transcription varies dramatically (up to 100-fold) between naive B cells and plasma cells (Fig. 2)39, using unsorted bulk B cells from peripheral blood as the source of mRNA makes it challenging to deduce cellular clonal frequencies.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:ig-seq-rep-seq-maf",
+          "locator": "jcr:content/par/text_1/text, bulk-analysis limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Although throughput is high, in bulk analysis information regarding which VH and VL chains were paired in the same cell is lost, as cells are lysed in bulk and VH and VL genes are amplified in separate reactions.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_rt",
+      "label": "Reverse transcription",
+      "description": "Copy the extracted immunoglobulin RNA template into first-strand cDNA using the depicted constant-side UID-bearing primer. The incorporated primer supplies a reverse molecular tag and a partial Illumina adapter in MAF.",
+      "inputs": [
+        "s_rna",
+        "s_rt_primer"
+      ],
+      "outputs": [
+        "s_cdna"
+      ],
+      "mechanism": "IgG gene-specific primer-directed reverse transcription; the primary paper identifies the reverse tag as RID.",
+      "information_effect": "Moves immunoglobulin transcript sequence information onto DNA and associates that cDNA with an RID; the input RNA serves as template.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Reverse transcription panel: constant-side angled primer labelled 8N UID; leftward extension arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.341,
+            0.12,
+            0.491,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MAF starts with single molecule tagging of first-strand cDNA during reverse transcription with a reverse-UID (RID), providing a unique tag to each transcript.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_second",
+      "label": "Second strand synthesis",
+      "description": "Extend an opposite-end, forward UID-bearing primer on the first-strand cDNA, producing complementary target DNA with a forward tag as well as the RID association. The depicted boundary is retained. We interpret it as early forward-primer extension within the primary MAF multiplex PCR, whose forward primers carry FIDs.",
+      "inputs": [
+        "s_cdna",
+        "s_second_primer"
+      ],
+      "outputs": [
+        "s_tagged_dna"
+      ],
+      "mechanism": "FID-bearing multiplex forward-primer extension copies the RID-bearing cDNA template. The precise 8N sequence design in the cartoon is superseded by the paper's spacer-containing, partially degenerate UID design.",
+      "information_effect": "Associates the immunoglobulin target and RID with an FID. The FID is an amplification-history label: further FIDs can be introduced to copies sharing an RID during multiplex amplification.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Second strand synthesis panel: opposite-side angled primer labelled 8N UID and extended target",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.541,
+            0.0,
+            0.655,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, MAF continues by tagging each DNA-RID molecule during multiplex PCR amplification with a forward-UID (FID), whereby overamplified molecules receive more FIDs than underamplified molecules. This fingerprint of amplification for each molecule allowed us to implement an algorithm to normalize multiplex amplification bias effects.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We did not use a typical degenerate nucleotide design for UIDs (that is, NNNN…) (25, 27), which can often result in various artifacts such as nonspecific amplification, strand invasion, and primer-dimers (32, 38). Instead, we aimed to minimize these effects by the incorporation of spacer sequences and partial degeneracy",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015], interpreted alongside the diagram Second strand synthesis panel",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": "The diagram places a forward UID-bearing primer on first-strand cDNA before its PCR block, while the paper places forward FID addition within multiplex PCR. Interpreting the depicted second-strand stage as the early forward-primer extension within that multiplex amplification reconciles the boundary without claiming an independently reported reaction."
+        }
+      ]
+    },
+    {
+      "id": "op_pcr",
+      "label": "PCR",
+      "description": "Amplify the tagged immunoglobulin target while retaining its RID/FID associations and terminal synthetic sequences. At the resolution supported by the paper, this broad block encompasses continued multiplex amplification with FID tagging, followed by adapter extension PCR producing sequencing-ready amplicons.",
+      "inputs": [
+        "s_tagged_dna",
+        "s_second_primer"
+      ],
+      "outputs": [
+        "s_pcr_dna"
+      ],
+      "mechanism": "Multiplex PCR with FID-bearing forward primers, followed by PCR incorporation/extension of Illumina adapters; these stages are the paper-supported interpretation of the broad PCR block.",
+      "information_effect": "Increases DNA copy number, retains RID-defined transcript families and records amplification through FID multiplicity. Completion of adapter ends makes the DNA compatible with the downstream Illumina interface.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "PCR panel: target with synthetic terminal regions on opposing strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.712,
+            0.15,
+            0.834,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Fig. 2A caption [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(A) Workflow for library preparation by MAF consists of reverse transcription (RT), multiplex PCR, and adapter extension PCR and results in amplicons ready for Ig-seq.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, MAF continues by tagging each DNA-RID molecule during multiplex PCR amplification with a forward-UID (FID), whereby overamplified molecules receive more FIDs than underamplified molecules. This fingerprint of amplification for each molecule allowed us to implement an algorithm to normalize multiplex amplification bias effects.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Assessment of Ig-Seq errors and biases [b00011]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We quantified our master pool of standards by sequencing five independently prepared libraries generated by adapter extension PCR, which incorporates Illumina adapters by PCR.",
+          "bbox": null,
+          "rationale": "Establishes the role of adapter extension, rather than adding an independent ligation step."
+        }
+      ]
+    },
+    {
+      "id": "op_purify",
+      "label": "Purify",
+      "description": "Clean up the amplified DNA and recover the final DNA library shown at the right. No distinct target-selection branch or change in encoded biological identity is depicted.",
+      "inputs": [
+        "s_pcr_dna"
+      ],
+      "outputs": [
+        "s_final_dna"
+      ],
+      "mechanism": "Purification is unspecified in the Illumina drawing. The primary MAF implementation reports bead cleanup after adapter extension PCR; execution settings are outside this architecture.",
+      "information_effect": "Retains the target/tag associations in the recovered library; purification itself supplies no new sequence measurement or cell-pairing information.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Arrow labelled Purify leading to the rightmost DNA product",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.848,
+            0.16,
+            1.0,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, Adapter extension PCR [b00054]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Following second-step adapter extension PCR, reactions were cleaned using a double-sided SPRIselect bead cleanup process",
+          "bbox": null,
+          "rationale": "Supports bead cleanup after adapter extension; execution details are outside the extracted architecture."
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_rna_rt",
+      "source": "s_rna",
+      "target": "op_rt",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Right-pointing arrow from Extracted RNA to Reverse transcription",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.305,
+            0.16,
+            0.334,
+            0.38
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Reverse transcription panel: constant-side angled primer labelled 8N UID; leftward extension arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.341,
+            0.12,
+            0.491,
+            0.72
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_rtprimer_rt",
+      "source": "s_rt_primer",
+      "target": "op_rt",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Reverse transcription panel: constant-side angled primer labelled 8N UID; leftward extension arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.341,
+            0.12,
+            0.491,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_rt_cdna",
+      "source": "op_rt",
+      "target": "s_cdna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Reverse transcription panel: constant-side angled primer labelled 8N UID; leftward extension arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.341,
+            0.12,
+            0.491,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_cdna_second",
+      "source": "s_cdna",
+      "target": "op_second",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Right-pointing arrow from Reverse transcription to Second strand synthesis",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.499,
+            0.16,
+            0.521,
+            0.38
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Second strand synthesis panel: opposite-side angled primer labelled 8N UID and extended target",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.541,
+            0.0,
+            0.655,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_forward_second",
+      "source": "s_second_primer",
+      "target": "op_second",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Second strand synthesis panel: opposite-side angled primer labelled 8N UID and extended target",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.541,
+            0.0,
+            0.655,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_second_tagged",
+      "source": "op_second",
+      "target": "s_tagged_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Second strand synthesis panel: opposite-side angled primer labelled 8N UID and extended target",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.541,
+            0.0,
+            0.655,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_tagged_pcr",
+      "source": "s_tagged_dna",
+      "target": "op_pcr",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Right-pointing arrow from Second strand synthesis to PCR",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.674,
+            0.16,
+            0.698,
+            0.38
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "PCR panel: target with synthetic terminal regions on opposing strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.712,
+            0.15,
+            0.834,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Fig. 2A caption [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(A) Workflow for library preparation by MAF consists of reverse transcription (RT), multiplex PCR, and adapter extension PCR and results in amplicons ready for Ig-seq.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_forward_pcr",
+      "source": "s_second_primer",
+      "target": "op_pcr",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, MAF continues by tagging each DNA-RID molecule during multiplex PCR amplification with a forward-UID (FID), whereby overamplified molecules receive more FIDs than underamplified molecules. This fingerprint of amplification for each molecule allowed us to implement an algorithm to normalize multiplex amplification bias effects.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_pcr_amplified",
+      "source": "op_pcr",
+      "target": "s_pcr_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "PCR panel: target with synthetic terminal regions on opposing strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.712,
+            0.15,
+            0.834,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Fig. 2A caption [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(A) Workflow for library preparation by MAF consists of reverse transcription (RT), multiplex PCR, and adapter extension PCR and results in amplicons ready for Ig-seq.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_amplified_purify",
+      "source": "s_pcr_dna",
+      "target": "op_purify",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Arrow labelled Purify leading to the rightmost DNA product",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.848,
+            0.16,
+            1.0,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, Adapter extension PCR [b00054]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Following second-step adapter extension PCR, reactions were cleaned using a double-sided SPRIselect bead cleanup process",
+          "bbox": null,
+          "rationale": "Supports bead cleanup after adapter extension; execution details are outside the extracted architecture."
+        }
+      ]
+    },
+    {
+      "id": "f_purify_dna",
+      "source": "op_purify",
+      "target": "s_final_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Arrow labelled Purify leading to the rightmost DNA product",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.848,
+            0.16,
+            1.0,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, Adapter extension PCR [b00054]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Following second-step adapter extension PCR, reactions were cleaned using a double-sided SPRIselect bead cleanup process",
+          "bbox": null,
+          "rationale": "Supports bead cleanup after adapter extension; execution details are outside the extracted architecture."
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "MAF",
+      "operation_ids": [
+        "op_rt",
+        "op_second",
+        "op_pcr",
+        "op_purify"
+      ],
+      "status": "resolved",
+      "rationale": "The catalogue explicitly identifies the drawing as MAF. Khan et al. describe RNA-to-RID cDNA, multiplex PCR adding FIDs, and adapter extension PCR. The diagram's Second strand synthesis boundary is retained as the early forward extension within multiplex amplification; its PCR block is broad. Literal 8N labels are corrected to the paper's spacer-containing, partially degenerate UIDs. The specifically evidenced implementation is mouse IgG heavy-chain MAF, not all possible immunoglobulin or T-cell-receptor protocols.",
+      "evidence": [
+        {
+          "source_id": "card:ig-seq-rep-seq-maf",
+          "locator": "jcr:content/par/text_1/text, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MAF (illustrated below) was developed to correct the amplification biases in Ig-seq, by using UIG tagging before and during the multiplex PCR amplification as well as a bioinformatics pipeline.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Fig. 2A caption [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(A) Workflow for library preparation by MAF consists of reverse transcription (RT), multiplex PCR, and adapter extension PCR and results in amplicons ready for Ig-seq.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Materials and Methods, cDNA synthesis [b00048]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "TAK_402 binds a conserved portion of mouse IgG1, IgG2a, IgG2b, and IgG2c. TAK_403 binds the less biologically present mouse IgG3.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We did not use a typical degenerate nucleotide design for UIDs (that is, NNNN…) (25, 27), which can often result in various artifacts such as nonspecific amplification, strand invasion, and primer-dimers (32, 38). Instead, we aimed to minimize these effects by the incorporation of spacer sequences and partial degeneracy",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "Ig-Seq",
+      "operation_ids": [],
+      "status": "unresolved",
+      "rationale": "Ig-Seq is the broader immunoglobulin-sequencing application, within which MAF is a specific preparation/correction approach. The catalogue-listed Vollmers study is a distinct RNA-barcode/consensus implementation: its supplied abstract supports labelling starting RNA molecules and estimating RNA/isotype levels, but does not establish the MAF RID/FID scheme or map its reaction stages to this drawing. The catalogue's gDNA-to-cDNA wording does not alter the diagram's explicitly RNA-derived route. No figure operation is assigned universally to Ig-Seq.",
+      "evidence": [
+        {
+          "source_id": "paper:23898164",
+          "locator": "Abstract: barcode/consensus approach (abstract-only evidence)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a consensus read sequencing approach that incorporates unique barcode labels on each starting RNA molecule. These labels allow one to combine multiple sequencing reads covering the same RNA molecule to reduce the error rate to a desired level, and they also enable accurate quantification of RNA and isotype levels.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:ig-seq-rep-seq-maf",
+          "locator": "jcr:content/par/text_1/text, final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MAF (illustrated below) was developed to correct the amplification biases in Ig-seq, by using UIG tagging before and during the multiplex PCR amplification as well as a bioinformatics pipeline.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Extracted RNA panel, labels V / D / J / Constant",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.153,
+            0.0,
+            0.296,
+            0.7
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "Rep-Seq",
+      "operation_ids": [],
+      "status": "unresolved",
+      "rationale": "The catalogue and Benichou abstract define Rep-Seq as a collective family of repertoire-sequencing technologies, not a distinct synonym for MAF or one version with a fixed preparation sequence. Applicability of individual depicted steps to each Rep-Seq member is unspecified by the supplied abstract; this figure cannot assign its two-UID RNA route to the entire family.",
+      "evidence": [
+        {
+          "source_id": "card:ig-seq-rep-seq-maf",
+          "locator": "jcr:content/par/text_1/text, grouped-method description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Rep-Seq is a collective term for repertoire sequencing technologies.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22043864",
+          "locator": "Abstract: definition of Rep-Seq (abstract-only evidence)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we describe some of the technologies, which we collectively refer to as Rep-Seq (repertoire sequencing), to portray achievements in the field and to present the essential and inseparable role of next-generation sequencing to the understanding of entities in immune response.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_23898164",
+      "source_id": "paper:23898164",
+      "methods": [
+        "Ig-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:23898164",
+          "locator": "PubMed metadata: PMID and publication title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genetic measurement of memory B-cell recall using antibody repertoire sequencing.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; scientific support comes from the separately cited abstract or full-text blocks."
+        },
+        {
+          "source_id": "paper:23898164",
+          "locator": "Abstract: barcode/consensus approach (abstract-only evidence)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we developed a consensus read sequencing approach that incorporates unique barcode labels on each starting RNA molecule. These labels allow one to combine multiple sequencing reads covering the same RNA molecule to reduce the error rate to a desired level, and they also enable accurate quantification of RNA and isotype levels.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_22043864",
+      "source_id": "paper:22043864",
+      "methods": [
+        "Rep-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:22043864",
+          "locator": "PubMed metadata: PMID and publication title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Rep-Seq: uncovering the immunological repertoire through next-generation sequencing.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; scientific support comes from the separately cited abstract or full-text blocks."
+        },
+        {
+          "source_id": "paper:22043864",
+          "locator": "Abstract: definition of Rep-Seq (abstract-only evidence)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we describe some of the technologies, which we collectively refer to as Rep-Seq (repertoire sequencing), to portray achievements in the field and to present the essential and inseparable role of next-generation sequencing to the understanding of entities in immune response.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26998518",
+      "source_id": "paper:26998518",
+      "methods": [
+        "MAF",
+        "Ig-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:26998518",
+          "locator": "PubMed metadata: PMID and publication title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Accurate and predictive antibody repertoire profiling by molecular amplification fingerprinting.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; scientific support comes from the separately cited abstract or full-text blocks."
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Fig. 2A caption [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(A) Workflow for library preparation by MAF consists of reverse transcription (RT), multiplex PCR, and adapter extension PCR and results in amplicons ready for Ig-seq.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We did not use a typical degenerate nucleotide design for UIDs (that is, NNNN…) (25, 27), which can often result in various artifacts such as nonspecific amplification, strand invasion, and primer-dimers (32, 38). Instead, we aimed to minimize these effects by the incorporation of spacer sequences and partial degeneracy",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_24441474",
+      "source_id": "paper:24441474",
+      "methods": [
+        "Ig-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:24441474",
+          "locator": "PubMed metadata: PMID and publication title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The promise and challenge of high-throughput sequencing of the antibody repertoire.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; scientific support comes from the separately cited abstract or full-text blocks."
+        },
+        {
+          "source_id": "paper:24441474",
+          "locator": "Abstract [b00003], review scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Rapid progress in the development of experimental protocols and informatics analysis tools is helping to reduce sequencing artifacts, to achieve more precise quantification of clonal diversity and to extract the most pertinent biological information.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24441474",
+          "locator": "High-throughput sequencing, Experimental design [b00020]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "On the other hand, using mRNA as a template can provide an estimate of the relative expression level of various immunoglobulin sequences in the repertoire. However, because immunoglobulin transcription varies dramatically (up to 100-fold) between naive B cells and plasma cells (Fig. 2)39, using unsorted bulk B cells from peripheral blood as the source of mRNA makes it challenging to deduce cellular clonal frequencies.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "c_rid_design",
+      "target_id": "state:s_rt_primer",
+      "diagram_observation": "The reverse-transcription primer is labelled 8N UID and drawn with a coloured terminal tail; exact bases and spacer layout are not shown.",
+      "primary_statement": "MAF uses an RID-bearing IgG-specific primer with a partial Illumina adapter. Its UID design uses spacers and partial degeneracy rather than a typical NNNN run. The state records the paper-supported primer architecture while preserving the visible 8N UID label.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Reverse transcription panel: constant-side angled primer labelled 8N UID; leftward extension arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.341,
+            0.12,
+            0.491,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RNA is reverse-transcribed into first-strand cDNA using an IgG gene-specific primer with an RID tag and a partial lllumina adapter sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We did not use a typical degenerate nucleotide design for UIDs (that is, NNNN…) (25, 27), which can often result in various artifacts such as nonspecific amplification, strand invasion, and primer-dimers (32, 38). Instead, we aimed to minimize these effects by the incorporation of spacer sequences and partial degeneracy",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "c_fid_design",
+      "target_id": "state:s_second_primer",
+      "diagram_observation": "The opposite-end primer at Second strand synthesis is also labelled 8N UID.",
+      "primary_statement": "The primary method uses a multiplex forward primer set bearing an FID and partial Illumina adapter; RID and FID designs incorporate spacers and partial degeneracy. The two same-looking schematic labels do not mean the RID and FID have identical designs or information roles.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Second strand synthesis panel: opposite-side angled primer labelled 8N UID and extended target",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.541,
+            0.0,
+            0.655,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We did not use a typical degenerate nucleotide design for UIDs (that is, NNNN…) (25, 27), which can often result in various artifacts such as nonspecific amplification, strand invasion, and primer-dimers (32, 38). Instead, we aimed to minimize these effects by the incorporation of spacer sequences and partial degeneracy",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, MAF continues by tagging each DNA-RID molecule during multiplex PCR amplification with a forward-UID (FID), whereby overamplified molecules receive more FIDs than underamplified molecules. This fingerprint of amplification for each molecule allowed us to implement an algorithm to normalize multiplex amplification bias effects.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "c_forward_stage",
+      "target_id": "operation:op_second",
+      "diagram_observation": "The drawing presents Second strand synthesis with the forward 8N UID primer before a separate panel labelled PCR.",
+      "primary_statement": "Khan et al. specify reverse transcription, multiplex PCR and adapter extension PCR, with FIDs introduced during multiplex amplification. Their named workflow does not specify a standalone second-strand stage. The candidate retains the drawing's boundary and explicitly marks its mapping to early forward-primer extension within multiplex PCR as an interpretation; continued FID addition and adapter extension are represented in the broad PCR block.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "Second strand synthesis panel: opposite-side angled primer labelled 8N UID and extended target",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.541,
+            0.0,
+            0.655,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_78ea00f8b65adeac460c8e65",
+          "locator": "PCR panel: target with synthetic terminal regions on opposing strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.712,
+            0.15,
+            0.834,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Introduction, MAF principle [b00008]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, MAF continues by tagging each DNA-RID molecule during multiplex PCR amplification with a forward-UID (FID), whereby overamplified molecules receive more FIDs than underamplified molecules. This fingerprint of amplification for each molecule allowed us to implement an algorithm to normalize multiplex amplification bias effects.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Fig. 2A caption [b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(A) Workflow for library preparation by MAF consists of reverse transcription (RT), multiplex PCR, and adapter extension PCR and results in amplicons ready for Ig-seq.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26998518",
+          "locator": "Results, Ig-seq library preparation by MAF [b00015], interpreted alongside the diagram Second strand synthesis panel",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Next, a multiplex PCR step is performed using a forward primer set, wherein each primer also contains an FID region (and a partial Illumina adapter sequence; Fig. 2A).",
+          "bbox": null,
+          "rationale": "The diagram places a forward UID-bearing primer on first-strand cDNA before its PCR block, while the paper places forward FID addition within multiplex PCR. Interpreting the depicted second-strand stage as the early forward-primer extension within that multiplex amplification reconciles the boundary without claiming an independently reported reaction."
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u_vollmers_mapping",
+      "question": "Which, if any, of the separate second-strand, dual-UID and PCR stages in the MAF drawing apply to the specific Vollmers et al. Ig-Seq implementation? Its supplied abstract establishes starting-RNA barcoding and consensus readout but not reaction order or primer architecture; its full library-preparation methods/figure would be needed to resolve that mapping.",
+      "blocking": false,
+      "affected_ids": [
+        "scope:Ig-Seq",
+        "paper:pm_23898164"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1334 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "clickseq",
+  "title": "ClickSeq",
+  "method_names": [
+    "ClickSeq"
+  ],
+  "scope": "Illumina explanatory schematic of the semi-random-primed RNA ClickSeq implementation supported by Routh et al., PMID 26116762: unfragmented RNA to stochastically 3′-azido-terminated cDNA, single-stranded cDNA purification, alkyne-adaptor click ligation and PCR to an Illumina cDNA library. The two parallel example molecules do not define alternative routes. The yellow-highlighted line and left caption summarize the method; they are not an extra operation. Sequencing is a downstream library interface, not a separate depicted operation. Template-specific proof-of-chemistry experiments in the paper are not additional branches of this schematic.",
+  "inspected_sources": [
+    "card:clickseq",
+    "diagram:asset_d837abedd3131e24dba2c490",
+    "metadata:26116762",
+    "paper:26116762",
+    "metadata:26408523",
+    "paper:26408523"
+  ],
+  "states": [
+    {
+      "id": "s_rna",
+      "label": "RNA templates",
+      "kind": "material",
+      "features": [
+        "Purple strands with 5′ labels at their left ends.",
+        "Biological target and reverse-transcription template: unfragmented RNA; stochastic cDNA termination supplies fragment boundaries without an RNA-fragmentation operation."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "RNA panel: two purple horizontal strands, each labelled 5′ at the left; caption RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.245,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00018] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ClickSeq overcomes these limitations by removing the fragmentation steps via the stochastic termination of cDNA synthesis and by replacing the enzymatic ligation steps with robust bio-orthogonal click-chemistry.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_rt_reagents",
+      "label": "Semi-random primers and AzNTPs/dNTPs",
+      "kind": "material",
+      "features": [
+        "Semi-random DNA primer: six random nucleotides plus a constant Illumina adaptor region; the catalogue names this primer-associated adaptor P7.",
+        "dNTPs permit cDNA extension; AzNTPs are 3′-azido-2′,3′-dideoxynucleotides whose incorporation terminates extension and provides the 3′ azido group for click ligation."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Add semi-random primers and AzNTPs - dNTP mixture: RNA strands with shorter blue/green/pink products and N3 labels; incoming arrow from RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.25,
+            0.0,
+            0.42,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, in a process akin to dideoxy (Sanger) sequencing, we supplement the RT-PCR reaction containing dNTPs with small amounts of AzNTPs to randomly terminate chain elongation and release 3’-azido blocked cDNA fragments.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:clickseq",
+          "locator": "Method description: semi-random primer and click adaptor",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process induces chain termination and semirandom primers (6 random nucleotides followed by an Illumina 3' P7 adapter) to sequence random positions on the RNA template. Single-stranded cDNA is purified, and the 3'-ends are click-ligated with alkyne-modified (5'hexynyl) P5 adapters.",
+          "bbox": null,
+          "rationale": "Catalogue evidence names the primer-associated adaptor P7 and click adaptor P5; the full text establishes the reactive end groups and reaction order."
+        }
+      ]
+    },
+    {
+      "id": "s_rt_material",
+      "label": "RNA templates and newly synthesized azido-terminated cDNA fragments",
+      "kind": "material",
+      "features": [
+        "Shorter blue cDNA strands are drawn alongside purple RNA, with N3 at the left and green/pink primer-associated segments at the right.",
+        "Each cDNA carries copied RNA sequence, a primer-derived adaptor flank and a terminal 3′ azido group (N3 in the diagram).",
+        "Purple RNA remains pictured at this boundary; this does not establish that every terminated cDNA remains in an RNA:cDNA hybrid."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Add semi-random primers and AzNTPs - dNTP mixture: RNA strands with shorter blue/green/pink products and N3 labels; incoming arrow from RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.25,
+            0.0,
+            0.42,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, in a process akin to dideoxy (Sanger) sequencing, we supplement the RT-PCR reaction containing dNTPs with small amounts of AzNTPs to randomly terminate chain elongation and release 3’-azido blocked cDNA fragments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_sscdna",
+      "label": "Purified single-stranded azido-terminated cDNA",
+      "kind": "material",
+      "features": [
+        "N3-labelled ends and the green/pink segments are retained; purple RNA templates are no longer shown.",
+        "Single-stranded cDNA retains the reactive 3′ azido terminus and the primer-derived adaptor flank.",
+        "Purification changes the retained material rather than ligating an adaptor or removing the azido end group; full text specifically reports removal of unincorporated AzNTPs."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Purify single-stranded cDNA: purple RNA strands disappear; two shorter cDNAs retain N3 labels on the left and green/pink segments on the right",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.43,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RT-PCR, unincorporated AzNTPs are removed using standard DNA cleaning/desalting columns.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_click_adaptor",
+      "label": "Alkyne-modified adaptor",
+      "kind": "material",
+      "features": [
+        "Orange adaptor segments enter at the N3-labelled ends; black stacked-bar symbols are shown at the interface.",
+        "DNA oligonucleotide bearing a reactive 5′-hexynyl (alkyne) modification; the catalogue names this second adaptor flank P5."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Click-ligate alkyne-modified adaptor: orange left-hand adaptor segments with black stacked-bar symbols are adjacent to the N3-labelled blue cDNAs; incoming arrow from purified cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            0.71,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:clickseq",
+          "locator": "Method description: semi-random primer and click adaptor",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process induces chain termination and semirandom primers (6 random nucleotides followed by an Illumina 3' P7 adapter) to sequence random positions on the RNA template. Single-stranded cDNA is purified, and the 3'-ends are click-ligated with alkyne-modified (5'hexynyl) P5 adapters.",
+          "bbox": null,
+          "rationale": "Catalogue evidence names the primer-associated adaptor P7 and click adaptor P5; the full text establishes the reactive end groups and reaction order."
+        }
+      ]
+    },
+    {
+      "id": "s_click_product",
+      "label": "Adaptor-ligated cDNA",
+      "kind": "material",
+      "features": [
+        "Diagram observation: orange adaptor segments are contiguous with the blue/green/pink cDNA; N3 and black stacked-bar symbols remain at their interface.",
+        "Primary-source interpretation (correction c_click_junction): the ligated single-stranded product is covalently joined through an unnatural triazole-linked DNA backbone formed by reaction of the cDNA 3′ azido and adaptor 5′ alkyne groups.",
+        "The RNA-derived cDNA is flanked by the primer-associated Illumina adaptor and the click-ligated Illumina adaptor."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Click-ligate alkyne-modified adaptor: orange left-hand adaptor segments with black stacked-bar symbols are adjacent to the N3-labelled blue cDNAs; incoming arrow from purified cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            0.71,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Upon the addition of ascorbic acid (Vitamin C) and tris(benzyltriazolylmethyl)amine-conjugated copper(I) ions (Cu-TBTA) as catalysts, the 3’-azido-blocked cDNA fragments are ‘click-ligated’ to the 5’-hexynyl adaptor via copper(I)-catalysed azide-alkyne cycloaddition11 (Figure 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process generates random single-stranded cDNA fragments from the original RNA that are flanked by the 5’ and 3’ Illumina adaptors, but that contain an unnatural DNA backbone. The bulky triazole linkage (Figure 1B) can be read through by common DNA polymerases such as OneTaq polymerase (NEB) and Klenow DNA polymerase, albeit inefficiently.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_library",
+      "label": "PCR-amplified cDNA library",
+      "kind": "material",
+      "features": [
+        "Final DNA carries orange and green/pink flanks around the blue insert; no terminal N3 labels remain in the PCR or library panels.",
+        "Readout carrier: amplified double-stranded DNA with RNA-derived inserts and Illumina adaptor flanks; the RNA itself is the biological template rather than the sequenced library molecule.",
+        "The library represents recovered sequence intervals sampled through semi-random priming and stochastic cDNA termination. Downstream RNA-derived sequence coverage and within-insert recombinant junctions are supported by the paper’s sequencing demonstrations.",
+        "Recovery is incomplete: click ligation and especially polymerase read-through of the triazole junction limit capture. Successful library formation does not establish complete RNA-molecule recovery or biological authenticity of every apparent recombinant junction."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "PCR amplify: orange/blue/green/pink DNA products; N3 and black junction symbols are no longer drawn; incoming arrow from click-ligation panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.0,
+            0.85,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Rightmost cDNA library panel and incoming arrow after PCR amplify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.92,
+            0.0,
+            1.0,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consequently, the click-ligated cDNA can be used directly in a PCR reaction to generate a cDNA library using Primers #3 and #4 (Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00019] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "One current limitation of ClickSeq is the efficiency with which 3’-azido-blocked cDNA fragments are captured during library generation. While approximately 10 % of the 3’-azido-blocked cDNA fragments in Figure 2B could be ligated to an alkyne-modified oligo, the conversion of this triazole-linked ssDNA into a double stranded DNA via the read-through of the triazole-linkage seems to be far less efficient.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00011] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The alignment frequencies and the read coverage over the viral genomes are similar between the ClickSeq and NEBNext data (Table S2 and Figures 3A-C).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00012] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We next searched for recombination events using ViReMa (Viral Recombination Mapper)17, a computational pipeline that reports recombination events both within and between viral and host genomes.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00016] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consequently, filtering of the data is required27; 28 and putative recombination events must be experimentally validated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_rt",
+      "label": "Add semi-random primers and AzNTPs - dNTP mixture",
+      "description": "Add the semi-random primer and nucleotide mixture to unfragmented RNA and reverse-transcribe it. Incorporation of an AzNTP stops nascent cDNA elongation, yielding shorter first-strand cDNAs with a 3′ azido terminus and a primer-associated adaptor flank. The RNA template is not deliberately fragmented in this depicted route.",
+      "inputs": [
+        "s_rna",
+        "s_rt_reagents"
+      ],
+      "outputs": [
+        "s_rt_material"
+      ],
+      "mechanism": "Randomly primed reverse transcription with competing dNTPs and chain-terminating 3′-azido-2′,3′-dideoxynucleotides. The first caption says Add; cDNA synthesis and stochastic termination are established by the drawn products and the primary paper.",
+      "information_effect": "RNA sequence is copied into cDNA over intervals defined by priming and termination. The information carrier changes from template RNA to RNA-derived DNA, while the semi-random primer introduces one constant sequencing-adaptor flank.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "RNA panel: two purple horizontal strands, each labelled 5′ at the left; caption RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.245,
+            0.7
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Add semi-random primers and AzNTPs - dNTP mixture: RNA strands with shorter blue/green/pink products and N3 labels; incoming arrow from RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.25,
+            0.0,
+            0.42,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, in a process akin to dideoxy (Sanger) sequencing, we supplement the RT-PCR reaction containing dNTPs with small amounts of AzNTPs to randomly terminate chain elongation and release 3’-azido blocked cDNA fragments.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00018] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ClickSeq overcomes these limitations by removing the fragmentation steps via the stochastic termination of cDNA synthesis and by replacing the enzymatic ligation steps with robust bio-orthogonal click-chemistry.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_purify",
+      "label": "Purify single-stranded cDNA",
+      "description": "Recover single-stranded 3′-azido cDNA from the reverse-transcription material while retaining its primer-associated adaptor. Purple RNA is no longer drawn. The paper identifies removal of unincorporated AzNTPs; the schematic does not specify how RNA disappears, so no RNA-destruction substep is added.",
+      "inputs": [
+        "s_rt_material"
+      ],
+      "outputs": [
+        "s_sscdna"
+      ],
+      "mechanism": null,
+      "information_effect": "Retain RNA-derived DNA inserts and their reactive azido ends for the next material transformation; no new sequence association is introduced.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Purify single-stranded cDNA: purple RNA strands disappear; two shorter cDNAs retain N3 labels on the left and green/pink segments on the right",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.43,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RT-PCR, unincorporated AzNTPs are removed using standard DNA cleaning/desalting columns.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_click",
+      "label": "Click-ligate alkyne-modified adaptor",
+      "description": "Covalently attach the alkyne-modified DNA adaptor to the purified cDNA’s 3′ azido end, producing single-stranded adaptor-flanked DNA. Preserve the diagram’s N3/stacked-bar interface symbols as observations; assign the product’s triazole linkage from the primary paper as recorded in c_click_junction.",
+      "inputs": [
+        "s_sscdna",
+        "s_click_adaptor"
+      ],
+      "outputs": [
+        "s_click_product"
+      ],
+      "mechanism": "Copper(I)-catalysed azide-alkyne cycloaddition between the cDNA 3′ azido group and adaptor 5′ hexynyl group forms the triazole-linked backbone. Copper is a catalyst, not a retained library component or an additional product branch.",
+      "information_effect": "The second sequencing-adaptor flank becomes physically linked to the same RNA-derived cDNA insert; click ligation joins this DNA to the adaptor rather than copying additional RNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Click-ligate alkyne-modified adaptor: orange left-hand adaptor segments with black stacked-bar symbols are adjacent to the N3-labelled blue cDNAs; incoming arrow from purified cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            0.71,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Upon the addition of ascorbic acid (Vitamin C) and tris(benzyltriazolylmethyl)amine-conjugated copper(I) ions (Cu-TBTA) as catalysts, the 3’-azido-blocked cDNA fragments are ‘click-ligated’ to the 5’-hexynyl adaptor via copper(I)-catalysed azide-alkyne cycloaddition11 (Figure 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process generates random single-stranded cDNA fragments from the original RNA that are flanked by the 5’ and 3’ Illumina adaptors, but that contain an unnatural DNA backbone. The bulky triazole linkage (Figure 1B) can be read through by common DNA polymerases such as OneTaq polymerase (NEB) and Klenow DNA polymerase, albeit inefficiently.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_pcr",
+      "label": "PCR amplify",
+      "description": "Use the click-ligated, adaptor-flanked single-stranded cDNA as template for polymerase read-through and PCR amplification, producing the double-stranded cDNA library shown at the right. PCR is retained as one schematic operation.",
+      "inputs": [
+        "s_click_product"
+      ],
+      "outputs": [
+        "s_library"
+      ],
+      "mechanism": "The demonstrated DNA polymerases can copy across the unnatural triazole junction, enabling amplification through the adaptor flanks. Read-through is inefficient in this implementation.",
+      "information_effect": "Amplification retains RNA-derived insert/adaptor associations and supplies the DNA library for Illumina sequencing. Downstream reads can establish sequence coverage and candidate junctions within recovered inserts; limited capture and residual artifacts prevent claims of exhaustive RNA recovery or automatic biological validation of a junction.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Click-ligate alkyne-modified adaptor: orange left-hand adaptor segments with black stacked-bar symbols are adjacent to the N3-labelled blue cDNAs; incoming arrow from purified cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            0.71,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "PCR amplify: orange/blue/green/pink DNA products; N3 and black junction symbols are no longer drawn; incoming arrow from click-ligation panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.0,
+            0.85,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Rightmost cDNA library panel and incoming arrow after PCR amplify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.92,
+            0.0,
+            1.0,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process generates random single-stranded cDNA fragments from the original RNA that are flanked by the 5’ and 3’ Illumina adaptors, but that contain an unnatural DNA backbone. The bulky triazole linkage (Figure 1B) can be read through by common DNA polymerases such as OneTaq polymerase (NEB) and Klenow DNA polymerase, albeit inefficiently.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consequently, the click-ligated cDNA can be used directly in a PCR reaction to generate a cDNA library using Primers #3 and #4 (Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00019] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "One current limitation of ClickSeq is the efficiency with which 3’-azido-blocked cDNA fragments are captured during library generation. While approximately 10 % of the 3’-azido-blocked cDNA fragments in Figure 2B could be ligated to an alkyne-modified oligo, the conversion of this triazole-linked ssDNA into a double stranded DNA via the read-through of the triazole-linkage seems to be far less efficient.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00011] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The alignment frequencies and the read coverage over the viral genomes are similar between the ClickSeq and NEBNext data (Table S2 and Figures 3A-C).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00012] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We next searched for recombination events using ViReMa (Viral Recombination Mapper)17, a computational pipeline that reports recombination events both within and between viral and host genomes.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00016] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consequently, filtering of the data is required27; 28 and putative recombination events must be experimentally validated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_01",
+      "source": "s_rna",
+      "target": "op_rt",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Add semi-random primers and AzNTPs - dNTP mixture: RNA strands with shorter blue/green/pink products and N3 labels; incoming arrow from RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.25,
+            0.0,
+            0.42,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, in a process akin to dideoxy (Sanger) sequencing, we supplement the RT-PCR reaction containing dNTPs with small amounts of AzNTPs to randomly terminate chain elongation and release 3’-azido blocked cDNA fragments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_02",
+      "source": "s_rt_reagents",
+      "target": "op_rt",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Add semi-random primers and AzNTPs - dNTP mixture: RNA strands with shorter blue/green/pink products and N3 labels; incoming arrow from RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.25,
+            0.0,
+            0.42,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, in a process akin to dideoxy (Sanger) sequencing, we supplement the RT-PCR reaction containing dNTPs with small amounts of AzNTPs to randomly terminate chain elongation and release 3’-azido blocked cDNA fragments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_03",
+      "source": "op_rt",
+      "target": "s_rt_material",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Add semi-random primers and AzNTPs - dNTP mixture: RNA strands with shorter blue/green/pink products and N3 labels; incoming arrow from RNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.25,
+            0.0,
+            0.42,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, in a process akin to dideoxy (Sanger) sequencing, we supplement the RT-PCR reaction containing dNTPs with small amounts of AzNTPs to randomly terminate chain elongation and release 3’-azido blocked cDNA fragments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_04",
+      "source": "s_rt_material",
+      "target": "op_purify",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Purify single-stranded cDNA: purple RNA strands disappear; two shorter cDNAs retain N3 labels on the left and green/pink segments on the right",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.43,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RT-PCR, unincorporated AzNTPs are removed using standard DNA cleaning/desalting columns.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_05",
+      "source": "op_purify",
+      "target": "s_sscdna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Purify single-stranded cDNA: purple RNA strands disappear; two shorter cDNAs retain N3 labels on the left and green/pink segments on the right",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.43,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After RT-PCR, unincorporated AzNTPs are removed using standard DNA cleaning/desalting columns.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_06",
+      "source": "s_sscdna",
+      "target": "op_click",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Click-ligate alkyne-modified adaptor: orange left-hand adaptor segments with black stacked-bar symbols are adjacent to the N3-labelled blue cDNAs; incoming arrow from purified cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            0.71,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Upon the addition of ascorbic acid (Vitamin C) and tris(benzyltriazolylmethyl)amine-conjugated copper(I) ions (Cu-TBTA) as catalysts, the 3’-azido-blocked cDNA fragments are ‘click-ligated’ to the 5’-hexynyl adaptor via copper(I)-catalysed azide-alkyne cycloaddition11 (Figure 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process generates random single-stranded cDNA fragments from the original RNA that are flanked by the 5’ and 3’ Illumina adaptors, but that contain an unnatural DNA backbone. The bulky triazole linkage (Figure 1B) can be read through by common DNA polymerases such as OneTaq polymerase (NEB) and Klenow DNA polymerase, albeit inefficiently.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_07",
+      "source": "s_click_adaptor",
+      "target": "op_click",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Click-ligate alkyne-modified adaptor: orange left-hand adaptor segments with black stacked-bar symbols are adjacent to the N3-labelled blue cDNAs; incoming arrow from purified cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            0.71,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Upon the addition of ascorbic acid (Vitamin C) and tris(benzyltriazolylmethyl)amine-conjugated copper(I) ions (Cu-TBTA) as catalysts, the 3’-azido-blocked cDNA fragments are ‘click-ligated’ to the 5’-hexynyl adaptor via copper(I)-catalysed azide-alkyne cycloaddition11 (Figure 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process generates random single-stranded cDNA fragments from the original RNA that are flanked by the 5’ and 3’ Illumina adaptors, but that contain an unnatural DNA backbone. The bulky triazole linkage (Figure 1B) can be read through by common DNA polymerases such as OneTaq polymerase (NEB) and Klenow DNA polymerase, albeit inefficiently.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_08",
+      "source": "op_click",
+      "target": "s_click_product",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Click-ligate alkyne-modified adaptor: orange left-hand adaptor segments with black stacked-bar symbols are adjacent to the N3-labelled blue cDNAs; incoming arrow from purified cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            0.71,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Upon the addition of ascorbic acid (Vitamin C) and tris(benzyltriazolylmethyl)amine-conjugated copper(I) ions (Cu-TBTA) as catalysts, the 3’-azido-blocked cDNA fragments are ‘click-ligated’ to the 5’-hexynyl adaptor via copper(I)-catalysed azide-alkyne cycloaddition11 (Figure 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process generates random single-stranded cDNA fragments from the original RNA that are flanked by the 5’ and 3’ Illumina adaptors, but that contain an unnatural DNA backbone. The bulky triazole linkage (Figure 1B) can be read through by common DNA polymerases such as OneTaq polymerase (NEB) and Klenow DNA polymerase, albeit inefficiently.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_09",
+      "source": "s_click_product",
+      "target": "op_pcr",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "PCR amplify: orange/blue/green/pink DNA products; N3 and black junction symbols are no longer drawn; incoming arrow from click-ligation panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.0,
+            0.85,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Rightmost cDNA library panel and incoming arrow after PCR amplify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.92,
+            0.0,
+            1.0,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consequently, the click-ligated cDNA can be used directly in a PCR reaction to generate a cDNA library using Primers #3 and #4 (Table S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_10",
+      "source": "op_pcr",
+      "target": "s_library",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "PCR amplify: orange/blue/green/pink DNA products; N3 and black junction symbols are no longer drawn; incoming arrow from click-ligation panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.0,
+            0.85,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Rightmost cDNA library panel and incoming arrow after PCR amplify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.92,
+            0.0,
+            1.0,
+            0.72
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consequently, the click-ligated cDNA can be used directly in a PCR reaction to generate a cDNA library using Primers #3 and #4 (Table S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "ClickSeq",
+      "operation_ids": [
+        "op_rt",
+        "op_purify",
+        "op_click",
+        "op_pcr"
+      ],
+      "status": "resolved",
+      "rationale": "All four depicted operations apply to the one named ClickSeq route: semi-random-primed RNA library preparation. The full text also uses a template-specific FHV primer for mechanistic demonstrations, but that experiment is not a distinct route in this image. CoVaMa is a downstream bioinformatic method named by a related reference; its abstract does not establish a ClickSeq library-preparation variant. The catalogue’s related TruSeq kit links likewise do not assign this workflow to those kits.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Entire horizontal schematic; left overview caption Generate RNAseq libraries from stochastically terminated 3′-azido-blocked cDNA fragments (ClickSeq); four labelled transformations and one final library; no branch",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consequently, the click-ligated cDNA can be used directly in a PCR reaction to generate a cDNA library using Primers #3 and #4 (Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00008] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A template-specific primer to Flock House Virus (FHV) genomic RNA 1 (Primer #5, Table S1, Figure 2A-B, step 1) was designed that immediately precedes a 23 nt stretch of FHV RNA 1 devoid of adenine.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:clickseq",
+          "locator": "Related kit links and method references",
+          "basis": "text",
+          "support": "reported",
+          "quote": "TruSeq RNA Library Prep Kit v2\nTruSeq Stranded mRNA Library Prep Kit",
+          "bbox": null,
+          "rationale": "These are related catalogue links, not named branches in the attached diagram."
+        },
+        {
+          "source_id": "paper:26408523",
+          "locator": "Abstract only: description of CoVaMa and its input",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we describe a simple bioinformatic pipeline called CoVaMa (Co-Variation Mapper) scripted in Python that detects correlated patterns of mutations in a viral sample. Our algorithm takes NGS alignment data and populates large matrices of contingency tables that correspond to every possible pairwise interaction of nucleotides in the viral genome or amino acids in the chosen open reading frame.",
+          "bbox": null,
+          "rationale": "Only abstract content is available and was checked. This is a background reference listed on the ClickSeq card; the methods field records that scoped relationship, not a claim that CoVaMa describes ClickSeq preparation. The abstract establishes a downstream computational method, not ClickSeq chemistry, reaction order, or a distinct implementation."
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_clickseq_26116762",
+      "source_id": "paper:26116762",
+      "methods": [
+        "ClickSeq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:26116762",
+          "locator": "PubMed metadata: PMID, title and identifiers.doi",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ClickSeq: Fragmentation-Free Next-Generation Sequencing via Click Ligation of Adaptors to Stochastically Terminated 3'-Azido cDNAs.",
+          "bbox": null,
+          "rationale": "Identifies PMID 26116762, DOI 10.1016/j.jmb.2015.06.011. Bibliographic identity is separate from the inspected full-text architecture evidence."
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To begin, RT-PCR is initiated from a random position in the un-fragmented sample RNA using a semi-random primer containing 6 random nucleotides and a constant region corresponding to the Illumina 3’ adaptor (Primer #1, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00005] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, in a process akin to dideoxy (Sanger) sequencing, we supplement the RT-PCR reaction containing dNTPs with small amounts of AzNTPs to randomly terminate chain elongation and release 3’-azido blocked cDNA fragments.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The purified 3’-azido blocked cDNA fragments are then mixed with excess Illumina 5’-adaptor that has been modified with a 5’-hexynyl (alkyne) group (the ‘click-adaptor’: Oligo #2, Table S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Upon the addition of ascorbic acid (Vitamin C) and tris(benzyltriazolylmethyl)amine-conjugated copper(I) ions (Cu-TBTA) as catalysts, the 3’-azido-blocked cDNA fragments are ‘click-ligated’ to the 5’-hexynyl adaptor via copper(I)-catalysed azide-alkyne cycloaddition11 (Figure 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process generates random single-stranded cDNA fragments from the original RNA that are flanked by the 5’ and 3’ Illumina adaptors, but that contain an unnatural DNA backbone. The bulky triazole linkage (Figure 1B) can be read through by common DNA polymerases such as OneTaq polymerase (NEB) and Klenow DNA polymerase, albeit inefficiently.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Consequently, the click-ligated cDNA can be used directly in a PCR reaction to generate a cDNA library using Primers #3 and #4 (Table S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_covama_26408523",
+      "source_id": "paper:26408523",
+      "methods": [
+        "ClickSeq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26408523",
+          "locator": "PubMed metadata: PMID, title and identifiers.doi",
+          "basis": "text",
+          "support": "reported",
+          "quote": "CoVaMa: Co-Variation Mapper for disequilibrium analysis of mutant loci in viral populations using next-generation sequence data.",
+          "bbox": null,
+          "rationale": "Identifies PMID 26408523, DOI 10.1016/j.ymeth.2015.09.021; identity alone provides no reaction-order evidence."
+        },
+        {
+          "source_id": "paper:26408523",
+          "locator": "Abstract only: description of CoVaMa and its input",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we describe a simple bioinformatic pipeline called CoVaMa (Co-Variation Mapper) scripted in Python that detects correlated patterns of mutations in a viral sample. Our algorithm takes NGS alignment data and populates large matrices of contingency tables that correspond to every possible pairwise interaction of nucleotides in the viral genome or amino acids in the chosen open reading frame.",
+          "bbox": null,
+          "rationale": "Only abstract content is available and was checked. This is a background reference listed on the ClickSeq card; the methods field records that scoped relationship, not a claim that CoVaMa describes ClickSeq preparation. The abstract establishes a downstream computational method, not ClickSeq chemistry, reaction order, or a distinct implementation."
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "c_click_junction",
+      "target_id": "operation:op_click",
+      "diagram_observation": "The Click-ligate alkyne-modified adaptor panel places the orange adaptor’s black stacked-bar symbol adjacent to the cDNA’s N3 label and retains those symbols at the interface. The subsequent PCR/library panels omit them; the drawing does not explicitly draw the chemical product of their reaction.",
+      "primary_statement": "The full text specifies copper(I)-catalysed cycloaddition of the cDNA 3′ azido end and the adaptor 5′ hexynyl end. The product is single-stranded adaptor-flanked cDNA containing an unnatural triazole-linked backbone, which DNA polymerases can read through inefficiently. Accordingly op_click and s_click_product use this paper-supported product chemistry rather than assigning separate free azido and alkyne termini to the completed ligation product.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_d837abedd3131e24dba2c490",
+          "locator": "Click-ligate alkyne-modified adaptor: orange left-hand adaptor segments with black stacked-bar symbols are adjacent to the N3-labelled blue cDNAs; incoming arrow from purified cDNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.0,
+            0.71,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00006] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Upon the addition of ascorbic acid (Vitamin C) and tris(benzyltriazolylmethyl)amine-conjugated copper(I) ions (Cu-TBTA) as catalysts, the 3’-azido-blocked cDNA fragments are ‘click-ligated’ to the 5’-hexynyl adaptor via copper(I)-catalysed azide-alkyne cycloaddition11 (Figure 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26116762",
+          "locator": "[b00007] main text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This process generates random single-stranded cDNA fragments from the original RNA that are flanked by the 5’ and 3’ Illumina adaptors, but that contain an unnatural DNA backbone. The bulky triazole linkage (Figure 1B) can be read through by common DNA polymerases such as OneTaq polymerase (NEB) and Klenow DNA polymerase, albeit inefficiently.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "unknowns": []
+}

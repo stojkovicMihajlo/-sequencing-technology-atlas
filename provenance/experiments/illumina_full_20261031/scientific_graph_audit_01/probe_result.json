@@ -1,0 +1,95 @@
+{
+  "audit": "offline_completed_pilot_scientific_graph_probe",
+  "model_calls": 0,
+  "boundary": "Local archived JSON and reacquired byte-identical diagrams only; no remote custody/source-text replay or new reviewer was performed.",
+  "input_artifacts": {
+    "clickseq": {
+      "extraction.json": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/illumina_full_20261031/pilot_02/cards/clickseq/attempt_001/extraction.json",
+        "sha256": "9bf0e3f08606bca9f988c396c91aef6a0a957545755b08c6151aed7b88e38a87"
+      },
+      "review.json": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/illumina_full_20261031/pilot_02/cards/clickseq/attempt_001/review.json",
+        "sha256": "999083f80ed1658e28485c246a538cf4cd171e101dffdbcf4f525f77e0857be1"
+      },
+      "graph.json": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/illumina_full_20261031/pilot_02/cards/clickseq/attempt_001/graph.json",
+        "sha256": "2a55286ebf5d3567b85bcfb2816bd3ee7522b7998f6097c89309914596991ad9"
+      },
+      "candidate_sha256": "d5d9607416e53acc9aaad2b85978cdbacf4c6d8a50e42ef3dbd49bc9473c0132",
+      "review_sha256": "4421a7ba764da13e8c7f47f5c93c2112a8f04653f2462bedd346abaa52494cb1"
+    },
+    "g-t-seq": {
+      "extraction.json": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/illumina_full_20261031/pilot_02/cards/g-t-seq/attempt_001/extraction.json",
+        "sha256": "00abde0a0c779b00601fd6de0f1834be62af45fb2c2c99c3d36cbbd0f54c43d1"
+      },
+      "review.json": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/illumina_full_20261031/pilot_02/cards/g-t-seq/attempt_001/review.json",
+        "sha256": "ab7025a4bc08fb4e0282245587733624bc976491484e48aaf0768a1cc4049c69"
+      },
+      "graph.json": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/illumina_full_20261031/pilot_02/cards/g-t-seq/attempt_001/graph.json",
+        "sha256": "e0781c6c79df56501e9d07633c3459c901e0f27c151e31d81902f9b21f7ea874"
+      },
+      "candidate_sha256": "6eff3d10965b51976b24f4dcac5ea61c06338336200d46718e53174be6648b14",
+      "review_sha256": "d9231748ce224a70ce84f063c0aeade1505fc40c48801ca08b3ddee447bc142f"
+    }
+  },
+  "query_implementation": {
+    "path": "src/genomics_discovery/curation/illumina_graph.py",
+    "sha256": "3b0ba1a5bde65c635ae7b7c8b8af20b732b79d31a27ab15eb03c600250240da2"
+  },
+  "controls": {
+    "clickseq": {
+      "pydantic_graph_validation": "passed",
+      "saved_review_bound_to_exact_candidate": true,
+      "archived_review_outcome_without_source_replay": "supported",
+      "flow_projection_preserves_extracted_endpoints_and_types": true,
+      "unscoped_operations": [],
+      "multi_input_multi_output_operations": []
+    },
+    "g-t-seq": {
+      "pydantic_graph_validation": "passed",
+      "saved_review_bound_to_exact_candidate": true,
+      "archived_review_outcome_without_source_replay": "supported",
+      "flow_projection_preserves_extracted_endpoints_and_types": true,
+      "unscoped_operations": [],
+      "multi_input_multi_output_operations": [
+        "o_sequence"
+      ]
+    }
+  },
+  "cross_branch_incidence_paths": [
+    {
+      "start_id": "illumina:g-t-seq:state:s_transcriptome_product",
+      "unrelated_branch_output_id": "illumina:g-t-seq:state:s_dna_reads",
+      "unrelated_output_is_reachable": true,
+      "path_node_ids": [
+        "illumina:g-t-seq:state:s_transcriptome_product",
+        "illumina:g-t-seq:operation:o_sequence",
+        "illumina:g-t-seq:state:s_dna_reads"
+      ],
+      "path_flow_ids": [
+        "illumina:g-t-seq:flow:f_s_transcriptome_product_to_o_sequence",
+        "illumina:g-t-seq:flow:f_o_sequence_to_s_dna_reads"
+      ],
+      "meaning": "An incidence path exists; source-molecule attribution is not established by this path."
+    },
+    {
+      "start_id": "illumina:g-t-seq:state:s_genome_product",
+      "unrelated_branch_output_id": "illumina:g-t-seq:state:s_rna_reads",
+      "unrelated_output_is_reachable": true,
+      "path_node_ids": [
+        "illumina:g-t-seq:state:s_genome_product",
+        "illumina:g-t-seq:operation:o_sequence",
+        "illumina:g-t-seq:state:s_rna_reads"
+      ],
+      "path_flow_ids": [
+        "illumina:g-t-seq:flow:f_s_genome_product_to_o_sequence",
+        "illumina:g-t-seq:flow:f_o_sequence_to_s_rna_reads"
+      ],
+      "meaning": "An incidence path exists; source-molecule attribution is not established by this path."
+    }
+  ]
+}

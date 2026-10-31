@@ -1,0 +1,1628 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "medip-seq-dip-seq-hmedip-seq",
+  "title": "MeDIP-Seq/DIP-Seq/hMeDIP-Seq",
+  "method_names": [
+    "MeDIP-Seq",
+    "DIP-Seq",
+    "hMeDIP-Seq"
+  ],
+  "scope": "Illumina family-level explanatory schematic: one route from chromatin-associated Methylated DNA through Extract DNA, Fractionate / Denature, Immunoprecipitate and DNA purification to DNA. The leftmost vignette and long assay caption introduce the method; they have no transfer arrow to the main start and are not a separate assay branch. The visible magenta antibodies are affinity-selection reagents, not enzymes acting on chromatin. No end-group chemistry, adapters, library construction or sequencing is drawn. The purified enriched DNA is the depicted endpoint and the source of a subsequent sequencing library described in the catalogue and cited implementations. Antibody targets and implementation evidence are qualified below; the grouped names do not establish alias equivalence or historical lineage.",
+  "inspected_sources": [
+    "card:medip-seq-dip-seq-hmedip-seq",
+    "diagram:asset_e07c921011965208a7743952",
+    "metadata:16007088",
+    "paper:16007088",
+    "metadata:23602152",
+    "paper:23602152",
+    "metadata:24875481",
+    "paper:24875481",
+    "metadata:25697895",
+    "paper:25697895",
+    "metadata:25928765",
+    "paper:25928765",
+    "metadata:25691127",
+    "paper:25691127",
+    "metadata:25690954",
+    "paper:25690954",
+    "metadata:26086966",
+    "paper:26086966"
+  ],
+  "states": [
+    {
+      "id": "s_chromatin",
+      "label": "Methylated DNA in chromatin",
+      "kind": "material",
+      "features": [
+        "Main start shows DNA wrapped around gray nucleosome-like bodies, with red modification symbols.",
+        "The introductory vignette also contains yellow highlighting without a separate legend; no distinct chemistry is assigned to it."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Main workflow start: nucleosome-associated DNA labeled Methylated DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.23,
+            0.21,
+            0.354,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Leftmost chromatin vignette and introductory MeDIP-Seq / DIP-seq caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.12,
+            0.228,
+            0.99
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_extracted_dna",
+      "label": "Extracted modification-bearing genomic DNA",
+      "kind": "material",
+      "features": [
+        "A long dark DNA line bears three red modification marks; the gray nucleosome-like bodies are absent.",
+        "No strand polarity, chemical end group or sequencing adapter is specified."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Extract DNA label, rightward arrow, and isolated marked DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.36,
+            0.4,
+            0.52,
+            0.81
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_denatured_fragments",
+      "label": "Fragmented, denatured DNA mixture",
+      "kind": "material",
+      "features": [
+        "Short separate DNA lines include red-marked and unmarked fragments.",
+        "Single-stranded status follows the Denature caption; no end chemistry is specified.",
+        "Variant-specific interface: in the cited DIP-Seq and hMeDIP-Seq sequencing implementations, adapters have already been ligated before antibody capture. This feature is not drawn and is not assigned to every member of the family."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Experimental Procedures, 5mC/5hmC/5fC/5caC DIP-Seq, [b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "sonicated, adaptor ligated genomic DNA from control or Tdg knockdown mouse ESCs was used as input",
+          "bbox": null,
+          "rationale": "This excerpt identifies the capture substrate; its adapter ligation precedes immunoprecipitation in this implementation."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], pre-immunoprecipitation preparation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "End repair, addition with ‘A’ bases to the 3′ end of the DNA fragments and ligation with Illumina paired ends adapters were then performed similar to the procedure described in DREAM.",
+          "bbox": null,
+          "rationale": "The cited implementation attaches adapters before the subsequent denaturation and antibody capture; the schematic does not draw these end modifications."
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": "The explicit Denature label supplies strand separation; single-line DNA icons alone would not establish single-stranded DNA."
+        }
+      ]
+    },
+    {
+      "id": "s_selected_complexes",
+      "label": "Antibody-associated, modification-enriched DNA fragments",
+      "kind": "material",
+      "features": [
+        "Magenta antibody icons associate with red marks on dark DNA fragments.",
+        "Pale unbound-looking fragments illustrate background at the selection scene; no independently routed branch is drawn.",
+        "The antibody target is 5mC for the catalogue MeDIP example, 5hmC for the cited hMeDIP implementation, and antibody-dependent for DIP-Seq."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-5mC antibodies are incubated with fragmented genomic DNA and precipitated, followed by DNA purification and sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Results, [b00044], paragraph describing genome-wide 5hmC mapping in HEK293T cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We performed genome-wide mapping of 5hmC in HEK293T cells with 5hmC antibody-based hMeDIP-seq (Figure 3A and Supplementary Figure S3).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Results, Preferential enrichment of 5fC/5caC at pericentric heterochromatin in mouse ESCs, [b00017]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To map 5fC/5caC distribution, we performed 5fC and 5caC DIP-Seq experiments in replicates using genomic DNA of control and Tdg-deficient mouse ESCs (Figure S1E and Table S1). We also performed 5mC, 5hmC and mock IgG DIP-Seq experiments using the same genomic DNA (Figure S1E).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], antibody incubation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-5hmC antibody described above",
+          "bbox": null,
+          "rationale": "This is the target-specific antibody used on the denatured DNA in the hMeDIP paragraph."
+        }
+      ]
+    },
+    {
+      "id": "s_purified_dna",
+      "label": "Purified immunoprecipitated DNA",
+      "kind": "material",
+      "features": [
+        "Three short lines at the right are labeled DNA; antibody icons are absent.",
+        "Red marks are omitted at this endpoint. This drawing simplification does not establish removal or conversion of modified bases.",
+        "The DNA fraction is enriched for fragments carrying the antibody-recognized modification and supplies the downstream sequencing library; selection is not perfectly specific.",
+        "The schematic does not identify adapter attachment, amplification state or strand state of this final material."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "DNA purification label, rightward arrow, three short DNA lines and terminal DNA label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.32,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-5mC antibodies are incubated with fragmented genomic DNA and precipitated, followed by DNA purification and sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, Cons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibody specificity and selectivity must be tested to avoid nonspecific interaction",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], DNA recovery",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was separated from beads",
+          "bbox": null,
+          "rationale": "Supports recovery of DNA from the capture complex, without importing the paper’s execution conditions."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], library amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA extracted from agarose was amplified with PCR",
+          "bbox": null,
+          "rationale": "The resulting sequencing library consists of amplified copies of the enriched DNA fragments; size-selection details are outside the depicted architecture."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], sequencing readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequenced DNA tags were mapped to human genome hg18",
+          "bbox": null,
+          "rationale": "Supports connecting sequenced fragment identities to genomic regions, not direct identification of each modified base."
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "DNA purification label, rightward arrow, three short DNA lines and terminal DNA label",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.32,
+            1.0,
+            0.82
+          ],
+          "rationale": "The endpoint omits both antibody icons and red marks. Purification and affinity selection do not depict a base-conversion reaction; absence of a red drawing symbol is not evidence of demodification."
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_extract",
+      "label": "Extract DNA",
+      "description": "Extract DNA from the depicted chromatin-associated input, yielding isolated genomic DNA with the modification symbols retained.",
+      "inputs": [
+        "s_chromatin"
+      ],
+      "outputs": [
+        "s_extracted_dna"
+      ],
+      "mechanism": null,
+      "information_effect": "The extracted DNA carries both genomic sequence and the pre-existing cytosine-modification association; the diagram does not depict a histone-directed ChIP assay.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Main workflow start: nucleosome-associated DNA labeled Methylated DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.23,
+            0.21,
+            0.354,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Extract DNA label, rightward arrow, and isolated marked DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.36,
+            0.4,
+            0.52,
+            0.81
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_fragment_denature",
+      "label": "Fractionate / Denature",
+      "description": "Convert the long extracted DNA into shorter fragments and denature the DNA before antibody selection. The two captions share one fragment panel, so no unshown intermediate operation order is imposed.",
+      "inputs": [
+        "s_extracted_dna"
+      ],
+      "outputs": [
+        "s_denatured_fragments"
+      ],
+      "mechanism": "Fragmentation and strand denaturation are named or illustrated; the schematic gives no fragmentation instrument or denaturation conditions.",
+      "information_effect": "Modified and unmodified DNA fragments enter selection together; no base conversion or sequence-specific probe product is shown.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Extract DNA label, rightward arrow, and isolated marked DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.36,
+            0.4,
+            0.52,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-5mC antibodies are incubated with fragmented genomic DNA and precipitated, followed by DNA purification and sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_immunoprecipitate",
+      "label": "Immunoprecipitate",
+      "description": "Bind and retain DNA fragments using antibodies directed to the selected cytosine modification. The dark red-marked fragments become antibody-associated; pale fragments indicate background outside the retained route.",
+      "inputs": [
+        "s_denatured_fragments"
+      ],
+      "outputs": [
+        "s_selected_complexes"
+      ],
+      "mechanism": "Antibody-dependent affinity enrichment of modification-bearing DNA, with the target qualified by method scope. Antibodies are selection reagents, not newly generated DNA products.",
+      "information_effect": "Selection links genomic fragment identity to the modification recognized by the antibody. It enriches fragments rather than identifying every modified nucleotide; specificity and selectivity require testing.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-5mC antibodies are incubated with fragmented genomic DNA and precipitated, followed by DNA purification and sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, Cons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibody specificity and selectivity must be tested to avoid nonspecific interaction",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Results, [b00044], paragraph describing genome-wide 5hmC mapping in HEK293T cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We performed genome-wide mapping of 5hmC in HEK293T cells with 5hmC antibody-based hMeDIP-seq (Figure 3A and Supplementary Figure S3).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Results, Preferential enrichment of 5fC/5caC at pericentric heterochromatin in mouse ESCs, [b00017]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To map 5fC/5caC distribution, we performed 5fC and 5caC DIP-Seq experiments in replicates using genomic DNA of control and Tdg-deficient mouse ESCs (Figure S1E and Table S1). We also performed 5mC, 5hmC and mock IgG DIP-Seq experiments using the same genomic DNA (Figure S1E).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], antibody incubation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-5hmC antibody described above",
+          "bbox": null,
+          "rationale": "This is the target-specific antibody used on the denatured DNA in the hMeDIP paragraph."
+        }
+      ]
+    },
+    {
+      "id": "op_purify",
+      "label": "DNA purification",
+      "description": "Recover DNA from the immunoprecipitated material, yielding the short DNA fragments drawn at the right without antibody icons. No purification chemistry is specified.",
+      "inputs": [
+        "s_selected_complexes"
+      ],
+      "outputs": [
+        "s_purified_dna"
+      ],
+      "mechanism": null,
+      "information_effect": "Purified captured genomic DNA supplies the downstream library. The cited DIP-Seq and hMeDIP-Seq implementations amplify the captured DNA, so their library molecules are copies of selected genomic fragments. Sequenced tags locate regional modification enrichment; the target association is supplied by antibody capture, not by a depicted base-conversion code. The catalogue describes fragment-scale resolution (approximately 150 bp), density bias and possible nonspecific interaction; this readout does not by itself establish single-base modification states or absolute modified-base fractions. Library construction and sequencing remain text-supported downstream uses, outside the drawn operation graph.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "DNA purification label, rightward arrow, three short DNA lines and terminal DNA label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.32,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-5mC antibodies are incubated with fragmented genomic DNA and precipitated, followed by DNA purification and sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, Cons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Base-pair resolution is lower (~150 bp) as opposed to single base resolution",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, Cons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibody-based selection is biased towards hypermethylated regions",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Experimental Procedures, 5mC/5hmC/5fC/5caC DIP-Seq, [b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Immunoprecipitated DNA was further amplified for high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, Hydroxymethylated DNA immunoprecipitation combined with next generation DNA sequencing (hMeDIP-seq), [b00025]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resultant sequencing libraries were purified with Agencourt AMPure PCR Purification Kit and sent for single-read sequencing on Illumina Genome Analyzer II.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], DNA recovery",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was separated from beads",
+          "bbox": null,
+          "rationale": "Supports recovery of DNA from the capture complex, without importing the paper’s execution conditions."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], library amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA extracted from agarose was amplified with PCR",
+          "bbox": null,
+          "rationale": "The resulting sequencing library consists of amplified copies of the enriched DNA fragments; size-selection details are outside the depicted architecture."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], sequencing readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequenced DNA tags were mapped to human genome hg18",
+          "bbox": null,
+          "rationale": "Supports connecting sequenced fragment identities to genomic regions, not direct identification of each modified base."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], sequencing readout",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Sequenced DNA tags were mapped to human genome hg18",
+          "bbox": null,
+          "rationale": "Mapping sequenced genomic-fragment tags provides locus association. Because selection acts on whole modification-bearing fragments, and no modification-encoding conversion is drawn, sequencing that fraction alone cannot identify every modified nucleotide or establish an absolute modified-base fraction. This is an interpretation of the enrichment architecture, supported also by the catalogue’s fragment-scale resolution statement."
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f1_in",
+      "source": "s_chromatin",
+      "target": "op_extract",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Main workflow start: nucleosome-associated DNA labeled Methylated DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.23,
+            0.21,
+            0.354,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Extract DNA label, rightward arrow, and isolated marked DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.36,
+            0.4,
+            0.52,
+            0.81
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f1_out",
+      "source": "op_extract",
+      "target": "s_extracted_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Main workflow start: nucleosome-associated DNA labeled Methylated DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.23,
+            0.21,
+            0.354,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Extract DNA label, rightward arrow, and isolated marked DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.36,
+            0.4,
+            0.52,
+            0.81
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f2_in",
+      "source": "s_extracted_dna",
+      "target": "op_fragment_denature",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Extract DNA label, rightward arrow, and isolated marked DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.36,
+            0.4,
+            0.52,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f2_out",
+      "source": "op_fragment_denature",
+      "target": "s_denatured_fragments",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Extract DNA label, rightward arrow, and isolated marked DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.36,
+            0.4,
+            0.52,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f3_in",
+      "source": "s_denatured_fragments",
+      "target": "op_immunoprecipitate",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f3_out",
+      "source": "op_immunoprecipitate",
+      "target": "s_selected_complexes",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f4_in",
+      "source": "s_selected_complexes",
+      "target": "op_purify",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "DNA purification label, rightward arrow, three short DNA lines and terminal DNA label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.32,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f4_out",
+      "source": "op_purify",
+      "target": "s_purified_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "DNA purification label, rightward arrow, three short DNA lines and terminal DNA label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.32,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "MeDIP-Seq",
+      "operation_ids": [
+        "op_extract",
+        "op_fragment_denature",
+        "op_immunoprecipitate",
+        "op_purify"
+      ],
+      "status": "resolved",
+      "rationale": "These are the catalogue-supported schematic operations for the anti-5mC example. The 2005 Weber reference supports immunocapture followed by a microarray readout at abstract level; it does not verify a sequencing-library implementation or establish invention of MeDIP-Seq. The sequencing continuation is supported by the catalogue, not that paper.",
+      "evidence": [
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_0/text, description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-5mC antibodies are incubated with fragmented genomic DNA and precipitated, followed by DNA purification and sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:16007088",
+          "locator": "Abstract (available evidence is abstract only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used an immunocapturing approach followed by DNA microarray analysis",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Main workflow start: nucleosome-associated DNA labeled Methylated DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.23,
+            0.21,
+            0.354,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Left introductory MeDIP-Seq and DIP-seq caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.12,
+            0.228,
+            0.99
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "DIP-Seq",
+      "operation_ids": [
+        "op_immunoprecipitate",
+        "op_purify"
+      ],
+      "status": "unresolved",
+      "rationale": "The cited Shen implementation resolves antibody-dependent capture of sonicated, adaptor-ligated genomic DNA, with recovery of captured DNA for amplification and sequencing. Its tested targets include 5fC and 5caC as well as 5mC and 5hmC; these are separate antibody selections, not a single mixed target assay. Capture and DNA recovery map to the two listed schematic operations. Fragmentation is supported, but denaturation within the combined Fractionate / Denature block is not specified in the available core methods paragraph [b00050], which refers to Extended Experimental Procedures. Extraction is shown at family level rather than described as an operation in that paragraph. The exact applicability of those two earlier schematic blocks to this paper is therefore not independently resolved here; their family-level depiction is retained.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Experimental Procedures, 5mC/5hmC/5fC/5caC DIP-Seq, [b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Immunoprecipitated DNA was further amplified for high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Results, Preferential enrichment of 5fC/5caC at pericentric heterochromatin in mouse ESCs, [b00017]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To map 5fC/5caC distribution, we performed 5fC and 5caC DIP-Seq experiments in replicates using genomic DNA of control and Tdg-deficient mouse ESCs (Figure S1E and Table S1). We also performed 5mC, 5hmC and mock IgG DIP-Seq experiments using the same genomic DNA (Figure S1E).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Experimental Procedures, 5mC/5hmC/5fC/5caC DIP-Seq, [b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "sonicated, adaptor ligated genomic DNA from control or Tdg knockdown mouse ESCs was used as input",
+          "bbox": null,
+          "rationale": "This excerpt identifies the capture substrate; its adapter ligation precedes immunoprecipitation in this implementation."
+        }
+      ]
+    },
+    {
+      "method": "hMeDIP-Seq",
+      "operation_ids": [
+        "op_extract",
+        "op_fragment_denature",
+        "op_immunoprecipitate",
+        "op_purify"
+      ],
+      "status": "resolved",
+      "rationale": "Use the common extraction, fragmentation/denaturation, immunoprecipitation and DNA recovery architecture with anti-5hmC selection. Jin et al. explicitly describe fragmented DNA, pre-capture adapter ligation, denaturation, anti-5hmC immunoprecipitation and amplified libraries for sequencing. The main drawing says Methylated DNA and does not draw a separate hydroxymethylated branch; its red symbols must not be assigned universally to 5mC. The catalogue statement that antibody selection does not enrich 5hmC belongs to its anti-5mC example; it cannot describe anti-5hmC selection.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Main workflow start: nucleosome-associated DNA labeled Methylated DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.23,
+            0.21,
+            0.354,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Immunoprecipitate: magenta antibody icons on red-marked DNA; pale background fragments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.69,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, Hydroxymethylated DNA immunoprecipitation combined with next generation DNA sequencing (hMeDIP-seq), [b00025]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resultant sequencing libraries were purified with Agencourt AMPure PCR Purification Kit and sent for single-read sequencing on Illumina Genome Analyzer II.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Results, [b00044], paragraph describing genome-wide 5hmC mapping in HEK293T cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We performed genome-wide mapping of 5hmC in HEK293T cells with 5hmC antibody-based hMeDIP-seq (Figure 3A and Supplementary Figure S3).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], pre-immunoprecipitation preparation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "End repair, addition with ‘A’ bases to the 3′ end of the DNA fragments and ligation with Illumina paired ends adapters were then performed similar to the procedure described in DREAM.",
+          "bbox": null,
+          "rationale": "The cited implementation attaches adapters before the subsequent denaturation and antibody capture; the schematic does not draw these end modifications."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], antibody incubation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-5hmC antibody described above",
+          "bbox": null,
+          "rationale": "This is the target-specific antibody used on the denatured DNA in the hMeDIP paragraph."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], DNA recovery",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was separated from beads",
+          "bbox": null,
+          "rationale": "Supports recovery of DNA from the capture complex, without importing the paper’s execution conditions."
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_16007088",
+      "source_id": "paper:16007088",
+      "methods": [
+        "MeDIP-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:16007088",
+          "locator": "PubMed publication metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Chromosome-wide and promoter-specific analyses identify sites of differential DNA methylation in normal and transformed human cells.",
+          "bbox": null,
+          "rationale": "Bibliographic identity does not verify chemistry, reaction order or priority."
+        },
+        {
+          "source_id": "paper:16007088",
+          "locator": "Abstract (available evidence is abstract only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used an immunocapturing approach followed by DNA microarray analysis",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_1/text, named method reference",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeDIP-Seq: Weber M., Davies J. J., Wittig D., Oakeley E. J., Haase M., et al. (2005) Chromosome-wide and promoter-specific analyses identify sites of differential DNA methylation in normal and transformed human cells. Nat Genet 37: 853-862",
+          "bbox": null,
+          "rationale": "This is the catalogue’s method-to-paper assignment; readout and implementation claims are limited by the independently inspected paper evidence."
+        }
+      ]
+    },
+    {
+      "id": "pm_23602152",
+      "source_id": "paper:23602152",
+      "methods": [
+        "DIP-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:23602152",
+          "locator": "PubMed publication metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis reveals TET- and TDG-dependent 5-methylcytosine oxidation dynamics.",
+          "bbox": null,
+          "rationale": "Bibliographic identity does not verify chemistry, reaction order or priority."
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Experimental Procedures, 5mC/5hmC/5fC/5caC DIP-Seq, [b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Immunoprecipitated DNA was further amplified for high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Results, Preferential enrichment of 5fC/5caC at pericentric heterochromatin in mouse ESCs, [b00017]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To map 5fC/5caC distribution, we performed 5fC and 5caC DIP-Seq experiments in replicates using genomic DNA of control and Tdg-deficient mouse ESCs (Figure S1E and Table S1). We also performed 5mC, 5hmC and mock IgG DIP-Seq experiments using the same genomic DNA (Figure S1E).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_1/text, named method reference",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DIP-Seq: Shen L., Wu H., Diep D., Yamaguchi S., D'Alessio A. C., et al. (2013) Genome-wide analysis reveals TET- and TDG-dependent 5-methylcytosine oxidation dynamics. Cell 153: 692-706",
+          "bbox": null,
+          "rationale": "This is the catalogue’s method-to-paper assignment; readout and implementation claims are limited by the independently inspected paper evidence."
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Experimental Procedures, 5mC/5hmC/5fC/5caC DIP-Seq, [b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "sonicated, adaptor ligated genomic DNA from control or Tdg knockdown mouse ESCs was used as input",
+          "bbox": null,
+          "rationale": "This excerpt identifies the capture substrate; its adapter ligation precedes immunoprecipitation in this implementation."
+        }
+      ]
+    },
+    {
+      "id": "pm_24875481",
+      "source_id": "paper:24875481",
+      "methods": [
+        "hMeDIP-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:24875481",
+          "locator": "PubMed publication metadata: title, PMID and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "TET1 is a maintenance DNA demethylase that prevents methylation spreading in differentiated cells.",
+          "bbox": null,
+          "rationale": "Bibliographic identity does not verify chemistry, reaction order or priority."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, Hydroxymethylated DNA immunoprecipitation combined with next generation DNA sequencing (hMeDIP-seq), [b00025]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resultant sequencing libraries were purified with Agencourt AMPure PCR Purification Kit and sent for single-read sequencing on Illumina Genome Analyzer II.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Results, [b00044], paragraph describing genome-wide 5hmC mapping in HEK293T cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We performed genome-wide mapping of 5hmC in HEK293T cells with 5hmC antibody-based hMeDIP-seq (Figure 3A and Supplementary Figure S3).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_1/text, named method reference",
+          "basis": "text",
+          "support": "reported",
+          "quote": "hMeDIP-Seq: Jin C., Lu Y., Jelinek J., Liang S., Estecio M. R., et al. (2014) TET1 is a maintenance DNA demethylase that prevents methylation spreading in differentiated cells. Nucleic Acids Res 42: 6956-6971",
+          "bbox": null,
+          "rationale": "This is the catalogue’s method-to-paper assignment; readout and implementation claims are limited by the independently inspected paper evidence."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], pre-immunoprecipitation preparation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "End repair, addition with ‘A’ bases to the 3′ end of the DNA fragments and ligation with Illumina paired ends adapters were then performed similar to the procedure described in DREAM.",
+          "bbox": null,
+          "rationale": "The cited implementation attaches adapters before the subsequent denaturation and antibody capture; the schematic does not draw these end modifications."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], antibody incubation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-5hmC antibody described above",
+          "bbox": null,
+          "rationale": "This is the target-specific antibody used on the denatured DNA in the hMeDIP paragraph."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], library amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The DNA extracted from agarose was amplified with PCR",
+          "bbox": null,
+          "rationale": "The resulting sequencing library consists of amplified copies of the enriched DNA fragments; size-selection details are outside the depicted architecture."
+        }
+      ]
+    },
+    {
+      "id": "pm_25697895",
+      "source_id": "paper:25697895",
+      "methods": [
+        "MeDIP-Seq",
+        "DIP-Seq",
+        "hMeDIP-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25697895",
+          "locator": "PubMed publication metadata, title and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Developmental enhancers revealed by extensive DNA methylome maps of zebrafish early embryos.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25697895",
+          "locator": "Supplied abstract only; full text not acquired",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we generate and compare comprehensive DNA methylome maps of zebrafish developing embryos.",
+          "bbox": null,
+          "rationale": "The abstract concerns developmental methylome maps; it does not identify the immunoprecipitation architecture. Method names designate the grouped card for which this is background, not demonstrated use of all three assays."
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_4/text, related publications",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Developmental enhancers revealed by extensive DNA methylome maps of zebrafish early embryos",
+          "bbox": null,
+          "rationale": "Listed under related publications, not among the three named method references."
+        }
+      ]
+    },
+    {
+      "id": "pm_25928765",
+      "source_id": "paper:25928765",
+      "methods": [
+        "MeDIP-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25928765",
+          "locator": "PubMed publication metadata, title and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "coMET: visualisation of regional epigenome-wide association scan results and DNA co-methylation patterns.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25928765",
+          "locator": "Supplied abstract only; full text not acquired",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We developed coMET, an R package and online tool for visualisation of EWAS results in a genomic region of interest.",
+          "bbox": null,
+          "rationale": "The abstract describes visualization software and mentions MeDIP-seq as an accepted data type; this is background, not an assay-development or library-preparation paper."
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_4/text, related publications",
+          "basis": "text",
+          "support": "reported",
+          "quote": "coMET: visualisation of regional epigenome-wide association scan results and DNA co-methylation patterns",
+          "bbox": null,
+          "rationale": "Listed under related publications, not among the three named method references."
+        }
+      ]
+    },
+    {
+      "id": "pm_25691127",
+      "source_id": "paper:25691127",
+      "methods": [
+        "MeDIP-Seq",
+        "DIP-Seq",
+        "hMeDIP-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25691127",
+          "locator": "PubMed publication metadata, title and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Intermediate DNA methylation is a conserved signature of genome regulation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25691127",
+          "locator": "Supplied abstract only; full text not acquired",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we apply integrative and comparative epigenomics to 25 human primary cell and tissue samples.",
+          "bbox": null,
+          "rationale": "The abstract concerns intermediate methylation and gene regulation. It does not establish the depicted laboratory operations; names designate the grouped card’s background association only."
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_4/text, related publications",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Intermediate DNA methylation is a conserved signature of genome regulation",
+          "bbox": null,
+          "rationale": "Listed under related publications, not among the three named method references."
+        }
+      ]
+    },
+    {
+      "id": "pm_25690954",
+      "source_id": "paper:25690954",
+      "methods": [
+        "MeDIP-Seq",
+        "DIP-Seq",
+        "hMeDIP-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25690954",
+          "locator": "PubMed publication metadata, title and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Epigenetic and transcriptional determinants of the human breast.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25690954",
+          "locator": "Supplied abstract only; full text not acquired",
+          "basis": "text",
+          "support": "reported",
+          "quote": "generating epigenomic and transcriptional profiles from primary human breast cell types isolated from disease-free human subjects.",
+          "bbox": null,
+          "rationale": "The abstract concerns epigenomic and transcriptional profiles rather than this assay implementation. Names designate the grouped card’s background association only."
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_4/text, related publications",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Epigenetic and transcriptional determinants of the human breast",
+          "bbox": null,
+          "rationale": "Listed under related publications, not among the three named method references."
+        }
+      ]
+    },
+    {
+      "id": "pm_26086966",
+      "source_id": "paper:26086966",
+      "methods": [
+        "MeDIP-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26086966",
+          "locator": "PubMed publication metadata, title and identifiers (identity only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tet3 mediates stable glucocorticoid-induced alterations in DNA methylation and Dnmt3a/Dkk1 expression in neural progenitors.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26086966",
+          "locator": "Supplied abstract only; full text not acquired",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we investigated the effects of dexamethasone (Dex, a synthetic GC analog) by MeDIP-like genome-wide analysis of differentially methylated DNA regions (DMRs) in NSCs isolated from embryonic rat cortices.",
+          "bbox": null,
+          "rationale": "The abstract reports a MeDIP-like application. It does not independently establish its sequencing-library chemistry or the exact diagram route."
+        },
+        {
+          "source_id": "card:medip-seq-dip-seq-hmedip-seq",
+          "locator": "jcr:content/par/text_4/text, related publications",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tet3 mediates stable glucocorticoid-induced alterations in DNA methylation and Dnmt3a/Dkk1 expression in neural progenitors",
+          "bbox": null,
+          "rationale": "Listed under related publications, not among the three named method references."
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "c_reference_readout",
+      "target_id": "paper:pm_16007088",
+      "diagram_observation": "The introductory figure caption names MeDIP-Seq and DNA immunoprecipitation followed by high throughput sequencing (DIP-seq); the catalogue associates its MeDIP-Seq entry with Weber et al. (2005). The drawing itself ends at DNA.",
+      "primary_statement": "The available Weber abstract describes immunocapturing followed by DNA microarray analysis. Its evidence supports the immunocapture component, but not a sequencing implementation or sequencing-method origin date. The paper match is limited accordingly.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Left introductory assay caption names MeDIP-Seq and high throughput sequencing (DIP-seq)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.67,
+            0.228,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:16007088",
+          "locator": "Abstract (available evidence is abstract only)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used an immunocapturing approach followed by DNA microarray analysis",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "c_antibody_targets",
+      "target_id": "operation:op_immunoprecipitate",
+      "diagram_observation": "The main route says Methylated DNA and depicts one generic red mark with magenta antibodies; no separate 5hmC, 5fC or 5caC branch is drawn.",
+      "primary_statement": "Jin et al. explicitly use anti-5hmC for hMeDIP-Seq, and Shen et al. describe separate modification-directed DIP-Seq experiments including 5fC and 5caC. The operation therefore uses target-dependent antibody selection, not universal anti-5mC specificity, while retaining the original single schematic route.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Main start labeled Methylated DNA; same generic red marks continue into capture",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.23,
+            0.21,
+            0.835,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Generic magenta antibody icons bind red-marked fragments, without an antibody-specific legend",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.75,
+            0.12,
+            0.85,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], antibody incubation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-5hmC antibody described above",
+          "bbox": null,
+          "rationale": "This is the target-specific antibody used on the denatured DNA in the hMeDIP paragraph."
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Results, Preferential enrichment of 5fC/5caC at pericentric heterochromatin in mouse ESCs, [b00017]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To map 5fC/5caC distribution, we performed 5fC and 5caC DIP-Seq experiments in replicates using genomic DNA of control and Tdg-deficient mouse ESCs (Figure S1E and Table S1). We also performed 5mC, 5hmC and mock IgG DIP-Seq experiments using the same genomic DNA (Figure S1E).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "c_capture_interface",
+      "target_id": "state:s_denatured_fragments",
+      "diagram_observation": "Short fragments at Fractionate / Denature are drawn as plain lines with red marks. Adapters, 3′ ends and library preparation are not drawn, so the figure does not place adapter attachment before or after capture.",
+      "primary_statement": "Shen et al. use sonicated, adaptor-ligated genomic DNA as DIP input. Jin et al. report end repair, 3′ A addition and Illumina adapter ligation before denaturation and anti-5hmC capture. The state records the pre-capture adapter interface only for these cited sequencing implementations; the drawing is not expanded into an unshown universal library recipe.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e07c921011965208a7743952",
+          "locator": "Arrow to short DNA lines; two-line caption Fractionate / Denature",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.535,
+            0.33,
+            0.681,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23602152",
+          "locator": "Experimental Procedures, 5mC/5hmC/5fC/5caC DIP-Seq, [b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "sonicated, adaptor ligated genomic DNA from control or Tdg knockdown mouse ESCs was used as input",
+          "bbox": null,
+          "rationale": "This excerpt identifies the capture substrate; its adapter ligation precedes immunoprecipitation in this implementation."
+        },
+        {
+          "source_id": "paper:24875481",
+          "locator": "Materials and Methods, hMeDIP-seq, [b00025], pre-immunoprecipitation preparation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "End repair, addition with ‘A’ bases to the 3′ end of the DNA fragments and ligation with Illumina paired ends adapters were then performed similar to the procedure described in DREAM.",
+          "bbox": null,
+          "rationale": "The cited implementation attaches adapters before the subsequent denaturation and antibody capture; the schematic does not draw these end modifications."
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u_library_interface",
+      "question": "Which complete library-construction implementation should be attached to the final DNA endpoint for the grouped family? The figure ends at DNA. The cited DIP/hMeDIP papers support adapters already present before capture, but no universal library-preparation order or complete anti-5mC sequencing protocol follows from this drawing; a specific sequencing protocol would be needed for that extension.",
+      "blocking": false,
+      "affected_ids": [
+        "state:s_denatured_fragments",
+        "state:s_selected_complexes",
+        "state:s_purified_dna",
+        "operation:op_purify"
+      ]
+    },
+    {
+      "id": "u_medip_fulltext",
+      "question": "What detailed immunocapture chemistry and preparation order did Weber et al. use? Only the abstract is supplied, and it reports microarray analysis. Full text would be needed for any protocol-specific or historical claim; this does not block the catalogue-supported schematic.",
+      "blocking": false,
+      "affected_ids": [
+        "operation:op_immunoprecipitate",
+        "operation:op_purify"
+      ]
+    },
+    {
+      "id": "u_dip_precapture_scope",
+      "question": "Does the cited Shen DIP-Seq implementation include the denaturation step within Illumina’s combined Fractionate / Denature block? The inspected core Experimental Procedures [b00050] specify sonicated, adaptor-ligated DNA but delegate detailed DIP procedures to Extended Experimental Procedures. That supplement or its expressly cited protocol would be needed to verify this variant-specific denaturation step; the family-level depicted block remains intact.",
+      "blocking": false,
+      "affected_ids": [
+        "operation:op_fragment_denature",
+        "scope:DIP-Seq"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2873 @@
+{
+  "format_version": "illumina_schematic_graph/1.0",
+  "status": "research_needed",
+  "semantics": "Source-supported architecture with explicit primary-paper corrections; literal diagram observations retained, no automatic historical edges.",
+  "record_id": "pat-chip",
+  "candidate_sha256": "6c3c2207f0b0fba45803b2dbb634f0c1dddc57b37211ecb46851762fbce7d967",
+  "review_sha256": "527b46d246e0808b5166c35ab56741516cff4363bf27c242849adc70f763d62b",
+  "nodes": [
+    {
+      "id": "illumina:pat-chip",
+      "node_type": "source_workflow",
+      "record_id": "pat-chip",
+      "title": "PAT-ChIP",
+      "scope": "Illumina PAT-ChIP explanatory schematic: one linear route from FFPE-fixed pathology chromatin through deparaffination/rehydration, MNase digestion, sonication, immunoprecipitation/elution, crosslink reversal/proteinase K digestion and purification to DNA. The separate far-left PAT-ChIP title illustration is descriptive, not an additional operation or branch. The diagram has no library-preparation or sequencing block, no legend assigning chemical identities to colors, and no specified DNA end groups. The card mentions FiT-seq as a distinct refinement, but the supplied abstract does not resolve its operation-by-operation relationship to this route. Downstream library/readout interpretation is limited to DNA recovered by chromatin-target enrichment."
+    },
+    {
+      "id": "illumina:pat-chip:state:s_ffpe",
+      "node_type": "state",
+      "original": {
+        "id": "s_ffpe",
+        "label": "FFPE-fixed chromatin",
+        "kind": "material",
+        "features": [
+          "Chromatin from formalin-fixed, paraffin-embedded pathology tissue; DNA remains associated with chromatin proteins.",
+          "The yellow nucleosome drawing at far left captions the assay and is not connected as a separate input or branch."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosome array labeled \"FFPE-fixed chromatin\"; the separate far-left yellow nucleosome illustration is captioned \"Pathology tissue chromatin immunoprecipitation (PAT-ChIP)\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:state:s_rehydrated",
+      "node_type": "state",
+      "original": {
+        "id": "s_rehydrated",
+        "label": "Deparaffinated, rehydrated chromatin",
+        "kind": "material",
+        "features": [
+          "Intermediate boundary between removal of paraffin/rehydration and MNase digestion; no separate isolated intermediate is drawn."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Deparaffination and rehydration\", between \"FFPE-fixed chromatin\" and the chromatin illustration labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "inferred",
+            "quote": null,
+            "bbox": null,
+            "rationale": "The named deparaffination/rehydration arrow precedes the MNase-labeled chromatin; this boundary separates the two depicted operations."
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:state:s_digested",
+      "node_type": "state",
+      "original": {
+        "id": "s_digested",
+        "label": "MNase-digested chromatin",
+        "kind": "material",
+        "features": [
+          "Chromatin has undergone nuclease digestion and is still depicted as DNA associated with nucleosomal particles.",
+          "Orange circles accompany the MNase digestion label; no legend specifies their chemistry, and no DNA end groups are drawn."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"MNase digestion\": orange circles appear around nucleosomal chromatin; the rightward arrow leads to a shorter chromatin illustration before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:state:s_soluble",
+      "node_type": "state",
+      "original": {
+        "id": "s_soluble",
+        "label": "Soluble extract",
+        "kind": "material",
+        "features": [
+          "Soluble chromatin fragments after sonication, depicted as nucleosomal particles with attached DNA.",
+          "The icon does not specify a uniform fragment length or an exclusively mononucleosomal preparation."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Sonicate\", from the chromatin illustration after \"MNase digestion\" to the nucleosomal fragments labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:state:s_enriched",
+      "node_type": "state",
+      "original": {
+        "id": "s_enriched",
+        "label": "Immunoprecipitated and eluted chromatin",
+        "kind": "material",
+        "features": [
+          "Selected chromatin retains DNA associated with chromatin protein before crosslink reversal.",
+          "The isolated nucleosome-like output is schematic; the figure names no antibody, epitope, or histone modification."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"Soluble extract\" and pink antibody-like capture illustration; rightward arrow labeled \"Immunoprecipitate and chromatin elution\" leads to a single nucleosome-like particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:state:s_released_dna",
+      "node_type": "state",
+      "original": {
+        "id": "s_released_dna",
+        "label": "DNA after crosslink reversal and proteinase K digestion",
+        "kind": "material",
+        "features": [
+          "DNA is depicted as a blue line after the protein-associated particle; it is no longer shown wrapped around a nucleosome.",
+          "No strand count, end polarity, or chemical modification is specified by the line icon."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, isolated nucleosome-like particle and pink/green enzyme-like icon above the arrow labeled \"Reverse crosslink and proteinase K digestion\"; output is a blue line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:state:s_purified_dna",
+      "node_type": "state",
+      "original": {
+        "id": "s_purified_dna",
+        "label": "Purified DNA",
+        "kind": "material",
+        "features": [
+          "Terminal product explicitly labeled DNA; derives from the immunoprecipitated chromatin fraction.",
+          "Downstream ChIP-seq uses the recovered DNA sequence to locate genomic regions associated with the selected histone modification or transcription factor. This is a library interface interpretation; library construction and sequencing are not depicted.",
+          "A sequencing library would represent the recovered, antibody-enriched DNA fragments, not direct sequencing of histone marks or proteins. Enrichment does not establish perfect target specificity or unbiased recovery."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right end: blue line before the arrow labeled \"Purification\"; terminal blue line labeled \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): PAT-ChIP and genome-wide target analyses",
+            "basis": "text",
+            "support": "inferred",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": "Combined with the figure's immunoprecipitation-to-DNA route and the abstract's ChIP-seq definition, this supports interpreting recovered DNA as the genomic carrier of the selection history. No library chemistry or specificity guarantee follows."
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Limitations / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Sonication may introduce sequence bias 1",
+            "bbox": null,
+            "rationale": "This is the catalogue warning. The background paper reports chromatin-dependent shearing and recovery effects in yeast; it does not quantify bias in PAT-ChIP or establish universal sequence-specific sonication bias."
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:operation:o_deparaffinate",
+      "node_type": "operation",
+      "original": {
+        "id": "o_deparaffinate",
+        "label": "Deparaffination and rehydration",
+        "description": "Remove the paraffin embedding medium from the FFPE material and rehydrate it, producing chromatin-containing material for the depicted MNase digestion.",
+        "inputs": [
+          "s_ffpe"
+        ],
+        "outputs": [
+          "s_rehydrated"
+        ],
+        "mechanism": "The card specifies dewaxing with the xylene substitute Histolemon, followed by MNase digestion and sonication; the diagram groups deparaffination and rehydration into one arrow.",
+        "information_effect": "Changes specimen preparation state while retaining chromatin as the material to be enriched.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Deparaffination and rehydration\", between \"FFPE-fixed chromatin\" and the chromatin illustration labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:operation:o_mnase",
+      "node_type": "operation",
+      "original": {
+        "id": "o_mnase",
+        "label": "MNase digestion",
+        "description": "Digest the DNA component of rehydrated chromatin, producing fragmented chromatin that remains protein-associated and proceeds to sonication.",
+        "inputs": [
+          "s_rehydrated"
+        ],
+        "outputs": [
+          "s_digested"
+        ],
+        "mechanism": "MNase-mediated digestion is explicitly named. The schematic does not specify cleavage sites, DNA end chemistry, or an enzyme concentration.",
+        "information_effect": "Genomic DNA remains associated with chromatin proteins; the drawing does not establish an exact fragment size or nucleosome count.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"MNase digestion\": orange circles appear around nucleosomal chromatin; the rightward arrow leads to a shorter chromatin illustration before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:operation:o_sonicate",
+      "node_type": "operation",
+      "original": {
+        "id": "o_sonicate",
+        "label": "Sonicate",
+        "description": "Sonicate the MNase-digested chromatin to obtain the material labeled soluble extract, still containing chromatin protein and DNA.",
+        "inputs": [
+          "s_digested"
+        ],
+        "outputs": [
+          "s_soluble"
+        ],
+        "mechanism": "Sonication follows MNase digestion in the depicted route; together they prepare soluble fragmented chromatin.",
+        "information_effect": "Produces soluble chromatin for immunoprecipitation. The card warns that sonication may introduce sequence bias; neither the figure nor the background yeast study establishes the magnitude of a PAT-ChIP-specific bias.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Sonicate\", from the chromatin illustration after \"MNase digestion\" to the nucleosomal fragments labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Limitations / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Sonication may introduce sequence bias 1",
+            "bbox": null,
+            "rationale": "This is the catalogue warning. The background paper reports chromatin-dependent shearing and recovery effects in yeast; it does not quantify bias in PAT-ChIP or establish universal sequence-specific sonication bias."
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:operation:o_immunoprecipitate",
+      "node_type": "operation",
+      "original": {
+        "id": "o_immunoprecipitate",
+        "label": "Immunoprecipitate and chromatin elution",
+        "description": "Enrich a selected fraction of the soluble chromatin by immunoprecipitation and elute that chromatin, yielding protein-associated DNA for crosslink reversal.",
+        "inputs": [
+          "s_soluble"
+        ],
+        "outputs": [
+          "s_enriched"
+        ],
+        "mechanism": "The immunoprecipitation label and pink antibody-like icon support affinity selection. Capture and elution are retained as the single combined operation shown; support chemistry and antibody specificity are unspecified.",
+        "information_effect": "Selection enriches DNA fragments associated with the immunoprecipitated chromatin target. The PAT-ChIP abstract supports histone modifications and transcription factor binding as target classes, without identifying the target in this drawing.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"Soluble extract\" and pink antibody-like capture illustration; rightward arrow labeled \"Immunoprecipitate and chromatin elution\" leads to a single nucleosome-like particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): biological readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": "The supplied abstract supports these target classes and the genome-wide readout; full protocol text was not supplied or inspected."
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:operation:o_release_dna",
+      "node_type": "operation",
+      "original": {
+        "id": "o_release_dna",
+        "label": "Reverse crosslink and proteinase K digestion",
+        "description": "Reverse fixation crosslinks and digest proteins in the eluted chromatin, converting the protein-associated particles into released DNA depicted as a blue line.",
+        "inputs": [
+          "s_enriched"
+        ],
+        "outputs": [
+          "s_released_dna"
+        ],
+        "mechanism": "Crosslink reversal and proteinase K digestion are explicitly grouped under one arrow; the adjacent enzyme-like symbol is an auxiliary reagent icon, not a separate retained material branch.",
+        "information_effect": "Removes the protein carrier while DNA retains genomic sequence and membership in the selected fraction. The protein or histone modification itself is not the sequenced product.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, isolated nucleosome-like particle and pink/green enzyme-like icon above the arrow labeled \"Reverse crosslink and proteinase K digestion\"; output is a blue line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Nucleosome-like output of immunoprecipitation through the arrow labeled \"Reverse crosslink and proteinase K digestion\" to a blue DNA line.",
+            "basis": "image",
+            "support": "inferred",
+            "quote": null,
+            "bbox": null,
+            "rationale": "The depicted change from protein-associated DNA to a DNA line indicates removal of the protein association. The retained information is the recovered DNA sequence and its membership in the enriched fraction, rather than physical preservation of the histone mark or protein."
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:operation:o_purify",
+      "node_type": "operation",
+      "original": {
+        "id": "o_purify",
+        "label": "Purification",
+        "description": "Purify the released DNA to produce the terminal material labeled DNA.",
+        "inputs": [
+          "s_released_dna"
+        ],
+        "outputs": [
+          "s_purified_dna"
+        ],
+        "mechanism": null,
+        "information_effect": "Supplies selected DNA for downstream ChIP-seq library preparation and genomic readout; the figure does not describe that library preparation.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right end: blue line before the arrow labeled \"Purification\"; terminal blue line labeled \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): PAT-ChIP definition and genome-wide target analyses",
+            "basis": "text",
+            "support": "inferred",
+            "quote": "a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": "The abstract identifies ChIP-seq as a downstream analysis; the diagram terminates at DNA. Together they support a DNA-to-library interface without adding an unshown library-construction operation."
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:paper_match:p_22082985",
+      "node_type": "paper_match",
+      "original": {
+        "id": "p_22082985",
+        "source_id": "paper:22082985",
+        "methods": [
+          "PAT-ChIP"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_architecture",
+        "evidence": [
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): biological readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": "The supplied abstract supports these target classes and the genome-wide readout; full protocol text was not supplied or inspected."
+          },
+          {
+            "source_id": "metadata:22082985",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Chromatin immunoprecipitation and high-throughput sequencing from paraffin-embedded pathology tissue.",
+            "bbox": null,
+            "rationale": "PMID 22082985 and DOI 10.1038/nprot.2011.406 identify the PAT-ChIP protocol. Only its supplied abstract was inspected; metadata does not verify step chemistry or historical priority."
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:paper_match:p_27111282",
+      "node_type": "paper_match",
+      "original": {
+        "id": "p_27111282",
+        "source_id": "paper:27111282",
+        "methods": [
+          "FiT-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_variant",
+        "evidence": [
+          {
+            "source_id": "paper:27111282",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe fixed-tissue chromatin immunoprecipitation sequencing (FiT-seq), a method that enables reliable extraction of soluble chromatin from formalin-fixed paraffin-embedded (FFPE) tissue samples for accurate detection of histone marks.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "metadata:27111282",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Chromatin immunoprecipitation from fixed clinical tissues reveals tumor-specific enhancer profiles.",
+            "bbox": null,
+            "rationale": "PMID 27111282 and DOI 10.1038/nm.4085 identify the FiT-seq paper. Supplied content is abstract only; it does not verify the detailed refinements or the applicability of each drawn PAT-ChIP operation."
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:paper_match:p_19693276",
+      "node_type": "paper_match",
+      "original": {
+        "id": "p_19693276",
+        "source_id": "paper:19693276",
+        "methods": [
+          "PAT-ChIP"
+        ],
+        "assessment": "content_checked",
+        "relationship": "background",
+        "evidence": [
+          {
+            "source_id": "paper:19693276",
+            "locator": "Full text, abstract block b00003",
+            "basis": "text",
+            "support": "reported",
+            "quote": "We initially discovered this effect at the Saccharomyces cerevisiae HMR locus, where we found that silenced chromatin was refractory to shearing, relative to euchromatin.",
+            "bbox": null,
+            "rationale": "The abstract in the available full-text source supports chromatin-dependent recovery/shearing bias as background. This yeast study does not describe the scoped PAT-ChIP method."
+          },
+          {
+            "source_id": "paper:19693276",
+            "locator": "Full text, Discussion, block b00046",
+            "basis": "text",
+            "support": "reported",
+            "quote": "These results suggested that chromatin states can also influence input-Seq coverage through effects other than shearing.",
+            "bbox": null,
+            "rationale": "This bounded body-text reading distinguishes chromatin recovery bias from a shearing-only explanation. It remains background evidence from yeast rather than validation of the PAT-ChIP or FiT-seq extraction steps."
+          },
+          {
+            "source_id": "metadata:19693276",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Impact of chromatin structures on DNA processing for genomic analyses.",
+            "bbox": null,
+            "rationale": "PMID 19693276 and DOI 10.1371/journal.pone.0006700 identify the background study."
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:paper_match:p_23986147",
+      "node_type": "paper_match",
+      "original": {
+        "id": "p_23986147",
+        "source_id": "paper:23986147",
+        "methods": [
+          "PAT-ChIP"
+        ],
+        "assessment": "content_checked",
+        "relationship": "background",
+        "evidence": [
+          {
+            "source_id": "paper:23986147",
+            "locator": "Abstract (supplied abstract only): review purpose",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this review, we highlight the merits and characteristics of ChIP-seq and RNA-seq and discuss the use of the genome-wide analysis in kidney disease.",
+            "bbox": null,
+            "rationale": "Related review provides general context, not PAT-ChIP or FiT-seq architecture. PAT-ChIP here is the catalogue context being assessed; this background paper does not describe the scoped method."
+          },
+          {
+            "source_id": "metadata:23986147",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Revolution of nephrology research by deep sequencing: ChIP-seq and RNA-seq.",
+            "bbox": null,
+            "rationale": "PMID 23986147 and DOI 10.1038/ki.2013.321 identify the related review; its full text was not supplied or inspected."
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:state:s_ffpe",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:state:s_rehydrated",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:state:s_digested",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:state:s_soluble",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:state:s_enriched",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:state:s_released_dna",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:state:s_purified_dna",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:operation:o_deparaffinate",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:operation:o_mnase",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:operation:o_sonicate",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:operation:o_immunoprecipitate",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:operation:o_release_dna",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:operation:o_purify",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:paper_match:p_22082985",
+      "kind": "has_paper_match"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:paper_match:p_27111282",
+      "kind": "has_paper_match"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:paper_match:p_19693276",
+      "kind": "has_paper_match"
+    },
+    {
+      "source": "illumina:pat-chip",
+      "target": "illumina:pat-chip:paper_match:p_23986147",
+      "kind": "has_paper_match"
+    },
+    {
+      "id": "illumina:pat-chip:flow:f1_input",
+      "source": "illumina:pat-chip:state:s_ffpe",
+      "target": "illumina:pat-chip:operation:o_deparaffinate",
+      "kind": "material_input",
+      "original": {
+        "id": "f1_input",
+        "source": "s_ffpe",
+        "target": "o_deparaffinate",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Deparaffination and rehydration\", between \"FFPE-fixed chromatin\" and the chromatin illustration labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f1_output",
+      "source": "illumina:pat-chip:operation:o_deparaffinate",
+      "target": "illumina:pat-chip:state:s_rehydrated",
+      "kind": "material_output",
+      "original": {
+        "id": "f1_output",
+        "source": "o_deparaffinate",
+        "target": "s_rehydrated",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Deparaffination and rehydration\", between \"FFPE-fixed chromatin\" and the chromatin illustration labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f2_input",
+      "source": "illumina:pat-chip:state:s_rehydrated",
+      "target": "illumina:pat-chip:operation:o_mnase",
+      "kind": "material_input",
+      "original": {
+        "id": "f2_input",
+        "source": "s_rehydrated",
+        "target": "o_mnase",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"MNase digestion\": orange circles appear around nucleosomal chromatin; the rightward arrow leads to a shorter chromatin illustration before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f2_output",
+      "source": "illumina:pat-chip:operation:o_mnase",
+      "target": "illumina:pat-chip:state:s_digested",
+      "kind": "material_output",
+      "original": {
+        "id": "f2_output",
+        "source": "o_mnase",
+        "target": "s_digested",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"MNase digestion\": orange circles appear around nucleosomal chromatin; the rightward arrow leads to a shorter chromatin illustration before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f3_input",
+      "source": "illumina:pat-chip:state:s_digested",
+      "target": "illumina:pat-chip:operation:o_sonicate",
+      "kind": "material_input",
+      "original": {
+        "id": "f3_input",
+        "source": "s_digested",
+        "target": "o_sonicate",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Sonicate\", from the chromatin illustration after \"MNase digestion\" to the nucleosomal fragments labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f3_output",
+      "source": "illumina:pat-chip:operation:o_sonicate",
+      "target": "illumina:pat-chip:state:s_soluble",
+      "kind": "material_output",
+      "original": {
+        "id": "f3_output",
+        "source": "o_sonicate",
+        "target": "s_soluble",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Sonicate\", from the chromatin illustration after \"MNase digestion\" to the nucleosomal fragments labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f4_input",
+      "source": "illumina:pat-chip:state:s_soluble",
+      "target": "illumina:pat-chip:operation:o_immunoprecipitate",
+      "kind": "material_input",
+      "original": {
+        "id": "f4_input",
+        "source": "s_soluble",
+        "target": "o_immunoprecipitate",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"Soluble extract\" and pink antibody-like capture illustration; rightward arrow labeled \"Immunoprecipitate and chromatin elution\" leads to a single nucleosome-like particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f4_output",
+      "source": "illumina:pat-chip:operation:o_immunoprecipitate",
+      "target": "illumina:pat-chip:state:s_enriched",
+      "kind": "material_output",
+      "original": {
+        "id": "f4_output",
+        "source": "o_immunoprecipitate",
+        "target": "s_enriched",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"Soluble extract\" and pink antibody-like capture illustration; rightward arrow labeled \"Immunoprecipitate and chromatin elution\" leads to a single nucleosome-like particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f5_input",
+      "source": "illumina:pat-chip:state:s_enriched",
+      "target": "illumina:pat-chip:operation:o_release_dna",
+      "kind": "material_input",
+      "original": {
+        "id": "f5_input",
+        "source": "s_enriched",
+        "target": "o_release_dna",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, isolated nucleosome-like particle and pink/green enzyme-like icon above the arrow labeled \"Reverse crosslink and proteinase K digestion\"; output is a blue line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f5_output",
+      "source": "illumina:pat-chip:operation:o_release_dna",
+      "target": "illumina:pat-chip:state:s_released_dna",
+      "kind": "material_output",
+      "original": {
+        "id": "f5_output",
+        "source": "o_release_dna",
+        "target": "s_released_dna",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, isolated nucleosome-like particle and pink/green enzyme-like icon above the arrow labeled \"Reverse crosslink and proteinase K digestion\"; output is a blue line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f6_input",
+      "source": "illumina:pat-chip:state:s_released_dna",
+      "target": "illumina:pat-chip:operation:o_purify",
+      "kind": "material_input",
+      "original": {
+        "id": "f6_input",
+        "source": "s_released_dna",
+        "target": "o_purify",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right end: blue line before the arrow labeled \"Purification\"; terminal blue line labeled \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:pat-chip:flow:f6_output",
+      "source": "illumina:pat-chip:operation:o_purify",
+      "target": "illumina:pat-chip:state:s_purified_dna",
+      "kind": "material_output",
+      "original": {
+        "id": "f6_output",
+        "source": "o_purify",
+        "target": "s_purified_dna",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right end: blue line before the arrow labeled \"Purification\"; terminal blue line labeled \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    }
+  ],
+  "workflow": {
+    "format_version": "illumina_diagram/1.0",
+    "record_id": "pat-chip",
+    "title": "PAT-ChIP",
+    "method_names": [
+      "PAT-ChIP",
+      "FiT-seq"
+    ],
+    "scope": "Illumina PAT-ChIP explanatory schematic: one linear route from FFPE-fixed pathology chromatin through deparaffination/rehydration, MNase digestion, sonication, immunoprecipitation/elution, crosslink reversal/proteinase K digestion and purification to DNA. The separate far-left PAT-ChIP title illustration is descriptive, not an additional operation or branch. The diagram has no library-preparation or sequencing block, no legend assigning chemical identities to colors, and no specified DNA end groups. The card mentions FiT-seq as a distinct refinement, but the supplied abstract does not resolve its operation-by-operation relationship to this route. Downstream library/readout interpretation is limited to DNA recovered by chromatin-target enrichment.",
+    "inspected_sources": [
+      "card:pat-chip",
+      "diagram:asset_993d08b142a57d72b39a29d3",
+      "metadata:22082985",
+      "paper:22082985",
+      "metadata:27111282",
+      "paper:27111282",
+      "metadata:19693276",
+      "paper:19693276",
+      "metadata:23986147",
+      "paper:23986147"
+    ],
+    "states": [
+      {
+        "id": "s_ffpe",
+        "label": "FFPE-fixed chromatin",
+        "kind": "material",
+        "features": [
+          "Chromatin from formalin-fixed, paraffin-embedded pathology tissue; DNA remains associated with chromatin proteins.",
+          "The yellow nucleosome drawing at far left captions the assay and is not connected as a separate input or branch."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosome array labeled \"FFPE-fixed chromatin\"; the separate far-left yellow nucleosome illustration is captioned \"Pathology tissue chromatin immunoprecipitation (PAT-ChIP)\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "s_rehydrated",
+        "label": "Deparaffinated, rehydrated chromatin",
+        "kind": "material",
+        "features": [
+          "Intermediate boundary between removal of paraffin/rehydration and MNase digestion; no separate isolated intermediate is drawn."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Deparaffination and rehydration\", between \"FFPE-fixed chromatin\" and the chromatin illustration labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "inferred",
+            "quote": null,
+            "bbox": null,
+            "rationale": "The named deparaffination/rehydration arrow precedes the MNase-labeled chromatin; this boundary separates the two depicted operations."
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "s_digested",
+        "label": "MNase-digested chromatin",
+        "kind": "material",
+        "features": [
+          "Chromatin has undergone nuclease digestion and is still depicted as DNA associated with nucleosomal particles.",
+          "Orange circles accompany the MNase digestion label; no legend specifies their chemistry, and no DNA end groups are drawn."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"MNase digestion\": orange circles appear around nucleosomal chromatin; the rightward arrow leads to a shorter chromatin illustration before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "s_soluble",
+        "label": "Soluble extract",
+        "kind": "material",
+        "features": [
+          "Soluble chromatin fragments after sonication, depicted as nucleosomal particles with attached DNA.",
+          "The icon does not specify a uniform fragment length or an exclusively mononucleosomal preparation."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Sonicate\", from the chromatin illustration after \"MNase digestion\" to the nucleosomal fragments labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "s_enriched",
+        "label": "Immunoprecipitated and eluted chromatin",
+        "kind": "material",
+        "features": [
+          "Selected chromatin retains DNA associated with chromatin protein before crosslink reversal.",
+          "The isolated nucleosome-like output is schematic; the figure names no antibody, epitope, or histone modification."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"Soluble extract\" and pink antibody-like capture illustration; rightward arrow labeled \"Immunoprecipitate and chromatin elution\" leads to a single nucleosome-like particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "s_released_dna",
+        "label": "DNA after crosslink reversal and proteinase K digestion",
+        "kind": "material",
+        "features": [
+          "DNA is depicted as a blue line after the protein-associated particle; it is no longer shown wrapped around a nucleosome.",
+          "No strand count, end polarity, or chemical modification is specified by the line icon."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, isolated nucleosome-like particle and pink/green enzyme-like icon above the arrow labeled \"Reverse crosslink and proteinase K digestion\"; output is a blue line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "s_purified_dna",
+        "label": "Purified DNA",
+        "kind": "material",
+        "features": [
+          "Terminal product explicitly labeled DNA; derives from the immunoprecipitated chromatin fraction.",
+          "Downstream ChIP-seq uses the recovered DNA sequence to locate genomic regions associated with the selected histone modification or transcription factor. This is a library interface interpretation; library construction and sequencing are not depicted.",
+          "A sequencing library would represent the recovered, antibody-enriched DNA fragments, not direct sequencing of histone marks or proteins. Enrichment does not establish perfect target specificity or unbiased recovery."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right end: blue line before the arrow labeled \"Purification\"; terminal blue line labeled \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): PAT-ChIP and genome-wide target analyses",
+            "basis": "text",
+            "support": "inferred",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": "Combined with the figure's immunoprecipitation-to-DNA route and the abstract's ChIP-seq definition, this supports interpreting recovered DNA as the genomic carrier of the selection history. No library chemistry or specificity guarantee follows."
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Limitations / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Sonication may introduce sequence bias 1",
+            "bbox": null,
+            "rationale": "This is the catalogue warning. The background paper reports chromatin-dependent shearing and recovery effects in yeast; it does not quantify bias in PAT-ChIP or establish universal sequence-specific sonication bias."
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "id": "o_deparaffinate",
+        "label": "Deparaffination and rehydration",
+        "description": "Remove the paraffin embedding medium from the FFPE material and rehydrate it, producing chromatin-containing material for the depicted MNase digestion.",
+        "inputs": [
+          "s_ffpe"
+        ],
+        "outputs": [
+          "s_rehydrated"
+        ],
+        "mechanism": "The card specifies dewaxing with the xylene substitute Histolemon, followed by MNase digestion and sonication; the diagram groups deparaffination and rehydration into one arrow.",
+        "information_effect": "Changes specimen preparation state while retaining chromatin as the material to be enriched.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Deparaffination and rehydration\", between \"FFPE-fixed chromatin\" and the chromatin illustration labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "o_mnase",
+        "label": "MNase digestion",
+        "description": "Digest the DNA component of rehydrated chromatin, producing fragmented chromatin that remains protein-associated and proceeds to sonication.",
+        "inputs": [
+          "s_rehydrated"
+        ],
+        "outputs": [
+          "s_digested"
+        ],
+        "mechanism": "MNase-mediated digestion is explicitly named. The schematic does not specify cleavage sites, DNA end chemistry, or an enzyme concentration.",
+        "information_effect": "Genomic DNA remains associated with chromatin proteins; the drawing does not establish an exact fragment size or nucleosome count.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"MNase digestion\": orange circles appear around nucleosomal chromatin; the rightward arrow leads to a shorter chromatin illustration before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "o_sonicate",
+        "label": "Sonicate",
+        "description": "Sonicate the MNase-digested chromatin to obtain the material labeled soluble extract, still containing chromatin protein and DNA.",
+        "inputs": [
+          "s_digested"
+        ],
+        "outputs": [
+          "s_soluble"
+        ],
+        "mechanism": "Sonication follows MNase digestion in the depicted route; together they prepare soluble fragmented chromatin.",
+        "information_effect": "Produces soluble chromatin for immunoprecipitation. The card warns that sonication may introduce sequence bias; neither the figure nor the background yeast study establishes the magnitude of a PAT-ChIP-specific bias.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Sonicate\", from the chromatin illustration after \"MNase digestion\" to the nucleosomal fragments labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Limitations / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Sonication may introduce sequence bias 1",
+            "bbox": null,
+            "rationale": "This is the catalogue warning. The background paper reports chromatin-dependent shearing and recovery effects in yeast; it does not quantify bias in PAT-ChIP or establish universal sequence-specific sonication bias."
+          }
+        ]
+      },
+      {
+        "id": "o_immunoprecipitate",
+        "label": "Immunoprecipitate and chromatin elution",
+        "description": "Enrich a selected fraction of the soluble chromatin by immunoprecipitation and elute that chromatin, yielding protein-associated DNA for crosslink reversal.",
+        "inputs": [
+          "s_soluble"
+        ],
+        "outputs": [
+          "s_enriched"
+        ],
+        "mechanism": "The immunoprecipitation label and pink antibody-like icon support affinity selection. Capture and elution are retained as the single combined operation shown; support chemistry and antibody specificity are unspecified.",
+        "information_effect": "Selection enriches DNA fragments associated with the immunoprecipitated chromatin target. The PAT-ChIP abstract supports histone modifications and transcription factor binding as target classes, without identifying the target in this drawing.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"Soluble extract\" and pink antibody-like capture illustration; rightward arrow labeled \"Immunoprecipitate and chromatin elution\" leads to a single nucleosome-like particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): biological readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": "The supplied abstract supports these target classes and the genome-wide readout; full protocol text was not supplied or inspected."
+          }
+        ]
+      },
+      {
+        "id": "o_release_dna",
+        "label": "Reverse crosslink and proteinase K digestion",
+        "description": "Reverse fixation crosslinks and digest proteins in the eluted chromatin, converting the protein-associated particles into released DNA depicted as a blue line.",
+        "inputs": [
+          "s_enriched"
+        ],
+        "outputs": [
+          "s_released_dna"
+        ],
+        "mechanism": "Crosslink reversal and proteinase K digestion are explicitly grouped under one arrow; the adjacent enzyme-like symbol is an auxiliary reagent icon, not a separate retained material branch.",
+        "information_effect": "Removes the protein carrier while DNA retains genomic sequence and membership in the selected fraction. The protein or histone modification itself is not the sequenced product.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, isolated nucleosome-like particle and pink/green enzyme-like icon above the arrow labeled \"Reverse crosslink and proteinase K digestion\"; output is a blue line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Nucleosome-like output of immunoprecipitation through the arrow labeled \"Reverse crosslink and proteinase K digestion\" to a blue DNA line.",
+            "basis": "image",
+            "support": "inferred",
+            "quote": null,
+            "bbox": null,
+            "rationale": "The depicted change from protein-associated DNA to a DNA line indicates removal of the protein association. The retained information is the recovered DNA sequence and its membership in the enriched fraction, rather than physical preservation of the histone mark or protein."
+          }
+        ]
+      },
+      {
+        "id": "o_purify",
+        "label": "Purification",
+        "description": "Purify the released DNA to produce the terminal material labeled DNA.",
+        "inputs": [
+          "s_released_dna"
+        ],
+        "outputs": [
+          "s_purified_dna"
+        ],
+        "mechanism": null,
+        "information_effect": "Supplies selected DNA for downstream ChIP-seq library preparation and genomic readout; the figure does not describe that library preparation.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right end: blue line before the arrow labeled \"Purification\"; terminal blue line labeled \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): PAT-ChIP definition and genome-wide target analyses",
+            "basis": "text",
+            "support": "inferred",
+            "quote": "a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": "The abstract identifies ChIP-seq as a downstream analysis; the diagram terminates at DNA. Together they support a DNA-to-library interface without adding an unshown library-construction operation."
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "id": "f1_input",
+        "source": "s_ffpe",
+        "target": "o_deparaffinate",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Deparaffination and rehydration\", between \"FFPE-fixed chromatin\" and the chromatin illustration labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f1_output",
+        "source": "o_deparaffinate",
+        "target": "s_rehydrated",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Deparaffination and rehydration\", between \"FFPE-fixed chromatin\" and the chromatin illustration labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f2_input",
+        "source": "s_rehydrated",
+        "target": "o_mnase",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"MNase digestion\": orange circles appear around nucleosomal chromatin; the rightward arrow leads to a shorter chromatin illustration before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f2_output",
+        "source": "o_mnase",
+        "target": "s_digested",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"MNase digestion\": orange circles appear around nucleosomal chromatin; the rightward arrow leads to a shorter chromatin illustration before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f3_input",
+        "source": "s_digested",
+        "target": "o_sonicate",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Sonicate\", from the chromatin illustration after \"MNase digestion\" to the nucleosomal fragments labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f3_output",
+        "source": "o_sonicate",
+        "target": "s_soluble",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, arrow labeled \"Sonicate\", from the chromatin illustration after \"MNase digestion\" to the nucleosomal fragments labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f4_input",
+        "source": "s_soluble",
+        "target": "o_immunoprecipitate",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"Soluble extract\" and pink antibody-like capture illustration; rightward arrow labeled \"Immunoprecipitate and chromatin elution\" leads to a single nucleosome-like particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f4_output",
+        "source": "o_immunoprecipitate",
+        "target": "s_enriched",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, \"Soluble extract\" and pink antibody-like capture illustration; rightward arrow labeled \"Immunoprecipitate and chromatin elution\" leads to a single nucleosome-like particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f5_input",
+        "source": "s_enriched",
+        "target": "o_release_dna",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, isolated nucleosome-like particle and pink/green enzyme-like icon above the arrow labeled \"Reverse crosslink and proteinase K digestion\"; output is a blue line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f5_output",
+        "source": "o_release_dna",
+        "target": "s_released_dna",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, isolated nucleosome-like particle and pink/green enzyme-like icon above the arrow labeled \"Reverse crosslink and proteinase K digestion\"; output is a blue line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f6_input",
+        "source": "s_released_dna",
+        "target": "o_purify",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right end: blue line before the arrow labeled \"Purification\"; terminal blue line labeled \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "f6_output",
+        "source": "o_purify",
+        "target": "s_purified_dna",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right end: blue line before the arrow labeled \"Purification\"; terminal blue line labeled \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ],
+    "method_scopes": [
+      {
+        "method": "PAT-ChIP",
+        "operation_ids": [
+          "o_deparaffinate",
+          "o_mnase",
+          "o_sonicate",
+          "o_immunoprecipitate",
+          "o_release_dna",
+          "o_purify"
+        ],
+        "status": "resolved",
+        "rationale": "All six operations belong to the single workflow captioned pathology tissue chromatin immunoprecipitation (PAT-ChIP). The card identifies FFPE chromatin, Histolemon dewaxing, MNase digestion and sonication; the PAT-ChIP abstract confirms specimen and biological readout. The operation details are schematic claims from the drawing, not full-text protocol verification.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Entire diagram: far-left PAT-ChIP caption and main workflow from \"FFPE-fixed chromatin\" to \"DNA\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "method": "FiT-seq",
+        "operation_ids": [],
+        "status": "unresolved",
+        "rationale": "FiT-seq is separately named fixed-tissue chromatin immunoprecipitation sequencing in its abstract; it is not an alias for PAT-ChIP. The card calls it a refinement, and the abstract supports FFPE-derived soluble chromatin and histone-mark readout. No FiT-seq-specific branch or step is labeled in the diagram, and the abstract does not establish whether its extraction uses the same MNase/sonication route. No individual diagram operations are assigned to FiT-seq without that evidence.",
+        "evidence": [
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description / jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27111282",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe fixed-tissue chromatin immunoprecipitation sequencing (FiT-seq), a method that enables reliable extraction of soluble chromatin from formalin-fixed paraffin-embedded (FFPE) tissue samples for accurate detection of histone marks.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ],
+    "paper_matches": [
+      {
+        "id": "p_22082985",
+        "source_id": "paper:22082985",
+        "methods": [
+          "PAT-ChIP"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_architecture",
+        "evidence": [
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): biological readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": "The supplied abstract supports these target classes and the genome-wide readout; full protocol text was not supplied or inspected."
+          },
+          {
+            "source_id": "metadata:22082985",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Chromatin immunoprecipitation and high-throughput sequencing from paraffin-embedded pathology tissue.",
+            "bbox": null,
+            "rationale": "PMID 22082985 and DOI 10.1038/nprot.2011.406 identify the PAT-ChIP protocol. Only its supplied abstract was inspected; metadata does not verify step chemistry or historical priority."
+          }
+        ]
+      },
+      {
+        "id": "p_27111282",
+        "source_id": "paper:27111282",
+        "methods": [
+          "FiT-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_variant",
+        "evidence": [
+          {
+            "source_id": "paper:27111282",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe fixed-tissue chromatin immunoprecipitation sequencing (FiT-seq), a method that enables reliable extraction of soluble chromatin from formalin-fixed paraffin-embedded (FFPE) tissue samples for accurate detection of histone marks.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "metadata:27111282",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Chromatin immunoprecipitation from fixed clinical tissues reveals tumor-specific enhancer profiles.",
+            "bbox": null,
+            "rationale": "PMID 27111282 and DOI 10.1038/nm.4085 identify the FiT-seq paper. Supplied content is abstract only; it does not verify the detailed refinements or the applicability of each drawn PAT-ChIP operation."
+          }
+        ]
+      },
+      {
+        "id": "p_19693276",
+        "source_id": "paper:19693276",
+        "methods": [
+          "PAT-ChIP"
+        ],
+        "assessment": "content_checked",
+        "relationship": "background",
+        "evidence": [
+          {
+            "source_id": "paper:19693276",
+            "locator": "Full text, abstract block b00003",
+            "basis": "text",
+            "support": "reported",
+            "quote": "We initially discovered this effect at the Saccharomyces cerevisiae HMR locus, where we found that silenced chromatin was refractory to shearing, relative to euchromatin.",
+            "bbox": null,
+            "rationale": "The abstract in the available full-text source supports chromatin-dependent recovery/shearing bias as background. This yeast study does not describe the scoped PAT-ChIP method."
+          },
+          {
+            "source_id": "paper:19693276",
+            "locator": "Full text, Discussion, block b00046",
+            "basis": "text",
+            "support": "reported",
+            "quote": "These results suggested that chromatin states can also influence input-Seq coverage through effects other than shearing.",
+            "bbox": null,
+            "rationale": "This bounded body-text reading distinguishes chromatin recovery bias from a shearing-only explanation. It remains background evidence from yeast rather than validation of the PAT-ChIP or FiT-seq extraction steps."
+          },
+          {
+            "source_id": "metadata:19693276",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Impact of chromatin structures on DNA processing for genomic analyses.",
+            "bbox": null,
+            "rationale": "PMID 19693276 and DOI 10.1371/journal.pone.0006700 identify the background study."
+          }
+        ]
+      },
+      {
+        "id": "p_23986147",
+        "source_id": "paper:23986147",
+        "methods": [
+          "PAT-ChIP"
+        ],
+        "assessment": "content_checked",
+        "relationship": "background",
+        "evidence": [
+          {
+            "source_id": "paper:23986147",
+            "locator": "Abstract (supplied abstract only): review purpose",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this review, we highlight the merits and characteristics of ChIP-seq and RNA-seq and discuss the use of the genome-wide analysis in kidney disease.",
+            "bbox": null,
+            "rationale": "Related review provides general context, not PAT-ChIP or FiT-seq architecture. PAT-ChIP here is the catalogue context being assessed; this background paper does not describe the scoped method."
+          },
+          {
+            "source_id": "metadata:23986147",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Revolution of nephrology research by deep sequencing: ChIP-seq and RNA-seq.",
+            "bbox": null,
+            "rationale": "PMID 23986147 and DOI 10.1038/ki.2013.321 identify the related review; its full text was not supplied or inspected."
+          }
+        ]
+      }
+    ],
+    "corrections": [],
+    "unknowns": [
+      {
+        "id": "u_fit_scope",
+        "question": "Which of the depicted PAT-ChIP operations, particularly MNase digestion followed by sonication, apply to FiT-seq, and what extraction refinements distinguish it? Resolving this requires the FiT-seq methods or an explicit variant-specific schematic; its supplied abstract does not specify the sequence.",
+        "blocking": false,
+        "affected_ids": [
+          "scope:FiT-seq",
+          "operation:o_deparaffinate",
+          "operation:o_mnase",
+          "operation:o_sonicate",
+          "operation:o_immunoprecipitate",
+          "operation:o_release_dna",
+          "operation:o_purify"
+        ]
+      }
+    ]
+  },
+  "review": {
+    "format_version": "illumina_diagram_review/1.0",
+    "record_id": "pat-chip",
+    "candidate_sha256": "6c3c2207f0b0fba45803b2dbb634f0c1dddc57b37211ecb46851762fbce7d967",
+    "inspected_sources": [
+      "card:pat-chip",
+      "diagram:asset_993d08b142a57d72b39a29d3",
+      "metadata:22082985",
+      "paper:22082985",
+      "metadata:27111282",
+      "paper:27111282",
+      "metadata:19693276",
+      "paper:19693276",
+      "metadata:23986147",
+      "paper:23986147"
+    ],
+    "checks": [
+      {
+        "target": "flow:f1_input",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The labeled FFPE chromatin is the material at the tail of the deparaffination/rehydration arrow; this is material processing within PAT-ChIP, not an additional transfer from the unconnected title illustration.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosomal array labeled \"FFPE-fixed chromatin\", rightward arrow labeled \"Deparaffination and rehydration\", then the array labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f1_output",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The deparaffination/rehydration arrow feeds the MNase stage. s_rehydrated is a valid logical boundary for the prepared chromatin; the candidate explicitly states that a separate isolated intermediate is not drawn.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosomal array labeled \"FFPE-fixed chromatin\", rightward arrow labeled \"Deparaffination and rehydration\", then the array labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosomal array labeled \"FFPE-fixed chromatin\", rightward arrow labeled \"Deparaffination and rehydration\", then the array labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "inferred",
+            "quote": null,
+            "bbox": null,
+            "rationale": "The two adjacent named transformations justify a logical deparaffinated/rehydrated intermediate, while no isolated pool or new compartment is claimed."
+          }
+        ]
+      },
+      {
+        "target": "flow:f2_input",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The prepared chromatin enters the MNase-labeled stage along the same route. This agrees with s_rehydrated and o_mnase; the card independently places dewaxing before MNase digestion.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left-center: orange circles around the nucleosomal array labeled \"MNase digestion\"; rightward arrow leads to the compact chromatin array before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosomal array labeled \"FFPE-fixed chromatin\", rightward arrow labeled \"Deparaffination and rehydration\", then the array labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "inferred",
+            "quote": null,
+            "bbox": null,
+            "rationale": "The two adjacent named transformations justify a logical deparaffinated/rehydrated intermediate, while no isolated pool or new compartment is claimed."
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f2_output",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The rightward arrow from the MNase-labeled array leads to the compact protein-associated chromatin array before sonication. The output remains chromatin, consistent with s_digested and the next operation.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left-center: orange circles around the nucleosomal array labeled \"MNase digestion\"; rightward arrow leads to the compact chromatin array before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f3_input",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The compact array immediately after MNase digestion is at the tail of the Sonicate arrow. It is chromatin material entering sonication, consistent with the preceding output.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, center: compact chromatin array, rightward arrow labeled \"Sonicate\", then protein-associated DNA particles labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f3_output",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The Sonicate arrow leads directly to the particles labeled Soluble extract. The output is soluble protein-associated chromatin, not released purified DNA.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, center: compact chromatin array, rightward arrow labeled \"Sonicate\", then protein-associated DNA particles labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f4_input",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The labeled soluble extract is the material presented to the capture illustration and immunoprecipitation/elution arrow. The capture symbol is not substituted for the chromatin input.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, center-right: \"Soluble extract\", pink capture-like symbol with attached particle, and rightward arrow labeled \"Immunoprecipitate and chromatin elution\", leading to an isolated nucleosomal particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f4_output",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The combined immunoprecipitation/elution arrow produces the isolated nucleosomal particle. s_enriched correctly retains protein-associated DNA and feeds the crosslink-reversal stage.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, center-right: \"Soluble extract\", pink capture-like symbol with attached particle, and rightward arrow labeled \"Immunoprecipitate and chromatin elution\", leading to an isolated nucleosomal particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f5_input",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The isolated particle after immunoprecipitation/elution is at the input of crosslink reversal/proteinase K digestion. The auxiliary enzyme-like icon is not a retained material branch.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right: isolated nucleosomal particle, small pink/green enzyme-like symbol above the rightward arrow labeled \"Reverse crosslink and proteinase K digestion\", followed by a blue DNA line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f5_output",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The blue line after the named crosslink-reversal/protein-digestion arrow is released DNA, matching s_released_dna and its subsequent purification input.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right: isolated nucleosomal particle, small pink/green enzyme-like symbol above the rightward arrow labeled \"Reverse crosslink and proteinase K digestion\", followed by a blue DNA line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f6_input",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The blue line from the preceding release step is at the tail of the Purification arrow. DNA identity persists across this interface without an added unshown conversion.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, far right: blue line after crosslink reversal/protein digestion, rightward arrow labeled \"Purification\", and terminal blue line at the \"DNA\" label on the source image edge.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:f6_output",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The Purification arrow leads to the terminal blue DNA line. The route ends at recovered DNA and does not assert an unshown sequencing or library-construction operation.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, far right: blue line after crosslink reversal/protein digestion, rightward arrow labeled \"Purification\", and terminal blue line at the \"DNA\" label on the source image edge.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:o_deparaffinate",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The operation preserves the depicted grouping of deparaffination and rehydration and acts on FFPE chromatin-containing material. Histolemon dewaxing is explicitly sourced to the catalogue; no unverified full-text recipe or extra stage is introduced.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosomal array labeled \"FFPE-fixed chromatin\", rightward arrow labeled \"Deparaffination and rehydration\", then the array labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:o_immunoprecipitate",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The diagram groups immunoprecipitation with chromatin elution. Affinity enrichment of chromatin and retention of its associated DNA fit the capture illustration and nucleosomal output. The abstract supports histone modifications and transcription-factor binding as PAT-ChIP target classes; the candidate assigns no particular target, antibody or support chemistry to this drawing.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, center-right: \"Soluble extract\", pink capture-like symbol with attached particle, and rightward arrow labeled \"Immunoprecipitate and chromatin elution\", leading to an isolated nucleosomal particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Supplied abstract: biological target classes",
+            "basis": "text",
+            "support": "reported",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:o_mnase",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "MNase digestion is explicitly named between prepared FFPE chromatin and the compact chromatin array. Describing DNA fragmentation with protein association retained matches the depicted substrate and output; no cleavage-site, end-group or exact-size claim is made.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left-center: orange circles around the nucleosomal array labeled \"MNase digestion\"; rightward arrow leads to the compact chromatin array before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:o_purify",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The final named operation purifies DNA already released from enriched chromatin. Its mechanism appropriately remains unspecified. The downstream DNA-to-ChIP-seq interface is identified as interpretation from the abstract, without adding internal library chemistry to the diagram.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, far right: blue line after crosslink reversal/protein digestion, rightward arrow labeled \"Purification\", and terminal blue line at the \"DNA\" label on the source image edge.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Supplied abstract: PAT-ChIP definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:o_release_dna",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "Crosslink reversal and proteinase K digestion are correctly retained as one depicted operation. The particle-to-blue-line change supports release of DNA from its protein association. Retaining genomic sequence and selection history rather than physically sequencing the protein target is an explicit, appropriate interpretation; the auxiliary symbol is not treated as a second material route.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right: isolated nucleosomal particle, small pink/green enzyme-like symbol above the rightward arrow labeled \"Reverse crosslink and proteinase K digestion\", followed by a blue DNA line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:o_sonicate",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "Sonication follows MNase digestion and produces the labeled soluble chromatin extract. The candidate preserves this local sequence, cites the catalogue bias warning as such, and does not turn the yeast background study into a quantified PAT-ChIP bias result.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, center: compact chromatin array, rightward arrow labeled \"Sonicate\", then protein-associated DNA particles labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Limitations, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Sonication may introduce sequence bias 1",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "paper:p_22082985",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The supplied abstract explicitly defines PAT-ChIP on FFPE chromatin and supports histone-modification and transcription-factor readouts. Metadata independently matches PMID and DOI. The candidate explicitly limits scientific verification to the abstract, without claiming full-protocol or priority verification.",
+        "evidence": [
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Abstract (supplied abstract only): biological readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": "The supplied abstract supports these target classes and the genome-wide readout; full protocol text was not supplied or inspected."
+          },
+          {
+            "source_id": "metadata:22082985",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Chromatin immunoprecipitation and high-throughput sequencing from paraffin-embedded pathology tissue.",
+            "bbox": null,
+            "rationale": "PMID 22082985 and DOI 10.1038/nprot.2011.406 identify the PAT-ChIP protocol. Only its supplied abstract was inspected; metadata does not verify step chemistry or historical priority."
+          }
+        ]
+      },
+      {
+        "target": "paper:p_27111282",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The supplied abstract explicitly defines FiT-seq, soluble chromatin extraction from FFPE tissue, and histone-mark readout. Metadata independently matches PMID and DOI. The candidate correctly leaves the detailed extraction sequence unverified.",
+        "evidence": [
+          {
+            "source_id": "paper:27111282",
+            "locator": "Abstract (supplied abstract only): method definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe fixed-tissue chromatin immunoprecipitation sequencing (FiT-seq), a method that enables reliable extraction of soluble chromatin from formalin-fixed paraffin-embedded (FFPE) tissue samples for accurate detection of histone marks.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "metadata:27111282",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Chromatin immunoprecipitation from fixed clinical tissues reveals tumor-specific enhancer profiles.",
+            "bbox": null,
+            "rationale": "PMID 27111282 and DOI 10.1038/nm.4085 identify the FiT-seq paper. Supplied content is abstract only; it does not verify the detailed refinements or the applicability of each drawn PAT-ChIP operation."
+          }
+        ]
+      },
+      {
+        "target": "paper:p_19693276",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The independently inspected full-text abstract b00003 and Discussion b00046 report chromatin-dependent shearing and recovery effects in yeast. The candidate correctly treats this as background rather than a PAT-ChIP protocol or quantitative PAT-ChIP bias validation. PMID and DOI match the supplied metadata.",
+        "evidence": [
+          {
+            "source_id": "paper:19693276",
+            "locator": "Full text, abstract block b00003",
+            "basis": "text",
+            "support": "reported",
+            "quote": "We initially discovered this effect at the Saccharomyces cerevisiae HMR locus, where we found that silenced chromatin was refractory to shearing, relative to euchromatin.",
+            "bbox": null,
+            "rationale": "The abstract in the available full-text source supports chromatin-dependent recovery/shearing bias as background. This yeast study does not describe the scoped PAT-ChIP method."
+          },
+          {
+            "source_id": "paper:19693276",
+            "locator": "Full text, Discussion, block b00046",
+            "basis": "text",
+            "support": "reported",
+            "quote": "These results suggested that chromatin states can also influence input-Seq coverage through effects other than shearing.",
+            "bbox": null,
+            "rationale": "This bounded body-text reading distinguishes chromatin recovery bias from a shearing-only explanation. It remains background evidence from yeast rather than validation of the PAT-ChIP or FiT-seq extraction steps."
+          },
+          {
+            "source_id": "metadata:19693276",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Impact of chromatin structures on DNA processing for genomic analyses.",
+            "bbox": null,
+            "rationale": "PMID 19693276 and DOI 10.1371/journal.pone.0006700 identify the background study."
+          }
+        ]
+      },
+      {
+        "target": "paper:p_23986147",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The supplied abstract and metadata identify a general ChIP-seq/RNA-seq review in kidney disease. The candidate correctly assigns background relevance and discloses abstract-only inspection, without attributing PAT-ChIP architecture to this review.",
+        "evidence": [
+          {
+            "source_id": "paper:23986147",
+            "locator": "Abstract (supplied abstract only): review purpose",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this review, we highlight the merits and characteristics of ChIP-seq and RNA-seq and discuss the use of the genome-wide analysis in kidney disease.",
+            "bbox": null,
+            "rationale": "Related review provides general context, not PAT-ChIP or FiT-seq architecture. PAT-ChIP here is the catalogue context being assessed; this background paper does not describe the scoped method."
+          },
+          {
+            "source_id": "metadata:23986147",
+            "locator": "PubMed metadata: title and identifiers",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Revolution of nephrology research by deep sequencing: ChIP-seq and RNA-seq.",
+            "bbox": null,
+            "rationale": "PMID 23986147 and DOI 10.1038/ki.2013.321 identify the related review; its full text was not supplied or inspected."
+          }
+        ]
+      },
+      {
+        "target": "record",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "All seven material states, six depicted transformations and twelve input/output routes have been checked individually and jointly against the image. The linear graph preserves chromatin protein association until the named release step, then DNA identity through purification. It covers the depicted route, treats the unconnected far-left drawing as a title illustration, and does not invent retained branches from reagent-like icons. Biological target, recovered DNA carrier and downstream library interpretation are distinguished. No consequential source conflict requiring a correction was found. PAT-ChIP has schematic-level support; the separately named FiT-seq applicability limit is explicit and carries no unsupported operation assignment. Paper identity is separated from abstract/full-text verification and no historical priority is inferred.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Entire supplied diagram, including far-left PAT-ChIP caption, all six named transformations and their rightward arrows, nucleosomal versus blue-line products, and terminal DNA label. No legend, compartment boundary, separate FiT-seq branch, library-preparation block or sequencing block is shown.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Supplied abstract: PAT-ChIP definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27111282",
+            "locator": "Supplied abstract: FiT-seq definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe fixed-tissue chromatin immunoprecipitation sequencing (FiT-seq), a method that enables reliable extraction of soluble chromatin from formalin-fixed paraffin-embedded (FFPE) tissue samples for accurate detection of histone marks.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "scope:PAT-ChIP",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The diagram is captioned PAT-ChIP, and its full linear route can be assigned to that method at schematic level. The card independently identifies FFPE chromatin, Histolemon dewaxing, MNase digestion and sonication. The abstract confirms method and readout, while the candidate expressly avoids full-protocol verification claims.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Entire supplied diagram, including far-left PAT-ChIP caption, all six named transformations and their rightward arrows, nucleosomal versus blue-line products, and terminal DNA label. No legend, compartment boundary, separate FiT-seq branch, library-preparation block or sequencing block is shown.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Supplied abstract: PAT-ChIP definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "scope:FiT-seq",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "Accept the explicitly unresolved applicability, not an asserted equivalence. The card calls FiT-seq a refinement and the separate abstract defines its FFPE-to-soluble-chromatin/histone-mark purpose, but neither specifies which drawn extraction steps it shares. The candidate assigns no diagram operation to FiT-seq and accurately preserves this exact limit.",
+        "evidence": [
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27111282",
+            "locator": "Supplied abstract: FiT-seq definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe fixed-tissue chromatin immunoprecipitation sequencing (FiT-seq), a method that enables reliable extraction of soluble chromatin from formalin-fixed paraffin-embedded (FFPE) tissue samples for accurate detection of histone marks.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Entire supplied diagram, including far-left PAT-ChIP caption, all six named transformations and their rightward arrows, nucleosomal versus blue-line products, and terminal DNA label. No legend, compartment boundary, separate FiT-seq branch, library-preparation block or sequencing block is shown.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:s_digested",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The post-MNase intermediate remains DNA associated with nucleosomal proteins and is routed into sonication. Orange circles are recorded as visible symbols without inventing an end modification or chemical identity; no uniform fragment length is inferred.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left-center: orange circles around the nucleosomal array labeled \"MNase digestion\"; rightward arrow leads to the compact chromatin array before \"Sonicate\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:s_enriched",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The single nucleosome-like output after combined immunoprecipitation/elution remains protein-associated chromatin. The candidate appropriately interprets it as an enriched fraction, without asserting a particular epitope, exact particle size or guaranteed specificity.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, center-right: \"Soluble extract\", pink capture-like symbol with attached particle, and rightward arrow labeled \"Immunoprecipitate and chromatin elution\", leading to an isolated nucleosomal particle.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:s_ffpe",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The input label and nucleosomal drawing support FFPE pathology chromatin with DNA-protein association. Expanding FFPE as formalin-fixed paraffin-embedded is confirmed by the abstract. The separate yellow far-left PAT-ChIP title illustration has no incoming workflow arrow and is correctly not made an additional input transformation.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosomal array labeled \"FFPE-fixed chromatin\", rightward arrow labeled \"Deparaffination and rehydration\", then the array labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Supplied abstract: PAT-ChIP definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Supplied abstract: opening specimen definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Formalin-fixed, paraffin-embedded (FFPE) samples represent the gold standard for storage of pathology samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Far-left, unconnected yellow nucleosome illustration captioned \"Pathology tissue chromatin immunoprecipitation (PAT-ChIP)\", followed spatially by the main workflow input \"FFPE-fixed chromatin\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:s_purified_dna",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The terminal material is DNA recovered from the immunoprecipitated fraction, with identity continuous from the release step. The candidate explicitly presents downstream genomic localization and library representation as interpretation supported by ChIP-seq and target classes in the abstract. It does not infer adapters, strand count, end chemistry, direct sequencing of proteins, perfect specificity or unbiased recovery.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, far right: blue line after crosslink reversal/protein digestion, rightward arrow labeled \"Purification\", and terminal blue line at the \"DNA\" label on the source image edge.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Supplied abstract: PAT-ChIP definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe pathology tissue chromatin immunoprecipitation (PAT-ChIP), a technique for extraction and high-throughput analysis, by techniques such as ChIP-seq, of chromatin derived from FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:22082985",
+            "locator": "Supplied abstract: biological target classes",
+            "basis": "text",
+            "support": "reported",
+            "quote": "analyses of histone modifications and transcription factor binding on a genome-wide scale using patient-derived FFPE samples.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Limitations, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Sonication may introduce sequence bias 1",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:s_rehydrated",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "This is an explicitly inferred preparation-state boundary between two depicted named operations, rather than a claimed isolated product or compartment. It correctly carries chromatin from paraffin removal/rehydration into MNase digestion.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, left: nucleosomal array labeled \"FFPE-fixed chromatin\", rightward arrow labeled \"Deparaffination and rehydration\", then the array labeled \"MNase digestion\".",
+            "basis": "image",
+            "support": "inferred",
+            "quote": null,
+            "bbox": null,
+            "rationale": "The named deparaffination/rehydration transformation precedes the named MNase stage, supporting this logical material-state boundary without a separately drawn isolated intermediate."
+          },
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:s_released_dna",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The post-release blue line correctly represents DNA no longer drawn as nucleosome-associated. The state agrees with the incoming release route and outgoing purification route; the simple line does not establish strand number, end polarity or a chemical modification.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, right: isolated nucleosomal particle, small pink/green enzyme-like symbol above the rightward arrow labeled \"Reverse crosslink and proteinase K digestion\", followed by a blue DNA line.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:s_soluble",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The labeled soluble extract follows sonication and visibly retains nucleosomal protein-associated DNA. The candidate preserves that identity through the immunoprecipitation input without assigning a uniform fragment size or an exclusively mononucleosomal composition.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Main workflow, center: compact chromatin array, rightward arrow labeled \"Sonicate\", then protein-associated DNA particles labeled \"Soluble extract\".",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "unknown:u_fit_scope",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The precise open question is whether FiT-seq uses each depicted PAT-ChIP operation, especially the MNase-then-sonication extraction sequence, and what refinements distinguish it. The supplied abstract cannot establish that sequence. The candidate identifies the appropriate needed evidence (FiT-seq methods or an explicit variant-specific schematic), names all affected operations, and makes the uncertainty nonblocking because no FiT-seq operation-level architecture is asserted.",
+        "evidence": [
+          {
+            "source_id": "card:pat-chip",
+            "locator": "Description, jcr:content/par/text_1/text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "PAT-ChIP is a variation of ChIP-Seq, optimized for the analysis of chromatin derived from FFPE samples. The distinguishing features of this method are dewaxing with a xylene substitute (Histolemon, Carlo Erba) followed by both MNase digestion and sonication. FiT-seq introduces further refinements to this method.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27111282",
+            "locator": "Supplied abstract: FiT-seq definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we describe fixed-tissue chromatin immunoprecipitation sequencing (FiT-seq), a method that enables reliable extraction of soluble chromatin from formalin-fixed paraffin-embedded (FFPE) tissue samples for accurate detection of histone marks.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_993d08b142a57d72b39a29d3",
+            "locator": "Entire supplied diagram, including far-left PAT-ChIP caption, all six named transformations and their rightward arrows, nucleosomal versus blue-line products, and terminal DNA label. No legend, compartment boundary, separate FiT-seq branch, library-preparation block or sequencing block is shown.",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ]
+  },
+  "source_registry": {
+    "card:pat-chip": {
+      "kind": "text",
+      "content_level": "catalogue",
+      "url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/pat-chip.html",
+      "title": "PAT-ChIP"
+    },
+    "diagram:asset_993d08b142a57d72b39a29d3": {
+      "kind": "image",
+      "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/87/87ef684b99229e93b82887a9f2b931e5a98c4cf7189df4fa991522947ae8c133.png",
+      "sha256": "87ef684b99229e93b82887a9f2b931e5a98c4cf7189df4fa991522947ae8c133",
+      "url": "https://www.illumina.com/content/dam/illumina-marketing/images/tools/sequencing/pat-chip.png",
+      "content_level": "diagram"
+    },
+    "metadata:22082985": {
+      "kind": "text",
+      "content_level": "metadata",
+      "identity_status": "pubmed_record_retrieved",
+      "pmid": "22082985",
+      "title": "Chromatin immunoprecipitation and high-throughput sequencing from paraffin-embedded pathology tissue.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22082985/",
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/bc/bc2b36a4c2ad14f54b63d8a13a79f124b5455f6746ac13388610b150cbdf10c9.xml",
+          "sha256": "bc2b36a4c2ad14f54b63d8a13a79f124b5455f6746ac13388610b150cbdf10c9"
+        }
+      ]
+    },
+    "paper:22082985": {
+      "kind": "text",
+      "content_level": "abstract",
+      "pmid": "22082985",
+      "title": "Chromatin immunoprecipitation and high-throughput sequencing from paraffin-embedded pathology tissue.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22082985/",
+      "fulltext_status": "no_pmc_identifier_in_pubmed_metadata"
+    },
+    "metadata:27111282": {
+      "kind": "text",
+      "content_level": "metadata",
+      "identity_status": "pubmed_record_retrieved",
+      "pmid": "27111282",
+      "title": "Chromatin immunoprecipitation from fixed clinical tissues reveals tumor-specific enhancer profiles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27111282/",
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/51/519f830613d3e7ea108e8593484846732b9459f2dcd1bcb099b2c9a78912bd18.xml",
+          "sha256": "519f830613d3e7ea108e8593484846732b9459f2dcd1bcb099b2c9a78912bd18"
+        }
+      ]
+    },
+    "paper:27111282": {
+      "kind": "text",
+      "content_level": "abstract",
+      "pmid": "27111282",
+      "title": "Chromatin immunoprecipitation from fixed clinical tissues reveals tumor-specific enhancer profiles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27111282/",
+      "fulltext_status": "no_pmc_identifier_in_pubmed_metadata"
+    },
+    "metadata:19693276": {
+      "kind": "text",
+      "content_level": "metadata",
+      "identity_status": "pubmed_record_retrieved",
+      "pmid": "19693276",
+      "title": "Impact of chromatin structures on DNA processing for genomic analyses.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19693276/",
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/bc/bc2b36a4c2ad14f54b63d8a13a79f124b5455f6746ac13388610b150cbdf10c9.xml",
+          "sha256": "bc2b36a4c2ad14f54b63d8a13a79f124b5455f6746ac13388610b150cbdf10c9"
+        }
+      ]
+    },
+    "paper:19693276": {
+      "kind": "text",
+      "content_level": "fulltext",
+      "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/ec/ec008c039334d3f40d5f78f7676a2ad97ff6ce560111d4d1f99f81e1aa4fa9b3.txt",
+      "sha256": "ec008c039334d3f40d5f78f7676a2ad97ff6ce560111d4d1f99f81e1aa4fa9b3",
+      "pmid": "19693276",
+      "title": "Impact of chromatin structures on DNA processing for genomic analyses.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2725323/",
+      "original": {
+        "source_id": "paper:19693276",
+        "pmcid": "PMC2725323",
+        "status": "fulltext_acquired",
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/f4/f4c8f91e03b20eef02352c8aeb36980ee05686513574dd4256fa7851de30e5bd.xml",
+        "sha256": "f4c8f91e03b20eef02352c8aeb36980ee05686513574dd4256fa7851de30e5bd",
+        "bytes": 119314,
+        "text_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/ec/ec008c039334d3f40d5f78f7676a2ad97ff6ce560111d4d1f99f81e1aa4fa9b3.txt",
+        "text_sha256": "ec008c039334d3f40d5f78f7676a2ad97ff6ce560111d4d1f99f81e1aa4fa9b3",
+        "blocks_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/2e/2ecce6fcbee2b3483713c8443d4654281511fbd9e4ba5775c4ef68195938455c.json",
+        "block_count": 137,
+        "rendition": "jats_reading_blocks/1.0; paragraph boundaries preserved; not original layout",
+        "media_type": "application/xml",
+        "format": "JATS",
+        "identifiers": {
+          "pmcid": "PMC2725323",
+          "pmcid-ver": "PMC2725323.1",
+          "pmcaid": "2725323",
+          "pmcaiid": "2725323",
+          "pmid": "19693276",
+          "doi": "10.1371/journal.pone.0006700",
+          "publisher-id": "09-PONE-RA-11419R1"
+        },
+        "original_response": {
+          "request_url": "https://pmc.ncbi.nlm.nih.gov/api/oai/v1/mh/?verb=GetRecord&identifier=oai%3Apubmedcentral.nih.gov%3A2725323&metadataPrefix=pmc",
+          "http_status": 200,
+          "final_url": "https://pmc.ncbi.nlm.nih.gov/api/oai/v1/mh/?verb=GetRecord&identifier=oai%3Apubmedcentral.nih.gov%3A2725323&metadataPrefix=pmc",
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/7f/7faa5754d2b4aaa41cbb9c0ba178b1105cc26cd509ba4c4d4f30a073d003fed3.xml",
+          "sha256": "7faa5754d2b4aaa41cbb9c0ba178b1105cc26cd509ba4c4d4f30a073d003fed3",
+          "bytes": 106296,
+          "snapshot_file_imports": {
+            "path": {
+              "declared_path": "papers/19693276/original_oai_response.xml",
+              "resolved_input_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_03/papers/19693276/original_oai_response.xml",
+              "sha256": "7faa5754d2b4aaa41cbb9c0ba178b1105cc26cd509ba4c4d4f30a073d003fed3",
+              "bytes": 106296,
+              "imported_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/7f/7faa5754d2b4aaa41cbb9c0ba178b1105cc26cd509ba4c4d4f30a073d003fed3.xml"
+            }
+          }
+        },
+        "derivation": "Article subtree serialized from preserved official PMC OAI response",
+        "license": [
+          "https://creativecommons.org/licenses/by/4.0/ This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are properly credited."
+        ],
+        "scientific_support_status": "fulltext_available_not_content_reviewed",
+        "blocks_sha256": "2ecce6fcbee2b3483713c8443d4654281511fbd9e4ba5775c4ef68195938455c",
+        "snapshot_file_imports": {
+          "path": {
+            "declared_path": "papers/19693276/article.xml",
+            "resolved_input_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_03/papers/19693276/article.xml",
+            "sha256": "f4c8f91e03b20eef02352c8aeb36980ee05686513574dd4256fa7851de30e5bd",
+            "bytes": 119314,
+            "imported_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/f4/f4c8f91e03b20eef02352c8aeb36980ee05686513574dd4256fa7851de30e5bd.xml"
+          },
+          "text_path": {
+            "declared_path": "papers/19693276/article.txt",
+            "resolved_input_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_03/papers/19693276/article.txt",
+            "sha256": "ec008c039334d3f40d5f78f7676a2ad97ff6ce560111d4d1f99f81e1aa4fa9b3",
+            "bytes": 48643,
+            "imported_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/ec/ec008c039334d3f40d5f78f7676a2ad97ff6ce560111d4d1f99f81e1aa4fa9b3.txt"
+          },
+          "blocks_path": {
+            "declared_path": "papers/19693276/blocks.json",
+            "resolved_input_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_03/papers/19693276/blocks.json",
+            "sha256": "2ecce6fcbee2b3483713c8443d4654281511fbd9e4ba5775c4ef68195938455c",
+            "bytes": 66591,
+            "imported_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/2e/2ecce6fcbee2b3483713c8443d4654281511fbd9e4ba5775c4ef68195938455c.json"
+          }
+        }
+      },
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/2e/2ecce6fcbee2b3483713c8443d4654281511fbd9e4ba5775c4ef68195938455c.json",
+          "sha256": "2ecce6fcbee2b3483713c8443d4654281511fbd9e4ba5775c4ef68195938455c"
+        },
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/7f/7faa5754d2b4aaa41cbb9c0ba178b1105cc26cd509ba4c4d4f30a073d003fed3.xml",
+          "sha256": "7faa5754d2b4aaa41cbb9c0ba178b1105cc26cd509ba4c4d4f30a073d003fed3"
+        },
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/ec/ec008c039334d3f40d5f78f7676a2ad97ff6ce560111d4d1f99f81e1aa4fa9b3.txt",
+          "sha256": "ec008c039334d3f40d5f78f7676a2ad97ff6ce560111d4d1f99f81e1aa4fa9b3"
+        },
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/f4/f4c8f91e03b20eef02352c8aeb36980ee05686513574dd4256fa7851de30e5bd.xml",
+          "sha256": "f4c8f91e03b20eef02352c8aeb36980ee05686513574dd4256fa7851de30e5bd"
+        }
+      ]
+    },
+    "metadata:23986147": {
+      "kind": "text",
+      "content_level": "metadata",
+      "identity_status": "pubmed_record_retrieved",
+      "pmid": "23986147",
+      "title": "Revolution of nephrology research by deep sequencing: ChIP-seq and RNA-seq.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23986147/",
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/47/47e101d0a4b62d500f01aa9b54c2389f03d312841812f05b3fa6657fe644c52f.xml",
+          "sha256": "47e101d0a4b62d500f01aa9b54c2389f03d312841812f05b3fa6657fe644c52f"
+        }
+      ]
+    },
+    "paper:23986147": {
+      "kind": "text",
+      "content_level": "abstract",
+      "pmid": "23986147",
+      "title": "Revolution of nephrology research by deep sequencing: ChIP-seq and RNA-seq.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23986147/",
+      "fulltext_status": "not_acquired"
+    }
+  },
+  "source_registry_sha256": "581ed52240b55a1c1104820389d3f7135304811acda7a9bf0016464d5f5f9fb6"
+}

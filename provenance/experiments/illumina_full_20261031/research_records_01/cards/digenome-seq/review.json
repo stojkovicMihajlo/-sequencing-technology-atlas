@@ -1,0 +1,1435 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "digenome-seq",
+  "candidate_sha256": "b102b9ee223ad54984206ce0a7776c68d5cf259cce581dd0425b113b8514682d",
+  "inspected_sources": [
+    "diagram:asset_286677b4b09abfc6eab1b01a",
+    "card:digenome-seq",
+    "metadata:25664545",
+    "paper:25664545",
+    "metadata:26924689",
+    "paper:26924689",
+    "metadata:27031497",
+    "paper:27031497",
+    "metadata:27272384",
+    "paper:27272384",
+    "metadata:26750397",
+    "paper:26750397"
+  ],
+  "checks": [
+    {
+      "target": "correction:c_readout",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The correction is supported at abstract level: common 5′ read ends identify in vitro cleavage, while cellular indel validation is reported separately. It appropriately qualifies the catalogue’s mutation-detection wording, retains the depicted Deletion/Wild type/Insert rows, and does not claim that the paper resolves their unlabeled incoming arrow or proves selective cleavage of a row.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-left: arrow from Cas9 target to the Deletion, Wild type and Insert DNA rows, with central ticks and magenta insert",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.325,
+            0.0,
+            0.569,
+            0.59
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far right: black read segments with coincident endpoints and Align and determine sequence breaks caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.85,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: description of claimed mutation detection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method detects off-target mutations induced by RGENs in a bulk population of cells by sequencing in vitro nuclease-digested genomes (digenomes).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: separate validation sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We validated off-target sites at which insertions or deletions were induced with frequencies below 0.1%, near the detection limit of targeted deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: Cons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Requires in vivo cleavage confirmation",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f01",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_genome supplies genomic DNA to o_digest. The target-context-to-digestion arrow and the assay definition support this material input; the Cas9 icon is a catalyst acting on DNA, not the consumed material. The edge assigns no generation or pooling of the three contexts.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-right: arrow to three retained DNA rows, yellow blue-outlined icon on middle row, Target site digestion caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.569,
+            0.0,
+            0.77,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f02",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_digest produces s_digenome as cleaved genomic DNA. Fragment ends are the physical signal later read by sequencing; this output agrees with the receiving o_sequence input. The edge does not assert that all DNA molecules or all three labeled rows are cut.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-right: arrow to three retained DNA rows, yellow blue-outlined icon on middle row, Target site digestion caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.569,
+            0.0,
+            0.77,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: digest fragments and aligned reads",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These digests should produce many DNA fragments with identical 5′ ends, which give rise to sequence reads that are vertically aligned at cleavage sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f03",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_digenome enters o_sequence as DNA material. The labeled Sequence arrow and the inspected comparison-table row support cleavage followed by whole-genome sequencing; no hidden enrichment or end-processing sequence is asserted at this interface.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Right-center: rightward arrow labeled Sequence between digestion panel and black read segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.772,
+            0.17,
+            0.842,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "Full text [b00275]: Table 1, Digenome-seq row",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Digenome-seq44In vitroCleavage of genomic DNA followed by standard whole genome sequencingRequires in vivo cleavage confirmation; high skill requirement for bioinformatic analysis",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f04",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_sequence produces s_reads as sequence data, consistent with both the final read-segment drawing and the primary abstract. This material-to-data boundary retains genomic sequence and common read starts as the readout association.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Right-center: rightward arrow labeled Sequence between digestion panel and black read segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.772,
+            0.17,
+            0.842,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far right: black read segments with coincident endpoints and Align and determine sequence breaks caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.85,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f05",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_reads is the data input to o_align. The final caption explicitly calls for alignment and sequence-break determination; the primary abstract identifies the computationally detected common-5′-end pattern. The route agrees with the upstream sequencing output.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far right: black read segments with coincident endpoints and Align and determine sequence breaks caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.85,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f06",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_align produces s_sites as inferred in vitro cleavage locations. This is a data output from aligned read ends, with cellular mutation validation kept separate; it agrees with the state’s stated interpretation and correction c_readout.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far right: black read segments with coincident endpoints and Align and determine sequence breaks caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.85,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: separate validation sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We validated off-target sites at which insertions or deletions were induced with frequencies below 0.1%, near the detection limit of targeted deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f07",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_cpf1_genome supplies genomic DNA to o_cpf1_digest at the broad, explicitly reasoned boundary of the named in vitro Digenome-seq application. The route is separate from the Cas9 diagram contexts and makes no cross-nuclease library-equivalence claim.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": "The Cpf1 abstract explicitly names an in vitro Digenome-seq application. Combined with the original abstract defining digested whole-genome sequencing, this supports genomic DNA as the material at this broad boundary. It does not establish Cas9-compatible end processing, library chemistry, or a Cpf1 read-start pattern."
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: opening sentence defining Cpf1 nuclease and breaks",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Programmable clustered regularly interspaced short palindromic repeats (CRISPR) Cpf1 endonucleases are single-RNA-guided (crRNA) enzymes that recognize thymidine-rich protospacer-adjacent motif (PAM) sequences and produce cohesive double-stranded breaks (DSBs).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f08",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_cpf1_digest produces s_cpf1_digest as DNA containing cohesive double-stranded breaks. The Cpf1 abstract supports the nuclease and end geometry; neither this edge nor the outgoing readout interface asserts an overhang length or terminal chemistry.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: opening sentence defining Cpf1 nuclease and breaks",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Programmable clustered regularly interspaced short palindromic repeats (CRISPR) Cpf1 endonucleases are single-RNA-guided (crRNA) enzymes that recognize thymidine-rich protospacer-adjacent motif (PAM) sequences and produce cohesive double-stranded breaks (DSBs).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": "The Cpf1 abstract explicitly names an in vitro Digenome-seq application. Combined with the original abstract defining digested whole-genome sequencing, this supports genomic DNA as the material at this broad boundary. It does not establish Cas9-compatible end processing, library chemistry, or a Cpf1 read-start pattern."
+        }
+      ]
+    },
+    {
+      "target": "flow:f09",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_cpf1_digest is the material input to the broad o_cpf1_readout operation, justified by the explicitly named in vitro Cpf1 Digenome-seq application. Its receiving operation leaves cohesive-end handling and library internals unresolved instead of silently applying the Cas9 read-start mechanism.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": "The Cpf1 abstract explicitly names an in vitro Digenome-seq application. Combined with the original abstract defining digested whole-genome sequencing, this supports genomic DNA as the material at this broad boundary. It does not establish Cas9-compatible end processing, library chemistry, or a Cpf1 read-start pattern."
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f10",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_cpf1_readout yields s_cpf1_sites as genome-wide in vitro cleavage-site data. The abstract directly reports this result; the state does not convert it into a cellular mutation map.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: cellular-validation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Most Cpf1 off-target cleavage sites did not produce mutations in cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_align",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The operation acts on sequence reads and produces cleavage-site data using common 5′ ends. Both the depicted caption and original abstract support its computational role. The stated need for cellular confirmation preserves the assay’s measurement limit.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far right: black read segments with coincident endpoints and Align and determine sequence breaks caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.85,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: Cons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Requires in vivo cleavage confirmation",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_cpf1_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The Cpf1 abstract supports a crRNA-guided nuclease recognizing thymidine-rich PAMs, generating cohesive DSBs, and being used for in vitro Digenome-seq. Genomic DNA is a justified schematic-level inference for this named application. No preparation, end-processing step, or use of the Cas9 diagram’s three contexts is imported.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: opening sentence defining Cpf1 nuclease and breaks",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Programmable clustered regularly interspaced short palindromic repeats (CRISPR) Cpf1 endonucleases are single-RNA-guided (crRNA) enzymes that recognize thymidine-rich protospacer-adjacent motif (PAM) sequences and produce cohesive double-stranded breaks (DSBs).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": "The Cpf1 abstract explicitly names an in vitro Digenome-seq application. Combined with the original abstract defining digested whole-genome sequencing, this supports genomic DNA as the material at this broad boundary. It does not establish Cas9-compatible end processing, library chemistry, or a Cpf1 read-start pattern."
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_cpf1_readout",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The broad DNA-digest-to-cleavage-site-readout operation matches the explicitly reported Cpf1 application. Keeping its mechanism null and marking library construction and cohesive-end handling unresolved is appropriate to abstract-only evidence; a specific Cas9 endpoint pattern is not assigned to Cpf1.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: cellular-validation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Most Cpf1 off-target cleavage sites did not produce mutations in cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The image names Cas9, depicts a nuclease icon at Target site digestion, and carries all three DNA rows into that panel. The original abstract establishes the in vitro DNA digest and common-end readout. Input s_genome, output s_digenome, and routes f01–f02 agree; no indel-generation, allele-selection, or unshown guide-assembly operation is claimed.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far left: Genome and yellow highlight; adjacent Cas9 target line; lower-left assay caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.31,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-left: arrow from Cas9 target to the Deletion, Wild type and Insert DNA rows, with central ticks and magenta insert",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.325,
+            0.0,
+            0.569,
+            0.59
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-right: arrow to three retained DNA rows, yellow blue-outlined icon on middle row, Target site digestion caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.569,
+            0.0,
+            0.77,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_sequence",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The broad sequencing operation is supported by the Sequence arrow, the whole-genome-sequencing assay caption, the primary abstract, and the inspected comparison-table row. Its DNA input and read-data output agree with f03–f04. Leaving adapter addition, amplification, fragmentation and end chemistry unexpanded matches the image’s level of detail.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far left: Genome and yellow highlight; adjacent Cas9 target line; lower-left assay caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.31,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Right-center: rightward arrow labeled Sequence between digestion panel and black read segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.772,
+            0.17,
+            0.842,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: digest fragments and aligned reads",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These digests should produce many DNA fragments with identical 5′ ends, which give rise to sequence reads that are vertically aligned at cleavage sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "Full text [b00275]: Table 1, Digenome-seq row",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Digenome-seq44In vitroCleavage of genomic DNA followed by standard whole genome sequencingRequires in vivo cleavage confirmation; high skill requirement for bioinformatic analysis",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_25664545",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID 25664545 and DOI 10.1038/nmeth.3284 identify the original Cas9 Digenome-seq paper. The supplied abstract, independently inspected, supports the core architecture and separate indel validation. The candidate explicitly states abstract-only availability and makes no full-text protocol or historical-priority claim.",
+      "evidence": [
+        {
+          "source_id": "metadata:25664545",
+          "locator": "PubMed metadata: title, identifiers and publication_types; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Digenome-seq: genome-wide profiling of CRISPR-Cas9 off-target effects in human cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: separate validation sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We validated off-target sites at which insertions or deletions were induced with frequencies below 0.1%, near the detection limit of targeted deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26750397",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID 26750397 and DOI 10.1038/mt.2016.1 identify a review about nuclease target selection and specificity. Its inspected abstract supports the background assignment, not a separate Digenome-seq implementation. Although metadata include a PMC identifier, supplied scientific content is only the abstract, as the candidate acknowledges.",
+      "evidence": [
+        {
+          "source_id": "metadata:26750397",
+          "locator": "PubMed metadata: title, identifiers and publication_types; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nuclease Target Site Selection for Maximizing On-target Activity and Minimizing Off-target Effects in Genome Editing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26750397",
+          "locator": "Abstract: declared review scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we review the various tools available for target selection in designing engineered nucleases, and for quantifying nuclease activity and specificity, including web-based search tools and experimental methods.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26924689",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID 26924689 and DOI 10.1016/j.jgg.2016.01.001 identify a CRISPR/Cas9 review. The inspected abstract supports a background role and does not verify a Digenome-seq protocol or general sensitivity threshold. The candidate does not use bibliographic identification as mechanistic evidence.",
+      "evidence": [
+        {
+          "source_id": "metadata:26924689",
+          "locator": "PubMed metadata: title, identifiers and publication_types; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recent Progress in CRISPR/Cas9 Technology.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26924689",
+          "locator": "Abstract: declared review scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we review the recent advances in CRISPR/Cas9 technology and the ways that have been adopted to expand our capacity for precise genome manipulation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27031497",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID 27031497 and DOI 10.1038/nprot.2016.043 identify a distinct LAM-HTGTS protocol. Targeted full-text inspection of [b00003], reference 44 at [b00267], and Table 1 at [b00275] confirms the bait–prey translocation assay identity and its background description of Digenome-seq as genomic-DNA cleavage followed by standard WGS. The candidate appropriately excludes LAM-PCR and bridge-adapter chemistry from Digenome-seq.",
+      "evidence": [
+        {
+          "source_id": "metadata:27031497",
+          "locator": "PubMed metadata: title, identifiers and publication_types; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Detecting DNA double-stranded breaks in mammalian genomes by linear amplification-mediated high-throughput genome-wide translocation sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "Full text [b00003]: abstract defining LAM-HTGTS",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we describe a linear amplification-mediated high-throughput genome-wide sequencing (LAM-HTGTS) method for detecting genome-wide “prey” DSBs via their translocation in cultured mammalian cells to a fixed “bait” DSB.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "Full text [b00275]: Table 1, Digenome-seq row",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Digenome-seq44In vitroCleavage of genomic DNA followed by standard whole genome sequencingRequires in vivo cleavage confirmation; high skill requirement for bioinformatic analysis",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27272384",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID 27272384 and DOI 10.1038/nbt.3609 identify the Cpf1 specificity paper. Its supplied abstract explicitly reports in vitro Digenome-seq and cohesive DSBs, supporting a limited Cpf1 application branch. The candidate does not claim to have inspected unavailable variant full text or infer its internal library processing.",
+      "evidence": [
+        {
+          "source_id": "metadata:27272384",
+          "locator": "PubMed metadata: title, identifiers and publication_types; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis reveals specificities of Cpf1 endonucleases in human cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: opening sentence defining Cpf1 nuclease and breaks",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Programmable clustered regularly interspaced short palindromic repeats (CRISPR) Cpf1 endonucleases are single-RNA-guided (crRNA) enzymes that recognize thymidine-rich protospacer-adjacent motif (PAM) sequences and produce cohesive double-stranded breaks (DSBs).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: cellular-validation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Most Cpf1 off-target cleavage sites did not produce mutations in cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_multiplex_unresolved",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "This is explicitly an unresolved publication assignment: the catalogue mentions a multiplexed version, whereas the checked original-method abstract does not establish a multiplexed implementation. The entry’s use of paper:25664545 is qualified as a checked boundary, not a claim that this paper describes multiplexing; no operations or guide-assignment mechanism are attached to the unresolved version.",
+      "evidence": [
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: opening paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A multiplexed version has also been published.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "record",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The complete image, seven states, five operations, ten routes, three method scopes, six paper-match entries, correction and three unknowns have been independently checked. All depicted labeled regions and arrows are accounted for, including the ambiguous target-to-row arrow retained within s_genome and u_rows. Material and data interfaces agree; DNA carries the cleavage-end signal, the nuclease acts as reagent, and cellular validation remains distinct. No attachment, compartment, branch, end-group symbol, or consequential transformation is omitted. Abstract-level Cpf1 support and the unassigned multiplex mention are bounded honestly, with no consequential unsupported assertion requiring revision.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Complete diagram: Genome, Cas9 target, three labeled DNA contexts, Target site digestion, Sequence, Align and determine sequence breaks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: cellular-validation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Most Cpf1 off-target cleavage sites did not produce mutations in cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: opening paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A multiplexed version has also been published.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Digenome-seq (Cas9)",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue title, image caption and original paper identify capitalization aliases of the Cas9 method. o_digest, o_sequence and o_align are the supported operations. The scope correctly preserves the three DNA contexts without asserting how they are generated and limits paper-based resolution to the available abstract.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far left: Genome and yellow highlight; adjacent Cas9 target line; lower-left assay caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.31,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-right: arrow to three retained DNA rows, yellow blue-outlined icon on middle row, Target site digestion caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.569,
+            0.0,
+            0.77,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Right-center: rightward arrow labeled Sequence between digestion panel and black read segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.772,
+            0.17,
+            0.842,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far right: black read segments with coincident endpoints and Align and determine sequence breaks caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.85,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Digenome-seq (Cpf1 application)",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The related primary abstract explicitly names Cpf1 Digenome-seq, supporting o_cpf1_digest and the broad o_cpf1_readout. Resolved applicability at this level does not imply resolved library internals: the candidate keeps cohesive ends distinct, does not assign the three Cas9 rows or common-5′-end mechanism, and records the remaining interface question.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: opening sentence defining Cpf1 nuclease and breaks",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Programmable clustered regularly interspaced short palindromic repeats (CRISPR) Cpf1 endonucleases are single-RNA-guided (crRNA) enzymes that recognize thymidine-rich protospacer-adjacent motif (PAM) sequences and produce cohesive double-stranded breaks (DSBs).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: cellular-validation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Most Cpf1 off-target cleavage sites did not produce mutations in cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Multiplexed Digenome-seq (catalogue mention)",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue supports the existence of a multiplexed version but supplies no multiplexing route. Leaving status unresolved and operation_ids empty preserves that exact evidence boundary without inventing guide pooling, sample pooling, indexing, or cleavage-site attribution.",
+      "evidence": [
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: opening paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A multiplexed version has also been published.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Complete diagram: Genome, Cas9 target, three labeled DNA contexts, Target site digestion, Sequence, Align and determine sequence breaks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_cpf1_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "A Cpf1-cleaved genomic-DNA material state is supported at the abstract-defined application boundary. Cohesive DSBs are expressly reported; no overhang length, end group, adapter, or processing state is invented. This state matches both o_cpf1_digest output and o_cpf1_readout input.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: opening sentence defining Cpf1 nuclease and breaks",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Programmable clustered regularly interspaced short palindromic repeats (CRISPR) Cpf1 endonucleases are single-RNA-guided (crRNA) enzymes that recognize thymidine-rich protospacer-adjacent motif (PAM) sequences and produce cohesive double-stranded breaks (DSBs).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": "The Cpf1 abstract explicitly names an in vitro Digenome-seq application. Combined with the original abstract defining digested whole-genome sequencing, this supports genomic DNA as the material at this broad boundary. It does not establish Cas9-compatible end processing, library chemistry, or a Cpf1 read-start pattern."
+        }
+      ]
+    },
+    {
+      "target": "state:s_cpf1_genome",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Genomic DNA is a reasonable explicit inference from an in vitro human-genome cleavage analysis named Digenome-seq and the original definition of digested whole-genome sequencing. The candidate supplies that inference rationale and distinguishes this input from the three Cas9 schematic rows; it does not assert intact-cell cleavage.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": "The Cpf1 abstract explicitly names an in vitro Digenome-seq application. Combined with the original abstract defining digested whole-genome sequencing, this supports genomic DNA as the material at this broad boundary. It does not establish Cas9-compatible end processing, library chemistry, or a Cpf1 read-start pattern."
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_cpf1_sites",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract directly reports genome-wide in vitro Cpf1 cleavage sites and states that most off-target cleavage sites did not produce mutations in cells. The data state and its limitation are supported, and they agree with o_cpf1_readout and f10 without adding a Cpf1 endpoint-scoring mechanism.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: cellular-validation limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Most Cpf1 off-target cleavage sites did not produce mutations in cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_digenome",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The digestion panel and assay definition support digested genomic DNA. The catalogue expressly explains recurring fragment 5′ ends. All three rows remain visible around the nuclease icon, and the candidate correctly refrains from specifying which row is cut or retained. No terminal chemical group or library attachment is depicted or asserted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-right: arrow to three retained DNA rows, yellow blue-outlined icon on middle row, Target site digestion caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.569,
+            0.0,
+            0.77,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: digest fragments and aligned reads",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These digests should produce many DNA fragments with identical 5′ ends, which give rise to sequence reads that are vertically aligned at cleavage sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_genome",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The visible Genome highlight, adjacent Cas9 target line, arrow, shorter Deletion row, Wild type row, and longer Insert row with magenta segment are faithfully recorded. There is no extraction or amplification arrow between Genome and Cas9 target. The candidate distinguishes these drawn contexts from the paper’s human-cell application and the genomic DNA actually digested in vitro.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far left: Genome and yellow highlight; adjacent Cas9 target line; lower-left assay caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.31,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-left: arrow from Cas9 target to the Deletion, Wild type and Insert DNA rows, with central ticks and magenta insert",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.325,
+            0.0,
+            0.569,
+            0.59
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_reads",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Sequence reads are the data product of sequencing digested genomic DNA, carrying genomic sequence and shared 5′ start coordinates. The image leaves library preparation unexpanded and depicts no adapters or cleavage-end enrichment branch. This state agrees with both o_sequence output and o_align input.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Right-center: rightward arrow labeled Sequence between digestion panel and black read segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.772,
+            0.17,
+            0.842,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far right: black read segments with coincident endpoints and Align and determine sequence breaks caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.85,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: digest fragments and aligned reads",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These digests should produce many DNA fragments with identical 5′ ends, which give rise to sequence reads that are vertically aligned at cleavage sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_sites",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The final black read segments have coincident endpoints under the alignment/sequence-break caption. The original abstract establishes computational cleavage-site inference, while separate validation and the catalogue limitation prevent interpretation as direct cellular-indel frequency measurement. The state matches o_align and c_readout.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Far right: black read segments with coincident endpoints and Align and determine sequence breaks caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.85,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: separate validation sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We validated off-target sites at which insertions or deletions were induced with frequencies below 0.1%, near the detection limit of targeted deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: Cons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Requires in vivo cleavage confirmation",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_cpf1_interface",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The supplied Cpf1 abstract establishes cohesive breaks and a Digenome-seq application but gives no library construction, cohesive-end processing, or read-end scoring details. The question identifies exactly what variant-specific full text would be needed to expand o_cpf1_readout. Its nonblocking status is appropriate because the current operation remains broad and asserts none of those internals.",
+      "evidence": [
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: opening sentence defining Cpf1 nuclease and breaks",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Programmable clustered regularly interspaced short palindromic repeats (CRISPR) Cpf1 endonucleases are single-RNA-guided (crRNA) enzymes that recognize thymidine-rich protospacer-adjacent motif (PAM) sequences and produce cohesive double-stranded breaks (DSBs).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27272384",
+          "locator": "Abstract: in vitro Digenome-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of cleavage sites in vitro for eight Cpf1 nucleases using Digenome-seq revealed that there were 6 (LbCpf1) and 12 (AsCpf1) cleavage sites per crRNA in the human genome, fewer than are present for Cas9 nucleases (>90).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_multiplex",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue’s single multiplexing statement does not say what is combined or how guides are associated with cleavage sites. The candidate correctly requests a variant-specific primary description for any expansion. This is nonblocking for a scope that records only the catalogue mention and assigns no multiplexed operations.",
+      "evidence": [
+        {
+          "source_id": "card:digenome-seq",
+          "locator": "jcr:content/par/text_1/text: opening paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A multiplexed version has also been published.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_rows",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The target-to-row arrow is visible but unlabeled, and the digestion panel retains three rows with one central nuclease icon. These do not establish a mutation-generation mechanism, selective cleavage, or sample pooling. A figure-specific legend or primary description could resolve those roles; preserving the exact ambiguity is sufficient for the supported core digestion–sequencing–alignment architecture.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-left: arrow from Cas9 target to the Deletion, Wild type and Insert DNA rows, with central ticks and magenta insert",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.325,
+            0.0,
+            0.569,
+            0.59
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_286677b4b09abfc6eab1b01a",
+          "locator": "Center-right: arrow to three retained DNA rows, yellow blue-outlined icon on middle row, Target site digestion caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.569,
+            0.0,
+            0.77,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract: method definition and common-5-prime-end signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

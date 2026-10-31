@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-31",
+  "kind": "engineering_runtime_audit",
+  "native_model_runs_started_by_this_audit": false,
+  "existing_runtime": {
+    "worker": "src/genomics_discovery/curation/codex_worker.py",
+    "entrypoint": "CodexWorker.run(prompt, attempt_dir, image_paths=())",
+    "attachment_validation": "_image_inventory rejects unavailable, duplicate, symlinked, non-PNG or out-of-attempt inputs and records their SHA-256 hashes.",
+    "command": "_command adds a repeated --image argument for every supplied PNG, keeps --ephemeral, workspace-write sandbox, on-request approval with managed auto_review, and disables nested multi-agent pools.",
+    "archive": "command.json records actual image_inputs and invocation arguments. The worker checks image bytes again after execution and returns a nonaccepting outcome if they changed.",
+    "completion": "assess_archived_attempt independently replays result/events agreement, successful completion, thread ID, usage and nonempty final output. It does not validate scientific artifacts.",
+    "existing_image_tests": "tests/test_curation_codex_worker.py covers attachment order and hashes, invalid files, mutation, native errors, timeout and cancellation.",
+    "modifications_required": "None for image attachment or native transport. The new caller must actually supply image_paths to every author and reviewer."
+  },
+  "recommended_orchestration": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "location": "Sherlock Qiu group, sustained work under Slurm, selected immutable new runtime; no local native model jobs.",
+    "stages": [
+      "author",
+      "fresh independent reviewer",
+      "one normal author correction if requested",
+      "fresh independent reviewer after correction"
+    ],
+    "granularity": "Explanatory diagram transformations, actual branches and important material/readout/interface features. Do not invoke the old five-session detailed-execution pipeline merely to transcribe each schematic.",
+    "caller_responsibilities": [
+      "Freeze manifest and implementation hashes and exclusively claim a new run/attempt directory.",
+      "Copy or render each diagram as an actual regular PNG inside the author attempt, then supply it through image_paths.",
+      "Independently stage the same source image/rendition inside the reviewer attempt and supply it through image_paths there too.",
+      "Bind original image, any display rendition, source URL and rendering/crop coordinates in provenance. Attach a white-background rendition for transparent images; preserve the original.",
+      "Supply method/variant scope, source catalogue, verified bibliographic metadata and available paper evidence with its actual full-text/abstract/metadata level.",
+      "Supply exact output schema and artifact path; validate parsed JSON, graph IDs and source references after native transport succeeds.",
+      "Require source-backed review of every declared target and completeness against the diagram; positive-sounding prose is insufficient.",
+      "Keep literal figure transcription distinct from a scientifically justified correction and retain their source bindings.",
+      "On correction, pass the actual candidate and review; rerun fresh review before acceptance. Preserve previous files.",
+      "Persist per-card state, current stage, immutable inputs, output paths and terminal failure category. Resume only missing/failed work in new attempt directories, never rewrite original archives.",
+      "Do not automatically equate bibliography matching with full-paper protocol verification or cross-method novelty with documented ancestry."
+    ],
+    "latency": "The user requested full coverage, not a hard per-card time budget. Make any timeout an explicit plan option rather than silently accepting a truncated stage. The worker default is 1800 seconds unless overridden; the earlier source-only clean runner explicitly used None.",
+    "monitoring": "Track transport completion, JSON/schema failure, source failure and scientific review outcome separately. File existence alone does not establish completed extraction or acceptance."
+  },
+  "prompt_module": {
+    "path": "src/genomics_discovery/curation/illumina_prompts.py",
+    "function": "build_prompt(role, context, schema, previous_candidate=None, previous_review=None)",
+    "roles": [
+      "author",
+      "reviewer"
+    ],
+    "context_contract": "Caller-supplied JSON dictionary. Include pinned source scope, images/locators, bibliography/evidence levels, output details and reviewer candidate/targets as needed.",
+    "schema_contract": "Nonempty JSON schema dictionary, schema text or read-only schema Path.",
+    "boundary": "Only builds prompt text; does not acquire sources, attach images, call models, validate scientific output or admit graph edges.",
+    "case_specific_instructions": false,
+    "rules": [
+      "explicit molecule/readout roles",
+      "compartment and attachment state",
+      "grouped-method applicability",
+      "one-to-many granularity allowed",
+      "diagram-paper discrepancy resolution",
+      "selection specificity limitations",
+      "source-level honesty",
+      "fresh complete correction review"
+    ]
+  },
+  "temp_storage_audit": {
+    "trigger": "Parent observed ENOSPC under the user's normal Codex home tmp/arg0-linux directory on Sherlock.",
+    "pinned_source": "https://api.github.com/repos/openai/codex/contents/codex-rs/arg0/src/lib.rs?ref=rust-v0.163.0",
+    "function": "prepare_aliases_in_home",
+    "finding": "This version constructs CODEX_HOME/tmp/arg0-${OS} and calls tempfile.tempdir_in there. No dedicated TMPDIR or CODEX_TMPDIR override was found in this code.",
+    "implication": "Changing TMPDIR does not relocate this failing arg0 path. Changing CODEX_HOME also changes auth/config/session locations and is not a temp-only solution.",
+    "documented_related_variable": "CODEX_SQLITE_HOME relocates SQLite-backed state only, not arg0 helpers.",
+    "recommended_immediate_action": "Diagnose quota and reclaim only identified rebuildable cache under existing authorization, preserving auth, managed policy and original session artifacts. The parent owns remediation; this audit changes no auth/config/cache state.",
+    "unsupported_workaround_boundary": "Relocating a temp subdirectory through a symlink is not a documented CLI setting and was not performed or validated here. Active locks, user-only permissions and sandbox behavior would require explicit checks."
+  },
+  "independent_acceptance_audit": {
+    "status": "All 16 independent deterministic regression controls passed on the reviewed source snapshot. This does not establish live model behavior or scientific accuracy.",
+    "review_controls": "tests/test_illumina_review_controls.py",
+    "batch_controls": "tests/test_illumina_batch_controls.py",
+    "findings": [
+      "Scientific State/Operation/Flow evidence must not be established solely by publication metadata.",
+      "Unresolved grouped-method applicability and unresolved source corrections must not become supported merely because the candidate omits a blocking Unknown.",
+      "Matched publications require publication sources, not an image source ID.",
+      "Positive paper-content and correction review judgments require target-appropriate source evidence.",
+      "A use_primary correction requires an explicitly authored target supported by the primary source, with the source drawing observation retained separately.",
+      "Resume policy must pin inventory as well as acquisition state and must revalidate supported artifact bytes before skipping completed rows.",
+      "Source image identity must remain bound to acquired bytes before and after rendering/stages; attached-image hashes alone do not prove original-source identity.",
+      "Native prompt archives and worker result metadata must agree with the caller's requested prompt and replayed transport evidence.",
+      "Stage failures must update stage status and distinguish transport, structural and scientific review outcomes."
+    ],
+    "test_boundary": "The batch controls use a fake worker that writes the existing audited transport archive shape. No actual Codex or model is invoked, and successful fixture acceptance is not scientific validation.",
+    "coverage_boundary": "Cached inventory completeness differs from live-site completeness and from resolution of every underlying method or non-PubMed reference."
+  },
+  "official_documentation": [
+    "https://learn.chatgpt.com/docs/cli/reference",
+    "https://learn.chatgpt.com/docs/config-file/environment-variables",
+    "https://developers.openai.com/api/docs/guides/latest-model?model=gpt-5.3-codex"
+  ],
+  "limits": [
+    "This audit does not establish successful live attachment delivery under Sherlock CLI 0.163.0; parent must inspect the actual launch archive.",
+    "Image attachment and byte integrity establish transport, not image understanding or scientific entailment.",
+    "Role instructions constrain intended behavior but require empirical scientific checks; they do not guarantee hallucination-free extraction."
+  ],
+  "software_verification": {
+    "date": "2026-10-31",
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=src /Users/mihajlostojkovic/anaconda3/bin/python -m pytest tests/test_illumina_review_controls.py tests/test_illumina_batch_controls.py -q",
+    "passed": 16,
+    "skipped": 0,
+    "elapsed_seconds": 1.45,
+    "warning": "Existing asyncio_mode config is unknown when pytest_asyncio is not loaded. All batch controls use stdlib asyncio.run and executed without skipping.",
+    "model_calls": 0,
+    "implementation_sha256": {
+      "src/genomics_discovery/curation/illumina_prompts.py": "42c09d7b362ba8ee8fbe2bf845821c84babef7d3573e02709b5bef8424920cf1",
+      "src/genomics_discovery/curation/illumina_diagrams.py": "33d6ebd2f598cbf86de51fdd6a90e7e0984f1a1695efbbf2f220ee2af94586f8",
+      "src/genomics_discovery/curation/illumina_batch.py": "320e1b8c1dbdd62dc15ffb3e41df61da998c986de579fcec84d0e631026a4a8c",
+      "src/genomics_discovery/curation/illumina_sources.py": "ce15cef2d67ba366220bade77ad44cff3d5da0ef680aeee0edeabdbbaa3efd35"
+    }
+  }
+}

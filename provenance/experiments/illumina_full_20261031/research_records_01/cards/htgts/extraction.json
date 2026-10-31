@@ -1,0 +1,1760 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "htgts",
+  "title": "HTGTS",
+  "method_names": [
+    "HTGTS",
+    "HTGTS-Rep-seq",
+    "LAM-HTGTS"
+  ],
+  "scope": "Architecture of the supplied Illumina HTGTS explanatory schematic: one end-processed, adapter-first DNA-library route from genomic material to purified sequencing-end-tagged DNA. All eight depicted transformations and bead attachment are retained; no alternative branch or sequencing run is drawn. Biological joining is upstream context. Hu et al. Figure 1a supports interpretation of this implementation, while Chiarle et al. support the bait–prey principle but report different experimental library routes. Explicit repertoire and linear-amplification variants are qualified in method_scopes without importing unshown operations into the graph. Publication metadata and catalogue timestamps are not used to establish invention or priority.",
+  "inspected_sources": [
+    "diagram:asset_5de0e83033ca03a8bcec0775",
+    "card:htgts",
+    "metadata:21962511",
+    "paper:21962511",
+    "metadata:27354528",
+    "paper:27354528",
+    "metadata:26924689",
+    "paper:26924689",
+    "metadata:27031497",
+    "paper:27031497",
+    "metadata:25664545",
+    "paper:25664545",
+    "metadata:26873106",
+    "paper:26873106",
+    "metadata:25503383",
+    "paper:25503383"
+  ],
+  "states": [
+    {
+      "id": "s_genomic",
+      "label": "Genomic DNA containing pre-existing bait–prey junctions",
+      "kind": "material",
+      "features": [
+        "The biological target is the genomic junction formed when a known bait broken end joins a prey broken end in cells. The genomic DNA also contains unrearranged sequences.",
+        "The leftmost Breakage in genome icon supplies biological context; neither the cellular joining reaction nor extraction is depicted.",
+        "No legend assigns the yellow highlight or blue/orange colors to particular loci or chemical groups."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Leftmost Breakage in genome panel and High-throughput genome-wide translocation sequencing (HTGTS) label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.15,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00008], HTGTS junction substrate and resolution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Such high-throughput junction cloning11-13, leveraging aspects of whole-genome library construction and next generation sequencing14,15, provides nucleotide-level resolution of translocation junctions that fuse the broken ends of the genome-wide “prey” DSBs to the bait I-SceI DSB (Fig.1a).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_fragment",
+      "label": "Sonicated double-stranded genomic DNA fragments",
+      "kind": "material",
+      "features": [
+        "Mixed fragments with staggered ends are drawn, including a blue/orange fragment among blue-only fragments.",
+        "Junction-bearing fragments retain the covalent bait–prey sequence association already present in genomic DNA. Sonication creates preparation-specific fragment ends."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Fragmentation by sonication panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.24,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00008], HTGTS junction substrate and resolution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Such high-throughput junction cloning11-13, leveraging aspects of whole-genome library construction and next generation sequencing14,15, provides nucleotide-level resolution of translocation junctions that fuse the broken ends of the genome-wide “prey” DSBs to the bait I-SceI DSB (Fig.1a).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_repair",
+      "label": "End-repaired double-stranded DNA fragments",
+      "kind": "material",
+      "features": [
+        "Aligned duplex ends replace the staggered ends, consistent with end polishing to blunt ends.",
+        "The internal blue/orange sequence association is retained; no terminal phosphate chemistry is specified."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "End repair panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.265,
+            0.0,
+            0.345,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_atail",
+      "label": "Double-stranded DNA fragments with 3′ A additions",
+      "kind": "material",
+      "features": [
+        "Terminal A symbols explicitly mark 3′ adenine additions, distinct from the biological junction within the DNA."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "3’ A addition panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.37,
+            0.0,
+            0.46,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_adapter_pcr",
+      "label": "Adapter-bearing DNA mixture including biotin-labeled amplified target products",
+      "kind": "material",
+      "features": [
+        "Red end segments are depicted on several fragments. An upper target product also carries a small affinity symbol.",
+        "The primary overview identifies enrichment of biotinylated amplification products; this image supplies no explicit biotin legend.",
+        "The selected insert retains genomic sequence spanning the bait–prey junction, with adapters providing a library priming interface."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Adapter ligation and PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.58,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_capture",
+      "label": "Streptavidin-bead-bound enriched DNA",
+      "kind": "material",
+      "features": [
+        "Selected amplification products are physically associated with the depicted magnetic bead through streptavidin–biotin binding.",
+        "Affinity enrichment selects labeled DNA; bead retention alone does not establish that every retained molecule is a biological translocation."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Streptavidin magnetic bead pull-down panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.71,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_nested",
+      "label": "Nested-PCR target DNA amplicons",
+      "kind": "material",
+      "features": [
+        "The fragment is drawn without a bead, with a central blue segment and short orange/pink terminal regions.",
+        "This state represents newly amplified DNA. No independent elution or cleavage operation is depicted.",
+        "Locus/adapter-directed amplification retains the bait–prey sequence connection in junction-containing products."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Nested PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.0,
+            0.79,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_tagged",
+      "label": "DNA amplicons with sequencing-end tags",
+      "kind": "material",
+      "features": [
+        "Paired multicolored lines retain the internal sequence and show extended colored terminal regions.",
+        "The primary overview assigns further amplification an Illumina MiSeq end-labeling role. Exact adapter sequences, sample barcodes, UMIs and read orientation are not defined by the figure."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Tagged PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.0,
+            0.88,
+            0.88
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_purify",
+      "label": "Purified DNA sequencing library",
+      "kind": "material",
+      "features": [
+        "The rightmost multicolored duplex retains its tagged architecture and is labeled DNA.",
+        "The DNA insert is the readout carrier of the covalent genomic bait–prey association.",
+        "Sequencing junction-containing inserts can establish the connected prey locus and junction sequence at nucleotide resolution. Junction recovery and counts depend on bait selection, joining, and amplification; they are not a census of all cellular DSBs or an absolute cutting rate."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Purify panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.0,
+            1.0,
+            0.88
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00008], HTGTS junction substrate and resolution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Such high-throughput junction cloning11-13, leveraging aspects of whole-genome library construction and next generation sequencing14,15, provides nucleotide-level resolution of translocation junctions that fuse the broken ends of the genome-wide “prey” DSBs to the bait I-SceI DSB (Fig.1a).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00005], Introduction: determinants of translocation frequency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The frequency of translocations between two sites in the genome is a function of the frequency at which DSB ends at the two sites are available to be translocated and the frequency at which they are physically juxtaposed (“synapsed”)2. The frequency at which DSBs are available is influenced both by their rate of generation and by how long they persist before being rejoined2.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00015], detection limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To our knowledge, no method, including LAM-HTGTS, is capable of detecting all individual DSBs that occur in a population of cells over a period of time (see Limitations of LAM-HTGTS section).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00041], Limitations: absolute cutting rates",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Although LAM-HTGTS can compare relative recurrent DSB frequencies, currently LAM-HTGTS and all other related assays cannot readily quantify absolute cutting rates due to their inability to differentiate uncut sequences from cut sequences that have perfectly rejoined or rejoined bait sites in regions of very limited sequence diversity10.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_fragment",
+      "label": "Fragmentation by sonication",
+      "description": "Shears genomic DNA into shorter double-stranded fragments with the uneven ends shown. Internal bait–prey junctions can remain within fragments for subsequent recovery.",
+      "inputs": [
+        "s_genomic"
+      ],
+      "outputs": [
+        "s_fragment"
+      ],
+      "mechanism": "Physical fragmentation by sonication, as labeled.",
+      "information_effect": "Creates library-fragment ends while retaining any genomic sequence connection contained within a fragment. These newly made ends are distinct from the cellular breaks whose joining is the biological readout.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Fragmentation by sonication panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.24,
+            0.92
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_repair",
+      "label": "End repair",
+      "description": "Processes the staggered fragment ends into the aligned ends drawn in the next panel while retaining the internal DNA sequence association.",
+      "inputs": [
+        "s_fragment"
+      ],
+      "outputs": [
+        "s_repair"
+      ],
+      "mechanism": "End polishing at schematic scope; enzyme identities and additional end modifications are unspecified.",
+      "information_effect": "Changes the fragment-end interface for library construction while retaining the junction insert.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "End repair panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.265,
+            0.0,
+            0.345,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_atail",
+      "label": "3’ A addition",
+      "description": "Adds the explicitly drawn terminal 3′ A residues to the end-repaired DNA fragments, producing the A-marked substrate that proceeds to adapter ligation.",
+      "inputs": [
+        "s_repair"
+      ],
+      "outputs": [
+        "s_atail"
+      ],
+      "mechanism": "3′ adenine addition, as labeled and symbolized.",
+      "information_effect": "Changes fragment ends for library construction; it does not create the internal genomic junction.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "3’ A addition panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.37,
+            0.0,
+            0.46,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_adapter_pcr",
+      "label": "Adapter ligation and PCR",
+      "description": "Adds adapters to the A-tailed DNA and amplifies target-containing molecules before affinity selection. This combined diagram block yields adapter-bearing products including biotin-labeled target DNA.",
+      "inputs": [
+        "s_atail"
+      ],
+      "outputs": [
+        "s_adapter_pcr"
+      ],
+      "mechanism": "Adapter ligation and PCR remain one depicted block. The primary overview identifies biotinylated products; HTGTS text supports locus/adapter-directed PCR. The figure does not specify adapter oligonucleotides or biotin placement.",
+      "information_effect": "Retains the genomic insert, supplies an adapter priming interface, and enriches DNA accessible to bait-directed amplification. It does not directly mark every cellular broken end.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Adapter ligation and PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.58,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_capture",
+      "label": "Streptavidin magnetic bead pull-down",
+      "description": "Enriches the biotin-labeled amplification products by attachment to streptavidin on the magnetic bead. The retained product is bead-bound selected DNA.",
+      "inputs": [
+        "s_adapter_pcr"
+      ],
+      "outputs": [
+        "s_capture"
+      ],
+      "mechanism": "Streptavidin–biotin affinity binding; the bead is a selection support, not an enzyme or a DNA product.",
+      "information_effect": "Selects a library-associated physical label. Labeled background can also be retained, so this selection alone does not establish translocation specificity.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Streptavidin magnetic bead pull-down panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.71,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_nested",
+      "label": "Nested PCR",
+      "description": "Uses bead-selected DNA as template for nested amplification, producing the selected DNA fragment shown before Tagged PCR. The drawing implies no separate chemical bead-release step.",
+      "inputs": [
+        "s_capture"
+      ],
+      "outputs": [
+        "s_nested"
+      ],
+      "mechanism": "Further PCR using the HTGTS locus/adapter primer architecture. The primary overview assigns these later amplifications a specificity-increasing role.",
+      "information_effect": "Increases representation and specificity of bait-containing products while preserving the junction sequence in newly amplified DNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Nested PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.0,
+            0.79,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_tagged",
+      "label": "Tagged PCR",
+      "description": "Further amplifies the selected DNA and extends the colored terminal regions to generate sequencing-end-tagged amplicons.",
+      "inputs": [
+        "s_nested"
+      ],
+      "outputs": [
+        "s_tagged"
+      ],
+      "mechanism": "PCR-based end labeling for the Illumina sequencing interface, supported by the primary overview of the end-processed HTGTS route.",
+      "information_effect": "Adds the sequencing-library end interface while retaining the genomic junction insert. The colored ends do not establish a UMI or cell barcode.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Tagged PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.0,
+            0.88,
+            0.88
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_purify",
+      "label": "Purify",
+      "description": "Purifies the tagged amplicons to yield the rightmost DNA library, retaining the depicted multicolored duplex architecture.",
+      "inputs": [
+        "s_tagged"
+      ],
+      "outputs": [
+        "s_purify"
+      ],
+      "mechanism": "Purification is a broad depicted block; no purification chemistry or additional conversion is specified.",
+      "information_effect": "Produces the DNA library for reading bait-linked genomic junctions. Sequencing is the intended downstream interface; the figure contains no sequencing or computational operation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Purify panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.0,
+            1.0,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_fragment_in",
+      "source": "s_genomic",
+      "target": "op_fragment",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Fragmentation by sonication panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.24,
+            0.92
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_fragment_out",
+      "source": "op_fragment",
+      "target": "s_fragment",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Fragmentation by sonication panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.24,
+            0.92
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_repair_in",
+      "source": "s_fragment",
+      "target": "op_repair",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "End repair panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.265,
+            0.0,
+            0.345,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_repair_out",
+      "source": "op_repair",
+      "target": "s_repair",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "End repair panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.265,
+            0.0,
+            0.345,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_atail_in",
+      "source": "s_repair",
+      "target": "op_atail",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "3’ A addition panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.37,
+            0.0,
+            0.46,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_atail_out",
+      "source": "op_atail",
+      "target": "s_atail",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "3’ A addition panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.37,
+            0.0,
+            0.46,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_adapter_pcr_in",
+      "source": "s_atail",
+      "target": "op_adapter_pcr",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Adapter ligation and PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.58,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_adapter_pcr_out",
+      "source": "op_adapter_pcr",
+      "target": "s_adapter_pcr",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Adapter ligation and PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.58,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_capture_in",
+      "source": "s_adapter_pcr",
+      "target": "op_capture",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Streptavidin magnetic bead pull-down panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.71,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_capture_out",
+      "source": "op_capture",
+      "target": "s_capture",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Streptavidin magnetic bead pull-down panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.71,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_nested_in",
+      "source": "s_capture",
+      "target": "op_nested",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Nested PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.0,
+            0.79,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_nested_out",
+      "source": "op_nested",
+      "target": "s_nested",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Nested PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.0,
+            0.79,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_tagged_in",
+      "source": "s_nested",
+      "target": "op_tagged",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Tagged PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.0,
+            0.88,
+            0.88
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_tagged_out",
+      "source": "op_tagged",
+      "target": "s_tagged",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Tagged PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.0,
+            0.88,
+            0.88
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_purify_in",
+      "source": "s_tagged",
+      "target": "op_purify",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Purify panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.0,
+            1.0,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_purify_out",
+      "source": "op_purify",
+      "target": "s_purify",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Purify panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.0,
+            1.0,
+            0.88
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "HTGTS",
+      "operation_ids": [
+        "op_fragment",
+        "op_repair",
+        "op_atail",
+        "op_adapter_pcr",
+        "op_capture",
+        "op_nested",
+        "op_tagged",
+        "op_purify"
+      ],
+      "status": "resolved",
+      "rationale": "All eight operations belong to the single end-processed, adapter-first HTGTS route actually drawn, consistent with Hu et al. Figure 1a. It is an explanatory architecture, not the exact 2011 Chiarle implementation: that paper describes restriction-fragmented adapter-PCR and circularization-PCR libraries sequenced by Roche-454. Those unshown restriction/blocking/circularization routes are not added as branches. The biological target is a pre-existing bait–prey DNA junction, carried as copied genomic sequence in the final library.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Entire single-route schematic, initial HTGTS label and final DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00048], Generation of HTGTS libraries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with HaeIII for c-myc25xI-SceI samples or MspI for ΔSγ12xI-SceI samples. For adapter-PCR libraries, an asymmetric adapter was ligated to cleaved genomic DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00048], sequencing platform",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Libraries were sequenced by Roche-454.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], circularization-PCR approach",
+          "basis": "text",
+          "support": "reported",
+          "quote": "As a second approach, we employed circularization-PCR (Fig. 1E; Mahowald et al., 2009), in which enzymatically fragmented DNA was intra-molecularly ligated, digested with blocking enzymes, and nested-PCR performed with locus-specific primers.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "HTGTS-Rep-seq",
+      "operation_ids": [
+        "op_fragment"
+      ],
+      "status": "unresolved",
+      "rationale": "Only genomic-DNA sonication is directly mapped, supported by the catalogue. That text then describes linear amplification with a biotinylated J-associated primer, enrichment of labeled ssDNA, and bridge-adapter ligation after capture; it is not the figure’s adapter-first route. The supplied Lin abstract establishes IgH/IgL V(D)J exon, CDR3 and DJH repertoire measurement using J primers. That is the supported target, rather than equating repertoire sequencing with AID-dependent class switching. The exact variant chemistry, especially the catalogue’s six-nucleotide UMI designation, is not verified by the abstract-only primary evidence. Other complete diagram operations are not assigned solely because names overlap.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Fragmentation by sonication panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.24,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:htgts",
+          "locator": "jcr:content/par/text_1/text, repertoire variant description",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HTGTS-Rep-seq, genomic DNA from B-cell populations is sonicated and linearly amplified with a biotinylated primer that anneals downstream of a J segment. The biotin-labeled single-stranded DNA products are enriched with streptavidin beads, and the 3’ ends are ligated to a bridge adaptor containing a 6-nucleotide UMI.",
+          "bbox": null,
+          "rationale": "Catalogue-level chemistry claim. The supplied Lin paper is abstract-only; detailed primer, adapter and UMI chemistry has not been independently verified."
+        },
+        {
+          "source_id": "paper:27354528",
+          "locator": "Abstract only: assay target and J-primer selection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We now describe an unbiased, sensitive, and readily accessible assay, referred to as high-throughput genome-wide translocation sequencing-adapted repertoire sequencing (HTGTS-Rep-seq), to quantify antibody repertoires. HTGTS-Rep-seq quantitatively identifies the vast majority of IgH and IgL V(D)J exons, including their unique CDR3 sequences, from progenitor and mature mouse B lineage cells via the use of specific J primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27354528",
+          "locator": "Abstract only: DJH and productive/nonproductive configurations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HTGTS-Rep-seq also accurately quantifies DJH intermediates and V(D)J exons in either productive or nonproductive configurations.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "LAM-HTGTS",
+      "operation_ids": [
+        "op_fragment"
+      ],
+      "status": "resolved",
+      "rationale": "Sonication is the directly shared transformation. The full-text protocol separately establishes: linear amplification across a known bait into prey using a 5′ biotinylated primer; capture of resulting ssDNA on streptavidin beads; bridge-adapter ligation after capture; then nested and sequencing-end PCR. The depicted end-repair/A-addition/adapter-before-capture route is not assigned to this variant. Capture and PCR names overlap, but their material substrates differ, so they are not treated as identical graph operations. The card’s HTGTS CRISPR/Cas9 label denotes an application; the engineered-nuclease paper specifically supports a linear-amplification-mediated implementation for Cas9 and TALEN work, not a universal alias for every HTGTS CRISPR experiment.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Fragmentation by sonication panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.24,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel b",
+          "basis": "text",
+          "support": "reported",
+          "quote": "LAM-HTGTS directly amplifies junctions from sheared genomic DNA using LAM-PCR followed by enrichment and bridge adapter ligation to allow for exponential amplification and Miseq labeling of enriched products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00012], LAM-HTGTS overview: amplification, capture and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "LAM-PCR with a single 5’ biotinylated primer amplifies across the bait sequence into the unknown prey sequence (Fig. 1b). Junction-containing ssDNAs are enriched via binding to streptavidin-coated magnetic beads (Fig. 1b). After washing, bead-bound ssDNAs are unidirectionally ligated to a bridge adapter18.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25503383",
+          "locator": "Abstract only: explicit linear-amplification modification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we describe a linear amplification-mediated modification of a previously published high-throughput, genome-wide, translocation sequencing (HTGTS) method that robustly detects DNA double-stranded breaks (DSBs) generated by engineered nucleases across the human genome based on their translocation to other endogenous or ectopic DSBs.",
+          "bbox": null,
+          "rationale": "This abstract establishes the variant identity and translocation-based engineered-nuclease readout. Detailed chemistry is supported by the separate full-text Hu protocol."
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_21962511",
+      "source_id": "paper:21962511",
+      "methods": [
+        "HTGTS"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:21962511",
+          "locator": "PubMed metadata: title and PMID/DOI identity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide translocation sequencing reveals mechanisms of chromosome breaks and rearrangements in B cells.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; method-content evidence and its acquisition level are given separately."
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], adapter-PCR bait/prey definition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Depending on the locus-specific PCR primers, one or the other side of the I-SceI DSB provides the “bait” translocation partner (Fig. 1C), with the “prey” provided by DSBs at other genomic sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00048], Generation of HTGTS libraries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with HaeIII for c-myc25xI-SceI samples or MspI for ΔSγ12xI-SceI samples. For adapter-PCR libraries, an asymmetric adapter was ligated to cleaved genomic DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], circularization-PCR approach",
+          "basis": "text",
+          "support": "reported",
+          "quote": "As a second approach, we employed circularization-PCR (Fig. 1E; Mahowald et al., 2009), in which enzymatically fragmented DNA was intra-molecularly ligated, digested with blocking enzymes, and nested-PCR performed with locus-specific primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00048], sequencing platform",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Libraries were sequenced by Roche-454.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27354528",
+      "source_id": "paper:27354528",
+      "methods": [
+        "HTGTS-Rep-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:27354528",
+          "locator": "PubMed metadata: title and PMID/DOI identity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Highly sensitive and unbiased approach for elucidating antibody repertoires.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; method-content evidence and its acquisition level are given separately."
+        },
+        {
+          "source_id": "paper:27354528",
+          "locator": "Abstract only: assay target and J-primer selection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We now describe an unbiased, sensitive, and readily accessible assay, referred to as high-throughput genome-wide translocation sequencing-adapted repertoire sequencing (HTGTS-Rep-seq), to quantify antibody repertoires. HTGTS-Rep-seq quantitatively identifies the vast majority of IgH and IgL V(D)J exons, including their unique CDR3 sequences, from progenitor and mature mouse B lineage cells via the use of specific J primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27354528",
+          "locator": "Abstract only: DJH and productive/nonproductive configurations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HTGTS-Rep-seq also accurately quantifies DJH intermediates and V(D)J exons in either productive or nonproductive configurations.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26924689",
+      "source_id": "paper:26924689",
+      "methods": [
+        "LAM-HTGTS"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26924689",
+          "locator": "PubMed metadata: title and PMID/DOI identity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recent Progress in CRISPR/Cas9 Technology.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; method-content evidence and its acquisition level are given separately."
+        },
+        {
+          "source_id": "paper:26924689",
+          "locator": "Abstract only: review scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we review the recent advances in CRISPR/Cas9 technology and the ways that have been adopted to expand our capacity for precise genome manipulation.",
+          "bbox": null,
+          "rationale": "The card lists this for HTGTS CRISPR/Cas9, but the available abstract is a broad review and establishes neither this library architecture nor method priority."
+        }
+      ]
+    },
+    {
+      "id": "pm_27031497",
+      "source_id": "paper:27031497",
+      "methods": [
+        "HTGTS",
+        "LAM-HTGTS"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:27031497",
+          "locator": "PubMed metadata: title and PMID/DOI identity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Detecting DNA double-stranded breaks in mammalian genomes by linear amplification-mediated high-throughput genome-wide translocation sequencing.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; method-content evidence and its acquisition level are given separately."
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel b",
+          "basis": "text",
+          "support": "reported",
+          "quote": "LAM-HTGTS directly amplifies junctions from sheared genomic DNA using LAM-PCR followed by enrichment and bridge adapter ligation to allow for exponential amplification and Miseq labeling of enriched products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00012], LAM-HTGTS overview: amplification, capture and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "LAM-PCR with a single 5’ biotinylated primer amplifies across the bait sequence into the unknown prey sequence (Fig. 1b). Junction-containing ssDNAs are enriched via binding to streptavidin-coated magnetic beads (Fig. 1b). After washing, bead-bound ssDNAs are unidirectionally ligated to a bridge adapter18.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25664545",
+      "source_id": "paper:25664545",
+      "methods": [
+        "HTGTS"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25664545",
+          "locator": "PubMed metadata: title and PMID/DOI identity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Digenome-seq: genome-wide profiling of CRISPR-Cas9 off-target effects in human cells.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; method-content evidence and its acquisition level are given separately."
+        },
+        {
+          "source_id": "paper:25664545",
+          "locator": "Abstract only: Digenome-seq substrate and signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present Digenome-seq, in vitro Cas9-digested whole-genome sequencing, to profile genome-wide Cas9 off-target effects in human cells. This in vitro digest yields sequence reads with the same 5' ends at cleavage sites that can be computationally identified.",
+          "bbox": null,
+          "rationale": "This describes a distinct in-vitro Cas9-digested whole-genome assay, not the pictured HTGTS junction-enrichment workflow. Its available abstract does not verify the card’s chromatin-accessibility limitation for this route."
+        }
+      ]
+    },
+    {
+      "id": "pm_26873106",
+      "source_id": "paper:26873106",
+      "methods": [
+        "HTGTS"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26873106",
+          "locator": "PubMed metadata: title and PMID/DOI identity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transcription-associated processes cause DNA double-strand breaks and translocations in neural stem/progenitor cells.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; method-content evidence and its acquisition level are given separately."
+        },
+        {
+          "source_id": "paper:26873106",
+          "locator": "Abstract only: neural stem/progenitor-cell application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used the HTGTS approach to investigate whether a similar phenomenon occurs in primary neural stem/progenitor cells (NSPCs).",
+          "bbox": null,
+          "rationale": "An HTGTS application supports the biological use of junction data. The supplied abstract does not establish the diagram’s library chemistry."
+        }
+      ]
+    },
+    {
+      "id": "pm_25503383",
+      "source_id": "paper:25503383",
+      "methods": [
+        "LAM-HTGTS"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:25503383",
+          "locator": "PubMed metadata: title and PMID/DOI identity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide detection of DNA double-stranded breaks induced by engineered nucleases.",
+          "bbox": null,
+          "rationale": "Bibliographic identification only; method-content evidence and its acquisition level are given separately."
+        },
+        {
+          "source_id": "paper:25503383",
+          "locator": "Abstract only: explicit linear-amplification modification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we describe a linear amplification-mediated modification of a previously published high-throughput, genome-wide, translocation sequencing (HTGTS) method that robustly detects DNA double-stranded breaks (DSBs) generated by engineered nucleases across the human genome based on their translocation to other endogenous or ectopic DSBs.",
+          "bbox": null,
+          "rationale": "This abstract establishes the variant identity and translocation-based engineered-nuclease readout. Detailed chemistry is supported by the separate full-text Hu protocol."
+        },
+        {
+          "source_id": "paper:25503383",
+          "locator": "Abstract only: Cas9/TALEN application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HTGTS with different Cas9:sgRNA or TALEN nucleases revealed off-target hotspot numbers for given nucleases that ranged from a few or none to dozens or more, and extended the number of known off-targets for certain previously characterized nucleases more than tenfold.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "c_original_scope",
+      "target_id": "scope:HTGTS",
+      "diagram_observation": "The drawing shows sonication, end repair, 3′ A addition, adapter ligation/PCR, streptavidin capture, nested PCR, tagged PCR and purification to DNA. No restriction-fragmentation or circularization branch is shown.",
+      "primary_statement": "Chiarle et al. describe restriction-digested adapter-PCR and circularization-PCR libraries sequenced by Roche-454. Hu et al. Figure 1a separately describes an end-processed, adapter-first HTGTS overview with biotin-product enrichment and further MiSeq-end labeling. The scope retains every drawn operation and uses the later overview to interpret it; the exact drawing is not attributed to the 2011 experimental implementation.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Fragmentation by sonication panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.15,
+            0.0,
+            0.24,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "3’ A addition panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.37,
+            0.0,
+            0.46,
+            0.88
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel a",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The original HTGTS method requires end processing and adapter ligation of sheared genomic DNA fragments prior to PCR amplification, enrichment of biotinylated products, and further amplification steps to increase specificity and to label ends for Miseq sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00048], Generation of HTGTS libraries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with HaeIII for c-myc25xI-SceI samples or MspI for ΔSγ12xI-SceI samples. For adapter-PCR libraries, an asymmetric adapter was ligated to cleaved genomic DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00014], circularization-PCR approach",
+          "basis": "text",
+          "support": "reported",
+          "quote": "As a second approach, we employed circularization-PCR (Fig. 1E; Mahowald et al., 2009), in which enzymatically fragmented DNA was intra-molecularly ligated, digested with blocking enzymes, and nested-PCR performed with locus-specific primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21962511",
+          "locator": "[b00048], sequencing platform",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Libraries were sequenced by Roche-454.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "c_lam_order",
+      "target_id": "scope:LAM-HTGTS",
+      "diagram_observation": "Adapter ligation and PCR precedes Streptavidin magnetic bead pull-down, following end repair and 3′ A addition.",
+      "primary_statement": "Hu et al. explicitly distinguish LAM-HTGTS: linear amplification produces biotinylated ssDNA, enrichment occurs next, and bridge-adapter ligation follows enrichment. Only sonication is mapped to the same graph operation. The LAM sequence is described in its scope rather than replacing the drawing or asserting that shared operation names imply equivalent substrates.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Adapter ligation and PCR panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.49,
+            0.0,
+            0.58,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Streptavidin magnetic bead pull-down panel; molecular drawing, label and route to the next panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.71,
+            0.92
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00270], Figure 1 caption, panel b",
+          "basis": "text",
+          "support": "reported",
+          "quote": "LAM-HTGTS directly amplifies junctions from sheared genomic DNA using LAM-PCR followed by enrichment and bridge adapter ligation to allow for exponential amplification and Miseq labeling of enriched products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27031497",
+          "locator": "[b00012], LAM-HTGTS overview: amplification, capture and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "LAM-PCR with a single 5’ biotinylated primer amplifies across the bait sequence into the unknown prey sequence (Fig. 1b). Junction-containing ssDNAs are enriched via binding to streptavidin-coated magnetic beads (Fig. 1b). After washing, bead-bound ssDNAs are unidirectionally ligated to a bridge adapter18.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "c_repseq_target",
+      "target_id": "scope:HTGTS-Rep-seq",
+      "diagram_observation": "The figure is labeled HTGTS and Breakage in genome, with no J segment, V(D)J exon, CDR3 or UMI label. The catalogue associates HTGTS-Rep-seq with AID-dependent IgH class switching.",
+      "primary_statement": "The supplied Lin abstract defines HTGTS-Rep-seq as antibody-repertoire measurement using J primers to recover IgH/IgL V(D)J exons and CDR3 sequences, including DJH intermediates and productive/nonproductive configurations. That primary-supported target is used for this named variant. The abstract does not verify the catalogue’s detailed adapter/UMI chemistry or assign the entire figure to this variant.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_5de0e83033ca03a8bcec0775",
+          "locator": "Leftmost Breakage in genome panel and High-throughput genome-wide translocation sequencing (HTGTS) label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.15,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:htgts",
+          "locator": "jcr:content/par/text_1/text, application sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This approach is particularly suitable for studying for AID-dependent IgH class-switching (HTGTS-Rep-seq) and CRISPR/Cas9 genome modifications.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27354528",
+          "locator": "Abstract only: assay target and J-primer selection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We now describe an unbiased, sensitive, and readily accessible assay, referred to as high-throughput genome-wide translocation sequencing-adapted repertoire sequencing (HTGTS-Rep-seq), to quantify antibody repertoires. HTGTS-Rep-seq quantitatively identifies the vast majority of IgH and IgL V(D)J exons, including their unique CDR3 sequences, from progenitor and mature mouse B lineage cells via the use of specific J primers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27354528",
+          "locator": "Abstract only: DJH and productive/nonproductive configurations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HTGTS-Rep-seq also accurately quantifies DJH intermediates and V(D)J exons in either productive or nonproductive configurations.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u_repseq_umi",
+      "question": "Does the six-nucleotide segment called a UMI by the catalogue remain in sequenced HTGTS-Rep-seq molecules as a molecule identifier, and what is its exact adapter/ligation role? The supplied Lin abstract does not specify adapter chemistry. Resolution requires that paper’s full-text or supplementary oligonucleotide/library architecture showing the ligated and retained strands. No UMI is assigned to the Illumina diagram meanwhile.",
+      "blocking": false,
+      "affected_ids": [
+        "scope:HTGTS-Rep-seq"
+      ]
+    }
+  ]
+}

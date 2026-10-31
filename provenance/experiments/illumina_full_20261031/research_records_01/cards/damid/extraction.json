@@ -1,0 +1,2703 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "damid",
+  "title": "DamID",
+  "method_names": [
+    "DamID",
+    "DamID-Seq",
+    "Inducible DamID",
+    "NeuroDam"
+  ],
+  "scope": "Two-arm Illumina explanatory DamID schematic: in vivo adenine marking by a Dam–protein-of-interest fusion versus unfused Dam, followed separately by DpnI digestion, adapter ligation, DpnII digestion and selective PCR, then sequencing and comparison of mapped DNA. DamID-Seq names the sequencing readout implementation of DamID. The schematic is not a full library-construction recipe. Named Inducible DamID and NeuroDam variants in related abstracts are annotated for scope only; their unshown workflows are not merged into this graph. No origin date is assigned from the catalogue or publication dates.",
+  "inspected_sources": [
+    "card:damid",
+    "diagram:asset_cd181e47f160fb6a99b33ee1",
+    "metadata:17038565",
+    "paper:17038565",
+    "metadata:25785608",
+    "paper:25785608",
+    "metadata:27001518",
+    "paper:27001518",
+    "metadata:27597321",
+    "paper:27597321",
+    "metadata:27099177",
+    "paper:27099177",
+    "metadata:26787877",
+    "paper:26787877",
+    "metadata:25887553",
+    "paper:25887553",
+    "metadata:26365489",
+    "paper:26365489",
+    "metadata:25793375",
+    "paper:25793375",
+    "metadata:25798942",
+    "paper:25798942"
+  ],
+  "states": [
+    {
+      "id": "s_cells",
+      "label": "Cellular genomic DNA before Dam-dependent marking",
+      "kind": "material",
+      "features": [
+        "Biological target is protein association with genomic regions; the chemical marking substrate is DNA in living cells.",
+        "The left DNA/protein icon introduces the biological association; it is not a separate crosslinking or immunoprecipitation operation."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Left region: 'DNA-protein interaction', 'DNA adenine methyltransferase (DAM)', 'Protein of interest', 'Create fusion protein', and 'Split sample'; upper 'Fusion protein' and lower 'DAM' icons",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.315,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Description; low-level fusion expression in living cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DamID involves the low-level expression of a fusion protein consisting of DNA adenine methyltransferase (Dam) and a chromatin protein of interest.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_fusion_cells",
+      "label": "Genomic DNA in the Dam-fusion experimental sample",
+      "kind": "material",
+      "features": [
+        "A Dam–protein-of-interest fusion is expressed in cells and acts as the marking catalyst.",
+        "Upper arm; maintained separately from the Dam-only control."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Left region: 'DNA-protein interaction', 'DNA adenine methyltransferase (DAM)', 'Protein of interest', 'Create fusion protein', and 'Split sample'; upper 'Fusion protein' and lower 'DAM' icons",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.315,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Description; low-level fusion expression in living cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DamID involves the low-level expression of a fusion protein consisting of DNA adenine methyltransferase (Dam) and a chromatin protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used the Dam-DsxF/+, Dam-DsxM /+, and corresponding Dam/+ (control) genotypes to prepare for sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_control_cells",
+      "label": "Genomic DNA in the Dam-only control sample",
+      "kind": "material",
+      "features": [
+        "Unfused Dam is the marking catalyst.",
+        "Lower arm; provides background adenine methylation rather than an unmethylated or no-enzyme control."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Left region: 'DNA-protein interaction', 'DNA adenine methyltransferase (DAM)', 'Protein of interest', 'Create fusion protein', and 'Split sample'; upper 'Fusion protein' and lower 'DAM' icons",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.315,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Dam only, in which only the Dam was used as a surrogate for the fusion protein, was used as a control.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used the Dam-DsxF/+, Dam-DsxM /+, and corresponding Dam/+ (control) genotypes to prepare for sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_methyl_f",
+      "label": "Genomic DNA bearing fusion-dependent adenine methylation",
+      "kind": "material",
+      "features": [
+        "Upper arm: protein-associated marking plus nontargeted background.",
+        "Red dots denote methylation in the drawing; the full text identifies adenines at GATC sites.",
+        "The DNA sequence is the eventual genomic address carrier; methylation is the selection mark."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper methylation row: 'Specific and non-targeted methylation' and red dots on blue DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.33,
+            0.0,
+            0.44,
+            0.34
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Expression of this fusion protein in vivo results in specific methylation of adenines in the GATC sites surrounding the binding sites [6].",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_dpni_f",
+      "label": "DpnI-digested DNA from the fusion arm",
+      "kind": "material",
+      "features": [
+        "Restriction-fragment population generated by DpnI cleavage at Dam-methylated GATC sites; no quantitative completeness of digestion is claimed.",
+        "Additional unmethylated GATCs can remain within a DpnI-derived fragment, as made explicit by the later DpnII panel.",
+        "Exact strand overhangs, phosphates and hydroxyl groups are not specified by the drawing."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow labelled/shared 'DpnI'; blue DNA becomes separated segments above 'DpnI digestion'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.435,
+            0.0,
+            0.595,
+            0.34
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_adapter_f",
+      "label": "Adapter-ligated DpnI fragments from the fusion arm",
+      "kind": "material",
+      "features": [
+        "Magenta blocks are attached to the ends of the blue DNA fragment pairs.",
+        "Adapters supply the interface for the subsequent selective PCR; no adapter sequence or sequencing-platform end chemistry is shown."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow into fragment pairs with magenta terminal blocks above 'Adapter ligation'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.595,
+            0.0,
+            0.7,
+            0.34
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        }
+      ]
+    },
+    {
+      "id": "s_selected_f",
+      "label": "DpnII-treated adapter-ligated DNA from the fusion arm",
+      "kind": "material",
+      "features": [
+        "Mixture of intact adapter-flanked fragments and fragments additionally broken at unmethylated GATCs.",
+        "Internal DpnII cuts produce new ends without the depicted ligated adapter blocks; retained two-ended templates are favored in the following PCR."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        }
+      ]
+    },
+    {
+      "id": "s_amp_f",
+      "label": "Selective-PCR products from the fusion arm",
+      "kind": "material",
+      "features": [
+        "Strong colored products represent amplified intact adapter-flanked fragments; cut products are shown faintly.",
+        "PCR copies genomic DNA selected through Dam-dependent methylation and restriction, rather than sequencing the protein or a protein-bound probe.",
+        "Experimental/control sample identity remains separate."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper 'PCR' arrow and mixture of strong two-ended magenta/blue fragments and faint interrupted products",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.815,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_reads_f",
+      "label": "Sequence reads from the fusion DNA library",
+      "kind": "data",
+      "features": [
+        "Read sequences provide genomic locations of the selected DNA representation.",
+        "This data state makes the sequencing interface explicit; the schematic moves directly from PCR products toward aligned sequence stacks.",
+        "The selective PCR adapters are not established as complete Illumina sequencing adapters."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The libraries were sequenced with 76-bp single-end reads on the Illumina GA II platform.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_methyl_c",
+      "label": "Genomic DNA bearing Dam-only-dependent adenine methylation",
+      "kind": "material",
+      "features": [
+        "Lower arm: nontargeted background marking by Dam alone.",
+        "Red dots denote methylation in the drawing; the full text identifies adenines at GATC sites.",
+        "The DNA sequence is the eventual genomic address carrier; methylation is the selection mark."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower methylation row: 'Nontargeted methylation' and red dots on blue DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.33,
+            0.37,
+            0.44,
+            0.74
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Dam only, in which only the Dam was used as a surrogate for the fusion protein, was used as a control.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To compare the signals of DamID to that expected from the background adenine methylation, we use Dam only as a control in the experiments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_dpni_c",
+      "label": "DpnI-digested DNA from the Dam-only arm",
+      "kind": "material",
+      "features": [
+        "Restriction-fragment population generated by DpnI cleavage at Dam-methylated GATC sites; no quantitative completeness of digestion is claimed.",
+        "Additional unmethylated GATCs can remain within a DpnI-derived fragment, as made explicit by the later DpnII panel.",
+        "Exact strand overhangs, phosphates and hydroxyl groups are not specified by the drawing."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow labelled/shared 'DpnI'; blue DNA becomes separated segments above 'DpnI digestion'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.435,
+            0.37,
+            0.595,
+            0.74
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_adapter_c",
+      "label": "Adapter-ligated DpnI fragments from the Dam-only arm",
+      "kind": "material",
+      "features": [
+        "Magenta blocks are attached to the ends of the blue DNA fragment pairs.",
+        "Adapters supply the interface for the subsequent selective PCR; no adapter sequence or sequencing-platform end chemistry is shown."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow into fragment pairs with magenta terminal blocks above 'Adapter ligation'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.595,
+            0.37,
+            0.7,
+            0.74
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        }
+      ]
+    },
+    {
+      "id": "s_selected_c",
+      "label": "DpnII-treated adapter-ligated DNA from the Dam-only arm",
+      "kind": "material",
+      "features": [
+        "Mixture of intact adapter-flanked fragments and fragments additionally broken at unmethylated GATCs.",
+        "Internal DpnII cuts produce new ends without the depicted ligated adapter blocks; retained two-ended templates are favored in the following PCR."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        }
+      ]
+    },
+    {
+      "id": "s_amp_c",
+      "label": "Selective-PCR products from the Dam-only arm",
+      "kind": "material",
+      "features": [
+        "Strong colored products represent amplified intact adapter-flanked fragments; cut products are shown faintly.",
+        "PCR copies genomic DNA selected through Dam-dependent methylation and restriction, rather than sequencing the protein or a protein-bound probe.",
+        "Experimental/control sample identity remains separate."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower 'PCR' arrow and mixture of strong two-ended magenta/blue fragments and faint interrupted products",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.815,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_reads_c",
+      "label": "Sequence reads from the Dam-only DNA library",
+      "kind": "data",
+      "features": [
+        "Read sequences provide genomic locations of the selected DNA representation.",
+        "This data state makes the sequencing interface explicit; the schematic moves directly from PCR products toward aligned sequence stacks.",
+        "The selective PCR adapters are not established as complete Illumina sequencing adapters."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The libraries were sequenced with 76-bp single-end reads on the Illumina GA II platform.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_map",
+      "label": "Comparison of mapped fusion and Dam-only DNA representations",
+      "kind": "data",
+      "features": [
+        "Final caption: “Align sequences and determine differentially digested sites”.",
+        "Two final black sequence stacks represent the two arms; they are a data readout, not a merged physical library.",
+        "Fusion enrichment relative to Dam-only supports candidate protein-associated genomic regions.",
+        "Restriction-site distribution and methylation around binding sites limit localization: a methylated/selected fragment is not necessarily the exact protein-contact nucleotide.",
+        "Background is nonuniform and can overlap fusion signals; chemical survival alone does not prove biological specificity."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To compare the signals of DamID to that expected from the background adenine methylation, we use Dam only as a control in the experiments.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Results, 1. Distributions of reads in the genome, [b00036]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The reads in the control are non-uniformly distributed and the peaks overlap with that of the DamID (Fig. 1 A&B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Expression of this fusion protein in vivo results in specific methylation of adenines in the GATC sites surrounding the binding sites [6].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 2.3 Filtering, [b00023]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Intuitively, when a signal in the DamID sample is larger than that in the control, there might be a local peak.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction [b00010] and Discussion [b00065]; interpretation of the spatial readout",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "induced adenine methylation at GATC sites are not guaranteed to be symmetrical",
+          "bbox": null,
+          "rationale": "The source places methylation at GATC sites surrounding a binding site and reports that it need not be symmetric. Mapping selected genomic fragments therefore supports candidate associated regions, rather than identifying an exact protein-contact nucleotide from each surviving fragment."
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_setup",
+      "label": "Create fusion protein / Split sample",
+      "description": "Establish separate cellular samples expressing either the fusion protein or unfused Dam. The fused Dam and protein-of-interest icon denotes the targeting construct. The drawing labels the two-arm arrangement “Split sample”; the primary implementation uses separate Dam-fusion and Dam-only genotypes. This record follows that implementation for arm provenance.",
+      "inputs": [
+        "s_cells"
+      ],
+      "outputs": [
+        "s_fusion_cells",
+        "s_control_cells"
+      ],
+      "mechanism": "Low-level expression of a Dam–chromatin-protein fusion supplies the targeted catalyst; Dam alone supplies the control catalyst. Protein icons represent these catalysts, not substrates consumed by DNA digestion.",
+      "information_effect": "Sample provenance distinguishes targeted-plus-background methylation from the background control; no molecular barcode or pooling is depicted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Left region: 'DNA-protein interaction', 'DNA adenine methyltransferase (DAM)', 'Protein of interest', 'Create fusion protein', and 'Split sample'; upper 'Fusion protein' and lower 'DAM' icons",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.315,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Description; low-level fusion expression in living cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DamID involves the low-level expression of a fusion protein consisting of DNA adenine methyltransferase (Dam) and a chromatin protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Dam only, in which only the Dam was used as a surrogate for the fusion protein, was used as a control.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used the Dam-DsxF/+, Dam-DsxM /+, and corresponding Dam/+ (control) genotypes to prepare for sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_methyl_f",
+      "label": "Specific and non-targeted methylation",
+      "description": "Write adenine methylation onto genomic DNA in the fusion sample. The fused protein directs Dam near its genomic associations, while background marking also occurs.",
+      "inputs": [
+        "s_fusion_cells"
+      ],
+      "outputs": [
+        "s_methyl_f"
+      ],
+      "mechanism": "Dam methylates adenines at genomic GATC sites.",
+      "information_effect": "The biological protein–DNA association is encoded indirectly as a DNA methylation pattern.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper methylation row: 'Specific and non-targeted methylation' and red dots on blue DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.33,
+            0.0,
+            0.44,
+            0.34
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Expression of this fusion protein in vivo results in specific methylation of adenines in the GATC sites surrounding the binding sites [6].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To compare the signals of DamID to that expected from the background adenine methylation, we use Dam only as a control in the experiments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_dpni_f",
+      "label": "DpnI digestion",
+      "description": "Cut methylated DNA from the fusion arm into fragments at Dam-marked sites; the DNA is changed from continuous molecules to a methylation-dependent restriction-fragment population.",
+      "inputs": [
+        "s_methyl_f"
+      ],
+      "outputs": [
+        "s_dpni_f"
+      ],
+      "mechanism": "DpnI selects adenine-methylated GATC-associated DNA by restriction cleavage.",
+      "information_effect": "Converts the DNA mark into fragment boundaries that can receive adapters; this chemical selection does not distinguish targeted from background methylation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow labelled/shared 'DpnI'; blue DNA becomes separated segments above 'DpnI digestion'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.435,
+            0.0,
+            0.595,
+            0.34
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Expression of this fusion protein in vivo results in specific methylation of adenines in the GATC sites surrounding the binding sites [6].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_ligate_f",
+      "label": "Adapter ligation",
+      "description": "Attach the depicted magenta adapters to ends of DpnI-derived fragments in the fusion arm, creating adapter-bearing templates.",
+      "inputs": [
+        "s_dpni_f"
+      ],
+      "outputs": [
+        "s_adapter_f"
+      ],
+      "mechanism": "Ligation adds terminal adapter material; the drawing does not resolve its sequence, strand design or exact end chemistry.",
+      "information_effect": "Introduces an amplification interface on the selected genomic DNA fragments.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow into fragment pairs with magenta terminal blocks above 'Adapter ligation'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.595,
+            0.0,
+            0.7,
+            0.34
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        }
+      ]
+    },
+    {
+      "id": "op_dpnii_f",
+      "label": "Unmethylated GATCs are cut by DpnII",
+      "description": "Further digest adapter-bearing DNA from the fusion arm at internal unmethylated GATCs. Some previously continuous adapter-flanked fragments are now interrupted; intact fragments remain in the depicted mixture.",
+      "inputs": [
+        "s_adapter_f"
+      ],
+      "outputs": [
+        "s_selected_f"
+      ],
+      "mechanism": "DpnII cleaves unmethylated GATCs, as explicitly labelled; additional internal cuts do not add the magenta adapters.",
+      "information_effect": "Restricts which adapter-flanked genomic spans remain intact for subsequent amplification; this is selection on methylation state, not direct proof of protein binding.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        }
+      ]
+    },
+    {
+      "id": "op_pcr_f",
+      "label": "PCR",
+      "description": "Amplify the retained adapter-flanked DNA in the fusion arm. Intact products are emphasized in the drawing, whereas interrupted fragments are faint.",
+      "inputs": [
+        "s_selected_f"
+      ],
+      "outputs": [
+        "s_amp_f"
+      ],
+      "mechanism": "Selective PCR favors fragments that preserve the two adapter ends across an intact genomic insert; this is an explicit interpretation of the end-block and intensity symbols.",
+      "information_effect": "Amplified DNA abundance represents the selected fragment population. Both fusion-directed and background Dam marking can contribute, so the control arm remains necessary.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper 'PCR' arrow and mixture of strong two-ended magenta/blue fragments and faint interrupted products",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.815,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To compare the signals of DamID to that expected from the background adenine methylation, we use Dam only as a control in the experiments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_sequence_f",
+      "label": "Library construction and sequencing (text-supported interface)",
+      "description": "Convert selective-PCR DNA from the fusion arm through the broadly named library-construction interface to a sequenced DNA library and its reads. The diagram does not depict the internal construction steps.",
+      "inputs": [
+        "s_amp_f"
+      ],
+      "outputs": [
+        "s_reads_f"
+      ],
+      "mechanism": "The full text names PCR, library construction and deep sequencing in this order. No fragmentation, indexing, adapter replacement or other library-preparation substeps are inferred.",
+      "information_effect": "Converts selected genomic DNA sequences to read data while retaining the arm of origin. Read mapping reports where selected DNA originated; direct base-by-base methylation calling is not shown.",
+      "evidence": [
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The libraries were sequenced with 76-bp single-end reads on the Illumina GA II platform.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_methyl_c",
+      "label": "Nontargeted methylation",
+      "description": "Write adenine methylation onto genomic DNA in the Dam-only sample. Unfused Dam writes the background pattern used for comparison.",
+      "inputs": [
+        "s_control_cells"
+      ],
+      "outputs": [
+        "s_methyl_c"
+      ],
+      "mechanism": "Dam alone produces nontargeted adenine methylation; its background varies across the genome.",
+      "information_effect": "Retains a control pattern against which the fusion-derived DNA representation is assessed.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower methylation row: 'Nontargeted methylation' and red dots on blue DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.33,
+            0.37,
+            0.44,
+            0.74
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Dam only, in which only the Dam was used as a surrogate for the fusion protein, was used as a control.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Results, 1. Distributions of reads in the genome, [b00036]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The reads in the control are non-uniformly distributed and the peaks overlap with that of the DamID (Fig. 1 A&B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction [b00010]; common Dam catalyst and Dam-only control",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Expression of this fusion protein in vivo results in specific methylation of adenines in the GATC sites surrounding the binding sites [6].",
+          "bbox": null,
+          "rationale": "The source identifies Dam as the GATC-directed methylating enzyme and uses unfused Dam as the background control; the same catalytic substrate specificity is attributed to the two arms, without attributing fusion targeting to the control."
+        }
+      ]
+    },
+    {
+      "id": "op_dpni_c",
+      "label": "DpnI digestion",
+      "description": "Cut methylated DNA from the Dam-only arm into fragments at Dam-marked sites; the DNA is changed from continuous molecules to a methylation-dependent restriction-fragment population.",
+      "inputs": [
+        "s_methyl_c"
+      ],
+      "outputs": [
+        "s_dpni_c"
+      ],
+      "mechanism": "DpnI selects adenine-methylated GATC-associated DNA by restriction cleavage.",
+      "information_effect": "Converts the DNA mark into fragment boundaries that can receive adapters; this chemical selection does not distinguish targeted from background methylation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow labelled/shared 'DpnI'; blue DNA becomes separated segments above 'DpnI digestion'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.435,
+            0.37,
+            0.595,
+            0.74
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Expression of this fusion protein in vivo results in specific methylation of adenines in the GATC sites surrounding the binding sites [6].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_ligate_c",
+      "label": "Adapter ligation",
+      "description": "Attach the depicted magenta adapters to ends of DpnI-derived fragments in the Dam-only arm, creating adapter-bearing templates.",
+      "inputs": [
+        "s_dpni_c"
+      ],
+      "outputs": [
+        "s_adapter_c"
+      ],
+      "mechanism": "Ligation adds terminal adapter material; the drawing does not resolve its sequence, strand design or exact end chemistry.",
+      "information_effect": "Introduces an amplification interface on the selected genomic DNA fragments.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow into fragment pairs with magenta terminal blocks above 'Adapter ligation'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.595,
+            0.37,
+            0.7,
+            0.74
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        }
+      ]
+    },
+    {
+      "id": "op_dpnii_c",
+      "label": "Unmethylated GATCs are cut by DpnII",
+      "description": "Further digest adapter-bearing DNA from the Dam-only arm at internal unmethylated GATCs. Some previously continuous adapter-flanked fragments are now interrupted; intact fragments remain in the depicted mixture.",
+      "inputs": [
+        "s_adapter_c"
+      ],
+      "outputs": [
+        "s_selected_c"
+      ],
+      "mechanism": "DpnII cleaves unmethylated GATCs, as explicitly labelled; additional internal cuts do not add the magenta adapters.",
+      "information_effect": "Restricts which adapter-flanked genomic spans remain intact for subsequent amplification; this is selection on methylation state, not direct proof of protein binding.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        }
+      ]
+    },
+    {
+      "id": "op_pcr_c",
+      "label": "PCR",
+      "description": "Amplify the retained adapter-flanked DNA in the Dam-only arm. Intact products are emphasized in the drawing, whereas interrupted fragments are faint.",
+      "inputs": [
+        "s_selected_c"
+      ],
+      "outputs": [
+        "s_amp_c"
+      ],
+      "mechanism": "Selective PCR favors fragments that preserve the two adapter ends across an intact genomic insert; this is an explicit interpretation of the end-block and intensity symbols.",
+      "information_effect": "Amplified DNA abundance represents the selected fragment population. Both fusion-directed and background Dam marking can contribute, so the control arm remains necessary.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower 'PCR' arrow and mixture of strong two-ended magenta/blue fragments and faint interrupted products",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.815,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower adapter-ligation → DpnII → PCR panels; internal breaks are followed by faint products, intact adapter-flanked fragments by strong products",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.635,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": "The labelled DpnII cuts interrupt otherwise adapter-flanked fragments. The PCR panel emphasizes intact two-adapter fragments. This supports loss of efficient two-ended amplification for internally cut templates, without claiming perfect selection or specifying primer chemistry."
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To compare the signals of DamID to that expected from the background adenine methylation, we use Dam only as a control in the experiments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_sequence_c",
+      "label": "Library construction and sequencing (text-supported interface)",
+      "description": "Convert selective-PCR DNA from the Dam-only arm through the broadly named library-construction interface to a sequenced DNA library and its reads. The diagram does not depict the internal construction steps.",
+      "inputs": [
+        "s_amp_c"
+      ],
+      "outputs": [
+        "s_reads_c"
+      ],
+      "mechanism": "The full text names PCR, library construction and deep sequencing in this order. No fragmentation, indexing, adapter replacement or other library-preparation substeps are inferred.",
+      "information_effect": "Converts selected genomic DNA sequences to read data while retaining the arm of origin. Read mapping reports where selected DNA originated; direct base-by-base methylation calling is not shown.",
+      "evidence": [
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The libraries were sequenced with 76-bp single-end reads on the Illumina GA II platform.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_align_compare",
+      "label": "Align sequences and determine differentially digested sites",
+      "description": "Map DNA reads from each arm to the reference genome and compare their genomic representations. Interpret differential recovery as differential Dam-associated marking rather than direct sequencing of the protein.",
+      "inputs": [
+        "s_reads_f",
+        "s_reads_c"
+      ],
+      "outputs": [
+        "s_map"
+      ],
+      "mechanism": "Read alignment and experimental/control signal comparison; no peak-calling algorithm or parameter choices are part of the depicted architecture.",
+      "information_effect": "The readout carrier is selected genomic DNA, associated with the biological target by proximity-dependent methylation from the fusion. Regions above the Dam-only background are candidates for protein association; methylation can be distributed around, rather than exactly at, the binding site.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To compare the signals of DamID to that expected from the background adenine methylation, we use Dam only as a control in the experiments.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Results, 1. Distributions of reads in the genome, [b00036]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The reads in the control are non-uniformly distributed and the peaks overlap with that of the DamID (Fig. 1 A&B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we then aligned quality sequence reads to the Drosophila genome sequence (dm3)",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 2.3 Filtering, [b00023]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Intuitively, when a signal in the DamID sample is larger than that in the control, there might be a local peak.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction [b00010] and Discussion [b00065]; interpretation of the spatial readout",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "induced adenine methylation at GATC sites are not guaranteed to be symmetrical",
+          "bbox": null,
+          "rationale": "The source places methylation at GATC sites surrounding a binding site and reports that it need not be symmetric. Mapping selected genomic fragments therefore supports candidate associated regions, rather than identifying an exact protein-contact nucleotide from each surviving fragment."
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_s_cells_to_op_setup",
+      "source": "s_cells",
+      "target": "op_setup",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "card:damid",
+          "locator": "Description; low-level fusion expression in living cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DamID involves the low-level expression of a fusion protein consisting of DNA adenine methyltransferase (Dam) and a chromatin protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used the Dam-DsxF/+, Dam-DsxM /+, and corresponding Dam/+ (control) genotypes to prepare for sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_setup_to_s_fusion_cells",
+      "source": "op_setup",
+      "target": "s_fusion_cells",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "card:damid",
+          "locator": "Description; low-level fusion expression in living cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DamID involves the low-level expression of a fusion protein consisting of DNA adenine methyltransferase (Dam) and a chromatin protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used the Dam-DsxF/+, Dam-DsxM /+, and corresponding Dam/+ (control) genotypes to prepare for sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_setup_to_s_control_cells",
+      "source": "op_setup",
+      "target": "s_control_cells",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "card:damid",
+          "locator": "Description; low-level fusion expression in living cells",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DamID involves the low-level expression of a fusion protein consisting of DNA adenine methyltransferase (Dam) and a chromatin protein of interest.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used the Dam-DsxF/+, Dam-DsxM /+, and corresponding Dam/+ (control) genotypes to prepare for sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_fusion_cells_to_op_methyl_f",
+      "source": "s_fusion_cells",
+      "target": "op_methyl_f",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper methylation row: 'Specific and non-targeted methylation' and red dots on blue DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.33,
+            0.0,
+            0.44,
+            0.34
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_methyl_f_to_s_methyl_f",
+      "source": "op_methyl_f",
+      "target": "s_methyl_f",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper methylation row: 'Specific and non-targeted methylation' and red dots on blue DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.33,
+            0.0,
+            0.44,
+            0.34
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_methyl_f_to_op_dpni_f",
+      "source": "s_methyl_f",
+      "target": "op_dpni_f",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow labelled/shared 'DpnI'; blue DNA becomes separated segments above 'DpnI digestion'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.435,
+            0.0,
+            0.595,
+            0.34
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_dpni_f_to_s_dpni_f",
+      "source": "op_dpni_f",
+      "target": "s_dpni_f",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow labelled/shared 'DpnI'; blue DNA becomes separated segments above 'DpnI digestion'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.435,
+            0.0,
+            0.595,
+            0.34
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_dpni_f_to_op_ligate_f",
+      "source": "s_dpni_f",
+      "target": "op_ligate_f",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow into fragment pairs with magenta terminal blocks above 'Adapter ligation'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.595,
+            0.0,
+            0.7,
+            0.34
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_ligate_f_to_s_adapter_f",
+      "source": "op_ligate_f",
+      "target": "s_adapter_f",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow into fragment pairs with magenta terminal blocks above 'Adapter ligation'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.595,
+            0.0,
+            0.7,
+            0.34
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_adapter_f_to_op_dpnii_f",
+      "source": "s_adapter_f",
+      "target": "op_dpnii_f",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_dpnii_f_to_s_selected_f",
+      "source": "op_dpnii_f",
+      "target": "s_selected_f",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_selected_f_to_op_pcr_f",
+      "source": "s_selected_f",
+      "target": "op_pcr_f",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper 'PCR' arrow and mixture of strong two-ended magenta/blue fragments and faint interrupted products",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.815,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_pcr_f_to_s_amp_f",
+      "source": "op_pcr_f",
+      "target": "s_amp_f",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Upper 'PCR' arrow and mixture of strong two-ended magenta/blue fragments and faint interrupted products",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.815,
+            0.0,
+            0.905,
+            0.34
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_amp_f_to_op_sequence_f",
+      "source": "s_amp_f",
+      "target": "op_sequence_f",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_sequence_f_to_s_reads_f",
+      "source": "op_sequence_f",
+      "target": "s_reads_f",
+      "kind": "data_output",
+      "evidence": [
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_control_cells_to_op_methyl_c",
+      "source": "s_control_cells",
+      "target": "op_methyl_c",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower methylation row: 'Nontargeted methylation' and red dots on blue DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.33,
+            0.37,
+            0.44,
+            0.74
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_methyl_c_to_s_methyl_c",
+      "source": "op_methyl_c",
+      "target": "s_methyl_c",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower methylation row: 'Nontargeted methylation' and red dots on blue DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.33,
+            0.37,
+            0.44,
+            0.74
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_methyl_c_to_op_dpni_c",
+      "source": "s_methyl_c",
+      "target": "op_dpni_c",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow labelled/shared 'DpnI'; blue DNA becomes separated segments above 'DpnI digestion'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.435,
+            0.37,
+            0.595,
+            0.74
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_dpni_c_to_s_dpni_c",
+      "source": "op_dpni_c",
+      "target": "s_dpni_c",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow labelled/shared 'DpnI'; blue DNA becomes separated segments above 'DpnI digestion'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.435,
+            0.37,
+            0.595,
+            0.74
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_dpni_c_to_op_ligate_c",
+      "source": "s_dpni_c",
+      "target": "op_ligate_c",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow into fragment pairs with magenta terminal blocks above 'Adapter ligation'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.595,
+            0.37,
+            0.7,
+            0.74
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_ligate_c_to_s_adapter_c",
+      "source": "op_ligate_c",
+      "target": "s_adapter_c",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow into fragment pairs with magenta terminal blocks above 'Adapter ligation'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.595,
+            0.37,
+            0.7,
+            0.74
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_adapter_c_to_op_dpnii_c",
+      "source": "s_adapter_c",
+      "target": "op_dpnii_c",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_dpnii_c_to_s_selected_c",
+      "source": "op_dpnii_c",
+      "target": "s_selected_c",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower arrow at 'DpnII', added internal gaps in blue fragments, and caption 'Unmethylated GATCs are cut by DpnII'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.7,
+            0.0,
+            0.81,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_selected_c_to_op_pcr_c",
+      "source": "s_selected_c",
+      "target": "op_pcr_c",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower 'PCR' arrow and mixture of strong two-ended magenta/blue fragments and faint interrupted products",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.815,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_pcr_c_to_s_amp_c",
+      "source": "op_pcr_c",
+      "target": "s_amp_c",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Lower 'PCR' arrow and mixture of strong two-ended magenta/blue fragments and faint interrupted products",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.815,
+            0.37,
+            0.905,
+            0.74
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_amp_c_to_op_sequence_c",
+      "source": "s_amp_c",
+      "target": "op_sequence_c",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_sequence_c_to_s_reads_c",
+      "source": "op_sequence_c",
+      "target": "s_reads_c",
+      "kind": "data_output",
+      "evidence": [
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_reads_f_to_op_align_compare",
+      "source": "s_reads_f",
+      "target": "op_align_compare",
+      "kind": "data_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_reads_c_to_op_align_compare",
+      "source": "s_reads_c",
+      "target": "op_align_compare",
+      "kind": "data_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_align_compare_to_s_map",
+      "source": "op_align_compare",
+      "target": "s_map",
+      "kind": "data_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "DamID",
+      "operation_ids": [
+        "op_setup",
+        "op_methyl_f",
+        "op_dpni_f",
+        "op_ligate_f",
+        "op_dpnii_f",
+        "op_pcr_f",
+        "op_sequence_f",
+        "op_methyl_c",
+        "op_dpni_c",
+        "op_ligate_c",
+        "op_dpnii_c",
+        "op_pcr_c",
+        "op_sequence_c",
+        "op_align_compare"
+      ],
+      "status": "resolved",
+      "rationale": "These operations describe the Illumina DamID schematic in its sequencing-oriented presentation. “DNA adenine methyltransferase interaction detection (DamID)” in the figure and “DNA adenine methylation identification” in the full text name the same Dam-based mapping architecture. The Dam-only arm is a control, not a separate assay version. This assignment does not imply that historical array readouts or all DamID variants use sequencing.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Left region: 'DNA-protein interaction', 'DNA adenine methyltransferase (DAM)', 'Protein of interest', 'Create fusion protein', and 'Split sample'; upper 'Fusion protein' and lower 'DAM' icons",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.315,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To compare the signals of DamID to that expected from the background adenine methylation, we use Dam only as a control in the experiments.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "DamID-Seq",
+      "operation_ids": [
+        "op_setup",
+        "op_methyl_f",
+        "op_dpni_f",
+        "op_ligate_f",
+        "op_dpnii_f",
+        "op_pcr_f",
+        "op_sequence_f",
+        "op_methyl_c",
+        "op_dpni_c",
+        "op_ligate_c",
+        "op_dpnii_c",
+        "op_pcr_c",
+        "op_sequence_c",
+        "op_align_compare"
+      ],
+      "status": "resolved",
+      "rationale": "DamID followed by deep sequencing is explicitly named DamID-Seq in the inspected full text. It supports the fusion/control, GATC/DpnI, PCR, broad library-construction, sequencing and mapping interfaces. Adapter ligation and DpnII are supported at schematic level by the diagram, not by the supplied full-text passages. The specific DSX implementation supplies interpretation of the two arms, not universal specimen or instrument requirements.",
+      "evidence": [
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Expression of this fusion protein in vivo results in specific methylation of adenines in the GATC sites surrounding the binding sites [6].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used the Dam-DsxF/+, Dam-DsxM /+, and corresponding Dam/+ (control) genotypes to prepare for sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Far right: two separate arrowed rows ending in black sequence stacks; caption 'Align sequences and determine differentially digested sites'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.82,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Central two-row workflow, 'Adapter ligation' followed by 'DpnII' and 'PCR'",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.59,
+            0.0,
+            0.905,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "Inducible DamID",
+      "operation_ids": [],
+      "status": "unresolved",
+      "rationale": "The related abstract supports intein/ligand regulation of Dam and Dam-fusion expression and a separate strategy for cell-type-specific expression in Drosophila. These are distinct expression-control variants, not aliases for all DamID. They are not depicted in this diagram. The abstract does not resolve whether the entire depicted digestion, adapter and PCR sequence applies; no graph operations are assigned to this variant.",
+      "evidence": [
+        {
+          "source_id": "paper:27001518",
+          "locator": "Abstract only; expression-control variants are described, but their complete restriction/library workflow is not available and is not assigned the schematic steps.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we report an intein-based approach to tune the expression level of Dam and Dam-fusion proteins in Drosophila by addition of a ligand to fly food.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "NeuroDam",
+      "operation_ids": [],
+      "status": "unresolved",
+      "rationale": "The related abstract explicitly names NeuroDam: promoter-tethered Dam records stable G(methyl)ATC tags at chromosomal contacts. This is distinct from inferring a chromatin protein’s genomic associations. The abstract does not establish the depicted digestion, adapter and PCR operations for NeuroDam; no graph operations are assigned.",
+      "evidence": [
+        {
+          "source_id": "paper:27597321",
+          "locator": "Abstract only; promoter-tethered Dam records chromosomal contacts, a distinct biological targeting architecture. Its full downstream workflow is not available and is not substituted into this protein-binding schematic.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Short-term expression of the bacterial DNA adenine methyltransferase Dam, tethered to the Gad1 gene promoter in mouse prefrontal cortex neurons, results in stable G(methyl)ATC tags at Gad1-bound chromosomal contacts.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_17038565",
+      "source_id": "paper:17038565",
+      "methods": [
+        "DamID"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:17038565",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Human heterochromatin proteins form large domains containing KRAB-ZNF genes.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:17038565",
+          "locator": "Abstract only; adaptation/application, not verification of the schematic digestion order or an invention date.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have adapted the DamID method to systematically identify target genes of the heterochromatin proteins HP1 and SUV39H1 in human and mouse cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25785608",
+      "source_id": "paper:25785608",
+      "methods": [
+        "DamID-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:25785608",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A non-parametric peak calling algorithm for DamID-Seq.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Introduction, [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adenine-methylated DNA fragments are then isolated by a restriction enzyme (Dpnl), followed by PCR, library construction, and deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Dam only, in which only the Dam was used as a surrogate for the fusion protein, was used as a control.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27001518",
+      "source_id": "paper:27001518",
+      "methods": [
+        "Inducible DamID"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:27001518",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Inducible DamID systems for genomic mapping of chromatin proteins in Drosophila.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27001518",
+          "locator": "Abstract only; expression-control variants are described, but their complete restriction/library workflow is not available and is not assigned the schematic steps.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we report an intein-based approach to tune the expression level of Dam and Dam-fusion proteins in Drosophila by addition of a ligand to fly food.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27597321",
+      "source_id": "paper:27597321",
+      "methods": [
+        "NeuroDam"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:27597321",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Longitudinal assessment of neuronal 3D genomes in mouse prefrontal cortex.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27597321",
+          "locator": "Abstract only; promoter-tethered Dam records chromosomal contacts, a distinct biological targeting architecture. Its full downstream workflow is not available and is not substituted into this protein-binding schematic.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Short-term expression of the bacterial DNA adenine methyltransferase Dam, tethered to the Gad1 gene promoter in mouse prefrontal cortex neurons, results in stable G(methyl)ATC tags at Gad1-bound chromosomal contacts.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27099177",
+      "source_id": "paper:27099177",
+      "methods": [
+        "DamID-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:27099177",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Laminopathies disrupt epigenomic developmental programs and cell fate.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27099177",
+          "locator": "Abstract only; supports use of Dam fusion proteins for a lamin A application, not a distinct library-preparation version or the depicted enzyme order.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We fused mutated forms of the lamin A protein to bacterial DNA adenine methyltransferase (Dam) to define euchromatic-heterochromatin (epigenomic) transitions at the nuclear envelope during myogenesis (using DamID-seq).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Related publications, jcr:content/par/text_4/text; catalogue association only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Perovanovic J., Dell'Orso S., Gnochi V. F., et al. Laminopathies disrupt epigenomic developmental programs and cell fate. Sci Transl Med. 2016;8:335ra358",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26787877",
+      "source_id": "paper:26787877",
+      "methods": [
+        "DamID"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26787877",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antagonistic roles for the ubiquitin ligase Asr1 and the ubiquitin-specific protease Ubp3 in subtelomeric gene silencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26787877",
+          "locator": "Abstract only; Asr1/Ubp3 subtelomeric silencing findings do not specify a DamID architecture. Method association here records the catalogue’s related-publication context only, not primary evidence that this paper uses DamID.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We show that Asr1 associates with telomere-proximal chromatin",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Related publications, jcr:content/par/text_4/text; catalogue association only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "McCann T. S., Guo Y., McDonald W. H. and Tansey W. P. Antagonistic roles for the ubiquitin ligase Asr1 and the ubiquitin-specific protease Ubp3 in subtelomeric gene silencing. Proc Natl Acad Sci U S A. 2016;113:1309-1314",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25887553",
+      "source_id": "paper:25887553",
+      "methods": [
+        "DamID-Seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25887553",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Common binding by redundant group B Sox proteins is evolutionarily conserved in Drosophila.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25887553",
+          "locator": "Abstract, RESULTS only; demonstrates an application of DamID-seq, without a new chemistry version or digestion order.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used DamID-seq to examine the genome-wide binding patterns of Dichaete and SoxNeuro in four species of Drosophila.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Related publications, jcr:content/par/text_4/text; catalogue association only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Carl S. H. and Russell S. Common binding by redundant group B Sox proteins is evolutionarily conserved in Drosophila. BMC Genomics. 2015;16:292",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26365489",
+      "source_id": "paper:26365489",
+      "methods": [
+        "DamID"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26365489",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide maps of nuclear lamina interactions in single human cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26365489",
+          "locator": "Abstract only; reports single-cell nuclear-lamina contact mapping but does not name or describe the DamID chemistry. No single-cell isolation, barcode, pooling or library operations are imported. Method association here records the catalogue’s related-publication context only, not primary evidence that this paper uses DamID.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We report a method to map NL contacts genome-wide in single human cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Related publications, jcr:content/par/text_4/text; catalogue association only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Kind J., Pagie L., de Vries S. S., et al. Genome-wide maps of nuclear lamina interactions in single human cells. Cell. 2015;163:134-147",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25793375",
+      "source_id": "paper:25793375",
+      "methods": [
+        "DamID"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25793375",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Neurospora importin α is required for normal heterochromatic formation and DNA methylation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25793375",
+          "locator": "Abstract only; endogenous heterochromatin/cytosine-methylation work does not establish a DamID operation or variant. Method association here records the catalogue’s related-publication context only, not primary evidence that this paper uses DamID.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In Neurospora crassa, a five-protein complex, DCDC, catalyzes H3K9 methylation, which then directs DNA methylation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Related publications, jcr:content/par/text_4/text; catalogue association only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Klocko A. D., Rountree M. R., Grisafi P. L., Hays S. M., Adhvaryu K. K. and Selker E. U. Neurospora importin alpha is required for normal heterochromatic formation and DNA methylation. PLoS Genet. 2015;11:e1005083",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_25798942",
+      "source_id": "paper:25798942",
+      "methods": [
+        "DamID"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25798942",
+          "locator": "PubMed record metadata: title, PMID and identifiers; bibliographic identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The Fun30 chromatin remodeler Fft3 controls nuclear organization and chromatin structure of insulators and subtelomeres in fission yeast.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25798942",
+          "locator": "Abstract only; nuclear-organization findings do not establish the DamID restriction/library architecture. Method association here records the catalogue’s related-publication context only, not primary evidence that this paper uses DamID.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Using genome-wide mapping and live cell imaging, we show that this role is linked to controlling nuclear organization of its targets.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:damid",
+          "locator": "Related publications, jcr:content/par/text_4/text; catalogue association only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Steglich B., Stralfors A., Khorosjutina O., et al. The Fun30 chromatin remodeler Fft3 controls nuclear organization and chromatin structure of insulators and subtelomeres in fission yeast. PLoS Genet. 2015;11:e1005101",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "c_split_sample",
+      "target_id": "operation:op_setup",
+      "diagram_observation": "The label “Split sample” sits under an upper fusion-protein icon and a lower Dam-only icon, followed by targeted-plus-background and background methylation rows. The drawing does not define the sample-generation procedure.",
+      "primary_statement": "The inspected implementation uses Dam-DsxF/+, Dam-DsxM/+ and corresponding Dam/+ control genotypes. Accordingly op_setup is authored as separate fusion and Dam-only sample arms; it does not interpret the drawing as cleaving the fusion protein into components.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_cd181e47f160fb6a99b33ee1",
+          "locator": "Left region: 'DNA-protein interaction', 'DNA adenine methyltransferase (DAM)', 'Protein of interest', 'Create fusion protein', and 'Split sample'; upper 'Fusion protein' and lower 'DAM' icons",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.315,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we used the Dam-DsxF/+, Dam-DsxM /+, and corresponding Dam/+ (control) genotypes to prepare for sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25785608",
+          "locator": "Materials and Methods, 1. The DamID-Seq experiments, [b00015]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Dam only, in which only the Dam was used as a surrogate for the fusion protein, was used as a control.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u_sequencing_library_interface",
+      "question": "Which molecular conversion, if any, makes the magenta-ended selective-PCR products compatible with Illumina sequencing? The diagram does not show this interface, and [b00010] only names “library construction”. A library-construction description or adapter design for the actual implementation would be needed to specify it. The broad sequencing interface is supported, so this does not block the schematic architecture.",
+      "blocking": false,
+      "affected_ids": [
+        "operation:op_sequence_f",
+        "operation:op_sequence_c",
+        "state:s_amp_f",
+        "state:s_amp_c"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1510 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "psi-seq",
+  "title": "PSI-Seq",
+  "method_names": [
+    "PSI-seq",
+    "Ψ-seq"
+  ],
+  "scope": "Illumina explanatory schematic captioned \"Pseudouridine site identification sequencing (PSI-seq and Ψ-seq)\". Inventory of depicted path: poly(A)-selected DNase-treated RNA → CMC/OH− treatment → fragmentation into marked and unmarked RNA fragments → adaptor ligation → reverse transcription → purification → cDNA. The far-left pseudouridine icon is a legend; the three fragments are members of one pool, not separate method branches. No mock-control branch or sequencing operation is drawn. The graph below resolves PSI-seq to Lovejoy et al. (PMID 25353621), explicitly correcting its fragmentation/treatment order with c_order while preserving the diagram observation there. PSI-seq and Ψ-seq are distinct names in the supplied review, not established aliases. Exact transfer of the grouped schematic steps to Ψ-seq remains unresolved. Downstream library conversion and read-start semantics are supplied only to interpret the depicted cDNA endpoint, not to reconstruct an unshown protocol.",
+  "inspected_sources": [
+    "diagram:asset_51254b15beba0736e4718560",
+    "card:psi-seq",
+    "metadata:25353621",
+    "paper:25353621",
+    "metadata:26968262",
+    "paper:26968262"
+  ],
+  "states": [
+    {
+      "id": "s_sample",
+      "label": "RNA sample containing endogenous pseudouridines",
+      "kind": "material",
+      "features": [
+        "Biological target: positions of pseudouridine in RNA; these modifications pre-exist the assay.",
+        "The far-left purple strand, yellow highlighting and red sites explain pseudouridine symbols; they are a legend, not a separately connected reaction or a branch."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "Far-left legend: \"Pseudouridine residues\" above purple RNA with two yellow-highlighted red sites; caption \"Pseudouridine site identification sequencing (PSI-seq and Ψ-seq)\".",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.145,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, paragraph beginning \"Briefly\" / card source section jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, samples are poly(A)-selected, treated with DNase, and fragmented.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_prepared",
+      "label": "Poly(A)-selected, DNase-treated RNA",
+      "kind": "material",
+      "features": [
+        "Purple RNA with red pseudouridine sites and an AA(A)n poly(A) label.",
+        "Poly(A) enrichment defines the depicted input scope; the primary study also reports residual rRNA in these samples."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Poly(A) selected DNase treated RNA\": purple strand with two red sites and terminal \"AA(A)n\".",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.125,
+            0.12,
+            0.265,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00020; /article/body[1]/sec[2]/sec[2]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A small percentage of residual ribosomal RNA remaining in our RNA samples, even after two rounds of poly(A) selection, enabled us to use the well-mapped pseudouridines in rRNA as a set of internal positive controls.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_fragments",
+      "label": "RNA fragments before CMC treatment (PSI-seq interpretation)",
+      "kind": "material",
+      "features": [
+        "Primary-paper order: fragmentation of prepared RNA precedes CMCT treatment.",
+        "The diagram instead draws three fragments after chemical treatment: two retain adduct symbols and one is unmarked. Its fragment ensemble is retained here as marked and unmarked populations after op_cmc_alkali.",
+        "The PSI-seq paper uses RNA fragments of 100–300 nt, longer than the subsequently selected cDNA inserts; precise placement of RNA size selection is not expanded."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Fragmentation\": arrow from adduct-bearing intact RNA to three purple fragments, two with orange/red adduct symbols and one without.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.445,
+            0.0,
+            0.595,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00064; /article/body[1]/sec[4]/sec[4]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The sample was then split in half–one +CMCT sample and one mock sample.",
+          "bbox": null,
+          "rationale": "This statement follows fragmentation in the same Methods paragraph; fragmentation precedes the split and CMCT treatment. This confirms the order despite differences between the Results overview and Methods in placement of RNA size selection."
+        }
+      ]
+    },
+    {
+      "id": "s_modified_fragments",
+      "label": "CMC/alkali-treated RNA fragments",
+      "kind": "material",
+      "features": [
+        "Bulky CMC adduct retained on pseudouridine after alkaline treatment; the RNA remains the chemical substrate.",
+        "Includes adduct-bearing and unmarked fragments: the diagram shows two orange/red-bearing purple pieces and one piece without a symbol.",
+        "Orange circles and their short stalks are schematic adduct symbols, not chemical structures."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"CMC treatment and OH- treatment\": arrow from prepared RNA to an intact purple strand bearing orange adduct symbols at the red sites.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.27,
+            0.0,
+            0.44,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Fragmentation\": arrow from adduct-bearing intact RNA to three purple fragments, two with orange/red adduct symbols and one without.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.445,
+            0.0,
+            0.595,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00011; /article/body[1]/sec[1]/p[4]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "When RNA is treated with CMCT, the carbodiimide (CMC) moiety modifies the N1 of guanosine, the N3 of uridine, and the N1 and N3 of pseudouridine [28]. An alkaline treatment at pH 10.3 removes CMC from all these sites except for the N3 of pseudouridine. The bulky CMC modification acts as a barrier to reverse transcription through the modified base [29].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_linked",
+      "label": "3′-adaptor-ligated RNA fragments",
+      "kind": "material",
+      "features": [
+        "Each depicted RNA fragment, including the unmarked fragment, carries a green segment at its right end.",
+        "The primary paper identifies the linked end as RNA 3′ and the adaptor as the reverse-transcription priming site.",
+        "CMC-bearing pseudouridines remain on the RNA templates."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Adaptor ligation\": arrow from fragments to three purple fragments each extended by a green right-end segment; two retain adduct symbols.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.75,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_rt_products",
+      "label": "RNA templates with reverse-transcribed cDNA products",
+      "kind": "material",
+      "features": [
+        "Blue cDNA strands are shown alongside purple RNA templates; green RNA-adaptor segments face magenta segments on the cDNA/primer side. The figure gives no separate color legend or sequences for these segments.",
+        "Adduct-bearing templates yield truncated cDNAs when reverse transcription encounters the bulky modification; the unmarked fragment also yields a cDNA, depicted extending across its template.",
+        "The informational carrier becomes the sequence and termination end of cDNA rather than a chemically modified DNA base."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Reverse transcription\": arrow to three purple/green templates paired with blue strands and magenta right-end segments; the two marked templates show blue extension bounded near the adducts.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.755,
+            0.0,
+            0.89,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00011; /article/body[1]/sec[1]/p[4]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "When RNA is treated with CMCT, the carbodiimide (CMC) moiety modifies the N1 of guanosine, the N3 of uridine, and the N1 and N3 of pseudouridine [28]. An alkaline treatment at pH 10.3 removes CMC from all these sites except for the N3 of pseudouridine. The bulky CMC modification acts as a barrier to reverse transcription through the modified base [29].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because the library preparation protocol positions a sequencing primer immediately adjacent to the 3′ end of the cDNA, the first base of the sequencing reads should correspond to the last base incorporated by reverse transcription. If the 3′-end of the cDNA results from a stop in reverse transcription at a carbodiimide-modified pseudouridine, the first base of our sequencing read should delineate the base immediately 3′ to a pseudouridine in the mRNA sequence.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_cdna",
+      "label": "Purified cDNA; PSI-seq interpretation includes selection of truncated inserts",
+      "kind": "material",
+      "features": [
+        "The drawn endpoint is three isolated blue strands labelled cDNA, with lengths and selection criteria unspecified.",
+        "The PSI-seq primary figure specifies cDNA inserts of 20–80 nt selected from longer RNA templates, enriching RT-stop products. The unmarked-template product remains represented in s_rt_products; recovery of every template-length product is not asserted for the primary-selected pool (c_selection).",
+        "The primary paper converts these cDNAs into sequencing libraries using a ribosome-profiling-derived protocol; the card calls this Ribo-Seq/ARTseq. Those downstream internals are outside the drawn endpoint.",
+        "After that conversion, the sequencing-read start reports the last base incorporated by RT, ordinarily the RNA base immediately 3′ of the candidate pseudouridine."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Purification\" arrow from RNA/cDNA assemblies to three blue strands labelled \"cDNA\" at the far right.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.89,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Size selection for truncated cDNA products with insert lengths of 20-80 nt is performed, yielding only cDNAs whose reverse transcription stopped before the end of the RNA fragment. These cDNAs are converted into sequencing libraries using a protocol adapted from the ribosome profiling technique (Ingolia et al. 2010).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, end of paragraph beginning \"Briefly\" / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "cDNA strands of 20–80 nt are isolated and processed into cDNA libraries using the Ribo-Seq/ARTseq method before high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because the library preparation protocol positions a sequencing primer immediately adjacent to the 3′ end of the cDNA, the first base of the sequencing reads should correspond to the last base incorporated by reverse transcription. If the 3′-end of the cDNA results from a stop in reverse transcription at a carbodiimide-modified pseudouridine, the first base of our sequencing read should delineate the base immediately 3′ to a pseudouridine in the mRNA sequence.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_prepare",
+      "label": "Poly(A) selected DNase treated RNA",
+      "description": "Enrich the input RNA sample for polyadenylated RNA and remove DNA with DNase, giving the prepared RNA shown with an AA(A)n tail. The figure supplies the prepared state rather than individual substeps.",
+      "inputs": [
+        "s_sample"
+      ],
+      "outputs": [
+        "s_prepared"
+      ],
+      "mechanism": "Poly(A) selection and DNase treatment are named in the diagram and card; no additional reaction sequence is asserted.",
+      "information_effect": "Restricts the depicted RNA population by preparation, without selecting RNA solely because it contains pseudouridine.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Poly(A) selected DNase treated RNA\": purple strand with two red sites and terminal \"AA(A)n\".",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.125,
+            0.12,
+            0.265,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, paragraph beginning \"Briefly\" / card source section jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, samples are poly(A)-selected, treated with DNase, and fragmented.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_fragmentation",
+      "label": "Fragmentation",
+      "description": "Shorten prepared RNA into fragments. For the resolved PSI-seq implementation this acts before CMC treatment, as stated in the primary paper; the diagram instead places this block after CMC/OH− treatment (correction c_order).",
+      "inputs": [
+        "s_prepared"
+      ],
+      "outputs": [
+        "s_fragments"
+      ],
+      "mechanism": "Primary PSI-seq paper: fragmentation by base hydrolysis.",
+      "information_effect": "Replaces long transcripts with local RNA templates that retain their sequence and any endogenous pseudouridines.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Fragmentation\": arrow from adduct-bearing intact RNA to three purple fragments, two with orange/red adduct symbols and one without.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.445,
+            0.0,
+            0.595,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00064; /article/body[1]/sec[4]/sec[4]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The sample was then split in half–one +CMCT sample and one mock sample.",
+          "bbox": null,
+          "rationale": "This statement follows fragmentation in the same Methods paragraph; fragmentation precedes the split and CMCT treatment. This confirms the order despite differences between the Results overview and Methods in placement of RNA size selection."
+        }
+      ]
+    },
+    {
+      "id": "op_cmc_alkali",
+      "label": "CMC treatment and OH- treatment",
+      "description": "React RNA with the carbodiimide reagent, then apply alkaline treatment so that CMC is retained on pseudouridine while adducts on uridine and guanosine are removed. For PSI-seq the input is fragmented RNA; the diagram depicts the same block on an intact poly(A) strand before fragmentation.",
+      "inputs": [
+        "s_fragments"
+      ],
+      "outputs": [
+        "s_modified_fragments"
+      ],
+      "mechanism": "CMCT supplies the CMC moiety; the primary paper identifies the retained adduct on N3 of pseudouridine. The two named treatments form one depicted block.",
+      "information_effect": "Converts a pre-existing RNA modification into an obstacle to reverse transcription. It does not itself turn RNA into cDNA or separate pseudouridine-bearing molecules from all other RNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"CMC treatment and OH- treatment\": arrow from prepared RNA to an intact purple strand bearing orange adduct symbols at the red sites.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.27,
+            0.0,
+            0.44,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00011; /article/body[1]/sec[1]/p[4]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "When RNA is treated with CMCT, the carbodiimide (CMC) moiety modifies the N1 of guanosine, the N3 of uridine, and the N1 and N3 of pseudouridine [28]. An alkaline treatment at pH 10.3 removes CMC from all these sites except for the N3 of pseudouridine. The bulky CMC modification acts as a barrier to reverse transcription through the modified base [29].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_adaptor_ligation",
+      "label": "Adaptor ligation",
+      "description": "Attach a linker-adaptor to the 3′ end of each RNA fragment. Adduct-bearing and unmarked fragments continue together into the adaptor-bearing pool.",
+      "inputs": [
+        "s_modified_fragments"
+      ],
+      "outputs": [
+        "s_linked"
+      ],
+      "mechanism": "RNA 3′-end adaptor ligation; no adaptor sequence or ligase identity is specified here.",
+      "information_effect": "Provides an RT priming site linked to each RNA template, retaining sequence adjacency between the RNA fragment and its adaptor.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Adaptor ligation\": arrow from fragments to three purple fragments each extended by a green right-end segment; two retain adduct symbols.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.75,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_reverse_transcription",
+      "label": "Reverse transcription",
+      "description": "Extend a primer from the RNA adaptor to make complementary DNA. Extension can stop at a CMC-modified pseudouridine, producing a shorter cDNA; the diagram also retains the cDNA made from an unmarked RNA fragment.",
+      "inputs": [
+        "s_linked"
+      ],
+      "outputs": [
+        "s_rt_products"
+      ],
+      "mechanism": "The bulky retained CMC adduct is a barrier to reverse transcription through the modified base.",
+      "information_effect": "RNA sequence is copied into DNA, while the cDNA termination end encodes a candidate RT-stop position. A cDNA product alone is not evidence that a stop was caused by pseudouridine.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Reverse transcription\": arrow to three purple/green templates paired with blue strands and magenta right-end segments; the two marked templates show blue extension bounded near the adducts.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.755,
+            0.0,
+            0.89,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00011; /article/body[1]/sec[1]/p[4]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "When RNA is treated with CMCT, the carbodiimide (CMC) moiety modifies the N1 of guanosine, the N3 of uridine, and the N1 and N3 of pseudouridine [28]. An alkaline treatment at pH 10.3 removes CMC from all these sites except for the N3 of pseudouridine. The bulky CMC modification acts as a barrier to reverse transcription through the modified base [29].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because the library preparation protocol positions a sequencing primer immediately adjacent to the 3′ end of the cDNA, the first base of the sequencing reads should correspond to the last base incorporated by reverse transcription. If the 3′-end of the cDNA results from a stop in reverse transcription at a carbodiimide-modified pseudouridine, the first base of our sequencing read should delineate the base immediately 3′ to a pseudouridine in the mRNA sequence.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_purification",
+      "label": "Purification",
+      "description": "Recover cDNA from the depicted RNA/cDNA assemblies. The drawing shows isolated blue cDNA strands and does not specify the isolation mechanism. In primary PSI-seq, select truncated cDNA products with inserts of 20–80 nt from longer RNA templates, before the broadly described conversion to sequencing libraries (interpretation c_selection).",
+      "inputs": [
+        "s_rt_products"
+      ],
+      "outputs": [
+        "s_cdna"
+      ],
+      "mechanism": "The paper-supported selection is by cDNA insert length; no unshown RNA-removal chemistry or subsequent library substeps are supplied.",
+      "information_effect": "Enriches products whose RT stopped within a template. For PSI-seq, the subsequent library places the sequencing primer beside the cDNA 3′ end, so the first read base indicates the last incorporated base, normally immediately 3′ of a candidate Ψ in RNA. Interpretation requires comparison with matched mock-treated material; background and secondary stops limit specificity. The paper reports adjacent stops on either side of Ψ, so exact positioning is an expected signal rather than an invariant for every product.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Purification\" arrow from RNA/cDNA assemblies to three blue strands labelled \"cDNA\" at the far right.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.89,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Size selection for truncated cDNA products with insert lengths of 20-80 nt is performed, yielding only cDNAs whose reverse transcription stopped before the end of the RNA fragment. These cDNAs are converted into sequencing libraries using a protocol adapted from the ribosome profiling technique (Ingolia et al. 2010).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, end of paragraph beginning \"Briefly\" / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "cDNA strands of 20–80 nt are isolated and processed into cDNA libraries using the Ribo-Seq/ARTseq method before high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because the library preparation protocol positions a sequencing primer immediately adjacent to the 3′ end of the cDNA, the first base of the sequencing reads should correspond to the last base incorporated by reverse transcription. If the 3′-end of the cDNA results from a stop in reverse transcription at a carbodiimide-modified pseudouridine, the first base of our sequencing read should delineate the base immediately 3′ to a pseudouridine in the mRNA sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In parallel, the same sample is incubated with buffer lacking CMCT (mock treatment) as a negative control.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00020; /article/body[1]/sec[2]/sec[2]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, the secondary stops adjacent to known pseudouridines that we detected occurred at positions both one base 5′ and one base 3′ of the modifications, indicating that CMC-induced polymerase stalling can specifically occur before and after (as well as at) sites of modification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_s_sample_to_op_prepare",
+      "source": "s_sample",
+      "target": "op_prepare",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Poly(A) selected DNase treated RNA\": purple strand with two red sites and terminal \"AA(A)n\".",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.125,
+            0.12,
+            0.265,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, paragraph beginning \"Briefly\" / card source section jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, samples are poly(A)-selected, treated with DNase, and fragmented.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_prepare_to_s_prepared",
+      "source": "op_prepare",
+      "target": "s_prepared",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Poly(A) selected DNase treated RNA\": purple strand with two red sites and terminal \"AA(A)n\".",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.125,
+            0.12,
+            0.265,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, paragraph beginning \"Briefly\" / card source section jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, samples are poly(A)-selected, treated with DNase, and fragmented.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_prepared_to_op_fragmentation",
+      "source": "s_prepared",
+      "target": "op_fragmentation",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Fragmentation\": arrow from adduct-bearing intact RNA to three purple fragments, two with orange/red adduct symbols and one without.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.445,
+            0.0,
+            0.595,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00064; /article/body[1]/sec[4]/sec[4]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The sample was then split in half–one +CMCT sample and one mock sample.",
+          "bbox": null,
+          "rationale": "This statement follows fragmentation in the same Methods paragraph; fragmentation precedes the split and CMCT treatment. This confirms the order despite differences between the Results overview and Methods in placement of RNA size selection."
+        }
+      ]
+    },
+    {
+      "id": "f_op_fragmentation_to_s_fragments",
+      "source": "op_fragmentation",
+      "target": "s_fragments",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Fragmentation\": arrow from adduct-bearing intact RNA to three purple fragments, two with orange/red adduct symbols and one without.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.445,
+            0.0,
+            0.595,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00064; /article/body[1]/sec[4]/sec[4]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The sample was then split in half–one +CMCT sample and one mock sample.",
+          "bbox": null,
+          "rationale": "This statement follows fragmentation in the same Methods paragraph; fragmentation precedes the split and CMCT treatment. This confirms the order despite differences between the Results overview and Methods in placement of RNA size selection."
+        }
+      ]
+    },
+    {
+      "id": "f_s_fragments_to_op_cmc_alkali",
+      "source": "s_fragments",
+      "target": "op_cmc_alkali",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"CMC treatment and OH- treatment\": arrow from prepared RNA to an intact purple strand bearing orange adduct symbols at the red sites.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.27,
+            0.0,
+            0.44,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00011; /article/body[1]/sec[1]/p[4]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "When RNA is treated with CMCT, the carbodiimide (CMC) moiety modifies the N1 of guanosine, the N3 of uridine, and the N1 and N3 of pseudouridine [28]. An alkaline treatment at pH 10.3 removes CMC from all these sites except for the N3 of pseudouridine. The bulky CMC modification acts as a barrier to reverse transcription through the modified base [29].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_cmc_alkali_to_s_modified_fragments",
+      "source": "op_cmc_alkali",
+      "target": "s_modified_fragments",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"CMC treatment and OH- treatment\": arrow from prepared RNA to an intact purple strand bearing orange adduct symbols at the red sites.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.27,
+            0.0,
+            0.44,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00011; /article/body[1]/sec[1]/p[4]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "When RNA is treated with CMCT, the carbodiimide (CMC) moiety modifies the N1 of guanosine, the N3 of uridine, and the N1 and N3 of pseudouridine [28]. An alkaline treatment at pH 10.3 removes CMC from all these sites except for the N3 of pseudouridine. The bulky CMC modification acts as a barrier to reverse transcription through the modified base [29].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_modified_fragments_to_op_adaptor_ligation",
+      "source": "s_modified_fragments",
+      "target": "op_adaptor_ligation",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Adaptor ligation\": arrow from fragments to three purple fragments each extended by a green right-end segment; two retain adduct symbols.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.75,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_adaptor_ligation_to_s_linked",
+      "source": "op_adaptor_ligation",
+      "target": "s_linked",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Adaptor ligation\": arrow from fragments to three purple fragments each extended by a green right-end segment; two retain adduct symbols.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.0,
+            0.75,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_linked_to_op_reverse_transcription",
+      "source": "s_linked",
+      "target": "op_reverse_transcription",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Reverse transcription\": arrow to three purple/green templates paired with blue strands and magenta right-end segments; the two marked templates show blue extension bounded near the adducts.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.755,
+            0.0,
+            0.89,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00011; /article/body[1]/sec[1]/p[4]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "When RNA is treated with CMCT, the carbodiimide (CMC) moiety modifies the N1 of guanosine, the N3 of uridine, and the N1 and N3 of pseudouridine [28]. An alkaline treatment at pH 10.3 removes CMC from all these sites except for the N3 of pseudouridine. The bulky CMC modification acts as a barrier to reverse transcription through the modified base [29].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because the library preparation protocol positions a sequencing primer immediately adjacent to the 3′ end of the cDNA, the first base of the sequencing reads should correspond to the last base incorporated by reverse transcription. If the 3′-end of the cDNA results from a stop in reverse transcription at a carbodiimide-modified pseudouridine, the first base of our sequencing read should delineate the base immediately 3′ to a pseudouridine in the mRNA sequence.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_reverse_transcription_to_s_rt_products",
+      "source": "op_reverse_transcription",
+      "target": "s_rt_products",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Reverse transcription\": arrow to three purple/green templates paired with blue strands and magenta right-end segments; the two marked templates show blue extension bounded near the adducts.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.755,
+            0.0,
+            0.89,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00011; /article/body[1]/sec[1]/p[4]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "When RNA is treated with CMCT, the carbodiimide (CMC) moiety modifies the N1 of guanosine, the N3 of uridine, and the N1 and N3 of pseudouridine [28]. An alkaline treatment at pH 10.3 removes CMC from all these sites except for the N3 of pseudouridine. The bulky CMC modification acts as a barrier to reverse transcription through the modified base [29].",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because the library preparation protocol positions a sequencing primer immediately adjacent to the 3′ end of the cDNA, the first base of the sequencing reads should correspond to the last base incorporated by reverse transcription. If the 3′-end of the cDNA results from a stop in reverse transcription at a carbodiimide-modified pseudouridine, the first base of our sequencing read should delineate the base immediately 3′ to a pseudouridine in the mRNA sequence.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_s_rt_products_to_op_purification",
+      "source": "s_rt_products",
+      "target": "op_purification",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Purification\" arrow from RNA/cDNA assemblies to three blue strands labelled \"cDNA\" at the far right.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.89,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Size selection for truncated cDNA products with insert lengths of 20-80 nt is performed, yielding only cDNAs whose reverse transcription stopped before the end of the RNA fragment. These cDNAs are converted into sequencing libraries using a protocol adapted from the ribosome profiling technique (Ingolia et al. 2010).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, end of paragraph beginning \"Briefly\" / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "cDNA strands of 20–80 nt are isolated and processed into cDNA libraries using the Ribo-Seq/ARTseq method before high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because the library preparation protocol positions a sequencing primer immediately adjacent to the 3′ end of the cDNA, the first base of the sequencing reads should correspond to the last base incorporated by reverse transcription. If the 3′-end of the cDNA results from a stop in reverse transcription at a carbodiimide-modified pseudouridine, the first base of our sequencing read should delineate the base immediately 3′ to a pseudouridine in the mRNA sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In parallel, the same sample is incubated with buffer lacking CMCT (mock treatment) as a negative control.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00020; /article/body[1]/sec[2]/sec[2]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, the secondary stops adjacent to known pseudouridines that we detected occurred at positions both one base 5′ and one base 3′ of the modifications, indicating that CMC-induced polymerase stalling can specifically occur before and after (as well as at) sites of modification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_op_purification_to_s_cdna",
+      "source": "op_purification",
+      "target": "s_cdna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Purification\" arrow from RNA/cDNA assemblies to three blue strands labelled \"cDNA\" at the far right.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.89,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Size selection for truncated cDNA products with insert lengths of 20-80 nt is performed, yielding only cDNAs whose reverse transcription stopped before the end of the RNA fragment. These cDNAs are converted into sequencing libraries using a protocol adapted from the ribosome profiling technique (Ingolia et al. 2010).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, end of paragraph beginning \"Briefly\" / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "cDNA strands of 20–80 nt are isolated and processed into cDNA libraries using the Ribo-Seq/ARTseq method before high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because the library preparation protocol positions a sequencing primer immediately adjacent to the 3′ end of the cDNA, the first base of the sequencing reads should correspond to the last base incorporated by reverse transcription. If the 3′-end of the cDNA results from a stop in reverse transcription at a carbodiimide-modified pseudouridine, the first base of our sequencing read should delineate the base immediately 3′ to a pseudouridine in the mRNA sequence.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In parallel, the same sample is incubated with buffer lacking CMCT (mock treatment) as a negative control.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00020; /article/body[1]/sec[2]/sec[2]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Notably, the secondary stops adjacent to known pseudouridines that we detected occurred at positions both one base 5′ and one base 3′ of the modifications, indicating that CMC-induced polymerase stalling can specifically occur before and after (as well as at) sites of modification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "PSI-seq",
+      "operation_ids": [
+        "op_prepare",
+        "op_fragmentation",
+        "op_cmc_alkali",
+        "op_adaptor_ligation",
+        "op_reverse_transcription",
+        "op_purification"
+      ],
+      "status": "resolved",
+      "rationale": "The catalogue explicitly associates PSI-seq with Lovejoy, Riordan and Brown. Their inspected full text supports poly(A)-RNA fragmentation, CMCT/alkali treatment, 3′ adaptor priming, RT termination and truncated-cDNA selection. DNase treatment is supported by the diagram/card, not added from that paper. This is the primary-resolved PSI-seq graph, with fragmentation before chemical treatment as documented in c_order. The unshown mock arm and subsequent ribosome-profiling-derived library conversion inform interpretation of the endpoint only.",
+      "evidence": [
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Reference section / jcr:content/par/text_2/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "PSI-Seq: Lovejoy A. F., Riordan D. P. and Brown P. O. Transcriptome-Wide Mapping of Pseudouridines: Pseudouridine Synthases Modify Specific mRNAs in S. cerevisiae. PLoS One. 2014;9:e110799",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Poly(A) selected DNase treated RNA\": purple strand with two red sites and terminal \"AA(A)n\".",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.125,
+            0.12,
+            0.265,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We then ligated a specific adapter oligonucleotide onto the 3′-end of the RNA fragments, to serve as a priming site for reverse transcription.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Size selection for truncated cDNA products with insert lengths of 20-80 nt is performed, yielding only cDNAs whose reverse transcription stopped before the end of the RNA fragment. These cDNAs are converted into sequencing libraries using a protocol adapted from the ribosome profiling technique (Ingolia et al. 2010).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In parallel, the same sample is incubated with buffer lacking CMCT (mock treatment) as a negative control.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "Ψ-seq",
+      "operation_ids": [],
+      "status": "unresolved",
+      "rationale": "The image names Ψ-seq alongside PSI-seq without assigning different operations to either. The supplied 2016 review abstract lists them separately and supports shared CMC labeling, but does not establish Ψ-seq-specific operation order, adaptor strategy or cDNA selection. No Ψ-seq primary implementation is available in the supplied evidence. Therefore the drawing remains a family-level depiction for this member; none of the fully resolved PSI-seq operation records is independently assigned to Ψ-seq.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "Far-left legend: \"Pseudouridine residues\" above purple RNA with two yellow-highlighted red sites; caption \"Pseudouridine site identification sequencing (PSI-seq and Ψ-seq)\".",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.145,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26968262",
+          "locator": "Abstract (only abstract available), list of methods",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recently, however, a series of deep sequencing methods-Pseudo-seq, Ψ-seq, PSI-seq, and CeU-seq-has been published to map Ψ positions across the entire transcriptome with single nucleotide resolution.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26968262",
+          "locator": "Abstract (only abstract available), common chemical principle",
+          "basis": "text",
+          "support": "reported",
+          "quote": "However, an in-depth comparison of these techniques and their results has not yet been undertaken despite all four methods relying on the same basic principle: Ψ detection through selective chemical labeling by the carbodiimide known as CMC.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_25353621",
+      "source_id": "paper:25353621",
+      "methods": [
+        "PSI-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:25353621",
+          "locator": "PubMed metadata: title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transcriptome-wide mapping of pseudouridines: pseudouridine synthases modify specific mRNAs in S. cerevisiae.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00013; /article/body[1]/sec[1]/p[6]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this study, we developed pseudouridine site identification sequencing (PSI-seq), a high-throughput sequencing technique based on the CMCT reverse-transcription stop assay to identify pseudouridines in mRNAs, which we used to systematically characterize the pseudouridine content of the yeast transcriptome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Size selection for truncated cDNA products with insert lengths of 20-80 nt is performed, yielding only cDNAs whose reverse transcription stopped before the end of the RNA fragment. These cDNAs are converted into sequencing libraries using a protocol adapted from the ribosome profiling technique (Ingolia et al. 2010).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_26968262",
+      "source_id": "paper:26968262",
+      "methods": [
+        "PSI-seq",
+        "Ψ-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:26968262",
+          "locator": "PubMed metadata: title and publication_types",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Pseudouridylation meets next-generation sequencing.",
+          "bbox": null,
+          "rationale": "Publication metadata identifies this as a review; its identity is separate from protocol evidence."
+        },
+        {
+          "source_id": "paper:26968262",
+          "locator": "Abstract (only abstract available), list of methods",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recently, however, a series of deep sequencing methods-Pseudo-seq, Ψ-seq, PSI-seq, and CeU-seq-has been published to map Ψ positions across the entire transcriptome with single nucleotide resolution.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26968262",
+          "locator": "Abstract (only abstract available), common chemical principle",
+          "basis": "text",
+          "support": "reported",
+          "quote": "However, an in-depth comparison of these techniques and their results has not yet been undertaken despite all four methods relying on the same basic principle: Ψ detection through selective chemical labeling by the carbodiimide known as CMC.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26968262",
+          "locator": "Abstract (only abstract available), review purpose",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this article, we will outline the currently available high-throughput Ψ-detection methods and present a comparative analysis of their results.",
+          "bbox": null,
+          "rationale": "Only this supplied abstract was checked, not the review full text. It supports comparison of distinct named methods and their common CMC principle, not an independently verified Ψ-seq protocol or invention date."
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "c_order",
+      "target_id": "operation:op_fragmentation",
+      "diagram_observation": "The arrows place \"CMC treatment and OH- treatment\" on an intact poly(A)-labelled strand before \"Fragmentation\"; the products are three fragments, two retaining adduct symbols. The catalogue prose instead mentions fragmentation before CMC addition.",
+      "primary_statement": "Primary PSI-seq Results b00016 states that poly(A)-RNA is first fragmented by base hydrolysis and that the resulting fragments are treated with CMCT and then alkali. Methods b00064 also places fragmentation before division into +CMCT and mock samples. Accordingly op_fragmentation, op_cmc_alkali and their material routes use the primary-supported order. The paper overview and detailed Methods place RNA size selection differently relative to treatment; this extraction does not resolve that unneeded substep.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"CMC treatment and OH- treatment\": arrow from prepared RNA to an intact purple strand bearing orange adduct symbols at the red sites.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.27,
+            0.0,
+            0.44,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Fragmentation\": arrow from adduct-bearing intact RNA to three purple fragments, two with orange/red adduct symbols and one without.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.445,
+            0.0,
+            0.595,
+            0.94
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00064; /article/body[1]/sec[4]/sec[4]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The sample was then split in half–one +CMCT sample and one mock sample.",
+          "bbox": null,
+          "rationale": "This statement follows fragmentation in the same Methods paragraph; fragmentation precedes the split and CMCT treatment. This confirms the order despite differences between the Results overview and Methods in placement of RNA size selection."
+        },
+        {
+          "source_id": "card:psi-seq",
+          "locator": "Method description, paragraph beginning \"Briefly\" / card source section jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Briefly, samples are poly(A)-selected, treated with DNase, and fragmented.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "c_selection",
+      "target_id": "operation:op_purification",
+      "diagram_observation": "The single Purification arrow carries three representative blue cDNA strands to the endpoint, including a product from the unmarked-fragment track. No length cutoff, discarded population or RNA-removal mechanism is labelled.",
+      "primary_statement": "Primary PSI-seq Figure 1D specifies selection of cDNA inserts of 20–80 nt from RNA templates of 100–300 nt, before ribosome-profiling-derived library conversion. Thus op_purification uses this length selection for PSI-seq. The unmarked-fragment product is retained in the inventory and s_rt_products; the diagram does not justify assuming that every template-length product survives the primary selection. Short cDNAs can also reflect background stops, so this selection does not establish pseudouridine identity on its own.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Reverse transcription\": arrow to three purple/green templates paired with blue strands and magenta right-end segments; the two marked templates show blue extension bounded near the adducts.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.755,
+            0.0,
+            0.89,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_51254b15beba0736e4718560",
+          "locator": "\"Purification\" arrow from RNA/cDNA assemblies to three blue strands labelled \"cDNA\" at the far right.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.89,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Size selection for truncated cDNA products with insert lengths of 20-80 nt is performed, yielding only cDNAs whose reverse transcription stopped before the end of the RNA fragment. These cDNAs are converted into sequencing libraries using a protocol adapted from the ribosome profiling technique (Ingolia et al. 2010).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00016; /article/body[1]/sec[2]/sec[1]/p[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first fragmented oligo(dT)-purified poly-adenylated yeast RNA by base hydrolysis, then purified fragments 100 to 300 nucleotides in length. We treated the resulting RNA fragments with CMCT, followed by alkaline treatment to remove CMC from uridines and guanosines, leaving the CMC modification only on pseudouridines.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25353621",
+          "locator": "b00017; /article/body[1]/sec[2]/sec[1]/fig[1]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In parallel, the same sample is incubated with buffer lacking CMCT (mock treatment) as a negative control.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u_psi_greek_scope",
+      "question": "Which precise operations, order, adaptor arrangement and cDNA selection apply independently to Ψ-seq? Resolving this requires the Ψ-seq primary method or a full-text comparative account; the supplied grouped drawing and review abstract establish only the family depiction and shared CMC principle.",
+      "blocking": false,
+      "affected_ids": [
+        "operation:op_prepare",
+        "operation:op_fragmentation",
+        "operation:op_cmc_alkali",
+        "operation:op_adaptor_ligation",
+        "operation:op_reverse_transcription",
+        "operation:op_purification"
+      ]
+    }
+  ]
+}

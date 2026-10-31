@@ -1,0 +1,1564 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "bischip-seq-chip-bs-seq",
+  "title": "BisChIP-Seq/ChIP-BS-Seq",
+  "method_names": [
+    "BisChIP-seq",
+    "ChIP-BS-seq",
+    "ChIP-BMS"
+  ],
+  "scope": "Illumina shared explanatory schematic of BisChIP-seq/ChIP-BS-seq, with ChIP-BMS retained as a catalogue alias and implementation applicability qualified below. Image inventory: leftmost explanatory title cartoon; input \"DNA-protein complex with methylated histones and methylated DNA\"; arrow to \"Sonicate\" with separate complexes; arrow to \"Immunoprecipitate\" with pink antibodies and a faded nonselected complex; \"Purify DNA and shear\" producing naked DNA; a fanned sequence enlargement under \"Bisulfite conversion\" showing successive bisulfite and PCR states; arrow to a final blue DNA line with the visible right-edge label \"DNA\". The fanned inset is a chemical-state explanation, not three sample branches. Antibodies and modification dots are contextual reagents/symbols, without a chemical end-group legend. End-repair/methylated-adapter ligation and NGS are explicitly text-supported interfaces, not extra depicted panels. The main graph preserves the full shared drawing; method_scopes separates that depiction from primary-verified operation assignments. Routine execution details and unshown size-selection branches of individual experiments are outside this explanatory scope.",
+  "inspected_sources": [
+    "diagram:asset_a1649e5dbea138fa31f6eda3",
+    "card:bischip-seq-chip-bs-seq",
+    "metadata:25159599",
+    "paper:25159599",
+    "metadata:22466170",
+    "paper:22466170",
+    "metadata:25421684",
+    "paper:25421684",
+    "metadata:27385050",
+    "paper:27385050",
+    "metadata:25798578",
+    "paper:25798578"
+  ],
+  "states": [
+    {
+      "id": "s_chromatin",
+      "label": "DNA-protein complex with methylated histones and methylated DNA",
+      "kind": "material",
+      "features": [
+        "DNA is wrapped around gray histone/nucleosome-like protein icons; the caption identifies histone and DNA methylation.",
+        "Red dots and colored patches are schematic modification cues; no legend assigns a specific histone residue, exact chemical structure, DNA end group, or antibody target.",
+        "The similar far-left cartoon with the BisChIP-seq/ChIP-BS-seq explanatory caption is an overview of assay purpose, not a separate material-transfer branch."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Workflow input: \"DNA-protein complex with methylated histones and methylated DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.185,
+            0.04,
+            0.303,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Far-left explanatory caption and repeated chromatin cartoon",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.18,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_fragmented_chromatin",
+      "label": "Sonicated DNA-protein fragments",
+      "kind": "material",
+      "features": [
+        "The formerly connected nucleosomal DNA is depicted as separated protein-DNA complexes.",
+        "Protein association and the depicted modification cues persist through fragmentation."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow from input to separated chromatin icons; \"Sonicate\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.301,
+            0.0,
+            0.463,
+            0.75
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_selected_chromatin",
+      "label": "Antibody-associated, ChIP-selected chromatin",
+      "kind": "material",
+      "features": [
+        "Pink antibody shapes associate with one dark nucleosomal complex.",
+        "Selection is by the chosen chromatin feature, rather than a required methyl-CpG binding domain.",
+        "The selection history associates this DNA population with the captured protein or modification; enrichment does not establish perfect target specificity or direct contact at each sequenced cytosine."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Immunoprecipitate\": pink antibody shapes on dark complex and neighboring faded complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.462,
+            0.0,
+            0.625,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP is used to capture a genomic subfraction associated with a specific histone modification or transcription factor.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009], interpretation of ChIP capture",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "ChIP is used to capture a genomic subfraction associated with a specific histone modification or transcription factor.",
+          "bbox": null,
+          "rationale": "A ChIP-captured genomic subfraction supports fragment-level association with the capture target. Neither the drawing nor the quoted description establishes purity or base-specific protein contact."
+        }
+      ]
+    },
+    {
+      "id": "s_outside_selection",
+      "label": "Chromatin outside the depicted retained ChIP route",
+      "kind": "material",
+      "features": [
+        "The pale neighboring complex contrasts with the antibody-associated complex.",
+        "It is represented as an excluded population, with no route into downstream DNA preparation. The icon does not specify a wash or disposal operation."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Faded left complex beside antibody-bound dark complex in Immunoprecipitate panel",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.51,
+            0.02,
+            0.56,
+            0.58
+          ],
+          "rationale": "The dark antibody-bound versus faded unbound contrast, together with the immunoprecipitation label, indicates selection. The excluded population is a schematic interpretation, not a separately drawn collection vessel."
+        }
+      ]
+    },
+    {
+      "id": "s_captured_dna",
+      "label": "Purified and sheared DNA from captured chromatin",
+      "kind": "material",
+      "features": [
+        "Naked blue DNA with red modification dots replaces the protein-DNA cartoon.",
+        "The physical readout precursor is DNA. Protein association is retained as capture provenance after protein removal.",
+        "The figure explicitly labels both purification and shearing here; it specifies no mechanism for this later shearing."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow into \"Purify DNA and shear\" and outgoing naked blue DNA bearing red dots",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.637,
+            0.21,
+            0.765,
+            0.87
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP is used to capture a genomic subfraction associated with a specific histone modification or transcription factor.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_adapter_dna",
+      "label": "Captured DNA prepared with methylated sequencing adapters",
+      "kind": "material",
+      "features": [
+        "An explicitly text-supported intermediate; adapter ligation is absent from the drawing.",
+        "The Brinkman ChIP-BS-seq implementation ligates adapters whose cytosines are 5-methylcytosines, protecting adapter sequence from bisulfite-induced deamination.",
+        "No specific adapter sequence, barcode, attachment geometry, or end-group structure is supplied by the Illumina icon."
+      ],
+      "evidence": [
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00047]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After phenol extraction and ethanol precipitation, Illumina genomic DNA adapters containing 5-methylcytosine instead of cytosine (ATDBio), preventing deamination during bisulfite conversion, were ligated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_converted_dna",
+      "label": "Bisulfite-converted captured DNA",
+      "kind": "material",
+      "features": [
+        "In the middle inset row the originally unmarked C is U, whereas the marked C is still shown as C.",
+        "This is the converted DNA template for PCR, not an RNA measurement or an RNA-to-cDNA step.",
+        "The three inset rows illustrate successive states of the same methylation-sensitive sequence example, not three parallel retained samples."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_library",
+      "label": "PCR-amplified DNA library encoding the bisulfite response",
+      "kind": "material",
+      "features": [
+        "The bottom inset row has T at the position drawn as U after bisulfite treatment and C at the position drawn as marked C.",
+        "The readout carrier is amplified DNA with methylation-dependent sequence differences at the illustrated positions, rather than sequenced histone or antibody.",
+        "The final right-edge blue DNA line is the depicted product. Adapter-bearing library status and its sequencing interface are supported by text rather than drawn adapter symbols.",
+        "The modification glyph retained over C in the cartoon is treated as a label of the original protected position; the architecture makes no claim that PCR copies a covalent methyl group onto each newly synthesized strand."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow right of conversion inset to final plain blue line; right-edge caption visibly reads \"DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.21,
+            1.0,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Interpretation of retained modification glyph over C in the final PCR row",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.822,
+            0.43,
+            0.848,
+            0.64
+          ],
+          "rationale": "The inset distinguishes the original methylation states through C/U/T changes. A generic retained glyph does not establish the chemical modification state of every amplified strand."
+        }
+      ]
+    },
+    {
+      "id": "d_readout",
+      "label": "Sequences of ChIP-selected DNA with base-position methylation information",
+      "kind": "data",
+      "features": [
+        "DNA sequence identifies the captured genomic subfraction and provides methylation-sensitive C/T information at covered cytosine positions.",
+        "The methylation measurement is conditional on capture and sequence coverage; unrepresented regions cannot be assigned methylation status from this library.",
+        "The primary paper reports single-base methylation resolution within the selected fraction. This does not give base-resolution localization of the protein contact.",
+        "The figure supports the schematic C-versus-converted-T interpretation; it does not demonstrate absolute chemical specificity of every retained C for 5mC."
+      ],
+      "evidence": [
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00003]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A chromatin-immunoprecipitation (ChIP)-capturing step is used to obtain a restricted representation of the genome occupied by the epigenetic feature of interest, for which a single-base resolution DNA methylation map is then generated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00022]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Obviously, the latter could not be directly shown by ChIP-BS-seq because regions lacking H3K27me3 were not captured and, thus, not available for DNA methylation measurements.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009], interpretation of selected genomic subfraction and base-resolution methylation",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "In this way, the levels of DNA methylation can be quantitatively assessed at base-resolution within the genomic subfraction of interest.",
+          "bbox": null,
+          "rationale": "Capturing a chromatin-associated DNA fragment and reading individual cytosines establishes conditional methylation information, not a protein footprint at each base."
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_sonicate",
+      "label": "Sonicate",
+      "description": "Breaks the input chromatin into separate DNA-protein fragments, as shown by the connected input and separated nucleosomal complexes.",
+      "inputs": [
+        "s_chromatin"
+      ],
+      "outputs": [
+        "s_fragmented_chromatin"
+      ],
+      "mechanism": "Sonication is named; the diagram gives no fragmentation conditions or specified fragment length.",
+      "information_effect": "Protein-DNA association and modification cues remain on the fragments entering selection.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Workflow input: \"DNA-protein complex with methylated histones and methylated DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.185,
+            0.04,
+            0.303,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow from input to separated chromatin icons; \"Sonicate\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.301,
+            0.0,
+            0.463,
+            0.75
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_capture",
+      "label": "Immunoprecipitate",
+      "description": "Enriches the fragmented chromatin associated with the antibody-recognized feature. The dark antibody-bound complex continues toward DNA recovery; the faded complex represents material outside that selected route.",
+      "inputs": [
+        "s_fragmented_chromatin"
+      ],
+      "outputs": [
+        "s_selected_chromatin",
+        "s_outside_selection"
+      ],
+      "mechanism": "Antibody-based chromatin immunoprecipitation; the pink antibodies are capture reagents, not sequenced products or separately transformed substrates.",
+      "information_effect": "Restricts genomic representation according to a chromatin modification or associated protein. It does not require the recovered DNA to be methylated.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Immunoprecipitate\": pink antibody shapes on dark complex and neighboring faded complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.462,
+            0.0,
+            0.625,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP is used to capture a genomic subfraction associated with a specific histone modification or transcription factor.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00017]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "None of the fragments showed altered DNA methylation patterns after crosslinking/decrosslinking, showing that ChIP-derived DNA did not affect bisulfite conversion.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00016]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "H3K27me3-enriched CpG island promoters are devoid of DNA methylation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_recover",
+      "label": "Purify DNA and shear",
+      "description": "Transforms selected protein-associated chromatin into recovered naked DNA and depicts shearing of that recovered material. This broad drawing label is retained without inserting an unshown purification recipe.",
+      "inputs": [
+        "s_selected_chromatin"
+      ],
+      "outputs": [
+        "s_captured_dna"
+      ],
+      "mechanism": "DNA purification and shearing are named. The diagram does not identify the protein-removal chemistry or the later fragmentation mechanism.",
+      "information_effect": "The material becomes DNA rather than an intact protein-DNA complex; the connection to the chromatin target survives as the provenance of the selected DNA population.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow into \"Purify DNA and shear\" and outgoing naked blue DNA bearing red dots",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.637,
+            0.21,
+            0.765,
+            0.87
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_adapters",
+      "label": "End-repair and methylated-adapter ligation (text-supported interface)",
+      "description": "Prepares captured DNA for sequencing and attaches bisulfite-protected adapters before conversion. This single broad block bridges purified DNA to the converted library; it is supplied by the card and primary text and is not a separately depicted panel.",
+      "inputs": [
+        "s_captured_dna"
+      ],
+      "outputs": [
+        "s_adapter_dna"
+      ],
+      "mechanism": "End-repair and adapter ligation are explicitly reported. In the verified ChIP-BS-seq implementation the adapter cytosines are 5-methylcytosines, preventing their deamination during conversion.",
+      "information_effect": "Adds the sequencing-library interface while retaining captured genomic DNA as the biological insert.",
+      "evidence": [
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00047]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After phenol extraction and ethanol precipitation, Illumina genomic DNA adapters containing 5-methylcytosine instead of cytosine (ATDBio), preventing deamination during bisulfite conversion, were ligated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_bisulfite",
+      "label": "Bisulfite conversion",
+      "description": "Acts on the adapter-bearing captured DNA. In the depicted sequence example the unmarked C becomes U while the marked C remains C; the protected adapters are supplied by the text-supported implementation.",
+      "inputs": [
+        "s_adapter_dna"
+      ],
+      "outputs": [
+        "s_converted_dna"
+      ],
+      "mechanism": "The figure explicitly depicts the differential response of the illustrated cytosines to bisulfite; it supplies no further base-chemistry structures.",
+      "information_effect": "Converts an original methylation-state difference into a template-base difference that PCR can preserve in sequence.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00047]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After phenol extraction and ethanol precipitation, Illumina genomic DNA adapters containing 5-methylcytosine instead of cytosine (ATDBio), preventing deamination during bisulfite conversion, were ligated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_pcr",
+      "label": "PCR",
+      "description": "Amplifies the bisulfite-converted DNA into a library. The sequence row changes from T-U-T-C-G to T-T-T-C-G: the originally converted C is represented as T and the protected position as C.",
+      "inputs": [
+        "s_converted_dna"
+      ],
+      "outputs": [
+        "s_library"
+      ],
+      "mechanism": "PCR is explicitly named within the conversion inset and reported after bisulfite conversion in the primary workflow.",
+      "information_effect": "Retains a sequence-encoded record of the original methylation-sensitive C positions within captured DNA. No barcode or per-cell identity is depicted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow right of conversion inset to final plain blue line; right-edge caption visibly reads \"DNA\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.21,
+            1.0,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_sequence",
+      "label": "NGS / deep sequencing (text-supported readout)",
+      "description": "Reads the amplified captured-DNA library to obtain genomic sequence and methylation-sensitive base calls. Sequencing is reported in the card and primary paper; the image itself ends at a DNA product.",
+      "inputs": [
+        "s_library"
+      ],
+      "outputs": [
+        "d_readout"
+      ],
+      "mechanism": "Illumina DNA sequencing is reported; read length and analysis settings are outside the depicted architecture.",
+      "information_effect": "Jointly reports the genomic origin and base-position methylation pattern of represented ChIP DNA. It measures DNA associated with the selected feature, not the protein modification chemically.",
+      "evidence": [
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00003]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A chromatin-immunoprecipitation (ChIP)-capturing step is used to obtain a restricted representation of the genome occupied by the epigenetic feature of interest, for which a single-base resolution DNA methylation map is then generated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00022]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Obviously, the latter could not be directly shown by ChIP-BS-seq because regions lacking H3K27me3 were not captured and, thus, not available for DNA methylation measurements.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "op_sonicate_inputs_1",
+      "source": "s_chromatin",
+      "target": "op_sonicate",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow from input to separated chromatin icons; \"Sonicate\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.301,
+            0.0,
+            0.463,
+            0.75
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_sonicate_outputs_1",
+      "source": "op_sonicate",
+      "target": "s_fragmented_chromatin",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow from input to separated chromatin icons; \"Sonicate\"",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.301,
+            0.0,
+            0.463,
+            0.75
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_capture_inputs_1",
+      "source": "s_fragmented_chromatin",
+      "target": "op_capture",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Immunoprecipitate\": pink antibody shapes on dark complex and neighboring faded complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.462,
+            0.0,
+            0.625,
+            0.76
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_capture_outputs_1",
+      "source": "op_capture",
+      "target": "s_selected_chromatin",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Immunoprecipitate\": pink antibody shapes on dark complex and neighboring faded complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.462,
+            0.0,
+            0.625,
+            0.76
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_capture_outputs_2",
+      "source": "op_capture",
+      "target": "s_outside_selection",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Faded left complex beside antibody-bound dark complex in Immunoprecipitate panel",
+          "basis": "image",
+          "support": "inferred",
+          "quote": null,
+          "bbox": [
+            0.51,
+            0.02,
+            0.56,
+            0.58
+          ],
+          "rationale": "The dark antibody-bound versus faded unbound contrast, together with the immunoprecipitation label, indicates selection. The excluded population is a schematic interpretation, not a separately drawn collection vessel."
+        }
+      ]
+    },
+    {
+      "id": "op_recover_inputs_1",
+      "source": "s_selected_chromatin",
+      "target": "op_recover",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow into \"Purify DNA and shear\" and outgoing naked blue DNA bearing red dots",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.637,
+            0.21,
+            0.765,
+            0.87
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_recover_outputs_1",
+      "source": "op_recover",
+      "target": "s_captured_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Arrow into \"Purify DNA and shear\" and outgoing naked blue DNA bearing red dots",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.637,
+            0.21,
+            0.765,
+            0.87
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_adapters_inputs_1",
+      "source": "s_captured_dna",
+      "target": "op_adapters",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_adapters_outputs_1",
+      "source": "op_adapters",
+      "target": "s_adapter_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_bisulfite_inputs_1",
+      "source": "s_adapter_dna",
+      "target": "op_bisulfite",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_bisulfite_outputs_1",
+      "source": "op_bisulfite",
+      "target": "s_converted_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_pcr_inputs_1",
+      "source": "s_converted_dna",
+      "target": "op_pcr",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_pcr_outputs_1",
+      "source": "op_pcr",
+      "target": "s_library",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_sequence_inputs_1",
+      "source": "s_library",
+      "target": "op_sequence",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_sequence_outputs_1",
+      "source": "op_sequence",
+      "target": "d_readout",
+      "kind": "data_output",
+      "evidence": [
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "ChIP-BS-seq",
+      "operation_ids": [
+        "op_capture",
+        "op_adapters",
+        "op_bisulfite",
+        "op_pcr",
+        "op_sequence"
+      ],
+      "status": "resolved",
+      "rationale": "The Brinkman full text explicitly establishes this captured-DNA to methylated-adapter to bisulfite to PCR to sequencing core, with H3K27me3 and H3K9me3 applications. The supplied Varshney full text establishes a pol III/RPC155 capture application of ChIP-BS-Seq and confirms adaptor addition before bisulfite before amplification; it is an application, not a replacement origin claim. The sonication and composite \"Purify DNA and shear\" operations remain in the shared diagram graph. Their omission from this implementation-verified operation list avoids claiming that the primary protocols explicitly specify the drawing's additional post-capture shearing. No MethylCap selection is assigned to this antibody-based route.",
+      "evidence": [
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP is used to capture a genomic subfraction associated with a specific histone modification or transcription factor.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25798578",
+          "locator": "[b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "For pol III ChIP-BS-Seq, one library was prepared with eluate from 10 technical replicate RPC155 ChIP assays carried out as previously38 (~10 ng; all replicates were from the same batch of cross-linked HeLa cells, grown to 75% confluence), following the Illumina ChIP-Seq library protocol with bisulfite conversion as for the first input library.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25798578",
+          "locator": "[b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "following the Illumina ChIP-Seq library protocol, with the addition of bisulfite conversion after addition of adaptors but before amplification;",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "BisChIP-seq",
+      "operation_ids": [
+        "op_sonicate",
+        "op_capture",
+        "op_recover",
+        "op_bisulfite",
+        "op_pcr"
+      ],
+      "status": "unresolved",
+      "rationale": "The Illumina figure explicitly groups BisChIP-seq and ChIP-BS-seq under one depiction, and its catalogue describes a shared assay family. Jin et al. confirms a GR-associated BisChIP-seq application in the supplied abstract. That abstract supplies no implementation chemistry or reaction order. The listed operations designate the shared drawing only; primary confirmation of post-capture shearing, methylated-adapter chemistry, and exact library interface for this named application is unavailable. The family-level text-supported adapter and NGS blocks remain visible in the global architecture without claiming a verified identical BisChIP-seq protocol.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "Far-left explanatory caption and repeated chromatin cartoon",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.18,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, opening sentence; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BisChIP-seq, ChIP-BS-seq, and ChIP-BMS all refer to essentially the same method.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27385050",
+          "locator": "Abstract (only abstract supplied; no full text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "With BisChIP-seq assays in HEK-293T cells, we found that GR can recognize highly methylated sites within chromatin in cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "method": "ChIP-BMS",
+      "operation_ids": [
+        "op_capture",
+        "op_bisulfite",
+        "op_pcr"
+      ],
+      "status": "unresolved",
+      "rationale": "This name occurs in the catalogue's \"essentially the same method\" statement, not as a separately labeled diagram workflow. The listed operations are the catalogue-supported capture/bisulfite/PCR family core. No supplied primary content independently defines a ChIP-BMS implementation, confirms the extra shearing, or establishes exact equivalence of adapters and library construction. It is retained as a catalogue alias rather than a distinct experimentally resolved version.",
+      "evidence": [
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, opening sentence; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BisChIP-seq, ChIP-BS-seq, and ChIP-BMS all refer to essentially the same method.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "description, second paragraph; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR amplification, and NGS.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_25159599",
+      "source_id": "paper:25159599",
+      "methods": [
+        "BisChIP-seq",
+        "ChIP-BS-seq",
+        "ChIP-BMS"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25159599",
+          "locator": "PubMed title, PMID 25159599, DOI 10.1038/nrg3772, publication type Review",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Advances in the profiling of DNA modifications: cytosine methylation and beyond.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25159599",
+          "locator": "Abstract only; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This Review discusses the principles behind recently developed techniques, compares their respective strengths and limitations and provides general guidelines for selecting appropriate methods for specific experimental contexts.",
+          "bbox": null,
+          "rationale": "This is general DNA-modification assay background. The supplied abstract does not establish the specific ChIP workflow, exact aliases, or priority."
+        }
+      ]
+    },
+    {
+      "id": "pm_22466170",
+      "source_id": "paper:22466170",
+      "methods": [
+        "ChIP-BS-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "metadata:22466170",
+          "locator": "PubMed title, PMID 22466170, DOI 10.1101/gr.133728.111",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequential ChIP-bisulfite sequencing enables direct genome-scale investigation of chromatin and DNA methylation cross-talk.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP is used to capture a genomic subfraction associated with a specific histone modification or transcription factor.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Captured DNA fragments are subjected to end-repair, adapter ligation using methylated adapters, bisulfite conversion, PCR-amplification, and deep sequencing (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00047]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After phenol extraction and ethanol precipitation, Illumina genomic DNA adapters containing 5-methylcytosine instead of cytosine (ATDBio), preventing deamination during bisulfite conversion, were ligated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00003]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A chromatin-immunoprecipitation (ChIP)-capturing step is used to obtain a restricted representation of the genome occupied by the epigenetic feature of interest, for which a single-base resolution DNA methylation map is then generated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00039]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP-BS-seq was successfully established using H3K27me3 and H3K9me3 as the epigenetic marks of interest.",
+          "bbox": null,
+          "rationale": "Full-text evidence for the named ChIP-BS-seq method and its demonstrated histone-mark applications; the same paper separately describes MethylCap-BS-seq. Publication identity is not used to assert historical priority."
+        }
+      ]
+    },
+    {
+      "id": "pm_25421684",
+      "source_id": "paper:25421684",
+      "methods": [
+        "BisChIP-seq",
+        "ChIP-BS-seq",
+        "ChIP-BMS"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "metadata:25421684",
+          "locator": "PubMed title, PMID 25421684, DOI 10.1007/978-1-4939-1804-1_33",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing the cancer methylome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25421684",
+          "locator": "Abstract only; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this review, we discuss various current and emerging technologies in DNA methylation analysis that integrate next-generation sequencing with the basic principles of methylation detections including methylation sensitive restriction enzyme digestion, affinity purification with antibody or binding proteins, and bisulfite treatment.",
+          "bbox": null,
+          "rationale": "A broad review listed as a related publication; this abstract supplies no method-specific execution sequence or variant definition."
+        }
+      ]
+    },
+    {
+      "id": "pm_27385050",
+      "source_id": "paper:27385050",
+      "methods": [
+        "BisChIP-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:27385050",
+          "locator": "PubMed title, PMID 27385050, DOI 10.1038/srep29119",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The effects of cytosine methylation on general transcription factors.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27385050",
+          "locator": "Abstract (only abstract supplied; no full text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "With BisChIP-seq assays in HEK-293T cells, we found that GR can recognize highly methylated sites within chromatin in cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27385050",
+          "locator": "Abstract-only evidence limit",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "With BisChIP-seq assays in HEK-293T cells, we found that GR can recognize highly methylated sites within chromatin in cells.",
+          "bbox": null,
+          "rationale": "Supports an application to GR-associated DNA in HEK-293T cells and the BisChIP-seq name; the supplied abstract does not verify preparation order, adapter chemistry, or an origin claim."
+        }
+      ]
+    },
+    {
+      "id": "pm_25798578",
+      "source_id": "paper:25798578",
+      "methods": [
+        "ChIP-BS-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_variant",
+      "evidence": [
+        {
+          "source_id": "metadata:25798578",
+          "locator": "PubMed title, PMID 25798578, DOI 10.1038/ncomms7569",
+          "basis": "text",
+          "support": "reported",
+          "quote": "SINE transcription by RNA polymerase III is suppressed by histone methylation but not by DNA methylation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25798578",
+          "locator": "[b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "For pol III ChIP-BS-Seq, one library was prepared with eluate from 10 technical replicate RPC155 ChIP assays carried out as previously38 (~10 ng; all replicates were from the same batch of cross-linked HeLa cells, grown to 75% confluence), following the Illumina ChIP-Seq library protocol with bisulfite conversion as for the first input library.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25798578",
+          "locator": "[b00050]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "following the Illumina ChIP-Seq library protocol, with the addition of bisulfite conversion after addition of adaptors but before amplification;",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25798578",
+          "locator": "[b00018]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To examine this globally, we applied the recently reported genome-scale ChIP-bisulphite-sequencing (ChIP-BS-Seq) technique to assess DNA methylation status of pol III-bound DNA25.",
+          "bbox": null,
+          "rationale": "Full-text support for a pol III-associated DNA application. It describes adopting the reported technique, not its invention, and does not substitute RNA sequencing for the DNA readout."
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "corr_selection_scope",
+      "target_id": "operation:op_capture",
+      "diagram_observation": "The drawing explicitly says \"Immunoprecipitate\" and shows antibody-shaped pink objects binding chromatin. The accompanying catalogue additionally mentions MBD proteins, hypermethylation bias and CpG-density restrictions in its pros/cons.",
+      "primary_statement": "Brinkman distinguishes ChIP capture of a histone-modification/transcription-factor-associated subfraction from MethylCap-BS-seq capture using an MBD. The authored capture operation therefore follows the antibody-based ChIP route shown in the diagram; MBD capture and its selection restrictions are not imported into this architecture.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Immunoprecipitate\": pink antibody shapes on dark complex and neighboring faded complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.462,
+            0.0,
+            0.625,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00009]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP is used to capture a genomic subfraction associated with a specific histone modification or transcription factor.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "Pros/Cons; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Protein-based selection is biased toward hypermethylated regions",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00011]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In MethylCap, an MBD domain is used to capture methylated DNA (Brinkman et al. 2010).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "corr_resolution",
+      "target_id": "state:d_readout",
+      "diagram_observation": "The conversion inset shows individual C/U/T positions. The catalogue nevertheless states \"Base-pair resolution is lower (~150 bp), as opposed to single-base resolution with other methods\".",
+      "primary_statement": "The primary ChIP-BS-seq paper explicitly reports a single-base resolution DNA methylation map of the captured genomic fraction. The authored readout uses that primary-supported methylation resolution; it does not equate it with localization resolution of the ChIP capture target.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_a1649e5dbea138fa31f6eda3",
+          "locator": "\"Bisulfite conversion\" inset: upper T-C-T-C-G, middle T-U-T-C-G, lower T-T-T-C-G; \"Bisulfite\" and \"PCR\" labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.762,
+            0.0,
+            0.866,
+            0.76
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22466170",
+          "locator": "[b00003]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A chromatin-immunoprecipitation (ChIP)-capturing step is used to obtain a restricted representation of the genome occupied by the epigenetic feature of interest, for which a single-base resolution DNA methylation map is then generated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:bischip-seq-chip-bs-seq",
+          "locator": "Cons; card.json jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Base-pair resolution is lower (~150 bp), as opposed to single-base resolution with other methods",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u_extra_shearing",
+      "question": "Does \"Purify DNA and shear\" intentionally specify an additional post-ChIP fragmentation in each named implementation, and by what mechanism? The drawing explicitly retains that label, while Brinkman [b00047] begins library construction with already obtained ChIP DNA and does not specify that extra fragmentation. A variant-specific primary preparation description or original figure explanation would be needed to assign this extra shearing to a particular protocol.",
+      "blocking": false,
+      "affected_ids": [
+        "operation:op_recover",
+        "scope:BisChIP-seq",
+        "scope:ChIP-BMS"
+      ]
+    },
+    {
+      "id": "u_alias_implementation",
+      "question": "Which full primary protocol independently defines ChIP-BMS, and which exact BisChIP-seq library steps correspond to the GR application? The catalogue supplies an alias assertion and the Jin abstract supplies an application, but neither verifies identical adapter chemistry or every depicted operation for these names. Full method text identifying the named implementations would resolve this.",
+      "blocking": false,
+      "affected_ids": [
+        "scope:BisChIP-seq",
+        "scope:ChIP-BMS",
+        "operation:op_adapters"
+      ]
+    },
+    {
+      "id": "u_specific_protected_base",
+      "question": "What chemical specificity can be assigned to an unconverted C beyond the schematic marked-versus-unmarked cytosine example? The supplied figure and inspected primary passages do not establish chemical discrimination among all potentially bisulfite-resistant bases. A primary validation or chemical-specific assay description is needed for a stronger specificity claim; the captured-DNA architecture and illustrated C/T readout remain interpretable.",
+      "blocking": false,
+      "affected_ids": [
+        "state:d_readout"
+      ]
+    }
+  ]
+}

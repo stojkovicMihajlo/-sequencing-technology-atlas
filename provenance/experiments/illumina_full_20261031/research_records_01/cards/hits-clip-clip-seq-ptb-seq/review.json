@@ -1,0 +1,2046 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "hits-clip-clip-seq-ptb-seq",
+  "candidate_sha256": "2f6f51874a1e71521373939dd47ff8f197d06d29178c411b55cd972ff8091825",
+  "inspected_sources": [
+    "card:hits-clip-clip-seq-ptb-seq",
+    "diagram:asset_31171157bdbf6ede1e33d3d0",
+    "metadata:19536157",
+    "paper:19536157",
+    "metadata:17540862",
+    "paper:17540862",
+    "metadata:20064465",
+    "paper:20064465",
+    "metadata:16314267",
+    "paper:16314267",
+    "metadata:18978773",
+    "paper:18978773",
+    "metadata:27150721",
+    "paper:27150721",
+    "metadata:26914319"
+  ],
+  "checks": [
+    {
+      "target": "correction:correction_clip_citation",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The correction is supported: the catalogue labels the Johnson protein-DNA ChIPSeq paper as CLIP-Seq, while the image depicts an RNA-protein/RNase/RNA-to-cDNA route. The candidate retains the RNA drawing and identifies the citation mismatch using the supplied abstract rather than adding a DNA branch or claiming verified full-text CLIP chemistry.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Left descriptive cartoon and caption: Crosslinking and immunoprecipitation sequencing (CLIP-Seq) or high-throughput sequencing of CLIP cDNA library (HITS-CLIP). Blue protein, purple line and unlabelled yellow strokes; no transfer arrow to the main input.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.22,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Complete image: left CLIP-Seq/HITS-CLIP descriptive cartoon, then one route labelled RNA-protein complex, UV 254 nm, RNase T1 digestion, Proteinase K, RNA extraction, Reverse transcription and cDNA. No branch, legend or labelled end group is present.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "References, CLIP-Seq entry, references:1",
+          "basis": "text",
+          "support": "reported",
+          "quote": "CLIP-Seq: Johnson D. S., Mortazavi A., Myers R. M. and Wold B. (2007) Genome-wide mapping of in vivo protein-DNA interactions. Science 316: 1497-1502",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:17540862",
+          "locator": "Abstract only, assay identity; full text unavailable in supplied registry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To map these protein-DNA interactions comprehensively across entire mammalian genomes, we developed a large-scale chromatin immunoprecipitation assay (ChIPSeq) based on direct ultrahigh-throughput DNA sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:correction_gillen_nuclease_scope",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "The stated scientific discrepancy is supported, but the correction is incomplete in the graph interfaces. Excluding op_rnase_t1 from Gillen does not by itself remove T1 provenance: the Gillen scope still assigns op_proteinase_k, whose input and incoming flow are s_trimmed / f_s_trimmed_to_op_proteinase_k, and s_trimmed is explicitly RNase T1-trimmed. Revise the variant mapping/input route so the reported RNAse A construction is not attached to that T1 state, while retaining the original diagram T1 route and the independently supported primer qualification.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNase T1 digestion region: green reagent icons flank the blue protein on the purple RNA strand; no separate retained branch or labelled RNA end group.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], nuclease and selection order in the construction described",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HITS-CLIP library construction [1] begins with the cross-linking of RNA-binding proteins to RNA using UV light, partial RNA digestion with RNAse A, and immunoprecipitation of the RNA-binding protein of interest and attached RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], protein digestion and RNA purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting size-selected protein-RNA complexes are then digested with Proteinase K to remove the protein and the remaining RNA is purified by phenol extraction and ethanol precipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Results [b00021], nested RT and protected PCR primer interface; associated Figure 2 explanation is text evidence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "By using a nested reverse transcription primer that lacks the first three bases of the 3′ adaptor, along with a full-length reverse PCR primer with phosphorothioate bonds protecting the final four bases, only cDNAs resulting from priming on 3′ adaptor sequences will be valid templates for PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:correction_protease_remnant",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The source distinction is preserved and the correction is implemented in s_proteolyzed, s_rna and the RT limitation. The bare purple line shows loss of the large protein icon; Gillen explicitly reports one or two covalently retained amino acids that can terminate RT. There is no assertion that extraction removes that remnant.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Proteinase K region: pink reagent icon above a rightward arrow, followed by a purple RNA line without the large blue protein in the RNA extraction region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.74,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNA extraction region: isolated purple strand and rightward arrow leading to the reverse-transcription drawing.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.12,
+            0.79,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_extract_rna_to_s_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "RNA extraction yields the depicted isolated purple RNA material. The output agrees with the RNA template accepted by reverse transcription, with no compartment transition or extra chemical modification manufactured.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNA extraction region: isolated purple strand and rightward arrow leading to the reverse-transcription drawing.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.12,
+            0.79,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_ip_to_s_selected",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Antibody selection retains target-protein RNA complexes as material output with capture provenance. The output is compatible with catalogue-described subsequent digestion and retains the acknowledged background limitation.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Results [b00009], Ago purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To purify Ago bound to mouse brain RNAs, we UV-irradiated P13 neocortex and immunoprecipitated Ago under stringent conditions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Cons, capture specificity and efficiency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies not specific to the target may precipitate nonspecific complexes.\nUV crosslinking is not efficient and requires close protein-RNA interactions\nArtifacts may be introduced during the crosslinking process",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_proteinase_k_to_s_proteolyzed",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Protein digestion produces RNA-containing material without the large protein icon. The outgoing state agrees with the protease mechanism and preserves possible covalent amino-acid remnants for extraction and RT.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Proteinase K region: pink reagent icon above a rightward arrow, followed by a purple RNA line without the large blue protein in the RNA extraction region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.74,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_readout_to_d_tags",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Sequencing produces sequence information rather than a second material RNA product. The data-output kind and tags mapped to recovered RNA regions are compatible with the catalogue and primary footprint evidence.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, final sentence of workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing of the cDNA provides single-base resolution mapping of protein binding sites on RNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Discussion [b00026], regional footprint interpretation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Ago-HITS-CLIP compliments bioinformatic approaches to miRNA target identification by restricting the sequence space to be analyzed to the ∼45-60 nt Ago footprint.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Results [b00015], high-throughput library readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Having thoroughly characterized the libraries, we next subjected PCR amplicons to high-throughput sequencing on the Illumina GAII platform,",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_reverse_transcription_to_s_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The paired strands and terminal black strand labelled cDNA support the operation's DNA output. The output state matches the cDNA-derived readout interface without supplying an unshown template-removal reaction.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Reverse transcription region and endpoint: paired purple and black lines, rightward arrow, then one black line labelled cDNA. No RNA-removal reagent, adapter geometry or primer identity is labelled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.12,
+            1.0,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_rnase_t1_to_s_trimmed",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The T1-labelled digestion produces the explicitly T1-trimmed protein-associated RNA material. Partial-digestion evidence supports shortened retained fragments; the green reagent icons do not require extra retained branches.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNase T1 digestion region: green reagent icons flank the blue protein on the purple RNA strand; no separate retained branch or labelled RNA end group.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, introduction [b00007], contact capture and partial digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method28,29 uses UV-irradiation to covalently crosslink RNA-protein complexes that are in direct contact (∼single Angstrom distances) within cells, allowing them to be stringently purified. Partial RNA digestion reduces bound RNA to fragments that can be sequenced by high throughput methods, yielding genome wide maps and functional insights26,30.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_uv_to_s_crosslinked",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "UV produces covalently attached RNA-protein complexes; the material identity agrees with the ensuing capture input. The specific covalent interpretation is supported by primary text, not inferred solely from colour or placement.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "UV 254 nm lightning icon and rightward arrow between the initial RNA-protein complex and the RNase T1 region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.22,
+            0.0,
+            0.54,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, introduction [b00007], contact capture and partial digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method28,29 uses UV-irradiation to covalently crosslink RNA-protein complexes that are in direct contact (∼single Angstrom distances) within cells, allowing them to be stringently purified. Partial RNA digestion reduces bound RNA to fragments that can be sequenced by high throughput methods, yielding genome wide maps and functional insights26,30.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_cdna_to_op_readout",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "This extension is text-supported beyond the image endpoint: cDNA-derived library material supplies deep sequencing. Broad abstraction over unshown library construction is appropriate; PTB independently confirms PCR amplicons as the sequenced carrier.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, final sentence of workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing of the cDNA provides single-base resolution mapping of protein binding sites on RNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Methods summary [b00029]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing was performed with an Illumina Genome Analyzer.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Results [b00015], high-throughput library readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Having thoroughly characterized the libraries, we next subjected PCR amplicons to high-throughput sequencing on the Illumina GAII platform,",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_complex_to_op_uv",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The initial RNA-protein material is acted on by the labelled UV exposure. The arrow context and the primary contact-capture description support this material-input relation rather than consumption of the lightning icon.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Main input labelled RNA-protein complex: blue lobed protein on a continuous purple strand, with no labelled compartment or attachment carrier.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.22,
+            0.0,
+            0.32,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "UV 254 nm lightning icon and rightward arrow between the initial RNA-protein complex and the RNase T1 region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.22,
+            0.0,
+            0.54,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, introduction [b00007], contact capture and partial digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method28,29 uses UV-irradiation to covalently crosslink RNA-protein complexes that are in direct contact (∼single Angstrom distances) within cells, allowing them to be stringently purified. Partial RNA digestion reduces bound RNA to fragments that can be sequenced by high throughput methods, yielding genome wide maps and functional insights26,30.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_crosslinked_to_op_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue explicitly describes UV-crosslinked complexes followed by immunoprecipitation, and Ago HITS-CLIP independently supports capture after UV. The edge is correctly text-supported for the catalogue route.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Results [b00009], Ago purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To purify Ago bound to mouse brain RNAs, we UV-irradiated P13 neocortex and immunoprecipitated Ago under stringent conditions.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_proteolyzed_to_op_extract_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Protease-treated RNA material is the extraction input in the catalogue route. The connection preserves RNA identity and makes no unsupported claim that extraction reverses the remaining covalent attachment.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Proteinase K region: pink reagent icon above a rightward arrow, followed by a purple RNA line without the large blue protein in the RNA extraction region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.74,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNA extraction region: isolated purple strand and rightward arrow leading to the reverse-transcription drawing.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.12,
+            0.79,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_rna_to_op_reverse_transcription",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extracted RNA line and rightward arrow feed the copying block. Both the figure and catalogue support RNA as the template; this edge does not route a probe or a protein into the DNA readout.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNA extraction region: isolated purple strand and rightward arrow leading to the reverse-transcription drawing.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.12,
+            0.79,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Reverse transcription region and endpoint: paired purple and black lines, rightward arrow, then one black line labelled cDNA. No RNA-removal reagent, adapter geometry or primer identity is labelled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.12,
+            1.0,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_selected_to_op_rnase_t1",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue connects immunoprecipitated complexes to T1 treatment. This input edge is supported for the depicted/catalogue route and need not be generalized to the separately qualified Gillen construction.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNase T1 digestion region: green reagent icons flank the blue protein on the purple RNA strand; no separate retained branch or labelled RNA end group.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_trimmed_to_op_proteinase_k",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "The edge is supported for the Illumina T1 route, but its sole substrate is explicitly T1-trimmed and its receiving operation is also assigned to the Gillen modification. Gillen instead describes RNAse A-derived complexes. Preserve this diagram edge while qualifying variant routing, or remove the conflicting Gillen operation assignment; the current unqualified input does not implement correction_gillen_nuclease_scope.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNase T1 digestion region: green reagent icons flank the blue protein on the purple RNA strand; no separate retained branch or labelled RNA end group.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Proteinase K region: pink reagent icon above a rightward arrow, followed by a purple RNA line without the large blue protein in the RNA extraction region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.74,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], nuclease and selection order in the construction described",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HITS-CLIP library construction [1] begins with the cross-linking of RNA-binding proteins to RNA using UV light, partial RNA digestion with RNAse A, and immunoprecipitation of the RNA-binding protein of interest and attached RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], protein digestion and RNA purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting size-selected protein-RNA complexes are then digested with Proteinase K to remove the protein and the remaining RNA is purified by phenol extraction and ethanol precipitation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_extract_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extraction block receives protease-treated RNA material and yields recovered RNA. Keeping extraction broad matches the image and catalogue; no unsupported internal purification sequence or covalent-adduct removal has been added.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNA extraction region: isolated purple strand and rightward arrow leading to the reverse-transcription drawing.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.12,
+            0.79,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "This text-supported selection takes crosslinked complexes to an enriched target-protein-associated RNA population. The catalogue gives its position before T1 in the simplified route; no separate visible transfer panel or perfect specificity is asserted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Left descriptive cartoon and caption: Crosslinking and immunoprecipitation sequencing (CLIP-Seq) or high-throughput sequencing of CLIP cDNA library (HITS-CLIP). Blue protein, purple line and unlabelled yellow strokes; no transfer arrow to the main input.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.22,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Results [b00009], Ago purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To purify Ago bound to mouse brain RNAs, we UV-irradiated P13 neocortex and immunoprecipitated Ago under stringent conditions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Cons, capture specificity and efficiency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies not specific to the target may precipitate nonspecific complexes.\nUV crosslinking is not efficient and requires close protein-RNA interactions\nArtifacts may be introduced during the crosslinking process",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_proteinase_k",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "The depicted proteolysis and remnant interpretation are supported, but the assigned Gillen use has an incompatible input: op_proteinase_k accepts only s_trimmed, whose label is RNase T1-trimmed, while Gillen describes RNAse A digestion before immunoprecipitation. Qualify the variant input/route or stop assigning this T1-input operation to Gillen. Keep the diagram-specific operation and remnant correction intact; a shared protease name alone does not resolve this substrate mismatch.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Proteinase K region: pink reagent icon above a rightward arrow, followed by a purple RNA line without the large blue protein in the RNA extraction region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.74,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], nuclease and selection order in the construction described",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HITS-CLIP library construction [1] begins with the cross-linking of RNA-binding proteins to RNA using UV light, partial RNA digestion with RNAse A, and immunoprecipitation of the RNA-binding protein of interest and attached RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], protein digestion and RNA purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting size-selected protein-RNA complexes are then digested with Proteinase K to remove the protein and the remaining RNA is purified by phenol extraction and ethanol precipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_readout",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue supports deep sequencing after the drawn cDNA endpoint. The broad cDNA-derived library interface is appropriate and avoids inventing library-construction steps. Regional tags, capture provenance and limited biological interpretation are supported rather than a universal exact-contact or miRNA-pairing readout.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, final sentence of workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing of the cDNA provides single-base resolution mapping of protein binding sites on RNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Methods summary [b00029]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing was performed with an Illumina Genome Analyzer.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Discussion [b00026], regional footprint interpretation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Ago-HITS-CLIP compliments bioinformatic approaches to miRNA target identification by restricting the sequence space to be analyzed to the ∼45-60 nt Ago footprint.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, summary [b00004], Ago implementation and two datasets",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we use HITS-CLIP to covalently crosslink native Argonaute (Ago) protein-RNA complexes in mouse brain. This produced two simultaneous datasets—Ago-miRNA and Ago-mRNA binding sites—that were combined with bioinformatic analysis to identify miRNA-target mRNA interaction sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], misprimed cDNA representation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Such mispriming events produce cDNAs from RNAs that may lack 3′ adaptor sequences. These cDNAs, which will be included in final sequencing libraries if they received a 5′ adaptor, contaminate the library with read pileups anchored to genomic occurrences of the adaptor sequence, rather than bona fide sites of protein binding.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_reverse_transcription",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The operation correctly copies RNA sequence information into cDNA at the broad level shown. Template-end removal is not invented. Gillen supports the stated RT termination and mispriming limitations, with its primer design kept as a version qualification.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Reverse transcription region and endpoint: paired purple and black lines, rightward arrow, then one black line labelled cDNA. No RNA-removal reagent, adapter geometry or primer identity is labelled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.12,
+            1.0,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], misprimed cDNA representation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Such mispriming events produce cDNAs from RNAs that may lack 3′ adaptor sequences. These cDNAs, which will be included in final sequencing libraries if they received a 5′ adaptor, contaminate the library with read pileups anchored to genomic occurrences of the adaptor sequence, rather than bona fide sites of protein binding.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Results [b00021], nested RT and protected PCR primer interface; associated Figure 2 explanation is text evidence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "By using a nested reverse transcription primer that lacks the first three bases of the 3′ adaptor, along with a full-length reverse PCR primer with phosphorothioate bonds protecting the final four bases, only cDNAs resulting from priming on 3′ adaptor sequences will be valid templates for PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_rnase_t1",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The image and catalogue specifically name RNase T1 and place digestion before Proteinase K. Partial RNA trimming and retained protein association are supported without invented cut sites or terminal chemistry. Exclusion from the Gillen operation list is scientifically appropriate, subject to fixing that variant's downstream input.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNase T1 digestion region: green reagent icons flank the blue protein on the purple RNA strand; no separate retained branch or labelled RNA end group.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, introduction [b00007], contact capture and partial digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method28,29 uses UV-irradiation to covalently crosslink RNA-protein complexes that are in direct contact (∼single Angstrom distances) within cells, allowing them to be stringently purified. Partial RNA digestion reduces bound RNA to fragments that can be sequenced by high throughput methods, yielding genome wide maps and functional insights26,30.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_uv",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The UV label and lightning icon act on the RNA-protein complex; the primary source supports the stated covalent contact-capture mechanism. Treating UV as an irradiation input and qualifying inefficient capture are supported.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "UV 254 nm lightning icon and rightward arrow between the initial RNA-protein complex and the RNase T1 region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.22,
+            0.0,
+            0.54,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, introduction [b00007], contact capture and partial digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method28,29 uses UV-irradiation to covalently crosslink RNA-protein complexes that are in direct contact (∼single Angstrom distances) within cells, allowing them to be stringently purified. Partial RNA digestion reduces bound RNA to fragments that can be sequenced by high throughput methods, yielding genome wide maps and functional insights26,30.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Cons, capture specificity and efficiency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies not specific to the target may precipitate nonspecific complexes.\nUV crosslinking is not efficient and requires close protein-RNA interactions\nArtifacts may be introduced during the crosslinking process",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:match_16314267",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Ule publication identity and abstract content support underlying CLIP covalent capture, immunoprecipitation and a described improved linker-ligation implementation. The candidate explicitly limits this to abstract evidence and does not infer T1 chemistry, high-throughput readout, unlabelled yellow adapter identity or historical priority from that paper.",
+      "evidence": [
+        {
+          "source_id": "paper:16314267",
+          "locator": "Abstract only, CLIP purification; full text unavailable in supplied registry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have developed the cross-linking and immunoprecipitation assay, which exploits the covalent protein-nucleic acid cross-linking to stringently purify a specific protein-RNA complex using immunoprecipitation followed by SDS-PAGE separation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:16314267",
+          "locator": "Abstract only, improved CLIP implementation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present an improved protocol that performs RNA linker ligation before the SDS-PAGE step, and describe its application to the specific purification and amplification of RNA ligands of Nova in neurons.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Left descriptive cartoon and caption: Crosslinking and immunoprecipitation sequencing (CLIP-Seq) or high-throughput sequencing of CLIP cDNA library (HITS-CLIP). Blue protein, purple line and unlabelled yellow strokes; no transfer arrow to the main input.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.22,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:16314267",
+          "locator": "PubMed publication metadata, PMID/title/identifiers; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "CLIP: a method for identifying protein-RNA interaction sites in living cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:match_17540862",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Identity and the supplied abstract establish Johnson's protein-DNA ChIPSeq assay. Abstract-only content_checked is honestly bounded by its locator and rationale; no full-text chemistry verification is claimed. The background/mismatched-citation classification is correct and does not support the RNA architecture.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "References, CLIP-Seq entry, references:1",
+          "basis": "text",
+          "support": "reported",
+          "quote": "CLIP-Seq: Johnson D. S., Mortazavi A., Myers R. M. and Wold B. (2007) Genome-wide mapping of in vivo protein-DNA interactions. Science 316: 1497-1502",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:17540862",
+          "locator": "Abstract only, assay identity; full text unavailable in supplied registry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To map these protein-DNA interactions comprehensively across entire mammalian genomes, we developed a large-scale chromatin immunoprecipitation assay (ChIPSeq) based on direct ultrahigh-throughput DNA sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:17540862",
+          "locator": "PubMed publication metadata, PMID/title/identifiers; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide mapping of in vivo protein-DNA interactions.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:match_18978773",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The inspected full text supports Nova2 HITS-CLIP binding maps, with PCR amplification followed by 454 sequencing. The paper is correctly associated with HITS-CLIP architecture without converting its platform into an Illumina-specific or universal implementation.",
+      "evidence": [
+        {
+          "source_id": "paper:18978773",
+          "locator": "Full text, Summary [b00005], Nova2 HITS-CLIP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we develop a genome-wide means of mapping protein-RNA binding sites in vivo, by high throughput sequencing of RNA isolated by crosslinking immunoprecipitation (HITS-CLIP). HITS-CLIP analysis of the neuron-specific splicing factor Nova2 revealed extremely reproducible RNA binding maps in multiple mouse brains.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18978773",
+          "locator": "Full text, Methods summary [b00037]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After PCR amplification, high throughput sequencing was performed (454 Life Sciences).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:18978773",
+          "locator": "PubMed publication metadata, PMID/title/identifiers; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HITS-CLIP yields genome-wide insights into brain alternative RNA processing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:match_19536157",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Publication identity is verified separately from the inspected full-text passages. This is the Ago-specific HITS-CLIP implementation in mouse brain, with separate Ago-miRNA and Ago-mRNA datasets and Illumina sequencing. It supports the variant and generic contact-capture architecture, not identification of the schematic protein or a physically joined miRNA-mRNA product.",
+      "evidence": [
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, summary [b00004], Ago implementation and two datasets",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we use HITS-CLIP to covalently crosslink native Argonaute (Ago) protein-RNA complexes in mouse brain. This produced two simultaneous datasets—Ago-miRNA and Ago-mRNA binding sites—that were combined with bioinformatic analysis to identify miRNA-target mRNA interaction sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, introduction [b00007], contact capture and partial digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method28,29 uses UV-irradiation to covalently crosslink RNA-protein complexes that are in direct contact (∼single Angstrom distances) within cells, allowing them to be stringently purified. Partial RNA digestion reduces bound RNA to fragments that can be sequenced by high throughput methods, yielding genome wide maps and functional insights26,30.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Results [b00009], Ago purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To purify Ago bound to mouse brain RNAs, we UV-irradiated P13 neocortex and immunoprecipitated Ago under stringent conditions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Methods summary [b00029]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing was performed with an Illumina Genome Analyzer.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:19536157",
+          "locator": "PubMed publication metadata, PMID/title/identifiers; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Argonaute HITS-CLIP decodes microRNA-mRNA interaction maps.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:match_20064465",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Identity and targeted full text support Xue's PTB-specific CLIP-seq application, anti-PTB capture, independent monomer/dimer libraries and Illumina sequencing of PCR amplicons. Keeping the application split outside the unbranched diagram is appropriate. The paper-to-method relationship is supported; its broader RNA-to-cDNA evidence requires the separate scope:PTB-Seq revision, while exact N9 primer assignment remains unestablished.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "References, PTB-Seq entry, references:2",
+          "basis": "text",
+          "support": "reported",
+          "quote": "PTB-Seq: Xue Y., Zhou Y., Wu T., Zhu T., Ji X., et al. (2009) Genome-wide analysis of PTB-RNA interactions reveals a strategy used by the general splicing repressor to modulate exon inclusion or skipping. Mol Cell 36: 996-1006",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Introduction [b00009], assay and biological target",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we employed CLIP-seq to identify direct RNA targets for PTB in HeLa cells, finding that PTB bound to intronic regions near the 5’ or 3’ splice site regardless of whether the site is subject to regulation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Results [b00012], anti-PTB selection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In preparation for genome-wide analysis of PTB binding by CLIP-seq, we first characterized a monoclonal anti-PTB antibody (BB7, described in Chou et al., 2000) on HeLa cells before and after UV treatment by immunoprecipitation/Western blotting.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Results [b00014], independent library populations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To detect potential functional differences between the monomeric and dimeric forms of PTB, we separately isolated the two protein-RNA complexes and constructed two independent libraries for CLIP-seq analysis.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Results [b00015], high-throughput library readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Having thoroughly characterized the libraries, we next subjected PCR amplicons to high-throughput sequencing on the Illumina GAII platform,",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Figure S3 caption [b00062]; Results [b00014]-[b00015] connect cloned-tag library characterization to subsequent high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "About 900 clones containing the cDNA reverse-transcribed from the PTB-bound RNA tags were sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Experimental procedures [b00051]-[b00052], combined CLIP-seq/RIP-PCR subsection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The CLIP procedure was performed as described (Yeo et al., 2009).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:20064465",
+          "locator": "PubMed publication metadata, PMID/title/identifiers; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide analysis of PTB-RNA interactions reveals a strategy used by the general splicing repressor to modulate exon inclusion or skipping.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:match_26914319",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The supplied source is metadata for a Published Erratum, with no corresponding article-content source. Identity_verified/background accurately records the evidence level. The title cannot establish protocol chemistry or CIMS single-nucleotide analysis, and the candidate does not use it that way.",
+      "evidence": [
+        {
+          "source_id": "metadata:26914319",
+          "locator": "PubMed metadata, title and publication type Published Erratum; no article-content source supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Erratum: Mapping Argonaute and conventional RNA-binding protein interactions with RNA at single-nucleotide resolution using HITS-CLIP and CIMS analysis.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:26914319",
+          "locator": "PubMed publication metadata, PMID/title/identifiers; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Erratum: Mapping Argonaute and conventional RNA-binding protein interactions with RNA at single-nucleotide resolution using HITS-CLIP and CIMS analysis.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:match_27150721",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Identity and full-text passages support the cited Gillen modification, its RNAse A/selection ordering, peptide-remnant limitation and distinguishing nested RT/protected PCR primer interface. The supports_variant match is correct. It supplies the evidence needed for the separate correction/scope/input-route revision; no missing full text or new research is required for that fix.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, Gillen modification and separately named versions",
+          "basis": "text",
+          "support": "reported",
+          "quote": "An improvement on the HITS-CLIP protocol was published by Gillen et al., which reduces artifacts from mispriming occurences.3\nOther versions: iCLIP, irCLIP, eCLIP, miCLIP",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], nuclease and selection order in the construction described",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HITS-CLIP library construction [1] begins with the cross-linking of RNA-binding proteins to RNA using UV light, partial RNA digestion with RNAse A, and immunoprecipitation of the RNA-binding protein of interest and attached RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], protein digestion and RNA purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting size-selected protein-RNA complexes are then digested with Proteinase K to remove the protein and the remaining RNA is purified by phenol extraction and ethanol precipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Results [b00021], nested RT and protected PCR primer interface; associated Figure 2 explanation is text evidence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "By using a nested reverse transcription primer that lacks the first three bases of the 3′ adaptor, along with a full-length reverse PCR primer with phosphorothioate bonds protecting the final four bases, only cDNAs resulting from priming on 3′ adaptor sequences will be valid templates for PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:27150721",
+          "locator": "PubMed publication metadata, PMID/title/identifiers; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Improvements to the HITS-CLIP protocol eliminate widespread mispriming artifacts.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "record",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "Revision is required for two method-applicability interfaces. The diagram route and text-only additions are otherwise faithfully represented: the title cartoon is descriptive, the main route is unbranched, and RNA sequence information passes into cDNA. First, the Gillen scope excludes T1 but maps op_proteinase_k, whose sole input is the explicitly T1-trimmed s_trimmed; correction_gillen_nuclease_scope has not resolved that input/route contradiction. Second, scope:PTB-Seq omits the broad op_reverse_transcription even though Xue Figure S3 explicitly identifies cDNA reverse-transcribed from PTB-bound RNA tags. Fix these scope/interface records without adding routine experimental details. Exact PTB nuclease, wavelength and primer choices can remain unresolved and nonblocking.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Complete image: left CLIP-Seq/HITS-CLIP descriptive cartoon, then one route labelled RNA-protein complex, UV 254 nm, RNase T1 digestion, Proteinase K, RNA extraction, Reverse transcription and cDNA. No branch, legend or labelled end group is present.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], nuclease and selection order in the construction described",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HITS-CLIP library construction [1] begins with the cross-linking of RNA-binding proteins to RNA using UV light, partial RNA digestion with RNAse A, and immunoprecipitation of the RNA-binding protein of interest and attached RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Figure S3 caption [b00062]; Results [b00014]-[b00015] connect cloned-tag library characterization to subsequent high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "About 900 clones containing the cDNA reverse-transcribed from the PTB-bound RNA tags were sequenced.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:CLIP-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The image itself presents CLIP-Seq and HITS-CLIP as alternative names for the schematic route. Ule's abstract supports the underlying CLIP architecture, while the Johnson DNA ChIPSeq citation is properly excluded. This is a scoped naming resolution rather than a universal protocol-equivalence or historical-priority claim.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Left descriptive cartoon and caption: Crosslinking and immunoprecipitation sequencing (CLIP-Seq) or high-throughput sequencing of CLIP cDNA library (HITS-CLIP). Blue protein, purple line and unlabelled yellow strokes; no transfer arrow to the main input.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.22,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:16314267",
+          "locator": "Abstract only, CLIP purification; full text unavailable in supplied registry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have developed the cross-linking and immunoprecipitation assay, which exploits the covalent protein-nucleic acid cross-linking to stringently purify a specific protein-RNA complex using immunoprecipitation followed by SDS-PAGE separation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "References, CLIP-Seq entry, references:1",
+          "basis": "text",
+          "support": "reported",
+          "quote": "CLIP-Seq: Johnson D. S., Mortazavi A., Myers R. M. and Wold B. (2007) Genome-wide mapping of in vivo protein-DNA interactions. Science 316: 1497-1502",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:17540862",
+          "locator": "Abstract only, assay identity; full text unavailable in supplied registry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To map these protein-DNA interactions comprehensively across entire mammalian genomes, we developed a large-scale chromatin immunoprecipitation assay (ChIPSeq) based on direct ultrahigh-throughput DNA sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:HITS-CLIP",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The full operation list is supported for the explicitly declared Illumina explanatory route, including text-supported selection and sequencing. The rationale properly limits this resolution to that schematic and distinguishes Ago, Nova, Gillen nuclease/order differences and sequencing platforms rather than declaring every HITS-CLIP implementation chemically identical.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Left descriptive cartoon and caption: Crosslinking and immunoprecipitation sequencing (CLIP-Seq) or high-throughput sequencing of CLIP cDNA library (HITS-CLIP). Blue protein, purple line and unlabelled yellow strokes; no transfer arrow to the main input.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.22,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18978773",
+          "locator": "Full text, Summary [b00005], Nova2 HITS-CLIP",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we develop a genome-wide means of mapping protein-RNA binding sites in vivo, by high throughput sequencing of RNA isolated by crosslinking immunoprecipitation (HITS-CLIP). HITS-CLIP analysis of the neuron-specific splicing factor Nova2 revealed extremely reproducible RNA binding maps in multiple mouse brains.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, summary [b00004], Ago implementation and two datasets",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we use HITS-CLIP to covalently crosslink native Argonaute (Ago) protein-RNA complexes in mouse brain. This produced two simultaneous datasets—Ago-miRNA and Ago-mRNA binding sites—that were combined with bioinformatic analysis to identify miRNA-target mRNA interaction sites.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], nuclease and selection order in the construction described",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HITS-CLIP library construction [1] begins with the cross-linking of RNA-binding proteins to RNA using UV light, partial RNA digestion with RNAse A, and immunoprecipitation of the RNA-binding protein of interest and attached RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18978773",
+          "locator": "Full text, Methods summary [b00037]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After PCR amplification, high throughput sequencing was performed (454 Life Sciences).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Methods summary [b00029]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-throughput sequencing was performed with an Illumina Genome Analyzer.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:HITS-CLIP (Gillen et al., 2016 modification)",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "The nested RT/protected PCR primer distinction is supported, as is excluding the schematic T1 operation. However, marking the present operation mapping resolved is premature: it assigns op_proteinase_k with sole input s_trimmed, explicitly labelled RNase T1-trimmed. Gillen's reported input history is RNAse A digestion before immunoprecipitation. Qualify the variant input and material route, or retain Gillen as narrative variant evidence without mapping the T1-dependent operation; do not infer nuclease interchangeability.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, Gillen modification and separately named versions",
+          "basis": "text",
+          "support": "reported",
+          "quote": "An improvement on the HITS-CLIP protocol was published by Gillen et al., which reduces artifacts from mispriming occurences.3\nOther versions: iCLIP, irCLIP, eCLIP, miCLIP",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], nuclease and selection order in the construction described",
+          "basis": "text",
+          "support": "reported",
+          "quote": "HITS-CLIP library construction [1] begins with the cross-linking of RNA-binding proteins to RNA using UV light, partial RNA digestion with RNAse A, and immunoprecipitation of the RNA-binding protein of interest and attached RNAs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00013], protein digestion and RNA purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting size-selected protein-RNA complexes are then digested with Proteinase K to remove the protein and the remaining RNA is purified by phenol extraction and ethanol precipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Results [b00021], nested RT and protected PCR primer interface; associated Figure 2 explanation is text evidence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "By using a nested reverse transcription primer that lacks the first three bases of the 3′ adaptor, along with a full-length reverse PCR primer with phosphorothioate bonds protecting the final four bases, only cDNAs resulting from priming on 3′ adaptor sequences will be valid templates for PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNase T1 digestion region: green reagent icons flank the blue protein on the purple RNA strand; no separate retained branch or labelled RNA end group.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:PTB-Seq",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "Revise the operation mapping: retaining only op_ip and op_readout omits supported RNA-to-cDNA conversion at this schema's broad op_reverse_transcription level. Figure S3 [b00062] explicitly describes cDNA reverse-transcribed from PTB-bound RNA tags; Results [b00014]-[b00015] connect those library-characterization tags to the libraries subsequently sequenced as PCR amplicons. Add/qualify the broad RNA-to-cDNA interface without assigning the N9 validation primer, exact wavelength, T1, or unverified protease chemistry. The remaining exact-implementation uncertainty can stay unresolved and nonblocking.",
+      "evidence": [
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Figure S3 caption [b00062]; Results [b00014]-[b00015] connect cloned-tag library characterization to subsequent high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "About 900 clones containing the cDNA reverse-transcribed from the PTB-bound RNA tags were sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Results [b00014], independent library populations",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To detect potential functional differences between the monomeric and dimeric forms of PTB, we separately isolated the two protein-RNA complexes and constructed two independent libraries for CLIP-seq analysis.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Results [b00015], high-throughput library readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Having thoroughly characterized the libraries, we next subjected PCR amplicons to high-throughput sequencing on the Illumina GAII platform,",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Experimental procedures [b00051]-[b00052], combined CLIP-seq/RIP-PCR subsection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The CLIP procedure was performed as described (Yeo et al., 2009).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Reverse transcription region and endpoint: paired purple and black lines, rightward arrow, then one black line labelled cDNA. No RNA-removal reagent, adapter geometry or primer identity is labelled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.12,
+            1.0,
+            0.85
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:d_tags",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The text-supported library readout localizes recovered RNA fragments, with protein identity supplied by selection provenance. Binding-region interpretation, capture background, RT termination and mispriming limits are supported; neither exact-contact nucleotides, functional regulation nor physically joined miRNA-mRNA molecules are inferred from the diagram.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, final sentence of workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing of the cDNA provides single-base resolution mapping of protein binding sites on RNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Discussion [b00026], regional footprint interpretation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Ago-HITS-CLIP compliments bioinformatic approaches to miRNA target identification by restricting the sequence space to be analyzed to the ∼45-60 nt Ago footprint.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Cons, capture specificity and efficiency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies not specific to the target may precipitate nonspecific complexes.\nUV crosslinking is not efficient and requires close protein-RNA interactions\nArtifacts may be introduced during the crosslinking process",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], misprimed cDNA representation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Such mispriming events produce cDNAs from RNAs that may lack 3′ adaptor sequences. These cDNAs, which will be included in final sequencing libraries if they received a 5′ adaptor, contaminate the library with read pileups anchored to genomic occurrences of the adaptor sequence, rather than bona fide sites of protein binding.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, summary [b00004], Ago implementation and two datasets",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we use HITS-CLIP to covalently crosslink native Argonaute (Ago) protein-RNA complexes in mouse brain. This produced two simultaneous datasets—Ago-miRNA and Ago-mRNA binding sites—that were combined with bioinformatic analysis to identify miRNA-target mRNA interaction sites.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The paired purple/black copying cartoon and terminal black cDNA strand support an RNA-derived DNA carrier. The intervening arrow does not identify a separate RNA-removal reaction. The candidate correctly keeps adapters, amplification geometry and indexing unspecified at this drawing level.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Reverse transcription region and endpoint: paired purple and black lines, rightward arrow, then one black line labelled cDNA. No RNA-removal reagent, adapter geometry or primer identity is labelled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.12,
+            1.0,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_complex",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The blue protein on the purple RNA line is the main input, separate from the left descriptive title cartoon. The image supplies neither protein identity nor a bead, cell compartment, barcode or RNA end-group annotation; the candidate correctly leaves those unspecified.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Main input labelled RNA-protein complex: blue lobed protein on a continuous purple strand, with no labelled compartment or attachment carrier.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.22,
+            0.0,
+            0.32,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Left descriptive cartoon and caption: Crosslinking and immunoprecipitation sequencing (CLIP-Seq) or high-throughput sequencing of CLIP cDNA library (HITS-CLIP). Blue protein, purple line and unlabelled yellow strokes; no transfer arrow to the main input.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.22,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_crosslinked",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The depicted UV 254 nm input and primary contact-capture description support covalent RNA-protein complexes. The wavelength is explicitly confined to the drawing and is not imposed on every paper implementation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "UV 254 nm lightning icon and rightward arrow between the initial RNA-protein complex and the RNase T1 region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.22,
+            0.0,
+            0.54,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, introduction [b00007], contact capture and partial digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method28,29 uses UV-irradiation to covalently crosslink RNA-protein complexes that are in direct contact (∼single Angstrom distances) within cells, allowing them to be stringently purified. Partial RNA digestion reduces bound RNA to fragments that can be sequenced by high throughput methods, yielding genome wide maps and functional insights26,30.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_proteolyzed",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Loss of the large blue protein in the drawing supports protein digestion, while Gillen explicitly reports residual crosslinked amino acids and RT termination. The state preserves this distinction and does not assert complete covalent crosslink reversal.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Proteinase K region: pink reagent icon above a rightward arrow, followed by a purple RNA line without the large blue protein in the RNA extraction region.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.74,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extracted purple RNA strand is the template material carried to reverse transcription. Extraction does not supply evidence for removal of the covalent amino-acid remnant, so its possible persistence is correctly retained.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNA extraction region: isolated purple strand and rightward arrow leading to the reverse-transcription drawing.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.12,
+            0.79,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27150721",
+          "locator": "Full text, Background [b00014], covalent remnant and RT termination",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recovery of irrelevant misprimed sequences is exacerbated by the fact that proteinase K digestion leaves one or two amino acids crosslinked to the RNA [7]. These crosslinked bases are frequent sites of termination during reverse transcription, meaning that only a fraction of reverse transcription events on crosslinked RNAs will read through to the 5′ adaptor and produce PCR-competent templates.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_selected",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue and Ago implementation support immunoprecipitated target-protein RNA complexes. Selection is correctly attributed to text, and the protein association is capture provenance rather than a sequenced barcode. Nonspecific capture is explicitly allowed.",
+      "evidence": [
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, Results [b00009], Ago purification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To purify Ago bound to mouse brain RNAs, we UV-irradiated P13 neocortex and immunoprecipitated Ago under stringent conditions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Cons, capture specificity and efficiency",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies not specific to the target may precipitate nonspecific complexes.\nUV crosslinking is not efficient and requires close protein-RNA interactions\nArtifacts may be introduced during the crosslinking process",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_trimmed",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The T1-specific state is supported for the Illumina schematic: RNA digestion retains protein-associated fragments, and green icons are reagent imagery rather than extra products. No cleavage-end chemistry is labelled. Preserve this state for the depicted route; the separate Gillen scope finding concerns its inappropriate reuse as that variant's input.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "RNase T1 digestion region: green reagent icons flank the blue protein on the purple RNA strand; no separate retained branch or labelled RNA end group.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.45,
+            0.0,
+            0.56,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:hits-clip-clip-seq-ptb-seq",
+          "locator": "Description, HITS-CLIP workflow paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In HITS-CLIP, RNA-protein complexes are UV-crosslinked and immunoprecipitated. The protein-RNA complexes are treated with RNase T1, followed by proteinase K. RNA is extracted and reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19536157",
+          "locator": "Full text, introduction [b00007], contact capture and partial digestion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method28,29 uses UV-irradiation to covalently crosslink RNA-protein complexes that are in direct contact (∼single Angstrom distances) within cells, allowing them to be stringently purified. Partial RNA digestion reduces bound RNA to fragments that can be sequenced by high throughput methods, yielding genome wide maps and functional insights26,30.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:unknown_ptb_exact_route",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The exact nuclease, protease, wavelength and sequencing-library primer construction remain appropriately nonblocking implementation questions: the combined methods subsection delegates CLIP and includes validation PCR. Figure S3 does establish broad RNA-to-cDNA conversion, so this unknown must not be used to withhold that already-supported interface; that correctable omission is recorded under scope:PTB-Seq. No further research is required merely to represent the schematic-level conversion.",
+      "evidence": [
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Experimental procedures [b00051]-[b00052], combined CLIP-seq/RIP-PCR subsection",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The CLIP procedure was performed as described (Yeo et al., 2009).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Figure S3 caption [b00062]; Results [b00014]-[b00015] connect cloned-tag library characterization to subsequent high-throughput sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "About 900 clones containing the cDNA reverse-transcribed from the PTB-bound RNA tags were sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20064465",
+          "locator": "Full text, Results [b00015], high-throughput library readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Having thoroughly characterized the libraries, we next subjected PCR amplicons to high-throughput sequencing on the Illumina GAII platform,",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_31171157bdbf6ede1e33d3d0",
+          "locator": "Reverse transcription region and endpoint: paired purple and black lines, rightward arrow, then one black line labelled cDNA. No RNA-removal reagent, adapter geometry or primer identity is labelled.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.79,
+            0.12,
+            1.0,
+            0.85
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

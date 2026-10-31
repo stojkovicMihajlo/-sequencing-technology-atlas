@@ -1,0 +1,2685 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "gro-seq-bric-seq-bru-seq-bruchase-seq",
+  "candidate_sha256": "89aa66503052f25f3bdc50dc0e7740a908f6b198dc35bc9cee794baa78393d2d",
+  "inspected_sources": [
+    "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+    "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+    "metadata:19056941",
+    "metadata:22369889",
+    "metadata:23345452",
+    "metadata:26914315",
+    "metadata:22986266",
+    "metadata:26844429",
+    "metadata:27010758",
+    "metadata:26780995",
+    "metadata:26499213",
+    "metadata:25693130",
+    "metadata:26873106",
+    "metadata:27292797",
+    "metadata:27245778",
+    "metadata:27259512",
+    "metadata:26814966",
+    "metadata:26878240",
+    "metadata:26751173",
+    "metadata:26751768",
+    "metadata:27299313",
+    "paper:19056941",
+    "paper:22369889",
+    "paper:23345452",
+    "paper:26914315",
+    "paper:22986266",
+    "paper:26844429",
+    "paper:27010758"
+  ],
+  "checks": [
+    {
+      "target": "correction:c_antibody_label",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The image really labels the support α-BrdUTP antibody, while Core describes selection of BrU-containing RNA. The correction retains that visible label and interprets its selected analyte using the scoped GRO paper. Tani independently supports anti-BrdU recognition of BrU for BRIC; the candidate does not transfer that particular antibody implementation to GRO.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, BrU-containing RNA immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BrU-containing NRO-RNA was triple-selected through immunopurification with an antibody that is specific for this nucleotide analog",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00038, Methods: antibody recognition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-BrdU mAb (MBL), which also recognizes BrU",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:c_bric_scope",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The grouped caption is accurately retained, but the single drawn run-on route cannot describe Tani’s cell-culture BrU chase. Tani explicitly supplies the distinct labeling → time-point total-RNA isolation → immunopurification → sequencing-library route. The correction and its state/flow interfaces implement that distinction without deleting or reassigning the depicted GRO route.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Complete left-to-right schematic, including grouped GRO/BRIC caption, analog legend, hydrolysis, antibody bead, elution/terminal processing, and cDNA endpoint; no chase branch is drawn",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: RNA-seq library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "an RNA-seq library was constructed using the mRNA Seq Sample Preparation Kit, according to the manufacturer's instructions (Illumina).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_bric_enrich_s_bric_selected",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani recovers isolated RNA from the bead fraction for downstream use. Because the operation includes recovery, its output is correctly free selected RNA rather than a bead-attached substrate for library preparation.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: isolation of RNA from bead fraction for downstream assays",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The final pellet was resuspended in 100 μL of buffer B (10 mM Tris-HCl at pH 7.4, 50 mM NaCl), and then 300 μL of ISOGEN LS (Nippon Gene) was added, followed by RNA isolation in accordance with the manufacturer's instructions. The isolated RNA was used for RT-qPCR or deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_bric_labelchase_s_bric_total",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Sequential harvest and total-RNA isolation produce the time-indexed total extracts explicitly represented by s_bric_total; sample identities persist into enrichment.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00036, Methods: BRIC time-point harvest and total RNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "At indicated time points after the removal of BrU-containing medium, cells were harvested for RNA preparation using RNAiso Plus (TaKaRa), and total RNA was isolated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_bric_library_s_bric_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The reported RNA-seq library construction, together with BrU-RNA cDNA-template use, supports the broad RNA-derived sequencing-library output without importing GRO end-processing chemistry.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, BrU-RNA as reverse-transcription template",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The isolated BrU-RNAs can be used as templates for reverse transcriptase–mediated cDNA synthesis for subsequent quantification of RNA",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: RNA-seq library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "an RNA-seq library was constructed using the mRNA Seq Sample Preparation Kit, according to the manufacturer's instructions (Illumina).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_bric_read_s_bric_decay",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The source explicitly connects sequencing measurements over chase time to ongoing RNA decrease and half-life estimation; the endpoint is a data readout associated with the sampled cohort.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00003, abstract: labeling and temporal decrease",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method involved pulse-labeling endogenous RNAs with 5′-bromo-uridine and measuring the ongoing decrease in RNA levels over time using multifaceted deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: half-life readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We determined the half-lives of the RNAs by calculating the time when the RNA-seq value reached half of the initial RNA-seq value (0 h time point)",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_bru_s_bru_synthesis",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract assigns the Bru-Seq assay to genome-wide RNA synthesis, supporting a data-output edge from the broad operation.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_bruchase_s_bruchase_stability",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract assigns pulse-chase/sequencing to RNA stability, supporting the separate assay’s data output while leaving downstream physical carrier unspecified.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_capture_s_bound",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Star-bearing RNA is shown at the bead-surface antibodies, supporting an attached output that can subsequently be eluted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, BrU-containing RNA immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BrU-containing NRO-RNA was triple-selected through immunopurification with an antibody that is specific for this nucleotide analog",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_cdna_s_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The labeled reverse-transcription/amplification block terminates in black products explicitly labeled cDNA, supporting the material-output carrier.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from prepared RNA across Reverse transcription amplification to black products labeled cDNA at the right edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.06,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_gro_read_s_gro_map",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Core explicitly maps library reads to the reference genome to obtain RNA origin/orientation and associated engaged-polymerase profiles, supporting a data output.",
+      "evidence": [
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00004, abstract definition of GRO-seq readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a method (global run-on sequencing, GRO-seq) that maps the position, amount, and orientation of transcriptionally engaged RNA polymerases genome-wide.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_hydrolyze_s_fragments",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The hydrolysis output is the visibly shortened mixture of RNA fragments, matching the downstream capture input rather than an intact transcript complex.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from run-on panel to Isolate and hydrolyze; short purple fragments with and without red stars, some with black terminal squares",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.4,
+            0.1,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, chemical fragmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The length of the polynucleotide was kept short, and the NRO-RNA was chemically hydrolyzed into short fragments (∼100 bases) to facilitate high-resolution mapping of the polymerase origin at the time of assay (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_prepare_s_ready",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The output panel shows free starred RNA after the combined processing label. This free-RNA state matches the receiving reverse-transcription operation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from bead to free star-bearing RNA; Elute / Cap removal / End Repair; no keyed product end groups",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.07,
+            0.865,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "GRO-Seq description, eluted RNA to cDNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After cap removal and end repair, the eluted RNA is reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_runon_s_labeled",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The run-on produces star-bearing associated RNA, matching s_labeled and the substrate taken into isolation/hydrolysis.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Run-on with analog: red-star Br-UTP label, red stars on emerging RNA, and retained transcription complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.21,
+            0.0,
+            0.39,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_analog_o_runon",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Br-UTP is added as an incorporation substrate of RNA extension. The flow is a material input, with no assertion that the reagent is itself the sequenced target.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Run-on with analog: red-star Br-UTP label, red stars on emerging RNA, and retained transcription complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.21,
+            0.0,
+            0.39,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bead_o_capture",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The antibody-coated bead is the affinity-support input to capture. Its material role is retained within the bead-bound output; the flow does not claim chemical consumption of the support.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bound_o_prepare",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The arrow out of the RNA-bearing bead into Elute / Cap removal / End Repair makes the attached RNA state the correct starting material for release.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from bead to free star-bearing RNA; Elute / Cap removal / End Repair; no keyed product end groups",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.07,
+            0.865,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bric_beads_o_bric_enrich",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The specified anti-BrdU-coated protein G-Sepharose is a support input to RNA enrichment, with BrU recognition independently stated in Tani.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00038, Methods: antibody-coated support",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-BrdU monoclonal antibody (mAb)–coated protein G-Sepharose beads were prepared as follows.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00038, Methods: antibody recognition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-BrdU mAb (MBL), which also recognizes BrU",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: RNA added to antibody support",
+          "basis": "text",
+          "support": "reported",
+          "quote": "added to the anti-BrdU mAb-conjugated beads.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bric_bru_o_bric_labelchase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani adds BrU to culture media; it is the labeling-reagent input to this route, distinct from GRO’s nuclear-run-on BrUTP.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bric_cdna_o_bric_read",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani reports RNA-seq library construction followed by Illumina sequencing. The broad library state is the appropriate material input for the time-series readout.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: RNA-seq library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "an RNA-seq library was constructed using the mRNA Seq Sample Preparation Kit, according to the manufacturer's instructions (Illumina).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thirty-six base-pair single-end-read RNA-seq tags were generated using an Illumina GA sequencer, according to the standard protocol.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bric_cells_o_bric_labelchase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani labels endogenous transcripts in culture and subsequently harvests cells for RNA. Cultured cells are the appropriate material input to the combined BRIC operation.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00036, Methods: BRIC time-point harvest and total RNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "At indicated time points after the removal of BrU-containing medium, cells were harvested for RNA preparation using RNAiso Plus (TaKaRa), and total RNA was isolated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bric_selected_o_bric_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Recovered BrU-RNA is the template for subsequent library construction. The input is free RNA and retains its chase-time association, agreeing with the enrichment output.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: isolation of RNA from bead fraction for downstream assays",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The final pellet was resuspended in 100 μL of buffer B (10 mM Tris-HCl at pH 7.4, 50 mM NaCl), and then 300 μL of ISOGEN LS (Nippon Gene) was added, followed by RNA isolation in accordance with the manufacturer's instructions. The isolated RNA was used for RT-qPCR or deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, BrU-RNA as reverse-transcription template",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The isolated BrU-RNAs can be used as templates for reverse transcriptase–mediated cDNA synthesis for subsequent quantification of RNA",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: RNA-seq library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "an RNA-seq library was constructed using the mRNA Seq Sample Preparation Kit, according to the manufacturer's instructions (Illumina).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bric_total_o_bric_enrich",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani directly reports immunopurification of the BrU-containing total-RNA extracts with antibody beads. The receiving operation acts on extracted RNA, preserving chase-time association.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: RNA added to antibody support",
+          "basis": "text",
+          "support": "reported",
+          "quote": "added to the anti-BrdU mAb-conjugated beads.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bru_cells_o_bru",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract identifies human fibroblasts as material studied with Bru-Seq. This broad assay input does not assign any unreported extracted carrier or compartment.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bru_cells_o_bruchase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract identifies fibroblasts for the pulse-chase/sequencing study. Sharing this broad source state identifies the specimen class; it does not assert a drawn split of one sample.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bru_label_o_bru",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly calls Bru-Seq a labeling/sequencing method, supporting a labeling-material input at that level without specifying delivery chemistry.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_bru_label_o_bruchase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly names bromouridine pulse-chase, supporting its labeling-material input without assuming a chase reagent or intracellular nucleotide form.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_cdna_o_gro_read",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Core reports sequencing an NRO-cDNA library, so the cDNA product is the physical input to the reported readout continuation beyond the PNG.",
+      "evidence": [
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_fragments_o_capture",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The explicit arrow runs from the short-fragment pool to the antibody bead. These are RNA fragments entering enrichment, not cDNA or polymerase protein.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from run-on panel to Isolate and hydrolyze; short purple fragments with and without red stars, some with black terminal squares",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.4,
+            0.1,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, BrU-containing RNA immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BrU-containing NRO-RNA was triple-selected through immunopurification with an antibody that is specific for this nucleotide analog",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_labeled_o_hydrolyze",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "An explicit arrow carries the run-on RNA into isolation/hydrolysis; the associated starting state is released from its transcription context by this operation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from run-on panel to Isolate and hydrolyze; short purple fragments with and without red stars, some with black terminal squares",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.4,
+            0.1,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, chemical fragmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The length of the polynucleotide was kept short, and the NRO-RNA was chemically hydrolyzed into short fragments (∼100 bases) to facilitate high-resolution mapping of the polymerase origin at the time of assay (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_nascent_o_runon",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Nascent RNA in an engaged transcription complex is the substrate of the run-on. The receiving operation extends that same associated RNA; the nuclear qualification is paper-reported.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Run-on with analog: red-star Br-UTP label, red stars on emerging RNA, and retained transcription complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.21,
+            0.0,
+            0.39,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_ready_o_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The explicit rightward arrow transfers free processed RNA into reverse transcription/amplification; the source state has already lost bead attachment.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from bead to free star-bearing RNA; Elute / Cap removal / End Repair; no keyed product end groups",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.07,
+            0.865,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from prepared RNA across Reverse transcription amplification to black products labeled cDNA at the right edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.06,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "GRO-Seq description, eluted RNA to cDNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After cap removal and end repair, the eluted RNA is reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_bric_enrich",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani supports addition of total RNA to the specified antibody support and subsequent RNA isolation from the bead fraction. The broad operation includes attachment and recovery, so its free-RNA output agrees with the outgoing library-preparation route.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00038, Methods: antibody-coated support",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-BrdU monoclonal antibody (mAb)–coated protein G-Sepharose beads were prepared as follows.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00038, Methods: antibody recognition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-BrdU mAb (MBL), which also recognizes BrU",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: RNA added to antibody support",
+          "basis": "text",
+          "support": "reported",
+          "quote": "added to the anti-BrdU mAb-conjugated beads.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: isolation of RNA from bead fraction for downstream assays",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The final pellet was resuspended in 100 μL of buffer B (10 mM Tris-HCl at pH 7.4, 50 mM NaCl), and then 300 μL of ISOGEN LS (Nippon Gene) was added, followed by RNA isolation in accordance with the manufacturer's instructions. The isolated RNA was used for RT-qPCR or deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_bric_labelchase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani directly supports BrU labeling in culture, removal of labeled medium, and successive harvests with total-RNA isolation. The combined operation produces time-indexed RNA extracts and preserves the cohort association needed downstream; no nuclear run-on is imported.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00036, Methods: BRIC time-point harvest and total RNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "At indicated time points after the removal of BrU-containing medium, cells were harvested for RNA preparation using RNAiso Plus (TaKaRa), and total RNA was isolated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_bric_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Recovered RNA is an appropriate input to the reported mRNA Seq library construction, with cDNA-template use supported by Tani. The broad block preserves RNA ancestry and sample identity without asserting unshown fragmentation, adapters or GRO-specific end processing.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: isolation of RNA from bead fraction for downstream assays",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The final pellet was resuspended in 100 μL of buffer B (10 mM Tris-HCl at pH 7.4, 50 mM NaCl), and then 300 μL of ISOGEN LS (Nippon Gene) was added, followed by RNA isolation in accordance with the manufacturer's instructions. The isolated RNA was used for RT-qPCR or deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, BrU-RNA as reverse-transcription template",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The isolated BrU-RNAs can be used as templates for reverse transcriptase–mediated cDNA synthesis for subsequent quantification of RNA",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: RNA-seq library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "an RNA-seq library was constructed using the mRNA Seq Sample Preparation Kit, according to the manufacturer's instructions (Illumina).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_bric_read",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani reports sequencing and deriving decay/half-life information across chase time points. The operation correctly depends on the sample series; it does not treat a single selected library as sufficient for a half-life.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thirty-six base-pair single-end-read RNA-seq tags were generated using an Illumina GA sequencer, according to the standard protocol.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00003, abstract: labeling and temporal decrease",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method involved pulse-labeling endogenous RNAs with 5′-bromo-uridine and measuring the ongoing decrease in RNA levels over time using multifaceted deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: half-life readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We determined the half-lives of the RNAs by calculating the time when the RNA-seq value reached half of the initial RNA-seq value (0 h time point)",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_bru",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Paulsen’s abstract supports the broad bromouridine-labeling/sequencing-to-synthesis operation in fibroblasts. Its intermediate physical transformations and sequencing carrier are explicitly unspecified, so no diagram-to-variant interface is fabricated.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_bruchase",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Paulsen’s abstract supports the separate pulse-chase/sequencing-to-stability operation. The candidate does not introduce a particular chase reagent or portray this alternative assay as a physical branch or later transfer from GRO.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_capture",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The depicted short fragments encounter antibody-coated support and yield bead-retained starred RNA. Core resolves the selection target as BrU-containing RNA. The candidate preserves the attachment interface, label discrepancy and chemical-enrichment limitation without asserting perfect polymerase specificity or a particular number of rounds from the icon.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, BrU-containing RNA immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BrU-containing NRO-RNA was triple-selected through immunopurification with an antibody that is specific for this nucleotide analog",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The drawing explicitly links free processed RNA to cDNA by reverse transcription/amplification. The product carrier and its RNA ancestry agree with both adjacent states. Core supports the fragment-based interpretation; adapter chemistry is not invented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from bead to free star-bearing RNA; Elute / Cap removal / End Repair; no keyed product end groups",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.07,
+            0.865,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from prepared RNA across Reverse transcription amplification to black products labeled cDNA at the right edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.06,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_gro_read",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Core directly supports sequencing the NRO-cDNA library and mapping reads to recover RNA origin/orientation and associated engaged-polymerase profiles. The operation is correctly labeled as reported beyond the image endpoint, with exact native active-site resolution unestablished.",
+      "evidence": [
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00004, abstract definition of GRO-seq readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a method (global run-on sequencing, GRO-seq) that maps the position, amount, and orientation of transcriptionally engaged RNA polymerases genome-wide.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, chemical fragmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The length of the polynucleotide was kept short, and the NRO-RNA was chemically hydrolyzed into short fragments (∼100 bases) to facilitate high-resolution mapping of the polymerase origin at the time of assay (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_hydrolyze",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The labeled RNA is isolated from the transcription context and hydrolyzed into the short-fragment mixture before capture, exactly as depicted and described by Core. The candidate adds no unsupported enzyme sequence or terminal groups.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from run-on panel to Isolate and hydrolyze; short purple fragments with and without red stars, some with black terminal squares",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.4,
+            0.1,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, chemical fragmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The length of the polynucleotide was kept short, and the NRO-RNA was chemically hydrolyzed into short fragments (∼100 bases) to facilitate high-resolution mapping of the polymerase origin at the time of assay (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_prepare",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The arrow out of the bead and the Elute / Cap removal / End Repair label support the combined transformation to free processed RNA. It consumes the attached state and produces the free state required by reverse transcription, without inventing an internal enzymatic order.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from bead to free star-bearing RNA; Elute / Cap removal / End Repair; no keyed product end groups",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.07,
+            0.865,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "GRO-Seq description, eluted RNA to cDNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After cap removal and end repair, the eluted RNA is reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_runon",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Both the diagram and Core support extension of associated nascent RNA using BrUTP. Core specifically reports isolated-nuclear run-on with new initiation prohibited, and the candidate attributes that statement to Core. The chemical label is not presented as an RNAPII-specific protein tag.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Run-on with analog: red-star Br-UTP label, red stars on emerging RNA, and retained transcription complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.21,
+            0.0,
+            0.39,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00007, experimental material",
+          "basis": "text",
+          "support": "reported",
+          "quote": "prepared from primary human lung fibroblast (IMR90) nuclei",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_19056941",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title identity is verified independently from metadata. The inspected full-text b00006 describes the GRO nuclear-run-on, fragmentation, BrU-RNA selection and cDNA mapping architecture. The supporting relationship is scientific content support, without a claim that metadata alone establishes chemistry or historical priority.",
+      "evidence": [
+        {
+          "source_id": "metadata:19056941",
+          "locator": "PubMed metadata: PMID 19056941 and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nascent RNA sequencing reveals widespread pausing and divergent initiation at human promoters.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, chemical fragmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The length of the polynucleotide was kept short, and the NRO-RNA was chemically hydrolyzed into short fragments (∼100 bases) to facilitate high-resolution mapping of the polymerase origin at the time of assay (8).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, BrU-containing RNA immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BrU-containing NRO-RNA was triple-selected through immunopurification with an antibody that is specific for this nucleotide analog",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_22369889",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title identity is verified independently. Tani’s inspected Results and Methods directly support the BRIC cell-culture chase variant, antibody recovery and library/readout interfaces; it is correctly associated with BRIC rather than used as a GRO run-on protocol.",
+      "evidence": [
+        {
+          "source_id": "metadata:22369889",
+          "locator": "PubMed metadata: PMID 22369889 and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide determination of RNA stability reveals hundreds of short-lived noncoding transcripts in mammals.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00038, Methods: antibody-coated support",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-BrdU monoclonal antibody (mAb)–coated protein G-Sepharose beads were prepared as follows.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: isolation of RNA from bead fraction for downstream assays",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The final pellet was resuspended in 100 μL of buffer B (10 mM Tris-HCl at pH 7.4, 50 mM NaCl), and then 300 μL of ISOGEN LS (Nippon Gene) was added, followed by RNA isolation in accordance with the manufacturer's instructions. The isolated RNA was used for RT-qPCR or deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: RNA-seq library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "an RNA-seq library was constructed using the mRNA Seq Sample Preparation Kit, according to the manufacturer's instructions (Illumina).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_22986266",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title identity is verified from the supplied PubMed metadata. The inspected full-text passage identifies a review of promoter-proximal pausing. Treating this as background rather than a separate BrU implementation is justified. No protocol equivalence or historical-development edge is asserted.",
+      "evidence": [
+        {
+          "source_id": "metadata:22986266",
+          "locator": "PubMed metadata: PMID 22986266 and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Promoter-proximal pausing of RNA polymerase II: emerging roles in metazoans.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22986266",
+          "locator": "Full text b00006, stated review scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we focus on the promoter-proximal pausing of Pol II and its regulated escape into productive elongation1.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_23345452",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The PMID/title match is verified, and the inspected abstract supports both Bru variants at the stated broad level. Although assessment is content_checked, its evidence locator, operation descriptions and unresolved scopes explicitly identify abstract-only support; the candidate makes no claim to have verified unavailable full methods.",
+      "evidence": [
+        {
+          "source_id": "metadata:23345452",
+          "locator": "PubMed metadata: PMID 23345452 and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Coordinated regulation of synthesis and stability of RNA during the acute TNF-induced proinflammatory response.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_25693130",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:25693130",
+          "locator": "PubMed metadata: PMID 25693130 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Getting up to speed with transcription elongation by RNA polymerase II.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 25693130",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Getting up to speed with transcription elongation by RNA polymerase II.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26499213",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:26499213",
+          "locator": "PubMed metadata: PMID 26499213 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The identification of cis-regulatory elements: A review from a machine learning perspective.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 26499213",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The identification of cis-regulatory elements: A review from a machine learning perspective.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26751173",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:26751173",
+          "locator": "PubMed metadata: PMID 26751173 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Functional genetic screens for enhancer elements in the human genome using CRISPR-Cas9.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 26751173",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Functional genetic screens for enhancer elements in the human genome using CRISPR-Cas9.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26751768",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:26751768",
+          "locator": "PubMed metadata: PMID 26751768 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Replication landscape of the human genome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 26751768",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Replication landscape of the human genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26780995",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:26780995",
+          "locator": "PubMed metadata: PMID 26780995 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Enhanced Identification of Transcriptional Enhancers Provides Mechanistic Insights into Diseases.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 26780995",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Enhanced Identification of Transcriptional Enhancers Provides Mechanistic Insights into Diseases.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26814966",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:26814966",
+          "locator": "PubMed metadata: PMID 26814966 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide nucleosome specificity and function of chromatin remodellers in ES cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 26814966",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide nucleosome specificity and function of chromatin remodellers in ES cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26844429",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title identity is verified from the supplied PubMed metadata. The inspected passage describes the distinct mNET-seq capture of Pol II complexes, supporting background status rather than BrU-route implementation support. No protocol equivalence or historical-development edge is asserted.",
+      "evidence": [
+        {
+          "source_id": "metadata:26844429",
+          "locator": "PubMed metadata: PMID 26844429 and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Mammalian NET-seq analysis defines nascent RNA profiles and associated RNA processing genome-wide.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26844429",
+          "locator": "Full text b00002, mNET-seq protocol overview",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we provide a detailed protocol for mNET-seq. First, Pol II elongation complexes are isolated with specific phospho-CTD antibodies from chromatin solubilized by micrococcal nuclease digestion. Next, RNA derived from within the Pol II complex is size fractionated and Illumina sequenced.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26873106",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:26873106",
+          "locator": "PubMed metadata: PMID 26873106 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transcription-associated processes cause DNA double-strand breaks and translocations in neural stem/progenitor cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 26873106",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transcription-associated processes cause DNA double-strand breaks and translocations in neural stem/progenitor cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26878240",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:26878240",
+          "locator": "PubMed metadata: PMID 26878240 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "7SK-BAF axis controls pervasive transcription at enhancers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 26878240",
+          "basis": "text",
+          "support": "reported",
+          "quote": "7SK-BAF axis controls pervasive transcription at enhancers.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26914315",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title identity is verified from the supplied PubMed metadata. The inspected abstract describes transcription-factory isolation, not the depicted GRO/BRIC library route. Its background relationship and abstract-only evidence locator are appropriate. No protocol equivalence or historical-development edge is asserted.",
+      "evidence": [
+        {
+          "source_id": "metadata:26914315",
+          "locator": "PubMed metadata: PMID 26914315 and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Isolation of the protein and RNA content of active sites of transcription from mammalian cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26914315",
+          "locator": "Supplied abstract only, transcription-factory isolation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we describe a protocol for the isolation of large factory fragments under isotonic salt concentrations in <72 h.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27010758",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title identity is verified from the supplied PubMed metadata. The inspected passage describes a different NET-seq route without labeling or immunoprecipitation. Background status is justified, and its native-3′-end chemistry is not imported into GRO. No protocol equivalence or historical-development edge is asserted.",
+      "evidence": [
+        {
+          "source_id": "metadata:27010758",
+          "locator": "PubMed metadata: PMID 27010758 and title",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide profiling of RNA polymerase transcription at nucleotide resolution in human cells with native elongating transcript sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27010758",
+          "locator": "Full text b00002, human NET-seq overview",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Elongating RNA polymerase and the associated nascent RNA is prepared by cell fractionation, avoiding immunoprecipitation or RNA labeling. The 3′-ends of nascent RNAs are captured through barcode linker ligation and converted into a DNA sequencing library.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27245778",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:27245778",
+          "locator": "PubMed metadata: PMID 27245778 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The IL-4/STAT6 signaling axis establishes a conserved microRNA signature in human and mouse macrophages regulating cell survival via miR-342-3p.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 27245778",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The IL-4/STAT6 signaling axis establishes a conserved microRNA signature in human and mouse macrophages regulating cell survival via miR-342-3p.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27259512",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:27259512",
+          "locator": "PubMed metadata: PMID 27259512 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Comprehensive analysis of promoter-proximal RNA polymerase II pausing across mammalian cell types.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 27259512",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Comprehensive analysis of promoter-proximal RNA polymerase II pausing across mammalian cell types.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27292797",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:27292797",
+          "locator": "PubMed metadata: PMID 27292797 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Cutoff Suppresses RNA Polymerase II Termination to Ensure Expression of piRNA Precursors.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 27292797",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Cutoff Suppresses RNA Polymerase II Termination to Ensure Expression of piRNA Precursors.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27299313",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title bibliographic identity is verified. The candidate deliberately uses metadata-only identity_verified status and a catalogue-background association, with no experimental reaction, version, priority or equivalence claim based on this citation. This check does not verify the paper’s scientific contents.",
+      "evidence": [
+        {
+          "source_id": "metadata:27299313",
+          "locator": "PubMed metadata: PMID 27299313 and title; bibliographic evidence only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The Regulation of rRNA Gene Transcription during Directed Differentiation of Human Embryonic Stem Cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "Related-publication list, entry for PMID 27299313",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The Regulation of rRNA Gene Transcription during Directed Differentiation of Human Embryonic Stem Cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "record",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Independent inspection supports the scoped architecture and every listed state, operation, flow, method assignment and correction. All depicted transformations are represented with coherent attachment and carrier states; the sole drawn route is retained rather than merged with the paper-reported BRIC chase. Bru methods remain at abstract level, unkeyed end groups remain unspecified, and all 19 PMID matches preserve their actual evidence levels. No consequential unsupported assertion or in-scope omitted branch was identified.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Complete left-to-right schematic, including grouped GRO/BRIC caption, analog legend, hydrolysis, antibody bead, elution/terminal processing, and cDNA endpoint; no chase branch is drawn",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: isolation of RNA from bead fraction for downstream assays",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The final pellet was resuspended in 100 μL of buffer B (10 mM Tris-HCl at pH 7.4, 50 mM NaCl), and then 300 μL of ISOGEN LS (Nippon Gene) was added, followed by RNA isolation in accordance with the manufacturer's instructions. The isolated RNA was used for RT-qPCR or deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:BRIC-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The assigned four broad operations agree with Tani’s implementation and preserve chase-time association through extraction, antibody recovery, library construction and decay measurement. GRO run-on, pre-capture hydrolysis and its terminal-processing block are not silently assigned to BRIC.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: isolation of RNA from bead fraction for downstream assays",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The final pellet was resuspended in 100 μL of buffer B (10 mM Tris-HCl at pH 7.4, 50 mM NaCl), and then 300 μL of ISOGEN LS (Nippon Gene) was added, followed by RNA isolation in accordance with the manufacturer's instructions. The isolated RNA was used for RT-qPCR or deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: RNA-seq library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "an RNA-seq library was constructed using the mRNA Seq Sample Preparation Kit, according to the manufacturer's instructions (Illumina).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: half-life readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We determined the half-lives of the RNAs by calculating the time when the RNA-seq value reached half of the initial RNA-seq value (0 h time point)",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Bru-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The unresolved status is appropriately limited to downstream implementation. Paulsen’s supplied abstract supports a distinct labeling/sequencing assay for RNA synthesis in fibroblasts, permitting the broad o_bru operation but not assignment of the depicted GRO processing steps.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Complete left-to-right schematic, including grouped GRO/BRIC caption, analog legend, hydrolysis, antibody bead, elution/terminal processing, and cDNA endpoint; no chase branch is drawn",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:BruChase-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly distinguishes bromouridine pulse-chase/sequencing for RNA stability. A separate broad operation is supported; its downstream physical library architecture remains unresolved. Neither a physical split in the PNG nor equivalence with BRIC is asserted.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Complete left-to-right schematic, including grouped GRO/BRIC caption, analog legend, hydrolysis, antibody bead, elution/terminal processing, and cDNA endpoint; no chase branch is drawn",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:GRO-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The assigned operations cover every depicted material transformation and the paper-reported sequencing/mapping continuation. Isolated nuclei and engaged polymerases are Core-supported qualifications; the cap/end-processing block remains schematic. No BRIC chase or exact native active-site resolution is imposed on this route.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Complete left-to-right schematic, including grouped GRO/BRIC caption, analog legend, hydrolysis, antibody bead, elution/terminal processing, and cDNA endpoint; no chase branch is drawn",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "GRO-Seq description, eluted RNA to cDNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After cap removal and end repair, the eluted RNA is reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_analog",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The red-star legend explicitly names Br-UTP. Core confirms this is the ribonucleotide substrate added to the run-on, consistent with the material input rather than a readout product.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Run-on with analog: red-star Br-UTP label, red stars on emerging RNA, and retained transcription complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.21,
+            0.0,
+            0.39,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bead",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The support, antibodies and literal α-BrdUTP label are visible. Core supports interpreting it as an affinity support for BrU-RNA; the candidate claims neither a specified clone nor a DNA target.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, BrU-containing RNA immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BrU-containing NRO-RNA was triple-selected through immunopurification with an antibody that is specific for this nucleotide analog",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bound",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Star-bearing fragments are drawn at the bead-surface antibodies. This state retains the bead association needed for subsequent elution and agrees with o_capture output and o_prepare input.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from fragments to gray bead with pink antibody symbols and star-bearing RNA; caption Bead coated with α-BrdUTP antibody",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.55,
+            0.0,
+            0.72,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from bead to free star-bearing RNA; Elute / Cap removal / End Repair; no keyed product end groups",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.07,
+            0.865,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, BrU-containing RNA immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "BrU-containing NRO-RNA was triple-selected through immunopurification with an antibody that is specific for this nucleotide analog",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bric_beads",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani identifies anti-BrdU antibody-coated protein G-Sepharose and explicitly states that the antibody recognizes BrU. The support is supported specifically for BRIC.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00038, Methods: antibody-coated support",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Anti-BrdU monoclonal antibody (mAb)–coated protein G-Sepharose beads were prepared as follows.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00038, Methods: antibody recognition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "anti-BrdU mAb (MBL), which also recognizes BrU",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bric_bru",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani adds BrU to culture medium, whereas Core adds BrUTP directly to a nuclear run-on. These are correctly represented as separate input materials in their respective method scopes.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bric_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani supports recovered BrU-RNA as cDNA template and reports construction of an Illumina mRNA Seq library. A broad RNA-derived DNA-library state is justified; no unshown internal kit sequence or GRO terminal chemistry is asserted.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, BrU-RNA as reverse-transcription template",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The isolated BrU-RNAs can be used as templates for reverse transcriptase–mediated cDNA synthesis for subsequent quantification of RNA",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: RNA-seq library construction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "an RNA-seq library was constructed using the mRNA Seq Sample Preparation Kit, according to the manufacturer's instructions (Illumina).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bric_cells",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani explicitly labels endogenous transcripts in cultured cells, providing the biological material for the separate BRIC route.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bric_decay",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The source reports temporal decrease and half-life estimation and explicitly notes bias toward highly and moderately expressed transcripts. The candidate preserves both the time-series measurement and this limitation.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00003, abstract: labeling and temporal decrease",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This method involved pulse-labeling endogenous RNAs with 5′-bromo-uridine and measuring the ongoing decrease in RNA levels over time using multifaceted deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00041, Methods: half-life readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We determined the half-lives of the RNAs by calculating the time when the RNA-seq value reached half of the initial RNA-seq value (0 h time point)",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00011, Results: detection/analysis limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thus, the analysis is biased toward highly and moderately expressed transcripts.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bric_selected",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani’s bead-fraction recovery produces isolated RNA used downstream, supporting free recovered BrU-enriched RNA rather than a still-attached bead product. Its time-point association follows the explicitly sequential sample harvests.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00039, Methods: isolation of RNA from bead fraction for downstream assays",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The final pellet was resuspended in 100 μL of buffer B (10 mM Tris-HCl at pH 7.4, 50 mM NaCl), and then 300 μL of ISOGEN LS (Nippon Gene) was added, followed by RNA isolation in accordance with the manufacturer's instructions. The isolated RNA was used for RT-qPCR or deep sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bric_total",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Tani explicitly harvests cells and isolates total RNA at sequential times after BrU removal. The candidate preserves samples and chase-time association rather than substituting GRO’s hydrolyzed run-on pool.",
+      "evidence": [
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00009, Results: BRIC labeling, chase, total-RNA isolation and immunopurification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The BRIC method labels endogenous transcripts with 5′-bromo-uridine (BrU) by its addition to cell culture media (Fig. 1A). Total RNAs containing BrU-labeled RNAs (BrU-RNAs) are then isolated from cells at sequential time points after removal of BrU from the culture medium, and BrU-RNAs are recovered by immunopurification (Fig. 1A; Supplemental Fig. S1A,B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22369889",
+          "locator": "b00036, Methods: BRIC time-point harvest and total RNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "At indicated time points after the removal of BrU-containing medium, cells were harvested for RNA preparation using RNAiso Plus (TaKaRa), and total RNA was isolated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bru_cells",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The supplied Paulsen abstract identifies human fibroblasts and RNA synthesis/stability studies at homeostasis and after TNF. The broad input does not assert a particular extracted intermediate or compartment.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bru_label",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Bromouridine labeling/pulse-chase is supported at the abstract level. The candidate correctly leaves delivery details and intracellular nucleotide form unspecified; the wording bromouride in the Bru-Seq clause is preserved in the exact source quotation.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bru_synthesis",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract supports a genome-wide RNA-synthesis readout for Bru-Seq. This is a data state with the physical sequencing carrier explicitly unspecified, consistent with the broad operation.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_bruchase_stability",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract supports an RNA-stability readout after bromouridine pulse-chase/sequencing. The candidate preserves the absence of downstream carrier, support and fragment-handling evidence.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The depicted endpoint is black cDNA products after reverse transcription/amplification. Core supports an RNA-derived library representing fragment 5′ ends and genomic orientation; the candidate does not identify these as native transcript starts or original active-site nucleotides.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from prepared RNA across Reverse transcription amplification to black products labeled cDNA at the right edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.88,
+            0.06,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_fragments",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The hydrolysis product is a free short-RNA mixture: starred and unstarred fragments and some black terminal squares are drawn. Core confirms chemical fragmentation; exact fragment-end chemistry is not asserted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from run-on panel to Isolate and hydrolyze; short purple fragments with and without red stars, some with black terminal squares",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.4,
+            0.1,
+            0.57,
+            0.8
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, chemical fragmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The length of the polynucleotide was kept short, and the NRO-RNA was chemically hydrolyzed into short fragments (∼100 bases) to facilitate high-resolution mapping of the polymerase origin at the time of assay (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_gro_map",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Core explicitly defines the readout as position, amount and orientation of engaged polymerases derived from genome-mapped nuclear-run-on RNA sequence. Chemical incorporation/selection supports the candidate’s limitation against treating this as all promoter-bound polymerase or steady-state total RNA.",
+      "evidence": [
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00004, abstract definition of GRO-seq readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present a method (global run-on sequencing, GRO-seq) that maps the position, amount, and orientation of transcriptionally engaged RNA polymerases genome-wide.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, NRO-cDNA library and genomic mapping",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A NRO-cDNA library was then prepared for sequencing from what represents the 5′ end of the fragmented, BrU-incorporated RNA molecule by using the Illumina high-throughput sequencing platform. The origin and the orientation of the RNAs and therefore the associated transcriptionally engaged polymerases were documented genome-wide by mapping the reads to the reference human genome (8).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_labeled",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The run-on panel shows stars incorporated along the emerging RNA while the transcription context persists. Core describes BrUTP-mediated BrU tagging of nascent RNA, supporting RNA with incorporated analog rather than free triphosphate as the capture substrate.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Run-on with analog: red-star Br-UTP label, red stars on emerging RNA, and retained transcription complex",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.21,
+            0.0,
+            0.39,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_nascent",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The emerging RNA and transcription context are visible; the isolated-nucleus/engaged-polymerase qualification is independently supported by Core. The black terminal square is retained without assigning an unsupported chemical structure, and no nuclear membrane is invented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Left panel: Nascent RNA above chromatin/transcription cartoon; caption Global run-on-sequencing (GRO-seq) / 5′-Bromo-uridine immunoprecipitation chase (BRIC-seq)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.19,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00006, nuclear run-on and BrUTP incorporation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used nuclear run-on assays (NRO) to extend nascent RNAs that are associated with transcriptionally engaged polymerases under conditions where new initiation is prohibited. To specifically isolate NRO-RNA, we added a ribonucleotide analog [5-bromouridine 5′-triphosphate (BrUTP)] to BrU-tag nascent RNA during the run-on step (fig. S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:19056941",
+          "locator": "b00007, experimental material",
+          "basis": "text",
+          "support": "reported",
+          "quote": "prepared from primary human lung fibroblast (IMR90) nuclei",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_ready",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The post-bead panel contains free starred RNA and labels elution, cap removal and end repair. The candidate records changed attachment and terminal-processing state while leaving unkeyed resulting end groups unspecified.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Arrow from bead to free star-bearing RNA; Elute / Cap removal / End Repair; no keyed product end groups",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.74,
+            0.07,
+            0.865,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:gro-seq-bric-seq-bru-seq-bruchase-seq",
+          "locator": "GRO-Seq description, eluted RNA to cDNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After cap removal and end repair, the eluted RNA is reverse-transcribed to cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_bru_downstream",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The exact unresolved question is whether Paulsen’s implementations use the depicted hydrolysis/capture/terminal-processing steps and what physical library carrier they produce. The supplied abstract does not answer it. Full methods or a protocol figure would be needed for those assignments; the candidate makes none, so the unknown is appropriately nonblocking for this explicitly limited schematic/abstract-level scope.",
+      "evidence": [
+        {
+          "source_id": "paper:23345452",
+          "locator": "Supplied abstract only, sentence introducing Bru-Seq and BruChase-Seq; no full methods are present",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present bromouride labeling and sequencing (Bru-Seq) and bromouridine pulse-chase and sequencing (BruChase-Seq) to assess genome-wide changes to RNA synthesis and stability in human fibroblasts at homeostasis and after exposure to the proinflammatory tumor necrosis factor (TNF).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_ca092c2f6ecb1cc62bf99d36",
+          "locator": "Complete left-to-right schematic, including grouped GRO/BRIC caption, analog legend, hydrolysis, antibody bead, elution/terminal processing, and cDNA endpoint; no chase branch is drawn",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

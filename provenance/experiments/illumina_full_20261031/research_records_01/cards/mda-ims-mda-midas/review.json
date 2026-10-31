@@ -1,0 +1,1899 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "mda-ims-mda-midas",
+  "candidate_sha256": "fb2ba67f647ae34e0103e5484dcb332c7d8b4ce2a8facb7af33ca44c26727b80",
+  "inspected_sources": [
+    "card:mda-ims-mda-midas",
+    "diagram:asset_e5a4c14426a40ba63ca20b29",
+    "reference:mda-ims-mda-midas:recovery:mda",
+    "reference:mda-ims-mda-midas:recovery:midas",
+    "reference:mda-ims-mda-midas:recovery:ims_mda_protocol",
+    "reference:mda-ims-mda-midas:recovery:ims_mda_original"
+  ],
+  "checks": [
+    {
+      "target": "record",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Independent image and source checks support the complete candidate architecture. Every depicted transformation is represented, including both synthesis stages and the S1 endpoint; raised molecular branches are not mistaken for alternative workflows. Material edges agree with operation inputs/outputs. Paper-only MIDAS recovery/conversion is distinguished from the drawn S1 route, and method scopes preserve the different compartments and enrichment context. The amplified-genome carrier, downstream library boundary, primer correction, specificity/coverage limits and remaining S1 attribution uncertainty are explicit. All four listed PMIDs are assigned to the appropriate methods at the actual available evidence level; no historical or interchangeability claim is introduced.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Complete schematic, including lower-left grouped method caption and all five left-to-right panels/arrows: Genome; Hybridize primers; two Phi 29 / Synthesis stages; S1 nuclease; Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / DNA and Enzymes, line 16",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thiophosphate-modified random hexamer (5′-NpNpNpNpsNpsN-3′) was synthesized at Molecular Staging",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results / Developing IMS-MDA for C. trachomatis, block b00026",
+          "basis": "text",
+          "support": "reported",
+          "quote": "IMS uses antibodies associated with magnetic beads to bind intact Chlamydia",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_protocol",
+          "locator": "Supplied abstract, paragraph beginning The study of bacterial populations; protocol full text is unavailable in the supplied evidence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our protocol combines immunomagnetic separation (IMS) for targeted bacterial enrichment with multiple displacement amplification (MDA) for whole-genome amplification (WGA), which is followed by high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_genome",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The visible Genome trace is the genomic-DNA template entering hybridization. The candidate correctly treats it as both biological sequence target and copying substrate, without assigning a species, compartment, bead attachment or unshown denaturation step to the generic icon. Variant-specific contexts are kept in their method scopes.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Far-left Genome label, yellow-highlighted black DNA trace with dotted ends, and arrow into primer-hybridization panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.29,
+            0.192,
+            0.52
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Lower-left grouped caption names Multiple displacement amplification (MDA), Immunomagnetic separation for targeted bacterial enrichment for MDA (IMS-MDA), and Microwell displacement amplification system (MIDAS)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.53,
+            0.205,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 88",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Surprisingly, these reagents will also readily amplify linear, human genomic DNA in a cascading, strand displacement reaction termed MDA (12) (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_primers",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The candidate retains the visible 3′blocked wording and orange terminal marks without deriving a chemical formula from the icon. The MDA text independently identifies exonuclease-resistant thiophosphate-modified random hexamers, and its synthesis caption establishes extendability. The protected-primer interpretation is supported and agrees with both subsequent copying operations; it does not leave a polymerase-blocking terminal group on their input.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Primer-hybridization panel: 3′blocked random hexamer primers label, short blue segments with orange terminal marks, black template and Hybridize primers label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.195,
+            0.23,
+            0.355,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / DNA and Enzymes, line 16",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thiophosphate-modified random hexamer (5′-NpNpNpNpsNpsN-3′) was synthesized at Molecular Staging",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Introduction, line 10",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Using φ29 DNA polymerase and random exonuclease-resistant primers, DNA was amplified in a 30°C reaction not requiring thermal cycling.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_primed",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The hybridization panel associates the short primers with the template, and the following Phi 29 arrow uses that primer-template complex. The candidate preserves that association and does not add a barcode or sequencing adapter.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Primer-hybridization panel: 3′blocked random hexamer primers label, short blue segments with orange terminal marks, black template and Hybridize primers label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.195,
+            0.23,
+            0.355,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "First Phi 29 arrow and Synthesis panel: elongated blue products, displaced arms, extension arrowheads, retained black template and Nascent replication fork label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.62,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_forks",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The first synthesis panel retains the black template while blue products extend and displaced arms rise above it. Nascent replication fork is an intermediate label, not a reagent or inspection. This output state matches the first synthesis operation and the substrate passed to further propagation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "First Phi 29 arrow and Synthesis panel: elongated blue products, displaced arms, extension arrowheads, retained black template and Nascent replication fork label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.62,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 112",
+          "basis": "text",
+          "support": "reported",
+          "quote": "However, once the reaction is initiated, the strand-displacing mechanism of MDA will release single-stranded template for ongoing priming and amplification (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_branched",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The second synthesis panel and primary caption support additional priming on displaced products and increased branching. The two panels are stages of a cascade, consistent with the single MDA round used for sequenced MIDAS products. The MIDAS-specific microwell qualification preserves physical sample association without implying pooling in the shared state.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Second Phi 29 arrow and Synthesis panel: further blue branches and short primer marks on displaced product strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 88",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Surprisingly, these reagents will also readily amplify linear, human genomic DNA in a cascading, strand displacement reaction termed MDA (12) (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results / MIDAS implements massively parallel polymerase cloning, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After seeding of cell populations into each microwell array, we performed limited multiple displacement amplification on the seeded single cells in the partitioned microwells, each with a physically separated (save for a thin aqueous layer atop the arrays) volume of ~12 nL",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Amplicon Quantification, block b00044",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Amplicons that were sequenced were only subjected to the initial round of MDA, and thus did not have any secondary MDA or quantification performed.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_amplified",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The endpoint is separate blue strokes labeled Amplified DNA after the S1 arrow. The candidate does not assign unsupported pairing, fragment ends, adapters or reads to those strokes. Genome-derived amplification product is a suitable boundary description; the reported plateau yield also supports its warning that product amount is not a direct input-genome count.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Right-hand transition labeled S1 nuclease, connecting branched synthesis material to separate parallel blue strokes labeled Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.13,
+            1.0,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 88",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Surprisingly, these reagents will also readily amplify linear, human genomic DNA in a cascading, strand displacement reaction termed MDA (12) (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 88, plateau yield versus starting genomic DNA amount",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The yield of amplified DNA from a 100-μl reaction was consistently in the range of 20 to 30 μg, regardless of the amount of starting material over a 5-log range (100 fg-10 ng).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_midas_recovered",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The MIDAS source reports individual-well micromanipulation and transfer of well contents into a pipette. The state correctly changes the compartment/handling status of hyperbranched DNA while retaining the selected-well association. It does not claim that random primers identify cells or that different wells are pooled.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After amplification in the microwells, we used a micromanipulation system to extract amplicons from individual wells for sequencing (Fig. 1c).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Amplicon Extraction, block b00042",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Negative pressure was slowly applied, and the well contents were visualized proceeding into the pipette.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, blocks b00011–b00013: stochastic loading, monitoring and selection of individual amplicons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Only single wells with single amplicons originating from a single point were extracted for analysis",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_midas_unbranched",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The reported Polymerase I conversion produces unbranched double-stranded genomic DNA, with nick sealing in the methods. This output agrees with the conversion operation and the downstream modified Nextera Tn5 interface. The source supports both cell/nucleus genome association and microbial/neuronal readouts, while amplification bias limits literal abundance interpretation.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Low-input library construction, block b00046",
+          "basis": "text",
+          "support": "reported",
+          "quote": "allowing second strand synthesis. 1 U of Ampligase was added to seal nicks",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct Illumina sequencing libraries from the extracted nanogram-scale DNA amplicons, we used a modified in-tube method based on the Nextera Tn5 transposase.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results / MIDAS enables detection of single copy-number changes in human neurons, block b00020",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We generated six sequencing libraries (two disease-free and four Down Syndrome) from individual nuclei using MIDAS",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Abstract, block b00003",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MIDAS reduces amplification bias because polymerase cloning occurs in physically separated nanoliter-scale reactors, facilitating the de novo assembly of near-complete microbial genomes from single E. coli cells. In addition, MIDAS allowed us to detect single-copy number changes in primary human adult neurons at 1–2 Mb resolution.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Introduction, block b00004",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Currently, the major technical challenge in using MDA is the highly uneven amplification of the one or two copies of each chromosome in a single cell.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_hybridize",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The Genome arrow and Hybridize primers panel establish association of genomic template and primer material. The s_genome/s_primers inputs and s_primed output match the material change, and the corrected extendable primer chemistry agrees with the receiving Phi29 synthesis operation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Far-left Genome label, yellow-highlighted black DNA trace with dotted ends, and arrow into primer-hybridization panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.29,
+            0.192,
+            0.52
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Primer-hybridization panel: 3′blocked random hexamer primers label, short blue segments with orange terminal marks, black template and Hybridize primers label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.195,
+            0.23,
+            0.355,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / DNA and Enzymes, line 16",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thiophosphate-modified random hexamer (5′-NpNpNpNpsNpsN-3′) was synthesized at Molecular Staging",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_synthesis_1",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The first Phi 29 transition and fork drawing support primer extension with strand displacement. The candidate correctly places Phi29 as catalyst, retains template/primer association in the input, and produces the elongating/displaced s_forks state used by the next stage. The genomic sequence-copying interpretation is supported by the primary MDA description.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "First Phi 29 arrow and Synthesis panel: elongated blue products, displaced arms, extension arrowheads, retained black template and Nascent replication fork label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.62,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 88",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Surprisingly, these reagents will also readily amplify linear, human genomic DNA in a cascading, strand displacement reaction termed MDA (12) (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 112",
+          "basis": "text",
+          "support": "reported",
+          "quote": "However, once the reaction is initiated, the strand-displacing mechanism of MDA will release single-stranded template for ongoing priming and amplification (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_synthesis_2",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The second synthesis drawing and MDA caption support secondary random priming on displaced primary products. Inputs s_forks and s_primers and output s_branched therefore agree with both the molecular depiction and adjoining routes. The candidate correctly distinguishes continued propagation from a separate MDA round and preserves amplification-bias limitations.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Second Phi 29 arrow and Synthesis panel: further blue branches and short primer marks on displaced product strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Amplicon Quantification, block b00044",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Amplicons that were sequenced were only subjected to the initial round of MDA, and thus did not have any secondary MDA or quantification performed.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Introduction, block b00004",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Currently, the major technical challenge in using MDA is the highly uneven amplification of the one or two copies of each chromosome in a single cell.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results, block b00037",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequence data generated using MDA has a more uneven depth of coverage than that generated from cultured samples, as seen above, through semi-random over-amplification of regions of the genome (Pinard et al. 2006).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_s1",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The visible labeled arrow supports the branched-material input and linear-stroke amplified-DNA output at schematic level. Keeping its cleavage mechanism unspecified avoids unsupported end-group or strand claims. Its family-level placement and exclusion from the documented MIDAS operation list agree with the scope qualifications; it is not asserted as a universal MDA/IMS-MDA requirement.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Right-hand transition labeled S1 nuclease, connecting branched synthesis material to separate parallel blue strokes labeled Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.13,
+            1.0,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Lower-left grouped caption names Multiple displacement amplification (MDA), Immunomagnetic separation for targeted bacterial enrichment for MDA (IMS-MDA), and Microwell displacement amplification system (MIDAS)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.53,
+            0.205,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / Amplification of Human Genomic DNA by MDA, line 24; Figure 1 caption, line 94. Inspected amplification description does not assign an S1 treatment.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Reactions were incubated for 18 h at 30°C and terminated by heating to 65°C for 3 min.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Methods / Immunomagnetic separation and MDA, block b00072",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomiphi amplification was performed on the full amount of remaining magnetic beads, without elution.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_midas_recover",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "This explicitly paper-only operation is supported by individual-well micromanipulation and physical extraction of well contents. Its microwell-qualified s_branched input and separately recovered s_midas_recovered output preserve the compartment change and well identity. Sparse loading and selection support attribution without guaranteeing that every well contains one cell.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results / MIDAS implements massively parallel polymerase cloning, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After seeding of cell populations into each microwell array, we performed limited multiple displacement amplification on the seeded single cells in the partitioned microwells, each with a physically separated (save for a thin aqueous layer atop the arrays) volume of ~12 nL",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After amplification in the microwells, we used a micromanipulation system to extract amplicons from individual wells for sequencing (Fig. 1c).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Amplicon Extraction, block b00042",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Negative pressure was slowly applied, and the well contents were visualized proceeding into the pipette.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, blocks b00011–b00013: stochastic loading, monitoring and selection of individual amplicons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Only single wells with single amplicons originating from a single point were extracted for analysis",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_midas_convert",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The MIDAS results and methods establish recovered hyperbranched amplicon denaturation, random-hexamer/Polymerase I second-strand synthesis and nick sealing, producing unbranched double-stranded DNA for Tn5 library construction. The operation agrees with both recovered input and unbranched output and remains explicitly distinct from the diagram S1 arrow.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Low-input library construction, block b00046",
+          "basis": "text",
+          "support": "reported",
+          "quote": "1.5 μL of ALS buffer was added to the extracted amplicons to denature the DNA",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Low-input library construction, block b00046",
+          "basis": "text",
+          "support": "reported",
+          "quote": "allowing second strand synthesis. 1 U of Ampligase was added to seal nicks",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct Illumina sequencing libraries from the extracted nanogram-scale DNA amplicons, we used a modified in-tube method based on the Nextera Tn5 transposase.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_01",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The drawn arrow transfers the Genome template into the hybridization panel; s_genome is correctly an input to op_hybridize.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Far-left Genome label, yellow-highlighted black DNA trace with dotted ends, and arrow into primer-hybridization panel",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.29,
+            0.192,
+            0.52
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Primer-hybridization panel: 3′blocked random hexamer primers label, short blue segments with orange terminal marks, black template and Hybridize primers label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.195,
+            0.23,
+            0.355,
+            0.66
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_02",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The primer label and short primer segments establish primer material participating in hybridization. The protected, extendable s_primers state is compatible with op_hybridize and the resulting complex.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Primer-hybridization panel: 3′blocked random hexamer primers label, short blue segments with orange terminal marks, black template and Hybridize primers label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.195,
+            0.23,
+            0.355,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / DNA and Enzymes, line 16",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thiophosphate-modified random hexamer (5′-NpNpNpNpsNpsN-3′) was synthesized at Molecular Staging",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_03",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Hybridize primers produces the template-associated primers represented by s_primed. This output retains the same association used by the next copying step.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Primer-hybridization panel: 3′blocked random hexamer primers label, short blue segments with orange terminal marks, black template and Hybridize primers label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.195,
+            0.23,
+            0.355,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "First Phi 29 arrow and Synthesis panel: elongated blue products, displaced arms, extension arrowheads, retained black template and Nascent replication fork label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.62,
+            0.66
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_04",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The first Phi 29 arrow explicitly links the hybridized-primer panel to synthesis. s_primed supplies the primer-template substrate for op_synthesis_1.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Primer-hybridization panel: 3′blocked random hexamer primers label, short blue segments with orange terminal marks, black template and Hybridize primers label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.195,
+            0.23,
+            0.355,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "First Phi 29 arrow and Synthesis panel: elongated blue products, displaced arms, extension arrowheads, retained black template and Nascent replication fork label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.62,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_05",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The first synthesis panel displays elongating blue DNA and displaced arms above retained template. The op_synthesis_1 output s_forks captures that material state.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "First Phi 29 arrow and Synthesis panel: elongated blue products, displaced arms, extension arrowheads, retained black template and Nascent replication fork label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.62,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 112",
+          "basis": "text",
+          "support": "reported",
+          "quote": "However, once the reaction is initiated, the strand-displacing mechanism of MDA will release single-stranded template for ongoing priming and amplification (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_06",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The second Phi 29 transition connects the first fork intermediate to the further synthesis panel. The primary caption supports continued copying from displaced primary products, rather than a transfer inferred only from proximity.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "First Phi 29 arrow and Synthesis panel: elongated blue products, displaced arms, extension arrowheads, retained black template and Nascent replication fork label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.62,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Second Phi 29 arrow and Synthesis panel: further blue branches and short primer marks on displaced product strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_07",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Short primer marks on displaced arms, resolved by the MDA caption as secondary priming, support random primers entering op_synthesis_2 as incorporated material. They are not incorrectly treated as the Phi29 catalyst.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Second Phi 29 arrow and Synthesis panel: further blue branches and short primer marks on displaced product strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_08",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The second synthesis stage produces the further-branched DNA represented by s_branched. This agrees with the cascade and with the single MDA round used for sequenced MIDAS material; it does not imply a second amplification experiment.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Second Phi 29 arrow and Synthesis panel: further blue branches and short primer marks on displaced product strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 88",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Surprisingly, these reagents will also readily amplify linear, human genomic DNA in a cascading, strand displacement reaction termed MDA (12) (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Amplicon Quantification, block b00044",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Amplicons that were sequenced were only subjected to the initial round of MDA, and thus did not have any secondary MDA or quantification performed.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_09",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The right-hand labeled transition takes branched synthesis material into S1 nuclease treatment. This edge is correctly qualified as a family-diagram route and is not the outgoing MIDAS recovery route.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Second Phi 29 arrow and Synthesis panel: further blue branches and short primer marks on displaced product strands",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.58,
+            0.0,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Right-hand transition labeled S1 nuclease, connecting branched synthesis material to separate parallel blue strokes labeled Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.13,
+            1.0,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_10",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The S1-labeled arrow terminates at the linear blue Amplified DNA strokes. The output agrees with s_amplified without assigning unshown strand pairing or termini.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Right-hand transition labeled S1 nuclease, connecting branched synthesis material to separate parallel blue strokes labeled Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.13,
+            1.0,
+            0.66
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_11",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "For MIDAS specifically, the paper places amplicons in individual microwells before micromanipulation. The microwell-qualified s_branched state therefore legitimately feeds op_midas_recover without pooling wells or passing through S1.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results / MIDAS implements massively parallel polymerase cloning, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After seeding of cell populations into each microwell array, we performed limited multiple displacement amplification on the seeded single cells in the partitioned microwells, each with a physically separated (save for a thin aqueous layer atop the arrays) volume of ~12 nL",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After amplification in the microwells, we used a micromanipulation system to extract amplicons from individual wells for sequencing (Fig. 1c).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_12",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Extraction of individual well contents supports op_midas_recover producing a separately handled amplicon sample. s_midas_recovered preserves that well association and is compatible with the next in-tube conversion.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After amplification in the microwells, we used a micromanipulation system to extract amplicons from individual wells for sequencing (Fig. 1c).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Amplicon Extraction, block b00042",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Negative pressure was slowly applied, and the well contents were visualized proceeding into the pipette.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct Illumina sequencing libraries from the extracted nanogram-scale DNA amplicons, we used a modified in-tube method based on the Nextera Tn5 transposase.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_13",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The source explicitly uses extracted amplicons as the denatured input for Polymerase I conversion. The recovered-sample state supplies op_midas_convert directly; no intervening S1 step is claimed.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Low-input library construction, block b00046",
+          "basis": "text",
+          "support": "reported",
+          "quote": "1.5 μL of ALS buffer was added to the extracted amplicons to denature the DNA",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_14",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The reported conversion yields unbranched double-stranded DNA, and the methods report nick sealing. Thus op_midas_convert produces the s_midas_unbranched substrate used by the described downstream Tn5 library interface.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Low-input library construction, block b00046",
+          "basis": "text",
+          "support": "reported",
+          "quote": "allowing second strand synthesis. 1 U of Ampligase was added to seal nicks",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct Illumina sequencing libraries from the extracted nanogram-scale DNA amplicons, we used a modified in-tube method based on the Nextera Tn5 transposase.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:MDA",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The MDA paper supports the three assigned copying operations: random-hexamer association, Phi29 displacement synthesis and secondary priming. Its inspected amplification methods and Figure 1 do not establish the family schematic S1 arrow as a requirement. The candidate correctly leaves that attribution unresolved while retaining the resolved copying core; it adds neither a sequencing-library recipe nor a date/priority claim.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Lower-left grouped caption names Multiple displacement amplification (MDA), Immunomagnetic separation for targeted bacterial enrichment for MDA (IMS-MDA), and Microwell displacement amplification system (MIDAS)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.53,
+            0.205,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / DNA and Enzymes, line 16",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thiophosphate-modified random hexamer (5′-NpNpNpNpsNpsN-3′) was synthesized at Molecular Staging",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 88",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Surprisingly, these reagents will also readily amplify linear, human genomic DNA in a cascading, strand displacement reaction termed MDA (12) (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / Amplification of Human Genomic DNA by MDA, line 24; Figure 1 caption, line 94. Inspected amplification description does not assign an S1 treatment.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Reactions were incubated for 18 h at 30°C and terminated by heating to 65°C for 3 min.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Right-hand transition labeled S1 nuclease, connecting branched synthesis material to separate parallel blue strokes labeled Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.13,
+            1.0,
+            0.66
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:IMS-MDA",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The original IMS-MDA paper supports a distinct target-enrichment implementation: antibody-associated magnetic beads bind intact Chlamydia, lysis/denaturation supplies genomic substrate, and amplification proceeds with the retained beads without elution. This context is correctly distinguished from the shared drawn copying core. The stated LPS target, incomplete purity and uneven coverage are source-supported. The later protocol contributes abstract-level corroboration only. S1 attribution remains explicitly unresolved rather than being assigned to this implementation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Lower-left grouped caption names Multiple displacement amplification (MDA), Immunomagnetic separation for targeted bacterial enrichment for MDA (IMS-MDA), and Microwell displacement amplification system (MIDAS)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.53,
+            0.205,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Introduction, block b00007",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MDA is an isothermal DNA amplification process using ø29 polymerase and random hexamers with phosphorothioate modification",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results / Developing IMS-MDA for C. trachomatis, block b00026",
+          "basis": "text",
+          "support": "reported",
+          "quote": "IMS uses antibodies associated with magnetic beads to bind intact Chlamydia",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results / Developing IMS-MDA for C. trachomatis, block b00026",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We used a commercially available anti-Chlamydia mouse IgG primary antibody (IMAGEN Chlamydia, Oxoid) against C. trachomatis lipopolysaccharide (LPS)",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results / Developing IMS-MDA for C. trachomatis, block b00026",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MDA was performed directly after IMS, with the first incubation at 95°C used for bacterial lysis and denaturation of the genomic DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Methods / Immunomagnetic separation and MDA, block b00072",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomiphi amplification was performed on the full amount of remaining magnetic beads, without elution.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results, block b00041",
+          "basis": "text",
+          "support": "reported",
+          "quote": "IMS enriches samples for C. trachomatis but does not produce pure samples of the target bacterium",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results, block b00037",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequence data generated using MDA has a more uneven depth of coverage than that generated from cultured samples, as seen above, through semi-random over-amplification of regions of the genome (Pinard et al. 2006).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_protocol",
+          "locator": "Supplied abstract, paragraph beginning The study of bacterial populations; protocol full text is unavailable in the supplied evidence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our protocol combines immunomagnetic separation (IMS) for targeted bacterial enrichment with multiple displacement amplification (MDA) for whole-genome amplification (WGA), which is followed by high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Right-hand transition labeled S1 nuclease, connecting branched synthesis material to separate parallel blue strokes labeled Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.13,
+            1.0,
+            0.66
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:MIDAS",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "MIDAS is a distinct cell/nucleus amplification implementation using individual nanoliter microwells, selected-well recovery and a Polymerase I conversion before modified Tn5 library construction. These paper-only operations are explicitly separated from the shared molecular panels. Its operation list, recovered compartments and downstream DNA state agree throughout, exclude the unsupported S1 assignment, and respect the reported single MDA round and limits on cell attribution/coverage.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Lower-left grouped caption names Multiple displacement amplification (MDA), Immunomagnetic separation for targeted bacterial enrichment for MDA (IMS-MDA), and Microwell displacement amplification system (MIDAS)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.53,
+            0.205,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results / MIDAS implements massively parallel polymerase cloning, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After seeding of cell populations into each microwell array, we performed limited multiple displacement amplification on the seeded single cells in the partitioned microwells, each with a physically separated (save for a thin aqueous layer atop the arrays) volume of ~12 nL",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After amplification in the microwells, we used a micromanipulation system to extract amplicons from individual wells for sequencing (Fig. 1c).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, blocks b00011–b00013: stochastic loading, monitoring and selection of individual amplicons",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Only single wells with single amplicons originating from a single point were extracted for analysis",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Amplicon Quantification, block b00044",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Amplicons that were sequenced were only subjected to the initial round of MDA, and thus did not have any secondary MDA or quantification performed.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct Illumina sequencing libraries from the extracted nanogram-scale DNA amplicons, we used a modified in-tube method based on the Nextera Tn5 transposase.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results / MIDAS enables detection of single copy-number changes in human neurons, block b00020",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We generated six sequencing libraries (two disease-free and four Down Syndrome) from individual nuclei using MIDAS",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Introduction, block b00004",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Currently, the major technical challenge in using MDA is the highly uneven amplification of the one or two copies of each chromosome in a single cell.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_11959976",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The supplied PubMed custody identifies PMID 11959976 as Comprehensive human genome amplification using multiple displacement amplification (DOI 10.1073/pnas.082089499). Independent reading of the supplied full text verifies its direct MDA architecture support: protected random hexamers, Phi29 and secondary priming. This is content verification beyond bibliographic identification, without asserting priority or universal S1 treatment.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Supplied full-text header, title and PMID lines 1–2; associated PubMed custody record for PMID 11959976",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Title: Comprehensive human genome amplification using multiple displacement amplification\nPMID: 11959976",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / DNA and Enzymes, line 16",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thiophosphate-modified random hexamer (5′-NpNpNpNpsNpsN-3′) was synthesized at Molecular Staging",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Results, line 88",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Surprisingly, these reagents will also readily amplify linear, human genomic DNA in a cascading, strand displacement reaction termed MDA (12) (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_24213699",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The supplied PubMed custody identifies PMID 24213699 as Massively parallel polymerase cloning and genome sequencing of single cells using nanoliter microwells (DOI 10.1038/nbt.2720). The available full text independently supports MIDAS microwell amplification, individual recovery, the single-round sequencing route and Polymerase I conversion. The candidate assigns it to MIDAS rather than using it to establish the other variants.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Full-text title, block b00001; associated PubMed custody record for PMID 24213699",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Massively parallel polymerase cloning and genome sequencing of single cells using nanoliter microwells",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results / MIDAS implements massively parallel polymerase cloning, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After seeding of cell populations into each microwell array, we performed limited multiple displacement amplification on the seeded single cells in the partitioned microwells, each with a physically separated (save for a thin aqueous layer atop the arrays) volume of ~12 nL",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After amplification in the microwells, we used a micromanipulation system to extract amplicons from individual wells for sequencing (Fig. 1c).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Amplicon Quantification, block b00044",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Amplicons that were sequenced were only subjected to the initial round of MDA, and thus did not have any secondary MDA or quantification performed.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_24202554",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The supplied PubMed custody identifies PMID 24202554 as Generating whole bacterial genome sequences of low-abundance species from complex samples with IMS-MDA (DOI 10.1038/nprot.2013.147). Only the supplied abstract was available and checked. It supports IMS enrichment followed by MDA and sequencing; the candidate explicitly preserves this evidence ceiling and does not use the abstract to verify detailed chemistry, reaction order within MDA, or historical priority.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_protocol",
+          "locator": "Supplied abstract header with title and PMID; associated PubMed custody record for PMID 24202554",
+          "basis": "text",
+          "support": "reported",
+          "quote": "PMID: 24202554",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_protocol",
+          "locator": "Supplied abstract, paragraph beginning The study of bacterial populations; protocol full text is unavailable in the supplied evidence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our protocol combines immunomagnetic separation (IMS) for targeted bacterial enrichment with multiple displacement amplification (MDA) for whole-genome amplification (WGA), which is followed by high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_23525359",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The supplied PubMed custody identifies PMID 23525359 as Whole-genome sequences of Chlamydia trachomatis directly from clinical samples without culture (DOI 10.1101/gr.150037.112). The supplied full text was independently checked and directly supports the scoped IMS-MDA implementation, including intact-bacterium capture, subsequent lysis, retained beads during amplification and imperfect target purity. The candidate correctly distinguishes this experimental implementation from the later abstract-only protocol.",
+      "evidence": [
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Full-text title, block b00001; associated PubMed custody record for PMID 23525359",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Whole-genome sequences of Chlamydia trachomatis directly from clinical samples without culture",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results / Developing IMS-MDA for C. trachomatis, block b00026",
+          "basis": "text",
+          "support": "reported",
+          "quote": "IMS uses antibodies associated with magnetic beads to bind intact Chlamydia",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results / Developing IMS-MDA for C. trachomatis, block b00026",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MDA was performed directly after IMS, with the first incubation at 95°C used for bacterial lysis and denaturation of the genomic DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Methods / Immunomagnetic separation and MDA, block b00072",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomiphi amplification was performed on the full amount of remaining magnetic beads, without elution.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Results, block b00041",
+          "basis": "text",
+          "support": "reported",
+          "quote": "IMS enriches samples for C. trachomatis but does not produce pure samples of the target bacterium",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:c_primer_end",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The correction preserves exactly what the image depicts, then uses the declared MDA implementation to resolve its misleading 3′blocked label. Exonuclease-resistant thiophosphate-modified hexamers that initiate synthesis support protection near the 3′ end with an extendable terminus. The corrected s_primers state and both primer-consuming routes remain chemically compatible; no orange-mark chemical structure is invented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Primer-hybridization panel: 3′blocked random hexamer primers label, short blue segments with orange terminal marks, black template and Hybridize primers label",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.195,
+            0.23,
+            0.355,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / DNA and Enzymes, line 16",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Thiophosphate-modified random hexamer (5′-NpNpNpNpsNpsN-3′) was synthesized at Molecular Staging",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Introduction, line 10",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Using φ29 DNA polymerase and random exonuclease-resistant primers, DNA was amplified in a 30°C reaction not requiring thermal cycling.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Figure 1 caption, line 94, random-primer initiation and secondary priming on displaced products",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA synthesis is initiated with random oligonucleotide primers. 3′ Ends are indicated by arrowheads. Thickened regions indicate primers. Secondary priming events occur on the displaced product DNA strands. (B) Scheme for MDA of genomic DNA. Secondary priming events are initiated from primary products.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:c_midas_s1",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The image groups MIDAS with the other names beside one S1-labeled route. The MIDAS results explicitly provide the consequential alternative: individual-well recovery, random-hexamer/Polymerase I conversion to unbranched double-stranded DNA, then modified Tn5 library construction. The correction retains the drawn S1 operation at family level while assigning the paper-supported route to MIDAS. Its corrected scope, recovery/conversion operations, f_11–f_14 and their material states agree; it asserts no S1/Polymerase I equivalence.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Lower-left grouped caption names Multiple displacement amplification (MDA), Immunomagnetic separation for targeted bacterial enrichment for MDA (IMS-MDA), and Microwell displacement amplification system (MIDAS)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.53,
+            0.205,
+            0.99
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Right-hand transition labeled S1 nuclease, connecting branched synthesis material to separate parallel blue strokes labeled Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.13,
+            1.0,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results / MIDAS implements massively parallel polymerase cloning, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After seeding of cell populations into each microwell array, we performed limited multiple displacement amplification on the seeded single cells in the partitioned microwells, each with a physically separated (save for a thin aqueous layer atop the arrays) volume of ~12 nL",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00012",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After amplification in the microwells, we used a micromanipulation system to extract amplicons from individual wells for sequencing (Fig. 1c).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Methods / Low-input library construction, block b00046",
+          "basis": "text",
+          "support": "reported",
+          "quote": "allowing second strand synthesis. 1 U of Ampligase was added to seal nicks",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To construct Illumina sequencing libraries from the extracted nanogram-scale DNA amplicons, we used a modified in-tube method based on the Nextera Tn5 transposase.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_s1_applicability",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The exact unresolved question is appropriately limited to which MDA or IMS-MDA implementation, if any, the family schematic S1 arrow represents. Inspection of the MDA amplification description and IMS-MDA amplification interface does not supply this attribution; absence of a documented attribution is not claimed as proof that S1 can never be used. A method-specific primary statement is the appropriate resolving evidence. This is nonblocking for the faithfully represented family diagram and the independently supported copying cores; MIDAS already has a resolved paper route.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_e5a4c14426a40ba63ca20b29",
+          "locator": "Right-hand transition labeled S1 nuclease, connecting branched synthesis material to separate parallel blue strokes labeled Amplified DNA",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.13,
+            1.0,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:mda",
+          "locator": "Materials and Methods / Amplification of Human Genomic DNA by MDA, line 24; Figure 1 caption, line 94. Inspected amplification description does not assign an S1 treatment.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Reactions were incubated for 18 h at 30°C and terminated by heating to 65°C for 3 min.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Introduction, block b00007",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MDA is an isothermal DNA amplification process using ø29 polymerase and random hexamers with phosphorothioate modification",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:ims_mda_original",
+          "locator": "Methods / Immunomagnetic separation and MDA, block b00072",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomiphi amplification was performed on the full amount of remaining magnetic beads, without elution.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:mda-ims-mda-midas:recovery:midas",
+          "locator": "Results, block b00014",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To address this issue, we used random hexamers and DNA Polymerase I to first convert the hyperbranched amplicons into unbranched double-stranded DNA molecules, which allowed effective library construction using in vitro transposition (Fig. 1d).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

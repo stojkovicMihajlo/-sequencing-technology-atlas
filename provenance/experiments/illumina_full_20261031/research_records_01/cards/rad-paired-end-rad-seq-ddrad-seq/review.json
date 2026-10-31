@@ -1,0 +1,1771 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "rad-paired-end-rad-seq-ddrad-seq",
+  "candidate_sha256": "3d34c61a64616b16bbf06d6d32e453e26dbd62a1d5420a1f75d4f15be869080d",
+  "inspected_sources": [
+    "diagram:asset_757cc031e4f7e90f878ecba8",
+    "card:rad-paired-end-rad-seq-ddrad-seq",
+    "metadata:18852878",
+    "metadata:21712251",
+    "metadata:25762582",
+    "paper:18852878",
+    "paper:21712251",
+    "paper:26279345",
+    "paper:25848968",
+    "paper:26394036",
+    "paper:25857931",
+    "paper:25858559",
+    "paper:25757406",
+    "paper:26398819",
+    "paper:25762582",
+    "paper:26291568",
+    "paper:26372103",
+    "paper:26181055",
+    "paper:26398139",
+    "reference:rad-paired-end-rad-seq-ddrad-seq:related_publications:4"
+  ],
+  "checks": [
+    {
+      "target": "correction:c_terminal_icon",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Accept the scoped resolution. The diagram omits terminal colors after Amplify but depicts no removal reaction. Baird explicitly identifies the enriched tags as P1-bearing and P1 as carrying the barcode and primer interfaces. Retaining these associations in s_library and f_o_amplify_out is consistent with the primary text. The candidate preserves the actual blue-only icon and limits the mechanistic resolution to Baird RAD.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Amplify arrow to plain blue DNA lines at right; prior colored termini are omitted and DNA is visible at the edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.866,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1D caption (text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(D) RAD tags, which have a P1 adapter, will be selectively and robustly enriched.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1A caption (text, not inspection of the paper figure image)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The P1 adapter contains a forward amplification primer site, an Illumina sequencing primer site, and a barcode (colored boxes represent P1 adapters with different barcodes).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_amplify_in",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_p2 to o_amplify is a material-input route: the arrow starts at the fragments with first-adapter and green second-adapter termini. For Baird, the P2 primer-competence mechanism matches o_p2 output and o_amplify input; no intervening adapter removal or compartment change is asserted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add P2 adapter arrow and ensuing fragments: orange/colored left termini and newly green right termini",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.711,
+            0.0,
+            0.858,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Amplify arrow to plain blue DNA lines at right; prior colored termini are omitted and DNA is visible at the edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.866,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P2 ligation and primer competence during PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was then ligated to a second adapter (P2), a Y adapter [14] that has divergent ends (Fig. 1C). The reverse amplification primer is unable to bind to P2 unless the complementary sequence is filled in during the first round of forward elongation originating from the P1 amplification primer. The structure of this adapter ensures that only P1 adapter-ligated RAD tags will be amplified during the final PCR amplification step (Fig. 1D).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_amplify_out",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_amplify to s_library matches the final product arrow. The outgoing material remains genomic DNA; colored-mark omission is addressed in c_terminal_icon without losing the barcode-associated Baird product. No unshown sequencing operation is inserted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Amplify arrow to plain blue DNA lines at right; prior colored termini are omitted and DNA is visible at the edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.866,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1D caption (text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(D) RAD tags, which have a P1 adapter, will be selectively and robustly enriched.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P1 adapter contents",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This adapter contains forward amplification and Illumina sequencing primer sites, as well as a nucleotide barcode 4 or 5 bp long for sample identification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_barcode_in",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_cut to o_barcode correctly supplies restriction-generated genomic fragments for adapter addition. The unadapted state is a reaction boundary rather than a separately drawn panel, independently supported by Baird digestion followed by P1 ligation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Restriction sites ticks and rightward arrow labeled Restriction digestion, before Add barcoded adapters",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.183,
+            0.0,
+            0.543,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add barcoded adapters: long blue fragments with orange terminals and short colored blocks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.386,
+            0.0,
+            0.543,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_barcode_out",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_barcode to s_barcoded correctly produces the long fragments with newly marked ends. In Baird the barcode and sequencing/amplification interfaces are attached as P1; this output is the same adapted substrate subsequently fragmented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add barcoded adapters: long blue fragments with orange terminals and short colored blocks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.386,
+            0.0,
+            0.543,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P1 adapter contents",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This adapter contains forward amplification and Illumina sequencing primer sites, as well as a nucleotide barcode 4 or 5 bp long for sample identification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_dd_digest_in",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_barcoded to o_dd_digest faithfully records the parenthetical ddRAD alternative at the arrow after first-adapter addition. The candidate explicitly treats this as depicted ordering and leaves its applicability to a matched ddRAD protocol unresolved; it does not claim a validated universal ddRAD preparation or a physical split of one sample.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: application of double-digest RAD",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We explored the utility of \"double-digest\" restriction site-associated DNA sequencing (ddRAD-seq) for phylogenetic analyses of the Lagonosticta firefinches (family Estrildidae) and the Vidua brood parasitic finches (family Viduidae).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_dd_digest_out",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_dd_digest to s_fragmented captures the depicted shorter, first-end-marked class. The shared state is expressly an alternative schematic boundary, not a pooled mixture or a statement that digest-generated ends equal sheared ends. This agrees with the downstream broad P2 interface.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add P2 adapter arrow and ensuing fragments: orange/colored left termini and newly green right termini",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.711,
+            0.0,
+            0.858,
+            1.0
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_digest_in",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_genome to o_digest is supported by the labeled genomic substrate, restriction-site marks, digestion arrow, and Baird genomic-DNA digestion statement. The left overview is not incorrectly represented as a separate reaction or attachment step.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Left overview: Genome and Restriction sites; lower caption Restriction-site associated DNA marker generation (RAD)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.326,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Restriction sites ticks and rightward arrow labeled Restriction digestion, before Add barcoded adapters",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.183,
+            0.0,
+            0.543,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_digest_out",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_digest to s_cut records restriction fragments as the product consumed by adapter addition. Although the drawing combines the transition with the adapted-fragment panel, Baird explicitly distinguishes cutting from ligation and supports this material boundary.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Restriction sites ticks and rightward arrow labeled Restriction digestion, before Add barcoded adapters",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.183,
+            0.0,
+            0.543,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_p2_in",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_fragmented to o_p2 follows the visible arrow from shorter fragments carrying the first end mark. The fragment state preserves the restriction/barcode association and leaves the newly created opposite end available for the second adapter. Variant branches are alternatives and are not combined physically.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add P2 adapter arrow and ensuing fragments: orange/colored left termini and newly green right termini",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.711,
+            0.0,
+            0.858,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], fragmentation after P1 ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adapter-ligated fragments were subsequently pooled, randomly sheared, and size-selected (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_p2_out",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_p2 to s_p2 matches addition of the green opposite-end segment while retaining the orange/colored first terminus. Baird divergent-Y chemistry is qualified in the operation/state and is not imposed on every variant passing through this schematic boundary.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add P2 adapter arrow and ensuing fragments: orange/colored left termini and newly green right termini",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.711,
+            0.0,
+            0.858,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P2 ligation and primer competence during PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was then ligated to a second adapter (P2), a Y adapter [14] that has divergent ends (Fig. 1C). The reverse amplification primer is unable to bind to P2 unless the complementary sequence is filled in during the first round of forward elongation originating from the P1 amplification primer. The structure of this adapter ensures that only P1 adapter-ligated RAD tags will be amplified during the final PCR amplification step (Fig. 1D).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_shear_in",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "s_barcoded to o_shear is supported by the fragmentation arrow and Baird explicit shearing of adapter-ligated fragments. Adapter-bearing DNA, rather than free adapters or the uncut genome, is the substrate.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add barcoded adapters: long blue fragments with orange terminals and short colored blocks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.386,
+            0.0,
+            0.543,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], fragmentation after P1 ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adapter-ligated fragments were subsequently pooled, randomly sheared, and size-selected (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_o_shear_out",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "o_shear to s_fragmented captures the retained short end-tagged class and its variable opposite-end positions. The candidate correctly avoids claiming that all random-shearing byproducts have a barcode; no discard stream or physical purification block is invented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], fragmentation after P1 ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adapter-ligated fragments were subsequently pooled, randomly sheared, and size-selected (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_amplify",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Amplify consumes s_p2 and produces s_library in agreement with both routes and the final arrow. Baird supplies PCR selection through P1 extension and the divergent P2 interface; the candidate limits other variants to the broad depicted amplification. Copy increase, barcode association and genomic restriction-flanking readout are consistent; no unsupported whole-genome coverage or perfect biological specificity is claimed.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Amplify arrow to plain blue DNA lines at right; prior colored termini are omitted and DNA is visible at the edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.866,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P2 ligation and primer competence during PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was then ligated to a second adapter (P2), a Y adapter [14] that has divergent ends (Fig. 1C). The reverse amplification primer is unable to bind to P2 unless the complementary sequence is filled in during the first round of forward elongation originating from the P1 amplification primer. The structure of this adapter ensures that only P1 adapter-ligated RAD tags will be amplified during the final PCR amplification step (Fig. 1D).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1D caption (text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(D) RAD tags, which have a P1 adapter, will be selectively and robustly enriched.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00007], reduced genomic representation and SNP readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RAD tags create a reduced representation of the genome, allowing oversequencing of the nucleotides next to restriction sites and detection of SNPs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21712251",
+          "locator": "RESULTS, abstract only; no supplied full text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present a method for de novo assembly of paired-end RAD-seq data in order to produce extended contigs flanking a restriction site.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_barcode",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Adapter addition acts on s_cut and yields s_barcoded, matching the labeled panel. P1 ligation, barcode carriage, sample identification and primer interfaces are supported specifically for Baird. The color-to-barcode interpretation has caption support without assigning a named sample to a color.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add barcoded adapters: long blue fragments with orange terminals and short colored blocks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.386,
+            0.0,
+            0.543,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P1 adapter contents",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This adapter contains forward amplification and Illumina sequencing primer sites, as well as a nucleotide barcode 4 or 5 bp long for sample identification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1A caption (text, not inspection of the paper figure image)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The P1 adapter contains a forward amplification primer site, an Illumina sequencing primer site, and a barcode (colored boxes represent P1 adapters with different barcodes).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00021], individual-specific barcode linkage",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Second, we tracked the genotype of each individual in the F2 population by performing separate digestions and ligations to uniquely barcoded P1 adapters for each F2 fish.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_dd_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The diagram explicitly supplies a second restriction digest as the ddRAD alternative at fragmentation. The operation preserves its depicted order and retained first-end marks and does not assert enzyme identity, end chemistry or protocol-level validation. Its statement that restriction-site variation affects locus sharing is supported at abstract level. No chemistry from the shearing branch is silently transferred.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: application of double-digest RAD",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We explored the utility of \"double-digest\" restriction site-associated DNA sequencing (ddRAD-seq) for phylogenetic analyses of the Lagonosticta firefinches (family Estrildidae) and the Vidua brood parasitic finches (family Viduidae).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: restriction-site variation limits sharing of loci",
+          "basis": "text",
+          "support": "reported",
+          "quote": "As expected, the number of homologous loci shared among samples was negatively correlated with genetic distance due to the accumulation of restriction site polymorphisms.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Restriction digestion transforms genomic DNA into restriction-bounded fragments; Baird establishes overhanging ends for its P1 ligation. The candidate does not manufacture a universal enzyme, cut sequence, strand polarity or formula from the simple line icon.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Left overview: Genome and Restriction sites; lower caption Restriction-site associated DNA marker generation (RAD)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.326,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Restriction sites ticks and rightward arrow labeled Restriction digestion, before Add barcoded adapters",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.183,
+            0.0,
+            0.543,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00007], reduced genomic representation and SNP readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RAD tags create a reduced representation of the genome, allowing oversequencing of the nucleotides next to restriction sites and detection of SNPs.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_p2",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The visible transformation adds a green right-terminal adapter while retaining the first adapter/barcode at the left. Baird supports a divergent-Y P2 and the requirement for forward extension before reverse-primer binding. Output s_p2 and input to amplification preserve this interface; the mechanism is explicitly limited to Baird.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add P2 adapter arrow and ensuing fragments: orange/colored left termini and newly green right termini",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.711,
+            0.0,
+            0.858,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P2 ligation and primer competence during PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was then ligated to a second adapter (P2), a Y adapter [14] that has divergent ends (Fig. 1C). The reverse amplification primer is unable to bind to P2 unless the complementary sequence is filled in during the first round of forward elongation originating from the P1 amplification primer. The structure of this adapter ensures that only P1 adapter-ligated RAD tags will be amplified during the final PCR amplification step (Fig. 1D).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:o_shear",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Shearing follows first-adapter addition and yields shorter retained end-tagged DNA, matching the arrow and Baird text. Random shearing is Baird-supported; size selection is acknowledged as reported without turning unshown execution details into invented diagram blocks. The described subset need not include every shearing byproduct.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], fragmentation after P1 ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adapter-ligated fragments were subsequently pooled, randomly sheared, and size-selected (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00007], reduced genomic representation and SNP readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RAD tags create a reduced representation of the genome, allowing oversequencing of the nucleotides next to restriction sites and detection of SNPs.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_25757406",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The supplied abstract explicitly reports a RAD-seq association study, so a RAD-related background link and abstract content_checked status are supported. Its paired-end sequence result does not verify Willing preparation chemistry; the candidate makes no such transfer.",
+      "evidence": [
+        {
+          "source_id": "paper:25757406",
+          "locator": "Abstract: RAD-seq association study; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we carried out a genome-wide association study using restriction site-associated DNA sequencing (RAD-seq) of 47 males, females and hermaphrodites from one dioecious and one androdioecious population.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_25762582",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "Revise the methods=[RAD-Seq] association. The supplied Shao abstract establishes SNP discovery and linkage/QTL mapping but never identifies RAD, paired-end RAD or ddRAD library preparation. The metadata identifies the paper only, and membership in the grouped card Related Publications list does not assign it to the RAD-Seq member. Keep this abstract-checked background record and leave its method association unassigned (methods=[]) unless publication content establishes a scoped method. This finding concerns method attribution, not the validity of the reported SNP result.",
+      "evidence": [
+        {
+          "source_id": "paper:25762582",
+          "locator": "Complete supplied abstract: SNP mapping application; library-preparation method is not named",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this study, we identified 13,362 SNPs evenly distributed across the Japanese flounder (Paralichthys olivaceus) genome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:25762582",
+          "locator": "PubMed metadata: title, bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genome-wide SNP identification for the construction of a high-resolution genetic map of Japanese flounder (Paralichthys olivaceus): applications to QTL mapping of Vibrio anguillarum disease resistance and comparative genomic analysis.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+          "locator": "Related Publications, Shao entry within grouped method card",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Shao C., Niu Y., Rastas P., Liu Y., Xie Z., et al. (2015) Genome-wide SNP identification for the construction of a high-resolution genetic map of Japanese flounder (Paralichthys olivaceus): applications to QTL mapping of Vibrio anguillarum disease resistance and comparative genomic analysis. DNA Res 22: 161-170",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_25848968",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract supports a RAD-Seq population-genomics application. Background is the appropriate relationship; this is not used as the method-origin paper or evidence for adapter chemistry.",
+      "evidence": [
+        {
+          "source_id": "paper:25848968",
+          "locator": "Abstract: RAD-Seq SNP application; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we used 6769 genome-wide SNPs from Restriction-site Associated DNA Sequencing (RAD-Seq)",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_25857931",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly supports pooled RAD-seq as an application. The candidate correctly retains a background relationship and does not import this application pooling scheme into the diagram.",
+      "evidence": [
+        {
+          "source_id": "paper:25857931",
+          "locator": "RESULTS abstract: pooled RAD-seq SNP application; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "by utilizing > 30,000 single nucleotide polymorphisms obtained with a pooled RAD-seq approach.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_25858559",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract establishes a RAD-marker phylogenetic application and reduced-representation libraries. The candidate uses it only as background and preserves the abstract-only evidence level.",
+      "evidence": [
+        {
+          "source_id": "paper:25858559",
+          "locator": "Abstract: reduced-representation RAD libraries; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we constructed reduced representation genomic libraries using restriction-site associated DNA (RAD) sequence markers to infer phylogenetic relationships among all genera and 22 out of 24 embiotocid species.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_26181055",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly supports a pooled RAD sequencing application. Background and abstract content_checked are appropriate, without assigning its pooling design or validation experiments to the schematic.",
+      "evidence": [
+        {
+          "source_id": "paper:26181055",
+          "locator": "Abstract: pooled RAD strategy; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "we developed a pooled RAD sequencing strategy for detecting geese laying-related SNP.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_26291568",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract identifies RAD sequencing and its use for the Orestias phylogenetic analysis. Background is supported; no method-origin or protocol-level claim is drawn from it.",
+      "evidence": [
+        {
+          "source_id": "paper:26291568",
+          "locator": "Abstract: RAD sequencing application; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Recently, restriction site-associated DNA (RAD) sequencing, which can produce a vast number of short sequences from various loci of nuclear DNA, has emerged as a useful way to resolve complex phylogenetic problems.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_26372103",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly reports an application of RAD markers. The background relationship and abstract-only content check are supported, without importing the disease-resistance or candidate-gene assays into the architecture.",
+      "evidence": [
+        {
+          "source_id": "paper:26372103",
+          "locator": "METHODOLOGY/PRINCIPAL FINDINGS abstract: RAD-marker application; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We first identify a genomic region, RADres, showing the highest differentiation between susceptible and resistant inbred lines among 1611 informative restriction-site associated DNA (RAD) markers",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_26394036",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly names RAD-Seq in the mammalian population-genomics application. The candidate appropriately treats it as background rather than evidence for the detailed preparation or origin.",
+      "evidence": [
+        {
+          "source_id": "paper:26394036",
+          "locator": "Abstract: RAD-Seq population-genomics application; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Herein, we analyze restriction-site associated DNA-sequences (RAD-Seq) to study recent historical processes in co-distributed mouse (Hylomyscus) and shrew (Sylvisorex) species complexes",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_26398139",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract supports a RAD-tag mapping application. The candidate limits this paper to background with abstract-only inspection and does not use its reference to genotyping to establish library chemistry.",
+      "evidence": [
+        {
+          "source_id": "paper:26398139",
+          "locator": "Abstract: RAD-tag linkage-map application; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this work, we report the construction of RAD-tag based high-density genetic maps by genotyping F1 interspecific hybrids",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_background_26398819",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract supports a RAD-marker background association, distinct from the accompanying SSR markers. The candidate does not conflate SSR amplification or the linkage-map construction with the depicted library operations.",
+      "evidence": [
+        {
+          "source_id": "paper:26398819",
+          "locator": "Abstract: RAD-marker contribution to a linkage map; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RAD markers were developed and a combined SSR and RAD markers linkage map of V. vexillata was constructed.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_baird_18852878",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Baird is explicitly the card RAD-Seq reference, with matching PubMed title/PMID and available primary full text. The inspected Results and Figure 1 caption support digestion, barcoded P1, random fragmentation, P2 and selective PCR. supports_architecture and content_checked are justified independently of metadata; no invention date or cross-method equivalence is inferred.",
+      "evidence": [
+        {
+          "source_id": "metadata:18852878",
+          "locator": "PubMed title and PMID, identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Rapid SNP discovery and genetic mapping using sequenced RAD markers.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+          "locator": "Method references, RAD-Seq entry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RAD-Seq:Baird N. A., Etter P. D., Atwood T. S., Currey M. C., Shiver A. L., et al. (2008) Rapid SNP discovery and genetic mapping using sequenced RAD markers. PLoS One 3: e3376",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P1 adapter contents",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This adapter contains forward amplification and Illumina sequencing primer sites, as well as a nucleotide barcode 4 or 5 bp long for sample identification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], fragmentation after P1 ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adapter-ligated fragments were subsequently pooled, randomly sheared, and size-selected (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P2 ligation and primer competence during PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was then ligated to a second adapter (P2), a Y adapter [14] that has divergent ends (Fig. 1C). The reverse amplification primer is unable to bind to P2 unless the complementary sequence is filled in during the first round of forward elongation originating from the P1 amplification primer. The structure of this adapter ensures that only P1 adapter-ligated RAD tags will be amplified during the final PCR amplification step (Fig. 1D).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1D caption (text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(D) RAD tags, which have a P1 adapter, will be selectively and robustly enriched.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_dacosta_26279345",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The complete supplied abstract explicitly evaluates ddRAD-seq in an avian phylogenetic application and reports restriction-site-polymorphism limitations. Background and content_checked at abstract level are supported. It does not establish ddRAD invention, the intended Illumina implementation or preparation order; the candidate does not use it for those claims.",
+      "evidence": [
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: application of double-digest RAD",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We explored the utility of \"double-digest\" restriction site-associated DNA sequencing (ddRAD-seq) for phylogenetic analyses of the Lagonosticta firefinches (family Estrildidae) and the Vidua brood parasitic finches (family Viduidae).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: restriction-site variation limits sharing of loci",
+          "basis": "text",
+          "support": "reported",
+          "quote": "As expected, the number of homologous loci shared among samples was negatively correlated with genetic distance due to the accumulation of restriction site polymorphisms.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_unverified_liu",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "Revise the methods=[RAD-Seq] association. The only supplied Liu source is unverified catalogue-reference metadata, whose title concerns a Miscanthus genetic map and does not identify a sequencing method. listed_not_read and background are honest, but they do not support assigning this paper specifically to RAD-Seq within the grouped card. Retain the citation with methods=[] pending content evidence; do not promote its DOI, title or catalogue placement to method verification.",
+      "evidence": [
+        {
+          "source_id": "reference:rad-paired-end-rad-seq-ddrad-seq:related_publications:4",
+          "locator": "Unverified catalogue-reference metadata, title; no abstract or full text supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-density genetic map of Miscanthus sinensis reveals inheritance of zebra stripe.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:rad-paired-end-rad-seq-ddrad-seq:related_publications:4",
+          "locator": "Unverified catalogue-reference metadata, evidence-status field",
+          "basis": "text",
+          "support": "reported",
+          "quote": "listed_by_illumina; not_independently_verified",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:p_willing_21712251",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Willing is explicitly the card paired-end RAD reference and has matching PubMed identity. The available abstract supports assembly of paired-end RAD data into restriction-flanking contigs and their use for markers; supports_variant is justified for that readout/assembly role. The candidate clearly labels its evidence abstract-only and does not claim to have verified its library-preparation chemistry.",
+      "evidence": [
+        {
+          "source_id": "metadata:21712251",
+          "locator": "PubMed title and PMID, identity only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Paired-end RAD-seq for de novo assembly and marker design without available reference.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+          "locator": "Method references, Paired end RAD-Seq entry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Paired end RAD-Seq: Willing E. M., Hoffmann M., Klein J. D., Weigel D. and Dreyer C. (2011) Paired-end RAD-seq for de novo assembly and marker design without available reference. Bioinformatics 27: 2187-2193",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21712251",
+          "locator": "RESULTS, abstract only; no supplied full text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present a method for de novo assembly of paired-end RAD-seq data in order to produce extended contigs flanking a restriction site.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21712251",
+          "locator": "RESULTS, abstract only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In addition, these contigs were used as reference allowing the detection of thousands of new polymorphic markers that are informative for mapping and population genetic studies in the guppy.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "record",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "All six material states, six operations, twelve material routes, the alternative fragmentation labels and the consequential terminal-color omission are represented and mutually consistent. Baird chemistry is scoped, sequencing is distinguished from the depicted endpoint, and unresolved paired-end/ddRAD implementation details do not block schematic extraction. All fourteen listed PMIDs and the additional Liu catalogue citation are covered; quoted excerpts match the supplied sources. Revision remains required for paper:p_background_25762582 and paper:p_unverified_liu: remove their unsupported assignment to the RAD-Seq member while retaining the background records. No other consequential diagram omission or interface contradiction was found.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Complete left-to-right schematic: Genome/Restriction sites, Restriction digestion, Add barcoded adapters, Shear (Second restriction digest in ddRADseq), Add P2 adapter, Amplify, final DNA lines",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P2 ligation and primer competence during PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was then ligated to a second adapter (P2), a Y adapter [14] that has divergent ends (Fig. 1C). The reverse amplification primer is unable to bind to P2 unless the complementary sequence is filled in during the first round of forward elongation originating from the P1 amplification primer. The structure of this adapter ensures that only P1 adapter-ligated RAD tags will be amplified during the final PCR amplification step (Fig. 1D).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1D caption (text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(D) RAD tags, which have a P1 adapter, will be selectively and robustly enriched.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21712251",
+          "locator": "RESULTS, abstract only; no supplied full text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present a method for de novo assembly of paired-end RAD-seq data in order to produce extended contigs flanking a restriction site.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: application of double-digest RAD",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We explored the utility of \"double-digest\" restriction site-associated DNA sequencing (ddRAD-seq) for phylogenetic analyses of the Lagonosticta firefinches (family Estrildidae) and the Vidua brood parasitic finches (family Viduidae).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:25762582",
+          "locator": "Complete supplied abstract: SNP mapping application; library-preparation method is not named",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this study, we identified 13,362 SNPs evenly distributed across the Japanese flounder (Paralichthys olivaceus) genome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "reference:rad-paired-end-rad-seq-ddrad-seq:related_publications:4",
+          "locator": "Unverified catalogue-reference metadata, title; no abstract or full text supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "High-density genetic map of Miscanthus sinensis reveals inheritance of zebra stripe.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Paired-end RAD-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Accept the explicitly unresolved scope: the card groups this member with the shearing schematic and names Willing, while the abstract supports paired-end data/contig assembly only. Operation IDs designate the family-level depiction, with Baird-specific P1/P2 chemistry expressly unassigned. The candidate does not collapse the paired-end member into an alias or assert that its protocol has been independently resolved.",
+      "evidence": [
+        {
+          "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+          "locator": "Method description, catalogue text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Restriction-site associated DNA (RAD/Paired-end RAD-Seq or ddRADseq) sequencing is a protocol used for SNP discovery and genotyping. In this method, genomic DNA is first digested with restriction enzymes, next barcoded adapters are added, DNA sheared, amplified and sequenced. Deep sequencing allows accurate SNP discovery and genotyping.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+          "locator": "Method references, Paired end RAD-Seq entry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Paired end RAD-Seq: Willing E. M., Hoffmann M., Klein J. D., Weigel D. and Dreyer C. (2011) Paired-end RAD-seq for de novo assembly and marker design without available reference. Bioinformatics 27: 2187-2193",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21712251",
+          "locator": "RESULTS, abstract only; no supplied full text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present a method for de novo assembly of paired-end RAD-seq data in order to produce extended contigs flanking a restriction site.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21712251",
+          "locator": "RESULTS, abstract only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In addition, these contigs were used as reference allowing the detection of thousands of new polymorphic markers that are informative for mapping and population genetic studies in the guppy.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:RAD-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The Baird-associated route digestion to P1 addition to shearing to P2 addition to selective PCR is supported in order by primary full text and the schematic. The ddRAD alternative is excluded from this route. Barcode linkage and reduced genomic representation are supported. Optional sample combination is reported, but its absence as a separate unshown operation is not an architecture omission.",
+      "evidence": [
+        {
+          "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+          "locator": "Method references, RAD-Seq entry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RAD-Seq:Baird N. A., Etter P. D., Atwood T. S., Currey M. C., Shiver A. L., et al. (2008) Rapid SNP discovery and genetic mapping using sequenced RAD markers. PLoS One 3: e3376",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], fragmentation after P1 ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adapter-ligated fragments were subsequently pooled, randomly sheared, and size-selected (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P2 ligation and primer competence during PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was then ligated to a second adapter (P2), a Y adapter [14] that has divergent ends (Fig. 1C). The reverse amplification primer is unable to bind to P2 unless the complementary sequence is filled in during the first round of forward elongation originating from the P1 amplification primer. The structure of this adapter ensures that only P1 adapter-ligated RAD tags will be amplified during the final PCR amplification step (Fig. 1D).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00007], reduced genomic representation and SNP readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RAD tags create a reduced representation of the genome, allowing oversequencing of the nucleotides next to restriction sites and detection of SNPs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1B caption (text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(B) Adapter-ligated fragments were combined (if multiplexing), sheared and (C) ligated to a second adapter (P2, white boxes).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:ddRAD-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Accept the qualified family-level depiction. The parenthetical label specifically replaces shearing with a second digest; it does not create a physical pooling branch. The candidate retains the diagram ordering while explicitly leaving the matched protocol, digest timing and adapter chemistry unresolved. The avian application abstract cannot verify those details, and no universal Baird-Y or sequential-ddRAD-protocol claim is made.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add P2 adapter arrow and ensuing fragments: orange/colored left termini and newly green right termini",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.711,
+            0.0,
+            0.858,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Amplify arrow to plain blue DNA lines at right; prior colored termini are omitted and DNA is visible at the edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.866,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: application of double-digest RAD",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We explored the utility of \"double-digest\" restriction site-associated DNA sequencing (ddRAD-seq) for phylogenetic analyses of the Lagonosticta firefinches (family Estrildidae) and the Vidua brood parasitic finches (family Viduidae).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: restriction-site variation limits sharing of loci",
+          "basis": "text",
+          "support": "reported",
+          "quote": "As expected, the number of homologous loci shared among samples was negatively correlated with genetic distance due to the accumulation of restriction site polymorphisms.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_barcoded",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The long-fragment panel supports genomic inserts bearing colored/orange terminal features after barcoded-adapter addition. Baird text establishes P1 linkage, sample barcodes and primer sites. The state keeps the barcode on the physical fragment, does not assign specimens to colors and correctly feeds both alternative fragmentation records.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add barcoded adapters: long blue fragments with orange terminals and short colored blocks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.386,
+            0.0,
+            0.543,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P1 adapter contents",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This adapter contains forward amplification and Illumina sequencing primer sites, as well as a nucleotide barcode 4 or 5 bp long for sample identification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1A caption (text, not inspection of the paper figure image)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The P1 adapter contains a forward amplification primer site, an Illumina sequencing primer site, and a barcode (colored boxes represent P1 adapters with different barcodes).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00021], individual-specific barcode linkage",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Second, we tracked the genotype of each individual in the F2 population by performing separate digestions and ligations to uniquely barcoded P1 adapters for each F2 fish.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_cut",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Restriction-cut genomic fragments are the material boundary between digestion and adapter addition. It is correctly noted that the drawing does not separately display this unadapted state. Baird supplies overhanging ends specifically for its implementation; no unsupported enzyme or end sequence is added.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Restriction sites ticks and rightward arrow labeled Restriction digestion, before Add barcoded adapters",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.183,
+            0.0,
+            0.543,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_fragmented",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The depicted retained class consists of shorter blue inserts with an orange/colored first terminus and a variable opposite end before P2 addition. Its two incoming routes denote label alternatives, not a mixed sample or identical end chemistry. The state correctly preserves barcode/restriction adjacency and avoids claiming that all fragmentation products survive as end-tagged molecules.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add P2 adapter arrow and ensuing fragments: orange/colored left termini and newly green right termini",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.711,
+            0.0,
+            0.858,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], fragmentation after P1 ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The adapter-ligated fragments were subsequently pooled, randomly sheared, and size-selected (Fig. 1B).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_genome",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Genome and Restriction sites identify genomic DNA at different schematic scales, rather than separate molecular substrates or an intervening reaction. The RAD caption is descriptive. No attachment surface or compartment is depicted, so omitting those states is appropriate.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Left overview: Genome and Restriction sites; lower caption Restriction-site associated DNA marker generation (RAD)",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.326,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], Results / RAD marker generation for sequencing, first digestion and ligation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Genomic DNA was digested with a restriction enzyme and an adapter (P1) was ligated to the fragment's overhanging ends (Fig. 1A).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The endpoint is amplified genomic DNA, representing restriction-site-associated inserts rather than uniform complete genomic coverage. Baird supports retained P1/barcode and sequencing-primer association despite the blue-only terminal icon. The candidate distinguishes the physical library from downstream sequence/genotype information and does not invent an RNA intermediary or an extra drawn sequencing block.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Amplify arrow to plain blue DNA lines at right; prior colored termini are omitted and DNA is visible at the edge",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.866,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00011], Figure 1D caption (text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "(D) RAD tags, which have a P1 adapter, will be selectively and robustly enriched.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P1 adapter contents",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This adapter contains forward amplification and Illumina sequencing primer sites, as well as a nucleotide barcode 4 or 5 bp long for sample identification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00007], reduced genomic representation and SNP readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "First, RAD tags create a reduced representation of the genome, allowing oversequencing of the nucleotides next to restriction sites and detection of SNPs.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+          "locator": "Method description, catalogue text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Restriction-site associated DNA (RAD/Paired-end RAD-Seq or ddRADseq) sequencing is a protocol used for SNP discovery and genotyping. In this method, genomic DNA is first digested with restriction enzymes, next barcoded adapters are added, DNA sheared, amplified and sequenced. Deep sequencing allows accurate SNP discovery and genotyping.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_p2",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The P2 panel adds green opposite termini while preserving orange/colored first termini. This yields a two-interface genomic-fragment state consistent with amplification input. The divergent-Y architecture is supported only for Baird and is explicitly qualified; the state does not claim that the green icon encodes a chemical structure or that all variants use the same adapter.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Add P2 adapter arrow and ensuing fragments: orange/colored left termini and newly green right termini",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.711,
+            0.0,
+            0.858,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18852878",
+          "locator": "[b00010], P2 ligation and primer competence during PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "DNA was then ligated to a second adapter (P2), a Y adapter [14] that has divergent ends (Fig. 1C). The reverse amplification primer is unable to bind to P2 unless the complementary sequence is filled in during the first round of forward elongation originating from the P1 amplification primer. The structure of this adapter ensures that only P1 adapter-ligated RAD tags will be amplified during the final PCR amplification step (Fig. 1D).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_dd_implementation",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The exact intended ddRAD protocol, digest/ligation order and adapter interfaces are not established by the available application abstract. The candidate asks the precise question and identifies matching protocol text/figures as the needed evidence. Nonblocking status is appropriate because the actual scoped diagram alternative is transcribed without claiming that unresolved preparation chemistry.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+          "locator": "Arrow from long adapted fragments to shorter fragments, labeled Shear (Second restriction digest in ddRADseq); orange and colored marks persist on the left",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.533,
+            0.0,
+            0.694,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26279345",
+          "locator": "Abstract only: application of double-digest RAD",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We explored the utility of \"double-digest\" restriction site-associated DNA sequencing (ddRAD-seq) for phylogenetic analyses of the Lagonosticta firefinches (family Estrildidae) and the Vidua brood parasitic finches (family Viduidae).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_paired_prep",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The Willing abstract establishes paired-data assembly/readout but does not describe the library-preparation interfaces or amplification design. The candidate correctly identifies matching full-text preparation evidence as necessary to resolve that implementation. Its nonblocking status is appropriate for the explicitly qualified family-level schematic.",
+      "evidence": [
+        {
+          "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+          "locator": "Method references, Paired end RAD-Seq entry",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Paired end RAD-Seq: Willing E. M., Hoffmann M., Klein J. D., Weigel D. and Dreyer C. (2011) Paired-end RAD-seq for de novo assembly and marker design without available reference. Bioinformatics 27: 2187-2193",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21712251",
+          "locator": "RESULTS, abstract only; no supplied full text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we present a method for de novo assembly of paired-end RAD-seq data in order to produce extended contigs flanking a restriction site.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21712251",
+          "locator": "RESULTS, abstract only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In addition, these contigs were used as reference allowing the detection of thousands of new polymorphic markers that are informative for mapping and population genetic studies in the guppy.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

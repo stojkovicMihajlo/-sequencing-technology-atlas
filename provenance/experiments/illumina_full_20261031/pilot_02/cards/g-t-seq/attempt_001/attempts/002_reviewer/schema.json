@@ -1,0 +1,207 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "description": "Exact ID in the supplied source registry.",
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "locator": {
+          "description": "Figure region/caption or text section actually inspected.",
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "basis": {
+          "enum": [
+            "image",
+            "text"
+          ],
+          "title": "Basis",
+          "type": "string"
+        },
+        "support": {
+          "description": "depicted for visible diagram content; reported for source text; inferred for an explicit deduction from these sources, requiring its own rationale.",
+          "enum": [
+            "depicted",
+            "reported",
+            "inferred"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "maxLength": 800,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Exact bounded source-text excerpt for text evidence; never a reconstructed quotation.",
+          "title": "Quote"
+        },
+        "bbox": {
+          "anyOf": [
+            {
+              "maxItems": 4,
+              "minItems": 4,
+              "prefixItems": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional image region [left, top, right, bottom], normalized to image dimensions.",
+          "title": "Bbox"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the cited content supports this claim; mandatory for an inference.",
+          "title": "Rationale"
+        }
+      },
+      "required": [
+        "source_id",
+        "locator",
+        "basis",
+        "support"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "ReviewCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "target": {
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "supported",
+            "unsupported",
+            "unresolved"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "action": {
+          "enum": [
+            "accept",
+            "revise",
+            "research"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "target",
+        "verdict",
+        "action",
+        "rationale",
+        "evidence"
+      ],
+      "title": "ReviewCheck",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "const": "illumina_diagram_review/1.0",
+      "default": "illumina_diagram_review/1.0",
+      "title": "Format Version",
+      "type": "string"
+    },
+    "record_id": {
+      "minLength": 1,
+      "title": "Record Id",
+      "type": "string"
+    },
+    "candidate_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Candidate Sha256",
+      "type": "string"
+    },
+    "inspected_sources": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Inspected Sources",
+      "type": "array"
+    },
+    "checks": {
+      "items": {
+        "$ref": "#/$defs/ReviewCheck"
+      },
+      "minItems": 1,
+      "title": "Checks",
+      "type": "array"
+    }
+  },
+  "required": [
+    "record_id",
+    "candidate_sha256",
+    "inspected_sources",
+    "checks"
+  ],
+  "title": "DiagramReview",
+  "type": "object"
+}

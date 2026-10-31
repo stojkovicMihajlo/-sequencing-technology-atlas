@@ -1,0 +1,136 @@
+{
+  "format_version": "illumina_graph_integration_audit/1.0",
+  "scope": "Read-onlyintegrationaudit plus boundedquery-semanticsfix; nocanonicalorhistoricalgraphmutations.",
+  "inputs": {
+    "201_entity_crosswalk": {
+      "path": "provenance/experiments/illumina_full_20261031/original_entity_crosswalk_01/crosswalk.json",
+      "sha256": "e043df0413c18d0db8eae3d092ac413b028d0202307ba23faa5f8cab00b41eda",
+      "statistics": {
+        "original_entities": 201,
+        "historical_graph_entities": 200,
+        "current_cards": 154,
+        "historically_bound_entities": 190,
+        "outside_catalogue_entities": 11,
+        "entities_with_exact_label_candidates": 169,
+        "entities_with_binding_only_cases": 23,
+        "cards_with_historical_entities": 154,
+        "cards_with_multiple_historical_entities": 30,
+        "duplicate_title_sets": 1,
+        "unresolved_lexical_cases": 41
+      }
+    },
+    "reviewed_working_code": {
+      "src/genomics_discovery/curation/illumina_graph.py": "038716484c228bce84cab6016cb2ae9948bea082b7da7dfbbc3647ce3321a4a1",
+      "tests/test_illumina_routing_controls.py": "13b958637b97c3808f066ba1db1fa0d6edae61ddd603e88899672c80884c6ecd"
+    }
+  },
+  "current_strengths": [
+    {
+      "functions": [
+        "build_graph",
+        "_load_card"
+      ],
+      "finding": "Retains everyinventorycard/status and reopensnativeauthor/review/image/artifactpins beforepublishing. Operationsstayrecord-scoped; noautomaticancestryorequivalence."
+    },
+    {
+      "functions": [
+        "workflow",
+        "protocol_text"
+      ],
+      "finding": "Methodscopes, fullflowgraphs, literaldiagramobservations andexplicitprimary-sourcecorrections arepreserved inreading/wholeworkflowviews."
+    },
+    {
+      "functions": [
+        "get_record",
+        "search_operations"
+      ],
+      "finding": "Operation/stateI/Oandprovenanceretrievable; searchcorrectlyreturnsunreviewedlexicalcomparisoncandidates, notmechanismequivalence."
+    }
+  ],
+  "implemented_change": {
+    "files": [
+      "src/genomics_discovery/curation/illumina_graph.py",
+      "tests/test_illumina_routing_controls.py"
+    ],
+    "problem": "AsharedcaptionOperationwithmultipleindependentinputs/outputscreatesincidencepaths thatcouldbe mistakenforcrossbranchmoleculelineage.",
+    "policy": "Structural2+input/2+outputboundaries stopwalkbydefault inbothdirections, withoriginalincidentFlow evidenceandfrontieroptionsretained. Explicitexpand_ambiguous_incidenceonlyexpandsrawincidence; itdoesnotverifypairing,mixingorlineage. NoIRchange.",
+    "tests": {
+      "passed": 28,
+      "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=src /Users/mihajlostojkovic/anaconda3/bin/python -m pytest tests/test_illumina_routing_controls.py tests/test_illumina_graph.py -q",
+      "new_controls": 10,
+      "existing_graph_tests": 18
+    }
+  },
+  "minimal_integration_recommendation": {
+    "representation": "A manifestofseparatelypinnedcatalogue/postergraphsnapshots withqualifiedreferences {collection_id,record_id}/{collection_id,node_id}; donotcoalesceoperationinstances orrewriteoldIDs.",
+    "reason": "RecordIDs distinguishcurrentcatalogue/posterrows, butfutureversionsofthesamesourcecardorposterrowcanreusetheID. Snapshotqualificationprevents accidentalcross-versionmerges.",
+    "safe_source_observations": [
+      {
+        "type": "same_diagram_bytes",
+        "basis": "ExactPNGsourceSHA256equality.",
+        "does_not_establish": "Sameassayidentity, operationapplicabilityorhistory."
+      },
+      {
+        "type": "same_parent_source_container",
+        "basis": "ExactparentPDF/rasterSHA256;retain distinctpage/cropcoordinatesandrowIDs.",
+        "does_not_establish": "Sharedworkfloworchemistry; allrowsinoneposter sharethecontainer."
+      },
+      {
+        "type": "same_publication_identifier",
+        "basis": "ExactownverifiedPMIDorDOI withdocumentidentityevidence; retaincontentlevel, documentversion/sourcehash, andeachPaperMatchassessment.",
+        "does_not_establish": "Sameprotocol, applicability, methoddevelopmentorancestry."
+      }
+    ],
+    "candidate_only_observations": [
+      {
+        "type": "historical_curator_card_association",
+        "basis": "Existingcrosswalkrecord_IDbindings preservedwitholdgraphpin.190entities linkedto154cards;30cardsassociatewithmultipleentities.",
+        "policy": "Recordwhatpreviouscurationassociated; donotupgradeitasfreshmethodidentityorper-operationapplicability."
+      },
+      {
+        "type": "exact_label_candidate",
+        "basis": "Declarednames/aliasesandliteralcardlabelmatches.",
+        "policy": "Retrievalonly; Nuc-seqhomonymsandwrappedDige-/nome-seqshowwhylabelequalityisnotidentity."
+      }
+    ],
+    "minimal_tools": [
+      "Listqualifiedsourceworkflowrecords acrossbothsnapshots withoutmergingthem.",
+      "Call existingworkflow/get/state/operation/paper/neighbor/walk/protocolqueries with thechosen graphsnapshot.",
+      "Retrieve exactshared-sourceobservationsseparatelyfromscientificrelationshipclaims.",
+      "Lookupthe201crosswalk withhistoricalbinding/candidate distinctionsintact."
+    ]
+  },
+  "concrete_remaining_tool_gaps": [
+    {
+      "priority": "high",
+      "location": "illumina_graph.build_graph cardentry",
+      "finding": "Aggregationdoesnotcopy source_row_id, scope_kind, canonical_technology_id/source_method_labels fromthepinnedinventory. Origin remainsrecoverablethroughimageprovenance/inventory, buttypeisnotdirectlyvisibletoanagent.",
+      "minimal_fix": "Copy asource-scopeidentity/provenancesubrecord frominventory; do notinfersemanticidentity."
+    },
+    {
+      "priority": "high",
+      "location": "illumina_graph.get_record operation/state results",
+      "finding": "Correctionnodespreserveexacttarget_IDs butarenotincidenttoaffectedoperations/states inqueryoutput; affectedUnknowns arestoredoncard ratherthanexposedwithretrievedoperation.",
+      "minimal_fix": "Returnmatchingcorrectionsandunknowns byexactreviewtargetkey, plusfullsourceregistrypath/pin. Keeptheseascontext, notnewscientificedges."
+    },
+    {
+      "priority": "medium",
+      "location": "illumina_graph publicationindex",
+      "finding": "VerifiedPMIDsgetdocumentnodes; DOI-onlydocuments remainworkflowscoped and DOIisnestedinoriginalsourceprovenance.",
+      "minimal_fix": "Addexactverifieddocumentidentifierindexforlookup, preservingworkflowPaperMatches, contentlevels andsourceversionpins. Noautomaticmethodrelationship."
+    },
+    {
+      "priority": "medium",
+      "location": "multiplebuild_graph outputs",
+      "finding": "Noexistingfederatedmanifest/toolchoosesbetween154cataloguecardsand285posterrowdepictions.",
+      "minimal_fix": "Usepinnedcollectionmanifest first; avoidprematurecanonicalgraphmerge."
+    }
+  ],
+  "boundaries": [
+    "154cards,285posterrowgroups,and201historicalentitiesaredifferentinventoryunits.",
+    "Sharedconcepts mustlinkseparateoperationinstances; merginginstancescreatesfalsematerial/data paths.",
+    "Directedincidenceisnotanatom-tracingorlineagemodel; sourceevidenceisrequiredforbranch-specificinput/outputpairing.",
+    "Noabsolutezero-hallucinationguarantee isestablishedbysoftwaretests.",
+    "No additionalagents,nativeruns,newscientificedgesorcanonicalmemberships introducedbythisaudit."
+  ]
+}

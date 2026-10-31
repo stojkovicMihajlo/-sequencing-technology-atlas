@@ -1,0 +1,1336 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "merip-seq-m6a-seq",
+  "candidate_sha256": "d18dfc80d2643b75aab8704525a4e327923507c8648960d4591a945e80f03277",
+  "inspected_sources": [
+    "card:merip-seq-m6a-seq",
+    "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+    "metadata:22608085",
+    "paper:22608085",
+    "metadata:22575960",
+    "paper:22575960",
+    "metadata:27318512",
+    "paper:27318512",
+    "metadata:27773535",
+    "paper:27773535",
+    "metadata:27117702",
+    "paper:27117702",
+    "metadata:24979058",
+    "paper:24979058"
+  ],
+  "checks": [
+    {
+      "target": "flow:f1i",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The Extract RNA arrow visibly leaves the repeated RNA-containing context. The source state and receiving extraction operation agree; title-vignette proximity is not used to add another input.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Workflow-start vignette -> gray arrow labeled Extract RNA -> free long purple RNA bearing three red marks.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.204,
+            0.0,
+            0.536,
+            0.81
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f1o",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extraction arrow terminates at the long marked free RNA, matching op_extract output s_rna and the subsequent operation input.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Workflow-start vignette -> gray arrow labeled Extract RNA -> free long purple RNA bearing three red marks.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.204,
+            0.0,
+            0.536,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "After Extract RNA: a long free purple strand bearing three red marks, before the next gray arrow.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.442,
+            0.26,
+            0.536,
+            0.44
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f2i",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The long marked RNA precedes and enters the Fractionate RNA arrow, matching s_rna and op_fractionate. The arrow is a transformation route, not a separate reagent addition.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Long marked purple RNA -> gray arrow labeled Fractionate RNA -> shorter purple fragments, some marked and some unmarked.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.442,
+            0.13,
+            0.674,
+            0.81
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f2o",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The shorter mixed RNA pieces are the depicted product of Fractionate RNA. The output preserves RNA and pre-existing marks and supplies the same fragment pool consumed by capture.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Long marked purple RNA -> gray arrow labeled Fractionate RNA -> shorter purple fragments, some marked and some unmarked.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.442,
+            0.13,
+            0.674,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Fragment pool upstream of antibody capture: shorter purple lines include red-marked and unmarked pieces; no terminal-group symbols or end legend.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.59,
+            0.13,
+            0.674,
+            0.56
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00019], Results: MeRIP-Seq Identifies m6A-Containing RNAs Throughout the Transcriptome",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The procedure for MeRIP-Seq (outlined in Figure 4A) involves randomly fragmenting the RNA to approximately 100 nt-sized fragments prior to immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f3i",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The arrow from the short marked/unmarked RNA pool enters the antibody-associated panel. This is material transfer of RNA into capture; the pink antibody symbols function as reagents within that operation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Fragment pool -> gray arrow -> capture panel labeled Immunoprecipitate, with pink antibodies contacting red marks and unbound unmarked fragments; next gray arrow leads to three marked RNA fragments without antibody icons.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.59,
+            0.0,
+            0.91,
+            0.81
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f3o",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The retained route continues from antibody capture to marked RNA without antibody icons. The broad operation includes recovery, supported by the MeRIP caption; its output is free enriched RNA rather than an antibody complex carried into RT. No outgoing flow-through route is depicted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Fragment pool -> gray arrow -> capture panel labeled Immunoprecipitate, with pink antibodies contacting red marks and unbound unmarked fragments; next gray arrow leads to three marked RNA fragments without antibody icons.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.59,
+            0.0,
+            0.91,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Between capture and cDNA: three retained purple fragments with red marks, without pink antibody icons; no separate outgoing flow-through route.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.876,
+            0.13,
+            0.908,
+            0.59
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00113], Figure 4A caption, inspected as text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNAs containing m6A are then immunoprecipitated by mixing the RNA with m6A antibody-coupled Dynabeads. m6A-containing RNAs are then eluted from the antibody-coupled beads and subjected to a second round of m6A immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f4i",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The retained marked RNA is the material immediately upstream of the conversion to cDNA. Its state agrees with recovered-RNA output from capture and the RNA template required by the diagram/catalogue RT statement.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Between capture and cDNA: three retained purple fragments with red marks, without pink antibody icons; no separate outgoing flow-through route.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.876,
+            0.13,
+            0.908,
+            0.59
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Right-hand retained purple RNA fragments -> gray arrow -> three black lines labeled cDNA; Reverse transcription label identifies this conversion.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.858,
+            0.1,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f4o",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The reverse-transcription route produces the black strands labeled cDNA. Both the outgoing route and state s_cdna identify DNA, preserving fragment identity rather than asserting direct methylation encoding.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Right-hand retained purple RNA fragments -> gray arrow -> three black lines labeled cDNA; Reverse transcription label identifies this conversion.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.858,
+            0.1,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Far-right endpoint: three black strands labeled cDNA, without red marks, adapter structures, strand arrows, barcodes or terminal-group labels.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.97,
+            0.13,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00006], standard-sequencing limitation, interpreted with the diagrammed RNA-to-cDNA conversion",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Because methylation of adenosine does not alter its ability to base pair with thymidine or uracil, m6A is not amenable to detection with standard hybridization or sequencing-based methods.",
+          "bbox": null,
+          "rationale": "Combined with the visible conversion of selected RNA into unmarked cDNA and the catalogue sequencing statement, this supports DNA sequence as the carrier of fragment identity and antibody enrichment as the association with methylation, rather than a methylation-specific base call."
+        }
+      ]
+    },
+    {
+      "target": "flow:f5i",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue explicitly says RNA is reverse-transcribed to cDNA and sequenced; this supports cDNA entering the broad library/sequencing continuation. The route is textual and does not invent an arrow beyond the image. The MeRIP methods corroborate library preparation and sequencing at that broad level.",
+      "evidence": [
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00060], Experimental Procedures: MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing libraries were prepared using the Illumina protocol for mRNA samples, and sequencing was performed on an Illumina GAIIx or an Illumina HiSeq2000 as indicated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f5o",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Sequencing produces sequence reads, also explicitly discussed in the catalogue and the MeRIP results. The route is correctly a data output and terminates at s_reads, not at RNA or an antibody complex.",
+      "evidence": [
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00060], Experimental Procedures: MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing libraries were prepared using the Illumina protocol for mRNA samples, and sequencing was performed on an Illumina GAIIx or an Illumina HiSeq2000 as indicated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00020], read peaks and non-IP input",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Furthermore, enrichment of reads in these regions was not observed in the non-IP control sample, which was composed of the input RNA prior to m6A immunoprecipitation, demonstrating the specificity of these peaks (Figure S3).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_extract",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The labeled arrow connects the repeated biological vignette to free marked RNA. Inputs, outputs and outgoing route consistently change contextual RNA into extracted RNA; no purification chemistry, RBP capture or persistent complex is fabricated.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Workflow-start vignette -> gray arrow labeled Extract RNA -> free long purple RNA bearing three red marks.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.204,
+            0.0,
+            0.536,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "After Extract RNA: a long free purple strand bearing three red marks, before the next gray arrow.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.442,
+            0.26,
+            0.536,
+            0.44
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_fractionate",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The source label Fractionate RNA is preserved. Fragmentation is a warranted explicit interpretation of the visible long-to-short transformation, independently confirmed before immunoprecipitation in the MeRIP full text. The operation correctly retains RNA identity and modifications without assigning cleavage chemistry or end groups.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Long marked purple RNA -> gray arrow labeled Fractionate RNA -> shorter purple fragments, some marked and some unmarked.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.442,
+            0.13,
+            0.674,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00019], Results: MeRIP-Seq Identifies m6A-Containing RNAs Throughout the Transcriptome",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The procedure for MeRIP-Seq (outlined in Figure 4A) involves randomly fragmenting the RNA to approximately 100 nt-sized fragments prior to immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00019], fragment-to-site relationship",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Because an m6A site could lie anywhere along the length of a given immunoprecipitated 100 nt fragment, sequencing reads are expected to map to a region which contains the m6A site near its center.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_ip",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The broad operation accounts for antibody association, selection and recovery together. Antibodies are selection reagents rather than the material carried into reverse transcription. Its recovered-RNA output agrees with the outgoing flow and RT input. MeRIP-specific bead capture and two rounds are distinguished from the single schematic block; the figure does not count rounds or draw a flow-through branch.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Fragment pool -> gray arrow -> capture panel labeled Immunoprecipitate, with pink antibodies contacting red marks and unbound unmarked fragments; next gray arrow leads to three marked RNA fragments without antibody icons.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.59,
+            0.0,
+            0.91,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Between capture and cDNA: three retained purple fragments with red marks, without pink antibody icons; no separate outgoing flow-through route.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.876,
+            0.13,
+            0.908,
+            0.59
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00113], Figure 4A caption, inspected as text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNAs containing m6A are then immunoprecipitated by mixing the RNA with m6A antibody-coupled Dynabeads. m6A-containing RNAs are then eluted from the antibody-coupled beads and subjected to a second round of m6A immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Cons (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies not specific to target will precipitate nonspecific RNA modifications",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_rt",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Selected RNA is the template and cDNA is the product across the labeled conversion. The RNA-to-DNA carrier change and indirect methylation association are supported. No particular enzyme, primer, additional strand-synthesis sequence or methylation-specific base-call chemistry is introduced.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Right-hand retained purple RNA fragments -> gray arrow -> three black lines labeled cDNA; Reverse transcription label identifies this conversion.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.858,
+            0.1,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Far-right endpoint: three black strands labeled cDNA, without red marks, adapter structures, strand arrows, barcodes or terminal-group labels.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.97,
+            0.13,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00006], standard-sequencing limitation, interpreted with the diagrammed RNA-to-cDNA conversion",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Because methylation of adenosine does not alter its ability to base pair with thymidine or uracil, m6A is not amenable to detection with standard hybridization or sequencing-based methods.",
+          "bbox": null,
+          "rationale": "Combined with the visible conversion of selected RNA into unmarked cDNA and the catalogue sequencing statement, this supports DNA sequence as the carrier of fragment identity and antibody enrichment as the association with methylation, rather than a methylation-specific base call."
+        }
+      ]
+    },
+    {
+      "target": "operation:op_sequence",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The cDNA input and reads output form a consistent broad library/sequencing continuation supported by the catalogue and the MeRIP methods. It is correctly labeled textual; no inner adapter/preparation order is inferred. Input-control interpretation is explicitly attributed to MeRIP. For m6A-seq the scope rationale admits only the abstract-supported sequencing purpose, leaving its detailed interface unresolved.",
+      "evidence": [
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00060], Experimental Procedures: MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing libraries were prepared using the Illumina protocol for mRNA samples, and sequencing was performed on an Illumina GAIIx or an Illumina HiSeq2000 as indicated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00020], read peaks and non-IP input",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Furthermore, enrichment of reads in these regions was not observed in the non-IP control sample, which was composed of the input RNA prior to m6A immunoprecipitation, demonstrating the specificity of these peaks (Figure S3).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22575960",
+          "locator": "Supplied PubMed abstract, method description; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present the human and mouse m(6)A modification landscape in a transcriptome-wide manner, using a novel approach, m(6)A-seq, based on antibody-mediated capture and massively parallel sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_22575960",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify Dominissini et al., Nature, DOI 10.1038/nature11112, and the catalogue assigns it to m6A-seq. content_checked is justified only at the supplied abstract level, explicitly acknowledged in the candidate. Capture and massively parallel sequencing support its architecture relationship; reaction order and detailed library chemistry are not claimed verified.",
+      "evidence": [
+        {
+          "source_id": "metadata:22575960",
+          "locator": "Supplied publication metadata: title, PMID and DOI; identity checked separately from scientific content",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Topology of the human and mouse m6A RNA methylomes revealed by m6A-seq.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Method references (jcr:content/par/text_1/text), m6A-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "m6A-Seq:Dominissini D. et al. (2012) Topology of the human and mouse m6A RNA methylomes revealed by m6A-seq. Nature 485: 201-206",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22575960",
+          "locator": "Supplied PubMed abstract, method description; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present the human and mouse m(6)A modification landscape in a transcriptome-wide manner, using a novel approach, m(6)A-seq, based on antibody-mediated capture and massively parallel sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_22608085",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The metadata identify Meyer et al., Cell, DOI 10.1016/j.cell.2012.05.003, and the catalogue explicitly assigns this reference to MeRIP-Seq. Full-text results, Experimental Procedures and Figure 4A caption were inspected as text and support the stated architecture and resolution claims. content_checked/supports_architecture is justified by that content, not merely bibliographic identity. No unseen paper image or historical-priority claim is treated as verified.",
+      "evidence": [
+        {
+          "source_id": "metadata:22608085",
+          "locator": "Supplied publication metadata: title, PMID and DOI; identity checked separately from scientific content",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Comprehensive analysis of mRNA methylation reveals enrichment in 3' UTRs and near stop codons.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Method references (jcr:content/par/text_1/text), MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq: Meyer K. D., Saletore Y., Zumbo P., Elemento O., Mason C. E., et al. (2012) Comprehensive analysis of mRNA methylation reveals enrichment in 3' UTRs and near stop codons. Cell 149: 1635-1646",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00019], Results: MeRIP-Seq Identifies m6A-Containing RNAs Throughout the Transcriptome",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The procedure for MeRIP-Seq (outlined in Figure 4A) involves randomly fragmenting the RNA to approximately 100 nt-sized fragments prior to immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00113], Figure 4A caption, inspected as text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNAs containing m6A are then immunoprecipitated by mixing the RNA with m6A antibody-coupled Dynabeads. m6A-containing RNAs are then eluted from the antibody-coupled beads and subjected to a second round of m6A immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00060], Experimental Procedures: MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing libraries were prepared using the Illumina protocol for mRNA samples, and sequencing was performed on an Illumina GAIIx or an Illumina HiSeq2000 as indicated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00031], local enrichment and resolution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Importantly, because MeRIP-Seq identifies m6A sites at a resolution of 200 nt, there could be multiple individual m6A residues within the area covered by each peak.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_24979058",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title and DOI 10.1016/j.ymeth.2014.06.008 identify a MeRIP-Seq data-analysis protocol. The inspected abstract describes exomePeak processing, not the origin of the depicted wet-laboratory assay or a separate capture variant. Background status and MeRIP-Seq association are supported. No analysis settings or full-text protocol claims are imported.",
+      "evidence": [
+        {
+          "source_id": "metadata:24979058",
+          "locator": "Supplied publication metadata: title, PMID and DOI; identity checked separately from scientific content",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A protocol for RNA methylation differential analysis with MeRIP-Seq data and exomePeak R/Bioconductor package.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:24979058",
+          "locator": "Supplied abstract, computational MeRIP-Seq analysis protocol; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therein provide here a detailed and easy-to-use protocol of using exomePeak R/Bioconductor package along with other software programs for analysis of MeRIP-Seq data, which covers raw reads alignment, RNA methylation site detection, motif discovery, differential RNA methylation analysis, and functional analysis.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Related publications, Meng et al.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Meng J., Lu Z., Liu H., et al. A protocol for RNA methylation differential analysis with MeRIP-Seq data and exomePeak R/Bioconductor package. Methods. 2014;69:274-281",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27117702",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title and DOI 10.1016/j.molcel.2016.03.021 identify the METTL3 translation paper. The inspected abstract supports biological background, not a new capture/library variant or any transformation in this graph. The related-publication association with the grouped card is accurately separated from method attribution and full-text verification.",
+      "evidence": [
+        {
+          "source_id": "metadata:27117702",
+          "locator": "Supplied publication metadata: title, PMID and DOI; identity checked separately from scientific content",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The m(6)A Methyltransferase METTL3 Promotes Translation in Human Cancer Cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27117702",
+          "locator": "Supplied abstract, METTL3 biological role; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we find that METTL3 promotes translation of certain mRNAs including epidermal growth factor receptor (EGFR) and the Hippo pathway effector TAZ in human cancer cells.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Related publications, Lin et al.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Lin S., Choe J., Du P., Triboulet R. and Gregory R. I. The m(6)A Methyltransferase METTL3 Promotes Translation in Human Cancer Cells. Mol Cell. 2016;62:335-345",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27318512",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title and DOI 10.1016/j.tibtech.2016.05.010 identify a computational stem-cell biology review. Its inspected abstract does not describe the capture/library method. The catalogue lists it among related publications; background is therefore supported. The two method labels associate it with the grouped card, not with invention or separate implementations. Full-text scientific verification is not asserted.",
+      "evidence": [
+        {
+          "source_id": "metadata:27318512",
+          "locator": "Supplied publication metadata: title, PMID and DOI; identity checked separately from scientific content",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Computational Tools for Stem Cell Biology.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27318512",
+          "locator": "Supplied abstract, review topic; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In this review, we provide an overview of this new field and pay particular attention to the impact that single cell transcriptomics is expected to have on our understanding of development and our ability to engineer cell fate.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Related publications, Bian and Cahan",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Bian Q. and Cahan P. Computational Tools for Stem Cell Biology. Trends Biotechnol. 2016;",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27773535",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "PMID/title and DOI 10.1016/j.chom.2016.09.015 identify the Flaviviridae RNA methylation paper. Its abstract reports viral methylation mapping but does not name or specify a capture/library implementation. The candidate accurately retains it as catalogue-related application/background rather than evidence for a distinct variant or the detailed graph; content checking is explicitly abstract-only.",
+      "evidence": [
+        {
+          "source_id": "metadata:27773535",
+          "locator": "Supplied publication metadata: title, PMID and DOI; identity checked separately from scientific content",
+          "basis": "text",
+          "support": "reported",
+          "quote": "N6-Methyladenosine in Flaviviridae Viral RNA Genomes Regulates Infection.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27773535",
+          "locator": "Supplied abstract, viral RNA methylation application; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We further mapped m6A sites across the HCV genome and determined that inactivating m6A in one viral genomic region increases viral titer without affecting RNA replication.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Related publications, Gokhale et al.",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Gokhale N. S., McIntyre A. B., McFadden M. J., et al. N6-Methyladenosine in Flaviviridae Viral RNA Genomes Regulates Infection. Cell Host Microbe. 2016;",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "record",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Independent review supports this schematic-level architecture. All six states, five operations, ten flows, two method scopes, six paper matches and the declared unknown were checked individually. The entire PNG has one retained route ending at cDNA; the duplicate title vignette is not a second assay branch. Library preparation/sequencing is explicitly a textual continuation. No depicted transformation is omitted, and no unsupported compartment, terminal chemistry, adapter or developmental relationship is asserted. The caption Fractionate RNA is retained and its long-to-short change is explicitly interpreted using MeRIP full text; no consequential diagram/paper conflict requires a separate correction. Acceptance concerns the family depiction and the stated evidence limits, not unverified equivalence of the two implementations.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Entire supplied PNG: left method-title vignette; repeated Methylated RNA/RBP context; Extract RNA; Fractionate RNA; Immunoprecipitate; Reverse transcription; cDNA. All intervening gray arrows inspected.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00019], Results: MeRIP-Seq Identifies m6A-Containing RNAs Throughout the Transcriptome",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The procedure for MeRIP-Seq (outlined in Figure 4A) involves randomly fragmenting the RNA to approximately 100 nt-sized fragments prior to immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00060], Experimental Procedures: MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing libraries were prepared using the Illumina protocol for mRNA samples, and sequencing was performed on an Illumina GAIIx or an Illumina HiSeq2000 as indicated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:MeRIP-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The catalogue assigns MeRIP-Seq to Meyer PMID 22608085, and the full text supports fragmentation followed by two rounds of m6A capture and sequencing-library preparation. Extraction and RT are supplied by the diagram/catalogue. All five broad operations are therefore supported for this explanatory scope; omitted routine and unshown implementation steps need not be reconstructed. Two capture rounds can be encompassed by the broad capture block without rewriting the figure.",
+      "evidence": [
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Method references (jcr:content/par/text_1/text), MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq: Meyer K. D., Saletore Y., Zumbo P., Elemento O., Mason C. E., et al. (2012) Comprehensive analysis of mRNA methylation reveals enrichment in 3' UTRs and near stop codons. Cell 149: 1635-1646",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Entire supplied PNG: left method-title vignette; repeated Methylated RNA/RBP context; Extract RNA; Fractionate RNA; Immunoprecipitate; Reverse transcription; cDNA. All intervening gray arrows inspected.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00019], Results: MeRIP-Seq Identifies m6A-Containing RNAs Throughout the Transcriptome",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The procedure for MeRIP-Seq (outlined in Figure 4A) involves randomly fragmenting the RNA to approximately 100 nt-sized fragments prior to immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00113], Figure 4A caption, inspected as text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNAs containing m6A are then immunoprecipitated by mixing the RNA with m6A antibody-coupled Dynabeads. m6A-containing RNAs are then eluted from the antibody-coupled beads and subjected to a second round of m6A immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00060], Experimental Procedures: MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing libraries were prepared using the Illumina protocol for mRNA samples, and sequencing was performed on an Illumina GAIIx or an Illumina HiSeq2000 as indicated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:m6A-seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The partial implementation assignment is appropriately marked unresolved. The grouped diagram supports the family route, while the supplied Dominissini abstract supports only antibody capture and massively parallel sequencing independently. The rationale explicitly limits op_ip/op_sequence to these purposes and leaves extraction, fragmentation, RT order and the DNA/library interface unverified for this implementation. The family graph is not asserted to be a fully verified separate Dominissini protocol, an exact alias, or a development relationship.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Left method-title vignette and repeated workflow-start vignette: Methylated RNA, blue RBP icon, gray chromatin-like forms; only the repeated vignette enters the extraction arrow.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.384,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Method references (jcr:content/par/text_1/text), m6A-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "m6A-Seq:Dominissini D. et al. (2012) Topology of the human and mouse m6A RNA methylomes revealed by m6A-seq. Nature 485: 201-206",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22575960",
+          "locator": "Supplied PubMed abstract, method description; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present the human and mouse m(6)A modification landscape in a transcriptome-wide manner, using a novel approach, m(6)A-seq, based on antibody-mediated capture and massively parallel sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_cdna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The final material is explicitly cDNA, shown as black strands lacking red marks. Fragment identity passes into DNA, while the methylation association derives from prior enrichment. This interpretation is supported by the base-pairing limitation, not by treating absence of the icon as proof of a specific chemical removal reaction. No unshown library structure is asserted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Right-hand retained purple RNA fragments -> gray arrow -> three black lines labeled cDNA; Reverse transcription label identifies this conversion.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.858,
+            0.1,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Far-right endpoint: three black strands labeled cDNA, without red marks, adapter structures, strand arrows, barcodes or terminal-group labels.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.97,
+            0.13,
+            1.0,
+            0.82
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00006], standard-sequencing limitation, interpreted with the diagrammed RNA-to-cDNA conversion",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Because methylation of adenosine does not alter its ability to base pair with thymidine or uracil, m6A is not amenable to detection with standard hybridization or sequencing-based methods.",
+          "bbox": null,
+          "rationale": "Combined with the visible conversion of selected RNA into unmarked cDNA and the catalogue sequencing statement, this supports DNA sequence as the carrier of fragment identity and antibody enrichment as the association with methylation, rather than a methylation-specific base call."
+        }
+      ]
+    },
+    {
+      "target": "state:s_context",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The repeated Methylated RNA/RBP vignette supplies the biological context for extraction. Its chromatin-like and RBP icons are described visually rather than promoted to measured complexes, crosslinking, or a second retained branch. The leftmost copy belongs to the method title.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Left method-title vignette and repeated workflow-start vignette: Methylated RNA, blue RBP icon, gray chromatin-like forms; only the repeated vignette enters the extraction arrow.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.384,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Workflow-start vignette -> gray arrow labeled Extract RNA -> free long purple RNA bearing three red marks.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.204,
+            0.0,
+            0.536,
+            0.81
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_enriched",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The state correctly distinguishes antibody-associated RNA in the capture panel from the downstream retained RNA drawn without antibodies. Recovery is supported by the MeRIP Figure 4A caption as text. Enrichment is not presented as perfect specificity or complete recovery; no discarded-material branch is invented.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Fragment pool -> gray arrow -> capture panel labeled Immunoprecipitate, with pink antibodies contacting red marks and unbound unmarked fragments; next gray arrow leads to three marked RNA fragments without antibody icons.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.59,
+            0.0,
+            0.91,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Between capture and cDNA: three retained purple fragments with red marks, without pink antibody icons; no separate outgoing flow-through route.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.876,
+            0.13,
+            0.908,
+            0.59
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00113], Figure 4A caption, inspected as text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "RNAs containing m6A are then immunoprecipitated by mixing the RNA with m6A antibody-coupled Dynabeads. m6A-containing RNAs are then eluted from the antibody-coupled beads and subjected to a second round of m6A immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Cons (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies not specific to target will precipitate nonspecific RNA modifications",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_fragments",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The figure shows marked and unmarked short RNA pieces derived from the long strand. Modifications stay on the containing pieces; the picture supplies no consequential end-group chemistry. MeRIP full text independently confirms fragmentation before capture.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Long marked purple RNA -> gray arrow labeled Fractionate RNA -> shorter purple fragments, some marked and some unmarked.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.442,
+            0.13,
+            0.674,
+            0.81
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Fragment pool upstream of antibody capture: shorter purple lines include red-marked and unmarked pieces; no terminal-group symbols or end legend.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.59,
+            0.13,
+            0.674,
+            0.56
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00019], Results: MeRIP-Seq Identifies m6A-Containing RNAs Throughout the Transcriptome",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The procedure for MeRIP-Seq (outlined in Figure 4A) involves randomly fragmenting the RNA to approximately 100 nt-sized fragments prior to immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_reads",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Reads are correctly identified as a text-supported continuation from selected RNA-derived DNA, not an extra depicted panel. Non-IP comparison, regional localization and the approximately 200-nt resolution are explicitly restricted to the MeRIP paper. Multiple marks per peak and stoichiometry ambiguity are supported; these reads are not claimed to report individual methylated bases directly.",
+      "evidence": [
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00060], Experimental Procedures: MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing libraries were prepared using the Illumina protocol for mRNA samples, and sequencing was performed on an Illumina GAIIx or an Illumina HiSeq2000 as indicated.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00020], read peaks and non-IP input",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Furthermore, enrichment of reads in these regions was not observed in the non-IP control sample, which was composed of the input RNA prior to m6A immunoprecipitation, demonstrating the specificity of these peaks (Figure S3).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00031], local enrichment and resolution",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Importantly, because MeRIP-Seq identifies m6A sites at a resolution of 200 nt, there could be multiple individual m6A residues within the area covered by each peak.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00031], interpretation of enrichment",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Therefore, the peaks with the highest levels of local m6A enrichment may represent a single adenosine residue which exhibits a high degree of methylation, or multiple adjacent m6A residues with a lower stoichiometry of methylation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00006], standard-sequencing limitation, interpreted with the diagrammed RNA-to-cDNA conversion",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "Because methylation of adenosine does not alter its ability to base pair with thymidine or uracil, m6A is not amenable to detection with standard hybridization or sequencing-based methods.",
+          "bbox": null,
+          "rationale": "Combined with the visible conversion of selected RNA into unmarked cDNA and the catalogue sequencing statement, this supports DNA sequence as the carrier of fragment identity and antibody enrichment as the association with methylation, rather than a methylation-specific base call."
+        }
+      ]
+    },
+    {
+      "target": "state:s_rna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The free long purple RNA and its three red marks are visible after extraction. Interpreting the marks as the targeted methylation is grounded in the m6A-specific title and catalogue. The state correctly avoids imposing a specimen or poly(A) requirement absent from this image.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "After Extract RNA: a long free purple strand bearing three red marks, before the next gray arrow.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.442,
+            0.26,
+            0.536,
+            0.44
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Assay description (jcr:content/par/text_0/text)",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MeRIP-Seq maps m6A-methylated RNA. In this method, m6A-specific antibodies are used to immunoprecipitate RNA. RNA is reverse-transcribed to cDNA and sequenced.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_m6a_implementation",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The exact unanswered question is correctly delimited: whether the Dominissini implementation follows the family RNA-fragmentation/capture/RT/cDNA-library order. The supplied abstract does not answer it; methods or a supplementary protocol would be needed for an implementation-specific assignment. Nonblocking status is justified because the candidate retains the depicted family route, supports the MeRIP member separately, and explicitly withholds that detailed m6A-seq claim. This is acceptance of the documented evidence boundary, not a positive finding that the implementations are identical.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_1a9f9b29e5a1fda8cdb5fd8c",
+          "locator": "Entire supplied PNG: left method-title vignette; repeated Methylated RNA/RBP context; Extract RNA; Fractionate RNA; Immunoprecipitate; Reverse transcription; cDNA. All intervening gray arrows inspected.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:merip-seq-m6a-seq",
+          "locator": "Method references (jcr:content/par/text_1/text), m6A-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "m6A-Seq:Dominissini D. et al. (2012) Topology of the human and mouse m6A RNA methylomes revealed by m6A-seq. Nature 485: 201-206",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22575960",
+          "locator": "Supplied PubMed abstract, method description; full text not supplied",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present the human and mouse m(6)A modification landscape in a transcriptome-wide manner, using a novel approach, m(6)A-seq, based on antibody-mediated capture and massively parallel sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00019], Results: MeRIP-Seq Identifies m6A-Containing RNAs Throughout the Transcriptome",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The procedure for MeRIP-Seq (outlined in Figure 4A) involves randomly fragmenting the RNA to approximately 100 nt-sized fragments prior to immunoprecipitation.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:22608085",
+          "locator": "[b00060], Experimental Procedures: MeRIP-Seq",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing libraries were prepared using the Illumina protocol for mRNA samples, and sequencing was performed on an Illumina GAIIx or an Illumina HiSeq2000 as indicated.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

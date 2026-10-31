@@ -1,0 +1,1616 @@
+{
+  "format_version": "illumina_diagram_review/1.0",
+  "record_id": "maine-seq-mnase-seq-nucleo-seq",
+  "candidate_sha256": "4b26d0c7cac9c5163bb82b5b438288f82b1a2e1c1fd672839d42893f67538a64",
+  "inspected_sources": [
+    "card:maine-seq-mnase-seq-nucleo-seq",
+    "diagram:asset_fae486eaefb220a3d9cfb38a",
+    "paper:1148184",
+    "paper:1148185",
+    "paper:18329373",
+    "paper:19572828",
+    "paper:20054063",
+    "paper:20512117",
+    "paper:21602827",
+    "paper:22025700",
+    "paper:23088423",
+    "paper:23811145",
+    "paper:26400169",
+    "paper:26490019",
+    "paper:26578577",
+    "paper:26721890",
+    "paper:26790608",
+    "paper:26814966",
+    "paper:26818620",
+    "paper:27008915",
+    "paper:27067544",
+    "paper:27151365",
+    "paper:27159561",
+    "paper:27184706",
+    "paper:27325136",
+    "paper:27462443",
+    "paper:27477279",
+    "paper:27487356",
+    "paper:6272844",
+    "metadata:1148184",
+    "metadata:1148185",
+    "metadata:18329373",
+    "metadata:19572828",
+    "metadata:20054063",
+    "metadata:20512117",
+    "metadata:21602827",
+    "metadata:22025700",
+    "metadata:23088423",
+    "metadata:23811145",
+    "metadata:26490019",
+    "metadata:26578577",
+    "metadata:6272844"
+  ],
+  "checks": [
+    {
+      "target": "record",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "Revision required for one method-applicability/interface error. The complete depicted linear route, DNA readout carrier, text-only downstream interfaces and all 27 paper associations are supported at the stated evidence levels. However, scope:Nucleo-Seq includes op_extract, whose fixed input s_complexes is the isolated-particle output of the excluded op_isolate. The cited implementation extracts from the digest before selecting purified DNA. The correction accurately states that distinction but leaves the incompatible local operation assignment in place. Revise scope:Nucleo-Seq and correction:c_nucleo_selection_object as detailed below; preserve the supported family diagram route. No additional routine execution details or external research are needed for this correction.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21602827",
+          "locator": "Full text [b00015], Methods summary; extraction followed by selection of purified DNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After digestion, reactions were stopped with EDTA, samples were treated with proteinase K, and nucleosome-bound DNA was extracted with phenol-chloroform and precipitated with ethanol (Supplementary methods). Purified DNA was size-selected (120–180 bp) on agarose to obtain mononucleosome cores, followed by sequencing library construction.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:MAINE-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Supported at the explicitly declared schematic level. The image caption co-designates MAINE-Seq and MNase-Seq, and the Ponts abstract describes mononucleosome purification, histone-bound DNA extraction and sequencing. This supports the five broad operations without verifying unshown isolation or library chemistry. FAIRE is a separate complementary assay in the abstract and is correctly excluded from the depicted route.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Left title illustration and caption: MNase-assisted isolation of nucleosomes (MAINE-Seq); Also Micrococcal nuclease sequencing (MNase-Seq). Yellow wraps have no legend; no transfer arrow joins this illustration to the workflow.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20054063",
+          "locator": "Abstract; MAINE versus complementary FAIRE route",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have generated genome-wide maps of nucleosome occupancy across the parasite erythrocytic cycle using two complementary assays--the formaldehyde-assisted isolation of regulatory elements to extract protein-free DNA (FAIRE) and the MNase-mediated purification of mononucleosomes to extract histone-bound DNA (MAINE), both techniques being coupled to high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing provides accurate representation of the location of regulatory DNA-binding proteins in the genome10.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:MNase-Seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The caption and card support the three drawn operations and the two broad downstream interfaces. The starting label is a material state, and the scope does not invent chromatin opening, affinity selection, adapter chemistry or short-fragment recovery. Different cited applications and technical variants are not asserted to be interchangeable.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Left title illustration and caption: MNase-assisted isolation of nucleosomes (MAINE-Seq); Also Micrococcal nuclease sequencing (MNase-Seq). Yellow wraps have no legend; no transfer arrow joins this illustration to the workflow.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In MNase-Seq, gDNA is treated with MNase. Sequences bound by chromatin proteins are protected from MNase digestion.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing provides accurate representation of the location of regulatory DNA-binding proteins in the genome10.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18329373",
+          "locator": "Abstract; nucleosome-end sequencing and positional readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have generated genome-wide maps of nucleosome positions in both resting and activated human CD4+ T cells by direct sequencing of nucleosome ends using the Solexa high-throughput sequencing technique.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Nucleo-Seq",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "The association with Valouev, the SOLiD platform, and extraction-before-purified-DNA-selection are supported. The operation assignment is nevertheless inconsistent: op_extract requires s_complexes, defined as isolated trimmed complexes produced by op_isolate, while this scope excludes op_isolate specifically because that input preparation is not established for the implementation. A shared extraction purpose does not establish the same local input-state interface. Remove op_extract from this scope and retain the paper-supported extraction correspondence in the correction, or use a separately scoped extraction interface with the supported digest input. Do not change the image-derived s_complexes -> op_extract route or require a new depicted branch.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, first paragraph; numbered references 7 and 8 identify the associated papers",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The terms MNase-assisted isolation of nucleosomes sequencing (MAINE-seq)5, 6 Nucleo-Seq7, and Nuc-seq8 are not commonly used.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21602827",
+          "locator": "Full text [b00015], Methods summary; native chromatin preparation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nucleosome cores were prepared as previously described7; cells were snap-frozen and crushed to release chromatin, followed by micrococcal nuclease treatment.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21602827",
+          "locator": "Full text [b00015], Methods summary; extraction followed by selection of purified DNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After digestion, reactions were stopped with EDTA, samples were treated with proteinase K, and nucleosome-bound DNA was extracted with phenol-chloroform and precipitated with ethanol (Supplementary methods). Purified DNA was size-selected (120–180 bp) on agarose to obtain mononucleosome cores, followed by sequencing library construction.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21602827",
+          "locator": "Full text [b00003], study design and platform",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To provide sufficient depth for both local and global analyses, we used high-throughput SOLiD technology, generating 584, 342, and 343 million mapped reads for granulocytes, CD4+, and CD8+ T-cells, respectively.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "scope:Nuc-seq",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Supported as a deliberately partial, unresolved mapping. The associated paper explicitly starts the library interface with MNase-digested mononucleosomal DNA and uses Illumina sequencing. It does not establish the intervening isolation/extraction boundaries in the inspected main text. Excluding op_isolate and op_extract is justified. The methylation comparison does not supply a bisulfite-conversion step on this library.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, first paragraph; numbered references 7 and 8 identify the associated papers",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The terms MNase-assisted isolation of nucleosomes sequencing (MAINE-seq)5, 6 Nucleo-Seq7, and Nuc-seq8 are not commonly used.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20512117",
+          "locator": "Full text [b00017], Method Summary; mononucleosomal DNA to Illumina library and sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Approximately 300ng of MNase digested mononucleosome DNA were used for Illumina library generation following manufacturer instructions. Libraries were sequenced using Illumina Genome Analyzer II following manufacturer instructions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20512117",
+          "locator": "Full text [b00008], comparison to independent methylation data",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To study the relationship of DNA methylation with nucleosome positions, we utilized our single nucleotide resolution whole genome bisulfite-sequencing data3.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_chromatin",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The starting panel shows DNA around gray nucleosomes with exposed connecting DNA and is labeled Open chromatin. The title illustration has yellow wraps, no defining legend and no connecting workflow arrow. The candidate correctly treats it as an illustration rather than a separate material transfer or a defined modification. No compartment is depicted.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Workflow starting region labeled Open chromatin: gray nucleosome particles connected by black DNA; arrow points into MNase digestion.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Left title illustration and caption: MNase-assisted isolation of nucleosomes (MAINE-Seq); Also Micrococcal nuclease sequencing (MNase-Seq). Yellow wraps have no legend; no transfer arrow joins this illustration to the workflow.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "This is a schematic digestion intermediate containing retained protein-associated DNA. The candidate preserves the still-connected drawing and distinguishes the later separated particles. Preferential linker attack and continued intraparticle attack are supported, so the state does not imply complete or perfectly nucleosome-specific protection.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "MNase digestion region: gray nucleosomes remain on connected DNA, orange circles occur along exposed DNA, and the rightward arrow leads to Isolate trimmed complexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In MNase-Seq, gDNA is treated with MNase. Sequences bound by chromatin proteins are protected from MNase digestion.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:1148185",
+          "locator": "Abstract; interpretation of initial versus further nuclease attack",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These data suggest that the initial site of nuclease cleavage in chromatin resides within the DNA bridging the repeating monomeric subunits. Further attack results in cleavage at a set of sites within the monomer liberating a pattern of smaller DNA fragments which probably represents the points of intimate contact between the histones and DNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_complexes",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The two icons depict a single stage containing separated DNA-wrapped protein particles. DNA-protein association persists until extraction; the icons do not establish alternatives, separate branches or pooling. The isolated-particle state is valid for the drawn family route. Its unsupported assignment to the Nucleo-Seq extraction input is addressed under that scope.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_dna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extraction arrow terminates in free DNA represented by parallel blue lines. The card identifies this as DNA recovered from DNA-protein complexes for library preparation. The candidate preserves DNA as carrier of genomic sequence association and does not invent chemical ends, adapters, barcodes or attachment states.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Far-right DNA label and two parallel blue lines; no adapter, polarity, end group, barcode, tether, compartment or subsequent arrow is specified.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The library is explicitly supported by catalogue text and is correctly labeled as unshown in the PNG. It derives from recovered protected genomic DNA; the candidate does not identify the proteins themselves as sequenced material or fix an unsupported kit, adapter, amplification scheme or read layout.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In MNase-Seq, gDNA is treated with MNase. Sequences bound by chromatin proteins are protected from MNase digestion.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Far-right DNA label and two parallel blue lines; no adapter, polarity, end group, barcode, tether, compartment or subsequent arrow is specified.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "state:s_reads",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Nucleosome-end sequencing supports genomic position maps, while the card and supporting literature permit other protection footprints in suitable implementations. The candidate correctly limits protein identification, distinguishes occupancy from accessibility and qualifies the effects of digestion, sequence and library recovery. Neither absence of reads nor a surviving footprint is treated as perfect biological specificity.",
+      "evidence": [
+        {
+          "source_id": "paper:18329373",
+          "locator": "Abstract; nucleosome-end sequencing and positional readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have generated genome-wide maps of nucleosome positions in both resting and activated human CD4+ T cells by direct sequencing of nucleosome ends using the Solexa high-throughput sequencing technique.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Cons, final item",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Integration of MNase with ChIP data is necessary to identify and differentiate similar protein-binding sites",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26578577",
+          "locator": "Full text [b00007], Introduction; technical influences on recovered nucleosomal signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our analysis shows that nucleosomal signal is highly susceptible to depletion in AT-rich sequences due to over-digestion of chromatin, inefficient cross-linking of nucleosomes and/or unequal amplification of various DNA fragments.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27151365",
+          "locator": "Abstract; occupancy and accessibility are distinct readouts",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We find that changes in accessibility at enhancers, promoters and other regulatory regions do not correlate with changes in nucleosome occupancy. Moreover, high nucleosome occupancy does not necessarily preclude high accessibility, which reveals novel principles of chromatin regulation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The image labels MNase digestion between connected chromatin and trimmed particles. The card and Axel abstract support preferential exposed/linker-DNA cleavage and relative protection, with continued digestion affecting retained DNA. The orange circles are expressly identified as an interpretation of unlabeled activity symbols, not substrate, product or a specified chemical structure. The enzyme is treated as a reagent rather than the sequenced carrier.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Workflow starting region labeled Open chromatin: gray nucleosome particles connected by black DNA; arrow points into MNase digestion.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "MNase digestion region: gray nucleosomes remain on connected DNA, orange circles occur along exposed DNA, and the rightward arrow leads to Isolate trimmed complexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In MNase-Seq, gDNA is treated with MNase. Sequences bound by chromatin proteins are protected from MNase digestion.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:1148185",
+          "locator": "Abstract; interpretation of initial versus further nuclease attack",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These data suggest that the initial site of nuclease cleavage in chromatin resides within the DNA bridging the repeating monomeric subunits. Further attack results in cleavage at a set of sites within the monomer liberating a pattern of smaller DNA fragments which probably represents the points of intimate contact between the histones and DNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_isolate",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Supported for the image-derived MAINE/MNase family route: digested chromatin leads to separated trimmed particles that retain bound DNA. The schematic provides no separation technique or protein-specific affinity step, and the candidate does not add one. The MAINE abstract supports mononucleosome purification and histone-bound DNA recovery.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "MNase digestion region: gray nucleosomes remain on connected DNA, orange circles occur along exposed DNA, and the rightward arrow leads to Isolate trimmed complexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20054063",
+          "locator": "Abstract; MAINE versus complementary FAIRE route",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have generated genome-wide maps of nucleosome occupancy across the parasite erythrocytic cycle using two complementary assays--the formaldehyde-assisted isolation of regulatory elements to extract protein-free DNA (FAIRE) and the MNase-mediated purification of mononucleosomes to extract histone-bound DNA (MAINE), both techniques being coupled to high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_extract",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Supported as the local depicted operation on isolated DNA-protein complexes, producing free DNA while preserving genomic sequence association. The output agrees with s_dna and the library input. This positive check concerns the family operation itself; its input requirement is the reason the Nucleo-Seq assignment requires revision.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Far-right DNA label and two parallel blue lines; no adapter, polarity, end group, barcode, tether, compartment or subsequent arrow is specified.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The card explicitly uses extracted DNA for sequencing-library preparation. A broad operation is appropriate because the image ends at DNA and neither source fixes a universally applicable internal preparation sequence. The input and output remain DNA-derived material, consistent with adjacent routes.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Far-right DNA label and two parallel blue lines; no adapter, polarity, end group, barcode, tether, compartment or subsequent arrow is specified.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "operation:op_sequence",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The text supports deep sequencing, and the Schones abstract connects nucleosome-end sequence to genomic positions. Library input, data output and protected-DNA carrier agree. Protein identity is appropriately qualified, and no unshown platform-specific sequencing chemistry is imposed on the entire family.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing provides accurate representation of the location of regulatory DNA-binding proteins in the genome10.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18329373",
+          "locator": "Abstract; nucleosome-end sequencing and positional readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have generated genome-wide maps of nucleosome positions in both resting and activated human CD4+ T cells by direct sequencing of nucleosome ends using the Solexa high-throughput sequencing technique.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Cons, final item",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Integration of MNase with ChIP data is necessary to identify and differentiate similar protein-binding sites",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_chromatin_op_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The explicit rightward arrow carries the Open chromatin material into the MNase digestion panel; this is material input rather than a transfer from the unconnected title illustration.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Workflow starting region labeled Open chromatin: gray nucleosome particles connected by black DNA; arrow points into MNase digestion.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "MNase digestion region: gray nucleosomes remain on connected DNA, orange circles occur along exposed DNA, and the rightward arrow leads to Isolate trimmed complexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_digest_s_digest",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The operation produces the digested chromatin intermediate described by the card and digestion panel. The candidate does not misidentify the orange enzyme/activity symbols as the output material. Relative protection agrees with the receiving isolation operation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "MNase digestion region: gray nucleosomes remain on connected DNA, orange circles occur along exposed DNA, and the rightward arrow leads to Isolate trimmed complexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "In MNase-Seq, gDNA is treated with MNase. Sequences bound by chromatin proteins are protected from MNase digestion.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:1148185",
+          "locator": "Abstract; interpretation of initial versus further nuclease attack",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These data suggest that the initial site of nuclease cleavage in chromatin resides within the DNA bridging the repeating monomeric subunits. Further attack results in cleavage at a set of sites within the monomer liberating a pattern of smaller DNA fragments which probably represents the points of intimate contact between the histones and DNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_digest_op_isolate",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The rightward arrow from MNase digestion to Isolate trimmed complexes explicitly supports this input route. The retained route carries protected DNA-protein material, not the digested-away linker DNA.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "MNase digestion region: gray nucleosomes remain on connected DNA, orange circles occur along exposed DNA, and the rightward arrow leads to Isolate trimmed complexes.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_isolate_s_complexes",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The isolation stage produces separately drawn particles still bearing wrapped DNA, matching the stated output and the family extraction input. The two orientations do not create separate output branches.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_complexes_op_extract",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extraction arrow explicitly departs the isolated trimmed particles, so the family route correctly preserves protein-bound DNA through isolation and into extraction. This route is supported for the drawing; the Nucleo-Seq scope must not inherit it by assigning its receiving operation without compatible input preparation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_extract_s_dna",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The extraction arrow terminates in the blue DNA product. This material output agrees with removal of the protecting proteins and subsequent use of DNA for library preparation.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Far-right DNA label and two parallel blue lines; no adapter, polarity, end group, barcode, tether, compartment or subsequent arrow is specified.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_dna_op_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The card explicitly says that DNA from DNA-protein complexes is extracted and used to prepare a sequencing library. This is an evidenced text route beyond the PNG, not a route inferred from drawing order.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Far-right DNA label and two parallel blue lines; no adapter, polarity, end group, barcode, tether, compartment or subsequent arrow is specified.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_library_s_library",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The explicit preparation of a sequencing library supports this material output. The candidate keeps the internal preparation broad and carries the recovered DNA sequences into the library without inventing adapter structures.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_s_library_op_sequence",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The library-preparation sentence followed by the explicit deep-sequencing readout supports this downstream library interface. Its status as catalogue-text support is preserved; no sequencing panel is claimed in the PNG.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, the DNA from the DNA-protein complexes is extracted and used to prepare a sequencing library.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing provides accurate representation of the location of regulatory DNA-binding proteins in the genome10.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "flow:f_op_sequence_s_reads",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Sequencing produces a sequence-based data readout whose genomic positions represent recovered protected DNA. The card and nucleosome-end sequencing abstract support this connection; the candidate does not treat protein molecules as the sequenced output.",
+      "evidence": [
+        {
+          "source_id": "card:maine-seq-mnase-seq-nucleo-seq",
+          "locator": "Description, second paragraph",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Deep sequencing provides accurate representation of the location of regulatory DNA-binding proteins in the genome10.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:18329373",
+          "locator": "Abstract; nucleosome-end sequencing and positional readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have generated genome-wide maps of nucleosome positions in both resting and activated human CD4+ T cells by direct sequencing of nucleosome ends using the Solexa high-throughput sequencing technique.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_6272844",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The card associates this paper with MAINE-Seq, but the inspected abstract reports MNase digestion of replicating SV40 chromatin, including transient bare nascent DNA and nucleosomal products. Background is the correct relationship; this is not evidence of a MAINE sequencing-library implementation or invention date. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:6272844",
+          "locator": "Abstract; bare nascent-DNA product",
+          "basis": "text",
+          "support": "reported",
+          "quote": "MNase digestion of replicating SV40 chromosomes, pulse labeled in either intact cells or nuclear extracts, resulted in the rapid release of nascent DNA as essentially bare fragments of duplex DNA (3-7S) that had an average length of 120 base pairs and were degraded during the course of the reaction.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:6272844",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Structure of chromatin at deoxyribonucleic acid replication forks: prenucleosomal deoxyribonucleic acid is rapidly excised from replicating simian virus 40 chromosomes by micrococcal nuclease.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_20054063",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly describes MAINE purification of mononucleosomes for histone-bound DNA and high-throughput sequencing, supporting schematic architecture. It separately describes FAIRE and does not establish detailed isolation or library chemistry. The candidate accurately retains the abstract-only evidence level. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:20054063",
+          "locator": "Abstract; MAINE versus complementary FAIRE route",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have generated genome-wide maps of nucleosome occupancy across the parasite erythrocytic cycle using two complementary assays--the formaldehyde-assisted isolation of regulatory elements to extract protein-free DNA (FAIRE) and the MNase-mediated purification of mononucleosomes to extract histone-bound DNA (MAINE), both techniques being coupled to high-throughput sequencing.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:20054063",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nucleosome landscape and control of transcription in the human malaria parasite.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_23811145",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The inspected full-text methods state that MNase signal tracks were taken from ENCODE. The paper is an application/background source for this card, not verification of a new wet-laboratory MNase library implementation. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:23811145",
+          "locator": "Full text [b00063], provenance of signal tracks",
+          "basis": "text",
+          "support": "reported",
+          "quote": "All ChIP, MNase, and DNase-seq signal tracks were taken from ENCODE (The ENCODE Project Consortium 2011) (Broad histone ChIP, Duke DNase-seq, Stanford MNase-seq) and are scored as fold enrichment over the average genomic read density.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:23811145",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "De novo DNA demethylation and noncoding transcription define active intergenic regulatory elements.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_1148184",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract reports digestion kinetics and discrete chromatin DNA fragments. The background association is supported, with no claim that these bibliographic dates establish first use or that an NGS implementation was verified. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:1148184",
+          "locator": "Abstract; digestion kinetics in nuclei and chromatin",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have followed the kinetics of staphylococcal nuclease digestion of duck reticulocyte nuclei and chromatin from early stages to the digestion limit.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:1148184",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A comparison of the digestion of nuclei and chromatin by staphylococcal nuclease.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_1148185",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract supports the background mechanism of initial linker attack followed by cleavage within monomeric particles. It is correctly used to qualify protection, without claiming verification of a sequencing protocol or historical priority. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:1148185",
+          "locator": "Abstract; interpretation of initial versus further nuclease attack",
+          "basis": "text",
+          "support": "reported",
+          "quote": "These data suggest that the initial site of nuclease cleavage in chromatin resides within the DNA bridging the repeating monomeric subunits. Further attack results in cleavage at a set of sites within the monomer liberating a pattern of smaller DNA fragments which probably represents the points of intimate contact between the histones and DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:1148185",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Cleavage of DNA in nuclei and chromatin with staphylococcal nuclease.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_18329373",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract supports sequence-derived nucleosome position maps using Solexa nucleosome-end sequencing. This supports the broad architecture/readout association but does not verify unshown library chemistry; the candidate states that limitation. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:18329373",
+          "locator": "Abstract; nucleosome-end sequencing and positional readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have generated genome-wide maps of nucleosome positions in both resting and activated human CD4+ T cells by direct sequencing of nucleosome ends using the Solexa high-throughput sequencing technique.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:18329373",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Dynamic regulation of nucleosome positioning in the human genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_19572828",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract proposes computational detection of nucleosome positions from existing MNase datasets. Background is appropriate, and use of the term MNase-Seq does not verify the catalogue claim of first coining the term. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:19572828",
+          "locator": "Abstract; computational model applicability",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our proposed approach is applicable to both low and high resolution MNase-Chip and MNase-Seq (high throughput sequencing) data, and is able to map nucleosome-linker boundaries accurately.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:19572828",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "A non-homogeneous hidden-state model on first order differences for automatic detection of nucleosome positions.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_21602827",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The full text supports the Nucleo-Seq-associated variant, including MNase treatment, extraction, selection of purified DNA and SOLiD sequencing. The paper association and primary-paper facts are valid. The incompatible assignment of the family extraction input is separately identified under scope:Nucleo-Seq and the correction. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:21602827",
+          "locator": "Full text [b00015], Methods summary; extraction followed by selection of purified DNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After digestion, reactions were stopped with EDTA, samples were treated with proteinase K, and nucleosome-bound DNA was extracted with phenol-chloroform and precipitated with ethanol (Supplementary methods). Purified DNA was size-selected (120–180 bp) on agarose to obtain mononucleosome cores, followed by sequencing library construction.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21602827",
+          "locator": "Full text [b00003], study design and platform",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To provide sufficient depth for both local and global analyses, we used high-throughput SOLiD technology, generating 584, 342, and 343 million mapped reads for granulocytes, CD4+, and CD8+ T-cells, respectively.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:21602827",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Determinants of nucleosome organization in primary human cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_20512117",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The inspected main-text method summary supports the Nuc-seq-associated MNase-digested mononucleosomal-DNA library and Illumina sequencing interface. The independent bisulfite dataset is a comparison, not a demonstrated conversion on that library. The uncertain upstream isolation boundaries are honestly preserved. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:20512117",
+          "locator": "Full text [b00017], Method Summary; mononucleosomal DNA to Illumina library and sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Approximately 300ng of MNase digested mononucleosome DNA were used for Illumina library generation following manufacturer instructions. Libraries were sequenced using Illumina Genome Analyzer II following manufacturer instructions.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:20512117",
+          "locator": "Full text [b00008], comparison to independent methylation data",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To study the relationship of DNA methylation with nucleosome positions, we utilized our single nucleotide resolution whole genome bisulfite-sequencing data3.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:20512117",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Relationship between nucleosome positioning and DNA methylation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26490019",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The paper describes ChEC-seq, which uses a protein-MNase fusion for targeted calcium-dependent cleavage. Background relative to the untethered protection schematic is appropriate; it is not established as an alias or an interchangeable MNase-Seq operation. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:26490019",
+          "locator": "Full text [b00005], abstract in the full-text source",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Chromatin endogenous cleavage (ChEC) uses fusion of a protein of interest to micrococcal nuclease (MNase) to target calcium-dependent cleavage to specific genomic loci in vivo.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:26490019",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChEC-seq kinetics discriminates transcription factor binding sites by DNA sequence and shape in vivo.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_23088423",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The inspected review explains protection by non-histone proteins and variant library limits for small fragments. Background is appropriate, and the candidate does not generalize its modified paired-end or short-fragment protocols to the entire family. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:23088423",
+          "locator": "Full text [b00011], MNase-seq review section",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Though MNase has primarily been used to study nucleosomes, its mode of action suggests that it will be blocked by any obstruction along the DNA, such as a DNA-binding protein, allowing for the determination of genomic regions protected by non-histone proteins.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:23088423",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Surveying the epigenomic landscape, one base at a time.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_22025700",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly combines standard MNase digestion with a modified paired-end library protocol for nucleosomal and subnucleosomal particles. A technical-variant association is supported at abstract level; it is not evidence that the generic drawing universally recovers small footprints or uses paired-end libraries. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:22025700",
+          "locator": "Abstract; modified library variant",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We have combined standard micrococcal nuclease (MNase) digestion of nuclei with a modified protocol for constructing paired-end DNA sequencing libraries to map both nucleosomes and subnucleosome-sized particles at single base-pair resolution throughout the budding yeast genome.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:22025700",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Epigenome characterization at single base-pair resolution.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26578577",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The full text describes an optimized MNase/exonuclease III implementation and libraries without size selection, and reports AT-dependent recovery biases. The technical-variant association and readout limitations are supported; its additional chemistry, controls and branches are correctly not inserted into the family diagram. Supplied metadata confirms bibliographic identity separately from the cited scientific content.",
+      "evidence": [
+        {
+          "source_id": "paper:26578577",
+          "locator": "Full text [b00013], Materials and Methods; library selection policy",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Importantly, no size-selection step was applied to the MNase-Seq and control libraries allowing assessment of the full range of DNA fragments resulting from enzymatic chromatin digestion and in silico size-selection of paired-end sequenced libraries.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26578577",
+          "locator": "Full text [b00007], Introduction; technical influences on recovered nucleosomal signal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Our analysis shows that nucleosomal signal is highly susceptible to depletion in AT-rich sequences due to over-digestion of chromatin, inefficient cross-linking of nucleosomes and/or unequal amplification of various DNA fragments.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "metadata:26578577",
+          "locator": "Supplied PubMed metadata, title and PMID fields; bibliographic identification only",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The nucleosome landscape of Plasmodium falciparum reveals chromatin architecture and dynamics of regulatory sequences.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26721890",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract describes a review of epigenomic platforms and disease-study considerations. Background is appropriate; it does not verify another implementation or operation in the supplied schematic.",
+      "evidence": [
+        {
+          "source_id": "paper:26721890",
+          "locator": "Abstract; review scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We introduce platforms for mapping genome-wide chromatin accessibility, nucleosome occupancy, DNA-binding proteins, and DNA methylation, primarily focusing on the integration of DNA methylation and chromatin immunoprecipitation-sequencing technologies into disease association studies.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27487356",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract concerns promoter antisense transcription and its nucleosomal context. Background is supported; no additional preparation operation or historical claim is inferred from this application.",
+      "evidence": [
+        {
+          "source_id": "paper:27487356",
+          "locator": "Abstract; nucleosome context of antisense transcription",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antisense transcription initiates between nucleosomes regularly positioned downstream of these promoters.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27008915",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract analyzes MeCP2 localization and nucleosome association. It supports application/background relevance without establishing a new MNase preparation, protein-specific selection step or mechanistic equivalence.",
+      "evidence": [
+        {
+          "source_id": "paper:27008915",
+          "locator": "Abstract; MeCP2 and nucleosomes",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Furthermore, MeCP2 co-localizes with nucleosomes.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26814966",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract concerns remodeller-nucleosome interaction profiles and transcriptional regulation. Background is appropriate; the candidate does not import remodeller targeting, histone variants or additional measurements into the depicted route.",
+      "evidence": [
+        {
+          "source_id": "paper:26814966",
+          "locator": "Abstract; study design",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we present genome-wide remodeller-nucleosome interaction profiles for the chromatin remodellers Chd1, Chd2, Chd4, Chd6, Chd8, Chd9, Brg1 and Ep400 in mouse embryonic stem (ES) cells.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26400169",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Unlike ordinary application papers, this abstract explicitly presents an improved MNase-seq method with simultaneous exonuclease III digestion. The variant relationship is justified at abstract level. Exonuclease III is not depicted and is correctly not added to the generic digestion operation.",
+      "evidence": [
+        {
+          "source_id": "paper:26400169",
+          "locator": "Abstract; improved MNase-seq variant",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We present an improved MNase-seq method involving simultaneous digestion with exonuclease III, which removes linker DNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26818620",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract studies cell-cycle nucleosome organization and functional correlations. Its use as application background is supported, without importing a cell-cycle branch or making a priority claim from the abstract wording.",
+      "evidence": [
+        {
+          "source_id": "paper:26818620",
+          "locator": "Abstract; cell-cycle nucleosome readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We determined nucleosome organization with a specific focus on two regulatory regions: transcription start sites (TSSs) and replication origins (ORIs).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27159561",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract concerns BRD4 acetylation, nucleosome eviction and transcription. Background is appropriate; this does not supply an acetylation or eviction operation in the schematic.",
+      "evidence": [
+        {
+          "source_id": "paper:27159561",
+          "locator": "Abstract; biological question and reported BRD4 activity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We report that BRD4 is a histone acetyltransferase (HAT) that acetylates histones H3 and H4 with a pattern distinct from those of other HATs.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27184706",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly reports a sperm MNase-seq application and footprint analysis. It supports background relevance, without adding sperm remodeling, protamine exchange or a computational operation to the pictured preparation.",
+      "evidence": [
+        {
+          "source_id": "paper:27184706",
+          "locator": "Abstract; MNase-seq application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To determine their potential roles, sperm from wild type and transgenic mice harboring a single copy insert of the human protamine cluster were subjected to Micrococcal Nuclease-seq.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27477279",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract describes a Leishmania nucleosome landscape and replication study. It supports application/background relevance, not an additional depicted transformation or a general sequencing implementation.",
+      "evidence": [
+        {
+          "source_id": "paper:27477279",
+          "locator": "Abstract; study scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we provide a complete analysis of the nucleosomal landscape and replication program of the human parasite Leishmania major, building on a better evolutionary understanding of replication organization in Eukarya.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_26790608",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract explicitly uses MNase-Seq data to analyze nucleosome patterns around regulatory elements. This is appropriate computational/application background and does not establish another wet-laboratory implementation.",
+      "evidence": [
+        {
+          "source_id": "paper:26790608",
+          "locator": "Abstract; existing MNase-seq data use",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here we used MNase-Seq data to evaluate NP around 258 cis-regulatory elements in the mouse genome.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27462443",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract concerns PARP1, nucleosomes and alternative splicing, using genome-wide approaches. Background is supported; no RNA measurement, PARylation or splicing operation is implied for the protected-DNA workflow.",
+      "evidence": [
+        {
+          "source_id": "paper:27462443",
+          "locator": "Abstract; biological scope",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Specialized chromatin structures such as nucleosomes with specific histone modifications decorate exons in eukaryotic genomes, suggesting a functional connection between chromatin organization and the regulation of pre-mRNA splicing.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27151365",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract introduces the distinct MNase-titration metric MACC and distinguishes accessibility from occupancy. The candidate uses it only as interpretive background for the readout; it does not claim that the single-route schematic depicts MACC, multiple digests or histone immunoprecipitation.",
+      "evidence": [
+        {
+          "source_id": "paper:27151365",
+          "locator": "Abstract; occupancy and accessibility are distinct readouts",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We find that changes in accessibility at enhancers, promoters and other regulatory regions do not correlate with changes in nucleosome occupancy. Moreover, high nucleosome occupancy does not necessarily preclude high accessibility, which reveals novel principles of chromatin regulation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27325136",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract describes Set1/Jhd2 regulation of chromatin and transcription. Background is appropriate; it does not establish methylation/demethylation reactions within the depicted library preparation.",
+      "evidence": [
+        {
+          "source_id": "paper:27325136",
+          "locator": "Abstract; biological result",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We find combined activities of Set1 and Jhd2 via H3K4 methylation contribute to positive or negative transcriptional regulation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "paper:pm_27067544",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "The abstract describes integrated cotton-fibre epigenomic analyses and developmental nucleosome changes. Background is appropriate. DNA methylation and other omics measurements are not evidence for a conversion or retained branch in this diagram.",
+      "evidence": [
+        {
+          "source_id": "paper:27067544",
+          "locator": "Abstract; nucleosome measurements in the application",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Examination of nucleosome positioning revealed a gradual transition from euchromatin to heterochromatin for chromatin dynamics in developing fibres, which could shape the DNA methylation landscape.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "correction:c_nucleo_selection_object",
+      "verdict": "unsupported",
+      "action": "revise",
+      "rationale": "The diagram observation and primary-paper statements are correct: the image isolates DNA-protein complexes before extraction, whereas Valouev extracts first, then selects purified DNA, and uses SOLiD. The correction is not fully applied to the graph applicability: its statement that the authored Nucleo-Seq scope matches extraction leaves op_extract assigned even though that local operation consumes the isolated-complex state s_complexes. Revise the extraction correspondence so it does not identify this distinct primary-paper input route with the diagram-specific local operation. Keep the depicted route and the accurate paper-supported distinction; the correction requires no further research or routine recipe expansion.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Isolate trimmed complexes region: two separately drawn, differently oriented gray DNA-wrapped particles, with no long connecting DNA and no branch arrows.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_fae486eaefb220a3d9cfb38a",
+          "locator": "Rightward arrow labeled DNA extraction from trimmed DNA-protein particles to terminal DNA product.",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21602827",
+          "locator": "Full text [b00015], Methods summary; extraction followed by selection of purified DNA",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After digestion, reactions were stopped with EDTA, samples were treated with proteinase K, and nucleosome-bound DNA was extracted with phenol-chloroform and precipitated with ethanol (Supplementary methods). Purified DNA was size-selected (120–180 bp) on agarose to obtain mononucleosome cores, followed by sequencing library construction.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:21602827",
+          "locator": "Full text [b00003], study design and platform",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To provide sufficient depth for both local and global analyses, we used high-throughput SOLiD technology, generating 584, 342, and 343 million mapped reads for granulocytes, CD4+, and CD8+ T-cells, respectively.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "target": "unknown:u_nucseq_isolation_boundary",
+      "verdict": "supported",
+      "action": "accept",
+      "rationale": "Supported as a nonblocking, precisely bounded uncertainty. The inspected main-text Method Summary begins with MNase-digested mononucleosomal DNA and does not specify which pre-extraction particle isolation or DNA extraction route produced it. The supplementary methods would be needed to assign those local boundaries. The candidate correctly excludes the two uncertain operations from Nuc-seq rather than inventing their applicability. This does not prevent review of the diagram-level route.",
+      "evidence": [
+        {
+          "source_id": "paper:20512117",
+          "locator": "Full text [b00017], Method Summary; mononucleosomal DNA to Illumina library and sequencing",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Approximately 300ng of MNase digested mononucleosome DNA were used for Illumina library generation following manufacturer instructions. Libraries were sequenced using Illumina Genome Analyzer II following manufacturer instructions.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ]
+}

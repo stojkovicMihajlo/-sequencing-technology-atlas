@@ -1,0 +1,67 @@
+{
+  "format_version": "illumina_scope_crosswalk_controls/1.0",
+  "scientific_review": false,
+  "tests": {
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=src /Users/mihajlostojkovic/anaconda3/bin/python -m pytest tests/test_illumina_method_crosswalk.py -q",
+    "passed": 6,
+    "skipped": 0
+  },
+  "implementation": {
+    "scripts/illumina_method_crosswalk.py": "95a9e8c5f757d215e85dad874d84bf78e6eb2d6a0bdba04c241c7853fa49cf14",
+    "tests/test_illumina_method_crosswalk.py": "9df908f00e581c011b7856782857a0efed9c05233008318291260d93a21f52f3"
+  },
+  "crosswalk": "original_entity_crosswalk_01/crosswalk.json",
+  "statistics": {
+    "original_entities": 201,
+    "historical_graph_entities": 200,
+    "current_cards": 154,
+    "historically_bound_entities": 190,
+    "outside_catalogue_entities": 11,
+    "entities_with_exact_label_candidates": 169,
+    "entities_with_binding_only_cases": 23,
+    "cards_with_historical_entities": 154,
+    "cards_with_multiple_historical_entities": 30,
+    "duplicate_title_sets": 1,
+    "unresolved_lexical_cases": 41
+  },
+  "specific_coverage_findings": [
+    {
+      "kind": "different_inventory_units",
+      "detail": "201 original method entities versus154 source cards;190 historically associated entities,11 outside-catalogue entities. All154cards have historical associations;30cards associated with multiple entities."
+    },
+    {
+      "kind": "duplicate_source_cards",
+      "card_ids": [
+        "3--seq",
+        "3prime-seq"
+      ],
+      "detail": "Same normalized source title3\u2032-Seq and same diagram asset. Kept as two source records; no new method identity claim."
+    },
+    {
+      "kind": "unsafe_exact_name_collision",
+      "method_id": "nuc-seq-dna",
+      "detail": "Exact label Nuc-seq also matches the card nuc-seq, while historical association includes nuc-seq-snes. Exact labels alone must not create semantic identity."
+    },
+    {
+      "kind": "existing_context_not_literal_member",
+      "examples": {
+        "long-read-chia-pet": "chia-pet",
+        "smart-seq2": "smart-seq-nanocage-cagescan",
+        "htgts-rep-seq": "htgts"
+      },
+      "detail": "Existing associations can include variants or contextual methods absent from card title. They must not automatically become applicability assignments to a single diagram."
+    },
+    {
+      "kind": "missing_card_content",
+      "card_id": "mda-ims-mda-midas",
+      "detail": "Historical bindings preserveMDA,IMS-MDA,MIDAS obligations despite empty catalogue title; poster evidence needed."
+    }
+  ],
+  "limits": [
+    "Existing record-ID associations are preserved as historical curation, not independently verified.",
+    "Exact names/declared aliases identify lexical candidates only; slash labels are not necessarily synonyms.",
+    "Identical diagrams/cards do not establish identical methods or per-operation applicability.",
+    "Outside-catalogue entities and poster-only candidates remain separate coverage obligations.",
+    "This comparison establishes no experimental compatibility or evolutionary edges."
+  ]
+}

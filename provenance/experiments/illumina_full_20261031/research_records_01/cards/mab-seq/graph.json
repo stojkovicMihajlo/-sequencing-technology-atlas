@@ -1,0 +1,3760 @@
+{
+  "format_version": "illumina_schematic_graph/1.0",
+  "status": "research_needed",
+  "semantics": "Source-supported architecture with explicit primary-paper corrections; literal diagram observations retained, no automatic historical edges.",
+  "record_id": "mab-seq",
+  "candidate_sha256": "6a4403cd6fa90a813e7e6391b1718c2ac265aff978a1cf89e3b8d6994101ade1",
+  "review_sha256": "842d87c4dd75f37d5169c63115e7854342ed2f9560f922a3279878bf04acaea5",
+  "nodes": [
+    {
+      "id": "illumina:mab-seq",
+      "node_type": "source_workflow",
+      "record_id": "mab-seq",
+      "title": "MAB-Seq",
+      "scope": "Illumina explanatory core MAB-seq schematic, including its upper untreated bisulfite control and lower M.SssI branch. MAB-seq is M.SssI methylase-assisted bisulfite sequencing. The five icons represent cytosine modification classes at corresponding positions, not a literal five-base genomic sequence. The target is DNA-borne 5fC plus 5caC; the final carrier is amplified DNA encoding their combined signal as T. Library construction internals are not drawn. A separate primary-paper extension records the locus-specific caMAB-seq implementation explicitly mentioned by the catalogue: M.SssI, then selective 5fC reduction, then bisulfite/PCR. Its extra route is not depicted in the Illumina image and is not merged with the MAB-seq route. RRMAB-seq is recognized only at the related abstract evidence level; applicability of individual diagram operations and its unshown representation-selection front end are not resolved here."
+    },
+    {
+      "id": "illumina:mab-seq:state:dna_input",
+      "node_type": "state",
+      "original": {
+        "id": "dna_input",
+        "label": "DNA bearing unmodified C, 5mC, 5hmC, 5fC and 5caC",
+        "kind": "material",
+        "features": [
+          "Left blue DNA line highlights a residue under the label 5fC/5caC residues; this is the biological target icon, not an extra processing step.",
+          "Central blue line carries five coloured C icons; modification labels identify 5mC, 5hmC, 5fC and 5caC.",
+          "The CpG interpretation of methylase protection is established by the primary text; G partners, strand ends and adapters are not specified in the drawing."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Left target icon and caption: \"5fC/5caC residues\"; \"M.SssI methylase-assisted bisulfite sequencing (MAB-seq) to map 5fC/5caC\"",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.0,
+              0.35,
+              0.18,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input DNA: five cytosine-type positions labelled C, 5mC, 5hmC, 5fC, 5caC; green, magenta, dark blue, cyan and orange respectively",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.16,
+              0.27,
+              0.68
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: M.SssI substrate and protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:state:dna_control",
+      "node_type": "state",
+      "original": {
+        "id": "dna_control",
+        "label": "Control DNA before bisulfite treatment",
+        "kind": "material",
+        "features": [
+          "Upper path retains the input modification classes C, 5mC, 5hmC, 5fC and 5caC."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:state:dna_protected",
+      "node_type": "state",
+      "original": {
+        "id": "dna_protected",
+        "label": "M.SssI-treated DNA",
+        "kind": "material",
+        "features": [
+          "Originally unmodified CpG C is now 5mC; pre-existing 5mC, 5hmC, 5fC and 5caC retain their classes."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: M.SssI substrate and protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:state:dna_control_product",
+      "node_type": "state",
+      "original": {
+        "id": "dna_control_product",
+        "label": "Amplified control DNA: schematic T-C-C-T-T",
+        "kind": "material",
+        "features": [
+          "At the five corresponding cytosine-type positions, original C, 5fC and 5caC are represented by T; original 5mC and 5hmC by C.",
+          "This control cannot distinguish original unmodified C from 5fC or 5caC.",
+          "The far-right generic DNA endpoint applies to amplified DNA; the two output arrows do not establish pooling."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow through \"Bisulfite treatment / PCR amplification\" to T-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.1,
+              0.89,
+              0.52
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Two right-facing output arrows and generic rightmost blue line labelled \"DNA\"; no explicit branch-merging operation",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.865,
+              0.23,
+              1.0,
+              0.88
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: Experimental strategy and validation of MAB-seq",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a).",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:state:dna_mab_product",
+      "node_type": "state",
+      "original": {
+        "id": "dna_mab_product",
+        "label": "Amplified MAB-seq DNA: schematic C-C-C-T-T",
+        "kind": "material",
+        "features": [
+          "At CpG positions, originally unmodified C, 5mC and 5hmC are represented by C; original 5fC and 5caC by T.",
+          "The sequenced carrier is amplified DNA with a base-identity record of the original genomic cytosine state; original chemical modifications are not individually read on that product.",
+          "The T signal measures 5fC and 5caC together and cannot distinguish them. Non-CpG unmodified C is not reliably protected.",
+          "Incomplete methylase protection produces background T; inefficient conversion of the targets can reduce their T signal.",
+          "The far-right generic DNA endpoint does not depict a physical merger of the two branches."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow through \"Bisulfite treatment / PCR amplification\" to C-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.55,
+              0.89,
+              0.97
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Two right-facing output arrows and generic rightmost blue line labelled \"DNA\"; no explicit branch-merging operation",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.865,
+              0.23,
+              1.0,
+              0.88
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: MAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Subsequent sequencing would reveal 5fC and 5caC as T, whereas C/5mC/5hmC as C (Supplementary Fig. 2a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: non-CpG limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00009], Results: required reaction efficiencies",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Successful detection of 5fC/5caC using MAB-seq requires complete conversion of C to 5mC by M. SssI as well as efficient bisulfite conversion of 5fC/5caC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00014], Results: methylase-protection background",
+            "basis": "text",
+            "support": "reported",
+            "quote": "we modeled the largely stochastic event of M.SssI failure in CpG methylation with a binomial distribution",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:state:dna_ca_reduced",
+      "node_type": "state",
+      "original": {
+        "id": "dna_ca_reduced",
+        "label": "caMAB-seq DNA after M.SssI and selective 5fC reduction",
+        "kind": "material",
+        "features": [
+          "Original unmodified CpG C is protected as 5mC.",
+          "Original 5fC is now 5hmC; original 5caC remains available for conversion.",
+          "This state belongs to the paper-supported caMAB-seq alternative, not either drawn Illumina branch."
+        ],
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective reduction mechanism",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:state:dna_ca_product",
+      "node_type": "state",
+      "original": {
+        "id": "dna_ca_product",
+        "label": "Locus-specific caMAB-seq PCR amplicons encoding 5caC as T",
+        "kind": "material",
+        "features": [
+          "At the corresponding CpG sites, original 5caC is represented by T; original C, 5mC, 5hmC and 5fC by C.",
+          "Illumina deep sequencing of the PCR amplicons is reported; this is a DNA sequence readout of original genomic DNA modifications.",
+          "This selective readout relies on methylase protection, 5fC reduction and bisulfite conversion; it is not a perfect chemical-specificity guarantee."
+        ],
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: locus-specific amplified readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Selected loci were then amplified by PCR, and PCR amplicons were sequenced using Illumina deep sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:operation:control_path",
+      "node_type": "operation",
+      "original": {
+        "id": "control_path",
+        "label": "Control",
+        "description": "Retain an untreated comparator route from the input DNA, with no M.SssI methylation on this route. This is the depicted branch assignment, not a chemical conversion.",
+        "inputs": [
+          "dna_input"
+        ],
+        "outputs": [
+          "dna_control"
+        ],
+        "mechanism": null,
+        "information_effect": "Original cytosine modification classes are retained until bisulfite treatment.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:operation:msssI",
+      "node_type": "operation",
+      "original": {
+        "id": "msssI",
+        "label": "M.SssI",
+        "description": "Treat DNA with the CpG methyltransferase M.SssI: unmodified CpG cytosine becomes 5mC, creating the bisulfite protection that distinguishes this assay.",
+        "inputs": [
+          "dna_input"
+        ],
+        "outputs": [
+          "dna_protected"
+        ],
+        "mechanism": "M.SssI catalyses CpG C methylation. It is a reagent/catalyst, not a sequenced material or a separate DNA product.",
+        "information_effect": "Protection makes original unmodified CpG C join original 5mC/5hmC in the eventual C class, while 5fC and 5caC remain convertible.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: M.SssI substrate and protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: non-CpG limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:operation:control_bs_pcr",
+      "node_type": "operation",
+      "original": {
+        "id": "control_bs_pcr",
+        "label": "Bisulfite treatment; PCR amplification (Control)",
+        "description": "Convert bisulfite-susceptible bases in untreated DNA and amplify the converted template, yielding the depicted T-C-C-T-T product.",
+        "inputs": [
+          "dna_control"
+        ],
+        "outputs": [
+          "dna_control_product"
+        ],
+        "mechanism": "Standard bisulfite converts C and 5fC to uracil and 5caC to 5caU; their products are represented as T after amplification/sequencing. 5mC and 5hmC yield C calls. The depicted two-line operation is kept as one block.",
+        "information_effect": "The product conflates unmodified C, 5fC and 5caC into the T class; sequence-position association is retained.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow through \"Bisulfite treatment / PCR amplification\" to T-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.1,
+              0.89,
+              0.52
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: Experimental strategy and validation of MAB-seq",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a).",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:operation:mab_bs_pcr",
+      "node_type": "operation",
+      "original": {
+        "id": "mab_bs_pcr",
+        "label": "Bisulfite treatment; PCR amplification (M.SssI branch)",
+        "description": "Convert the methylase-protected DNA and amplify the converted template, yielding the depicted C-C-C-T-T product.",
+        "inputs": [
+          "dna_protected"
+        ],
+        "outputs": [
+          "dna_mab_product"
+        ],
+        "mechanism": "Originally unmodified CpG C is protected as 5mC; 5fC and 5caC remain bisulfite susceptible and produce T-coded positions after PCR. Original 5mC and 5hmC produce C-coded positions.",
+        "information_effect": "At CpGs, the physical carrier is amplified DNA and its T calls provide a direct combined 5fC/5caC signal at corresponding genomic positions. MAB-seq alone does not resolve 5fC from 5caC, nor C from 5mC/5hmC. Incomplete protection and conversion limit quantitative interpretation; the untreated control is a comparator, not an obligatory subtraction step. The fraction of T among C/T reads at a CpG supports quantitative combined-target abundance, with reaction efficiency and protection background taken into account; it does not separately identify either oxidized base.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow through \"Bisulfite treatment / PCR amplification\" to C-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.55,
+              0.89,
+              0.97
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: Experimental strategy and validation of MAB-seq",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: MAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Subsequent sequencing would reveal 5fC and 5caC as T, whereas C/5mC/5hmC as C (Supplementary Fig. 2a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: non-CpG limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00009], Results: required reaction efficiencies",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Successful detection of 5fC/5caC using MAB-seq requires complete conversion of C to 5mC by M. SssI as well as efficient bisulfite conversion of 5fC/5caC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00015], Results: quantitative signal definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "MAB-seq signals (T/C+T) are highly similar in both experiments at a wide range of promoter-proximal and distal genomic elements",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00014], Results: methylase-protection background",
+            "basis": "text",
+            "support": "reported",
+            "quote": "we modeled the largely stochastic event of M.SssI failure in CpG methylation with a binomial distribution",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:operation:ca_reduce",
+      "node_type": "operation",
+      "original": {
+        "id": "ca_reduce",
+        "label": "NaBH4 reduction (caMAB-seq; primary-paper extension)",
+        "description": "As the distinct caMAB-seq alternative, reduce 5fC in M.SssI-treated DNA to 5hmC before bisulfite treatment. This operation is reported in the primary paper and is not drawn in the Illumina image.",
+        "inputs": [
+          "dna_protected"
+        ],
+        "outputs": [
+          "dna_ca_reduced"
+        ],
+        "mechanism": "Sodium borohydride selectively reduces 5fC to 5hmC. M.SssI methylation precedes this reduction in the inspected locus-specific implementation.",
+        "information_effect": "Original 5fC is moved into the bisulfite-resistant C-read class; original 5caC remains in the T-read class. The input is an alternative use of protected DNA, not a depicted physical split or mixing of branch products.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective reduction mechanism",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:operation:ca_bs_pcr",
+      "node_type": "operation",
+      "original": {
+        "id": "ca_bs_pcr",
+        "label": "Bisulfite treatment; PCR amplification (caMAB-seq; primary-paper extension)",
+        "description": "Bisulfite-convert the selectively reduced, methylase-treated DNA and amplify selected loci to obtain DNA in which only original 5caC gives T. This paper-supported locus-specific variant is separate from the diagrammed combined-target MAB-seq product.",
+        "inputs": [
+          "dna_ca_reduced"
+        ],
+        "outputs": [
+          "dna_ca_product"
+        ],
+        "mechanism": "Originally unmodified CpG C is protected as 5mC and original 5fC as reduced 5hmC; these and pre-existing 5mC/5hmC yield C calls. Original 5caC yields T.",
+        "information_effect": "The PCR amplicon sequence carries a position-specific 5caC signal. This is the inspected locus-specific Illumina implementation, not evidence that the supplied diagram itself includes selective reduction or a genome-wide caMAB-seq library.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: locus-specific amplified readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Selected loci were then amplified by PCR, and PCR amplicons were sequenced using Illumina deep sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:paper_match:pmid_25362244",
+      "node_type": "paper_match",
+      "original": {
+        "id": "pmid_25362244",
+        "source_id": "paper:25362244",
+        "methods": [
+          "MAB-seq",
+          "caMAB-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_architecture",
+        "evidence": [
+          {
+            "source_id": "metadata:25362244",
+            "locator": "PubMed bibliographic metadata: title and identifiers (identity only)",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Single-base resolution analysis of active DNA demethylation using methylase-assisted bisulfite sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: assay strategy; full-text evidence",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In MAB-seq, genomic DNA is first treated with the bacterial DNA CpG methyltransferase M.SssI, an enzyme that is originally isolated from Spiroplasma sp. strain MQ1 and is known to efficiently methylate cytosines within CpG dinucleotides 22.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:paper_match:pmid_26975309",
+      "node_type": "paper_match",
+      "original": {
+        "id": "pmid_26975309",
+        "source_id": "paper:26975309",
+        "methods": [
+          "MAB-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "background",
+        "evidence": [
+          {
+            "source_id": "metadata:26975309",
+            "locator": "PubMed bibliographic metadata: title and identifiers (identity only)",
+            "basis": "text",
+            "support": "reported",
+            "quote": "A probabilistic generative model for quantification of DNA modifications enables analysis of demethylation pathways.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:26975309",
+            "locator": "Abstract only; computational quantification model, not an assay-preparation source",
+            "basis": "text",
+            "support": "reported",
+            "quote": "We present a generative model, Lux, to quantify DNA methylation modifications from any combination of bisulfite sequencing approaches, including reduced, oxidative, TET-assisted, chemical-modification assisted, and methylase-assisted bisulfite sequencing data.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:paper_match:pmid_27281647",
+      "node_type": "paper_match",
+      "original": {
+        "id": "pmid_27281647",
+        "source_id": "paper:27281647",
+        "methods": [
+          "MAB-seq",
+          "RRMAB-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_variant",
+        "evidence": [
+          {
+            "source_id": "metadata:27281647",
+            "locator": "PubMed bibliographic metadata: title and identifiers (identity only)",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Methylation-assisted bisulfite sequencing to simultaneously map 5fC and 5caC on a genome-wide scale for DNA demethylation analysis.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only; M.SssI mechanism and reduced-representation variant; full text not acquired",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we also describe an adapted version of the protocol to perform reduced-representation MAB-seq (RRMAB-seq) that provides increased coverage on CpG-rich regions, thus reducing the execution costs and increasing the feasibility of the technique.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: MAB-seq protection chemistry; not verification of the full protocol",
+            "basis": "text",
+            "support": "reported",
+            "quote": "The pretreatment of the DNA with the CpG methylation enzyme M.SssI, which converts only the Cs to 5mCs, protects Cs but not 5fCs and 5caCs, which enables direct detection of 5fCs and 5caCs as uracils.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:paper_match:pmid_25660018",
+      "node_type": "paper_match",
+      "original": {
+        "id": "pmid_25660018",
+        "source_id": "paper:25660018",
+        "methods": [
+          "MAB-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_architecture",
+        "evidence": [
+          {
+            "source_id": "metadata:25660018",
+            "locator": "PubMed bibliographic metadata: title and identifiers (identity only)",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Single-Base Resolution Analysis of 5-Formyl and 5-Carboxyl Cytosine Reveals Promoter DNA Methylation Dynamics.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25660018",
+            "locator": "Abstract only; independent genome-wide MAB-seq description and application; full text not acquired",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here, we present a genome-wide approach, named methylation-assisted bisulfite sequencing (MAB-seq), that enables single-base resolution mapping of 5fC and 5caC and measures their abundance.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:state:dna_input",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:state:dna_control",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:state:dna_protected",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:state:dna_control_product",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:state:dna_mab_product",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:state:dna_ca_reduced",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:state:dna_ca_product",
+      "kind": "has_state"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:operation:control_path",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:operation:msssI",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:operation:control_bs_pcr",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:operation:mab_bs_pcr",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:operation:ca_reduce",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:operation:ca_bs_pcr",
+      "kind": "has_operation"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:paper_match:pmid_25362244",
+      "kind": "has_paper_match"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:paper_match:pmid_26975309",
+      "kind": "has_paper_match"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:paper_match:pmid_27281647",
+      "kind": "has_paper_match"
+    },
+    {
+      "source": "illumina:mab-seq",
+      "target": "illumina:mab-seq:paper_match:pmid_25660018",
+      "kind": "has_paper_match"
+    },
+    {
+      "id": "illumina:mab-seq:flow:dna_input_to_control_path",
+      "source": "illumina:mab-seq:state:dna_input",
+      "target": "illumina:mab-seq:operation:control_path",
+      "kind": "material_input",
+      "original": {
+        "id": "dna_input_to_control_path",
+        "source": "dna_input",
+        "target": "control_path",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:control_path_to_dna_control",
+      "source": "illumina:mab-seq:operation:control_path",
+      "target": "illumina:mab-seq:state:dna_control",
+      "kind": "material_output",
+      "original": {
+        "id": "control_path_to_dna_control",
+        "source": "control_path",
+        "target": "dna_control",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:dna_input_to_msssI",
+      "source": "illumina:mab-seq:state:dna_input",
+      "target": "illumina:mab-seq:operation:msssI",
+      "kind": "material_input",
+      "original": {
+        "id": "dna_input_to_msssI",
+        "source": "dna_input",
+        "target": "msssI",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:msssI_to_dna_protected",
+      "source": "illumina:mab-seq:operation:msssI",
+      "target": "illumina:mab-seq:state:dna_protected",
+      "kind": "material_output",
+      "original": {
+        "id": "msssI_to_dna_protected",
+        "source": "msssI",
+        "target": "dna_protected",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:dna_control_to_control_bs_pcr",
+      "source": "illumina:mab-seq:state:dna_control",
+      "target": "illumina:mab-seq:operation:control_bs_pcr",
+      "kind": "material_input",
+      "original": {
+        "id": "dna_control_to_control_bs_pcr",
+        "source": "dna_control",
+        "target": "control_bs_pcr",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow through \"Bisulfite treatment / PCR amplification\" to T-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.1,
+              0.89,
+              0.52
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:control_bs_pcr_to_dna_control_product",
+      "source": "illumina:mab-seq:operation:control_bs_pcr",
+      "target": "illumina:mab-seq:state:dna_control_product",
+      "kind": "material_output",
+      "original": {
+        "id": "control_bs_pcr_to_dna_control_product",
+        "source": "control_bs_pcr",
+        "target": "dna_control_product",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow through \"Bisulfite treatment / PCR amplification\" to T-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.1,
+              0.89,
+              0.52
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:dna_protected_to_mab_bs_pcr",
+      "source": "illumina:mab-seq:state:dna_protected",
+      "target": "illumina:mab-seq:operation:mab_bs_pcr",
+      "kind": "material_input",
+      "original": {
+        "id": "dna_protected_to_mab_bs_pcr",
+        "source": "dna_protected",
+        "target": "mab_bs_pcr",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow through \"Bisulfite treatment / PCR amplification\" to C-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.55,
+              0.89,
+              0.97
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:mab_bs_pcr_to_dna_mab_product",
+      "source": "illumina:mab-seq:operation:mab_bs_pcr",
+      "target": "illumina:mab-seq:state:dna_mab_product",
+      "kind": "material_output",
+      "original": {
+        "id": "mab_bs_pcr_to_dna_mab_product",
+        "source": "mab_bs_pcr",
+        "target": "dna_mab_product",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow through \"Bisulfite treatment / PCR amplification\" to C-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.55,
+              0.89,
+              0.97
+            ],
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:dna_protected_to_ca_reduce",
+      "source": "illumina:mab-seq:state:dna_protected",
+      "target": "illumina:mab-seq:operation:ca_reduce",
+      "kind": "material_input",
+      "original": {
+        "id": "dna_protected_to_ca_reduce",
+        "source": "dna_protected",
+        "target": "ca_reduce",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:ca_reduce_to_dna_ca_reduced",
+      "source": "illumina:mab-seq:operation:ca_reduce",
+      "target": "illumina:mab-seq:state:dna_ca_reduced",
+      "kind": "material_output",
+      "original": {
+        "id": "ca_reduce_to_dna_ca_reduced",
+        "source": "ca_reduce",
+        "target": "dna_ca_reduced",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective reduction mechanism",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:dna_ca_reduced_to_ca_bs_pcr",
+      "source": "illumina:mab-seq:state:dna_ca_reduced",
+      "target": "illumina:mab-seq:operation:ca_bs_pcr",
+      "kind": "material_input",
+      "original": {
+        "id": "dna_ca_reduced_to_ca_bs_pcr",
+        "source": "dna_ca_reduced",
+        "target": "ca_bs_pcr",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "illumina:mab-seq:flow:ca_bs_pcr_to_dna_ca_product",
+      "source": "illumina:mab-seq:operation:ca_bs_pcr",
+      "target": "illumina:mab-seq:state:dna_ca_product",
+      "kind": "material_output",
+      "original": {
+        "id": "ca_bs_pcr_to_dna_ca_product",
+        "source": "ca_bs_pcr",
+        "target": "dna_ca_product",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    }
+  ],
+  "workflow": {
+    "format_version": "illumina_diagram/1.0",
+    "record_id": "mab-seq",
+    "title": "MAB-Seq",
+    "method_names": [
+      "MAB-seq",
+      "caMAB-seq",
+      "RRMAB-seq"
+    ],
+    "scope": "Illumina explanatory core MAB-seq schematic, including its upper untreated bisulfite control and lower M.SssI branch. MAB-seq is M.SssI methylase-assisted bisulfite sequencing. The five icons represent cytosine modification classes at corresponding positions, not a literal five-base genomic sequence. The target is DNA-borne 5fC plus 5caC; the final carrier is amplified DNA encoding their combined signal as T. Library construction internals are not drawn. A separate primary-paper extension records the locus-specific caMAB-seq implementation explicitly mentioned by the catalogue: M.SssI, then selective 5fC reduction, then bisulfite/PCR. Its extra route is not depicted in the Illumina image and is not merged with the MAB-seq route. RRMAB-seq is recognized only at the related abstract evidence level; applicability of individual diagram operations and its unshown representation-selection front end are not resolved here.",
+    "inspected_sources": [
+      "card:mab-seq",
+      "diagram:asset_ee73620b6bf5b273969e5b0e",
+      "metadata:25362244",
+      "paper:25362244",
+      "metadata:26975309",
+      "paper:26975309",
+      "metadata:27281647",
+      "paper:27281647",
+      "metadata:25660018",
+      "paper:25660018"
+    ],
+    "states": [
+      {
+        "id": "dna_input",
+        "label": "DNA bearing unmodified C, 5mC, 5hmC, 5fC and 5caC",
+        "kind": "material",
+        "features": [
+          "Left blue DNA line highlights a residue under the label 5fC/5caC residues; this is the biological target icon, not an extra processing step.",
+          "Central blue line carries five coloured C icons; modification labels identify 5mC, 5hmC, 5fC and 5caC.",
+          "The CpG interpretation of methylase protection is established by the primary text; G partners, strand ends and adapters are not specified in the drawing."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Left target icon and caption: \"5fC/5caC residues\"; \"M.SssI methylase-assisted bisulfite sequencing (MAB-seq) to map 5fC/5caC\"",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.0,
+              0.35,
+              0.18,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input DNA: five cytosine-type positions labelled C, 5mC, 5hmC, 5fC, 5caC; green, magenta, dark blue, cyan and orange respectively",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.16,
+              0.27,
+              0.68
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: M.SssI substrate and protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_control",
+        "label": "Control DNA before bisulfite treatment",
+        "kind": "material",
+        "features": [
+          "Upper path retains the input modification classes C, 5mC, 5hmC, 5fC and 5caC."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_protected",
+        "label": "M.SssI-treated DNA",
+        "kind": "material",
+        "features": [
+          "Originally unmodified CpG C is now 5mC; pre-existing 5mC, 5hmC, 5fC and 5caC retain their classes."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: M.SssI substrate and protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_control_product",
+        "label": "Amplified control DNA: schematic T-C-C-T-T",
+        "kind": "material",
+        "features": [
+          "At the five corresponding cytosine-type positions, original C, 5fC and 5caC are represented by T; original 5mC and 5hmC by C.",
+          "This control cannot distinguish original unmodified C from 5fC or 5caC.",
+          "The far-right generic DNA endpoint applies to amplified DNA; the two output arrows do not establish pooling."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow through \"Bisulfite treatment / PCR amplification\" to T-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.1,
+              0.89,
+              0.52
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Two right-facing output arrows and generic rightmost blue line labelled \"DNA\"; no explicit branch-merging operation",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.865,
+              0.23,
+              1.0,
+              0.88
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: Experimental strategy and validation of MAB-seq",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a).",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_mab_product",
+        "label": "Amplified MAB-seq DNA: schematic C-C-C-T-T",
+        "kind": "material",
+        "features": [
+          "At CpG positions, originally unmodified C, 5mC and 5hmC are represented by C; original 5fC and 5caC by T.",
+          "The sequenced carrier is amplified DNA with a base-identity record of the original genomic cytosine state; original chemical modifications are not individually read on that product.",
+          "The T signal measures 5fC and 5caC together and cannot distinguish them. Non-CpG unmodified C is not reliably protected.",
+          "Incomplete methylase protection produces background T; inefficient conversion of the targets can reduce their T signal.",
+          "The far-right generic DNA endpoint does not depict a physical merger of the two branches."
+        ],
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow through \"Bisulfite treatment / PCR amplification\" to C-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.55,
+              0.89,
+              0.97
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Two right-facing output arrows and generic rightmost blue line labelled \"DNA\"; no explicit branch-merging operation",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.865,
+              0.23,
+              1.0,
+              0.88
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: MAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Subsequent sequencing would reveal 5fC and 5caC as T, whereas C/5mC/5hmC as C (Supplementary Fig. 2a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: non-CpG limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00009], Results: required reaction efficiencies",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Successful detection of 5fC/5caC using MAB-seq requires complete conversion of C to 5mC by M. SssI as well as efficient bisulfite conversion of 5fC/5caC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00014], Results: methylase-protection background",
+            "basis": "text",
+            "support": "reported",
+            "quote": "we modeled the largely stochastic event of M.SssI failure in CpG methylation with a binomial distribution",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_ca_reduced",
+        "label": "caMAB-seq DNA after M.SssI and selective 5fC reduction",
+        "kind": "material",
+        "features": [
+          "Original unmodified CpG C is protected as 5mC.",
+          "Original 5fC is now 5hmC; original 5caC remains available for conversion.",
+          "This state belongs to the paper-supported caMAB-seq alternative, not either drawn Illumina branch."
+        ],
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective reduction mechanism",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_ca_product",
+        "label": "Locus-specific caMAB-seq PCR amplicons encoding 5caC as T",
+        "kind": "material",
+        "features": [
+          "At the corresponding CpG sites, original 5caC is represented by T; original C, 5mC, 5hmC and 5fC by C.",
+          "Illumina deep sequencing of the PCR amplicons is reported; this is a DNA sequence readout of original genomic DNA modifications.",
+          "This selective readout relies on methylase protection, 5fC reduction and bisulfite conversion; it is not a perfect chemical-specificity guarantee."
+        ],
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: locus-specific amplified readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Selected loci were then amplified by PCR, and PCR amplicons were sequenced using Illumina deep sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "id": "control_path",
+        "label": "Control",
+        "description": "Retain an untreated comparator route from the input DNA, with no M.SssI methylation on this route. This is the depicted branch assignment, not a chemical conversion.",
+        "inputs": [
+          "dna_input"
+        ],
+        "outputs": [
+          "dna_control"
+        ],
+        "mechanism": null,
+        "information_effect": "Original cytosine modification classes are retained until bisulfite treatment.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "msssI",
+        "label": "M.SssI",
+        "description": "Treat DNA with the CpG methyltransferase M.SssI: unmodified CpG cytosine becomes 5mC, creating the bisulfite protection that distinguishes this assay.",
+        "inputs": [
+          "dna_input"
+        ],
+        "outputs": [
+          "dna_protected"
+        ],
+        "mechanism": "M.SssI catalyses CpG C methylation. It is a reagent/catalyst, not a sequenced material or a separate DNA product.",
+        "information_effect": "Protection makes original unmodified CpG C join original 5mC/5hmC in the eventual C class, while 5fC and 5caC remain convertible.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: M.SssI substrate and protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: non-CpG limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "control_bs_pcr",
+        "label": "Bisulfite treatment; PCR amplification (Control)",
+        "description": "Convert bisulfite-susceptible bases in untreated DNA and amplify the converted template, yielding the depicted T-C-C-T-T product.",
+        "inputs": [
+          "dna_control"
+        ],
+        "outputs": [
+          "dna_control_product"
+        ],
+        "mechanism": "Standard bisulfite converts C and 5fC to uracil and 5caC to 5caU; their products are represented as T after amplification/sequencing. 5mC and 5hmC yield C calls. The depicted two-line operation is kept as one block.",
+        "information_effect": "The product conflates unmodified C, 5fC and 5caC into the T class; sequence-position association is retained.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow through \"Bisulfite treatment / PCR amplification\" to T-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.1,
+              0.89,
+              0.52
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: Experimental strategy and validation of MAB-seq",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a).",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "mab_bs_pcr",
+        "label": "Bisulfite treatment; PCR amplification (M.SssI branch)",
+        "description": "Convert the methylase-protected DNA and amplify the converted template, yielding the depicted C-C-C-T-T product.",
+        "inputs": [
+          "dna_protected"
+        ],
+        "outputs": [
+          "dna_mab_product"
+        ],
+        "mechanism": "Originally unmodified CpG C is protected as 5mC; 5fC and 5caC remain bisulfite susceptible and produce T-coded positions after PCR. Original 5mC and 5hmC produce C-coded positions.",
+        "information_effect": "At CpGs, the physical carrier is amplified DNA and its T calls provide a direct combined 5fC/5caC signal at corresponding genomic positions. MAB-seq alone does not resolve 5fC from 5caC, nor C from 5mC/5hmC. Incomplete protection and conversion limit quantitative interpretation; the untreated control is a comparator, not an obligatory subtraction step. The fraction of T among C/T reads at a CpG supports quantitative combined-target abundance, with reaction efficiency and protection background taken into account; it does not separately identify either oxidized base.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow through \"Bisulfite treatment / PCR amplification\" to C-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.55,
+              0.89,
+              0.97
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: Experimental strategy and validation of MAB-seq",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: MAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Subsequent sequencing would reveal 5fC and 5caC as T, whereas C/5mC/5hmC as C (Supplementary Fig. 2a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: non-CpG limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00009], Results: required reaction efficiencies",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Successful detection of 5fC/5caC using MAB-seq requires complete conversion of C to 5mC by M. SssI as well as efficient bisulfite conversion of 5fC/5caC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00015], Results: quantitative signal definition",
+            "basis": "text",
+            "support": "reported",
+            "quote": "MAB-seq signals (T/C+T) are highly similar in both experiments at a wide range of promoter-proximal and distal genomic elements",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00014], Results: methylase-protection background",
+            "basis": "text",
+            "support": "reported",
+            "quote": "we modeled the largely stochastic event of M.SssI failure in CpG methylation with a binomial distribution",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "ca_reduce",
+        "label": "NaBH4 reduction (caMAB-seq; primary-paper extension)",
+        "description": "As the distinct caMAB-seq alternative, reduce 5fC in M.SssI-treated DNA to 5hmC before bisulfite treatment. This operation is reported in the primary paper and is not drawn in the Illumina image.",
+        "inputs": [
+          "dna_protected"
+        ],
+        "outputs": [
+          "dna_ca_reduced"
+        ],
+        "mechanism": "Sodium borohydride selectively reduces 5fC to 5hmC. M.SssI methylation precedes this reduction in the inspected locus-specific implementation.",
+        "information_effect": "Original 5fC is moved into the bisulfite-resistant C-read class; original 5caC remains in the T-read class. The input is an alternative use of protected DNA, not a depicted physical split or mixing of branch products.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective reduction mechanism",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "ca_bs_pcr",
+        "label": "Bisulfite treatment; PCR amplification (caMAB-seq; primary-paper extension)",
+        "description": "Bisulfite-convert the selectively reduced, methylase-treated DNA and amplify selected loci to obtain DNA in which only original 5caC gives T. This paper-supported locus-specific variant is separate from the diagrammed combined-target MAB-seq product.",
+        "inputs": [
+          "dna_ca_reduced"
+        ],
+        "outputs": [
+          "dna_ca_product"
+        ],
+        "mechanism": "Originally unmodified CpG C is protected as 5mC and original 5fC as reduced 5hmC; these and pre-existing 5mC/5hmC yield C calls. Original 5caC yields T.",
+        "information_effect": "The PCR amplicon sequence carries a position-specific 5caC signal. This is the inspected locus-specific Illumina implementation, not evidence that the supplied diagram itself includes selective reduction or a genome-wide caMAB-seq library.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: locus-specific amplified readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Selected loci were then amplified by PCR, and PCR amplicons were sequenced using Illumina deep sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ],
+    "flows": [
+      {
+        "id": "dna_input_to_control_path",
+        "source": "dna_input",
+        "target": "control_path",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "control_path_to_dna_control",
+        "source": "control_path",
+        "target": "dna_control",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_input_to_msssI",
+        "source": "dna_input",
+        "target": "msssI",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "msssI_to_dna_protected",
+        "source": "msssI",
+        "target": "dna_protected",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_control_to_control_bs_pcr",
+        "source": "dna_control",
+        "target": "control_bs_pcr",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow through \"Bisulfite treatment / PCR amplification\" to T-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.1,
+              0.89,
+              0.52
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "control_bs_pcr_to_dna_control_product",
+        "source": "control_bs_pcr",
+        "target": "dna_control_product",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow through \"Bisulfite treatment / PCR amplification\" to T-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.1,
+              0.89,
+              0.52
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_protected_to_mab_bs_pcr",
+        "source": "dna_protected",
+        "target": "mab_bs_pcr",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow through \"Bisulfite treatment / PCR amplification\" to C-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.55,
+              0.89,
+              0.97
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "mab_bs_pcr_to_dna_mab_product",
+        "source": "mab_bs_pcr",
+        "target": "dna_mab_product",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow through \"Bisulfite treatment / PCR amplification\" to C-C-C-T-T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.54,
+              0.55,
+              0.89,
+              0.97
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_protected_to_ca_reduce",
+        "source": "dna_protected",
+        "target": "ca_reduce",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "ca_reduce_to_dna_ca_reduced",
+        "source": "ca_reduce",
+        "target": "dna_ca_reduced",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective reduction mechanism",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "dna_ca_reduced_to_ca_bs_pcr",
+        "source": "dna_ca_reduced",
+        "target": "ca_bs_pcr",
+        "kind": "material_input",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "ca_bs_pcr_to_dna_ca_product",
+        "source": "ca_bs_pcr",
+        "target": "dna_ca_product",
+        "kind": "material_output",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ],
+    "method_scopes": [
+      {
+        "method": "MAB-seq",
+        "operation_ids": [
+          "control_path",
+          "control_bs_pcr",
+          "msssI",
+          "mab_bs_pcr"
+        ],
+        "status": "resolved",
+        "rationale": "The lower path is MAB-seq; the upper path is the untreated standard-bisulfite comparator. MAB-Seq and M.SssI methylase-assisted bisulfite sequencing are aliases in this depiction. TET oxidation and TDG/BER in the catalogue description explain biological generation/removal of the target and are not depicted assay operations. The catalogue mentions caMAB-seq separately; its selective chemistry is not shown in this image.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Left target icon and caption: \"5fC/5caC residues\"; \"M.SssI methylase-assisted bisulfite sequencing (MAB-seq) to map 5fC/5caC\"",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.0,
+              0.35,
+              0.18,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to upper \"Control\" path; upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC, 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.0,
+              0.49,
+              0.53
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Arrow from input to lower \"M.SssI\" path; lower first C becomes magenta and is labelled 5mC; other modification icons remain",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.28,
+              0.47,
+              0.49,
+              0.96
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "card:mab-seq",
+            "locator": "Description: MAB-seq and caMAB-seq distinction",
+            "basis": "text",
+            "support": "reported",
+            "quote": "MAB-seq allows simultaneous and quantitative mapping of both 5fC and 5caC at base resolution. This method is complimentary to caMAB-seq, a method for direct 5caC mapping.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "method": "caMAB-seq",
+        "operation_ids": [
+          "msssI",
+          "ca_reduce",
+          "ca_bs_pcr"
+        ],
+        "status": "resolved",
+        "rationale": "caMAB-seq is a distinct method variant, not an alias for the diagrammed combined 5fC/5caC assay. Its M.SssI-to-NaBH4-to-bisulfite/PCR order and 5caC-only T interpretation are supported by the full-text locus-specific implementation. Sharing the protected-DNA state represents the expressly reported common M.SssI pretreatment; the two downstream operations are alternative methods, not sequential steps of MAB-seq. The diagrammed untreated control is not asserted as a required caMAB-seq operation.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "method": "RRMAB-seq",
+        "operation_ids": [],
+        "status": "unresolved",
+        "rationale": "The related 2016 protocol abstract expressly names reduced-representation MAB-seq and its increased coverage of CpG-rich regions. Full text was not acquired. This establishes a related variant, but does not establish which depiction-specific steps or representation-selection interfaces apply to its implementation; no individual operation is assigned from resemblance or the shared method name. This unresolved applicability does not prevent extraction of the two Illumina branches or of the fully supported caMAB-seq extension.",
+        "evidence": [
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: RRMAB-seq identity and representation goal; full text not acquired",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we also describe an adapted version of the protocol to perform reduced-representation MAB-seq (RRMAB-seq) that provides increased coverage on CpG-rich regions, thus reducing the execution costs and increasing the feasibility of the technique.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ],
+    "paper_matches": [
+      {
+        "id": "pmid_25362244",
+        "source_id": "paper:25362244",
+        "methods": [
+          "MAB-seq",
+          "caMAB-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_architecture",
+        "evidence": [
+          {
+            "source_id": "metadata:25362244",
+            "locator": "PubMed bibliographic metadata: title and identifiers (identity only)",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Single-base resolution analysis of active DNA demethylation using methylase-assisted bisulfite sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: assay strategy; full-text evidence",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In MAB-seq, genomic DNA is first treated with the bacterial DNA CpG methyltransferase M.SssI, an enzyme that is originally isolated from Spiroplasma sp. strain MQ1 and is known to efficiently methylate cytosines within CpG dinucleotides 22.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq, distinct selective-reduction variant; full text",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: Locus-specific caMAB-seq and 5caC calling",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "pmid_26975309",
+        "source_id": "paper:26975309",
+        "methods": [
+          "MAB-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "background",
+        "evidence": [
+          {
+            "source_id": "metadata:26975309",
+            "locator": "PubMed bibliographic metadata: title and identifiers (identity only)",
+            "basis": "text",
+            "support": "reported",
+            "quote": "A probabilistic generative model for quantification of DNA modifications enables analysis of demethylation pathways.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:26975309",
+            "locator": "Abstract only; computational quantification model, not an assay-preparation source",
+            "basis": "text",
+            "support": "reported",
+            "quote": "We present a generative model, Lux, to quantify DNA methylation modifications from any combination of bisulfite sequencing approaches, including reduced, oxidative, TET-assisted, chemical-modification assisted, and methylase-assisted bisulfite sequencing data.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "pmid_27281647",
+        "source_id": "paper:27281647",
+        "methods": [
+          "MAB-seq",
+          "RRMAB-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_variant",
+        "evidence": [
+          {
+            "source_id": "metadata:27281647",
+            "locator": "PubMed bibliographic metadata: title and identifiers (identity only)",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Methylation-assisted bisulfite sequencing to simultaneously map 5fC and 5caC on a genome-wide scale for DNA demethylation analysis.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only; M.SssI mechanism and reduced-representation variant; full text not acquired",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we also describe an adapted version of the protocol to perform reduced-representation MAB-seq (RRMAB-seq) that provides increased coverage on CpG-rich regions, thus reducing the execution costs and increasing the feasibility of the technique.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: MAB-seq protection chemistry; not verification of the full protocol",
+            "basis": "text",
+            "support": "reported",
+            "quote": "The pretreatment of the DNA with the CpG methylation enzyme M.SssI, which converts only the Cs to 5mCs, protects Cs but not 5fCs and 5caCs, which enables direct detection of 5fCs and 5caCs as uracils.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "id": "pmid_25660018",
+        "source_id": "paper:25660018",
+        "methods": [
+          "MAB-seq"
+        ],
+        "assessment": "content_checked",
+        "relationship": "supports_architecture",
+        "evidence": [
+          {
+            "source_id": "metadata:25660018",
+            "locator": "PubMed bibliographic metadata: title and identifiers (identity only)",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Single-Base Resolution Analysis of 5-Formyl and 5-Carboxyl Cytosine Reveals Promoter DNA Methylation Dynamics.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25660018",
+            "locator": "Abstract only; independent genome-wide MAB-seq description and application; full text not acquired",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here, we present a genome-wide approach, named methylation-assisted bisulfite sequencing (MAB-seq), that enables single-base resolution mapping of 5fC and 5caC and measures their abundance.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ],
+    "corrections": [],
+    "unknowns": [
+      {
+        "id": "rr_applicability",
+        "question": "For RRMAB-seq, which of the diagrammed operations apply, and what selected DNA state enters them? The supplied abstract names the variant and its CpG-rich coverage goal but does not show its representation-selection interface or preparation order. The protocol full text and its workflow figure for PMID 27281647 would be needed to assign a complete variant architecture.",
+        "blocking": false,
+        "affected_ids": []
+      }
+    ]
+  },
+  "review": {
+    "format_version": "illumina_diagram_review/1.0",
+    "record_id": "mab-seq",
+    "candidate_sha256": "6a4403cd6fa90a813e7e6391b1718c2ac265aff978a1cf89e3b8d6994101ade1",
+    "inspected_sources": [
+      "card:mab-seq",
+      "diagram:asset_ee73620b6bf5b273969e5b0e",
+      "metadata:25362244",
+      "paper:25362244",
+      "metadata:26975309",
+      "paper:26975309",
+      "metadata:27281647",
+      "paper:27281647",
+      "metadata:25660018",
+      "paper:25660018"
+    ],
+    "checks": [
+      {
+        "target": "flow:ca_bs_pcr_to_dna_ca_product",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The caMAB-seq bisulfite/PCR operation produces selected-locus DNA amplicons, whose T calls encode original 5caC. The output state and receiving readout agree; this is the paper extension, not a drawn Illumina branch.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: amplified material and sequenced carrier",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Selected loci were then amplified by PCR, and PCR amplicons were sequenced using Illumina deep sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:ca_reduce_to_dna_ca_reduced",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "NaBH4 acts on the protected DNA and produces a DNA state with original 5fC reduced to 5hmC. This output retains CpG protection and is compatible with the next bisulfite/PCR input.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective 5fC reduction",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:control_bs_pcr_to_dna_control_product",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The upper bisulfite/PCR block explicitly leads to T-C-C-T-T, matching the declared control product and its original-position association.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow from control DNA through \"Bisulfite treatment / PCR amplification\" to purple T, green C, green C, purple T, purple T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.4,
+              0.0,
+              0.86,
+              0.52
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:control_path_to_dna_control",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The Control arrow leads to DNA carrying the unchanged five modification classes. It represents comparator assignment with no methylase conversion, as declared.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and upper \"Control\" route; pre-bisulfite strand retains green C, magenta 5mC, blue 5hmC, cyan 5fC and orange 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.0,
+              0.49,
+              0.66
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:dna_ca_reduced_to_ca_bs_pcr",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The inspected locus-specific implementation expressly places bisulfite conversion after reduction of M.SssI-treated DNA; subsequent selected-locus PCR gives the declared carrier.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: amplified material and sequenced carrier",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Selected loci were then amplified by PCR, and PCR amplicons were sequenced using Illumina deep sequencing.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:dna_control_to_control_bs_pcr",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The upper strand connects by an arrow to its own bisulfite/PCR block. The receiving operation uses the untreated DNA state and does not receive the lower methylated branch.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow from control DNA through \"Bisulfite treatment / PCR amplification\" to purple T, green C, green C, purple T, purple T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.4,
+              0.0,
+              0.86,
+              0.52
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:dna_input_to_control_path",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The central five-class DNA has an upper route labelled Control. This supports entry of the input DNA into the comparator route, without asserting an unshown physical aliquoting operation.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and upper \"Control\" route; pre-bisulfite strand retains green C, magenta 5mC, blue 5hmC, cyan 5fC and orange 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.0,
+              0.49,
+              0.66
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:dna_input_to_msssI",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The common input DNA has a lower route labelled M.SssI. The substrate is DNA; the methylase is the treatment catalyst rather than a transferred or sequenced material.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and lower \"M.SssI\" route; formerly green first C becomes magenta and gains the 5mC label",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.45,
+              0.49,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:dna_protected_to_ca_reduce",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The locus-specific caMAB-seq method explicitly uses M.SssI-treated DNA as the NaBH4 substrate. The common protected state is an alternative-method interface, not an asserted physical split in the Illumina picture.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq chemistry and order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:dna_protected_to_mab_bs_pcr",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The lower methylated strand connects to the lower bisulfite/PCR block. Its protected first position and unchanged oxidized target classes match the receiving operation.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and lower \"M.SssI\" route; formerly green first C becomes magenta and gains the 5mC label",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.45,
+              0.49,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow from M.SssI-treated DNA through \"Bisulfite treatment / PCR amplification\" to green C, green C, green C, purple T, purple T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.4,
+              0.51,
+              0.86,
+              1.0
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:mab_bs_pcr_to_dna_mab_product",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The lower block produces the depicted C-C-C-T-T DNA state. Original 5fC/5caC positions form the T class; no merger with the control product is asserted.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow from M.SssI-treated DNA through \"Bisulfite treatment / PCR amplification\" to green C, green C, green C, purple T, purple T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.4,
+              0.51,
+              0.86,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Separate upper and lower right-facing arrows beyond the products; generic rightmost blue line labelled \"DNA\", without a pooling junction",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.86,
+              0.24,
+              1.0,
+              0.86
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "flow:msssI_to_dna_protected",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The lower first C becomes a magenta 5mC after M.SssI, while the other four classes persist. This is the protected DNA output, consistent with both downstream method-specific uses.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and lower \"M.SssI\" route; formerly green first C becomes magenta and gains the 5mC label",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.45,
+              0.49,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:ca_bs_pcr",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The full-text locus-specific implementation reports bisulfite conversion followed by selected-locus PCR and Illumina amplicon sequencing. The declared 5caC-specific T readout follows the preceding protection and reduction; it is not assigned to the diagrammed combined-target block.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: amplified material and sequenced carrier",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Selected loci were then amplified by PCR, and PCR amplicons were sequenced using Illumina deep sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:ca_reduce",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The primary text establishes both selective 5fC-to-5hmC reduction and its placement after M.SssI in this implementation. The candidate keeps it as the distinct caMAB-seq alternative and does not insert it into either drawn branch.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective 5fC reduction",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq chemistry and order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:control_bs_pcr",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The upper two-line label is preserved as one bisulfite/PCR block acting on control DNA. T-C-C-T-T is visible; the extra uracil versus 5caU explanation is explicitly supported by the full text and is not invented from the icons.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow from control DNA through \"Bisulfite treatment / PCR amplification\" to purple T, green C, green C, purple T, purple T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.4,
+              0.0,
+              0.86,
+              0.52
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: standard bisulfite chemistry and calls",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a).",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:control_path",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The upper Control route preserves the starting classes until conversion. Treating this as branch assignment rather than an added chemical reaction matches the drawing.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and upper \"Control\" route; pre-bisulfite strand retains green C, magenta 5mC, blue 5hmC, cyan 5fC and orange 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.0,
+              0.49,
+              0.66
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:mab_bs_pcr",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The lower block converts and amplifies M.SssI-treated DNA to C-C-C-T-T. The combined-target T readout, sequence association, CpG limitation, protection/conversion background, and quantitative T fraction are supported. The upper untreated comparator is not an obligatory subtraction input to this direct assay.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow from M.SssI-treated DNA through \"Bisulfite treatment / PCR amplification\" to green C, green C, green C, purple T, purple T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.4,
+              0.51,
+              0.86,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: sequence readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Subsequent sequencing would reveal 5fC and 5caC as T, whereas C/5mC/5hmC as C (Supplementary Fig. 2a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: sequence-context limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00009], Results: efficiencies required for target detection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Successful detection of 5fC/5caC using MAB-seq requires complete conversion of C to 5mC by M. SssI as well as efficient bisulfite conversion of 5fC/5caC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00014], Results: incomplete CpG protection background",
+            "basis": "text",
+            "support": "reported",
+            "quote": "we modeled the largely stochastic event of M.SssI failure in CpG methylation with a binomial distribution",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00015], Results: readout fraction",
+            "basis": "text",
+            "support": "reported",
+            "quote": "MAB-seq signals (T/C+T) are highly similar in both experiments at a wide range of promoter-proximal and distal genomic elements",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "operation:msssI",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The drawing changes the first C to 5mC; the full text identifies CpG methylase protection and its non-CpG limitation. The catalyst role, DNA input/output, and use of the same pretreatment for the explicitly scoped caMAB-seq extension agree.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and lower \"M.SssI\" route; formerly green first C becomes magenta and gains the 5mC label",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.45,
+              0.49,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: sequence-context limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "paper:pmid_25362244",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "PMID 25362244 and DOI 10.1038/nbt.3073 identify the Wu et al. paper. Independently inspected full-text Results and locus-specific Methods support MAB-seq and the caMAB-seq extension. Bibliographic identity is kept separate from chemistry verification; no invention-date claim is made.",
+        "evidence": [
+          {
+            "source_id": "metadata:25362244",
+            "locator": "PubMed bibliographic metadata: PMID, title and identifiers; identity evidence only",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Single-base resolution analysis of active DNA demethylation using methylase-assisted bisulfite sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq chemistry and order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "paper:pmid_25660018",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "PMID 25660018 and DOI 10.1016/j.celrep.2015.01.008 match the Neri et al. publication. Its abstract supports a genome-wide MAB-seq description and application, so the candidate does not treat it as mere bibliographic background. Acceptance is limited to that abstract-level architecture statement, not full protocol verification or a caMAB-seq assignment.",
+        "evidence": [
+          {
+            "source_id": "metadata:25660018",
+            "locator": "PubMed bibliographic metadata: PMID, title and identifiers; identity evidence only",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Single-Base Resolution Analysis of 5-Formyl and 5-Carboxyl Cytosine Reveals Promoter DNA Methylation Dynamics.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25660018",
+            "locator": "Abstract only: named method, biological target and resolution",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here, we present a genome-wide approach, named methylation-assisted bisulfite sequencing (MAB-seq), that enables single-base resolution mapping of 5fC and 5caC and measures their abundance.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "paper:pmid_26975309",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "PMID 26975309 and DOI 10.1186/s13059-016-0911-6 identify the Lux model paper. Its available abstract describes computational inference from sequencing data, supporting the background classification rather than an assay-preparation or invention claim. The candidate explicitly preserves the abstract-only evidence level.",
+        "evidence": [
+          {
+            "source_id": "metadata:26975309",
+            "locator": "PubMed bibliographic metadata: PMID, title and identifiers; identity evidence only",
+            "basis": "text",
+            "support": "reported",
+            "quote": "A probabilistic generative model for quantification of DNA modifications enables analysis of demethylation pathways.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:26975309",
+            "locator": "Abstract only: Lux computational model and input sequencing data",
+            "basis": "text",
+            "support": "reported",
+            "quote": "We present a generative model, Lux, to quantify DNA methylation modifications from any combination of bisulfite sequencing approaches, including reduced, oxidative, TET-assisted, chemical-modification assisted, and methylase-assisted bisulfite sequencing data.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "paper:pmid_27281647",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "PMID 27281647 and DOI 10.1038/nprot.2016.063 identify the protocol publication. The available abstract supports the general M.SssI protection principle and names RRMAB-seq, but does not verify its detailed selection workflow. The candidate correctly distinguishes content checked at abstract level from unavailable full-text protocol evidence.",
+        "evidence": [
+          {
+            "source_id": "metadata:27281647",
+            "locator": "PubMed bibliographic metadata: PMID, title and identifiers; identity evidence only",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Methylation-assisted bisulfite sequencing to simultaneously map 5fC and 5caC on a genome-wide scale for DNA demethylation analysis.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: general MAB-seq protection principle",
+            "basis": "text",
+            "support": "reported",
+            "quote": "The pretreatment of the DNA with the CpG methylation enzyme M.SssI, which converts only the Cs to 5mCs, protects Cs but not 5fCs and 5caCs, which enables direct detection of 5fCs and 5caCs as uracils.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: RRMAB-seq identity and coverage goal; supplied source contains no full protocol",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we also describe an adapted version of the protocol to perform reduced-representation MAB-seq (RRMAB-seq) that provides increased coverage on CpG-rich regions, thus reducing the execution costs and increasing the feasibility of the technique.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "record",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "All seven material states, six operations, twelve routes, three method scopes and four paper associations have been checked against the image and available source content. Both depicted branches and the generic DNA endpoint are represented without inventing pooling, adapters, end groups, compartments or library-construction internals. Full text supports the separately labelled locus-specific caMAB-seq extension; no consequential diagram/paper conflict requires a correction. RRMAB-seq remains an explicitly bounded, nonblocking applicability unknown rather than an asserted complete workflow. No consequential unsupported assertion or omitted in-scope transformation remains.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Entire supplied PNG: target caption, five cytosine classes, upper Control and lower M.SssI routes, both bisulfite/PCR blocks, T-C-C-T-T and C-C-C-T-T outputs, and generic DNA endpoint",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: RRMAB-seq identity and coverage goal; supplied source contains no full protocol",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we also describe an adapted version of the protocol to perform reduced-representation MAB-seq (RRMAB-seq) that provides increased coverage on CpG-rich regions, thus reducing the execution costs and increasing the feasibility of the technique.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "scope:MAB-seq",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The image caption identifies M.SssI methylase-assisted bisulfite sequencing, while its lower M.SssI route implements MAB-seq and its upper Control route supplies a standard-bisulfite comparator. The alias treatment and exclusion of biological TET/TDG/BER activity from assay operations are consistent with the drawing. The catalogue explicitly distinguishes caMAB-seq.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Entire supplied PNG: target caption, five cytosine classes, upper Control and lower M.SssI routes, both bisulfite/PCR blocks, T-C-C-T-T and C-C-C-T-T outputs, and generic DNA endpoint",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.0,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "card:mab-seq",
+            "locator": "Description: combined-target assay versus caMAB-seq",
+            "basis": "text",
+            "support": "reported",
+            "quote": "MAB-seq allows simultaneous and quantitative mapping of both 5fC and 5caC at base resolution. This method is complimentary to caMAB-seq, a method for direct 5caC mapping.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "scope:RRMAB-seq",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "Accept the limited unresolved scope declaration: the abstract names a reduced-representation adaptation and its CpG-rich coverage goal. It supports the general MAB-seq principle but does not show the selected DNA state, selection order or variant-specific interfaces. No complete RRMAB-seq architecture, step assignment, interchangeability or historical-development edge is asserted.",
+        "evidence": [
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: RRMAB-seq identity and coverage goal; supplied source contains no full protocol",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we also describe an adapted version of the protocol to perform reduced-representation MAB-seq (RRMAB-seq) that provides increased coverage on CpG-rich regions, thus reducing the execution costs and increasing the feasibility of the technique.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: general MAB-seq protection principle",
+            "basis": "text",
+            "support": "reported",
+            "quote": "The pretreatment of the DNA with the CpG methylation enzyme M.SssI, which converts only the Cs to 5mCs, protects Cs but not 5fCs and 5caCs, which enables direct detection of 5fCs and 5caCs as uracils.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "scope:caMAB-seq",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The catalogue names caMAB-seq separately, and the primary Results plus locus-specific Methods establish M.SssI followed by NaBH4 and bisulfite/PCR, with original 5caC giving T. The shared methylase state is supported, and the candidate qualifies the subsequent route as an alternative paper extension rather than a depicted split or an alias for combined-target MAB-seq.",
+        "evidence": [
+          {
+            "source_id": "card:mab-seq",
+            "locator": "Description: combined-target assay versus caMAB-seq",
+            "basis": "text",
+            "support": "reported",
+            "quote": "MAB-seq allows simultaneous and quantitative mapping of both 5fC and 5caC at base resolution. This method is complimentary to caMAB-seq, a method for direct 5caC mapping.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: caMAB-seq chemistry and order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In this modified version of MAB-seq (termed caMAB-seq), M.SssI-treated DNA was further incubated with NaBH4 so that only 5caC is read as T in bisulfite sequencing (Fig. 5a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:dna_ca_product",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The product is selected-locus PCR amplicon DNA sequenced by Illumina, with original CpG 5caC read as T and the other four classes as C. The carrier and original-state association agree with the producing operation; reaction-dependence is retained rather than claiming perfect specificity.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: amplified material and sequenced carrier",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Selected loci were then amplified by PCR, and PCR amplicons were sequenced using Illumina deep sequencing.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective 5fC reduction",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:dna_ca_reduced",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "After CpG protection, selective reduction changes original 5fC to 5hmC while leaving the 5caC target convertible. This paper-supported DNA state is chemically compatible with ca_bs_pcr and is expressly excluded from the two depicted branches.",
+        "evidence": [
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00025], Results: selective 5fC reduction",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Thus, we explored a subtraction-independent 5caC mapping strategy by taking advantage of the fact that 5fC can be selectively reduced by sodium borohydride (NaBH4) to 5hmC 35.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods: caMAB-seq base interpretation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In caMAB-seq, 5caC is read as T while C, 5mC, 5hmC and 5fC are read as C.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:dna_control",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The upper pre-bisulfite DNA retains C, 5mC, 5hmC, 5fC and 5caC. Its identity matches both the control assignment output and the control bisulfite/PCR input.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and upper \"Control\" route; pre-bisulfite strand retains green C, magenta 5mC, blue 5hmC, cyan 5fC and orange 5caC",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.0,
+              0.49,
+              0.66
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:dna_control_product",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The upper product reads T-C-C-T-T at the illustrated corresponding positions, conflating original C with 5fC/5caC. The amplified DNA state fits the producing block; separate terminal arrows do not establish pooling.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Upper arrow from control DNA through \"Bisulfite treatment / PCR amplification\" to purple T, green C, green C, purple T, purple T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.4,
+              0.0,
+              0.86,
+              0.52
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: standard bisulfite chemistry and calls",
+            "basis": "text",
+            "support": "reported",
+            "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Separate upper and lower right-facing arrows beyond the products; generic rightmost blue line labelled \"DNA\", without a pooling junction",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.86,
+              0.24,
+              1.0,
+              0.86
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:dna_input",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The left residue highlight identifies DNA-borne 5fC/5caC, and the central strand displays the five cytosine classes used by both branches. The candidate does not invent G partners, adapters, strand-end chemistry or a literal five-base genomic sequence; the CpG qualification comes from full text.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Left target label \"5fC/5caC residues\" and blue DNA line; central five C icons with 5mC, 5hmC, 5fC and 5caC labels",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.0,
+              0.0,
+              0.27,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:dna_mab_product",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The lower product is amplified DNA with C-C-C-T-T at the illustrated original-state positions. Its sequence encodes combined 5fC/5caC, not direct reading of the original modifications. The candidate preserves the unresolved 5fC-versus-5caC distinction, non-CpG ambiguity, methylase background and conversion-efficiency limit, and does not merge it with the control output.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Lower arrow from M.SssI-treated DNA through \"Bisulfite treatment / PCR amplification\" to green C, green C, green C, purple T, purple T",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.4,
+              0.51,
+              0.86,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: sequence readout",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Subsequent sequencing would reveal 5fC and 5caC as T, whereas C/5mC/5hmC as C (Supplementary Fig. 2a).",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results: sequence-context limitation",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00009], Results: efficiencies required for target detection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Successful detection of 5fC/5caC using MAB-seq requires complete conversion of C to 5mC by M. SssI as well as efficient bisulfite conversion of 5fC/5caC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00014], Results: incomplete CpG protection background",
+            "basis": "text",
+            "support": "reported",
+            "quote": "we modeled the largely stochastic event of M.SssI failure in CpG methylation with a binomial distribution",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Separate upper and lower right-facing arrows beyond the products; generic rightmost blue line labelled \"DNA\", without a pooling junction",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.86,
+              0.24,
+              1.0,
+              0.86
+            ],
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "state:dna_protected",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The lower pre-bisulfite strand shows originally unmodified C converted to 5mC while pre-existing 5mC, 5hmC, 5fC and 5caC retain their classes. This DNA state is the common supported input for MAB-seq conversion or the separately scoped caMAB-seq reduction.",
+        "evidence": [
+          {
+            "source_id": "diagram:asset_ee73620b6bf5b273969e5b0e",
+            "locator": "Central input arrow and lower \"M.SssI\" route; formerly green first C becomes magenta and gains the 5mC label",
+            "basis": "image",
+            "support": "depicted",
+            "quote": null,
+            "bbox": [
+              0.18,
+              0.45,
+              0.49,
+              1.0
+            ],
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00008], Results, Experimental strategy and validation of MAB-seq: CpG protection",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC.",
+            "bbox": null,
+            "rationale": null
+          },
+          {
+            "source_id": "paper:25362244",
+            "locator": "[b00066], Online Methods, Locus-specific caMAB-seq and 5caC calling: input and reaction order",
+            "basis": "text",
+            "support": "reported",
+            "quote": "M.sssI-treated DNA was then reduced by NaBH4 as described above in the redBS-seq protocol, followed by bisulfite conversion",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      },
+      {
+        "target": "unknown:rr_applicability",
+        "verdict": "supported",
+        "action": "accept",
+        "rationale": "The remaining question is precisely the RRMAB-seq selection output and its placement relative to the shared assay chemistry. The available abstract names the adaptation but does not supply that interface; the protocol full text/workflow figure would resolve it. Treating this as nonblocking is appropriate because no RRMAB-seq-specific operations are claimed and both Illumina branches plus the separately supported caMAB-seq route are already complete at the declared level.",
+        "evidence": [
+          {
+            "source_id": "paper:27281647",
+            "locator": "Abstract only: RRMAB-seq identity and coverage goal; supplied source contains no full protocol",
+            "basis": "text",
+            "support": "reported",
+            "quote": "Here we also describe an adapted version of the protocol to perform reduced-representation MAB-seq (RRMAB-seq) that provides increased coverage on CpG-rich regions, thus reducing the execution costs and increasing the feasibility of the technique.",
+            "bbox": null,
+            "rationale": null
+          }
+        ]
+      }
+    ]
+  },
+  "source_registry": {
+    "card:mab-seq": {
+      "kind": "text",
+      "content_level": "catalogue",
+      "url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/mab-seq.html",
+      "title": "MAB-Seq"
+    },
+    "diagram:asset_ee73620b6bf5b273969e5b0e": {
+      "kind": "image",
+      "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/42/42dd097fc2b7cf8868ae387d2d3d45aff8c44fc44fc30e63b8cc25d59ffd7f1c.png",
+      "sha256": "42dd097fc2b7cf8868ae387d2d3d45aff8c44fc44fc30e63b8cc25d59ffd7f1c",
+      "url": "https://www.illumina.com/content/dam/illumina-marketing/images/tools/sequencing/mab-seq.png",
+      "content_level": "diagram"
+    },
+    "metadata:25362244": {
+      "kind": "text",
+      "content_level": "metadata",
+      "identity_status": "pubmed_record_retrieved",
+      "pmid": "25362244",
+      "title": "Single-base resolution analysis of active DNA demethylation using methylase-assisted bisulfite sequencing.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25362244/",
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/21/2148358ef4611b9699b96797be2d60d7ab5af54bf6b1e1465cf47d995da079a7.xml",
+          "sha256": "2148358ef4611b9699b96797be2d60d7ab5af54bf6b1e1465cf47d995da079a7"
+        }
+      ]
+    },
+    "paper:25362244": {
+      "kind": "text",
+      "content_level": "fulltext",
+      "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/c6/c6f145c8b9f3c28ca0263a931eb553ce59371f94ad198adbef73db91f2334b44.txt",
+      "sha256": "c6f145c8b9f3c28ca0263a931eb553ce59371f94ad198adbef73db91f2334b44",
+      "pmid": "25362244",
+      "title": "Single-base resolution analysis of active DNA demethylation using methylase-assisted bisulfite sequencing.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4269366/",
+      "original": {
+        "source_id": "paper:25362244",
+        "pmcid": "PMC4269366",
+        "status": "fulltext_acquired",
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/eb/eb437a2dd94f2ccae7dffd30935c2552eb2580b2a153afaa72fac443331876ac.xml",
+        "sha256": "eb437a2dd94f2ccae7dffd30935c2552eb2580b2a153afaa72fac443331876ac",
+        "bytes": 136638,
+        "text_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/c6/c6f145c8b9f3c28ca0263a931eb553ce59371f94ad198adbef73db91f2334b44.txt",
+        "text_sha256": "c6f145c8b9f3c28ca0263a931eb553ce59371f94ad198adbef73db91f2334b44",
+        "blocks_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/ab/ab2fc9fe17bd335a92fba1b6f2265cbfd48d3f8e6a0d8062d917480b88610e67.json",
+        "block_count": 133,
+        "rendition": "jats_reading_blocks/1.0; paragraph boundaries preserved; not original layout",
+        "media_type": "application/xml",
+        "format": "JATS",
+        "identifiers": {
+          "pmcid": "PMC4269366",
+          "pmcid-ver": "PMC4269366.1",
+          "pmcaid": "4269366",
+          "pmcaiid": "4269366",
+          "manuscript-id": "NIHMS636247",
+          "pmid": "25362244",
+          "doi": "10.1038/nbt.3073",
+          "manuscript-id-alternative": "NIHPA636247"
+        },
+        "original_response": {
+          "request_url": "https://pmc.ncbi.nlm.nih.gov/api/oai/v1/mh/?verb=GetRecord&identifier=oai%3Apubmedcentral.nih.gov%3A4269366&metadataPrefix=pmc",
+          "http_status": 200,
+          "final_url": "https://pmc.ncbi.nlm.nih.gov/api/oai/v1/mh/?verb=GetRecord&identifier=oai%3Apubmedcentral.nih.gov%3A4269366&metadataPrefix=pmc",
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/4b/4bcfd1e96ccfac3588a04c313d91d71914fbaf9dfc009928a09ebb27218d97e9.xml",
+          "sha256": "4bcfd1e96ccfac3588a04c313d91d71914fbaf9dfc009928a09ebb27218d97e9",
+          "bytes": 124220,
+          "snapshot_file_imports": {
+            "path": {
+              "declared_path": "papers/25362244/original_oai_response.xml",
+              "resolved_input_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_03/papers/25362244/original_oai_response.xml",
+              "sha256": "4bcfd1e96ccfac3588a04c313d91d71914fbaf9dfc009928a09ebb27218d97e9",
+              "bytes": 124220,
+              "imported_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/4b/4bcfd1e96ccfac3588a04c313d91d71914fbaf9dfc009928a09ebb27218d97e9.xml"
+            }
+          }
+        },
+        "derivation": "Article subtree serialized from preserved official PMC OAI response",
+        "license": [
+          "Users may view, print, copy, and download text and data-mine the content in such documents, for the purposes of academic research, subject always to the full Conditions of use: http://www.nature.com/authors/editorial_policies/license.html#terms"
+        ],
+        "scientific_support_status": "fulltext_available_not_content_reviewed",
+        "blocks_sha256": "ab2fc9fe17bd335a92fba1b6f2265cbfd48d3f8e6a0d8062d917480b88610e67",
+        "snapshot_file_imports": {
+          "path": {
+            "declared_path": "papers/25362244/article.xml",
+            "resolved_input_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_03/papers/25362244/article.xml",
+            "sha256": "eb437a2dd94f2ccae7dffd30935c2552eb2580b2a153afaa72fac443331876ac",
+            "bytes": 136638,
+            "imported_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/eb/eb437a2dd94f2ccae7dffd30935c2552eb2580b2a153afaa72fac443331876ac.xml"
+          },
+          "text_path": {
+            "declared_path": "papers/25362244/article.txt",
+            "resolved_input_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_03/papers/25362244/article.txt",
+            "sha256": "c6f145c8b9f3c28ca0263a931eb553ce59371f94ad198adbef73db91f2334b44",
+            "bytes": 72774,
+            "imported_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/c6/c6f145c8b9f3c28ca0263a931eb553ce59371f94ad198adbef73db91f2334b44.txt"
+          },
+          "blocks_path": {
+            "declared_path": "papers/25362244/blocks.json",
+            "resolved_input_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_03/papers/25362244/blocks.json",
+            "sha256": "ab2fc9fe17bd335a92fba1b6f2265cbfd48d3f8e6a0d8062d917480b88610e67",
+            "bytes": 89578,
+            "imported_path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/ab/ab2fc9fe17bd335a92fba1b6f2265cbfd48d3f8e6a0d8062d917480b88610e67.json"
+          }
+        }
+      },
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/4b/4bcfd1e96ccfac3588a04c313d91d71914fbaf9dfc009928a09ebb27218d97e9.xml",
+          "sha256": "4bcfd1e96ccfac3588a04c313d91d71914fbaf9dfc009928a09ebb27218d97e9"
+        },
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/ab/ab2fc9fe17bd335a92fba1b6f2265cbfd48d3f8e6a0d8062d917480b88610e67.json",
+          "sha256": "ab2fc9fe17bd335a92fba1b6f2265cbfd48d3f8e6a0d8062d917480b88610e67"
+        },
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/c6/c6f145c8b9f3c28ca0263a931eb553ce59371f94ad198adbef73db91f2334b44.txt",
+          "sha256": "c6f145c8b9f3c28ca0263a931eb553ce59371f94ad198adbef73db91f2334b44"
+        },
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/eb/eb437a2dd94f2ccae7dffd30935c2552eb2580b2a153afaa72fac443331876ac.xml",
+          "sha256": "eb437a2dd94f2ccae7dffd30935c2552eb2580b2a153afaa72fac443331876ac"
+        }
+      ]
+    },
+    "metadata:26975309": {
+      "kind": "text",
+      "content_level": "metadata",
+      "identity_status": "pubmed_record_retrieved",
+      "pmid": "26975309",
+      "title": "A probabilistic generative model for quantification of DNA modifications enables analysis of demethylation pathways.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26975309/",
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/fe/feb62856dd419c4e862391c0a0b6e0441c6f0e8e97b451e9806418f8a2eefc94.xml",
+          "sha256": "feb62856dd419c4e862391c0a0b6e0441c6f0e8e97b451e9806418f8a2eefc94"
+        }
+      ]
+    },
+    "paper:26975309": {
+      "kind": "text",
+      "content_level": "abstract",
+      "pmid": "26975309",
+      "title": "A probabilistic generative model for quantification of DNA modifications enables analysis of demethylation pathways.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26975309/",
+      "fulltext_status": "not_acquired"
+    },
+    "metadata:27281647": {
+      "kind": "text",
+      "content_level": "metadata",
+      "identity_status": "pubmed_record_retrieved",
+      "pmid": "27281647",
+      "title": "Methylation-assisted bisulfite sequencing to simultaneously map 5fC and 5caC on a genome-wide scale for DNA demethylation analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27281647/",
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/51/519f830613d3e7ea108e8593484846732b9459f2dcd1bcb099b2c9a78912bd18.xml",
+          "sha256": "519f830613d3e7ea108e8593484846732b9459f2dcd1bcb099b2c9a78912bd18"
+        }
+      ]
+    },
+    "paper:27281647": {
+      "kind": "text",
+      "content_level": "abstract",
+      "pmid": "27281647",
+      "title": "Methylation-assisted bisulfite sequencing to simultaneously map 5fC and 5caC on a genome-wide scale for DNA demethylation analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27281647/",
+      "fulltext_status": "not_acquired"
+    },
+    "metadata:25660018": {
+      "kind": "text",
+      "content_level": "metadata",
+      "identity_status": "pubmed_record_retrieved",
+      "pmid": "25660018",
+      "title": "Single-Base Resolution Analysis of 5-Formyl and 5-Carboxyl Cytosine Reveals Promoter DNA Methylation Dynamics.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25660018/",
+      "custody_files": [
+        {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/21/2148358ef4611b9699b96797be2d60d7ab5af54bf6b1e1465cf47d995da079a7.xml",
+          "sha256": "2148358ef4611b9699b96797be2d60d7ab5af54bf6b1e1465cf47d995da079a7"
+        }
+      ]
+    },
+    "paper:25660018": {
+      "kind": "text",
+      "content_level": "abstract",
+      "pmid": "25660018",
+      "title": "Single-Base Resolution Analysis of 5-Formyl and 5-Carboxyl Cytosine Reveals Promoter DNA Methylation Dynamics.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25660018/",
+      "fulltext_status": "not_acquired"
+    }
+  },
+  "source_registry_sha256": "8bd14bf47c470d7199b9d121d401af0a7259a4fce5b843b134255cca1e24cc6d"
+}
