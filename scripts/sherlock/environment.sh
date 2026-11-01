@@ -15,7 +15,7 @@ if [[ -n "${ATLAS_CODEX_BIN_DIR:-}" ]]; then
 fi
 export ATLAS_PROJECT_ROOT="${ATLAS_PROJECT_ROOT:-$GROUP_SCRATCH/mstojkov/agents_snRNA}"
 export ATLAS_REPOSITORY="${ATLAS_REPOSITORY:-$ATLAS_PROJECT_ROOT/sequencing-technology-atlas}"
-[[ -d "$ATLAS_REPOSITORY/src/genomics_discovery/curation" ]] || {
+[[ -d "$ATLAS_REPOSITORY/src/genomics_discovery" ]] || {
     echo 'ATLAS_REPOSITORY must name an existing harness source directory' >&2
     return 2
 }

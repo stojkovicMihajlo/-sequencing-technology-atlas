@@ -133,7 +133,7 @@ in-container test report are also preserved locally under
 Release 08's eight skipped tests included optional/external fixtures and macOS
 `textutil` checks. The newer candidate includes a tested Linux legacy Word
 converter, with seven remaining skips when the real fixture is enabled. See
-[converter selection and limits](SOURCE_ACQUISITION.md#legacy-word-supplements).
+[converter selection and limits](sources/SOURCE_ACQUISITION.md#legacy-word-supplements).
 Existing rendered and pinned documents do not require reconversion. New originals
 still need successful conversion, association and fresh source review; a download
 alone does not make them scientifically inspected evidence.
@@ -144,7 +144,7 @@ Use `scripts/sherlock/run.sbatch` to invoke a curation CLI under Slurm, for exam
 
 ```bash
 sbatch scripts/sherlock/run.sbatch \
-  genomics_discovery.curation.deployment status /absolute/path/to/NEW_LINUX_PLAN
+  genomics_discovery.execution.deployment status /absolute/path/to/NEW_LINUX_PLAN
 ```
 
 The time request is a scheduler allocation, not a claim about expected latency.

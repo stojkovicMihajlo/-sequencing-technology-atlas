@@ -93,7 +93,7 @@ ATLAS_VALIDATION="$ATLAS_PROJECT_ROOT/technology_atlas/v2/work/migration_to_xiao
 cd "$ATLAS_REPOSITORY"
 export PYTHONPATH="$ATLAS_REPOSITORY/src:$ATLAS_REPOSITORY"
 # Fresh packets/plans reproduce source bytes and passages under the new root.
-"$ATLAS_ENV_DIR/bin/python" scripts/validate_release.py \
+"$ATLAS_ENV_DIR/bin/python" scripts/validation/validate_release.py \
     --project-root "$ATLAS_PROJECT_ROOT" \
     --old-root /Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA \
     --output "$ATLAS_VALIDATION" > "$ATLAS_CONTROL/validation.log" 2>&1

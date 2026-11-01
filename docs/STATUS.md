@@ -98,7 +98,7 @@ reviewer with three seeded defects in a full Workflow: all three were identified
 the result was `needs_revision`, and supported exports were withheld. It completed
 in **15m06s**. This repair timing is not a new full-extraction timing result.
 
-The [runnable prototype guide](PROTOTYPE.md) and
+The [runnable prototype guide](protocols/PROTOTYPE.md) and
 [completed example](../examples/scstamp-seq/README.md) show the actual outputs.
 The [experiment report](../experiments/scstamp_seq_20261021/README.md) links source
 audits, exact changes, native controls and limitations. Both smaller eight-case
@@ -179,7 +179,7 @@ At 18:23 UTC all three source-obligation stages had validated and each method
 had launched its two readers. The source-only stage took 535–819 seconds per
 method. Future development uses a five-method pool with one or two fresh
 extractions per iteration; the
-[graph-usability procedure](benchmark/GRAPH_USABILITY.md) adds downstream retrieval,
+[graph-usability procedure](evaluation/benchmark/GRAPH_USABILITY.md) adds downstream retrieval,
 representation-variation and graph-navigation criteria. Those consumer controls
 are planned evaluations, not native successes from this run.
 
@@ -365,7 +365,7 @@ Source registration and `atlas-batch` are already reusable. `atlas-deploy` also
 provides durable extraction plus cumulative isolated publication. The latest
 shared-selection/registry integration remains wired in an experiment launcher.
 Extend these existing paths with the remaining stages; do not create another
-extractor or change frozen experiment scripts. See the [runbook](RUNBOOK.md).
+extractor or change frozen experiment scripts. See the [runbook](operations/RUNBOOK.md).
 
 Completion checks:
 
@@ -380,7 +380,7 @@ Completion checks:
   registry and archive hashes are written after completion. No supported parents or
   unfinished admission is not presented as successful graph construction.
 - The declared distribution contains the entire dependency closure, including code
-  currently imported from `playground/`. One fresh bounded Qiu Slurm run validates
+  currently imported from `scripts.research/`. One fresh bounded Qiu Slurm run validates
   the exact frozen release together, followed by structural replay and an audit.
 
 The deterministic overlay-order fix passed 2,146 local software tests, three
@@ -402,7 +402,7 @@ agent-facing schema/scaffold/prompt/check/view tools, and full-definition semant
 candidate retrieval through the existing embedding adapter. Accepted and pending
 registry definitions are searched; backend/settings are bound through comparison,
 reconciliation and publication. Source occurrences remain unchanged, and fresh
-scientific membership review remains required. See [the exact tool contract](COMPARISON_PROFILES.md)
+scientific membership review remains required. See [the exact tool contract](graphs/COMPARISON_PROFILES.md)
 and [19 recorded design decisions](decisions/2026-10-20-shared-operation-alignment.md).
 
 The clean complete local run passed **1,589 tests, 3 skipped**. Qiu job 48601586
@@ -537,7 +537,7 @@ Acquisition/conversion, fresh registration and re-review still need a closure
 experiment. The pilot imported existing historical relationships; it did not
 produce fresh shared-operation mappings between these three methods.
 
-See [the extraction and matching contract](EXTRACTION_SCOPE_AND_MATCHING.md) for
+See [the extraction and matching contract](graphs/EXTRACTION_SCOPE_AND_MATCHING.md) for
 the goal, allowed gaps, exact record identities versus reviewed semantic concepts,
 and the limitations of embedding or graph hashing. Current registry retrieval is
 lexical; optional embeddings are not a validated matching capability.
@@ -612,7 +612,7 @@ reCAPTCHA page instead of PDF content. This is a challenged retrieval, not
 evidence that the publication lacks the required procedure. Its source-recovery
 receipt is `../technology_atlas/v2/work/deployment_20261018/source_recovery_followup_06/report.json`.
 
-The product path is documented in [DEPLOYMENT.md](DEPLOYMENT.md). As of the
+The product path is documented in [DEPLOYMENT.md](operations/DEPLOYMENT.md). As of the
 2026-10-18 development pass:
 
 - A full inventory contains **201 methods**: **133 ready for source inspection**
@@ -655,7 +655,7 @@ The product path is documented in [DEPLOYMENT.md](DEPLOYMENT.md). As of the
   original inspection. Retrieved dependencies are not silently registered.
 - Explicit same-source repair/re-review jobs are implemented. They preserve the
   original negative result and require a new review; changed sources require a
-  fresh extraction. See [deployment commands](DEPLOYMENT.md).
+  fresh extraction. See [deployment commands](operations/DEPLOYMENT.md).
 - **Bulk deployment is running** with `gpt-6.1-sol`, `xhigh`, ten extraction/review
   sessions at most and no hard stage deadline. It reuses four accepted methods and queues
   129 new extraction jobs in frozen chunks, publishing each chunk before moving
@@ -779,12 +779,12 @@ fragmentation/tagging concept across ATAC-seq, ChIPmentation and Smart-seq2, plu
 a separate purification-purpose concept: four reviewed memberships, all three
 expected method pairs connected, and no false mechanism connection to purification.
 All original drafts, source reviews and comparison reports remain archived.
-**1,038 software tests pass.** See the [recovery result](KNOWN_OVERLAP_EXPERIMENT.md#source-backed-recovery-of-the-independent-drafts)
+**1,038 software tests pass.** See the [recovery result](evaluation/KNOWN_OVERLAP_EXPERIMENT.md#source-backed-recovery-of-the-independent-drafts)
 and [recorded output](../provenance/definition_reconciliation_results.json).
 This is a repair on known examples with supplied operation boundaries, not a
 held-out accuracy estimate or validation of full-atlas automatic decomposition.
 
-The [known-overlap experiment](KNOWN_OVERLAP_EXPERIMENT.md) completed 16 fresh
+The [known-overlap experiment](evaluation/KNOWN_OVERLAP_EXPERIMENT.md) completed 16 fresh
 native sessions over ATAC-seq, ChIPmentation and Smart-seq2. Joint curation recovered
 one shared tagmentation mechanism across three supplied reaction boundaries, with
 purification kept separate. Automatic section selection recovered broader shared
@@ -796,7 +796,7 @@ That experiment tested the previous harness unchanged. The recovery above adds
 the missing source-backed handoff; section-boundary refinement is still separate
 work. Experimental graphs remain separate from the production atlas.
 
-The earlier [ten-paper diagnostic](TEN_PAPER_DIAGNOSTIC.md) completed 40 native
+The earlier [ten-paper diagnostic](evaluation/TEN_PAPER_DIAGNOSTIC.md) completed 40 native
 sessions in 23 minutes 49 seconds. Nineteen of twenty sampled definitions passed
 model/source review, but an over-strict comparison rule blocked every job at
 publication. After general fixes, replaying unchanged evidence admitted thirteen
@@ -815,7 +815,7 @@ The [implementation and live-test record](../provenance/shared_registry_checks.j
 retains rejected test inputs as well as follow-up outcomes. The final controlled
 two-paper trial admitted one definition with two uses in 6 minutes 15 seconds. The canonical atlas
 is unchanged; these are isolated registry experiments. Read the
-[workflow and commands](CONCEPT_REGISTRY.md#shared-proposals-and-coordinated-admission).
+[workflow and commands](graphs/CONCEPT_REGISTRY.md#shared-proposals-and-coordinated-admission).
 
 The [frozen-matching pilot](../examples/frozen_matching/README.md) adds six completed
 native sessions over source-bound selections from four methods. Routine jobs now
@@ -881,7 +881,7 @@ scientific judgments.
 
 ## Decisions before a large extraction job
 
-The [shared-operation discovery update](SHARED_OPERATIONS.md) adds optional broad
+The [shared-operation discovery update](graphs/SHARED_OPERATIONS.md) adds optional broad
 workflow-role questions, free/contextual lexical and local semantic retrieval, and
 a joined lookup of exact comparison scope and concept membership. **978 local
 software tests pass.** Across 14 positive directional searches, semantic retrieval

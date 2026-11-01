@@ -16,7 +16,7 @@ uv --version
 codex --version
 uv sync --locked --extra dev --python "$(command -v python3)" --no-python-downloads
 "$ATLAS_ENV_DIR/bin/python" -m pip --version 2>/dev/null || true
-"$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.curation.deployment --help
-"$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.curation.extraction_batch --help
-"$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.curation.technology_graph --help
+"$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.execution.deployment --help
+"$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.execution.batch --help
+"$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.graphs.workflows --help
 "$ATLAS_ENV_DIR/bin/python" -m pytest -q -p no:cacheprovider --junitxml="$report/tests.xml"

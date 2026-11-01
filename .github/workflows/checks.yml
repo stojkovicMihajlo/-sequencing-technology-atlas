@@ -16,6 +16,6 @@ jobs:
           python-version: '3.13'
       - run: python -m pip install uv
       - run: uv sync --locked --extra dev
-      - run: uv run python scripts/check_example.py
-      - run: uv run python scripts/inspect_example.py --operation o_tag_v1 --json > /dev/null
+      - run: uv run python scripts/examples/check_example.py
+      - run: uv run python scripts/examples/inspect_example.py --operation o_tag_v1 --json > /dev/null
       - run: uv run python -m pytest -q
