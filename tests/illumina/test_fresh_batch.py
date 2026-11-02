@@ -104,3 +104,32 @@ def test_no_fuzzy_label_equivalence():
     assert leads['cap-seq'] == {('rna', 2)}
     assert labels['CAP-seq'] == set()
     assert labels['CapSeq']
+
+
+def test_historical_inventory_paths_are_not_rebased_into_current_snapshot(tmp_path):
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    image = raw / 'diagram.png'
+    image.write_bytes(b'original image')
+    historical = {'path': 'older/location/superseded.png', 'sha256': 'a' * 64}
+    inventory = {'catalogue': {'path': 'methods.jsonl', 'sha256': 'b' * 64},
+                 'cards': [{'record_id': 'x', 'poster_scope': {'superseded_context_crop': historical}}]}
+    write(raw / 'inventory.json', inventory)
+    write(raw / 'sources.json', {'assets': [{'path': 'diagram.png', 'sha256': sha(image)}]})
+    result, sources = prepare.load_source_bundle(raw, prepare.Custody())
+    assert result['catalogue'] == inventory['catalogue']
+    assert result['cards'][0]['poster_scope']['superseded_context_crop'] == historical
+    assert sources['assets'][0]['path'] == str(image)
+    assert read(raw / 'inventory.json') == inventory
+    image.unlink()
+    with pytest.raises(ValueError, match='materialized source file'):
+        prepare.load_source_bundle(raw, prepare.Custody())
+
+
+def test_changed_active_source_remains_blocking(tmp_path):
+    image = tmp_path / 'diagram.png'; image.write_bytes(b'original')
+    write(tmp_path / 'inventory.json', {'cards': []})
+    write(tmp_path / 'sources.json', {'assets': [{'path': 'diagram.png', 'sha256': sha(image)}]})
+    image.write_bytes(b'changed')
+    with pytest.raises(ValueError, match='custody mismatch'):
+        prepare.load_source_bundle(tmp_path, prepare.Custody())

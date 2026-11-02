@@ -40,6 +40,25 @@ def collection_candidates(audits, poster_cards):
     return candidates, poster_labels
 
 
+def load_source_bundle(base, custody):
+    """Inventory metadata is not an acquired-file registry.
+
+    Inventory may preserve original catalogue paths and superseded crop paths
+    relative to their historical locations. Keep those assertions verbatim and
+    pin the inventory itself. Only the acquisition registry supplies current
+    model input files; resolve and verify those, then card_sources checks the
+    exact per-card input set before any model call.
+    """
+    inventory = read(base / "inventory.json")
+    acquired = custody.absolute_records(read(base / "sources.json"), base)
+    inventory["input_path_contract"] = {
+        "parent_inventory": str(base / "inventory.json"),
+        "parent_inventory_sha256": sha(base / "inventory.json"),
+        "historical_inventory_paths": "preserved verbatim; not registered model inputs",
+        "current_input_paths": "only the validated acquisition registry and added catalogue documents"}
+    return inventory, acquired
+
+
 def prepare(source_root, annotations, output):
     if not os.environ.get("SLURM_JOB_ID"):
         raise ValueError("Source preparation must run inside a Slurm allocation")
@@ -49,8 +68,7 @@ def prepare(source_root, annotations, output):
     parents = {}
     for name, old in (("catalogue", "sources_06"), ("posters", "poster_sources_06")):
         base = source_root / old
-        inventory = custody.absolute_records(read(base / "inventory.json"), base)
-        acquired = custody.absolute_records(read(base / "sources.json"), base)
+        inventory, acquired = load_source_bundle(base, custody)
         bundles[name] = (inventory, acquired)
         parents[name] = {"inventory": str(base / "inventory.json"),
             "inventory_sha256": sha(base / "inventory.json"), "sources": str(base / "sources.json"),
