@@ -162,6 +162,33 @@ original migration records. Completed Mac runs remain historical records.
 Jobs still writing locally require a final incremental copy after completion.
 Do not run another local-to-remote sync over new Sherlock run directories.
 
+### Dedicated account for future atlas runs (2 November 2026)
+
+The user requested a different ChatGPT/Codex account for future agent runs.
+The Qiu environment sources `atlas-codex-account.sh` from the user's Qiu group
+home. Its tracked source is `scripts/sherlock/atlas-account.sh`. This selects
+`$GROUP_HOME/mstojkov/private/codex-atlas-runs` as `CODEX_HOME`, a private login
+directory with file-based ChatGPT authentication. The default personal Codex
+login is preserved. Changing this selector does not migrate existing sessions.
+
+The new directory is initially unauthenticated. The user must complete login:
+
+```bash
+ssh sherlock-qiu
+source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
+"$ATLAS_CODEX_BIN_DIR/codex" login --device-auth
+"$ATLAS_CODEX_BIN_DIR/codex" login status
+```
+
+In the browser, choose the intended new account. Device-code login must be enabled
+for that account. Do not send tokens, passwords, or auth.json to the agent.
+Before a new batch, check the selected CODEX_HOME and login status in its job
+environment, and ensure API/access-token environment variables do not override
+the intended login. A successful login check alone does not prove model access
+or identify the billing account. User confirmation of the browser account and
+a subsequent bounded native run are separate checks. Never fall back to the
+old login just because this directory is unauthenticated.
+
 Codex sign-in is separate from SSH sign-in. Check `codex login status` after
 loading the modules. If needed, use the documented
 [device sign-in](https://learn.chatgpt.com/docs/auth#login-on-headless-devices)
