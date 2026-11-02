@@ -69,6 +69,20 @@ def requires_paper_matches(card):
                for r in card_references(card))
 
 
+def paper_instructions(card):
+    if not requires_paper_matches(card):
+        return ("This source depiction has no required primary-paper association. Assess any supplied "
+                "publications honestly, but a clearly depicted architecture does not require an invented "
+                "paper match. Absence of an unlisted paper is not itself a blocking Unknown. Missing "
+                "evidence for a consequential claimed mechanism or connection still requires research.")
+    return ("Assess every listed method reference and every declared method in paper_matches. Candidate "
+            "publications are unverified association leads, not assumed matches. A resolved bibliographic "
+            "association can cite the literal reference source alongside the identified paper's own "
+            "identity/content evidence. Use metadata-only status honestly. If no paper evidence exists, "
+            "record a blocking Unknown on the exact method scope rather than invent a citation. "
+            "Related publications are background unless content shows otherwise.")
+
+
 def source_file_pins(record, base):
     """Resolve current source custody explicitly; historical cache paths stay historical."""
     pins = {}
@@ -116,6 +130,18 @@ def card_sources(card, acquired, base):
     registry[card["source_id"]] = {"kind": "text", "text": text,
         "content_level": "catalogue", "url": card.get("source_page_url"),
         "title": card.get("source_title")}
+    for document in card.get("catalogue_documents", []):
+        ident = document["source_id"]
+        if ident in registry or document.get("content_level") != "catalogue":
+            raise ValueError("Additional catalogue documents need distinct IDs and catalogue evidence level")
+        path = (base / document["text_path"]).resolve()
+        if sha(path) != document["text_sha256"]:
+            raise ValueError("Catalogue document rendition changed")
+        registry[ident] = {"kind": "text", "content_level": "catalogue",
+            "text": path.read_text(), "path": str(path), "sha256": document["text_sha256"],
+            "title": document["title"], "url": document.get("url"),
+            "association_status": document.get("association_status"),
+            "original": document, "custody_files": source_file_pins(document, base)}
     for asset in acquired["assets"]:
         if asset["asset_id"] not in card["diagram_asset_ids"] or asset["status"] != "downloaded":
             continue
@@ -307,7 +333,7 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
             "attached_images": delivery, "output": str(attempt / "artifact.json"),
             "source_helper": shlex.join([sys.executable, "-m", "genomics_discovery.illumina.extraction", "source", "--registry", str(source_path)]),
             "self_check": shlex.join([sys.executable, "-m", "genomics_discovery.illumina.extraction", "check", str(attempt / 'artifact.json'), "--registry", str(source_path), "--record-id", card['record_id'], "--card", str(directory / "card.json")]),
-            "source_requirement": "Assess every listed method reference and every declared method in paper_matches. Candidate publications are unverified association leads, not assumed matches. A resolved bibliographic association can cite the literal reference source alongside the identified paper's own identity/content evidence. Use metadata-only status honestly. If no paper evidence exists, record a blocking Unknown on the exact method scope rather than invent a citation. Related publications are background unless content shows otherwise."}
+            "source_requirement": paper_instructions(card)}
         if role == "reviewer":
             candidate_path = attempt / "candidate.json"
             write(candidate_path, candidate.model_dump(mode="json"))

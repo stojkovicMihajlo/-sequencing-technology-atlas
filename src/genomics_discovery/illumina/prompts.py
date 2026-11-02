@@ -47,6 +47,10 @@ rewrite the source, merge incompatible variants, or label a resolvable source
 discrepancy as an unexplained biological impossibility.
 
 Distinguish publication metadata, abstract-only evidence and full-text evidence.
+Illumina collection pages are secondary catalogue evidence, not primary papers.
+When a supplied page is a candidate match, check its heading and depicted target
+before applying it. A page may discuss several methods; its presence does not
+expand the assigned schematic's scope or establish their equivalence.
 A verified PMID/DOI or title is bibliographic identification, not verification of
 reaction order, historical priority or chemistry. Associate each method with the
 paper(s) that actually describe it; a grouped card may list protocols, applications

@@ -1,0 +1,92 @@
+Illumina workflows first; paper-supported development links afterward
+Current contract, 2 November 2026
+
+Purpose
+Use Illumina's existing schematic detail as the baseline. Extract those workflows
+first. Then investigate the method paper's methodological citations, identify what
+was adopted or changed, locate the earlier method in this extracted catalogue,
+and bind the supported relationship to the relevant operations. A paper may have
+several contributors; no connected evolutionary tree or one-parent rule is forced.
+
+1. Fresh source preparation — scripts/illumina/prepare_fresh_batch.py
+Inputs: original catalogue descriptions and images, poster row crops, collection
+PDFs, and source-location annotations. Prior model extractions and reviews are
+not inputs. Counts describe source occurrences, not unique technologies.
+Collection pages remain secondary evidence. A candidate source-page association
+requires the agent to check target/scope; it is not method equivalence.
+Outputs: sources.json and inventory.json for each source class, manifest.json,
+and a CHECKLIST.csv listing every source occurrence.
+
+2. Workflow extraction — scripts/illumina/extract_all.py
+Calls src/genomics_discovery/illumina/extraction.py:run -> extract_card.
+The first two new records must pass independent review before the rest launch.
+No completed older extraction is counted as a new result. All outputs use new
+attempt directories. Existing source documents are reused with integrity hashes.
+
+What the extraction agent must inspect and record
+- Inspect the supplied actual image, including arrows, branches and end groups.
+- State: a material/data product at a particular point, with relevant features.
+- Operation: the depicted transformation, declared input/output State IDs,
+  mechanism and information effect only to the specificity supported by sources.
+- Flow: the directed input/output/dependency connecting those exact records.
+- MethodScope: which operations apply to each named method/variant on the card.
+- PaperMatch: which supplied publication describes which target, with the actual
+  evidence level; background citation alone does not establish a contribution.
+- Evidence: source ID, locator and quote or image region for the specific claim.
+- Correction/Unknown: a source discrepancy and its supported resolution, or a
+  consequential unresolved question. Routine unshown recipe details are outside
+  this extraction's purpose. No invented waste streams, pooling or mechanisms.
+
+Instructions: src/genomics_discovery/illumina/prompts.py
+Data definitions and checks: src/genomics_discovery/illumina/models.py
+
+Tools actually supplied to the extraction agent
+- Diagram images attached to the native call.
+- `python -m genomics_discovery.illumina.extraction source --registry PATH`
+  lists registered evidence; --id ID --query TEXT retrieves bounded passages.
+- `python -m genomics_discovery.illumina.extraction check artifact.json
+   --registry PATH --record-id ID --card PATH` checks the same representation
+  and source-coverage rules that the host repeats independently.
+The agent can read registered source files. It cannot silently substitute a web
+page, previous extraction or recollection for those sources. Missing evidence is
+recorded for a subsequent acquisition attempt with new source registration.
+
+3. Independent workflow review
+A fresh model session receives the exact candidate, sources, diagram images and
+required review targets. It checks scientific support and scope. Python validates
+IDs, connections, source/candidate hashes, quote support and review coverage.
+At most one author correction followed by a fresh review is permitted per record.
+Unresolved/failed records remain visible but are excluded from supported retrieval.
+Per-record outputs: card.json, source_registry.json, extraction.json, review.json,
+graph.json, stages.json; native attempts retain exact prompts, schemas and events.
+This is automated review, not a guarantee of scientific correctness or expert review.
+
+4. Development tracing — existing bounded pilot; NOT part of this extraction run
+experiments/citation_lineage_pilot/{prompts.py,models.py,run.py}
+- Read the method paper and nominate methodological citations with exact contexts.
+- Retrieve/check the cited work, not just the citing author's bibliography.
+- Classify contribution: assay development, component adoption, mechanism
+  precedent, experimental comparator, background, or not established.
+- Record the earlier demonstration, specific change, limitation, reported gain,
+  trade-offs/transfer limits, and evidence from both sides. Multiple coordinated
+  changes may form one claim. Unsupported motivation/performance stays unspecified.
+- Search catalogue titles, descriptions and reference identities for a match.
+  An absent earlier method remains an external contribution awaiting extraction.
+- Inspect exact operations on both sides; tie the contribution to those operations.
+  Only expand a workflow if its current detail cannot express the supported change.
+- Independent relation review is required before publication. A citation, earlier
+  date or similar label does not establish ancestry. Shared mechanism is distinct
+  from demonstrated historical adoption.
+
+Graph inspection tools already implemented in illumina/graph.py
+list, workflow, get, neighbors, walk, search, group, protocol.
+`group` retrieves a connected operation group with boundary states and evidence.
+`search` retrieves candidates; it does not certify chemical equivalence.
+The bounded citation and paired-operation pilots exercise parts of stage 4.
+Automatic recursive processing of all catalogue methods is still to be integrated
+and evaluated. This document does not claim that it already exists.
+
+Launch outputs and scientific completion are separate
+The batch has finished only when every source occurrence has an explicit terminal
+outcome. 'Supported' requires its own fresh source/review checks. Extraction
+completion does not establish a completed evolutionary graph.
