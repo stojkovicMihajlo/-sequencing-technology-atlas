@@ -133,3 +133,50 @@ def test_changed_active_source_remains_blocking(tmp_path):
     image.write_bytes(b'changed')
     with pytest.raises(ValueError, match='custody mismatch'):
         prepare.load_source_bundle(tmp_path, prepare.Custody())
+
+
+@pytest.mark.parametrize('source_title,recovered_title', [(None, 'Recovered method'), ('', None)])
+def test_complete_source_preparation_with_missing_title(tmp_path, monkeypatch, source_title, recovered_title):
+    """Exercise registration to manifest across all three source classes, no models."""
+    import subprocess
+    source_root = tmp_path / 'raw'
+    annotation = tmp_path / 'annotations'
+    annotation.mkdir()
+    pdf_assets = []
+    for kind, aid in [('dna', 'asset_409e5c0403ff18301d168974'),
+                      ('rna', 'asset_4a5d25b11e0887cf7958bda3')]:
+        pdf = tmp_path / (kind + '.pdf'); pdf.write_bytes(kind.encode())
+        pdf_assets.append({'asset_id': aid, 'path': str(pdf), 'sha256': sha(pdf), 'url': 'https://example.org/' + kind})
+        write(annotation / (kind + '_collection.json'), {'figures': [
+            {'page': 1, 'source_pdf_sha256': sha(pdf), 'poster_row_candidate': 'row:one'}]})
+    image = tmp_path / 'figure.png'; image.write_bytes(b'pinned image')
+    main_asset = {'asset_id': 'main', 'source_id': 'image:main', 'status': 'downloaded',
+                  'path': str(image), 'sha256': sha(image), 'url': 'https://example.org/figure'}
+    catalogue_card = {'record_id': 'blank', 'source_id': 'card:blank', 'source_title': source_title,
+                      'recovered_title': recovered_title, 'diagram_asset_ids': ['main'], 'references': []}
+    poster_card = {'record_id': prepare.row_record_id('row:one'), 'source_id': 'card:poster',
+                   'source_title': 'Recovered method', 'source_method_labels': ['Recovered method'],
+                   'diagram_asset_ids': ['main'], 'references': []}
+    for name, card in [('sources_06', catalogue_card), ('poster_sources_06', poster_card)]:
+        write(source_root / name / 'inventory.json', {'catalogue': {'path': 'historical.json', 'sha256': 'f' * 64},
+                                                     'cards': [card]})
+        write(source_root / name / 'sources.json', {'assets': [main_asset, *pdf_assets]})
+    (annotation / 'panels').mkdir()
+    footer = annotation / 'panels' / 'footer.png'; footer.write_bytes(b'footer image')
+    write(annotation / 'footer_panels.json', {'rows': [{'row_id': 'row:footer',
+        'image_provenance': {'crop_path': 'old/footer.png', 'crop_sha256': sha(footer)},
+        'source_pdf_sha256': pdf_assets[0]['sha256'], 'source_url': 'https://example.org/footer',
+        'diagram_region_proposal': [0, 0, 10, 10], 'source_row_caption': 'Readout',
+        'members': [{'source_method_label': 'Readout'}], 'scope_note': 'Readout schematic',
+        'panel_classification': 'readout'}]})
+    monkeypatch.setenv('SLURM_JOB_ID', 'test')
+    monkeypatch.setattr(prepare.subprocess, 'run', lambda *a, **kw:
+                        subprocess.CompletedProcess(a, 0, stdout=b'Collection page text.\f'))
+    result = prepare.prepare(source_root, annotation, tmp_path / 'prepared')
+    assert result['source_occurrences'] == 3
+    assert set(result['batches']) == {'catalogue', 'posters', 'footer_panels'}
+    card = read(tmp_path / 'prepared/catalogue/inventory.json')['cards'][0]
+    assert card['source_title'] == source_title  # Preserve the literal missing CMS value.
+    assert len(card['catalogue_documents']) == (2 if recovered_title else 0)
+    assert result['records'][0]['title'] == (recovered_title or 'blank')
+    assert launch.validate_manifest(tmp_path / 'prepared/manifest.json')['source_occurrences'] == 3

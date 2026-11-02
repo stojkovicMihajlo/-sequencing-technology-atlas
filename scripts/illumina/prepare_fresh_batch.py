@@ -16,7 +16,7 @@ from pathlib import Path
 import subprocess
 
 from poster_sources import Custody, row_record_id
-from genomics_discovery.illumina.extraction import card_sources, read, sha, write
+from genomics_discovery.illumina.extraction import card_sources, card_title, read, sha, write
 
 
 def collection_candidates(audits, poster_cards):
@@ -106,7 +106,7 @@ def prepare(source_root, annotations, output):
         for card in inventory["cards"]:
             matches = set(leads[card["record_id"]])
             if name == "catalogue":
-                for poster_id in labels[card.get("source_title", "").strip()]:
+                for poster_id in labels[card_title(card).strip()]:
                     matches.update(leads[poster_id])
             card["catalogue_documents"] = [copy.deepcopy(documents[key]) for key in sorted(matches)]
         inventory["fresh_extraction"] = {"prior_model_outputs_used": False,
@@ -149,7 +149,7 @@ def prepare(source_root, annotations, output):
             registry, images = card_sources(card, acquired, folder)
             if not images:
                 raise ValueError("Source occurrence has no usable diagram: " + card["record_id"])
-            manifest["records"].append({"record_id": card["record_id"], "title": card.get("source_title"),
+            manifest["records"].append({"record_id": card["record_id"], "title": card_title(card),
                 "batch": name, "status": "pending", "catalogue_page_candidates": len(card.get("catalogue_documents", [])),
                 "source_count": len(registry)})
         write(folder / "inventory.json", inventory)
