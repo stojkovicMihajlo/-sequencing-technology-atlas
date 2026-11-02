@@ -1,0 +1,1192 @@
+{
+  "format_version": "citation_lineage_pilot/1",
+  "nodes": [
+    {
+      "id": "seed",
+      "kind": "assay",
+      "name": "ATAC-seq",
+      "bindings": {
+        "record_id": "atac-seq",
+        "parent_attempt": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/scope_repair_pilot_01/cards/atac-seq/attempt_001",
+        "parent_artifact_pins": {
+          "card.json": "c248c1de2aac8686bbe84b3675be58e1370688886980bf898f6e61352c32b0e1",
+          "source_registry.json": "8ea7fa4aef7bfb1e6d2a15efe328c46d6128d54e8179c1dec0fa31ad61090fe5",
+          "extraction.json": "d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+          "review.json": "487bde1585f64bb74784ae1494eacdb999a8af01f8c4d094cc284cd48e3f7371",
+          "graph.json": "627d60c0a4e392822edf906d67b5d91905c51c87f71ce75842ebf322af7b6941",
+          "stages.json": "6f8a0d0f1ad705e0c5fbe4a394ae557a6ea9b2838613deb036db403d2162b60b"
+        },
+        "catalogue_sha256": "974792834228ab9d99e1c7845da56353bc1992b215ba8a20a00a8c69b2f53760",
+        "seed_article_sha256": "161b7c162f0d176cf22b852d4eeeaf9888f5dde50f00afd01975050bf94ff41c",
+        "reason": "New citation-lineage pilot reusing supported extraction; not an unchanged-source extraction rerun"
+      }
+    }
+  ],
+  "links": [],
+  "withheld": [
+    {
+      "claim": {
+        "id": "claim_r4",
+        "reference_id": "R4",
+        "contributor": "Boyle et al. (2008): DNase I hypersensitivity mapping by sequencing and tiled arrays",
+        "contributor_kind": "assay",
+        "relation": "background",
+        "seed_operation_ids": [
+          "op_tagmentation"
+        ],
+        "earlier_demonstration": "Primary abstract, PMID 18243105: mapped DNase I hypersensitive sites in human primary CD4+ T cells with high-throughput sequencing and whole-genome tiled arrays; the combined map contained 94,925 sites. This establishes an earlier accessibility assay implementation, with only abstract-level operational detail.",
+        "seed_design_change": "The seed uses accessibility-dependent insertion of sequencing-adapter-loaded Tn5 into unfixed nuclei. Its introduction cites R4 as earlier open-chromatin work; adoption of R4 operations, a direct development path, or use of its CD4+ data as the GM12878 comparator is not established. The operation link locates the shared measurement target only.",
+        "limitation_addressed": "The seed describes high input and separate, time-consuming epigenomic workflows generally. A limitation measured specifically against this R4 implementation is not established.",
+        "reported_gain": "A seed gain attributable to R4 or a head-to-head comparison with its combined sequencing/array implementation is not established.",
+        "tradeoffs_and_transfer_limits": "DNase cleavage and Tn5 adapter insertion are different transformations; CD4+ primary cells and the seed GM12878 validation samples also differ. The abstract cannot establish R4 end repair, adapter structure, titration or recovery details. Earlier assay existence does not imply whole-assay ancestry.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Major insights into the epigenetic information encoded within the nucleoprotein structure of chromatin have come from high-throughput, genome-wide methods for separately assaying the chromatin accessibility (“open chromatin”)4,5, nucleosome positioning6–8, and transcription factor (TF) occupancy9."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R4",
+            "quote": "We employed high-throughput sequencing and whole-genome tiled array strategies to identify DNase I HS sites within human primary CD4+ T cells."
+          },
+          {
+            "source_id": "R4",
+            "quote": "Combining these two technologies, we have created a comprehensive and accurate genome-wide open chromatin map."
+          }
+        ],
+        "catalogue_candidates": [
+          "dnase-seq-dnasel-seq"
+        ],
+        "unresolved": [
+          "Full-text acquisition for PMC2669738 failed with recorded HTTP 400; only the registered primary abstract is used. Detailed isolation and library operations remain unverified.",
+          "Catalogue description uses DNase digestion and extraction/sequencing, and its reference title/PMID 18243105 match R4. This is a candidate identity only; the combined catalogue entry contains additional variants and an unsupported historical assertion about sequencing chronology, neither adopted here."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r4",
+        "decision": "accept",
+        "rationale": "Supported as written as accessibility background. The seed Introduction cites R4 for earlier open-chromatin measurements; the independently inspected primary abstract reports DNase I mapping in primary CD4+ T cells using sequencing and arrays, including 94,925 sites. It establishes an earlier implementation, with neither Tn5 adapter transfer nor a development path into ATAC. The claim expressly limits op_tagmentation to the shared measurement target and withholds a GM12878 comparator assignment and R4-specific gain. The catalogue reference title and PMID support the stated candidate identity only; its additional variants and chronology are not evidence for R4 operations.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Major insights into the epigenetic information encoded within the nucleoprotein structure of chromatin have come from high-throughput, genome-wide methods for separately assaying the chromatin accessibility (“open chromatin”)4,5, nucleosome positioning6–8, and transcription factor (TF) occupancy9."
+          },
+          {
+            "source_id": "R4",
+            "quote": "We employed high-throughput sequencing and whole-genome tiled array strategies to identify DNase I HS sites within human primary CD4+ T cells."
+          },
+          {
+            "source_id": "R4",
+            "quote": "Surprisingly, only 16%-21% of the identified 94,925 DNase I HS sites are found in promoters or first exons of known genes, but nearly half of the most open sites are in these regions."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r5",
+        "reference_id": "R5",
+        "contributor": "Thurman et al. (2012): multi-cell-type DNase I accessibility atlas and comparison-locus context",
+        "contributor_kind": "assay",
+        "relation": "background",
+        "seed_operation_ids": [],
+        "earlier_demonstration": "Primary full text, PMID 22955617: DNase I hypersensitivity profiling across 125 human cell/tissue types produced about 2.9 million DHSs. Its methods describe Duke/UW protocols and an average of 30 million uniquely mapping tags per replicate. This is an earlier accessibility implementation and biological atlas.",
+        "seed_design_change": "The seed explicitly identifies a displayed comparison locus as previously highlighted by R5 and measures accessibility there by Tn5 insertion. A locus citation establishes comparison context, not transfer of a library, recipe or whole assay from R5.",
+        "limitation_addressed": "A seed limitation or design motivation uniquely attributable to R5 is not established.",
+        "reported_gain": "The seed reports similar ATAC and DNase signal-to-noise at the illustrated locus. R5 is cited for the locus; attributing that DNase track or the 3–5-order cell-input contrast specifically to an R5 library is not established.",
+        "tradeoffs_and_transfer_limits": "R5 includes different production-center protocols, cell types and read lengths. It cannot identify the exact seed comparison library without accession/sample linkage. No new operation ID is assigned to locus choice or downstream plotting.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Major insights into the epigenetic information encoded within the nucleoprotein structure of chromatin have come from high-throughput, genome-wide methods for separately assaying the chromatin accessibility (“open chromatin”)4,5, nucleosome positioning6–8, and transcription factor (TF) occupancy9."
+          },
+          {
+            "source_id": "seed",
+            "quote": "At a locus previously highlighted by others5, (Fig. 1c), ATAC-seq has a signal-to-noise ratio similar to DNase-seq, which was generated from approximately 3 to 5 orders-of-magnitude more cells13,14."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R5",
+            "quote": "Here we present the first extensive map of human DHSs identified through genome-wide profiling in 125 diverse cell and tissue types."
+          },
+          {
+            "source_id": "R5",
+            "quote": "DNaseI hypersensitivity mapping was performed using protocols developed by Duke7 or UW8 on a total of 125 cell-types (Supplementary Table 1)."
+          },
+          {
+            "source_id": "R5",
+            "quote": "Datasets were sequenced to an average depth of 30 million uniquely mapping sequence tags (27-35 bp for UW and 20 bp for Duke) per replicate."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "The registered catalogue DNase entry matches the assay family but contains no reference identity for PMID 22955617; no exact catalogue identity is proposed.",
+          "The exact R5 locus panel and the accession/library used for the seed Figure 1c DNase track are not resolved by the available attribution. Supplementary library-level provenance would be needed."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r5",
+        "decision": "accept",
+        "rationale": "Supported as written as background and locus context. R5 primary full text verifies 125 cell/tissue types, approximately 2.9 million DHSs, two production-center protocols and average depth per replicate. The seed specifically attributes the illustrated locus to R5, then cites R13/R14 for its input contrast. Those statements do not assign an R5 library to the displayed DNase track. The claim retains this distinction, assigns no inherited operation, and does not convert locus reuse or similar signal-to-noise into ancestry or an R5-specific efficiency gain.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "At a locus previously highlighted by others5, (Fig. 1c), ATAC-seq has a signal-to-noise ratio similar to DNase-seq, which was generated from approximately 3 to 5 orders-of-magnitude more cells13,14."
+          },
+          {
+            "source_id": "R5",
+            "quote": "Here we present the first extensive map of human DHSs identified through genome-wide profiling in 125 diverse cell and tissue types."
+          },
+          {
+            "source_id": "R5",
+            "quote": "DNaseI hypersensitivity mapping was performed using protocols developed by Duke7 or UW8 on a total of 125 cell-types (Supplementary Table 1)."
+          },
+          {
+            "source_id": "R5",
+            "quote": "Datasets were sequenced to an average depth of 30 million uniquely mapping sequence tags (27-35 bp for UW and 20 bp for Duke) per replicate."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r10",
+        "reference_id": "R10",
+        "contributor": "Goryshin and Reznikoff (1998): hyperactive Tn5 in vitro transposition",
+        "contributor_kind": "experimental_component",
+        "relation": "mechanistic_precedent",
+        "seed_operation_ids": [
+          "op_tagmentation"
+        ],
+        "earlier_demonstration": "Primary abstract, PMID 9516433: developed an efficient in vitro Tn5 system using hyperactive mutant transposase. The required macromolecules for most steps were transposase, specific 19-bp Tn5 ends and target DNA; the abstract reports conservative cut-and-paste transposition and donor-end cleavage.",
+        "seed_design_change": "The seed cites R10 jointly with R11 for hyperactive Tn5. It uses sequencing-adapter-loaded Tn5 on unfixed eukaryotic nuclei. R10 supports the enabling in vitro enzyme principle; sequencing-adapter tagmentation and the seed adapter/PCR interface are separately supported by R11, not demonstrated by this abstract.",
+        "limitation_addressed": "The earlier abstract identifies low activity of wild-type Tn5 as a constraint. A seed-specific optimization of that enzyme or historical reason for choosing a particular mutant is not established.",
+        "reported_gain": "R10 reports an efficient system qualitatively. A numerical enhancement transferable to ATAC-seq, or an isolated seed gain from its mutant, is not established.",
+        "tradeoffs_and_transfer_limits": "The abstract does not identify the seed commercial enzyme mutations, demonstrate insertion into native nuclei, or show sequencing adapters or amplification. Canonical 19-bp ends alone do not establish identical mosaic ends or adapter chemistry. Its proposed product-dissociation issue is not a measured ATAC tradeoff.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R10",
+            "quote": "This communication reports the development of an efficient in vitro transposition system for Tn5."
+          },
+          {
+            "source_id": "R10",
+            "quote": "A key component of this system was the use of hyperactive mutant transposase."
+          },
+          {
+            "source_id": "R10",
+            "quote": "the only required macromolecules for most of the steps in Tn5 transposition are the transposase, the specific 19-bp Tn5 end sequences, and target DNA;"
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "Primary full text is not registered: acquisition status is no_pmc_identifier_in_pubmed_metadata. Exact mutant, end structures and any sequencing-related interface beyond the abstract are not established.",
+          "No catalogue reference identity for PMID 9516433 and no corresponding stand-alone Tn5 biochemical method entry were found. Keep this enabling component precedent external."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r10",
+        "decision": "accept",
+        "rationale": "Supported as written at the explicitly labeled primary-abstract level. R10 demonstrates efficient hyperactive Tn5 transposition in vitro with transposase, specific 19-bp ends and target DNA, and describes conservative cut-and-paste transposition. The seed joint citation establishes an enabling enzyme precedent; its separate attribution of tagmentation to R11 is material. The proposed relationship is mechanistic_precedent, with explicit withholding of the exact commercial mutant, mosaic-end identity, adapter chemistry, native-nuclear substrate and numerical transfer of enzyme performance. It does not claim direct component identity from a broad principle.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          },
+          {
+            "source_id": "R10",
+            "quote": "A key component of this system was the use of hyperactive mutant transposase."
+          },
+          {
+            "source_id": "R10",
+            "quote": "the only required macromolecules for most of the steps in Tn5 transposition are the transposase, the specific 19-bp Tn5 end sequences, and target DNA;"
+          },
+          {
+            "source_id": "R10",
+            "quote": "Tn5 transposes by a conservative \"cut and paste\" mechanism;"
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r11",
+        "reference_id": "R11",
+        "contributor": "Adey et al. (2010): Nextera/Tn5 fragmentation with adapter incorporation and PCR library construction",
+        "contributor_kind": "experimental_component",
+        "relation": "component_adoption",
+        "seed_operation_ids": [
+          "op_tagmentation",
+          "op_purify_amplify"
+        ],
+        "earlier_demonstration": "Primary full text, PMID 21143862: characterized hyperactive Tn5 with free synthetic mosaic-end adapters, coupling target-DNA fragmentation to joining adapters to target 5-prime ends; limited-cycle PCR appended platform-specific sequences. Experiments used purified genomic DNA, including human DNA, and sequenced the resulting libraries. Separate extensions included very low DNA input and a distinct PCR-free branch. Its Figure 4 discusses a homodimer acting on a duplicated 9-bp region; that is the insertion-geometry precedent the seed cites for read-offset interpretation.",
+        "seed_design_change": "The seed explicitly attributes prior tagmentation to R11, supporting adoption of the coupled fragmentation/adapter-tagging component and its PCR-compatible output. The coordinated seed change applies that reaction to native unfixed eukaryotic nuclei and uses accessibility-dependent sampling as the measurement. The seed also reports monitored PCR, omission of pre-PCR purification at low cell input and avoidance of size selection; specific inheritance of those choices from R11 is not established.",
+        "limitation_addressed": "R11 replaces separate fragmentation, end processing and adapter ligation in shotgun library preparation. The seed combines assay selection with adapter insertion to simplify accessibility-library generation. Calling every removed conventional step a directly inherited before-side operation would exceed the supplied extraction.",
+        "reported_gain": "R11 reports a 5-minute fragmentation/tagging reaction, comparable overall genomic coverage bias to conventional libraries, and over 2 million uniquely mapped read pairs from 10 pg human DNA with reduced complexity. The seed demonstrates accessibility profiling from 500–50,000 cells, reports DNase correlations of 0.79/0.83 and diminished sensitivity at smaller inputs. These are measurements of different workflows; the fraction of ATAC gain caused by this component alone is not established. Seed authors explain efficiency by coupling assay and library construction, without a component-ablation experiment.",
+        "tradeoffs_and_transfer_limits": "Purified genomic DNA and native nuclei differ materially. R11 sequence bias, size constraints and low-input DNA performance cannot be transferred quantitatively to chromatin. The seed uses Illumina transposase and custom Nextera PCR primers; exact equality of its loaded oligonucleotides, proprietary enzyme variant, buffer or full chemical end structure to R11 is not established. R11 PCR-free full-adapter/nick-translation chemistry is a separate branch, not evidence that ATAC used it. The seed 9-bp-derived mapping offsets are analysis context, not a new diagram operation.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          },
+          {
+            "source_id": "seed",
+            "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR."
+          },
+          {
+            "source_id": "seed",
+            "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+          },
+          {
+            "source_id": "seed",
+            "quote": "To reduce GC and size bias in our PCR we monitored the PCR reaction using qPCR in order to stop amplification prior to saturation."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Also, we eliminated the Qiagen Minelute purification prior to PCR and instead took the 5 μL reaction immediately after transposition directly into the 50 μL PCR."
+          },
+          {
+            "source_id": "seed",
+            "quote": "During the ATAC-seq protocol, we chose to avoid a size selection step to maximize the library complexity."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Previous descriptions of the Tn5 transposase show that the transposon binds as a dimer and inserts two adapters separated by 9 bps (main text ref. 11)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Peak intensities were highly reproducible between technical replicates (R=0.98), and highly correlated between ATAC-seq and DNase-seq (R=0.79 and R=0.83, Supplementary Fig. 1), and we note that the majority of reads within peaks come from intersections of DNase and ATAC-seq peaks (Supplementary Fig. 2)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Highly sensitive open chromatin detection is maintained even when using 5,000 or 500 human nuclei as starting material (Supplementary Fig. 3 and 6), although sensitivity is diminished for smaller numbers of input material, as can be seen in Fig 1c."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R11",
+            "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA."
+          },
+          {
+            "source_id": "R11",
+            "quote": "To generate fragment libraries compatible with massively parallel DNA sequencing, limited-cycle PCR is used to append platform-specific primers (Figure 1b)."
+          },
+          {
+            "source_id": "R11",
+            "quote": "With transposase-mediated adaptor insertion, fragmentation and adaptor insertion occur in a single 5-min in vitro step, followed by PCR."
+          },
+          {
+            "source_id": "R11",
+            "quote": "Next, we generated a library from 10 pg human genomic DNA, or roughly three copies of the human genome, which produced over 2 million uniquely mapped read-pairs. Although complexity was reduced because of the significant decrease in progenitor molecules entering PCR, the potential advantages of sequencing from material approaching a single equivalent of the human genome are substantial."
+          },
+          {
+            "source_id": "R11",
+            "quote": "The roughly 110 Å transposase homodimer (grey) is bound to genomic DNA (blue), such that the core of the enzyme acts on a 9 bp region drawn out to 41 Å as well as approximately 10 additional bases of DNA flanking either side (~34 Å each) that are essentially protected from a subsequent transposase attack due to steric hindrance. Since the core region is duplicated in the process, the minimum spacing of transposition events is approximately 38 bp."
+          },
+          {
+            "source_id": "R11",
+            "quote": "The effective bias associated with transposase-catalyzed adaptor insertion is thus greater than with standard library construction, but only modestly so."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "No catalogue reference identity for PMID 21143862 or stand-alone matching shotgun Nextera implementation was found. Other entries use Nextera/Tn5 on different substrates or in later assays; these do not resolve R11 identity. Retain the contribution externally.",
+          "Exact loaded adapter and enzyme-variant equivalence is not established. This does not block the explicitly evidenced conceptual component adoption, but it blocks a claim of identical complete chemical interface.",
+          "Reported low-cell purification and no-size-selection choices are documented seed modifications, not independently proven causes of gain or established adoptions from R11. No before-side operation IDs were supplied or invented."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r11",
+        "decision": "accept",
+        "rationale": "Supported as written as component adoption, rather than whole-assay descent. Independently inspected R11 full text demonstrates free synthetic mosaic-end adapter joining to target-DNA 5-prime ends, coupled fragmentation and PCR addition of platform-compatible sequences on genomic DNA. The seed explicitly credits that tagmentation principle and uses a Nextera PCR interface, supporting the two existing operation links at the stated conceptual scope. R11 also supports the 9-bp geometry, five-minute reaction and 10-pg library result. The claim preserves the different nuclear substrate, distinguishes the PCR-free/nick-translation branch, and withholds exact oligonucleotide/enzyme identity and inheritance of particular recovery/PCR choices. Seed accessibility correlations are not attributed causally to this component alone.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          },
+          {
+            "source_id": "R11",
+            "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA."
+          },
+          {
+            "source_id": "R11",
+            "quote": "To generate fragment libraries compatible with massively parallel DNA sequencing, limited-cycle PCR is used to append platform-specific primers (Figure 1b)."
+          },
+          {
+            "source_id": "R11",
+            "quote": "Next, we generated a library from 10 pg human genomic DNA, or roughly three copies of the human genome, which produced over 2 million uniquely mapped read-pairs. Although complexity was reduced because of the significant decrease in progenitor molecules entering PCR, the potential advantages of sequencing from material approaching a single equivalent of the human genome are substantial."
+          },
+          {
+            "source_id": "R11",
+            "quote": "After transposition, a nick translation is performed resulting in Illumina-ready libraries."
+          },
+          {
+            "source_id": "seed",
+            "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r12",
+        "reference_id": "R12",
+        "contributor": "Gangadharan et al. (2010): chromatin-associated Hermes insertion in yeast",
+        "contributor_kind": "general_method",
+        "relation": "mechanistic_precedent",
+        "seed_operation_ids": [
+          "op_tagmentation"
+        ],
+        "earlier_demonstration": "Primary abstract, PMID 21131571: analyzed about 200,000 unique Hermes insertions in Saccharomyces cerevisiae, comparing purified-genomic-DNA in vitro reactions with recovered in vivo insertions. In vivo target sites were strongly associated with nucleosome-free chromatin (P < 2e-16).",
+        "seed_design_change": "The seed explicitly uses prior in vivo insertion as the rationale for its hypothesis that purified prokaryotic Tn5 acting on small numbers of unfixed nuclei could probe accessibility. It changes transposon/enzyme, biological system, reaction environment and payload to an in vitro sequencing-adapter assay.",
+        "limitation_addressed": "The demonstrated dependence of Hermes targeting on chromatin makes an accessibility-sensitive transposition assay plausible. A historical motive or seed limitation beyond the stated hypothesis is not established.",
+        "reported_gain": "The primary abstract measures an association for Hermes. The seed reports sensitive accessibility profiles, but no measured gain from transferring the Hermes principle or controlled cross-enzyme transfer experiment is established.",
+        "tradeoffs_and_transfer_limits": "Hermes is not Tn5. Yeast in vivo insertions and purified yeast genomic-DNA controls are not purified Tn5 reactions on native human nuclei. The seed broadens the precedent to active regulatory elements; the available abstract directly establishes nucleosome-free association, not a functional test of every regulatory element. Sequencing used to map Hermes sites does not prove delivery of ATAC sequencing adapters or identical chemistry.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "We carried out ATAC-seq on 50,000 and 500 unfixed nuclei isolated from GM12878 lymphoblastoid cell line (ENCODE Tier 115) for comparison and validation with chromatin accessibility data sets, including DNase-seq13 and FAIRE-seq16."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R12",
+            "quote": "We have used second-generation sequencing to analyze ≈2 × 10(5) unique de novo transposon insertion sites of the transposon Hermes in the Saccharomyces cerevisiae genome from both in vitro transposition reactions by using purified yeast genomic DNA, to better characterize intrinsic sequence specificity, and sites recovered from in vivo transposition events, to characterize the effect of intracellular factors such as chromatin on target site selection."
+          },
+          {
+            "source_id": "R12",
+            "quote": "The subset of genome-wide target sites used in vivo is strongly associated (P < 2e-16 by Fisher's exact test) with nucleosome-free chromatin."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "Full-text acquisition for PMC3009821 failed with recorded HTTP 400. The primary abstract supports the narrower targeting association; exact insertion/payload structures and experimental details are not available.",
+          "No Hermes method/reference identity for PMID 21131571 was found in the catalogue. Keep this mechanistic precedent external."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r12",
+        "decision": "accept",
+        "rationale": "Supported as written as a different-transposon mechanistic precedent. The primary abstract independently identifies Hermes, yeast, purified-genomic-DNA in vitro controls, recovered in vivo insertions and a strong nucleosome-free association. The seed expressly presents the Tn5-on-unfixed-nuclei proposal as the authors' hypothesis. The claim distinguishes enzyme, substrate, environment and payload, and narrows the seed's regulatory-element wording to what the abstract measures. Neither common adapter chemistry, direct Tn5 component reuse nor a cross-enzyme performance experiment is asserted. Full-text recipe gaps do not invalidate this limited conceptual link.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          },
+          {
+            "source_id": "R12",
+            "quote": "We have used second-generation sequencing to analyze ≈2 × 10(5) unique de novo transposon insertion sites of the transposon Hermes in the Saccharomyces cerevisiae genome from both in vitro transposition reactions by using purified yeast genomic DNA, to better characterize intrinsic sequence specificity, and sites recovered from in vivo transposition events, to characterize the effect of intracellular factors such as chromatin on target site selection."
+          },
+          {
+            "source_id": "R12",
+            "quote": "The subset of genome-wide target sites used in vivo is strongly associated (P < 2e-16 by Fisher's exact test) with nucleosome-free chromatin."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r13",
+        "reference_id": "R13",
+        "contributor": "Song and Crawford (2010): DNase-seq protocol as workflow and accessibility comparator",
+        "contributor_kind": "assay",
+        "relation": "comparison",
+        "seed_operation_ids": [
+          "op_tagmentation",
+          "op_purify_amplify"
+        ],
+        "earlier_demonstration": "Primary full text, PMID 20150147: describes DNase I digestion of nuclei starting from 50 million cells, agarose-plug protection and washes, end polishing, sequential linker ligations including an MmeI-based capture scheme, bead enrichment, PCR and final gel recovery. Overnight LIDS incubation and overnight linker ligation independently support the seed timing contrast.",
+        "seed_design_change": "The seed substitutes accessibility-dependent Tn5 adapter insertion followed by PCR for a separate nuclease-accessibility assay and multistep library construction. It names R13 for DNase validation and workflow benchmarking. This is an operational contrast and experimental comparison, not evidence of adopting DNase operations.",
+        "limitation_addressed": "The earlier protocol documents high starting-cell number and substantial handling. The seed describes these as potentially loss-prone and says they perhaps explain high input. A controlled measurement of loss from each step or proof of that explanation is not established.",
+        "reported_gain": "The seed reports similar sensitivity/specificity to ENCODE DNase data, correlations of 0.79/0.83, and sensitivity at 500–5,000 nuclei with reduced sensitivity at lower input. Its approximately 44 steps and 3–5-order input contrast are author-reported protocol/data comparisons. R13 independently confirms its 50-million-cell recipe and two overnight incubations, not the input of each exact DNase comparator library or a matched causal efficiency gain.",
+        "tradeoffs_and_transfer_limits": "DNase digestion requires empirical titration; the source warns heavier digestion lowers signal-to-noise. ATAC measures preferential Tn5 insertion with its own sequence/PCR effects. Common accessibility peaks do not imply identical sampled sites or interchangeable libraries. The recipe starting quantity is not an experimentally demonstrated universal minimum for all DNase methods.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR."
+          },
+          {
+            "source_id": "seed",
+            "quote": "For instance, a published DNase-seq protocol calls for approximately 44 steps, and two overnight incubations, while published FAIRE-seq protocols require two overnight incubations carried out over at least 3 days13,14."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Furthermore, these protocols require 1–50 million cells (FAIRE) or 50 million cells (DNase-seq)13,14, perhaps because of these complex workflows (Fig 1b)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "We carried out ATAC-seq on 50,000 and 500 unfixed nuclei isolated from GM12878 lymphoblastoid cell line (ENCODE Tier 115) for comparison and validation with chromatin accessibility data sets, including DNase-seq13 and FAIRE-seq16."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Peak intensities were highly reproducible between technical replicates (R=0.98), and highly correlated between ATAC-seq and DNase-seq (R=0.79 and R=0.83, Supplementary Fig. 1), and we note that the majority of reads within peaks come from intersections of DNase and ATAC-seq peaks (Supplementary Fig. 2)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Highly sensitive open chromatin detection is maintained even when using 5,000 or 500 human nuclei as starting material (Supplementary Fig. 3 and 6), although sensitivity is diminished for smaller numbers of input material, as can be seen in Fig 1c."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R13",
+            "quote": "Spin down 50 million human or mammalian cells in single-cell suspension at 900 rpm x 5 minutes;"
+          },
+          {
+            "source_id": "R13",
+            "quote": "Replace with fresh LIDS buffer and incubate tubes overnight at 37 °C horizontal without shaking."
+          },
+          {
+            "source_id": "R13",
+            "quote": "Incubate tubes in PCR machine, 20 °C, overnight."
+          },
+          {
+            "source_id": "R13",
+            "quote": "Since DNase I nicks DNA and leaves single-strand overhangs, these overhangs need to be blunt ended by T4 DNA polymerase before ligating to blunt-ended Linker 1."
+          },
+          {
+            "source_id": "R13",
+            "quote": "Remove unligated linkers by gel purification."
+          },
+          {
+            "source_id": "R13",
+            "quote": "We have found that using more heavily digested DNA results in lower signal to noise."
+          },
+          {
+            "source_id": "R13",
+            "quote": "Amplify the DNase-seq product by following PCR reactions:"
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "The catalogue DNase family description is compatible, but its reference list has no PMID 20150147 identity match. Do not silently equate this linker/MmeI implementation with the Boyle R4 entry.",
+          "The exact DNase accession/library supporting each seed Figure 1 and supplementary comparison, cell input and preparation time is not assigned by these citations. R14 is a FAIRE protocol and cannot resolve DNase provenance.",
+          "The 44-step total is retained as the seed authors' approximate count; the extracted primary protocol independently supports the named operations and overnights, without a new step-count audit."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r13",
+        "decision": "accept",
+        "rationale": "Supported as written as protocol and experimental comparison. R13 primary full text independently verifies the 50-million-cell starting recipe, agarose-plug handling, two overnight stages, T4 blunting, sequential linker/MmeI capture, bead enrichment, PCR and recovery. These differ from Tn5 adapter insertion and its PCR output; linking both existing seed operations describes the contrast without asserting inheritance. The seed supplies the ATAC/DNase correlations and low-input observations. The claim correctly leaves the approximate 44-step count author-reported, distinguishes recipe quantity from a universal minimum, withholds exact comparator-library input, and treats workflow loss as an explanation rather than a measured cause.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "We carried out ATAC-seq on 50,000 and 500 unfixed nuclei isolated from GM12878 lymphoblastoid cell line (ENCODE Tier 115) for comparison and validation with chromatin accessibility data sets, including DNase-seq13 and FAIRE-seq16."
+          },
+          {
+            "source_id": "R13",
+            "quote": "Spin down 50 million human or mammalian cells in single-cell suspension at 900 rpm x 5 minutes;"
+          },
+          {
+            "source_id": "R13",
+            "quote": "Replace with fresh LIDS buffer and incubate tubes overnight at 37 °C horizontal without shaking."
+          },
+          {
+            "source_id": "R13",
+            "quote": "Incubate tubes in PCR machine, 20 °C, overnight."
+          },
+          {
+            "source_id": "R13",
+            "quote": "Since DNase I nicks DNA and leaves single-strand overhangs, these overhangs need to be blunt ended by T4 DNA polymerase before ligating to blunt-ended Linker 1."
+          },
+          {
+            "source_id": "R13",
+            "quote": "We have found that using more heavily digested DNA results in lower signal to noise."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Furthermore, these protocols require 1–50 million cells (FAIRE) or 50 million cells (DNase-seq)13,14, perhaps because of these complex workflows (Fig 1b)."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r14",
+        "reference_id": "R14",
+        "contributor": "Simon et al. (2012): FAIRE isolation and sequencing protocol benchmark",
+        "contributor_kind": "assay",
+        "relation": "comparison",
+        "seed_operation_ids": [
+          "op_tagmentation",
+          "op_purify_amplify"
+        ],
+        "earlier_demonstration": "Primary full text, PMID 22262007: formaldehyde fixation, sonication and phenol/chloroform partitioning enrich DNA weakly crosslinked to protein. The protocol begins with 1–50 million cells, ideally 10 million, and schedules input-control preparation and FAIRE preparation over three days with overnight incubations. Sequencing library guidance includes purification, PCR and size selection.",
+        "seed_design_change": "The seed compares that workflow with native unfixed-nuclei Tn5 insertion and PCR. It removes the need for FAIRE crosslink-based partitioning in its own assay and couples accessibility sampling with adapter delivery. It does not adopt the FAIRE chemical isolation component.",
+        "limitation_addressed": "Seed authors describe multistep accessibility workflows as potentially loss-prone and slow. R14 independently documents its workflow schedule and recommended input; that establishes a benchmark, not a measured causal explanation for high input.",
+        "reported_gain": "R14 states its procedure can be completed in three days; its timing table contains two overnight stages. The seed reports low-input ATAC and a 275-minute blood-to-library/sequencing workflow in its own application. These are different workflow contexts, not a controlled speed or efficiency ratio against R14. Quantitative gain due specifically to eliminating crosslink reversal is not established.",
+        "tradeoffs_and_transfer_limits": "FAIRE chemical partitioning and Tn5 insertion have different selectivity. R14 itself reports shared and unique elements relative to DNase, so one assay cannot be assumed to recover all of another's features. The first overnight in the R14 schedule is for input-control DNA, the second for FAIRE DNA; its 1–50-million range is protocol guidance, not proof that no lower input could work. R14 does not supply a DNase library merely because the seed co-cites it in a DNase cell-input sentence.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "For instance, a published DNase-seq protocol calls for approximately 44 steps, and two overnight incubations, while published FAIRE-seq protocols require two overnight incubations carried out over at least 3 days13,14."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Furthermore, these protocols require 1–50 million cells (FAIRE) or 50 million cells (DNase-seq)13,14, perhaps because of these complex workflows (Fig 1b)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR."
+          },
+          {
+            "source_id": "seed",
+            "quote": "We have optimized procedures to transform a clinical blood sample to completed sequencing library in 275 minutes."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R14",
+            "quote": "Cells or dissociated tissues are crosslinked briefly with formaldehyde, lysed, and sonicated."
+          },
+          {
+            "source_id": "R14",
+            "quote": "Sheared chromatin is subjected to phenol-chloroform extraction and the isolated DNA, typically encompassing 1–3% of the human genome, is purified."
+          },
+          {
+            "source_id": "R14",
+            "quote": "Culture 1 × 106 – 5 × 107 cells for each experiment. If available, 1 × 107 cells is ideal for most applications."
+          },
+          {
+            "source_id": "R14",
+            "quote": "Day 1: Steps 1–8 (approximately 7–8 hours and overnight incubation)"
+          },
+          {
+            "source_id": "R14",
+            "quote": "Day 2: Steps 32–56 (approximately 3–4 hours and overnight incubation)"
+          },
+          {
+            "source_id": "R14",
+            "quote": "We typically incorporate two rounds of purification with Agencourt AMPure XP beads prior to 18 cycles of amplification by PCR, and size-select the final library to 200–500 bp, avoiding adapter bands, which typically run under 100 bp."
+          },
+          {
+            "source_id": "R14",
+            "quote": "FAIRE was able to detect some distal regulatory elements, such as transcriptional enhancers, that DNase-seq could not, whereas DNase-seq identified some promoters that FAIRE did not."
+          }
+        ],
+        "catalogue_candidates": [
+          "faire-seq-sono-seq"
+        ],
+        "unresolved": [
+          "Catalogue description matches FAIRE fixation/sonication/partitioning and includes the exact R14 title and PMID 22262007. The joint FAIRE/Sono entry remains a candidate; this does not establish Sono-seq identity or a method merge.",
+          "The seed R13/R14 co-citation for the DNase signal/input sentence is not independent provenance for DNase data. Exact comparator accession and input remain unresolved there."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r14",
+        "decision": "accept",
+        "rationale": "Supported as written as the FAIRE protocol benchmark. Independent R14 full text verifies fixation, sonication, phenol/chloroform partitioning, recommended cell input, three-day schedule and downstream library purification/PCR/size selection. The claim specifically identifies the first overnight as input-control preparation and the second as FAIRE preparation. It neither treats their duration as a universal minimum nor claims that their removal caused a measured ATAC gain. R14 is a FAIRE source, so the seed co-citation cannot establish a DNase comparison library. The catalogue title/PMID candidate remains on the FAIRE side of the combined FAIRE/Sono entry.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "For instance, a published DNase-seq protocol calls for approximately 44 steps, and two overnight incubations, while published FAIRE-seq protocols require two overnight incubations carried out over at least 3 days13,14."
+          },
+          {
+            "source_id": "R14",
+            "quote": "Cells or dissociated tissues are crosslinked briefly with formaldehyde, lysed, and sonicated."
+          },
+          {
+            "source_id": "R14",
+            "quote": "Sheared chromatin is subjected to phenol-chloroform extraction and the isolated DNA, typically encompassing 1–3% of the human genome, is purified."
+          },
+          {
+            "source_id": "R14",
+            "quote": "Day 1: Steps 1–8 (approximately 7–8 hours and overnight incubation)"
+          },
+          {
+            "source_id": "R14",
+            "quote": "Day 2: Steps 32–56 (approximately 3–4 hours and overnight incubation)"
+          },
+          {
+            "source_id": "R14",
+            "quote": "FAIRE was able to detect some distal regulatory elements, such as transcriptional enhancers, that DNase-seq could not, whereas DNase-seq identified some promoters that FAIRE did not."
+          },
+          {
+            "source_id": "seed",
+            "quote": "We have optimized procedures to transform a clinical blood sample to completed sequencing library in 275 minutes."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r16",
+        "reference_id": "R16",
+        "contributor": "Giresi and Lieb (2009): FAIRE-seq isolation/library implementation named in validation",
+        "contributor_kind": "assay",
+        "relation": "comparison",
+        "seed_operation_ids": [
+          "op_tagmentation",
+          "op_purify_amplify"
+        ],
+        "earlier_demonstration": "Primary full text, PMID 19303047: details FAIRE fixation, sonication and extraction, and Illumina library preparation from 100–200 ng recovered DNA by end blunting, A-overhang addition, T-overhang adapter ligation, gel excision and PCR. It shows sequenced and microarray FAIRE signal from human lymphoblastoid cells.",
+        "seed_design_change": "The seed explicitly names FAIRE-seq16 in its GM12878 validation, while generating its own adapter-bearing fragments directly from unfixed native chromatin. R16 supports a concrete comparator architecture; it is not the source of Tn5 chemistry or a demonstrated inherited operation.",
+        "limitation_addressed": "The seed contrasts separate recovery/library operations with coupled Tn5 sampling/tagging. R16 independently establishes those FAIRE operations. A loss magnitude attributable to any one operation is not established.",
+        "reported_gain": "The seed reports concordant accessibility tracks at a GM12878 locus and low-input ATAC performance. A numerical ATAC-versus-R16 sensitivity or library-efficiency gain is not established in the cited passage. R16 describes a working lymphoblastoid-cell FAIRE implementation, not a controlled ATAC comparison.",
+        "tradeoffs_and_transfer_limits": "FAIRE uses fixed, sonicated material and crosslink-dependent extraction; ATAC uses unfixed nuclei and Tn5-accessibility sampling. R16 says overnight precipitation may be shortened and an earlier overnight reversal step can be skipped without detectable downstream difference. The seed's general three-day FAIRE benchmark must therefore not be imposed as a universal minimum on R16. Lymphoblastoid-cell figures alone do not establish the exact seed comparator sample/library.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "We carried out ATAC-seq on 50,000 and 500 unfixed nuclei isolated from GM12878 lymphoblastoid cell line (ENCODE Tier 115) for comparison and validation with chromatin accessibility data sets, including DNase-seq13 and FAIRE-seq16."
+          },
+          {
+            "source_id": "seed",
+            "quote": "A comparison of ATAC-seq to other open chromatin assays at a locus in GM12878 lymphoblastoid cells displaying high concordance."
+          },
+          {
+            "source_id": "seed",
+            "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R16",
+            "quote": "To perform FAIRE, chromatin is crosslinked with formaldehyde, sheared by sonication, and phenol-chloroform extracted."
+          },
+          {
+            "source_id": "R16",
+            "quote": "We use 100 to 200 ng of DNA for starting material. This procedure involves blunting the ends of the DNA fragments (Epicentre #ER0720), adding an “A” overhang (Epicentre #KL06041K), and ligating double-stranded adapters containing a T-overhang to the DNA fragments (Illumina #1000521). Ligation products are then run on a 2% agarose gel, and a portion of the gel corresponding to 125 bp– 275 bp is excised. It usually is not possible to see the DNA on the gel at this point. PCR amplification is then carried out using PfuUltraII (Stratagene #600670) and primers complimentary to the adapters (Illumina #1000537 and 1000538)."
+          },
+          {
+            "source_id": "R16",
+            "quote": "Although overnight incubations are routinely performed, incubation as short as one hour should be sufficient."
+          },
+          {
+            "source_id": "R16",
+            "quote": "However, we have found that skipping this step results in no detectable difference in the efficiency of downstream enzymatic reactions."
+          },
+          {
+            "source_id": "R16",
+            "quote": "DNA isolated by FAIRE in human lymphoblastoid cells was mapped to the genome using both the Illumina GAII (black) and NimbleGen tiling microarrays (red)."
+          }
+        ],
+        "catalogue_candidates": [
+          "faire-seq-sono-seq"
+        ],
+        "unresolved": [
+          "Description and exact title/PMID 19303047 support a FAIRE-side catalogue candidate only. Joint catalogue naming is not evidence that this implementation is Sono-seq or that it should be merged into ATAC.",
+          "R16 documents a protocol and example data, but the accession and exact library used in the seed validation remain unresolved. Do not substitute the distinct R14 benchmark or assume the plotted R16 example is the seed comparator."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r16",
+        "decision": "accept",
+        "rationale": "Supported as written as a separately cited FAIRE validation comparator. R16 full text establishes fixation/sonication/partitioning and the actual Illumina library interface: end blunting, A addition, T-overhang adapter ligation, gel recovery and PCR. Its lymphoblastoid-cell example supports a working accessibility implementation without assigning that particular library to the seed plot. The claim preserves the shortened precipitation and dispensable reversal qualifications and does not substitute R14's schedule for this protocol. Its contrast with unfixed-nuclear Tn5 sampling supports comparison at the two existing operations, with no adopted FAIRE chemistry or numerical ATAC-versus-R16 gain asserted.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "We carried out ATAC-seq on 50,000 and 500 unfixed nuclei isolated from GM12878 lymphoblastoid cell line (ENCODE Tier 115) for comparison and validation with chromatin accessibility data sets, including DNase-seq13 and FAIRE-seq16."
+          },
+          {
+            "source_id": "R16",
+            "quote": "To perform FAIRE, chromatin is crosslinked with formaldehyde, sheared by sonication, and phenol-chloroform extracted."
+          },
+          {
+            "source_id": "R16",
+            "quote": "We use 100 to 200 ng of DNA for starting material. This procedure involves blunting the ends of the DNA fragments (Epicentre #ER0720), adding an “A” overhang (Epicentre #KL06041K), and ligating double-stranded adapters containing a T-overhang to the DNA fragments (Illumina #1000521)."
+          },
+          {
+            "source_id": "R16",
+            "quote": "Although overnight incubations are routinely performed, incubation as short as one hour should be sufficient."
+          },
+          {
+            "source_id": "R16",
+            "quote": "Earlier versions of the protocol included a step that incubates DNA from crosslinked samples at 65° C overnight to ensure that any DNA-DNA crosslinks do not interfere with downstream enzymatic steps. However, we have found that skipping this step results in no detectable difference in the efficiency of downstream enzymatic reactions."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r18",
+        "reference_id": "R18",
+        "contributor": "Prioleau et al. (1999): condensed chromatin between chicken regulatory domains",
+        "contributor_kind": "other",
+        "relation": "background",
+        "seed_operation_ids": [],
+        "earlier_demonstration": "Primary abstract, PMID 10406808: identifies a 16-kbp silent region between the chicken folate receptor and beta-globin loci and describes that region as fully methylated and condensed at a particular erythroid stage. The available abstract does not report its release as large nuclease-resistant fragments.",
+        "seed_design_change": "The seed cites R18 specifically for nuclease-refractory sequences released as large multi-nucleosome fragments while interpreting ATAC insert lengths. The precise earlier fragmentation demonstration is not established by the registered primary abstract, so that mechanistic link is withheld. Only chromatin-condensation background is retained.",
+        "limitation_addressed": "A limitation addressed by adopting a specific R18 experiment is not established.",
+        "reported_gain": "An ATAC performance gain, experimental transfer or measured validation against R18 material is not established.",
+        "tradeoffs_and_transfer_limits": "An abstract describing condensed avian chromatin does not establish nuclease identity, digestion resistance, release mechanism, Tn5 exclusion or adapter chemistry. Seed attribution alone cannot fill the missing experiment. No seed operation is linked as an inherited transformation.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Finally, prior studies have shown that certain DNA sequences are refractory to nuclease digestion and released as large, multi-nucleosome-sized fragments18; subsequent studies showed that such fragments are condensed heterochromatin19."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Indeed we found repressed regions are depleted for short fragments and enriched for phased multi-nucleosomal inserts, consistent with their expected inaccessible state."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R18",
+            "quote": "We have identified a folate receptor gene upstream of the chicken beta-globin locus and separated from it by a 16 kbp region of silent chromatin."
+          },
+          {
+            "source_id": "R18",
+            "quote": "We also find that the region between the beta-globin locus and the folate receptor gene is fully methylated and condensed at this stage of differentiation."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "Full-text acquisition for PMC1171479 failed with recorded HTTP 400. Primary experimental text would be required to verify the seed's specific nuclease-refractory-fragment attribution; that relationship remains withheld.",
+          "No catalogue reference identity or matching external condensed-fragment implementation was found for PMID 10406808."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r18",
+        "decision": "accept",
+        "rationale": "Supported as written as background, including its explicit withholding of the nominated mechanistic relation. The primary abstract identifies silent, methylated, condensed chicken chromatin. It does not describe the specific large nuclease-resistant-fragment release experiment attributed to R18 by the seed. The claim acknowledges this evidence gap, assigns no seed operation and makes no nuclease, Tn5-exclusion or adapter-transfer claim. Acceptance therefore applies to the submitted narrow background claim; it does not verify the stronger seed attribution. Abstract silence is insufficient to call that unverified experiment false.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Finally, prior studies have shown that certain DNA sequences are refractory to nuclease digestion and released as large, multi-nucleosome-sized fragments18; subsequent studies showed that such fragments are condensed heterochromatin19."
+          },
+          {
+            "source_id": "R18",
+            "quote": "We have identified a folate receptor gene upstream of the chicken beta-globin locus and separated from it by a 16 kbp region of silent chromatin."
+          },
+          {
+            "source_id": "R18",
+            "quote": "We also find that the region between the beta-globin locus and the folate receptor gene is fully methylated and condensed at this stage of differentiation."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r19",
+        "reference_id": "R19",
+        "contributor": "Ghirlando et al. (2004): hydrodynamic characterization of a condensed genomic chromatin fragment",
+        "contributor_kind": "general_method",
+        "relation": "mechanistic_precedent",
+        "seed_operation_ids": [
+          "op_tagmentation"
+        ],
+        "earlier_demonstration": "Primary abstract, PMID 15095975: restriction-enzyme excision releases an essentially homogeneous approximately 15.5-kbp chromatin fragment from an avian erythroleukemia cell line. Sedimentation and cross-linked-particle buoyant-density measurements yielded a frictional coefficient consistent with a rod-like particle of the dimensions proposed for a 30-nm chromatin fiber.",
+        "seed_design_change": "The seed invokes R19 when interpreting large protected inserts as consistent with condensed chromatin. The operation link locates where ATAC fragment lengths originate; it does not claim adoption of restriction digestion or hydrodynamic analysis. The seed measures transposition-derived insert-size patterns, a different physical observation.",
+        "limitation_addressed": "R19 overcame the measurement difficulty of studying a unique-sequence chromatin particle at genomic abundance through its homogeneity. A seed-specific limitation solved by adopting R19 procedures is not established.",
+        "reported_gain": "The seed observes depletion of short fragments and enrichment of phased multi-nucleosomal inserts in repressed regions. A measured gain from R19, direct validation of ATAC inserts as 30-nm fibers, or proof that the same structure exists at all such human loci is not established.",
+        "tradeoffs_and_transfer_limits": "Restriction excision, sedimentation and density of a selected avian particle differ from Tn5 accessibility sampling in human nuclei. The abstract supports consistency with a proposed rod-like shape, not direct imaging of universal fiber structure. It does not establish Tn5 steric exclusion or ATAC adapter/library chemistry.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Finally, prior studies have shown that certain DNA sequences are refractory to nuclease digestion and released as large, multi-nucleosome-sized fragments18; subsequent studies showed that such fragments are condensed heterochromatin19."
+          },
+          {
+            "source_id": "seed",
+            "quote": "The insert size distribution of sequenced fragments from human chromatin has clear periodicity of approximately 200 base pairs, suggesting many fragments are protected by integer multiples of nucleosomes (Fig 2a)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Indeed we found repressed regions are depleted for short fragments and enriched for phased multi-nucleosomal inserts, consistent with their expected inaccessible state."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R19",
+            "quote": "This segment can be excised from an avian erythroleukemia cell line by restriction enzyme digestion and released from the nucleus as an essentially homogeneous fragment about 15.5 kbp long."
+          },
+          {
+            "source_id": "R19",
+            "quote": "Because of this homogeneity we could measure its sedimentation coefficient quite accurately by a combination of sucrose gradient and analytical ultracentrifugation."
+          },
+          {
+            "source_id": "R19",
+            "quote": "The measured value of f is consistent with a rod-like particle of the approximate length and diameter proposed earlier for the 30 nm chromatin fiber."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "No full text is registered; acquisition status is no_pmc_identifier_in_pubmed_metadata. Exact enzymes, preparation effects and structural details beyond the primary abstract remain unverified.",
+          "No catalogue reference identity or corresponding physical-characterization entry was found for PMID 15095975. Keep this limited interpretive precedent external."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r19",
+        "decision": "accept",
+        "rationale": "Supported as written as a limited physical/interpretive precedent. The primary abstract specifies a restriction-excised avian chromatin fragment, sedimentation and cross-linked-particle density measurements, and a frictional coefficient consistent with a proposed rod-like 30-nm fiber. The seed invokes the condensed-fragment work while interpreting insert-length patterns. The submitted claim expressly limits op_tagmentation to the origin of those insert lengths and does not claim inherited restriction/hydrodynamic operations, direct imaging, identical human structures or demonstrated Tn5 steric exclusion. Those differences make the narrow precedent supportable without importing unseen chemistry from an abstract.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Finally, prior studies have shown that certain DNA sequences are refractory to nuclease digestion and released as large, multi-nucleosome-sized fragments18; subsequent studies showed that such fragments are condensed heterochromatin19."
+          },
+          {
+            "source_id": "R19",
+            "quote": "This segment can be excised from an avian erythroleukemia cell line by restriction enzyme digestion and released from the nucleus as an essentially homogeneous fragment about 15.5 kbp long."
+          },
+          {
+            "source_id": "R19",
+            "quote": "By measuring additionally the buoyant density of the cross-linked particle in CsCl we could deduce the total mass of the particle, hence its frictional coefficient, f, directly related to its shape."
+          },
+          {
+            "source_id": "R19",
+            "quote": "The measured value of f is consistent with a rod-like particle of the approximate length and diameter proposed earlier for the 30 nm chromatin fiber."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r23",
+        "reference_id": "R23",
+        "contributor": "Kundaje et al. (2012): GM12878 MNase-seq dataset used for nucleosome comparison",
+        "contributor_kind": "assay",
+        "relation": "comparison",
+        "seed_operation_ids": [
+          "op_tagmentation"
+        ],
+        "earlier_demonstration": "Primary full text, PMID 22955985: generated MNase-seq in GM12878 and K562 by isolating chromatin, MNase digestion, mononucleosome gel purification, linker addition, library PCR, SOLiD emulsion PCR and single-end 35-bp sequencing. GM12878 yielded 4,078,911,370 raw reads and 1,929,303,627 confidently mapped reads. This supports the seed's rounded four-billion-read dataset attribution.",
+        "seed_design_change": "The seed uses native-chromatin Tn5 fragments and paired-end insert-length-derived nucleosome signals, rather than generating a separate MNase mononucleosome library. Figure 3 explicitly attributes the comparison MNase data to R23. The operation link marks fragment generation, not a new sequencing or analysis operation.",
+        "limitation_addressed": "The seed seeks nucleosome information concentrated at accessible regulatory regions rather than a broad nucleosome map. This is a difference in sampling and readout scope, not proof that MNase is generally inferior.",
+        "reported_gain": "Seed Figure 3 compares 198 million paired ATAC reads with four billion single-end MNase reads and reports stronger accessibility-focused regulatory nucleosome signal. Its explanation that lower promoter-proximal MNase signal is likely due to overdigestion is a qualified author explanation, not a controlled digestion-rescue experiment. A universal read-efficiency factor is not established.",
+        "tradeoffs_and_transfer_limits": "Raw read totals, mapped-read totals, single reads and read pairs are different denominators; do not calculate a simple sequencing-efficiency ratio. The methods differ in enzyme, gel selection, platform, read structure and biological coverage. ATAC concentration in accessible chromatin limits transfer to genome-wide or closed-region nucleosome mapping. Seed methods acknowledge nucleosome-size false positives from other complexes.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Compared to MNase-seq23, ATAC-seq data is more amenable to detecting nucleosomes within putative regulatory regions, as the majority of reads are concentrated within accessible regions of chromatin (Fig. 3b)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "(b) ATAC-seq (198 million paired reads) and MNase-seq (4 billion single-end reads from ref 23) nucleosome signal shown for all active TSSs (n=64,836), TSSs are sorted by CAGE expression."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Because ATAC-seq reads are concentrated at regions of open chromatin, we see strong nucleosome signal at the +1 nucleosome, which decreases at the +2, +3 and +4 nucleosomes, in contrast, MNase-seq nucleosome signal increases at larger distances from the TSS likely due to over digestion of more accessible nucleosomes."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Although generating nucleosome tracks using simple insert size cutoffs may yield false positives due to other nucleosome sized features, i.e. enhanaceosomes, we observed that we faithfully recapitulated global features on nucleosome position genome-wide (Fig 2c,d main text)."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R23",
+            "quote": "Briefly, chromatin was isolated, mononucleosomal fragments were generated by MNase digestion and gel-purified, linkers were added, and library PCR was performed."
+          },
+          {
+            "source_id": "R23",
+            "quote": "Aliquots of the library were subjected to emulsion PCR according to the standard SOLiD protocol (Life Technologies), and several separate 35-bp, single-end sequencing runs were performed on the SOLiD V4 platform to generate a total of 3,741,618,497 for K562 and 4,078,911,370 reads for GM12878."
+          },
+          {
+            "source_id": "R23",
+            "quote": "A total of 1,845,550,856 confidently mapped reads were obtained for K562, and 1,929,303,627 for GM12878."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "The catalogue maine-seq-mnase-seq-nucleo-seq description matches a broad MNase-protection/library family, but no reference identity for PMID 22955985 is present. It remains a family lead, not an exact identity or admitted merge.",
+          "The main texts support dataset, cell line, platform and read-structure attribution. Exact downloaded track version and processing correspondence to the seed supplementary data remain unresolved.",
+          "Nominations also noted R6/R7 nucleosome-phasing and R8 histone-profile contexts. Their primary texts are not registered; no ancestry or component relationship is inferred from those citations."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r23",
+        "decision": "accept",
+        "rationale": "Supported as written as an explicitly attributed dataset comparison. R23 full text independently confirms GM12878 MNase digestion, gel-purified mononucleosomes, linker addition, library PCR, SOLiD emulsion PCR, 35-bp single-end sequencing, 4,078,911,370 raw reads and 1,929,303,627 confidently mapped reads. This corroborates the seed Figure 3 attribution. The claim keeps paired ATAC reads, raw MNase reads and mapped reads as different denominators; it asserts no universal read-efficiency factor. It also retains the accessible-region scope and the qualified author explanation of overdigestion, without inventing a controlled causality experiment or an MNase-to-ATAC lineage.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "(b) ATAC-seq (198 million paired reads) and MNase-seq (4 billion single-end reads from ref 23) nucleosome signal shown for all active TSSs (n=64,836), TSSs are sorted by CAGE expression."
+          },
+          {
+            "source_id": "R23",
+            "quote": "Briefly, chromatin was isolated, mononucleosomal fragments were generated by MNase digestion and gel-purified, linkers were added, and library PCR was performed."
+          },
+          {
+            "source_id": "R23",
+            "quote": "Aliquots of the library were subjected to emulsion PCR according to the standard SOLiD protocol (Life Technologies), and several separate 35-bp, single-end sequencing runs were performed on the SOLiD V4 platform to generate a total of 3,741,618,497 for K562 and 4,078,911,370 reads for GM12878."
+          },
+          {
+            "source_id": "R23",
+            "quote": "A total of 1,845,550,856 confidently mapped reads were obtained for K562, and 1,929,303,627 for GM12878."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Because ATAC-seq reads are concentrated at regions of open chromatin, we see strong nucleosome signal at the +1 nucleosome, which decreases at the +2, +3 and +4 nucleosomes, in contrast, MNase-seq nucleosome signal increases at larger distances from the TSS likely due to over digestion of more accessible nucleosomes."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r24",
+        "reference_id": "R24",
+        "contributor": "Hesselberth et al. (2009): digital DNase I footprints in yeast nuclei",
+        "contributor_kind": "assay",
+        "relation": "mechanistic_precedent",
+        "seed_operation_ids": [
+          "op_tagmentation"
+        ],
+        "earlier_demonstration": "Primary full text, PMID 19305407: DNase I digestion of intact yeast nuclei generated short double-hit fragments; dense mapping revealed protected motif regions and protein-DNA correspondence. Parallel naked-DNA digestion was used to estimate cleavage bias and normalize chromatin data. The paper describes a measured protection/readout implementation, not merely a shared diagram.",
+        "seed_design_change": "The seed explicitly reasons by analogy that protein-bound DNA would be protected from Tn5 transposition and uses insertion-site depletion to infer occupancy, with CTCF footprints aligned to motifs and ChIP-seq. The earlier enzyme removes DNA by cleavage; the seed enzyme fragments and transfers sequencing adapters. This is a protection-based interpretive precedent, not demonstrated prior transposase footprinting.",
+        "limitation_addressed": "R24 addresses genome-wide occupancy mapping at nucleotide resolution without factor-specific reagents. A seed-specific limitation experimentally solved by importing R24 wet-lab operations is not established.",
+        "reported_gain": "R24 obtained 23.8 million uniquely localized yeast reads and demonstrated protected sites. The seed reports agreement of ATAC occupancy inference with ChIP-seq and favorable comparison to DNase inference. A measured gain attributable to the analogy, or a matched cross-enzyme performance improvement over R24, is not established.",
+        "tradeoffs_and_transfer_limits": "Yeast and human genomes, DNase cleavage and Tn5 insertion, and their sequence preferences differ. R24's naked-DNA bias control does not prove that the seed performed an identical control. Binding inference requires local coverage, motif/context and validation; a depletion alone does not transfer a chemical interface or uniquely identify a protein.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "We reasoned that DNA sequences directly occupied by DNA-binding proteins are protected from transposition; the resulting sequence “footprint” reveals the presence of the DNA-binding protein at each site, analogous to DNase digestion footprints24."
+          },
+          {
+            "source_id": "seed",
+            "quote": "At a specific CTCF binding site on chromosome 1, we observed a clear footprint (a deep notch of ATAC-seq signal), similar to footprints seen by DNase-seq25,26, at the precise location of the CTCF motif that coincides with the summit of the CTCF ChIP-seq signal in GM12878 cells (Fig 4a)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Results using ATAC-seq closely recapitulate ChIP-seq binding data in this cell line and compare favorably to DNase-based factor occupancy inference (see Supplementary Fig. 9), suggesting that factor occupancy data can be extracted from these ATAC-seq data allowing reconstruction of regulatory networks."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R24",
+            "quote": "We isolated yeast nuclei and treated them with a DNase I concentration sufficient to release short (<300 bp) DNA fragments while maintaining the bulk of the sample in high molecular weight species (Supplementary Fig.1)."
+          },
+          {
+            "source_id": "R24",
+            "quote": "To control for possible DNase I cleavage bias at particular nucleotide combinations, we carried out a parallel experiment with naked DNA from the same cells digested to yield an equivalent fragment size distribution."
+          },
+          {
+            "source_id": "R24",
+            "quote": "On close inspection, we observed that DNase I cleavage patterns upstream of transcriptional start sites (TSSs) were punctuated by short stretches of protected nucleotides consistent with the footprints of DNA-binding proteins, and that in many cases individual footprints could be matched to known DNA-binding motifs (Fig.1d)."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "No catalogue reference identity for PMID 19305407 was found. The DNase catalogue family is descriptive context only; do not force this specific digital-footprinting implementation into the Boyle R4 identity.",
+          "Primary supplementary wet-lab details beyond the registered full-text rendition are not acquired. They do not block the directly observed protection analogy, but would matter for exact recipe adoption, which is not claimed."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r24",
+        "decision": "accept",
+        "rationale": "Supported as written as an experimentally grounded protection/readout precedent. R24 primary full text demonstrates short double-hit DNase fragments from yeast nuclei, mapped motif-centered protection, and naked-DNA cleavage-bias normalization. The seed explicitly invokes DNase footprints by analogy when interpreting transposition depletion. The claim distinguishes DNase cleavage from Tn5 fragmentation/adapter transfer and human from yeast material; it does not assert prior transposase footprinting, transfer of a chemical interface or adoption of the naked-DNA control. Its ATAC/ChIP agreement is kept as a seed result rather than an isolated gain from R24 or a matched cross-enzyme benchmark.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "We reasoned that DNA sequences directly occupied by DNA-binding proteins are protected from transposition; the resulting sequence “footprint” reveals the presence of the DNA-binding protein at each site, analogous to DNase digestion footprints24."
+          },
+          {
+            "source_id": "R24",
+            "quote": "We isolated yeast nuclei and treated them with a DNase I concentration sufficient to release short (<300 bp) DNA fragments while maintaining the bulk of the sample in high molecular weight species (Supplementary Fig.1)."
+          },
+          {
+            "source_id": "R24",
+            "quote": "To control for possible DNase I cleavage bias at particular nucleotide combinations, we carried out a parallel experiment with naked DNA from the same cells digested to yield an equivalent fragment size distribution."
+          },
+          {
+            "source_id": "R24",
+            "quote": "On close inspection, we observed that DNase I cleavage patterns upstream of transcriptional start sites (TSSs) were punctuated by short stretches of protected nucleotides consistent with the footprints of DNA-binding proteins, and that in many cases individual footprints could be matched to known DNA-binding motifs (Fig.1d)."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r25",
+        "reference_id": "R25",
+        "contributor": "Boyle et al. (2011): human DNase I footprinting and CTCF patterns",
+        "contributor_kind": "assay",
+        "relation": "comparison",
+        "seed_operation_ids": [
+          "op_tagmentation"
+        ],
+        "earlier_demonstration": "Primary abstract, PMID 21106903: a high-throughput DNase I hypersensitivity assay delineates hundreds of thousands of base-pair-resolution footprints in human cells, correlating with ChIP-seq and distinguishing functional motifs. It specifically reports detailed CTCF footprint analysis and multiple binding modes.",
+        "seed_design_change": "The seed cites R25 jointly with R26 for DNase patterns similar to its CTCF insertion footprint. Its change is Tn5 insertion-site depletion in GM12878 as the occupancy readout. The evidence supports comparison to a prior human DNase footprint pattern, not adoption of its library chemistry.",
+        "limitation_addressed": "A seed limitation, design motive or experimental optimization specifically derived from R25 is not established.",
+        "reported_gain": "The seed observes a clear CTCF footprint at a motif coinciding with a ChIP-seq summit and reports favorable occupancy-inference comparison. A numerical gain over R25 or attribution of the displayed DNase track to a particular R25 library is not established.",
+        "tradeoffs_and_transfer_limits": "The primary abstract establishes human footprinting, ChIP association and CTCF analysis, but not the exact digestion/capture procedure, sample/library, adapter structures or seed comparison-track identity. Similar footprints do not establish identical enzyme bias, binding chemistry or Tn5 assay ancestry.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "At a specific CTCF binding site on chromosome 1, we observed a clear footprint (a deep notch of ATAC-seq signal), similar to footprints seen by DNase-seq25,26, at the precise location of the CTCF motif that coincides with the summit of the CTCF ChIP-seq signal in GM12878 cells (Fig 4a)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Results using ATAC-seq closely recapitulate ChIP-seq binding data in this cell line and compare favorably to DNase-based factor occupancy inference (see Supplementary Fig. 9), suggesting that factor occupancy data can be extracted from these ATAC-seq data allowing reconstruction of regulatory networks."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R25",
+            "quote": "Here we demonstrate that data from a single high-throughput DNase I hypersensitivity assay can delineate hundreds of thousands of base-pair resolution in vivo footprints in human cells that precisely mark individual transcription factor-DNA interactions."
+          },
+          {
+            "source_id": "R25",
+            "quote": "We find that footprints for specific transcription factors correlate with ChIP-seq enrichment and can accurately identify functional versus nonfunctional transcription factor motifs."
+          },
+          {
+            "source_id": "R25",
+            "quote": "Finally, detailed analysis of CTCF footprints suggests multiple modes of binding and a novel DNA binding motif upstream of the primary binding site."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "Full-text acquisition for PMC3044859 failed with recorded HTTP 400; only the primary abstract is available. Exact DNase end-capture and library implementation remain unverified here.",
+          "The seed joint citation to R25/R26 does not identify which exact experiment/library supplied each displayed comparison. Do not infer provenance from a similar CTCF trace.",
+          "No catalogue reference identity for PMID 21106903 was found; the DNase family description does not resolve this implementation."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r25",
+        "decision": "accept",
+        "rationale": "Supported as written at primary-abstract level as a qualitative human DNase/CTCF footprint comparison. R25 independently demonstrates human nucleotide-resolution footprints, association with ChIP enrichment and detailed CTCF footprint analysis. The seed joint R25/R26 citation supports similarity of observed protection patterns, with no unique assignment of the displayed library. The claim preserves this provenance limit and withholds exact end-capture/adapter chemistry, numerical performance against R25 and assay ancestry. Those missing details do not block the narrow comparison that is actually submitted.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "At a specific CTCF binding site on chromosome 1, we observed a clear footprint (a deep notch of ATAC-seq signal), similar to footprints seen by DNase-seq25,26, at the precise location of the CTCF motif that coincides with the summit of the CTCF ChIP-seq signal in GM12878 cells (Fig 4a)."
+          },
+          {
+            "source_id": "R25",
+            "quote": "Here we demonstrate that data from a single high-throughput DNase I hypersensitivity assay can delineate hundreds of thousands of base-pair resolution in vivo footprints in human cells that precisely mark individual transcription factor-DNA interactions."
+          },
+          {
+            "source_id": "R25",
+            "quote": "We find that footprints for specific transcription factors correlate with ChIP-seq enrichment and can accurately identify functional versus nonfunctional transcription factor motifs."
+          },
+          {
+            "source_id": "R25",
+            "quote": "Finally, detailed analysis of CTCF footprints suggests multiple modes of binding and a novel DNA binding motif upstream of the primary binding site."
+          }
+        ]
+      }
+    },
+    {
+      "claim": {
+        "id": "claim_r26",
+        "reference_id": "R26",
+        "contributor": "Neph et al. (2012): high-depth human DNase I footprint atlas",
+        "contributor_kind": "assay",
+        "relation": "comparison",
+        "seed_operation_ids": [
+          "op_tagmentation"
+        ],
+        "earlier_demonstration": "Primary full text, PMID 22955618: profiled DNase I footprints across 41 cell/tissue types. Roughly 10 million cells supplied intact nuclei; short double-hit fragments were recovered by sucrose ultracentrifugation, end-repaired, adapter-ligated and Illumina-sequenced. Average depth was about 273 million uniquely mapping single-end tags per cell type. Occupancy scores correlated with ChIP signal; 89% of high-confidence NRF1 motif footprints overlapped reproducible NRF1 ChIP-seq peaks in the reported analysis.",
+        "seed_design_change": "The seed separately cites R26 with R25 for DNase footprints resembling its CTCF notch and uses Tn5 insertion data plus motif/conservation information for occupancy inference. R26 establishes a prior experimental human footprinting comparator, not an adopted transposition component or confirmed source of every displayed DNase track.",
+        "limitation_addressed": "R26 documents a strong local-depth requirement for reliable footprints. The seed seeks occupancy and accessibility information from its transposition library, but a controlled removal of the R26 depth requirement is not established.",
+        "reported_gain": "R26 reports its own atlas/enrichment gains over prior DNase implementations. Those are not ATAC gains. The seed reports agreement with ChIP-seq and favorable DNase inference comparison qualitatively; a numerical improvement against a defined R26 library is not established.",
+        "tradeoffs_and_transfer_limits": "DNase double-hit fragment recovery, ligation and single-end sequencing differ from paired-end Tn5 fragment sampling. R26 validation across factors is not a guarantee for all ATAC motifs or the specific CTCF site. Its methods confirm human DNase footprints, while the joint seed citation does not resolve exact track provenance. Sampling depth and enzyme preferences prevent unqualified transfer of sensitivity or binding-interface conclusions.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "At a specific CTCF binding site on chromosome 1, we observed a clear footprint (a deep notch of ATAC-seq signal), similar to footprints seen by DNase-seq25,26, at the precise location of the CTCF motif that coincides with the summit of the CTCF ChIP-seq signal in GM12878 cells (Fig 4a)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Results using ATAC-seq closely recapitulate ChIP-seq binding data in this cell line and compare favorably to DNase-based factor occupancy inference (see Supplementary Fig. 9), suggesting that factor occupancy data can be extracted from these ATAC-seq data allowing reconstruction of regulatory networks."
+          },
+          {
+            "source_id": "seed",
+            "quote": "We reasoned that DNA sequences directly occupied by DNA-binding proteins are protected from transposition; the resulting sequence “footprint” reveals the presence of the DNA-binding protein at each site, analogous to DNase digestion footprints24."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R26",
+            "quote": "Using genomic DNaseI footprinting across 41 diverse cell and tissue types, we detected 45 million factor occupancy events within regulatory regions, representing differential binding to 8.4 million distinct short sequence elements."
+          },
+          {
+            "source_id": "R26",
+            "quote": "Briefly, roughly 10 million cells were grown in appropriate culture media and nuclei were extracted using NP-40 in an isotonic buffer."
+          },
+          {
+            "source_id": "R26",
+            "quote": "The small ‘double-hit’ fragments (<500 bp) were recovered by sucrose ultra-centrifugation, endrepaired and ligated with adapters compatible with the Illumina sequencing platform."
+          },
+          {
+            "source_id": "R26",
+            "quote": "High quality libraries from each cell type were sequenced on the Illumina platform to an average depth of 273 million uniquely mapping single-end tags."
+          },
+          {
+            "source_id": "R26",
+            "quote": "While only a subset of these motif instances (2,351) coincided with high-confidence footprints, the vast majority of NRF1 motif instances in DNaseI footprints (89%) overlapped reproducible NRF1 ChIP-seq peaks (Fig. 1c)."
+          },
+          {
+            "source_id": "R26",
+            "quote": "The ability to resolve DNaseI footprints sensitively and precisely is critically dependent on the local density of mapped DNaseI cleavages (Supplementary Figs. 1a–d),"
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "The catalogue DNase family has no reference identity for PMID 22955618. No exact method identity or merge is proposed for this human footprinting implementation.",
+          "Exact R25-versus-R26 provenance of the seed Figure 4 and supplementary DNase comparison libraries remains unresolved. R26 GEO accessions alone do not assign a particular library to the seed plots."
+        ]
+      },
+      "reason": "unresolved_claim",
+      "review": {
+        "claim_id": "claim_r26",
+        "decision": "accept",
+        "rationale": "Supported as written as a separate human DNase footprinting comparator. R26 primary full text independently establishes 41 cell/tissue types, roughly ten-million-cell preparations, double-hit fragment recovery, end repair/adapter ligation and approximately 273 million uniquely mapped single-end tags per cell type. It also supports the stated NRF1 validation and local-depth dependence. The claim preserves the different enzyme, library interface, read structure and sampling requirements and keeps R26's own enrichment results separate from ATAC performance. The joint seed citation does not resolve each comparison track or make all-factor validation transferable to ATAC; the submitted wording expressly withholds those claims.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "At a specific CTCF binding site on chromosome 1, we observed a clear footprint (a deep notch of ATAC-seq signal), similar to footprints seen by DNase-seq25,26, at the precise location of the CTCF motif that coincides with the summit of the CTCF ChIP-seq signal in GM12878 cells (Fig 4a)."
+          },
+          {
+            "source_id": "R26",
+            "quote": "Using genomic DNaseI footprinting across 41 diverse cell and tissue types, we detected 45 million factor occupancy events within regulatory regions, representing differential binding to 8.4 million distinct short sequence elements."
+          },
+          {
+            "source_id": "R26",
+            "quote": "The small ‘double-hit’ fragments (<500 bp) were recovered by sucrose ultra-centrifugation, endrepaired and ligated with adapters compatible with the Illumina sequencing platform."
+          },
+          {
+            "source_id": "R26",
+            "quote": "High quality libraries from each cell type were sequenced on the Illumina platform to an average depth of 273 million uniquely mapping single-end tags."
+          },
+          {
+            "source_id": "R26",
+            "quote": "While only a subset of these motif instances (2,351) coincided with high-confidence footprints, the vast majority of NRF1 motif instances in DNaseI footprints (89%) overlapped reproducible NRF1 ChIP-seq peaks (Fig. 1c)."
+          },
+          {
+            "source_id": "R26",
+            "quote": "The ability to resolve DNaseI footprints sensitively and precisely is critically dependent on the local density of mapped DNaseI cleavages (Supplementary Figs. 1a–d),"
+          }
+        ]
+      }
+    }
+  ],
+  "analysis_sha256": "4bf2e61c54fb0114f20a1241134f91d1d97c8bc54a6b01ff1c6417f10d45c6fa",
+  "boundary": "One-hop source-guided pilot, not a complete lineage or canonical atlas admission. Shared evidence, comparisons and mechanistic precedents are not descent. Referenced methods have not received full workflow extraction."
+}
