@@ -36,3 +36,26 @@ registered; this bounded experiment does not test general literature retrieval.
 Native runs: Qiu Sherlock Slurm, `gpt-6.1-sol`, `xhigh`, fresh author/reviewer
 sessions. The recorded plan selects the reviewed scope-repair ATAC version and
 the supported ChIPmentation catalogue version. Source files are immutable.
+
+## Completed result — 2 November 2026
+
+Job 50766951 completed in 17.0 minutes with no revision. Both diagrams were
+retained unchanged (ATAC: two operations; ChIPmentation: three). The fresh reviewer
+accepted a shared tagmentation mechanism, a shared library-production purpose,
+a specifically attributed custom-primer adoption from ATAC into ChIPmentation,
+and a reported readout comparison. ChIP capture remains unmatched. Both diagrams
+were sufficient with paper annotations for these claims. They do not separately
+represent internal recovery or analysis steps.
+
+Open [the comparison](../../provenance/experiments/method_pair_20261102/comparison.html),
+[results and limits](../../provenance/experiments/method_pair_20261102/RESULTS.json),
+or [the review](../../provenance/experiments/method_pair_20261102/review.json).
+The offline renderer `pair_view.py` turns the exported JSON into a clickable view;
+it makes no model calls and does not add scientific claims. Dashed lines attach
+operation groups to comparison records, not material flows between methods.
+
+Forty focused software checks passed locally; the 31 citation/pair checks also
+passed on Qiu. The original hashes, exact quotations, operation groups, review
+sessions and exported graph were revalidated locally. Eleven qualifications
+remain visible. This is a selected model-reviewed example; supplements and an
+independent human accuracy assessment are outside this completed test.

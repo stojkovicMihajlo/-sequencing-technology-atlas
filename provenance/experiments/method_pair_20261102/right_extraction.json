@@ -1,0 +1,1233 @@
+{
+  "format_version": "illumina_diagram/1.0",
+  "record_id": "chipmentation",
+  "title": "ChIPmentation",
+  "method_names": [
+    "ChIPmentation"
+  ],
+  "scope": "Illumina explanatory ChIPmentation schematic, resolved to the bead-bound-chromatin implementation described by Schmidl et al. (PMID 26280331): antibody-mediated chromatin capture, Tn5 tagmentation while bead-bound, and the depicted combined DNA purification/amplification block yielding a DNA library. The far-left overview cartoon/caption names the method rather than supplying an extra upstream transformation. The three upstream ChIP protocols reported in the paper share this bead-bound interface at the level extracted here. Purified-DNA ChIP-tagmentation and ATAC-seq are distinct workflows discussed by the sources, with no separate route for either in this diagram. Sequencing is the supported use of the final DNA library, not a drawn operation.",
+  "inspected_sources": [
+    "diagram:asset_20083ca733fbaa508edf5f27",
+    "card:chipmentation",
+    "metadata:26280331",
+    "paper:26280331",
+    "metadata:27297499",
+    "paper:27297499",
+    "metadata:27346425",
+    "paper:27346425"
+  ],
+  "states": [
+    {
+      "id": "s_chromatin",
+      "label": "Chromatin",
+      "kind": "material",
+      "features": [
+        "DNA associated with chromatin proteins, drawn as two grey nucleosome-like stacks with short DNA strands.",
+        "The primary implementation enters tagmentation with already fragmented chromatin; the schematic does not depict the upstream fragmentation procedure."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Chromatin label and two grey nucleosome-like icons",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.18,
+            0.07,
+            0.29,
+            0.83
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00011, main text: tagmentation substrate",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_selected_chromatin",
+      "label": "Immunoprecipitated, bead-bound chromatin",
+      "kind": "material",
+      "features": [
+        "Magenta Y-shaped antibody connects one chromatin icon to a grey support; the card identifies the retained material as bead-bound immunoprecipitated chromatin.",
+        "DNA remains protein-associated. Enrichment is determined by the chosen antibody target, including histone marks or transcription factors.",
+        "The capture panel also contains an apparently unattached second chromatin icon; this is not assigned a separately retained material route."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Arrow from Chromatin to Chromatin immunoprecipitation; magenta antibody on grey support",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.295,
+            0.07,
+            0.455,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chipmentation",
+          "locator": "description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00005, Introduction: biological readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP-seq combines chromatin immunoprecipitation with next generation sequencing in order to measure the genome-wide distribution of chromatin proteins and their posttranslational modifications1.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_tn5",
+      "label": "Tn5 Transposome",
+      "kind": "material",
+      "features": [
+        "Tn5 transposome is added as the tagmentation reagent/catalyst. Its material-input edge denotes reagent addition, without asserting stoichiometric consumption or retention in the final library.",
+        "Blue icon carries short pink and yellow-green arms that accompany adapter insertion; the diagram provides no sequence, strand polarity or chemical-end legend."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Tn5 Transposome label, blue icon with short pink and yellow-green arms and addition arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.08,
+            0.535,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_tagged_chromatin",
+      "label": "Fragmented and primed (DNA within tagmented, bead-bound chromatin)",
+      "kind": "material",
+      "features": [
+        "DNA is further fragmented and carries sequencing-compatible adapter sequences introduced during tagmentation.",
+        "The depicted blue DNA line has a pink segment at one end and a yellow-green segment at the other. The label primed indicates the adapter/priming state at schematic scope; explicit primer annealing is not shown.",
+        "In the primary-supported implementation, the immediate tagmentation product remains bead-bound chromatin pending recovery. The free DNA line abstracts the modified DNA, rather than establishing an earlier protein-removal operation."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Adapter insertion: chromatin with blue Tn5 icons; right-hand chromatin icon is pale",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.555,
+            0.05,
+            0.7,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Arrow to Fragmented and primed; blue DNA line with pink and yellow-green end segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.725,
+            0.24,
+            0.84,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chipmentation",
+          "locator": "description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00004, Abstract",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00011, main text: tagmentation substrate",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "s_library",
+      "label": "DNA (purified, amplified sequencing library)",
+      "kind": "material",
+      "features": [
+        "Final blue DNA line retains pink and yellow-green terminal segments after the arrow labelled DNA purification / Amplification.",
+        "Purified and PCR-enriched genomic DNA fragments carry the sequencing readout; their genomic origins represent enrichment through the selected chromatin protein or histone modification.",
+        "The protein association is used for selection upstream; it is represented by the composition of the recovered DNA library after elution, reverse-crosslinking and purification. Exact adapter structures and end chemistry are not specified in the drawing."
+      ],
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "DNA purification / Amplification arrow to final DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.865,
+            0.18,
+            1.0,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00004, Abstract",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00067, Figure 1 caption, panel i: final library amplification by PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Library preparation time was measured up to the point when sequencing-compatible adapters are introduced, excluding the final library amplification by PCR that is similar for all methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00026, Online Methods, Amplification and sequencing of libraries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was performed by the Biomedical Sequencing Facility at CeMM using the Illumina HiSeq 2000/2500 platform (see Supplementary Table 2 for details).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00005, Introduction: biological readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP-seq combines chromatin immunoprecipitation with next generation sequencing in order to measure the genome-wide distribution of chromatin proteins and their posttranslational modifications1.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: elution, reverse-crosslinking and DNA purification",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": "Recovery removes the chromatin attachment represented before purification. Together with the reported ChIP-seq mapping purpose, this supports interpreting purified genomic DNA as the readout carrier of prior antibody enrichment; proteins themselves are not the sequenced product."
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "op_chip",
+      "label": "Chromatin immunoprecipitation",
+      "description": "Immunoprecipitate chromatin using an antibody-associated support, retaining protein-associated genomic DNA on beads. The drawing changes from unattached chromatin to a chromatin icon linked by a magenta Y-shaped antibody to the grey support; the primary implementation retains this bead-bound fraction for tagmentation.",
+      "inputs": [
+        "s_chromatin"
+      ],
+      "outputs": [
+        "s_selected_chromatin"
+      ],
+      "mechanism": "Antibody-mediated enrichment of chromatin bearing the selected protein or histone modification; the card specifies a bead-bound product.",
+      "information_effect": "Select associated genomic DNA through the antibody target. This is enrichment whose interpretation depends on antibody quality and specificity; individual recovered fragments do not establish perfect target specificity.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Arrow from Chromatin to Chromatin immunoprecipitation; magenta antibody on grey support",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.295,
+            0.07,
+            0.455,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chipmentation",
+          "locator": "description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00004, Abstract",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00005, Introduction: biological readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP-seq combines chromatin immunoprecipitation with next generation sequencing in order to measure the genome-wide distribution of chromatin proteins and their posttranslational modifications1.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00010, main text: antibody limitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Nevertheless, as with every ChIP approach, low-input ChIPmentation depends on antibody quality and may not be feasible for all histone marks and transcription factors.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:27297499",
+          "locator": "b00092, section 5, ChIP-seq: antibody specificity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies may show poor reactivity to their target or bind to other DNA-binding proteins nonspecifically, leading to false inferences of protein binding localization (Landt et al., 2012).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_tagment",
+      "label": "Adapter insertion",
+      "description": "Add Tn5 transposome to immunoprecipitated, bead-bound chromatin. Tagmentation further fragments the already fragmented chromatin DNA and introduces sequencing-compatible adapter sequences, summarized by the Fragmented and primed line. The supported substrate is captured chromatin, including its protein protection, rather than purified ChIP DNA.",
+      "inputs": [
+        "s_selected_chromatin",
+        "s_tn5"
+      ],
+      "outputs": [
+        "s_tagged_chromatin"
+      ],
+      "mechanism": "Tn5-mediated tagmentation couples DNA fragmentation and adapter tagging in one reaction on bead-bound chromatin; the blue transposome is the reagent, not a specimen branch.",
+      "information_effect": "Introduce library priming handles into genomic DNA enriched by ChIP. Detailed insertion patterns can also reflect transposase sequence bias; the primary biological readout is genomic enrichment for the antibody target.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Tn5 Transposome label, blue icon with short pink and yellow-green arms and addition arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.08,
+            0.535,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Adapter insertion: chromatin with blue Tn5 icons; right-hand chromatin icon is pale",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.555,
+            0.05,
+            0.7,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Arrow to Fragmented and primed; blue DNA line with pink and yellow-green end segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.725,
+            0.24,
+            0.84,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chipmentation",
+          "locator": "description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00005, Introduction",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA3.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00004, Abstract",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00011, main text: tagmentation substrate",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00011, main text: interpreting Tn5 patterns",
+          "basis": "text",
+          "support": "reported",
+          "quote": "However, some of these patterns were also present in genome sequencing libraries prepared by tagmentation of purified genomic DNA (Supplementary Fig. 7a), suggesting that they originate in part from DNA sequence biases of the transposase.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00008, main text: reason for retaining chromatin proteins",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We reasoned that performing tagmentation directly on the immunoprecipitated and bead-bound chromatin would allow chromatin proteins to protect the DNA from excessive tagmentation.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "op_recover_amplify",
+      "label": "DNA purification / Amplification",
+      "description": "The depicted combined DNA purification / Amplification block converts tagmented chromatin to recovered DNA and enriches the library by amplification. The paper specifies elution from beads, reverse-crosslinking and DNA purification after on-bead tagmentation, followed by library amplification; these are retained within the broad drawn block rather than expanded into an execution recipe.",
+      "inputs": [
+        "s_tagged_chromatin"
+      ],
+      "outputs": [
+        "s_library"
+      ],
+      "mechanism": "Recovery releases genomic DNA from the captured chromatin, and PCR amplification produces additional copies of the adapter-bearing library.",
+      "information_effect": "Purified genomic DNA is the sequenced carrier. Mapping its inserts can establish the genomic distribution of enrichment associated with the immunoprecipitated chromatin protein or modification. Protein removal breaks the physical protein-DNA association while library composition retains the selection history; antibody specificity and Tn5 bias constrain the resulting interpretation. The schematic ends at DNA library production.",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "DNA purification / Amplification arrow to final DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.865,
+            0.18,
+            1.0,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00004, Abstract",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00067, Figure 1 caption, panel i: final library amplification by PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Library preparation time was measured up to the point when sequencing-compatible adapters are introduced, excluding the final library amplification by PCR that is similar for all methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00026, Online Methods, Amplification and sequencing of libraries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was performed by the Biomedical Sequencing Facility at CeMM using the Illumina HiSeq 2000/2500 platform (see Supplementary Table 2 for details).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00005, Introduction: biological readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIP-seq combines chromatin immunoprecipitation with next generation sequencing in order to measure the genome-wide distribution of chromatin proteins and their posttranslational modifications1.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: elution, reverse-crosslinking and DNA purification",
+          "basis": "text",
+          "support": "inferred",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": "Recovery removes the chromatin attachment represented before purification. Together with the reported ChIP-seq mapping purpose, this supports interpreting purified genomic DNA as the readout carrier of prior antibody enrichment; proteins themselves are not the sequenced product."
+        },
+        {
+          "source_id": "paper:27297499",
+          "locator": "b00092, section 5, ChIP-seq: antibody specificity",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Antibodies may show poor reactivity to their target or bind to other DNA-binding proteins nonspecifically, leading to false inferences of protein binding localization (Landt et al., 2012).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00011, main text: interpreting Tn5 patterns",
+          "basis": "text",
+          "support": "reported",
+          "quote": "However, some of these patterns were also present in genome sequencing libraries prepared by tagmentation of purified genomic DNA (Supplementary Fig. 7a), suggesting that they originate in part from DNA sequence biases of the transposase.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "flows": [
+    {
+      "id": "f_chromatin_chip",
+      "source": "s_chromatin",
+      "target": "op_chip",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Arrow from Chromatin to Chromatin immunoprecipitation; magenta antibody on grey support",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.295,
+            0.07,
+            0.455,
+            0.85
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_chip_selected",
+      "source": "op_chip",
+      "target": "s_selected_chromatin",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Arrow from Chromatin to Chromatin immunoprecipitation; magenta antibody on grey support",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.295,
+            0.07,
+            0.455,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chipmentation",
+          "locator": "description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_selected_tagment",
+      "source": "s_selected_chromatin",
+      "target": "op_tagment",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Tn5 Transposome label, blue icon with short pink and yellow-green arms and addition arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.08,
+            0.535,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Adapter insertion: chromatin with blue Tn5 icons; right-hand chromatin icon is pale",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.555,
+            0.05,
+            0.7,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chipmentation",
+          "locator": "description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_tn5_tagment",
+      "source": "s_tn5",
+      "target": "op_tagment",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Tn5 Transposome label, blue icon with short pink and yellow-green arms and addition arrow",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.47,
+            0.08,
+            0.535,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Adapter insertion: chromatin with blue Tn5 icons; right-hand chromatin icon is pale",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.555,
+            0.05,
+            0.7,
+            0.85
+          ],
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_tagment_tagged",
+      "source": "op_tagment",
+      "target": "s_tagged_chromatin",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Adapter insertion: chromatin with blue Tn5 icons; right-hand chromatin icon is pale",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.555,
+            0.05,
+            0.7,
+            0.85
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Arrow to Fragmented and primed; blue DNA line with pink and yellow-green end segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.725,
+            0.24,
+            0.84,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_tagged_recover",
+      "source": "s_tagged_chromatin",
+      "target": "op_recover_amplify",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Arrow to Fragmented and primed; blue DNA line with pink and yellow-green end segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.725,
+            0.24,
+            0.84,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "DNA purification / Amplification arrow to final DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.865,
+            0.18,
+            1.0,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "f_recover_library",
+      "source": "op_recover_amplify",
+      "target": "s_library",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "DNA purification / Amplification arrow to final DNA line",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.865,
+            0.18,
+            1.0,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00067, Figure 1 caption, panel i: final library amplification by PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Library preparation time was measured up to the point when sequencing-compatible adapters are introduced, excluding the final library amplification by PCR that is similar for all methods.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "ChIPmentation",
+      "operation_ids": [
+        "op_chip",
+        "op_tagment",
+        "op_recover_amplify"
+      ],
+      "status": "resolved",
+      "rationale": "All three extracted operations apply to ChIPmentation as defined by the on-bead reaction. The far-left long caption expands the same method name; the title cartoon is not an additional material input. The paper reports three compatible upstream ChIP protocols, which converge on beads carrying immunoprecipitated chromatin; only their common interface is represented here. The differently named purified-DNA ChIP-tagmentation comparator is distinct, not an alias or a retained branch. The catalogue mentions combining ATAC-seq and ChIPmentation in an experiment, but neither the image nor that statement establishes material transfer between those assays. The pale chromatin icon at adapter insertion has no separately labelled route or final product; the primary source resolves the retained substrate as bead-bound chromatin.",
+      "evidence": [
+        {
+          "source_id": "card:chipmentation",
+          "locator": "description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00004, Abstract",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00007, main text: purified-DNA comparator versus bead-bound ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We initially tested an approach that combines standard ChIP with subsequent tagmentation of the purified ChIP DNA (Supplementary Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Far-left overview cartoon and caption: Chromatin immunoprecipitation with sequencing library preparation by Tn5 transposase (ChIPmentation); no arrow connects this title cartoon to Chromatin",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.168,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00018, Online Methods, Chromatin immunoprecipitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation was tested in combination with three different protocols for performing the chromatin immunoprecipitation, which are described in detail in the Supplementary Note.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: shared interface with different ChIP protocols",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation is compatible with various different protocols for ChIP, which makes it easy to apply ChIP-mentation to antibodies that work best with a certain ChIP protocol.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00007, main text: distinct purified-DNA comparator",
+          "basis": "text",
+          "support": "reported",
+          "quote": "This “ChIP-tagmentation” protocol gave acceptable results (Supplementary Fig. 2), but was difficult to standardize across samples and across antibodies.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Adapter insertion panel: solid antibody/support-bound chromatin and a pale apparently unattached chromatin icon, both adjacent to blue transposome icons; no bifurcating arrow or legend",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.555,
+            0.04,
+            0.7,
+            0.86
+          ],
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "pm_26280331",
+      "source_id": "paper:26280331",
+      "methods": [
+        "ChIPmentation"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00004, Abstract",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+          "bbox": null,
+          "rationale": "Primary method paper; the supplied full text was inspected for the on-bead substrate, recovery order and library amplification. Publication identity and content support are recorded separately."
+        },
+        {
+          "source_id": "metadata:26280331",
+          "locator": "PubMed title and identifiers",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation: fast, robust, low-input ChIP-seq for histones and transcription factors.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00067, Figure 1 caption, panel i: final library amplification by PCR",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Library preparation time was measured up to the point when sequencing-compatible adapters are introduced, excluding the final library amplification by PCR that is similar for all methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00018, Online Methods, Chromatin immunoprecipitation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "ChIPmentation was tested in combination with three different protocols for performing the chromatin immunoprecipitation, which are described in detail in the Supplementary Note.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27297499",
+      "source_id": "paper:27297499",
+      "methods": [
+        "ChIPmentation"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "paper:27297499",
+          "locator": "b00131, concluding discussion",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Both ATAC-seq and ChIPmentation (Schmidl et al., 2015) take advantage of the flexibility and efficiency provided by the use of the Tn5 transposase in library preparation in order to assay open chromatin and protein binding, respectively.",
+          "bbox": null,
+          "rationale": "Full-text review discussion supports the differing biological purposes of ATAC-seq and ChIPmentation and cites Schmidl et al. for ChIPmentation. It is background, not a separate primary method or architecture variant."
+        },
+        {
+          "source_id": "metadata:27297499",
+          "locator": "PubMed title and identifiers",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next generation sequencing technology and genomewide data analysis: Perspectives for retinal research.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "pm_27346425",
+      "source_id": "paper:27346425",
+      "methods": [
+        "ChIPmentation"
+      ],
+      "assessment": "content_checked",
+      "relationship": "background",
+      "evidence": [
+        {
+          "source_id": "paper:27346425",
+          "locator": "Abstract only; supplied full text not acquired",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We also performed ChIPmentation and RNA-seq profiling for ten representative samples.",
+          "bbox": null,
+          "rationale": "Only the supplied abstract and publication metadata were inspected. The abstract establishes an application of ChIPmentation; full-text protocol evidence was not acquired, so it does not support assigning an implementation variant or reaction order."
+        },
+        {
+          "source_id": "metadata:27346425",
+          "locator": "PubMed title and identifiers",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Chromatin accessibility maps of chronic lymphocytic leukaemia identify subtype-specific epigenome signatures and transcription regulatory networks.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "c_dna_abstraction",
+      "target_id": "state:s_tagged_chromatin",
+      "diagram_observation": "The diagram places a free-looking, protein-free blue DNA line with pink and yellow-green ends labelled Fragmented and primed before the DNA purification / Amplification block. It does not draw an intervening elution or protein-removal step.",
+      "primary_statement": "The primary paper places tagmentation directly on bead-bound chromatin and only afterward resumes elution, reverse-crosslinking and DNA purification. Accordingly, the affected state is authored as adapter-tagged DNA still in bead-bound chromatin at the end of tagmentation; the free-line drawing is preserved as a schematic abstraction of DNA modification, and recovery remains in the downstream combined block.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "After Adapter insertion arrow: single blue line with pink and yellow-green end segments labelled Fragmented and primed, before DNA purification / Amplification",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.725,
+            0.24,
+            0.843,
+            0.91
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "c_retained_substrate",
+      "target_id": "operation:op_tagment",
+      "diagram_observation": "The Adapter insertion panel depicts blue transposome icons beside both a solid support-bound chromatin icon and a pale apparently unattached chromatin icon. There is no legend explaining the fading and no bifurcating material arrow.",
+      "primary_statement": "The card and primary paper explicitly define the ChIPmentation reaction on bead-bound, immunoprecipitated chromatin. The operation and its retained output are therefore authored for that fraction; the pale icon is recorded without assigning it a separate retained or purified-DNA tagmentation route. Its graphical fading alone does not specify a biochemical fate.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+          "locator": "Adapter insertion panel: solid antibody/support-bound chromatin and a pale apparently unattached chromatin icon, both adjacent to blue transposome icons; no bifurcating arrow or legend",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.555,
+            0.04,
+            0.7,
+            0.86
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "card:chipmentation",
+          "locator": "description_verbatim / jcr:content/par/text_1/text",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "paper:26280331",
+          "locator": "b00006, main text: definition of ChIPmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u_end_identity",
+      "question": "Which exact adapter sequences and strand-end polarities do the pink and yellow-green segments denote? The diagram has no legend; an annotated oligonucleotide map would be needed to resolve them. This does not prevent interpreting the adapter-tagged DNA architecture.",
+      "blocking": false,
+      "affected_ids": [
+        "state:s_tn5",
+        "state:s_tagged_chromatin",
+        "state:s_library"
+      ]
+    }
+  ]
+}

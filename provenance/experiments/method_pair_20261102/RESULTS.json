@@ -1,0 +1,83 @@
+{
+  "experiment": "Compare two unchanged Illumina workflow graphs",
+  "status": "completed",
+  "job_id": "50766951",
+  "slurm_exit_code": "0:0",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "elapsed_minutes": 17.0,
+  "author_minutes": 11.4,
+  "review_minutes": 5.56,
+  "source_operation_counts": {
+    "ATAC-seq": 2,
+    "ChIPmentation": 3
+  },
+  "source_extractions_changed": false,
+  "comparison_revision_rounds": 0,
+  "reviewed_connections": [
+    {
+      "id": "c1",
+      "type": "shared_mechanism",
+      "direction": "undirected",
+      "description": "At the coupled tagmentation abstraction, adapter-loaded Tn5 fragments genomic DNA within chromatin and transfers sequencing-adapter sequences, producing tagged fragments that can enter library amplification. The shared transformation is DNA fragmentation plus adapter tagging; the transposome supplies the adapter payload and catalysis, while genomic DNA is the eventual readout carrier."
+    },
+    {
+      "id": "c2",
+      "type": "shared_purpose",
+      "direction": "undirected",
+      "description": "The complete combined recovery/amplification blocks serve a comparable function: turn the respective tagmented chromatin-derived material into a purified, amplified genomic DNA library carrying adapter-associated priming handles. Library DNA preserves genomic origins, but those origins reflect different upstream selection histories."
+    },
+    {
+      "id": "c3",
+      "type": "component_adoption",
+      "direction": "left_to_right",
+      "description": "Within the existing combined purification/amplification blocks, ChIPmentation explicitly adopts the custom Nextera primer implementation described for ATAC-seq to prepare/amplify the tagged DNA library. This is a historical claim about that primer component, not inheritance of the entire block or assay."
+    },
+    {
+      "id": "c4",
+      "type": "comparison",
+      "direction": "undirected",
+      "description": "The papers support a documented comparison of local Tn5 insertion/footprint information carried by libraries produced by the connected tagmentation-to-library groups. Both can carry information about protein-associated protection, but their genomic sampling and interpretation differ. This relation records the published methodological comparison; sequencing and computational analysis remain downstream annotations beyond these diagrams' library endpoints."
+    }
+  ],
+  "unmatched_operation": "ChIPmentation chromatin immunoprecipitation",
+  "diagram_adequacy": [
+    {
+      "record_id": "atac-seq",
+      "verdict": "sufficient_with_paper_annotations",
+      "explanation": "The existing two operations suffice for the qualified tagmentation mechanism, broad library-production function, primer-component adoption annotation and whole-group readout comparison. 'Open DNA' describes accessible DNA within native chromatin; the repeated vignette is not an opening operation, and final multiple DNA strokes do not form alternative routes. The original paper supplies the unfixed nuclear context, preferential rather than absolute accessibility sampling, custom-primer implementation, purification variation at low input, and lack of size selection. No finer extraction is required for these claims. Separately addressable purification-versus-PCR comparisons or an operation-level alignment of downstream footprint analysis would require distinctions absent from the current broad block/library endpoint; those narrower questions remain unresolved."
+    },
+    {
+      "record_id": "chipmentation",
+      "verdict": "sufficient_with_paper_annotations",
+      "explanation": "The three existing operations preserve the key additional antibody-selection step and support qualified correspondence of tagmentation and downstream library production. Paper annotations are essential: tagmentation is on already fragmented immunoprecipitated bead-bound chromatin; the free-looking tagged-DNA line remains attached until the combined recovery block; and the pale unattached icon does not define another retained workflow. Elution, reverse-crosslinking, primer adoption and size selection can be explained inside the existing broad block without editing it. The original papers support the recorded claims at this level. Separate operation-level attribution of bead release, crosslink reversal, cleanup and PCR, or alignment of downstream footprint-correction operations, would require finer extraction for those specified unresolved questions, not an executable recipe or redesign during this run."
+    }
+  ],
+  "qualifications_retained": 11,
+  "software_checks": {
+    "local": 40,
+    "qiu_subset": 31
+  },
+  "artifacts": {
+    "interactive_view": "comparison.html",
+    "static_graph": "comparison.svg",
+    "machine_graph": "graph.json",
+    "scientific_analysis": "analysis.json",
+    "independent_review": "review.json",
+    "integrity_checks": "integrity_check.json",
+    "tool_audit": "tool_use_audit.json"
+  },
+  "limits": [
+    "One chosen development pair; not a precision/recall or generalization benchmark.",
+    "Independent model review, not human expert validation.",
+    "Full registered original paper texts were supplied; supplements were not separately registered/independently inspected.",
+    "Historical transfer concerns custom primers; no whole-assay development edge admitted.",
+    "Internal cleanup, crosslink reversal and analysis operations are not separately extracted.",
+    "Candidate paired graph is separate from canonical atlas admission.",
+    "Pair assembly preserves exact source state/operation/flow records; structured method-scope nodes added by the full atlas builder are not synthesized here. Original extraction scopes remain available to both agents; grouped-family matching remains untested."
+  ],
+  "observed_execution_issues": [
+    "Each native stage encountered the expected Sherlock bwrap namespace failure on its first command and continued through managed escalation; no sandbox was disabled.",
+    "Group outputs are verbose. Both stages used additional Python reads to inspect/reduce source material; source tools were used but not exclusively."
+  ]
+}
