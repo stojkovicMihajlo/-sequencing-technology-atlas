@@ -1,0 +1,295 @@
+{
+  "scope": "Retrospective comparison of three final accepted Drop-seq source extractions; no new model calls",
+  "source_archive_sha256": "9414e1866f056c3504f06a811d63dae19abee9e7b8723145203b22704e4ce0fb",
+  "native_model_calls_for_this_check": 0,
+  "alignment_method": "Engineering-agent semantic inspection of the seven State roles and five named Operations; Python independently compares the typed node/edge sets under those explicit bijections. This is not an automated general semantic matcher.",
+  "records": [
+    {
+      "record_id": "drop-seq",
+      "source": "website",
+      "source_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/drop-seq.html",
+      "candidate_sha256": "f8234d784602a1e1af9a804005d3be0d81faf87ab47c69258817350d57e67604",
+      "review_sha256": "b97396f060b8767b5afea22ed55fe72187665df49b9c01a0726d16fc475c227e",
+      "counts": {
+        "operations": 5,
+        "states": 7,
+        "flows": 11,
+        "corrections": 1,
+        "unknowns": 0
+      },
+      "author_revisions": 0,
+      "native_stage_seconds": 625.58,
+      "role_alignment": {
+        "s.cells": "cells",
+        "s.beads": "primer_beads",
+        "s.droplets": "droplet_pair",
+        "s.captured": "captured_RNA",
+        "s.pooled": "pooled_beads",
+        "s.library": "DNA_library",
+        "s.readout": "sequence_data",
+        "o.load": "coencapsulate",
+        "o.capture": "lyse_and_capture",
+        "o.pool": "recover_and_pool",
+        "o.cdna": "RT_and_amplify",
+        "o.sequence": "sequence"
+      },
+      "operation_annotations": [
+        {
+          "role": "coencapsulate",
+          "source_local_id": "o.load",
+          "description": "Co-encapsulate cells and barcoded beads so that a productive droplet isolates a cell together with its companion capture bead.",
+          "mechanism": "Microfluidic compartmentalization of cell and bead/lysis-buffer aqueous inputs.",
+          "information_effect": "Creates a local compartment associating a cell’s released RNA with one bead’s barcode; identity is not yet encoded in cDNA."
+        },
+        {
+          "role": "lyse_and_capture",
+          "source_local_id": "o.capture",
+          "description": "Lyse the encapsulated cell and capture released mRNA on its companion bead within the droplet, converting intracellular RNA to bead-hybridized RNA.",
+          "mechanism": "Lysis releases RNA; poly(A) tails hybridize to bead-attached oligo(dT).",
+          "information_effect": "Preserves the cell-of-origin association through droplet confinement and RNA attachment to the bead; oligo(dT) capture selects polyadenylated RNA."
+        },
+        {
+          "role": "recover_and_pool",
+          "source_local_id": "o.pool",
+          "description": "Break the emulsion and collect the mRNA-bearing beads in a common pool. The output is pooled beads with attached RNA rather than intact pooled droplets.",
+          "mechanism": "Droplet disruption and recovery of RNA-bound beads; the supplied text resolves the compartment change compressed into the figure caption.",
+          "information_effect": "Removes spatial separation between cells while retaining each captured RNA’s association with its bead-bound barcoded primer."
+        },
+        {
+          "role": "RT_and_amplify",
+          "source_local_id": "o.cdna",
+          "description": "In bulk, copy captured mRNAs from bead-attached primers into barcode-bearing cDNA and amplify the cDNA. The broad depicted block is connected to sequencing through the primary paper’s cDNA-derived 3′-end DNA library interface. The catalogue statement that a PCR primer sequence replaces the universal sequence is not adopted: the primary source describes the original universal region as a downstream PCR/sequencing priming site and template switching as introducing an additional PCR handle downstream of synthesized cDNA.",
+          "mechanism": "Bead-primer reverse transcription with template switching to add a downstream PCR handle, followed by PCR amplification. The primary implementation prepares the sequencing library from amplified cDNA using Nextera XT with primers selecting transcript 3′ ends; this is clarification within the broad block, not an additional depicted operation.",
+          "information_effect": "Covalently links bead cell barcode and primer UMI to transcript-derived DNA; amplification creates copies that retain those identifiers."
+        },
+        {
+          "role": "sequence",
+          "source_local_id": "o.sequence",
+          "description": "Sequence the barcode-bearing DNA library to obtain transcript-derived sequence associated with a cell label and molecular index.",
+          "mechanism": "In the primary implementation, paired reads recover barcode/UMI information and cDNA sequence.",
+          "information_effect": "Provides the molecular association needed to assign detected transcripts to a bead/cell and gene and count original captured molecules using UMIs; the final mRNA label describes the biological target."
+        }
+      ],
+      "primary_paper_level": "fulltext",
+      "secondary_collection_page_supplied": true,
+      "null_mechanism_roles": [],
+      "correction_targets": [
+        {
+          "id": "c.readout_carrier",
+          "target_id": "state:s.readout",
+          "primary_statement": "The primary paper sequences a DNA library derived from amplified cDNA; one read carries the cell barcode and UMI and its mate interrogates cDNA. The authored terminal state is sequence data representing captured mRNA, preserving the source label without treating mRNA itself as the sequencing substrate."
+        }
+      ]
+    },
+    {
+      "record_id": "poster_1fcf501faf1682cf757ab309",
+      "source": "single_cell_poster",
+      "source_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-single-cell.pdf",
+      "candidate_sha256": "7c68604c9de2d7a1a02f0690f4ee20394625d173b3db9570a10bd98ff08bb042",
+      "review_sha256": "0b4de8fef7097b385f097f7010c778855bd6dd94e3f4ee1d8f2a9aa2dc0998cb",
+      "counts": {
+        "operations": 5,
+        "states": 7,
+        "flows": 11,
+        "corrections": 1,
+        "unknowns": 0
+      },
+      "author_revisions": 0,
+      "native_stage_seconds": 744.26,
+      "role_alignment": {
+        "s_cells": "cells",
+        "s_beads": "primer_beads",
+        "s_droplets": "droplet_pair",
+        "s_captured": "captured_RNA",
+        "s_pooled": "pooled_beads",
+        "s_library": "DNA_library",
+        "s_reads": "sequence_data",
+        "op_load": "coencapsulate",
+        "op_capture": "lyse_and_capture",
+        "op_pool": "recover_and_pool",
+        "op_cdna": "RT_and_amplify",
+        "op_sequence": "sequence"
+      },
+      "operation_annotations": [
+        {
+          "role": "coencapsulate",
+          "source_local_id": "op_load",
+          "description": "Co-compartmentalizes the cell suspension and barcoded beads into droplets, producing isolated cell–bead pairings for capture.",
+          "mechanism": "The primary implementation co-encapsulates cells and beads in aqueous droplets using microfluidics.",
+          "information_effect": "Establishes the physical cell-to-bead association before cells are lysed; the cell label is initially a bead barcode."
+        },
+        {
+          "role": "lyse_and_capture",
+          "source_local_id": "op_capture",
+          "description": "Lyses the compartmentalized cells and captures released polyadenylated mRNA on the companion bead, changing intracellular RNA into bead-associated RNA within each droplet.",
+          "mechanism": "Oligo-dT segments on bead-bound primers hybridize to mRNA poly(A) tails.",
+          "information_effect": "The droplet confines capture to its local material and associates captured transcripts with the bead’s shared cell barcode. This is intended single-cell attribution, not proof that every droplet has exactly one cell."
+        },
+        {
+          "role": "recover_and_pool",
+          "source_local_id": "op_pool",
+          "description": "Recovers and pools the mRNA-bearing beads from the droplet compartments; the paper specifies breaking the droplets before collecting the beads.",
+          "mechanism": null,
+          "information_effect": "Physical droplet separation ends, while RNA remains associated with the corresponding barcoded beads for pooled processing."
+        },
+        {
+          "role": "RT_and_amplify",
+          "source_local_id": "op_cdna",
+          "description": "Copies captured mRNAs into barcoded cDNA from bead-attached primers, then amplifies the cDNA for the depicted sequencing interface. The broad block is retained without inventing its internal library-preparation sequence.",
+          "mechanism": "Reverse transcription from bead-attached primers followed by amplification, as established for Drop-Seq in the primary paper.",
+          "information_effect": "Makes the bead’s cell barcode and primer UMI part of transcript-derived DNA, preserving RNA origin and molecule identity through pooled amplification."
+        },
+        {
+          "role": "sequence",
+          "source_local_id": "op_sequence",
+          "description": "Sequences the pooled amplified cDNA library, producing reads that report captured mRNA identities and their cell and molecular barcodes.",
+          "mechanism": null,
+          "information_effect": "Supports digital gene expression by cell of origin, with UMI-based duplicate recognition; the physical readout is DNA-derived sequence data representing mRNA."
+        }
+      ],
+      "primary_paper_level": "fulltext",
+      "secondary_collection_page_supplied": false,
+      "null_mechanism_roles": [
+        "recover_and_pool",
+        "sequence"
+      ],
+      "correction_targets": [
+        {
+          "id": "c_endpoint",
+          "target_id": "state:s_reads",
+          "primary_statement": "The primary paper describes sequencing a 3′-end expression library derived by reverse transcription and amplification of captured mRNA. The endpoint is therefore cDNA-derived sequence information representing mRNA, not direct sequencing of the original RNA molecules."
+        }
+      ]
+    },
+    {
+      "record_id": "poster_3d6d7a7f88f7417ff14c1d22",
+      "source": "RNA_poster",
+      "source_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+      "candidate_sha256": "9e8dcee4e5eb385c054ba39bf97bef8bc534c7b6875010a97a9126c58e316608",
+      "review_sha256": "6247eddc8cec227612d2f7f46e18eada85c06cb40af1965258fb993acbaf5261",
+      "counts": {
+        "operations": 5,
+        "states": 7,
+        "flows": 11,
+        "corrections": 2,
+        "unknowns": 0
+      },
+      "author_revisions": 1,
+      "native_stage_seconds": 1595.92,
+      "role_alignment": {
+        "ds_cells": "cells",
+        "ds_beads": "primer_beads",
+        "ds_compartments": "droplet_pair",
+        "ds_captured": "captured_RNA",
+        "ds_pool": "pooled_beads",
+        "ds_library": "DNA_library",
+        "ds_reads": "sequence_data",
+        "ds_load": "coencapsulate",
+        "ds_lyse_capture": "lyse_and_capture",
+        "ds_pool_beads": "recover_and_pool",
+        "ds_cdna": "RT_and_amplify",
+        "ds_sequence": "sequence"
+      },
+      "operation_annotations": [
+        {
+          "role": "coencapsulate",
+          "source_local_id": "ds_load",
+          "description": "Bring suspended cells and uniquely tagged beads together in separate droplets, establishing the depicted cell-to-bead capture compartment.",
+          "mechanism": null,
+          "information_effect": "Physical co-confinement associates a cell with its companion primer bead; the input labels are carried by bead DNA, not yet covalently incorporated into cDNA."
+        },
+        {
+          "role": "lyse_and_capture",
+          "source_local_id": "ds_lyse_capture",
+          "description": "Lyse the compartmentalized cell and hybridize its released mRNA to the companion bead primers; the output is bead-associated RNA still in the original droplets.",
+          "mechanism": "Oligo(dT)-poly(A) hybridization, as indicated by the RNA key and bead legend.",
+          "information_effect": "Capture associates mRNA templates with the bead carrying cell and molecular labels; reverse transcription is a later block."
+        },
+        {
+          "role": "recover_and_pool",
+          "source_local_id": "ds_pool_beads",
+          "description": "Collect the RNA-bearing beads from their original droplets into one bead pool. The primary paper specifies droplet breakage before bulk reverse transcription.",
+          "mechanism": null,
+          "information_effect": "Compartments no longer separate the captured transcriptomes; the retained bead/primer association carries their provenance."
+        },
+        {
+          "role": "RT_and_amplify",
+          "source_local_id": "ds_cdna",
+          "description": "Convert the pooled bead-associated RNA templates into cDNA and amplify their tagged DNA representation in the broad block shown. The primary-supported 3' library finishing interface remains within this block rather than becoming a reconstructed series of unshown operations.",
+          "mechanism": "Bead-attached primers initiate reverse transcription; template switching adds a downstream PCR handle, followed by amplification and preparation of the supported 3' cDNA library.",
+          "information_effect": "Bead-primer extension creates cDNA with covalently linked cell barcode and UMI, converting the captured RNA association into a stable DNA representation. The original common primer handle is retained; template switching adds a further handle. The resulting 3' library supports transcript counting by cell rather than complete transcript reconstruction."
+        },
+        {
+          "role": "sequence",
+          "source_local_id": "ds_sequence",
+          "description": "Sequence the mRNA-derived DNA library to produce the depicted barcoded single-cell readout.",
+          "mechanism": null,
+          "information_effect": "Cell barcode links reads to the bead-associated cell compartment; UMI distinguishes captured molecules for duplicate-aware counting; paired cDNA sequence identifies gene of origin. Expression analysis itself is not drawn as a separate operation."
+        }
+      ],
+      "primary_paper_level": "fulltext",
+      "secondary_collection_page_supplied": true,
+      "null_mechanism_roles": [
+        "coencapsulate",
+        "recover_and_pool",
+        "sequence"
+      ],
+      "correction_targets": [
+        {
+          "id": "c_ds_readout_carrier",
+          "target_id": "state:ds_reads",
+          "primary_statement": "Macosko Figure 2C states that paired sequencing reads carry the cell barcode/UMI and sequence from cDNA. The library is a 3' cDNA representation of captured mRNA; the source endpoint names the biological target rather than a directly sequenced RNA product."
+        },
+        {
+          "id": "c_ds_handle_interpretation",
+          "target_id": "operation:ds_cdna",
+          "primary_statement": "The primary Figure 1B caption states that the bead primers' common PCR handle enables amplification after STAMP formation. Its Figure 2A caption states that template switching introduces a PCR handle downstream of the synthesized cDNA. These statements support retaining the original common bead-primer handle while adding a second handle, rather than replacing that universal region. The graph therefore preserves the drawn route and authors the handle interpretation from the primary text."
+        }
+      ]
+    }
+  ],
+  "pairwise_structure": [
+    {
+      "left": "drop-seq",
+      "right": "poster_1fcf501faf1682cf757ab309",
+      "aligned_node_count": 12,
+      "matching_typed_flows": 11,
+      "differing_typed_flows": 0
+    },
+    {
+      "left": "drop-seq",
+      "right": "poster_3d6d7a7f88f7417ff14c1d22",
+      "aligned_node_count": 12,
+      "matching_typed_flows": 11,
+      "differing_typed_flows": 0
+    },
+    {
+      "left": "poster_1fcf501faf1682cf757ab309",
+      "right": "poster_3d6d7a7f88f7417ff14c1d22",
+      "aligned_node_count": 12,
+      "matching_typed_flows": 11,
+      "differing_typed_flows": 0
+    }
+  ],
+  "common_scientific_content": [
+    "Polyadenylated cellular mRNA captured on bead-bound oligo(dT)",
+    "Cell and bead co-compartmentalized before lysis/capture",
+    "Droplets broken and RNA-bearing beads pooled before bulk reverse transcription",
+    "Cell barcode shared per bead; UMIs vary across primers",
+    "Bead-derived identifiers carried into transcript-derived cDNA",
+    "Paired DNA readout supplies cell barcode/UMI and transcript sequence",
+    "Library represents transcript 3-prime ends rather than full-length total RNA",
+    "Doublets and ambient RNA limit single-cell attribution"
+  ],
+  "annotation_variation": [
+    "Template switching and the second PCR handle are explicit in website and RNA-poster authored fields; the single-cell-poster account retains a broader RT/amplification description.",
+    "The website discusses the catalogue handle-replacement wording inside its cDNA Operation description; the RNA poster additionally creates a formal Correction object.",
+    "The disputed secondary collection page is supplied only to the website and RNA-poster tasks. Its absence from the single-cell packet partly explains the different correction coverage.",
+    "Null mechanism fields differ even when the physical transition is described in State features or Operation prose."
+  ],
+  "limits": [
+    "The three inputs are closely related Illumina depictions and share the original primary-paper full text; this does not establish accuracy across different assays.",
+    "The RNA-poster run used one author correction and a second fresh review; this is final-pipeline consistency rather than uniform first-pass success.",
+    "Agreement is not independent scientific truth. No fresh expert or wet-lab review was performed."
+  ]
+}

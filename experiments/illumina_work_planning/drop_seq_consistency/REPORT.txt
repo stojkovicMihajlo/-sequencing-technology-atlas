@@ -1,0 +1,56 @@
+Retrospective Drop-seq consistency check — 3 November 2026
+
+The three final accepted extractions agree on the assay backbone. This check
+used archived outputs; no new model call or extraction was run.
+
+Source                 Operations  States  Flows  Author revisions
+Website                     5         7     11         0
+Single-cell poster          5         7     11         0
+RNA poster                  5         7     11         1
+
+The corresponding State roles and Operation meanings were inspected and aligned.
+Python then compared their typed graph connections under those explicit mappings.
+Every pair has the same 12 typed nodes and all 11 directed Flows, with zero
+differing connections. This checks the actual graph incidence, not just counts.
+The alignment is recorded in comparison.json; it is a case inspection rather
+than a newly evaluated general semantic-matching algorithm.
+
+All three recover this route:
+Cells + barcoded primer beads -> co-encapsulation in droplets -> cell lysis and
+poly(A)-RNA capture on beads -> droplet breakage and bead pooling -> bulk reverse
+transcription/amplification -> DNA-derived single-cell sequence readout.
+
+All three preserve the same consequential interpretations:
+- RNA capture occurs before pooling and before reverse transcription.
+- Bead association preserves provenance when droplets are broken.
+- The bead cell barcode is shared among its primers; UMIs vary among primers.
+- Barcode/UMI information accompanies transcript-derived cDNA.
+- The physical sequencing substrate is DNA; the represented analyte is mRNA.
+- Paired reads supply barcode/UMI and transcript-derived sequence information.
+- The library reports captured polyadenylated RNA near transcript 3-prime ends.
+- Doublets and ambient RNA limit single-cell attribution.
+
+Differences that matter for the harness
+1. Website and RNA-poster authored fields explicitly describe template switching
+   and the additional PCR handle. The single-cell output is more compressed and
+   records reverse transcription/amplification without that extra explanation.
+2. Website discusses the catalogue's handle-replacement wording in the cDNA
+   Operation description. RNA poster also records a formal Correction object.
+   Thus the same issue is not always retrievable from the same structured field.
+3. Null mechanism fields differ:0for website,2for single-cell,3for RNA poster.
+   The corresponding transformations may still be explained elsewhere in the
+   record. This is annotation variability, not proof of contradictory chemistry.
+4. Inputs differ: only website and RNA poster received collection page110, which
+   contains the disputed handle-replacement statement. Correction coverage must
+   be interpreted relative to those supplied sources.
+
+Interpretation
+This is positive evidence of consistency in the final workflow structure and
+main scientific content across the three depictions. Detailed annotation is less
+uniform. The RNA-poster pipeline needed a revision, so final agreement does not
+establish equal first-pass success. All three share the same original primary
+paper and closely related Illumina drawings; agreement here does not establish
+correctness across different technologies. No fresh expert/wet-lab review occurred.
+
+Use this as an archived development case for source consolidation and consistent
+fact placement. Do not count it as a measured LLM identity-resolver benchmark.
