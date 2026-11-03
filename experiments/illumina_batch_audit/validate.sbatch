@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=illumina-audit-validate
-#SBATCH --partition=dev,normal,xiaojie
+#SBATCH --partition=xiaojie,normal
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=12G
 #SBATCH --time=01:00:00
@@ -10,7 +10,8 @@ printenv SLURM_JOB_ID
 source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
 run_root="$GROUP_SCRATCH/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102"
 audit_root="$run_root/audit_20261103_01"
-export ATLAS_REPOSITORY="$run_root/runtime_04_audit"
+: "${ATLAS_AUDIT_RUNTIME_NAME:?Set the new frozen audit runtime explicitly}"
+export ATLAS_REPOSITORY="$run_root/$ATLAS_AUDIT_RUNTIME_NAME"
 source "$ATLAS_REPOSITORY/scripts/sherlock/environment.sh"
 export PYTHONPATH="$ATLAS_REPOSITORY/src:$GROUP_HOME/mstojkov/software/atlas/illumina-20261031/python"
 export OMP_NUM_THREADS=1
@@ -21,7 +22,7 @@ backup() {
     code=$?
     trap - EXIT
     tar -czf "$GROUP_HOME/mstojkov/atlas-results/illumina_extraction_20261102/audit_validation_${SLURM_JOB_ID}.tar.gz" \
-      -C "$run_root" --exclude='*.tar.gz' audit_20261103_01 runtime_04_audit runtime_04_audit_manifest.json
+      -C "$run_root" --exclude='*.tar.gz' audit_20261103_01 "$ATLAS_AUDIT_RUNTIME_NAME" "${ATLAS_AUDIT_RUNTIME_NAME}_manifest.json"
     exit "$code"
 }
 trap backup EXIT
@@ -41,6 +42,6 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p pytest
   tests/illumina tests/execution/test_curation_codex_worker.py tests/execution/test_codex_terminal_failure_diagnostics.py \
   --junitxml="$audit_root/validation_tests_${SLURM_JOB_ID}.xml"
 "$ATLAS_ENV_DIR/bin/python" "$ATLAS_REPOSITORY/experiments/illumina_batch_audit/audit.py" \
-  "$run_root" --output "$audit_root/report_v2"
+  "$run_root" --output "$audit_root/report_${SLURM_JOB_ID}"
 "$ATLAS_ENV_DIR/bin/python" "$ATLAS_REPOSITORY/experiments/illumina_batch_audit/validate.py" \
-  "$audit_root/validation_plan.json" --output "$audit_root/forward_validation_01"
+  "$audit_root/validation_plan.json" --output "$audit_root/forward_validation_${SLURM_JOB_ID}"
