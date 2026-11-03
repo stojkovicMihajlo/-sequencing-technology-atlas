@@ -90,3 +90,17 @@ Launch outputs and scientific completion are separate
 The batch has finished only when every source occurrence has an explicit terminal
 outcome. 'Supported' requires its own fresh source/review checks. Extraction
 completion does not establish a completed evolutionary graph.
+
+Revision review, 3 November 2026
+The source-occurrence bulk dispatcher above is the implementation used for the
+completed run. It does not consolidate scientific method identity before dispatch;
+do not use it to launch another bulk method-extraction batch. Read
+docs/decisions/2026-11-03-harness-redesign.txt for the replacement planning contract
+and the distinction between implemented controls and proposed stages.
+
+The development extractor's --resume now recovers pending/running work only.
+Completed supported, research_needed, needs_revision, failed and
+source_recovery_needed records are retained; completed scientific artifacts are
+revalidated before reuse. A new source packet or deliberate repair requires its
+own recorded task/attempt. A missing paper does not justify another unchanged
+author/reviewer run. Historical frozen runtimes retain their original behavior.

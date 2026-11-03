@@ -426,6 +426,7 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
 
 
 def revalidate_completed(row):
+    """Reopen a completed verdict without converting a negative verdict to success."""
     directory = Path(row["attempt_directory"])
     if not row.get("artifact_pins"):
         raise ValueError("Completed card lacks artifact pins; cannot silently skip it")
@@ -435,7 +436,8 @@ def revalidate_completed(row):
     verify_registry_files(registry)
     candidate = DiagramExtraction.model_validate_json((directory / "extraction.json").read_bytes())
     review = DiagramReview.model_validate_json((directory / "review.json").read_bytes())
-    if validate_extraction(candidate, registry) or review_outcome(review, candidate, registry) != "supported":
+    if (validate_extraction(candidate, registry)
+            or review_outcome(review, candidate, registry) != row["status"]):
         raise ValueError("Completed extraction no longer passes recorded review")
     for stage in read(directory / "stages.json"):
         if not assess_archived_attempt(Path(stage["path"])).complete:
@@ -489,7 +491,10 @@ async def run(sources, output, *, workers=8, records=(), max_revisions=1, resume
         if state["policy"] != policy:
             raise ValueError("Resume requires unchanged sources and policy; use a new run for changed evidence")
         for row in state["cards"].values():
-            if row["status"] == "supported":
+            if row["status"] not in {"pending", "running", "supported", "research_needed",
+                                     "needs_revision", "failed", "source_recovery_needed"}:
+                raise ValueError("Unrecognized checkpoint status; inspect before resuming")
+            if row["status"] in {"supported", "research_needed", "needs_revision"}:
                 revalidate_completed(row)
     else:
         output.mkdir(parents=True, exist_ok=False)
@@ -506,7 +511,9 @@ async def run(sources, output, *, workers=8, records=(), max_revisions=1, resume
     async def one(card):
         ident = card["record_id"]
         row = state["cards"][ident]
-        if resume and row["status"] == "supported":
+        # Resume recovers interrupted work. A completed failure or evidence hold
+        # needs an explicit new task/source packet, not another unchanged attempt.
+        if resume and row["status"] not in {"pending", "running"}:
             return
         async with semaphore:
             existing = list((output / "cards" / ident).glob("attempt_*"))
@@ -536,7 +543,8 @@ def main(argv=None):
     launch.add_argument("--workers", type=int, default=8)
     launch.add_argument("--record", action="append", default=[])
     launch.add_argument("--max-revisions", type=int, default=1)
-    launch.add_argument("--resume", action="store_true")
+    launch.add_argument("--resume", action="store_true", help=
+        "Recover pending/running records only; preserve completed verdicts, holds and failures.")
     source = sub.add_parser("source")
     source.add_argument("--registry", type=Path, required=True)
     source.add_argument("--id")

@@ -217,6 +217,75 @@ def test_resume_cannot_silently_keep_a_tampered_supported_artifact(acquired, tmp
             or len(worker.calls) > calls), "Resume silently trusted changed accepted artifact bytes"
 
 
+@pytest.mark.parametrize("outcome", ["research_needed", "needs_revision", "failed", "source_recovery_needed"])
+def test_resume_preserves_completed_holds_and_failures_without_new_calls(
+        acquired, tmp_path, monkeypatch, outcome):
+    """A missing source or completed negative verdict is not unfinished work."""
+    root, _, _, _ = acquired
+    worker = FakeWorker(request_correction=outcome == "needs_revision",
+                        forged_prompt=outcome == "failed")
+    if outcome == "research_needed":
+        original = candidate
+
+        def with_evidence_gap(sources, **kwargs):
+            data = original(sources, **kwargs).model_dump(mode="json")
+            data["unknowns"] = [{"id": "missing_mechanism", "blocking": True,
+                "question": "Which primary passage establishes the required capture mechanism?",
+                "affected_ids": ["operation:capture"]}]
+            return DiagramExtraction.model_validate(data)
+
+        monkeypatch.setitem(globals(), "candidate", with_evidence_gap)
+    if outcome == "source_recovery_needed":
+        data = batch.read(root / "sources.json")
+        data["assets"] = []
+        write(root / "sources.json", data)
+    monkeypatch.setenv("SLURM_JOB_ID", "fake-resume-allocation")
+    monkeypatch.setattr(batch, "CodexWorker", lambda **kwargs: worker)
+    output = tmp_path / "batch"
+    completed = asyncio.run(batch.run(root / "sources.json", output, workers=1, max_revisions=0))
+    assert completed["cards"]["example"]["status"] == outcome
+    calls = len(worker.calls)
+    attempts = sorted((output / "cards" / "example").glob("attempt_*"))
+    resumed = asyncio.run(batch.run(root / "sources.json", output, workers=1,
+                                   max_revisions=0, resume=True))
+    assert resumed["cards"] == completed["cards"]
+    assert len(worker.calls) == calls
+    assert sorted((output / "cards" / "example").glob("attempt_*")) == attempts
+
+
+@pytest.mark.parametrize("interrupted_status", ["pending", "running"])
+def test_resume_still_recovers_unfinished_records(acquired, tmp_path, monkeypatch, interrupted_status):
+    root, _, _, _ = acquired
+    worker = FakeWorker(forged_prompt=True)
+    monkeypatch.setenv("SLURM_JOB_ID", "fake-resume-allocation")
+    monkeypatch.setattr(batch, "CodexWorker", lambda **kwargs: worker)
+    output = tmp_path / "batch"
+    asyncio.run(batch.run(root / "sources.json", output, workers=1))
+    state = batch.read(output / "state.json")
+    state["cards"]["example"]["status"] = interrupted_status
+    write(output / "state.json", state)
+    worker.forged_prompt = False
+    calls = len(worker.calls)
+    resumed = asyncio.run(batch.run(root / "sources.json", output, workers=1, resume=True))
+    assert resumed["cards"]["example"]["status"] == "supported"
+    assert len(worker.calls) == calls + 2
+
+
+def test_resume_revalidates_held_artifacts_before_skipping(acquired, tmp_path, monkeypatch):
+    root, _, _, _ = acquired
+    worker = FakeWorker(request_correction=True)
+    monkeypatch.setenv("SLURM_JOB_ID", "fake-resume-allocation")
+    monkeypatch.setattr(batch, "CodexWorker", lambda **kwargs: worker)
+    output = tmp_path / "batch"
+    completed = asyncio.run(batch.run(root / "sources.json", output, workers=1, max_revisions=0))
+    artifact = Path(completed["cards"]["example"]["attempt_directory"]) / "extraction.json"
+    artifact.write_text(artifact.read_text() + " ")
+    calls = len(worker.calls)
+    with pytest.raises(ValueError, match="artifact changed"):
+        asyncio.run(batch.run(root / "sources.json", output, workers=1, max_revisions=0, resume=True))
+    assert len(worker.calls) == calls
+
+
 def test_registered_fulltext_without_pmcid_retains_its_actual_url(acquired):
     root, card, sources, _ = acquired
     text = root / "author-copy.txt"

@@ -1,3 +1,20 @@
+CURRENT USER STEERING — deep harness revision, 3 November 2026
+User reports substantial weekly usage and requests architectural revision before
+more extraction. Read docs/decisions/2026-11-03-harness-redesign.txt and
+experiments/illumina_work_planning/{README.txt,development_cases.json,RESULTS.json}.
+No new model calls or remote jobs were launched for this design audit. Nine
+archived development cases cover17source occurrences; they are not an executed
+LLM accuracy benchmark. Method-level planning/dispatch and the shared evidence
+handoff are specified but NOT implemented. Do not launch another source-occurrence
+bulk batch. Existing source graphs remain useful as source-qualified views.
+
+One general cost-control defect was reproduced and corrected in development:
+--resume now revalidates and preserves completed holds/revision outcomes, skips
+completed failures/recovery outcomes, and recovers only pending/running work.
+Seven new controls;392related software tests pass locally. Frozen runtime06 and
+other historical runtimes were not changed or redeployed. Source acquisition or
+a deliberate repair needs a new recorded task, not automatic unchanged retries.
+
 COMPLETED AUDIT — 3 November 2026
 User requests all-result investigation, general harness improvements, and an
 explanation of duplicate source work. Read audit_01/AUDIT_STATUS.json,

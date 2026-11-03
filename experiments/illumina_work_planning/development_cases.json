@@ -1,0 +1,540 @@
+{
+  "format_version": "harness_revision_development_cases/1.0",
+  "status": "Design acceptance cases; not an executed LLM evaluation or expert-annotated scientific benchmark",
+  "baseline_job": "50822494",
+  "source_audit_sha256": "9414e1866f056c3504f06a811d63dae19abee9e7b8723145203b22704e4ce0fb",
+  "cases": [
+    {
+      "case": "repeated_drop_seq",
+      "sources": [
+        {
+          "record_id": "drop-seq",
+          "source_title": "Drop-Seq",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/drop-seq.html",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/initial_two/cards/drop-seq/attempt_001",
+          "extracted_method_names": [
+            "Drop-Seq"
+          ],
+          "proposal_only_scope": "The single, unbranched Illumina Drop-Seq schematic, interpreted at its depicted level using the original Macosko et al. (2015) implementation: droplet-isolated cells, barcoded oligo(dT) capture beads, pooling before bulk cDNA synthesis/amplification, and sequencing of a cDNA-derived 3′-end expression library. The left cell-to-poly(A)-RNA icon explains the target rather than adding a separate preparation operation; the bead legend explains an input component. Catalogue-listed similar methods and papers about other assays do not create additional targets.",
+          "proposal_only_first_state_labels": [
+            "Cell suspension",
+            "Beads bearing barcoded oligo(dT) primers",
+            "Droplets containing a cell and a barcoded bead"
+          ],
+          "source_reference_pmids": [
+            "26000488",
+            "26248267",
+            "26450340",
+            "26544934",
+            "26795869",
+            "26813401",
+            "27297499",
+            "27571192"
+          ]
+        },
+        {
+          "record_id": "poster_1fcf501faf1682cf757ab309",
+          "source_title": "Drop-Seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-single-cell.pdf",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_1fcf501faf1682cf757ab309/attempt_001",
+          "extracted_method_names": [
+            "Drop-Seq"
+          ],
+          "proposal_only_scope": "The lower, explicitly labeled Drop-Seq row of the assigned Illumina single-cell poster crop: droplet co-compartmentalization, bead capture of polyadenylated mRNA, bead pooling, cDNA synthesis/amplification and sequencing. The upper CytoSeq row is a separately labeled neighboring poster workflow, not an alternative branch of this Drop-Seq card. The partial chemical legend at the right has no route into this row. The scope is schematic architecture, clarified by the Macosko Drop-Seq implementation, not a complete execution protocol.",
+          "proposal_only_first_state_labels": [
+            "Single-cell suspension containing polyadenylated mRNA",
+            "Microparticles bearing barcoded oligonucleotide primers",
+            "Cells and barcoded beads co-compartmentalized in droplets"
+          ],
+          "source_reference_pmids": []
+        },
+        {
+          "record_id": "poster_3d6d7a7f88f7417ff14c1d22",
+          "source_title": "Drop-Seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_3d6d7a7f88f7417ff14c1d22/attempt_001",
+          "extracted_method_names": [
+            "Drop-Seq"
+          ],
+          "proposal_only_scope": "The assigned single-row Drop-Seq poster schematic: cell suspension and uniquely barcoded primer beads are co-encapsulated in droplets, released mRNA hybridizes to bead oligo(dT), RNA-bearing beads are recovered and pooled, cDNA is synthesized and amplified, and the resulting DNA library is sequenced. The broad crop also shows separate CLaP, CytoSeq and Hi-SCL catalogue rows, which are context rather than branches of the assigned target. The card source_method_labels and grouped_source_row=false select Drop-Seq, corroborated by the collection page heading and matching schematic caption. The single-cell/poly(A)-RNA icon identifies the biological target; the oligo/bead drawings describe input materials rather than RNA isolation or bead manufacture. The primary Drop-Seq paper resolves the bead, cDNA and readout interfaces within the depicted blocks.",
+          "proposal_only_first_state_labels": [
+            "Drop-Seq cell suspension",
+            "Drop-Seq uniquely tagged primer beads",
+            "Drop-Seq cells and beads co-confined in droplets"
+          ],
+          "source_reference_pmids": []
+        }
+      ],
+      "required_behavior": "Consolidate the established method identity; retain three source depictions.",
+      "failure_to_detect": "A separate full-method extraction for each depiction.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    },
+    {
+      "case": "repeated_gt_seq",
+      "sources": [
+        {
+          "record_id": "g-t-seq",
+          "source_title": "G&T-Seq",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/g-t-seq.html",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/catalogue/cards/g-t-seq/attempt_001",
+          "extracted_method_names": [
+            "G&T-Seq"
+          ],
+          "proposal_only_scope": "The assigned Illumina G&T-Seq schematic: isolation and lysis of one cell, bead capture and physical separation of poly(A) mRNA from genomic DNA, on-bead Smart-seq2 transcriptome amplification and a separate MDA genome-amplification branch, followed by sequencing and association of the two readouts. G&T-seq and Genome and Transcriptome Sequencing are aliases of this one target. Smart-seq2 and MDA are named components. This is the depicted MDA implementation, not a claim that all G&T-Seq implementations use MDA. The far-left cell/RNA/DNA icon is an explanatory target inset. The listed scM&T-seq adaptation and associated library kits are not additional depicted workflows. Original Macaulay primary-paper evidence supplied here is abstract-only; named chemistry is supported by the diagram and catalogue.",
+          "proposal_only_first_state_labels": [
+            "Cell suspension",
+            "Isolated single cell",
+            "Single-cell lysate containing RNA and genomic DNA"
+          ],
+          "source_reference_pmids": [
+            "25915121",
+            "26752769",
+            "26941284",
+            "27091476",
+            "27212022",
+            "27272212",
+            "27412011"
+          ]
+        },
+        {
+          "record_id": "poster_6b7c79ca872a885faa1d4c73",
+          "source_title": "G&T-seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-dna.pdf",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_6b7c79ca872a885faa1d4c73/attempt_001",
+          "extracted_method_names": [
+            "G&T-seq"
+          ],
+          "proposal_only_scope": "The assigned G&T-seq poster row at schematic scope: a single cell yields physically separated bead-captured poly(A) mRNA and genomic DNA, processed independently by the shown Smart-seq2 and MDA components, sequenced separately and linked at the data level. The verified collection heading and matching schematic identify the same target. The adjacent DR-Seq row, clipped text above it, and EDTA chemical legend are context, not alternatives within this assigned row. Smart-seq2 and MDA are embedded operations, not additional target methods. RNA-to-cDNA carrier interpretation is distinguished from the drawn RNA substrate using the supplied G&T-seq-derived adaptation evidence; no bisulfite workflow is imported. This is not an executable protocol or a claim that every G&T-seq implementation uses MDA.",
+          "proposal_only_first_state_labels": [
+            "Cell suspension",
+            "Isolated single cell",
+            "Single-cell lysate containing RNA and genomic DNA"
+          ],
+          "source_reference_pmids": []
+        },
+        {
+          "record_id": "poster_da34ce6bf41be72ddda4b6f3",
+          "source_title": "G&T-Seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-single-cell.pdf",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_da34ce6bf41be72ddda4b6f3/attempt_001",
+          "extracted_method_names": [
+            "G&T-Seq"
+          ],
+          "proposal_only_scope": "The assigned middle G&T-Seq row, captioned Genome and transcriptome sequencing from a single cell (G&T-seq): physical separation of bead-captured polyA RNA from genomic DNA, on-bead Smart-Seq2 transcriptome amplification, and the depicted MDA DNA branch, followed by separate sequencing and associated RNA/genome alignments. Smart-Seq2 and MDA are embedded components. The independent DR-Seq and scM&T-Seq rows visible above and below are adjacent poster context, not alternative G&T-Seq routes. This is a schematic architecture, not a complete experimental recipe or a claim about all G&T-Seq implementations.",
+          "proposal_only_first_state_labels": [
+            "G&T-Seq cell suspension",
+            "G&T-Seq isolated single cell",
+            "G&T-Seq single-cell lysate"
+          ],
+          "source_reference_pmids": []
+        },
+        {
+          "record_id": "poster_81e4998e97372dcd3d1ca18c",
+          "source_title": "G&T-seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_81e4998e97372dcd3d1ca18c/attempt_001",
+          "extracted_method_names": [
+            "G&T-seq"
+          ],
+          "proposal_only_scope": "The middle G&T-seq row of the assigned Illumina poster crop, matched to the page-118 G&T-Seq heading and figure caption: single-cell lysis, bead capture and RNA/DNA separation, on-bead Smart-seq2 transcriptome processing and separate MDA genome amplification, branch-specific sequencing, then paired RNA/genome alignment. Full-image inventory also identifies a separate scM&T-seq row above (scBS-seq DNA branch), a separate partially cropped scTrio-seq row below (supernatant/nucleus routes), and clipped neighboring SCRB-Seq text at the top edge. These are neighboring method entries, not alternatives within the captioned G&T-seq schematic. Smart-seq2 and MDA are named components, not additional target assays. This is a schematic architecture, not a complete execution protocol.",
+          "proposal_only_first_state_labels": [
+            "Cell suspension",
+            "Isolated single cell",
+            "Single-cell lysate containing RNA and genomic DNA"
+          ],
+          "source_reference_pmids": []
+        }
+      ],
+      "required_behavior": "Consolidate the established method identity and preserve independent DNA/RNA branches.",
+      "failure_to_detect": "Four separately invented method identities or pooling independent libraries.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    },
+    {
+      "case": "repeated_atac",
+      "sources": [
+        {
+          "record_id": "atac-seq",
+          "source_title": "ATAC-Seq",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/atac-seq.html",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/initial_two/cards/atac-seq/attempt_001",
+          "extracted_method_names": [
+            "ATAC-Seq"
+          ],
+          "proposal_only_scope": "The supplied Illumina ATAC-Seq schematic: native chromatin with exposed DNA is tagmented by adapter-loaded Tn5, then the tagged fragments undergo the depicted combined DNA purification/amplification block to yield a DNA library. The left assay-title icon and repeated Open DNA drawing describe the input; they do not depict a chromatin-opening operation. Blue Tn5 icons mark the reagent and its action. The insertion and fragmentation panels illustrate one tagmentation transformation. There is one route and no depicted alternative, compartment split, pooling or cell barcode. Fast-ATAC and other adaptations mentioned in catalogue text are not additional schematic targets.",
+          "proposal_only_first_state_labels": [
+            "Native chromatin containing Open DNA",
+            "Tn5 Transposome",
+            "Fragmented and primed chromatin DNA"
+          ],
+          "source_reference_pmids": [
+            "24097267",
+            "25953818",
+            "26083756",
+            "26721890",
+            "26814966",
+            "26823433",
+            "26846207",
+            "26878240",
+            "26912704",
+            "26928226",
+            "26956608",
+            "26977395",
+            "27114036",
+            "27146274",
+            "27156451",
+            "27156452",
+            "27239026",
+            "27249108",
+            "27259149",
+            "27297499",
+            "27309802",
+            "27315481",
+            "27346425",
+            "27376235",
+            "27381023",
+            "27386823",
+            "27397025",
+            "27477909",
+            "27498878",
+            "27507714",
+            "27526324"
+          ]
+        },
+        {
+          "record_id": "poster_0f3831d9dadcf3353fcf8335",
+          "source_title": "ATAC-Seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-dna.pdf",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_0f3831d9dadcf3353fcf8335/attempt_001",
+          "extracted_method_names": [
+            "ATAC-Seq"
+          ],
+          "proposal_only_scope": "The ATAC-Seq target row of the assigned Illumina poster crop (middle horizontal route, approximately y=210–340 pixels). Inventory: the left caption identifies Assay for transposase accessible chromatin (ATAC-Seq); a yellow exposed DNA segment between grey nucleosomes is descriptive, followed by Open DNA, Tn5 Transposome, Insert in regions of open chromatin, Fragmented and primed, DNA purification / Amplification, and terminal DNA. The card identifies this as a single target row. The independently labeled ORGANIC row and cropped X-ChIP captions above, and THS-seq row below with Read primer, T7 promoter, IVT and dsDNA synthesis, are adjacent context with no arrows into the ATAC-Seq route. They are not target alternatives. The secondary collection page has ATAC-Seq/Fast-ATAC headings but captions its matching graphic as an ATAC-seq overview; its unshown adaptations do not enlarge this scope. Extraction begins at native chromatin, without adding the unshown cell/nuclei preparation, and ends at the depicted DNA library. No pooling, compartment indexing, or sequencer operation is drawn.",
+          "proposal_only_first_state_labels": [
+            "Open DNA in native chromatin",
+            "Adapter-loaded Tn5 transposome",
+            "Fragmented and primed chromatin DNA"
+          ],
+          "source_reference_pmids": []
+        }
+      ],
+      "required_behavior": "Consolidate the established original ATAC method identity, with both depictions attached.",
+      "failure_to_detect": "Treating different source IDs as evidence of different methods.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    },
+    {
+      "case": "nuc_name_collision",
+      "sources": [
+        {
+          "record_id": "nuc-seq-snes",
+          "source_title": "nuc-seq/SNES",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/nuc-seq-snes.html",
+          "baseline_status": "research_needed",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/catalogue/cards/nuc-seq-snes/attempt_001",
+          "extracted_method_names": [
+            "nuc-seq",
+            "SNES"
+          ],
+          "proposal_only_scope": "The supplied Illumina nuc-seq/SNES genomic-DNA schematic: the G2/M-selected single-nucleus route through lysis, limited Phi29 MDA, further branched synthesis and the depicted S1 nuclease-to-DNA endpoint, including the two excluded sorting candidates. nuc-seq and SNES are distinct grouped targets, not aliases; the shared G2/M/MDA core is paper-supported, while S1 member applicability is retained as unresolved at the grouped schematic level. This is an amplification architecture, not a complete executable protocol or adapter-library diagram. Downstream whole-genome versus exome readout is explained from the respective full texts without adding unshown preparation, capture or sequencing nodes. The unrelated RNA Nuc-Seq catalogue page and prose-only Div-Seq variation do not expand scope.",
+          "proposal_only_first_state_labels": [
+            "Candidate single-nucleus genomes (drawn as single cells)",
+            "Selected individual G2/M nucleus (retained Cell2 icon)",
+            "Cell1 and Cell3 candidates excluded from the continuing route"
+          ],
+          "source_reference_pmids": [
+            "25079324",
+            "25853327",
+            "26741407"
+          ]
+        },
+        {
+          "record_id": "poster_06869234e814e10509a62546",
+          "source_title": "Nuc-Seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-single-cell.pdf",
+          "baseline_status": "research_needed",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_06869234e814e10509a62546/attempt_001",
+          "extracted_method_names": [
+            "Nuc-Seq"
+          ],
+          "proposal_only_scope": "The middle row explicitly labeled Nuc-Seq and A single nucleus RNA-Seq method (Nuc-Seq): tissue preservation, nuclei isolation and sorting, access to nuclear poly(A) RNA, cDNA synthesis/PCR, tagmentation and an enrichment-ready dual-indexed DNA fragment. This is the poster-level RNA architecture, not an identified complete laboratory implementation. The upper inDrop row, lower Div-Seq row and right-side chemical structure are independently labeled context with no arrows connecting them to this row. The homonymous genomic-DNA Nuc-Seq, SNES, and Smart-seq2 as a standalone method are not additional workflow targets.",
+          "proposal_only_first_state_labels": [
+            "Tissue",
+            "Tissue after depicted fixation and freezing",
+            "Isolated nuclei"
+          ],
+          "source_reference_pmids": []
+        }
+      ],
+      "required_behavior": "Keep DNA and RNA method identities distinct; preserve grouped-member uncertainty.",
+      "failure_to_detect": "Merging methods because normalized names or nuclei preparation match.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    },
+    {
+      "case": "grouped_chip_source",
+      "sources": [
+        {
+          "record_id": "chip-seq-chip-exo-ht-chip",
+          "source_title": "ChIP-Seq/ChIP-exo/HT-ChIP",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/chip-seq-chip-exo-ht-chip.html",
+          "baseline_status": "research_needed",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/catalogue/cards/chip-seq-chip-exo-ht-chip/attempt_001",
+          "extracted_method_names": [
+            "ChIP-Seq",
+            "ChIP-exo",
+            "HT-ChIP"
+          ],
+          "proposal_only_scope": "Assigned grouped Illumina schematic only. Inventory: an isolated left overview names ChIP-Seq and HT-ChIP; the arrowed main chain shows DNA-protein complex -> Crosslink proteins and DNA -> Sample fragmentation -> Exonuclease digestion -> Immunoprecipitate -> DNA extraction -> terminal DNA. Multiple chromatin particles form a population, not independently processed branches. The inset has no transfer arrow. Yellow highlighting and yellow/orange end-associated digestion icons lack a chemical legend; magenta Y icons are antibodies. All five drawn transformations and their order are retained. Separate conventional selection/recovery interfaces are text-supported interpretations for the ChIP-Seq overview, not physical splitting or pooling. The ChIP-exo primary implementation resolves the drawing's order discrepancy. HT-ChIP is retained as an unresolved target: its verified abstract supports ChIP and indexed libraries but cannot establish the exact fixed selection/recovery input history. No unsupported local instance is assigned to it merely from a shared operation name. The diagram ends at DNA; downstream library/sequencing interfaces are described without unshown preparation operations. Protein/chromatin associations are the biological targets and genomic DNA is the sequence carrier. Grouping establishes neither complete protocol identity nor interchangeability.",
+          "proposal_only_first_state_labels": [
+            "DNA-protein complex in chromatin",
+            "Crosslinked protein-DNA chromatin",
+            "Fragmented crosslinked chromatin, before exonuclease treatment"
+          ],
+          "source_reference_pmids": [
+            "21913084",
+            "22082985",
+            "22113276",
+            "22466170",
+            "22466171",
+            "23088423",
+            "23429716",
+            "24034248",
+            "24095734",
+            "24200198",
+            "2454748",
+            "24737864",
+            "25801168",
+            "25938714",
+            "26280331",
+            "26369632",
+            "26458175",
+            "26687680",
+            "26721890",
+            "26735971",
+            "26796577",
+            "27027282",
+            "27299313",
+            "27376235",
+            "27457071",
+            "27466807",
+            "27476967",
+            "27545881"
+          ]
+        }
+      ],
+      "required_behavior": "Account separately for the three named targets and their supported operation applicability.",
+      "failure_to_detect": "Assigning the complete common drawing to every member or dropping HT-ChIP.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    },
+    {
+      "case": "shared_component_not_identity",
+      "sources": [
+        {
+          "record_id": "atac-seq",
+          "source_title": "ATAC-Seq",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/atac-seq.html",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/initial_two/cards/atac-seq/attempt_001",
+          "extracted_method_names": [
+            "ATAC-Seq"
+          ],
+          "proposal_only_scope": "The supplied Illumina ATAC-Seq schematic: native chromatin with exposed DNA is tagmented by adapter-loaded Tn5, then the tagged fragments undergo the depicted combined DNA purification/amplification block to yield a DNA library. The left assay-title icon and repeated Open DNA drawing describe the input; they do not depict a chromatin-opening operation. Blue Tn5 icons mark the reagent and its action. The insertion and fragmentation panels illustrate one tagmentation transformation. There is one route and no depicted alternative, compartment split, pooling or cell barcode. Fast-ATAC and other adaptations mentioned in catalogue text are not additional schematic targets.",
+          "proposal_only_first_state_labels": [
+            "Native chromatin containing Open DNA",
+            "Tn5 Transposome",
+            "Fragmented and primed chromatin DNA"
+          ],
+          "source_reference_pmids": [
+            "24097267",
+            "25953818",
+            "26083756",
+            "26721890",
+            "26814966",
+            "26823433",
+            "26846207",
+            "26878240",
+            "26912704",
+            "26928226",
+            "26956608",
+            "26977395",
+            "27114036",
+            "27146274",
+            "27156451",
+            "27156452",
+            "27239026",
+            "27249108",
+            "27259149",
+            "27297499",
+            "27309802",
+            "27315481",
+            "27346425",
+            "27376235",
+            "27381023",
+            "27386823",
+            "27397025",
+            "27477909",
+            "27498878",
+            "27507714",
+            "27526324"
+          ]
+        },
+        {
+          "record_id": "chipmentation",
+          "source_title": "ChIPmentation",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/chipmentation.html",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/catalogue/cards/chipmentation/attempt_001",
+          "extracted_method_names": [
+            "ChIPmentation"
+          ],
+          "proposal_only_scope": "Single ChIPmentation workflow in the assigned Illumina schematic, titled “Chromatin immunoprecipitation with sequencing library preparation by Tn5 transposase (ChIPmentation)”. The depicted route begins at chromatin, proceeds through antibody/bead capture and Tn5 adapter insertion, and ends in purified, amplified DNA. The title illustration at far left is contextual, not an extra preparation step. The pale neighboring nucleosome at adapter insertion has no separately captioned route or retained output; no fork or alternative workflow is drawn. The catalogue page heading and caption confirm this target. ATAC-seq, purified-DNA ChIP-tagmentation and standard ChIP-seq are discussed in sources but are not targets of this schematic. The extraction describes this on-bead library-preparation architecture rather than all possible ChIPmentation implementations or an execution recipe.",
+          "proposal_only_first_state_labels": [
+            "Chromatin",
+            "Bead-bound, immunoprecipitated chromatin",
+            "Tn5 Transposome"
+          ],
+          "source_reference_pmids": [
+            "26280331",
+            "27297499",
+            "27346425"
+          ]
+        }
+      ],
+      "required_behavior": "Keep the assays distinct while allowing separately evidenced component comparison.",
+      "failure_to_detect": "Merging assay identities because both use tagmentation.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    },
+    {
+      "case": "mpe_scope_and_evidence",
+      "sources": [
+        {
+          "record_id": "mpe-seq",
+          "source_title": "MPE-Seq",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/mpe-seq.html",
+          "baseline_status": "research_needed",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/catalogue/cards/mpe-seq/attempt_001",
+          "extracted_method_names": [
+            "MPE-seq"
+          ],
+          "proposal_only_scope": "The single Illumina MPE-seq schematic from active chromatin in isolated nuclei through MPE digestion, bathophenanthroline addition and extraction of DNA. Methidiumpropyl-EDTA sequencing is the expanded name of MPE-seq. The far-left yellow-highlighted chromatin icon accompanies the method title and has no transfer arrow; it is not a separate branch. The visible endpoint is extracted DNA. The primary abstract establishes a downstream DNA-sequencing readout, but adapter construction, library selection and sequencing are not depicted operations. MNase-seq is a textual comparator, not a depicted alternative target.",
+          "proposal_only_first_state_labels": [
+            "Active chromatin in isolated nuclei",
+            "MPE-digested nuclear chromatin",
+            "Digested chromatin after bathophenanthroline addition"
+          ],
+          "source_reference_pmids": [
+            "26080409"
+          ]
+        },
+        {
+          "record_id": "poster_80aa5fb7d9d14a67eee6e952",
+          "source_title": "MPE-seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-dna.pdf",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_80aa5fb7d9d14a67eee6e952/attempt_001",
+          "extracted_method_names": [
+            "MPE-seq"
+          ],
+          "proposal_only_scope": "The single MPE-seq (methidiumpropyl-EDTA sequencing) row of the supplied Illumina poster: chromatin in isolated nuclei → MPE digestion → addition labeled bathophenanthroline → DNA extraction. The endpoint is extracted genomic DNA; library construction and sequencing are unshown. The supplied primary abstract establishes the downstream sequencing interface and fragment-based chromatin readout. Targeted supplemental primary full text and its author correction resolve the depicted addition as a quench and correct the reagent identity, while retaining the diagram label and order. The matching collection page has the MPE-seq heading and caption sequence and is secondary catalogue evidence. The far-left summary icon, neighboring DamID/Chem-seq rows and the abstract’s MNase comparator do not add targets. This record describes the depicted implementation, not every MPE-seq protocol.",
+          "proposal_only_first_state_labels": [
+            "Active chromatin in isolated nuclei",
+            "MPE-treated nuclear chromatin undergoing DNA cleavage",
+            "Quenched, fragmented chromatin after the depicted bathophenanthroline addition"
+          ],
+          "source_reference_pmids": []
+        }
+      ],
+      "required_behavior": "Reconcile scoped evidence claims; retain unresolved chemical function until primary content is registered.",
+      "failure_to_detect": "Treating an accepted schematic as chemical-function verification or repeating both complete extractions.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    },
+    {
+      "case": "cached_missing_evidence",
+      "sources": [
+        {
+          "record_id": "psi-seq",
+          "source_title": "PSI-Seq",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/psi-seq.html",
+          "baseline_status": "research_needed",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/catalogue/cards/psi-seq/attempt_001",
+          "extracted_method_names": [
+            "PSI-seq",
+            "Ψ-seq"
+          ],
+          "proposal_only_scope": "The assigned Illumina image explicitly groups PSI-seq and Ψ-seq. It depicts one route from poly(A)-selected, DNase-treated RNA through CMC/OH− treatment, fragmentation, adaptor ligation, reverse transcription and purification to cDNA. The left residue drawing is a legend; the three fragment/product examples are a mixed molecular population, not separately processed sample branches. The d_ records preserve that family-level drawing, including treatment before fragmentation. A disconnected psi_ interface records the primary-supported PSI-seq resolution: fragmentation precedes CMCT/alkali, followed by 3′ linker ligation, RT and truncated-cDNA isolation. These are two sourced representations, not a claimed physical sample split, extra pictured branch, or interchangeable workflow. No material is transferred between them. The distinct downstream PSI-seq local instances retain the fragment-first input history; their purpose correspondence to the drawing does not make the drawn local history applicable to PSI-seq. Ψ-seq remains a distinct explicit target. Targeted external research identified its primary publication (PMID 25219674; DOI 10.1016/j.cell.2014.08.028), but that publication has no source ID or content in the supplied frozen registry. Its inspected passages and the evidence-admission limitation are documented in research_psi_seq.json; they are not attributed to the registered abstract of PMID 26968262. The Ψ-seq scope therefore remains unresolved within this source-anchored artifact pending admission of the primary source. The RT panel is described relative to each RNA template: marked-template cDNA ends near an adduct, while unmarked-template cDNA reaches its template end; no absolute product-length ranking is inferred. The final depicted product is cDNA, not a fully specified sequencing-ready library. Downstream ribosome-profiling-derived library construction explains the PSI-seq endpoint-to-read interface only. ARTseq/Ribo-Seq is an embedded component, and Pseudo-seq/CeU-seq appear only as related methods outside this schematic scope.",
+          "proposal_only_first_state_labels": [
+            "Poly(A)-selected, DNase-treated RNA: diagram input",
+            "Long CMC/alkali-treated RNA: diagram order",
+            "Fragments of previously CMC/alkali-treated RNA"
+          ],
+          "source_reference_pmids": [
+            "25353621",
+            "26968262"
+          ]
+        },
+        {
+          "record_id": "poster_bac21732af2f8d025221b092",
+          "source_title": "Ψ -seq / PSI-seq",
+          "source_page_url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/posters/cards/poster_bac21732af2f8d025221b092/attempt_001",
+          "extracted_method_names": [
+            "Ψ-seq",
+            "PSI-seq"
+          ],
+          "proposal_only_scope": "Assigned third row of the attached poster: Ψ-seq / PSI-seq, captioned Pseudouridine identification sequencing (PSI-seq and Ψ-seq), from poly(A)-selected, DNase-treated RNA to purified cDNA. These are distinct named assays grouped around CMC-dependent RT-stop detection, not established aliases or interchangeable complete protocols. The w_ route preserves all five drawn transformations and their treatment-before-fragmentation history; the primary Ψ-seq workflow supports that order. The separate l_ route is an explicitly primary-supported resolution for the grouped PSI-seq member: fragmentation precedes CMCT/alkaline treatment. It reuses the depicted purposes, with distinct local operations and states; it is not a second drawn lane, sample split, pooling event or unshown adaptation. The catalogue page heading and schematic identify PSI-seq, so that page supports PSI-seq context only. Adjacent MeRIP/m6A, miCLIP and Pseudo-seq rows are outside the assigned target; the pseudouridine-residue icon is a substrate key, not an additional operation. Mock/IVT controls, experimental conditions, complete sequencing-library finishing and computational analysis are not added as graph branches. The papers clarify how the recovered cDNA can report Ψ positions and where the common drawing abbreviates member-specific preparation.",
+          "proposal_only_first_state_labels": [
+            "Poly(A)-selected, DNase-treated RNA (drawn Ψ-seq route)",
+            "CMC/OH−-treated RNA before fragmentation",
+            "Fragments of RNA treated with CMC/OH− before fragmentation"
+          ],
+          "source_reference_pmids": []
+        }
+      ],
+      "required_behavior": "Retrieve the registered PMID25219674 full-text lead and assess its applicability in a new source packet.",
+      "failure_to_detect": "Another unchanged author run or inheritance of the other record scientific verdict.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    },
+    {
+      "case": "unchanged_supported_source",
+      "sources": [
+        {
+          "record_id": "drop-seq",
+          "source_title": "Drop-Seq",
+          "source_page_url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/drop-seq.html",
+          "baseline_status": "supported",
+          "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_extraction_20261102/extractions_03/initial_two/cards/drop-seq/attempt_001",
+          "extracted_method_names": [
+            "Drop-Seq"
+          ],
+          "proposal_only_scope": "The single, unbranched Illumina Drop-Seq schematic, interpreted at its depicted level using the original Macosko et al. (2015) implementation: droplet-isolated cells, barcoded oligo(dT) capture beads, pooling before bulk cDNA synthesis/amplification, and sequencing of a cDNA-derived 3′-end expression library. The left cell-to-poly(A)-RNA icon explains the target rather than adding a separate preparation operation; the bead legend explains an input component. Catalogue-listed similar methods and papers about other assays do not create additional targets.",
+          "proposal_only_first_state_labels": [
+            "Cell suspension",
+            "Beads bearing barcoded oligo(dT) primers",
+            "Droplets containing a cell and a barcoded bead"
+          ],
+          "source_reference_pmids": [
+            "26000488",
+            "26248267",
+            "26450340",
+            "26544934",
+            "26795869",
+            "26813401",
+            "27297499",
+            "27571192"
+          ]
+        }
+      ],
+      "required_behavior": "Retain the supported artifact; schedule no new full extraction when sources/scope are unchanged.",
+      "failure_to_detect": "Rerunning because a new job or output directory has a new ID.",
+      "evaluation_boundary": "Existing model outputs nominate comparisons only. Scientific identity decisions must cite the original sources."
+    }
+  ]
+}

@@ -1,0 +1,211 @@
+Harness revision: scientific work units before model scheduling
+Status: design audit completed; method planning is specified, not implemented.
+One general resume correction is implemented and tested. No native calls were
+made during this revision. Existing frozen releases and results remain unchanged.
+
+Contract fixed before external implementation review
+The observable inputs are actual Illumina cards, diagrams, poster regions,
+catalogue prose, publication sources and their existing provenance. Completed
+extractions/reviews may nominate questions or correspondences; they are not new
+source evidence and must not be counted as newly extracted results.
+
+The target is an evidence-qualified assay architecture attached to its scientific
+method/implementation scope. Distinct source depictions remain addressable. An
+additional depiction must first be assessed for what it changes about an existing
+method record. One source occurrence is not automatically one new full-method job.
+
+Consequential ambiguity
+Deciding that two records describe the same implementation changes the scientific
+identity of graph nodes and what later agents may combine. A shared display name,
+PMID, image hash, reagent or purpose is insufficient by itself. Similarity supplies
+comparison candidates; a supported identity/scope decision is separate. Conversely,
+different source IDs do not justify separate method identities or full extractions.
+
+Required invariants
+- Preserve every source occurrence and exact source-version/hash provenance.
+- A source can describe several methods; a method can have several depictions.
+- Preserve unresolved identity without forcing a merge or inventing a difference.
+- Do not erase supported distinctions between assay versions or molecular targets.
+- No unreviewed transitive similarity closure establishes implementation identity.
+- Scheduling requires an explicit scientific scope, source coverage, intended
+  output and reason why the proposed work is not already completed.
+- An unchanged supported fact/source pair does not require another full extraction.
+- A missing source triggers an evidence-acquisition task with an affected claim;
+  it cannot be repaired by adding plausible prose.
+- Diagram-level completeness and chemical/protocol-design readiness are separate
+  judgments. A nonblocking schematic Unknown still restricts downstream use.
+- Historical adoption, shared mechanism and same-method identity remain distinct.
+
+Alternatives to compare
+1. Existing source-occurrence dispatcher, with canonicalization only afterward.
+   Retains source coverage but incurs redundant work and inconsistent verdicts.
+2. A global fixed vocabulary or semantic hash as the method identity authority.
+   Cheap lookup can nominate candidates but cannot establish scientific identity.
+3. Evidence-reviewed method/implementation work units before scheduling, retaining
+   source-specific views and updating only supported new or conflicting content.
+   This is the candidate direction; the review must establish its minimal form.
+
+Evaluation before another batch
+Reuse archived results for development. Include repeated Drop-seq depictions,
+repeated G&T-seq, ATAC-seq, DNA-versus-RNA Nuc-Seq, a grouped ChIP source, source
+conflicts, a new source supplying missing evidence and an unchanged supported
+source. Test erroneous merges and erroneous splits separately. Test scheduling
+coverage, stale decisions and duplicate task suppression mechanically. A manual
+reference mapping tests the scheduler, not the accuracy of an LLM identity resolver.
+
+Success is fewer unjustified model tasks and a usable, evidence-qualified method
+record with recoverable source differences. Passing schema/unit tests alone is
+not scientific success. No new native calls until the revised plan and small
+case-based acceptance checks are inspectable.
+
+What the code actually does today
+scripts/illumina/prepare_fresh_batch.py:prepare registers separate source records.
+collection_candidates supplies reading leads; it performs no identity resolution.
+scripts/illumina/extract_all.py:execute dispatches the source batches directly.
+Its first-two gate tests local extraction/review, not global method identity.
+tests/illumina/test_fresh_batch.py:test_initial_gate_and_no_repeated_records checks
+distinct record IDs. It cannot detect the same method behind several record IDs.
+prompts.py explicitly defines the extraction unit as the assigned schematic.
+Thus there is a mismatch between locally correct worker behavior and the desired
+method-level product. More same-source reviewers cannot repair that missing step.
+
+extraction.py:run also resumed every nonsupported record, including completed
+evidence holds and failures. It could spend more calls with identical evidence.
+That is a separate general orchestration error, not a scientific extraction rule.
+
+External implementations inspected
+DocETL, PVLDB2025, Sections2.2.4,3.2.2 and4:
+https://www.vldb.org/pvldb/vol18/p3035-shankar.pdf
+Pinned official code: ucbepic/docetl,
+53d292e0b0a4a3e2bf290760998a4fa3a4c2fdc8,
+docetl/operations/resolve.py:compare_pair,execute and merge_clusters;
+docs/operators/resolve.md; LICENSE(MIT).
+Adopt the separation of candidate blocking, semantic comparison and consolidation,
+and the evaluation of pipeline operations rather than prompt compliance alone.
+Do not copy its assumptions: compare_pair can automatically match equal blocking
+keys, and merge_clusters propagates matches through union-find and equal key
+values. Those shortcuts do not establish assay/version identity. Its reduction
+standardizes values; our consolidation must retain conflicting scientific claims
+and source-specific workflow scope. No source code was copied.
+
+ComEM, COLING2025, Sections3.1,3.4 and3.5:
+https://aclanthology.org/2025.coling-main.8/
+Pinned official code: tshu-w/ComEM,
+5b43c5b820637bb3464454f179ce07d7a19dec60,
+src/selecting.py:Selecting and src/compound.py:ComEM.__call__.
+The old tshu-w/LLM4EM URL redirects to this repository. The implementation ranks
+candidates, presents a shortlist together and permits a no-match result. Adopt
+the contextual shortlist principle as a candidate to test. Reject a direct
+one-to-one adaptation: one grouped diagram can describe several assays, and one
+assay can occur repeatedly in the candidate set. Selection from a shortlist also
+does not establish that no unseen match exists. The reported benchmark findings
+do not establish performance on genomics methods. No root license was located at
+the inspected LICENSE path; no source code was copied.
+
+EDC, EMNLP2024:
+https://aclanthology.org/2024.emnlp-main.548/
+Pinned official code: clear-nus/edc,
+02aad17e2fc1e9845c84746b384e7fd3160edc1a,
+edc/schema_canonicalization.py:SchemaCanonicalizer.retrieve_similar_relations,
+llm_verify,canonicalize.
+It retrieves relation definitions and verifies a candidate replacement in context.
+The released canonicalizer handles relation labels, not assay entity identity.
+Adopt contextual definitions plus candidate verification for a later shared-
+operation comparison. Do not present EDC as a ready-made method deduplicator.
+No code was copied and no dependency was installed.
+
+Revised workflow and ownership
+1. Resolve source scope before planning extraction.
+   A planning pass sees the global inventory and plausible existing methods,
+   rather than assigning an isolated source to a worker immediately. Labels,
+   references and linked images nominate comparisons. The model must explain
+   which implementation each source depicts, with source anchors and explicit
+   disagreements. Grouped sources have separate member assignments. Existing
+   extraction artifacts help nominate questions but are not scientific evidence.
+   Identity needs its own source-grounded review; an added ID or reviewed=true
+   flag is not sufficient. No automatic similarity/transitive cluster merge.
+
+2. Decide what new work is necessary.
+   For each resolved method scope, the plan states one of: attach a corroborating
+   source; update particular claims; extract a distinct implementation; recover
+   evidence; or investigate unresolved identity. It names the exact questions,
+   existing artifacts and new sources. One unresolved grouped member does not
+   force repeating the completed extraction of every other member.
+   Python checks coverage, conflicting assignments, repeated tasks and stale
+   evidence decisions before launching. The scientific identity decision remains
+   model/expert work; host consistency checks cannot substitute for it.
+
+3. Gather evidence for the actual unresolved question.
+   Search registered documents across records before downloading them again.
+   Register recovered evidence into a new source packet. The source helper can
+   currently search only its supplied registry: a shared document index and a
+   fulfilled acquisition handoff are still needed. Merely writing an Unknown
+   is not evidence recovery. Do not demand full recipes for schematic facts.
+
+4. Extract or update one scoped method record.
+   Reuse State,Operation,Flow and Evidence. Begin with the existing supported
+   graph when appropriate and preserve its source views. A consolidated graph
+   must not be the union of all arrows from different depictions: align the
+   reported transformations and retain differences/omissions explicitly. The
+   plan must designate its representative depiction and what the additional
+   sources contribute. Retrieve execution chemistry only when it changes an
+   interface, the method distinction, or a downstream design decision.
+
+5. Verify the scientific claims and graph consequences.
+   Keep independent source-based review and host reference/hash checks. Check
+   both support for assertions and coverage of depicted transformations. Review
+   a changed claim with its adjacent states/routes; do not rewrite unaffected
+   parts merely because another source arrived. An unchanged reviewer endorsement
+   cannot close a missing-evidence finding. Schematic coverage does not certify
+   unknown chemical functions for protocol design. Existing graph retrieval must
+   return affected Unknowns with the Operation, as in the MPE validation.
+
+6. Publish one method entry point with all applicable source views.
+   Preserve genuine variants and unresolved identity. Only afterward compare
+   different methods for shared operations or documented development. A shared
+   Tn5 transformation must not merge ATAC-seq and ChIPmentation into one assay.
+
+Minimal roles and tools
+Use a planning author and source-based reviewer, then the existing extraction
+author/reviewer when the plan actually calls for extraction. These are bounded
+decisions using the existing worker transport, not a new large expert team.
+Needed tool actions: find existing methods, inspect a source/graph, propose a
+scoped source-to-method assignment, request/register evidence, propose a targeted
+update, and check the work plan. Existing graph reading/search/group tools and
+source acquisition code should supply most underlying behavior. Plan validation
+must run in the host; it cannot be only a sentence in the coordinator prompt.
+
+Implementation sequence
+A. Correct unchanged-input resume now. Pending/running work may resume; supported,
+   held, revision-exhausted, failed and source-recovery outcomes are preserved.
+   Completed scientific artifacts are revalidated before reuse. New evidence or
+   a deliberate repair needs a separate recorded task/attempt. Five regression
+   cases reproduced the old issue; seven tests include positive interruption
+   controls. These are software controls, not an LLM accuracy evaluation.
+B. Build and inspect source-to-method proposals from the already processed run.
+   Do not repeat the478extractions. A method plan must become the required input
+   to a replacement dispatcher; the old bulk source dispatcher is not suitable.
+C. Evaluate nine archived development cases in
+   experiments/illumina_work_planning/development_cases.json. They cover17source
+   occurrences and define intended behavior, not a measured benchmark score.
+D. Run a small cross-source planning/consolidation test only after the expected
+   source assignments and failure criteria are inspectable. Compare the same
+   cases under old and revised plans; retain no-change and misleading-match cases.
+E. Extend only after the revised path suppresses redundant full-method jobs,
+   preserves distinct methods and produces a usable consolidated source view.
+
+What to measure
+Report false merges and false splits separately, omitted source/target coverage,
+supported versus unsupported scientific additions, inconsistent conclusions
+across depictions, unchanged-evidence reattempts, model calls and native recorded
+usage/latency per useful admitted method record. Include candidate-retrieval
+coverage so shortlisting does not hide missed matches. Reordering input sources
+must not change reviewed assignments or cause duplicate work. Keep some related
+families out of development. Do not convert native token counters into an asserted
+weekly subscription percentage or promise cost savings before a matched run.
+
+Current boundary
+The existing extractor, provenance checks and graph tools remain useful. The
+method-level planner, shared evidence handoff and incremental consolidation are
+not yet wired together. This revision does not claim they are implemented or
+validated, and it does not authorize another large extraction to discover that.
