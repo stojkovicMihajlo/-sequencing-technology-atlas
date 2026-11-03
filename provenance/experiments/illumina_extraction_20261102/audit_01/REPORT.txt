@@ -1,0 +1,165 @@
+Illumina first-pass extraction audit — 3 November 2026
+
+What was actually processed
+The first pass processed 478 source occurrences: 154 website cards, 285 main
+poster rows and 39 footer/product/readout panels. This is not a count of unique
+technologies. Baseline outcomes were 428 supported, 33 research_needed and 17 failed.
+The batch processed every selected source and stopped with explicit unresolved
+records; it did not crash partway through the queue.
+
+The dispatcher wrongly used source occurrences as independent extraction work
+units, without first consolidating established method/version identity. Drop-seq
+received 3 extractions, G&T-seq 4 and ATAC-seq 2. Preserving each source was needed;
+repeating full extraction for established duplicate depictions was unnecessary.
+No validated fresh count of distinct methods exists yet. Name normalization or
+the older 201-entity inventory cannot establish that count. Nuc-Seq is a useful
+negative example: DNA and RNA methods share that name and must not be merged.
+
+Publication references are a separate many-to-many relation. The registries have
+879 distinct PubMed IDs and 2,275 source-record/PMID pairs. Highest registered level
+per PMID: 268 fulltext, 607 abstract, 4 metadata. These figures do not mean that 879 full
+papers were read or that 879 method associations were verified. A method can cite
+its originating work, adaptations, applications and reviews. Repeating that
+reference across a card and several posters increases occurrence counts again.
+Exact examples and count boundaries: IDENTITY_ACCOUNTING.json.
+
+Scope of the audit
+Every 478 record was inspected mechanically, including candidate/review binding,
+source IDs and quoted text, declared Operation I/O versus Flow endpoints, graph
+copies, checkpoint outcomes and native execution traces. 2,582 distinct custody
+files were rehashed. Under the original rules, none of the 428 accepted records
+had a mechanical integrity failure. The durable baseline backup was independently
+rehashed and matched its original SHA256 receipt.
+
+All 17 failed and 33 held records were examined and assigned an explicit remedy in
+triage.csv. Accepted records were also screened for recurring evidence risks,
+with targeted source/scientific/visual inspection. This is not a new independent
+scientific review of every assertion in the 428 accepted records.
+
+Why the 17 failed
+14: PaperMatch rejected explicitly unverified secondary catalogue references.
+    This was a mismatch between the requested bibliographic accounting and the
+    allowed source role, rather than 14 invented publications.
+ 2: provider blocks on viscRNA-seq and CirSeq. These remain recorded; no evasive
+    retry or prompt workaround was attempted.
+ 1: Drop-ChIP exited 0 but did not deliver artifact.json. The archived final text
+    reports repeated write-approval timeouts. Process success was not delivery.
+
+Inspection of all 14 failed-stage artifacts also found two qualifications: the
+OS-Seq catalogue-only entries carry method membership, and the catalogue scRC-Seq
+entry uses relationship=unresolved. The narrow new rule deliberately does not
+accept those unchanged artifacts. A fresh author must correct the source role
+or retrieve primary evidence; the audit does not claim 14 automatic repairs.
+
+Why the 33 held
+18: member-specific applicability in grouped schematics. For example, the shared
+    Phi29 amplification core does not establish that IMS-MDA uses the depicted
+    finishing S1 treatment. Shared purpose also does not establish preparation
+    identity for ProP-PD and PDZ-Seq.
+ 8: missing registered publication evidence or a missing method-specific paper
+    association. A worker sometimes found the needed external passage, but the
+    supplied source registry was immutable and could not admit it. EpiGnome also
+    exposes a policy question: a commercial kit should not be assigned an
+    unrelated journal paper just to satisfy a blanket paper requirement.
+ 3: source discrepancy needing primary/supplemental evidence: BrdU-CLIP order,
+    MPE reagent identity and RNA Nuc-Seq fixation/implementation.
+ 2: consequential measurement interfaces: scAba-Seq immediate IVT product versus
+    the depicted DNA endpoint; UMI-4C original-molecule identity carrier/linkage.
+ 2: host-policy holds with blank explanations despite all positive model checks.
+    Both Ig/Rep/MAF depictions lack a non-background Rep-Seq paper association.
+
+These categories are not generic missing buffer recipes. They affect attribution,
+material history or the interpretation of the measurement. No missing source is
+declared impossible to obtain. A registered full-text lead already exists for the
+held Ψ-seq member in another record; it must be registered and independently used,
+not resolved by copying that record's verdict.
+
+Evidence failure found in accepted records
+Exact quotation checking did not ensure that the quote supported the claim.
+Seven scientific corrections in 3 records cite only an article title as primary
+support: 4C(2),DeepCAGE(4),MPE-seq(1). Some correction rationales mention external
+full-text passages that are absent from the registered sources. The separate
+reviewer accepted those same inadequate evidence objects. This is an evidence
+admission failure; it is not proof that the scientific correction itself is false.
+
+Reopening all 478 records under stronger gates rejects those 3 records and a fourth:
+the NOMe-Seq poster labels a background publication content_checked but cites only
+its title. That fourth finding concerns a bibliographic evidence-status overclaim,
+not an established error in the assay mechanism. Do not reinterpret baseline 428
+as 428 records passing the new gates. The exact revalidation report is preserved.
+
+Implemented general changes
+- A catalogue mention may be retained only as an unassigned listed_not_read
+  annotation. It cannot establish primary content, satisfy method coverage or
+  create a publication node. This also prevents separate bibliography entries
+  on one catalogue page from becoming one supposed publication.
+- An article title can establish identity but cannot support a scientific
+  correction or a content_checked status. The rule applies across methods.
+- A single function now produces the scientific host outcome's hold reasons;
+  self-check distinguishes structural validity from full scientific acceptance.
+- Query-based retrieval now searches registered texts for actual matching
+  passages. A miss returns found=false and no unrelated introductory text.
+- Native execution failure, missing artifact and invalid artifact have separate
+  failure categories.
+- Optional structured final-response transport was implemented and its simple
+  JSON probe passed with CLI 0.163.0, gpt-6.1-sol/xhigh. Full extraction/review
+  schema transport has not been migrated or proven with this probe.
+
+Validation
+385 related software checks passed locally, in the isolated packaged runtime and
+on Qiu. Tests include source-role negative controls and failed evidence admission.
+Job 50936553 completed successfully in 15m46s using frozen runtime_06_audit.
+All three fresh author/reviewer tests passed and published their source graphs,
+with no publication errors or author revision: 3'-Seq, ORGANIC and MPE-seq.
+The six native sessions have distinct thread IDs. Exact outputs, stages and
+candidate/review hashes are retained under forward_examples/ and in the remote
+job archive. The source packets were unchanged; prior extractions were not inputs.
+
+3'-Seq retained its extra catalogue citation as listed_not_read and unassigned,
+instead of failing the source-type check. ORGANIC likewise retained five secondary
+citations without converting them into verified primary associations. Its
+Kasinathan citation remains unread; a registered native-chromatin paper supports
+the scoped architecture. This does not establish historical attribution.
+
+MPE-seq omitted the old unsupported reagent correction. It preserves the named
+addition, leaves its mechanism null and records a source-recovery question. The
+reviewer accepted this as nonblocking for a faithful diagram-level record. Graph
+retrieval returns that Unknown with the affected Operation. Its chemical role
+therefore remains unresolved for downstream protocol design. Passing review has
+not supplied the missing chemistry. VALIDATION_BEHAVIOR.json records this boundary.
+
+Author plus reviewer duration was 14m29s for 3'-Seq, 11m59s for ORGANIC and 10m48s
+for MPE-seq, running concurrently. Each used bounded source retrieval and
+self-checks. These three development tests do not establish a general performance
+or accuracy gain. Their results are separate from the baseline graph counts.
+
+Baseline graph republication completed inside that allocation: 424 supported,
+33 research_needed,17 failed and 4 evidence-admission errors, covering all 478 selected
+source occurrences exactly once. All four rejected records expose no Operations
+or workflow nodes. Supported Drop-seq retrieval and an RNA-input search succeeded.
+GRAPH_PUBLICATION.json records graph paths, hashes, input pins and exclusions.
+These are still source-depiction graphs, not 424 distinct technology nodes.
+
+Before another full batch
+1. Establish reviewed method/version work units, with all applicable source
+   depictions attached. Preserve grouped/ambiguous source membership explicitly;
+   do not merge by label, hash or shared citation alone.
+2. Recover the question-specific missing evidence into new source packets, then
+   run targeted author/reviewer attempts. The current read-only retrieval helper
+   cannot itself acquire and register these documents.
+3. Use revalidated graph outputs and inspect new evidence-admission failures.
+   Original graph files remain historical artifacts.
+4. Test whole-schema structured delivery before replacing file-based extraction.
+
+Remaining limits
+Neither exact quotes nor two model sessions prove scientific entailment. The
+title-only guard closes one observed failure; an irrelevant body passage could
+still be misused. Semantic scientific review remains necessary. No new historical
+ancestry, biochemical interchangeability or cross-method equivalence is admitted
+by this audit. The method/version consolidation gate is specified, not yet wired
+into the batch scheduler. This is an audited source-architecture extraction pass,
+not a completed deduplicated evolutionary technology graph.
+
+Primary implementation references and rationale are recorded in
+docs/decisions/2026-11-03-extraction-audit.txt. Full per-record questions and
+recovery leads remain in recovery_requests.json; triage.csv is the compact worklist.
