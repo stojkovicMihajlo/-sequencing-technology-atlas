@@ -277,7 +277,10 @@ async def test_image_change_does_not_mask_timeout_or_cancellation(tmp_path, endi
         "image.write_bytes(image.read_bytes() + b'changed')\n"
         "pathlib.Path('ready').touch()\n"
         "time.sleep(60)\n")
-    task = asyncio.create_task(CodexWorker(executable, timeout_seconds=1).run(
+    # The cancellation case must reach its readiness handshake before the test
+    # cancels it; a competing 1-second host timeout races slow filesystem startup.
+    timeout = 1 if ending == "timeout" else None
+    task = asyncio.create_task(CodexWorker(executable, timeout_seconds=timeout).run(
         "Task", attempt, image_paths=(image,)))
     await wait_until_exists(attempt / "ready")
     if ending == "cancelled":
