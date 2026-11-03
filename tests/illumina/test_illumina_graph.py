@@ -122,6 +122,33 @@ def test_same_named_operation_instances_are_not_merged(acquired, tmp_path, monke
     assert len([n for n in graph["nodes"] if n["node_type"] == "publication"]) == 1
 
 
+def test_secondary_citations_on_one_page_do_not_become_a_publication(acquired, tmp_path, monkeypatch):
+    root, _, _, _ = acquired
+    inventory = batch.read(root / 'inventory.json')
+    inventory['cards'][0]['description_verbatim'] = (
+        'RNA is captured. Smith 2015: Separate paper. Jones 2016: Another paper.')
+    fixtures.write(root / 'inventory.json', inventory)
+    original = fixtures.candidate
+
+    def with_mentions(sources, **kwargs):
+        data = original(sources, **kwargs).model_dump(mode='json')
+        for ident, quote in [('smith', 'Smith 2015: Separate paper.'),
+                             ('jones', 'Jones 2016: Another paper.')]:
+            data['paper_matches'].append({'id': ident, 'source_id': 'card:example',
+                'methods': [], 'assessment': 'listed_not_read', 'relationship': 'catalogue_citation',
+                'evidence': [{'source_id': 'card:example', 'basis': 'text', 'support': 'reported',
+                              'locator': 'description', 'quote': quote}]})
+        return DiagramExtraction.model_validate(data)
+
+    monkeypatch.setattr(fixtures, 'candidate', with_mentions)
+    output, inventory_path = run_batch(acquired, tmp_path, monkeypatch)
+    graph = build_graph(output, inventory_path)
+    assert graph['cards']['example']['admission'] == 'supported'
+    assert len([n for n in graph['nodes'] if n['node_type'] == 'publication']) == 1
+    assert len([n for n in graph['nodes'] if n['node_type'] == 'paper_match']) == 3
+    assert len(graph['cards']['example']['publication_ids']) == 1
+
+
 def test_changed_inventory_and_cli_query_boundaries(acquired, tmp_path, monkeypatch, capsys):
     output, inventory = run_batch(acquired, tmp_path, monkeypatch)
     path = tmp_path / "atlas.json"

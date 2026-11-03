@@ -69,6 +69,17 @@ with methods=[] rather than inventing a member assignment. A claim that a paper
 supports an architecture or variant must name the method(s) its content supports.
 Unassigned background citations do not satisfy the separate requirement to assess
 the paper association for every actual target method.
+A citation available only on a catalogue page may use that actual catalogue
+source_id solely with assessment=listed_not_read, methods=[], and relationship
+catalogue_citation or background, quoting the literal entry. It is a secondary
+mention, not a verified primary publication. Do not manufacture a metadata source
+or claim primary content inspection to satisfy a schema requirement.
+For a scientific correction, cite the registered primary passage that actually
+states the correction or mechanism. An article title plus a rationale referring
+to an external paper is not scientific support. URLs, unregistered lookup notes
+and passages copied into a locator do not upgrade a registered abstract. If newly
+found evidence is absent from the registry, record the precise acquisition need
+and retain the affected claim as unresolved until a new registered-source attempt.
 
 REPRESENTATION RULES
 1. Read the complete diagram before deciding its decomposition. Represent its
@@ -126,7 +137,13 @@ attempts are read-only. Do not alter package code, sources, other runs, credenti
 or the atlas. Do not spawn another agent or contact people. Follow the actual
 tool/network permissions; do not use authentication or access-control workarounds.
 Prefer bounded source reads and targeted lookup of an architecture-changing
-question over repeatedly dumping whole papers. Write artifact.json as valid JSON
+question over repeatedly dumping whole papers. The supplied source_helper can
+search all registered text with --query, or retrieve one source with --id plus
+--query/--start/--limit. A query miss is explicit (found=false); change the query
+or inspect another source rather than treating a missing passage as evidence.
+The self_check reports structural/source validity; its valid=true alone does not
+establish scientific acceptance. Resolve any reported outcome/research questions
+honestly. Write artifact.json as valid JSON
 conforming exactly to the supplied schema. Do not substitute a prose final answer
 for the artifact. Preserve an early valid draft, then refine it as needed.
 """

@@ -13,6 +13,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 import shutil
 import shlex
 import sys
@@ -28,11 +29,20 @@ from genomics_discovery.illumina.models import (
     digest,
     export_graph,
     review_outcome,
+    review_reasons,
     review_targets,
     validate_extraction,
     validate_review,
 )
 from genomics_discovery.illumina.prompts import build_prompt
+
+
+class StageFailure(ValueError):
+    """A failed scientific artifact and a failed native process need different remedies."""
+
+    def __init__(self, category, message):
+        super().__init__(message)
+        self.category = category
 
 
 def now():
@@ -358,7 +368,7 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
             result = await worker.run(prompt, attempt, image_paths=paths)
             assessment = assess_archived_attempt(attempt)
             if not assessment.complete or result.exit_code != 0 or result.error:
-                raise ValueError("Native stage failed: " + str(assessment.error or result.error))
+                raise StageFailure("native_execution", "Native stage failed: " + str(assessment.error or result.error))
             if result.thread_id != assessment.thread_id or result.usage != assessment.usage:
                 raise ValueError("Worker result disagrees with archived native transport")
             if (attempt / "prompt.txt").read_text() != prompt:
@@ -373,18 +383,22 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
                 raise ValueError("Assigned source card changed during model execution")
             if any(sha(Path(row["original"])) != row["original_sha256"] for row in delivery):
                 raise ValueError("Original diagram changed during image-led extraction")
+            if not (attempt / "artifact.json").is_file():
+                raise StageFailure("missing_artifact", "Native process completed without the required artifact.json; "
+                                   "inspect archived final.txt and command events before retrying.")
             document = model.model_validate_json((attempt / "artifact.json").read_bytes())
             errors = (validate_extraction(document, registry, expected_record_id=card["record_id"],
                         expected_title=context["title"], require_paper_matches=requires_paper_matches(card)) + paper_coverage(document, card)
                       if role == "author" else validate_review(document, candidate, registry))
             if errors:
-                raise ValueError("; ".join(errors))
+                raise StageFailure("artifact_validation", "; ".join(errors))
             entry.update(status="validated", thread_id=assessment.thread_id,
                 usage=assessment.usage, artifact_sha256=sha(attempt / "artifact.json"))
             return document
         except BaseException as exc:
             entry.update(status="cancelled" if isinstance(exc, asyncio.CancelledError) else "failed",
-                         error=f"{type(exc).__name__}: {exc}")
+                         error=f"{type(exc).__name__}: {exc}",
+                         failure_category=getattr(exc, "category", "unclassified_stage_error"))
             raise
         finally:
             entry.update(finished_at=now(), elapsed_seconds=time.monotonic() - started)
@@ -399,14 +413,7 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
         if outcome != "needs_revision" or revision == max_revisions:
             break
     write(directory / "graph.json", export_graph(candidate, review, registry))
-    questions = ([{"target": c.target, "basis": "independent_review", "question": c.rationale}
-                  for c in review.checks if c.action != "accept"] +
-                 [{"target": "scope:" + s.method, "basis": "unresolved_method_applicability", "question": s.rationale}
-                  for s in candidate.method_scopes if s.status == "unresolved"] +
-                 [{"target": "unknown:" + u.id, "basis": "blocking_unknown", "question": u.question}
-                  for u in candidate.unknowns if u.blocking] +
-                 [{"target": "correction:" + c.id, "basis": "unresolved_source_discrepancy", "question": c.primary_statement}
-                  for c in candidate.corrections if c.disposition == "keep_unresolved"])
+    questions = review_reasons(review, candidate)
     return {"status": outcome, "source_status": "diagram_and_registered_literature",
         "operations": len(candidate.operations), "states": len(candidate.states),
         "flows": len(candidate.flows), "revision": revision,
@@ -439,6 +446,26 @@ def revalidate_completed(row):
         if stage.get("input_pins"):
             verify_stage_inputs(Path(stage["path"]),
                 read(Path(stage["path"]) / "image_delivery.json"), stage["input_pins"])
+
+
+def source_excerpt(registry, source_id, *, query=None, start=0, limit=8000):
+    """Bounded literal retrieval; a query miss never substitutes unrelated text."""
+    row = registry[source_id]
+    text = row.get("text", "")
+    limit = min(max(limit, 1), 16000)
+    if start < 0:
+        raise ValueError("Source start must be nonnegative")
+    matches = list(re.finditer(re.escape(query), text, re.IGNORECASE)) if query else []
+    if query:
+        start = max(0, matches[0].start() - 700) if matches else None
+    return {"source_id": source_id, "start": start,
+        "text": text[start:start + limit] if start is not None else "",
+        "total_characters": len(text), "path": row.get("path"),
+        "query": query, "found": bool(matches) if query else None,
+        "match_count": len(matches) if query else None,
+        "match_starts": [m.start() for m in matches[:8]],
+        "more_matches": len(matches) > 8,
+        "retrieval_basis": "literal text match; inspect the passage for scientific support"}
 
 
 async def run(sources, output, *, workers=8, records=(), max_revisions=1, resume=False):
@@ -490,7 +517,8 @@ async def run(sources, output, *, workers=8, records=(), max_revisions=1, resume
                 row.update(await extract_card(card, acquired, sources.parent, directory, worker,
                                               max_revisions=max_revisions))
             except Exception as exc:
-                row.update(status="failed", reason=f"{type(exc).__name__}: {exc}")
+                row.update(status="failed", reason=f"{type(exc).__name__}: {exc}",
+                           failure_category=getattr(exc, "category", "unclassified_stage_error"))
             row["finished_at"] = now()
             checkpoint(output, state, cards)
     await asyncio.gather(*(one(card) for card in cards))
@@ -531,20 +559,21 @@ def main(argv=None):
         return 0 if set(state["counts"]) <= {"supported"} else 1
     registry = read(args.registry)
     if args.command == "source":
-        if not args.id:
+        if not args.id and args.query:
+            matches = [source_excerpt(registry, key, query=args.query,
+                        limit=min(max(args.limit, 1), 16000) // 8)
+                       for key, row in registry.items() if row.get("kind") == "text"]
+            matches = [m for m in matches if m["found"]]
+            value = {"query": args.query, "found": bool(matches), "source_match_count": len(matches),
+                     "results": matches[:8], "truncated": len(matches) > 8,
+                     "retrieval_basis": "literal text search over registered sources; no new evidence acquired"}
+        elif not args.id:
             value = [{"source_id": key, **{k: v for k, v in row.items()
                 if k in {"kind", "content_level", "title", "pmid", "url", "association_status"}},
                 "characters": len(row.get("text", ""))} for key, row in registry.items()]
         else:
-            row = registry[args.id]
-            text = row.get("text", "")
-            start = args.start
-            if args.query:
-                match = text.casefold().find(args.query.casefold())
-                start = max(0, match - 700) if match >= 0 else 0
-            value = {"source_id": args.id, "start": start,
-                "text": text[start:start + min(max(args.limit, 1), 16000)],
-                "total_characters": len(text), "path": row.get("path")}
+            value = source_excerpt(registry, args.id, query=args.query,
+                                   start=args.start, limit=args.limit)
         print(json.dumps(value, indent=2, ensure_ascii=False))
         return 0
     try:
@@ -562,7 +591,12 @@ def main(argv=None):
                 errors += paper_coverage(document, card)
     except Exception as exc:
         errors = [str(exc)]
-    print(json.dumps({"valid": not errors, "errors": errors}, indent=2))
+    result = {"valid": not errors, "errors": errors,
+              "validation_scope": "Structure, source references and required coverage; scientific acceptance is separate."}
+    if args.candidate and not errors:
+        result.update(outcome=review_outcome(document, candidate, registry),
+                      research_questions=review_reasons(document, candidate))
+    print(json.dumps(result, indent=2))
     return int(bool(errors))
 
 

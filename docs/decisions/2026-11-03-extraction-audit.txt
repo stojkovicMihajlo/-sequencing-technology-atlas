@@ -1,0 +1,69 @@
+Decision: repair source representation and explain every extraction outcome
+
+Observed evidence
+Job 50822494 processed all 478 source occurrences. Fourteen failed at the
+PaperMatch source-type check. Inspected examples explicitly label secondary
+catalogue citations listed_not_read, with methods=[]; this is an honest record
+of a mention, not a claim to have read or verified the cited publication.
+Two Ig/Rep/MAF records have all positive model checks but the host withholds
+acceptance because Rep-Seq has only a background paper association. Their reason
+strings are empty: scientific outcome and its explanation use different code.
+Drop-ChIP exited 0 without artifact.json after approval timeouts blocked writes.
+The original source registries, outputs and frozen runtime remain immutable.
+
+Contract and alternatives
+Keep architecture support, publication identity and a bibliographic mention
+distinct. Requiring every secondary bibliography entry to be independently
+retrieved would expand the task without helping the depicted architecture.
+Silently deleting a secondary mention would discard provenance. Accept it only
+as an unassigned listed_not_read annotation with its own exact catalogue quote.
+It cannot support method coverage, establish a publication entity, or supply
+primary evidence for a correction. Verified architecture claims retain existing
+primary-content requirements. No accepted candidate fields or hashes are changed.
+
+Keep current scientific acceptance rules while making their reasons explicit.
+Every condition that can withhold acceptance must produce an inspectable target
+and explanation; model review and host outcome are both retained. A self-check
+reports structural validity separately from the complete scientific outcome.
+
+For missing artifact delivery, inspect structured final-response transport before
+changing execution. A successful process exit is insufficient. Provider safety
+blocks remain explicit and are never retried through evasive rephrasing.
+
+External implementation audit
+- W3C PROV-DM, https://www.w3.org/TR/prov-dm/: retain the identity and provenance
+  of the actual source used; a secondary document is not the cited primary work.
+- Future-House/paper-qa, src/paperqa/agents/tools.py, GatherEvidence:
+  https://github.com/Future-House/paper-qa/blob/c692d0dfeac4a0296599f7fe21a253a58b7ac12a/src/paperqa/agents/tools.py
+  Inspected implementation retains document/evidence state and gathers evidence
+  for specific questions, returning bounded relevant contexts. Transfer the
+  question-specific retrieval principle; do not claim PaperQA validates our
+  scientific graph or copy its numerical retrieval settings.
+- Future-House/paper-qa, src/paperqa/types.py, Doc/Context: document identity and
+  retrieved context are distinct objects. We retain our existing source/evidence
+  fields, with an explicit restriction on secondary citation annotations.
+- Official Codex noninteractive documentation:
+  https://learn.chatgpt.com/docs/non-interactive-mode
+  Documents --output-schema and --output-last-message for final JSON delivery.
+  This remains a candidate transport change until tested with CLI 0.163.0 and
+  the requested gpt-6.1-sol/xhigh; managed sandbox/approval controls stay active.
+External code was inspected as a reference; no implementation was copied.
+
+Tests required
+Secondary mentions cannot claim identity/content verification, method membership,
+or positive architecture support; two mentions from one catalogue page cannot
+collapse into one primary publication. Every host hold has a reason. Existing
+accepted records retain their canonical hashes and outcomes. Query misses must
+not return the start of an unrelated paper as if a requested passage was found.
+Fresh native extraction/review is required before admitting repaired records.
+
+Accepted-record scientific finding
+The first-pass MPE-seq poster record accepted a primary correction whose quote
+is the article title. Its rationale explicitly acknowledges that the quenching
+and reagent correction come from external passages absent from the registry.
+The corresponding catalogue record correctly remained research_needed. Exact
+quote matching and two reviewers therefore did not establish entailment.
+Reject title-only evidence for scientific correction/content support; it can
+still establish bibliographic identity. This is a general source-role boundary,
+not a keyword rule about MPE-seq. Unrelated body text remains an entailment risk
+requiring scientific review; the title guard does not solve that whole problem.

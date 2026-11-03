@@ -388,7 +388,7 @@ class CodexWorker:
         self._shell_python = str(Path(sys.executable).absolute()) if pin_shell_environment else None
         self._shell_overrides = pinned_shell_environment() if pin_shell_environment else {}
 
-    def _command(self, attempt_dir: Path, image_paths=()) -> list[str]:
+    def _command(self, attempt_dir: Path, image_paths=(), *, response_schema_path=None) -> list[str]:
         command = [
             self.executable,
             "exec",
@@ -426,11 +426,14 @@ class CodexWorker:
                 command.extend(("--config", f"shell_environment_policy.set.{key}={json.dumps(value)}"))
         if self.model != "default":
             command.extend(("--model", self.model))
+        if response_schema_path is not None:
+            command.extend(("--output-schema", str(response_schema_path)))
         for path in image_paths:
             command.extend(("--image", str(path)))
         return [*command, "-"]
 
-    async def run(self, prompt: str, attempt_dir: Path, *, image_paths=()) -> WorkerResult:
+    async def run(self, prompt: str, attempt_dir: Path, *, image_paths=(),
+                  response_schema_path: Path | None = None) -> WorkerResult:
         """Archive an attempt and return its outcome; cancellation still propagates.
 
         An attempt directory may already contain input files, but existing job
@@ -449,10 +452,22 @@ class CodexWorker:
         if any((attempt_dir / name).exists() for name in _ARCHIVES):
             raise FileExistsError(f"Attempt already has job archives: {attempt_dir}")
         images = _image_inventory(attempt_dir, image_paths)
+        response_schema = None
+        if response_schema_path is not None:
+            response_schema_path = Path(response_schema_path).resolve()
+            if not response_schema_path.is_relative_to(attempt_dir) or not response_schema_path.is_file():
+                raise ValueError("Response schema must be an existing file inside this attempt")
+            if not isinstance(json.loads(response_schema_path.read_text()), dict):
+                raise ValueError("Response schema must be a JSON object")
+            response_schema = {"path": str(response_schema_path),
+                "sha256": hashlib.sha256(response_schema_path.read_bytes()).hexdigest()}
         # Exclusive prompt creation also prevents two workers claiming the same attempt.
         with (attempt_dir / "prompt.txt").open("x", encoding="utf-8") as handle:
             handle.write(prompt)
-        command = self._command(attempt_dir, [row["path"] for row in images])
+        command = (self._command(attempt_dir, [row["path"] for row in images],
+                                 response_schema_path=response_schema_path)
+                   if response_schema_path is not None else
+                   self._command(attempt_dir, [row["path"] for row in images]))
         environment = {
             key: value for key, value in os.environ.items() if key not in _PARENT_SESSION_ENV
         }
@@ -460,6 +475,7 @@ class CodexWorker:
             json.dumps({
                 "argv": command,
                 "cwd": str(attempt_dir),
+                **({"response_schema": response_schema} if response_schema else {}),
                 **({"shell_environment_profile": {"enabled": True, "python_executable": self._shell_python,
                     "pinned_variable_names": list(self._shell_overrides), "automatic_preflight": False,
                     "guarantee": "Codex default shell uses non-login semantics, snapshots are disabled and declared environment values are explicitly injected.",
@@ -702,6 +718,14 @@ class CodexWorker:
             if not unchanged:
                 image_error = "Codex image input changed or is unavailable after execution"
                 error = f"{error}; {image_error}" if error else image_error
+        if response_schema:
+            try:
+                unchanged = hashlib.sha256(response_schema_path.read_bytes()).hexdigest() == response_schema['sha256']
+            except OSError:
+                unchanged = False
+            if not unchanged:
+                schema_error = "Codex response schema changed or is unavailable after execution"
+                error = f"{error}; {schema_error}" if error else schema_error
         (attempt_dir / "final.txt").touch(exist_ok=True)
         result = WorkerResult(
             exit_code, event_state.thread_id, event_state.usage, time.monotonic() - started, error

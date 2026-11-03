@@ -29,8 +29,10 @@ from genomics_discovery.illumina.extraction import (
 from genomics_discovery.illumina.models import (
     DiagramExtraction,
     DiagramReview,
+    PaperMatch,
     digest,
     export_graph,
+    is_catalogue_annotation,
     review_outcome,
     validate_extraction,
 )
@@ -166,6 +168,11 @@ def build_graph(batch_directory: Path, inventory_path: Path) -> dict:
                           else "unresolved_applicability", "record_id": ident, "admission": admission,
                           "evidence": scope["evidence"]} for op in scope["operation_ids"])
         for match in graph["workflow"]["paper_matches"]:
+            # A catalogue-only citation remains an evidenced PaperMatch annotation.
+            # It does not identify a primary publication or merge all mentions on
+            # the same catalogue page into one supposed paper.
+            if is_catalogue_annotation(PaperMatch.model_validate(match), sources):
+                continue
             source = sources[match["source_id"]]
             pmid = source.get("pmid")
             metadata = sources.get("metadata:" + str(pmid), source)

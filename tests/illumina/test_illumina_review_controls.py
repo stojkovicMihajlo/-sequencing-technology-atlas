@@ -10,6 +10,7 @@ from genomics_discovery.illumina.models import (
     DiagramReview,
     digest,
     review_outcome,
+    review_reasons,
     review_targets,
     validate_extraction,
     validate_review,
@@ -116,6 +117,95 @@ def test_unassigned_background_does_not_satisfy_method_paper_coverage(control):
     candidate = DiagramExtraction.model_validate(data)
     assert any('Named method lacks a paper-match assessment' in error
                for error in validate_extraction(candidate, sources, require_paper_matches=True))
+
+
+def test_host_publication_hold_is_explained_even_when_reviewer_accepts(control):
+    data, sources, image, _, _ = control
+    data['paper_matches'][0].update(methods=['A'], relationship='supports_architecture')
+    data['paper_matches'].append({**data['paper_matches'][0], 'id': 'background_b',
+                                  'methods': ['B'], 'relationship': 'background'})
+    candidate = DiagramExtraction.model_validate(data)
+    review = positive_review(candidate, image)
+    assert not validate_extraction(candidate, sources, require_paper_matches=True)
+    assert review_outcome(review, candidate, sources) == 'research_needed'
+    assert review_reasons(review, candidate) == [{
+        'target': 'scope:B', 'basis': 'publication_association_not_established',
+        'question': 'The recorded papers do not establish a non-background association '
+                    'for this named method. Resolve the association at the declared scope '
+                    'or retain it as unresolved; background content alone is insufficient.'}]
+
+
+def catalogue_mention(data, sources):
+    sources['catalogue:c'] = {'kind': 'text', 'content_level': 'catalogue',
+                              'text': 'Smith et al. A separate paper. Journal 2015.'}
+    data['inspected_sources'].append('catalogue:c')
+    paper = {'id': 'secondary_mention', 'source_id': 'catalogue:c', 'methods': [],
+             'assessment': 'listed_not_read', 'relationship': 'catalogue_citation',
+             'evidence': [{'source_id': 'catalogue:c', 'basis': 'text', 'support': 'reported',
+                           'locator': 'References', 'quote': sources['catalogue:c']['text']}]}
+    data['paper_matches'].append(paper)
+    return paper
+
+
+def test_literal_secondary_mention_is_retained_without_claiming_primary_support(control):
+    data, sources, image, _, _ = control
+    catalogue_mention(data, sources)
+    candidate = DiagramExtraction.model_validate(data)
+    assert not validate_extraction(candidate, sources)
+    assert review_outcome(positive_review(candidate, image), candidate, sources) == 'supported'
+
+
+@pytest.mark.parametrize('change', [
+    {'assessment': 'identity_verified'}, {'assessment': 'content_checked'},
+    {'methods': ['B']}, {'relationship': 'supports_architecture', 'methods': ['B']},
+    {'relationship': 'supports_variant', 'methods': ['B']}, {'evidence': []},
+])
+def test_secondary_mention_cannot_be_upgraded_or_assign_a_method(control, change):
+    data, sources, _, _, _ = control
+    paper = catalogue_mention(data, sources)
+    paper.update(change)
+    candidate = DiagramExtraction.model_validate(data)
+    assert validate_extraction(candidate, sources)
+
+
+def test_secondary_mention_does_not_close_missing_method_association(control):
+    data, sources, image, _, _ = control
+    data['paper_matches'][0]['methods'] = ['A']
+    catalogue_mention(data, sources)
+    data['unknowns'] = [{'id': 'missing_b', 'question': 'Which publication describes B?',
+                         'blocking': True, 'affected_ids': ['scope:B']}]
+    candidate = DiagramExtraction.model_validate(data)
+    assert not validate_extraction(candidate, sources, require_paper_matches=True)
+    assert review_outcome(positive_review(candidate, image), candidate, sources) == 'research_needed'
+
+
+def test_primary_correction_cannot_use_a_title_to_support_an_external_claim(control):
+    data, sources, image, _, _ = control
+    sources['paper:p'].update(title='A capture method', text='A capture method.\nCapture precedes library construction.')
+    title = {'source_id': 'paper:p', 'basis': 'text', 'support': 'reported',
+             'locator': 'Title; external methods were found elsewhere', 'quote': 'A capture method.',
+             'rationale': 'The title identifies the paper; unregistered external content gives the chemistry.'}
+    data['corrections'] = [correction(image, title, 'use_primary')]
+    data['flows'][0]['evidence'] = [image, title]
+    candidate = DiagramExtraction.model_validate(data)
+    errors = validate_extraction(candidate, sources)
+    assert any('requires primary content beyond a title' in e for e in errors)
+    assert any('Primary correction must be explicitly evidenced' in e for e in errors)
+    review = positive_review(candidate, image)
+    assert validate_review(review, candidate, sources)
+
+
+def test_article_title_can_verify_identity_but_cannot_claim_content_inspection(control):
+    data, sources, _, _, _ = control
+    sources['paper:p'].update(title='A capture method', text='A capture method.\nCapture precedes library construction.')
+    title = {'source_id': 'paper:p', 'basis': 'text', 'support': 'reported',
+             'locator': 'Title', 'quote': 'A capture method.'}
+    data['paper_matches'].append({'id': 'identity', 'source_id': 'paper:p', 'methods': [],
+        'assessment': 'identity_verified', 'relationship': 'background', 'evidence': [title]})
+    assert not validate_extraction(DiagramExtraction.model_validate(data), sources)
+    data['paper_matches'][-1]['assessment'] = 'content_checked'
+    assert any('Content-checked publication needs its own inspected content evidence' in e
+               for e in validate_extraction(DiagramExtraction.model_validate(data), sources))
 
 
 @pytest.mark.parametrize("collection", ["states", "operations", "flows"])

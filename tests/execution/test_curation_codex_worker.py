@@ -33,6 +33,31 @@ def fake_codex(tmp_path: Path, body: str) -> str:
     return str(executable)
 
 
+@pytest.mark.parametrize('mutate', [False, True])
+def test_optional_structured_final_response_keeps_schema_custody(tmp_path, mutate):
+    executable = fake_codex(tmp_path,
+        "schema = pathlib.Path(args[args.index('--output-schema') + 1])\n"
+        "assert json.loads(schema.read_text())['type'] == 'object'\n"
+        + ("schema.write_text('{}')\n" if mutate else '')
+        + "print(json.dumps({'type':'thread.started','thread_id':'schema-test'}))\n"
+          "print(json.dumps({'type':'turn.completed','usage':{'output_tokens':1}}))\n"
+          "output.write_text(json.dumps({'ready': True}))\n")
+    attempt = tmp_path / 'structured'
+    attempt.mkdir()
+    schema = attempt / 'schema.json'
+    schema.write_text(json.dumps({'type': 'object', 'properties': {'ready': {'type': 'boolean'}},
+                                  'required': ['ready'], 'additionalProperties': False}))
+    result = asyncio.run(CodexWorker(executable).run('Return JSON', attempt, response_schema_path=schema))
+    command = json.loads((attempt / 'command.json').read_text())
+    assert command['response_schema']['path'] == str(schema)
+    assert json.loads((attempt / 'final.txt').read_text()) == {'ready': True}
+    assert assess_archived_attempt(attempt).complete is (not mutate)
+    if mutate:
+        assert 'response schema changed' in result.error
+    else:
+        assert result.error is None
+
+
 async def wait_until_exists(path: Path) -> None:
     async with asyncio.timeout(5):
         while not path.exists():

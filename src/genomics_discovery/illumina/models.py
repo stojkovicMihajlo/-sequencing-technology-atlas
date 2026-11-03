@@ -99,7 +99,10 @@ class MethodScope(StrictModel):
 
 class PaperMatch(StrictModel):
     id: Text
-    source_id: Text = Field(description="Publication or publication-metadata source ID in registry.")
+    source_id: Text = Field(description=
+        "Publication/content or metadata source ID. A catalogue source is allowed only for "
+        "an unassigned listed_not_read citation/background annotation with its own literal quote; "
+        "it never establishes publication identity or primary scientific support.")
     methods: tuple[Text, ...] = Field(description=
         "In-scope methods that the inspected source actually establishes. Use an empty list "
         "for card-level background, catalogue or unresolved citations with no supported member "
@@ -300,17 +303,36 @@ def _source_errors(record, sources: dict, inspected: tuple[str, ...]) -> list[st
     return errors
 
 
+def _identity_only(evidence: Evidence, sources: dict) -> bool:
+    """An article title identifies a work; it cannot verify its protocol details."""
+    source = sources.get(evidence.source_id, {})
+    title = source.get("title")
+    normalize = lambda text: " ".join(text.split()).rstrip(". ").casefold()
+    return bool(title and evidence.quote and normalize(evidence.quote) == normalize(title))
+
+
 def _scientific(evidence: Evidence, sources: dict) -> bool:
     source = sources.get(evidence.source_id, {})
     return source.get("kind") == "image" or (
         source.get("kind") == "text" and source.get("content_level") in
-        {"catalogue", "abstract", "fulltext"})
+        {"catalogue", "abstract", "fulltext"} and not _identity_only(evidence, sources))
 
 
 def _primary(evidence: Evidence, sources: dict) -> bool:
     source = sources.get(evidence.source_id, {})
-    return evidence.basis == "text" and source.get("kind") == "text" and source.get(
-        "content_level") in {"abstract", "fulltext"}
+    return (evidence.basis == "text" and source.get("kind") == "text" and source.get(
+        "content_level") in {"abstract", "fulltext"} and not _identity_only(evidence, sources))
+
+
+def is_catalogue_annotation(paper: PaperMatch, sources: dict) -> bool:
+    """A secondary mention records its actual source and establishes no method."""
+    source = sources.get(paper.source_id, {})
+    return (source.get("kind") == "text" and source.get("content_level") == "catalogue"
+            and paper.assessment == "listed_not_read" and not paper.methods
+            and paper.relationship in {"catalogue_citation", "background"}
+            and any(e.source_id == paper.source_id and e.basis == "text"
+                    and e.support == "reported" and e.quote in source.get("text", "")
+                    for e in paper.evidence))
 
 
 def validate_extraction(candidate: DiagramExtraction, sources: dict, *,
@@ -348,7 +370,11 @@ def validate_extraction(candidate: DiagramExtraction, sources: dict, *,
         if source is None:
             errors.append("Unknown matched publication source: " + paper.source_id)
             continue
-        if source.get("kind") != "text" or source.get("content_level") not in {
+        if source.get("content_level") == "catalogue":
+            if not is_catalogue_annotation(paper, sources):
+                errors.append("Catalogue citation requires listed_not_read, methods=[], "
+                              "catalogue_citation/background and its own literal text evidence: " + paper.id)
+        elif source.get("kind") != "text" or source.get("content_level") not in {
                 "metadata", "abstract", "fulltext"}:
             errors.append("Paper match source must be a publication/metadata text source: " + paper.id)
         if (source.get("identity_status") == "unverified_catalogue_reference"
@@ -359,22 +385,19 @@ def validate_extraction(candidate: DiagramExtraction, sources: dict, *,
             errors.append("Verified publication needs inspected identity/content evidence: " + paper.id)
         if paper.relationship in {"supports_architecture", "supports_variant"}:
             supporting = [e for e in paper.evidence if e.basis == "text" and
-                          e.source_id == paper.source_id and
-                          sources.get(e.source_id, {}).get("content_level") in {"abstract", "fulltext"}]
+                          e.source_id == paper.source_id and _primary(e, sources)]
             if paper.assessment != "content_checked" or not supporting:
                 errors.append("Publication metadata alone cannot support architecture/variant: " + paper.id)
         if paper.assessment == "content_checked" and not any(
-            e.source_id == paper.source_id and e.basis == "text" and
-            sources.get(e.source_id, {}).get("content_level") in {"abstract", "fulltext"}
+            e.source_id == paper.source_id and _primary(e, sources)
             for e in paper.evidence
         ):
             errors.append("Content-checked publication needs its own inspected content evidence: " + paper.id)
     for correction in candidate.corrections:
         if {e.basis for e in correction.evidence} != {"image", "text"}:
             errors.append("Correction requires both diagram and primary text evidence: " + correction.id)
-        if not any(sources.get(e.source_id, {}).get("content_level") in {"abstract", "fulltext"}
-                   for e in correction.evidence if e.basis == "text"):
-            errors.append("Correction cannot be established by catalogue/metadata alone: " + correction.id)
+        if not any(_primary(e, sources) for e in correction.evidence):
+            errors.append("Correction requires primary content beyond a title, catalogue or metadata: " + correction.id)
         if correction.disposition == "use_primary":
             primary_ids = {e.source_id for e in correction.evidence if _primary(e, sources)}
             target_evidence = _evidence(records[correction.target_id])
@@ -421,6 +444,29 @@ def validate_review(review: DiagramReview, candidate: DiagramExtraction, sources
     return errors
 
 
+def review_reasons(review: DiagramReview, candidate: DiagramExtraction) -> list[dict]:
+    """Explain every review/host condition; callers validate records separately."""
+    reasons = [{"target": c.target, "basis": "independent_review", "question": c.rationale}
+               for c in review.checks if c.action != "accept"]
+    reasons.extend({"target": "scope:" + s.method, "basis": "unresolved_method_applicability",
+                    "question": s.rationale} for s in candidate.method_scopes if s.status == "unresolved")
+    reasons.extend({"target": "unknown:" + u.id, "basis": "blocking_unknown", "question": u.question}
+                   for u in candidate.unknowns if u.blocking)
+    reasons.extend({"target": "correction:" + c.id, "basis": "unresolved_source_discrepancy",
+                    "question": c.primary_statement} for c in candidate.corrections
+                   if c.disposition == "keep_unresolved")
+    if candidate.paper_matches:
+        for method in candidate.method_names:
+            if not any(method in p.methods and p.relationship not in {"background", "unresolved"}
+                       for p in candidate.paper_matches):
+                reasons.append({"target": "scope:" + method,
+                    "basis": "publication_association_not_established",
+                    "question": "The recorded papers do not establish a non-background association "
+                                "for this named method. Resolve the association at the declared scope "
+                                "or retain it as unresolved; background content alone is insufficient."})
+    return reasons
+
+
 def review_outcome(review: DiagramReview, candidate: DiagramExtraction,
                    sources: dict | None = None) -> str:
     if sources is not None:
@@ -437,13 +483,7 @@ def review_outcome(review: DiagramReview, candidate: DiagramExtraction,
     # while either revisions or research questions remain.
     if any(x.action == "revise" for x in review.checks):
         return "needs_revision"
-    if (any(x.action == "research" for x in review.checks)
-            or any(x.blocking for x in candidate.unknowns)
-            or any(x.status == "unresolved" for x in candidate.method_scopes)
-            or any(x.disposition == "keep_unresolved" for x in candidate.corrections)
-            or candidate.paper_matches and any(not any(method in p.methods and
-                p.relationship not in {"background", "unresolved"} for p in candidate.paper_matches)
-                for method in candidate.method_names)):
+    if review_reasons(review, candidate):
         return "research_needed"
     return "supported"
 
