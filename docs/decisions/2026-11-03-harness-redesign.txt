@@ -209,3 +209,60 @@ The existing extractor, provenance checks and graph tools remain useful. The
 method-level planner, shared evidence handoff and incremental consolidation are
 not yet wired together. This revision does not claim they are implemented or
 validated, and it does not authorize another large extraction to discover that.
+
+Annotation contract proposal after the Drop-seq comparison
+Status: proposed representation rules, not implemented schema changes.
+The five Operation captions in the three Drop-seq outputs are already identical.
+The observed differences concern detail coverage and fact placement, not just
+spelling. Controlled names alone cannot recover an omitted mechanism or move a
+source discrepancy into its dedicated record.
+
+Prespecify semantic roles and ownership of facts. Retain source wording, but
+represent material properties, process concepts, sequence/identity feature changes
+and source discrepancies in their designated records with evidence. Descriptive
+text should be a reading view of those assertions, not a second authoritative
+location for facts that tools must discover by rereading prose. A source conflict
+must be explicitly indexed even when an Operation description also explains it.
+
+Keep a small shared set of relation meanings, with reviewed extensible concept
+definitions. Retrieve existing definitions and aliases before proposing a term;
+do not admit an arbitrary new label as a global concept. Context is essential:
+a shared ligation concept does not establish equal substrates, end chemistry,
+conditions or interchangeability. Local material states and Operation instances
+remain distinct even when classified under the same process concept. One broad
+depicted Operation can have several evidenced process/feature assertions, avoiding
+a forced one-operation/one-label or universal workflow sequence.
+
+Distinguish normalization from completeness. Normalization maps an extracted fact
+to a shared meaning. Completeness checks whether a required source-supported fact
+was extracted at all. Conditional requirements should ask about relevant interfaces
+(for example, the origin and fate of amplification handles when those handles are
+part of the scoped interpretation), rather than demanding template switching for
+all RNA methods. Unknown and not-applicable need explicit scope; a required field
+must not force a fabricated value. Applicable constraints must be evaluated on
+source evidence, not inferred merely from a method name or conventional chemistry.
+
+External precedent inspected
+OBI paper: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0154556
+Relevant sections: Planned Processes and Using OBI in the ISA software suite.
+Official OBI template inspected at commit
+9d66d7b6a552886a2fc2ddc9932af08cfcbb3adc:
+src/ontology/templates/assays.tsv (header and logical mapping row).
+It distinguishes definitions/alternative labels and explicit input, output,
+reagent, device, objective and other roles. Adapt those semantic-role principles;
+do not equate our stage-specific State snapshots with OBI material entities or
+claim that the assay template specifies every sequencing-operation interface.
+No ontology/code dependency was installed or copied.
+
+EDC's inspected relation canonicalizer retrieves definitions and verifies a
+replacement in context; it is a useful normalization precedent, not a guarantee
+of assay equivalence. SchemaRAG (ACL2026) studies retrieving applicable schema
+subsets to reduce large-schema prompts:
+https://aclanthology.org/2026.acl-industry.78/
+This is relevant if our shared vocabulary grows. Its reported results do not
+establish the best schema or schema-retrieval recall for our genomics corpus.
+
+Next annotation test should separate same-meaning/different-wording cases from
+missing-fact cases and different-meaning/same-label cases. The existing Drop-seq
+outputs can test placement and coverage without another full extraction batch.
+No native model call was made for this annotation-design review.
