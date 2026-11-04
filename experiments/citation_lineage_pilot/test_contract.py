@@ -15,6 +15,85 @@ from types import SimpleNamespace
 from run import review_cycle
 
 
+def test_reference_acquisition_reuses_verified_full_text_without_network(tmp_path, monkeypatch):
+    import run as runner
+    inputs = tmp_path / 'inputs'; inputs.mkdir()
+    original = tmp_path / 'primary.xml'
+    original.write_text('<article><front><article-meta><article-id pub-id-type="pmid">123</article-id>'
+                        '</article-meta></front><body><p>Exact registered passage.</p></body></article>')
+    source = {'kind': 'text', 'pmid': '123', 'title': 'Original protocol',
+              'content_level': 'fulltext', 'text': runner.jats_text(original.read_bytes())[0],
+              'original': {'path': str(original), 'sha256': runner.sha(original)}}
+    cache = tmp_path / 'cache.json'; runner.write(cache, {'format_version': 'atlas_reference_cache/1', 'papers': {'123': source}})
+    runner.write(inputs/'reference_cache_receipt.json', {'path': str(cache), 'sha256': runner.sha(cache)})
+    runner.write(inputs/'sources_initial.json', {'seed': SOURCES['seed']})
+    runner.write(inputs/'bibliography.json', {'R1': {'identifiers': {'pmid': '123'}, 'citation': 'Original protocol'}})
+    def no_network(*args, **kwargs):
+        raise AssertionError('Exact cached source must not be downloaded again')
+    monkeypatch.setattr(runner, 'fetch', no_network)
+    monkeypatch.setattr(runner, 'acquire_pmc_fulltext', no_network)
+    result = runner.acquire(inputs, SimpleNamespace(references=[SimpleNamespace(reference_id='R1')]))
+    assert result['R1']['text'] == source['text']
+    assert result['R1']['cache_provenance']['lookup'] == 'exact_pmid'
+    assert result['R1']['bibliographic_title_agreement'] == 'review_required_against_seed_citation'
+
+
+def test_cache_embedded_text_cannot_differ_from_pinned_rendition(tmp_path):
+    import run as runner
+    original = tmp_path / 'article.xml'; original.write_text('<article><body><p>Actual source.</p></body></article>')
+    text = tmp_path / 'article.txt'; text.write_text(runner.jats_text(original.read_bytes())[0])
+    source = {'pmid': '123', 'content_level': 'fulltext', 'text': 'Invented source passage.',
+              'path': str(text), 'sha256': runner.sha(text),
+              'original': {'path': str(original), 'sha256': runner.sha(original)}}
+    with pytest.raises(ValueError, match='registered rendition'):
+        runner.validate_cached_reference('123', source)
+
+
+def test_cache_original_pmid_is_not_taken_from_reference_list(tmp_path):
+    import run as runner
+    original = tmp_path / 'article.xml'
+    original.write_text('<article><front><article-meta><article-id pub-id-type="pmid">456</article-id>'
+                        '</article-meta></front><body><p>Actual source.</p></body>'
+                        '<back><ref-list><ref><pub-id pub-id-type="pmid">123</pub-id></ref></ref-list></back></article>')
+    source = {'pmid': '123', 'content_level': 'fulltext', 'text': runner.jats_text(original.read_bytes())[0],
+              'original': {'path': str(original), 'sha256': runner.sha(original)}}
+    with pytest.raises(ValueError, match='original article PMID'):
+        runner.validate_cached_reference('123', source)
+
+
+def test_cached_pdf_requires_registered_text_artifact(tmp_path):
+    import run as runner
+    original = tmp_path / 'article.pdf'; original.write_bytes(b'%PDF-1.7\nPublished PDF')
+    source = {'pmid': '123', 'content_level': 'fulltext', 'text': 'Unbound OCR rendition.',
+              'original': {'path': str(original), 'sha256': runner.sha(original)}}
+    with pytest.raises(ValueError, match='pinned derived text'):
+        runner.validate_cached_reference('123', source)
+
+
+def test_reference_cache_id_and_level_are_checked_during_acquisition(tmp_path):
+    import run as runner
+    inputs = tmp_path / 'inputs'; inputs.mkdir()
+    cache = tmp_path / 'cache.json'
+    runner.write(cache, {'format_version': 'atlas_reference_cache/1',
+                        'papers': {'123': {'pmid': '456', 'content_level': 'fulltext'}}})
+    runner.write(inputs / 'reference_cache_receipt.json', {'path': str(cache), 'sha256': runner.sha(cache)})
+    runner.write(inputs / 'sources_initial.json', {})
+    runner.write(inputs / 'bibliography.json', {})
+    with pytest.raises(ValueError, match='exact publication IDs'):
+        runner.acquire(inputs, SimpleNamespace(references=[]))
+
+
+def test_reference_cache_cannot_change_after_registration(tmp_path):
+    import run as runner
+    inputs = tmp_path/'inputs'; inputs.mkdir()
+    cache = tmp_path/'cache.json'; runner.write(cache, {'format_version': 'atlas_reference_cache/1', 'papers': {}})
+    runner.write(inputs/'reference_cache_receipt.json', {'path': str(cache), 'sha256': runner.sha(cache)})
+    runner.write(inputs/'sources_initial.json', {}); runner.write(inputs/'bibliography.json', {})
+    cache.write_text('{}')
+    with pytest.raises(ValueError, match='cache changed'):
+        runner.acquire(inputs, SimpleNamespace(references=[]))
+
+
 @pytest.mark.asyncio
 @pytest.mark.parametrize('author_role', ['analyse', 'author'])
 async def test_review_cycle_preserves_issues_for_fresh_reviewer_and_stops_at_cap(author_role):

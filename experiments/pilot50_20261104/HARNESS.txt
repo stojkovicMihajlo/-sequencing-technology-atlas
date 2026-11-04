@@ -1,0 +1,72 @@
+PILOT50 — 4 November 2026
+
+Purpose
+Produce one source-grounded pilot atlas of 50 declared method/version workflows,
+then trace cited contributions and publish separately reviewed relationships
+between existing pilot workflows. Compare fresh outputs with preserved earlier
+outputs. This is a family-enriched engineering pilot, not a held-out benchmark.
+
+Selection is fixed before model execution
+selection_candidates.json contains 50 targets, 49 base method names and 106
+source depictions. Multiple depictions of one target feed one extraction. Original
+iCLIP and the Huppertz protocol are explicitly separate versions. Related families
+increase the chance of useful comparisons but prescribe no positive edges.
+No previous extraction is passed to an extraction writer as evidence.
+
+Read/run order
+1. prepare.py: verify source custody, combine source depictions for each declared
+   scope, register cached primary full texts and try exact-PMID recovery for gaps.
+   Original paper/text hashes remain recorded. Previous-output references are
+   stored separately for later evaluation.
+2. run.py -> illumina.extraction.extract_registered_workflow: author, independent
+   reviewer, at most one correction + fresh review, then checked graph export.
+   Every target receives its own directory, exact prompts, source registry,
+   stage records, extraction.json, review.json and graph.json where admissible.
+3. history_stage.py -> citation_lineage_pilot/run.py: inspect the actual full
+   primary JATS paper, nominate/dispose bibliography references, retrieve cached
+   or newly acquired sources, author history claims, independently review.
+4. history_stage.py -> citation_lineage_pilot/pair_run.py: match cited publication
+   candidates to supported workflows already extracted in this pilot. The paired
+   author/reviewer checks exact method/version scope and before-to-after changes.
+   A PMID match only creates a comparison task. It never creates an ancestry edge.
+5. history_stage.py assembles accepted paired relationships with the workflow
+   graphs. Publication holds and refinement requests remain outside admitted edges.
+6. evaluation.py compares preserved earlier and fresh extractions against sources
+   with run labels concealed. Different-source and different-version comparisons
+   are flagged. One model assessment is not expert gold or causal improvement.
+
+Native launch
+launch.sbatch: Sherlock Qiu environment, dedicated existing atlas Codex sign-in,
+gpt-6.1-sol, xhigh, four concurrent workers. All native stages run in Slurm on CPUs.
+The 24-hour scheduler limit bounds the complete finite job; it is not a latency
+prediction. Worker calls retain existing sandbox/policy controls. No supervisors,
+new local model runs, forced positive edges or unbounded revision loops.
+
+Tracked outputs inside the new remote run directory
+state.json                         overall phase
+sources/manifest.json              exact source bundles and recoveries
+sources/primary_recovery.json      original-PMID recovery results
+extractions/CHECKLIST.csv           per-method extraction/review state
+extractions/atlas.json              supported workflow graph
+history/methods.json                eligible primary sources and per-method holds
+history/pair_candidates.json        citation-derived candidate comparisons
+history/graph.json                  connected pilot graph with reviewed links
+history/refinement_requests.json    missing distinctions; no silent graph edits
+evaluation/diagnostics.json         prior/new schema, custody, source and cost checks
+evaluation/state.json              source-grounded A/B outcomes and failures
+RESULT.json                        final stage summaries, not a blanket success
+
+Scientific boundaries
+A source-derived diagram is not a complete executable laboratory protocol.
+Missing full text and inadequate workflow detail are different failure reasons.
+The current citation parser requires JATS; a PDF may support extraction or pair
+review but cannot seed bibliography tracing here. Unconfirmed primary assignments
+hold only the affected method. Missing or changed registered evidence fails
+custody checks. If a relationship requires finer State/Operation distinctions,
+publication is held and a request records the existing extraction hash. Automatic
+refinement is not implemented in this pilot: a changed workflow must be separately
+extracted/reviewed and then its relationships reviewed again.
+
+Success will be reported as coverage, source/support holds, exact-version paired
+edges, rejected/withheld claims, refinement requests, baseline comparison findings,
+and latency/token usage. Completion of software execution alone is not success.

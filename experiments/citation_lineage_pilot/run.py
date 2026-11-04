@@ -20,6 +20,7 @@ import xml.etree.ElementTree as ET
 from genomics_discovery.execution.codex_worker import CodexWorker, assess_archived_attempt
 from genomics_discovery.illumina.extraction import (
     card_title, read, revalidate_completed, sha, source_excerpt, stage_images, verify_stage_inputs, write,
+    verify_registry_files,
 )
 from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jats_text, parse_pubmed
 from models import (
@@ -50,6 +51,52 @@ def bibliography(raw):
         for rid in cited & refs.keys():
             refs[rid]["contexts"].append(text)
     return refs
+
+
+def validate_reference_cache(cache):
+    if cache.get('format_version') != 'atlas_reference_cache/1' or not isinstance(cache.get('papers'), dict):
+        raise ValueError('Unrecognized registered reference cache')
+    for pmid, entry in cache['papers'].items():
+        if (not isinstance(pmid, str) or not pmid.isdigit() or str(entry.get('pmid')) != pmid
+                or entry.get('content_level') != 'fulltext'):
+            raise ValueError('Cache entries require exact publication IDs and full text')
+    return cache['papers']
+
+
+def validate_cached_reference(pmid, source):
+    """Bind reused text to registered bytes, not only to a self-declared PMID."""
+    verify_registry_files({pmid: source})
+    original = source.get('original', {})
+    path = Path(original.get('path', ''))
+    if not path.is_file() or sha(path) != original.get('sha256'):
+        raise ValueError('Cached primary original is absent or changed')
+    raw = path.read_bytes()
+    text_path = source.get('path') or original.get('text_path')
+    text_pin = source.get('sha256') if source.get('path') else original.get('text_sha256')
+    if text_path and text_pin:
+        text_file = Path(text_path)
+        if sha(text_file) != text_pin or text_file.read_text() != source.get('text'):
+            raise ValueError('Cached text differs from its registered rendition')
+    elif raw.startswith(b'%PDF-'):
+        raise ValueError('Cached PDF requires a pinned derived text artifact')
+    else:
+        rendition, _ = jats_text(raw)
+        if rendition != source.get('text'):
+            raise ValueError('Cached text differs from its original JATS rendition')
+    if not source.get('text', '').strip():
+        raise ValueError('Cached full text cannot be empty')
+    if not raw.startswith(b'%PDF-'):
+        tree = ET.fromstring(raw)
+        if local(tree) != 'article':
+            raise ValueError('Cached primary XML is not a JATS article')
+        # Only the article's own front matter identifies it; reference-list PMIDs
+        # must never be mistaken for the identity of this paper.
+        front = next((x for x in tree if local(x) == 'front'), None)
+        metadata = next((x for x in front if local(x) == 'article-meta'), None) if front is not None else None
+        own_pmids = {''.join(x.itertext()).strip() for x in metadata
+                     if local(x) == 'article-id' and x.get('pub-id-type') == 'pmid'} if metadata is not None else set()
+        if own_pmids and own_pmids != {pmid}:
+            raise ValueError('Cached original article PMID disagrees with requested reference')
 
 
 def prepare(args):
@@ -95,6 +142,10 @@ def prepare(args):
         "bibliography": {"content_level": "seed_reference_contexts", "text": json.dumps(refs, ensure_ascii=False, indent=2)},
     }
     write(inputs / "sources_initial.json", sources)
+    if getattr(args, 'source_cache', None):
+        validate_reference_cache(read(args.source_cache))
+        write(inputs / 'reference_cache_receipt.json', {'path': str(args.source_cache),
+            'sha256': sha(args.source_cache), 'policy': 'Exact PMID cache lookup; earlier summaries/extractions are not sources'})
     images = []
     for sid, item in registry.items():
         if item.get("kind") == "image":
@@ -118,8 +169,16 @@ def acquire(inputs, nominations):
     refs = read(inputs / "bibliography.json")
     output = inputs / "retrieval"
     output.mkdir()
+    receipt_path = inputs / 'reference_cache_receipt.json'
+    cache = {}
+    if receipt_path.exists():
+        cache_receipt = read(receipt_path)
+        cache_path = Path(cache_receipt['path'])
+        if sha(cache_path) != cache_receipt['sha256']:
+            raise ValueError('Registered reference cache changed before acquisition')
+        cache = validate_reference_cache(read(cache_path))
     pmids = sorted({refs[r.reference_id]["identifiers"].get("pmid")
-                    for r in nominations.references} - {None})
+                    for r in nominations.references} - {None} - set(cache))
     metadata, receipt = {}, None
     if pmids:
         url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" + urlencode(
@@ -131,6 +190,14 @@ def acquire(inputs, nominations):
     for nomination in nominations.references:
         ref = refs[nomination.reference_id]
         pmid = ref["identifiers"].get("pmid")
+        if pmid in cache:
+            cached = cache[pmid]
+            validate_cached_reference(pmid, cached)
+            sources[nomination.reference_id] = {**cached,
+                'bibliographic_title_agreement': 'review_required_against_seed_citation',
+                'cache_provenance': {'path': str(cache_path), 'sha256': sha(cache_path),
+                                     'lookup': 'exact_pmid', 'pmid': pmid}}
+            continue
         pub = metadata.get(pmid)
         if not pub:
             sources[nomination.reference_id] = {"content_level": "unavailable", "text": "",
@@ -364,6 +431,7 @@ def main():
         run.add_argument('--'+name, type=Path, required=True)
     run.add_argument('--record', required=True)
     run.add_argument('--paper', required=True)
+    run.add_argument('--source-cache', type=Path, help='Pinned primary-text cache prepared from registered source files')
     reuse = sub.add_parser('review-existing', help='Fresh review of completed unchanged research; no failed-run resumption')
     reuse.add_argument('--previous', type=Path, required=True)
     reuse.add_argument('--output', type=Path, required=True)

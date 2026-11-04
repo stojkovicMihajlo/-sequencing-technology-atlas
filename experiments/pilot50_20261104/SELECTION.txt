@@ -1,0 +1,112 @@
+50-method extraction and citation-history pilot: cohort selection
+4 November 2026. Status: engineering-selected targets, pending source preflight and native scope review.
+
+Exactly 50 scoped method/version targets are selected in selection_candidates.json.
+They cover 49 base method names and use 106 unique source depictions; those
+depictions are not 106 extraction jobs. Original iCLIP and the Huppertz protocol
+are separately scoped targets sharing a coarse diagram. A later paper
+may describe a separate scoped implementation even when it shares a name or paper
+with another target. Conversely repeated cards/posters must not become extra jobs.
+
+The user explicitly requested fresh extraction under the current contract and a
+comparison to earlier outputs. That is the reason for revisiting unchanged source
+records; original extractions and reviews remain preserved. Writer/reviewer input
+must include source content, not earlier model graphs as scientific evidence.
+
+Cohort
+1–20: Smart-seq, Smart-seq2, CEL-Seq, MARS-Seq, inDrop, Drop-seq, Quartz-Seq,
+Quartz-Seq2, snRNA-Seq, DroNc-seq, Nuc-Seq, Div-Seq, iCLIP (Huppertz protocol), SUPeR-Seq, Seq-Well,
+CITE-seq, ECCITE-seq, SPLiT-seq, sci-RNA-seq, MULTI-seq.
+21–25: DR-Seq, G&T-seq, scM&T-seq, scTrio-seq, scNMT-seq.
+26–34: HITS-CLIP, iCLIP, irCLIP, eCLIP, hiCLIP, PAR-CLIP, CLASH, TRIBE, PIP-Seq.
+35–38: SHAPE-Seq, SHAPE-MaP, icSHAPE, Frag-seq.
+39–45: GRO-Seq, PRO-Seq, PRO-cap, NET-Seq, mNET-Seq, Bru-Seq, BruChase-Seq.
+46–50: ATAC-seq, combinatorial-indexing scATAC-seq, microfluidic scATAC-seq,
+THS-seq, ChIPmentation.
+
+Why these targets
+This is an enriched development pilot, not a random or exhaustive atlas sample.
+It covers method versions, cell/nucleus variants, branching joint assays,
+compartment versus combinatorial attribution, capture versus mutation/endpoint
+readouts, nascent versus metabolic labeling and chromatin library construction.
+Related methods give the citation stage a plausible chance of finding an earlier
+method already extracted in the cohort. Selection does not establish which pairs
+actually have historical links, or require any particular edge to be returned.
+Do not put this list of candidate family relations into research prompts as
+expected positive answers. Preserve comparisons and precedents as non-history.
+
+Scope controls
+- Smart-seq is one target from its Smart/NanoCAGE/CAGEscan grouped source. No
+  companion methods are silently dispatched from that grouped source.
+- GRO-seq is one target from GRO/BRIC/Bru/BruChase. Bru and BruChase are separate
+  targeted units using their own source depictions, not aliases of GRO.
+- HITS-CLIP is scoped to the original Licatalosi2008 implementation, with the
+  Chi2009 Argonaute version contextual. The grouped card incorrectly lists a
+  protein-DNA ChIP paper, PMID17540862, as CLIP-Seq. That is not appropriate
+  primary support for the target RNA-protein method.
+- PAR-CLIP uses the poster's Hafner2010 source, PMID20371350, available as cached
+  fulltext. Its website card first lists PMID18158127, a2008 small-RNA library
+  paper. Preserve that source mismatch; do not use the first listed citation as
+  an automatic primary-paper selection rule.
+- PRO-seq and PRO-cap deliberately share PMID23430654 but have distinct scoped
+  workflows. Bru/BruChase likewise share the originating paper. Shared PMID is
+  not permission to merge implementations.
+- The two scATAC implementations are separate targets with different primary
+  papers. Generic poster labels alone are not used to assign extra scATAC rows.
+- Nuc-Seq here is RNA profiling of nuclei, not DNA nuc-seq/SNES. The extraction
+  reviewer must check its specific version against the snRNA-Seq target rather
+  than equating all nuclear RNA methods or assuming they are distinct by label.
+- Original iCLIP (PMID 20601959) and the Huppertz protocol (PMID 24184352)
+  are separately scoped targets. They share the same Illumina card/poster as
+  coarse depictions, while the protocol target explicitly uses its own primary
+  full text. The reviewer must verify the version and may hold unsupported
+  distinctions. This is an intentional version selection, not duplicate dispatch.
+  The existing irCLIP pilot cited the Huppertz implementation; including that
+  exact version tests whether the citation resolver locates the proper workflow.
+  This selection fact must not be fed to extraction or history agents as an
+  expected accepted edge.
+
+Sources and prior baselines
+The current census has 41/50 target primary papers registered as full text.
+The Huppertz iCLIP protocol is additionally cached with its original XML, text
+and paragraph blocks in the recent irCLIP history registry (source R16). Thus
+42/50 targets have a known full-text source binding before fresh remote preflight.
+Eight target methods rely on seven unique primaryPMIDs that remain abstract-only
+in all census rows:24056875,22939981,25915121,21610164,21642531,21248844,23345452.
+Bru/BruChase detailed protocol PMID23973811 is already fulltext. Recent history
+or older deep-extraction source packets may contain additional fulltexts; the
+census alone is not evidence those caches are absent. Primary recovery must check
+those before fetching again. Any recovered original must retain its real document
+hash, source location and content level; old summaries are not replacement papers.
+
+All 50 targets have an archived source-depiction baseline candidate. The Huppertz
+protocol does not have a verified earlier same-version extraction; its baseline
+is a shared depiction comparison only and must be excluded from a same-version
+improvement denominator. Eleven other targets also match a current reviewed
+workflow label with an exact recorded extraction hash; these
+are preferred comparison candidates after full implementation-scope checking.
+Three archived baselines are not supported: HITS-CLIP grouped record is held,
+SHAPE-seq and PRO-seq require revision. Those outcomes are intentionally retained
+as failures/holds, not removed from the denominator to inflate apparent progress.
+
+Baseline provenance includes the audited archive SHA256, the canonical serialized
+archive-record SHA256 and the original review's candidate hash. An archive record
+hash is NOT an original extraction file hash. Native preflight must read and pin
+the actual baseline files; missing original bytes must remain unestablished.
+Latest19 baseline entries additionally retain true original extraction byte hashes.
+
+Evaluation should compare the same scientific facts and implementation scope,
+not node counts or matching prose. Record changed source availability separately
+from prompt/review changes. If primary fulltext is added now, improved coverage
+cannot automatically be attributed solely to a better harness. Grouped baseline
+records need projection to the declared target scope before comparison.
+
+Checks performed locally
+50 unique method_id values and 50 distinct declared target scopes; all 106 chosen
+source IDs exist in the 478-row census. Two source IDs (the iCLIP card and its
+poster row) are intentionally assigned to two explicit publication-version
+targets. No other source ID is reused across targets. Each source retains its
+card/registry pointers. Metadata and baseline references were derived from the
+existing census, archived outputs and the current history source registry. This
+is not a new full-paper or image rereview, admission of scientific identity, or
+confirmation of remote source availability.

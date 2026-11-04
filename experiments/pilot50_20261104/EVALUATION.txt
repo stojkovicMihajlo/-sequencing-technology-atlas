@@ -1,0 +1,72 @@
+Pilot evaluation: measure improvement without rewarding verbosity or acceptance
+
+The unit is one scoped assay implementation. Source occurrences and related
+method names are not automatically matched baselines. Record the baseline selected
+before the new extraction, its exact artifact pins and the identity rationale.
+Keep baseline answers out of extraction author/reviewer contexts. They enter only
+the separate comparison stage after extraction.
+
+Inputs to evaluation.py
+  {"format_version":"atlas_pilot_comparison/1", "methods":[{
+    "method_id":"cohort identifier", "scope_target":"specified implementation",
+    "identity_match":{"status":"reviewed_same_implementation","rationale":"..."},
+    "baseline":{"attempt_directory":"...","artifact_pins":{"extraction.json":"...",
+      "review.json":"...","source_registry.json":"...","stages.json":"..."},"declared_status":"supported"},
+    "candidate":{"attempt_directory":"...","artifact_pins":{...},"declared_status":"..."}
+  }]}
+Missing baseline/candidate gives unpaired. Ambiguous grouped-method identity gives
+pending_identity. No result is silently dropped from the denominator.
+
+Functions
+build_baseline_inventory(census): enumerate existing source occurrences, never
+merge aliases or claim scientific identity.
+inspect_attempt(reference): recorded byte-hash checks, version-dispatched schema,
+source and review checks, declared outcomes, unresolved scopes, unknowns,
+corrections, source levels, optional-field coverage, stage latency and usage.
+compare_pair(row): diagnose paired source conditions and changes in mechanical
+results. Same-source means exact registered content/access levels, independent of
+path/source-ID changes. Added full text, changed renditions or diagram crops are
+visible confounders, not silently credited to better prompting.
+evaluate_manifest(path, output): report every selected case, including failure,
+unpaired and pending-identity outcomes. Never generates an improvement verdict.
+
+Source-grounded semantic comparison
+prepare_blinded_pair(row, output, seed): writes A/B candidates, union source
+registry and image registrations, with prior run labels/reviews excluded from the
+packet. A private receipt maps labels back to baseline/candidate. In native mode
+this receipt is held in host memory during the worker call and saved afterwards.
+This conceals labels, but different schemas/style may reveal provenance; do not
+claim rigorous blinding. Only a matching scientific scope supports comparison.
+
+evaluate_pair_native(row, output, worker=None, seed=0): one fresh, bounded Sherlock
+model session using gpt-6.1-sol/xhigh and the existing CodexWorker. It records exact
+prompt/schema/input hashes, native trace/usage and completion. No correction loop.
+The evaluator checks material/data identity, physical carrier, transformations,
+routing/order, scope, consequential omitted differences and source grounding.
+Each finding names affected records on both sides (or explicitly omitted content)
+and quotes registered sources or identifies an inspected diagram region.
+It returns A_better, B_better, mixed, equivalent or undetermined. Conflicting
+directional findings cannot become a simple winner. Different/uncertain scope
+requires undetermined. Exact quote/target checks do not prove entailment.
+
+Interpretation
+- Counts of States/Operations/Flows, optional fields, corrections and unknowns
+  are diagnostics. More steps, less uncertainty or an accepting first reviewer
+  is not a scientific improvement metric.
+- The comparison evaluator is a fallible model judgment, not independent expert
+  gold. Source-grounded findings make it inspectable; the overall verdict alone
+  is insufficient. Report important unchecked questions, not exhaustive accuracy.
+- A changed-source pair can compare output usefulness but cannot isolate the
+  harness. Same-source pairs still mix model variability and harness changes;
+  repeated matched conditions are needed for a causal harness-performance claim.
+- This source-enriched 50-method cohort is a purposeful development pilot, not an
+  unbiased estimate of accuracy over all sequencing technologies.
+- A native semantic evaluator does not modify or approve the extraction, assign
+  historical edges, or resolve canonical identity. Those remain separate gates.
+
+CLI (from repository root with PYTHONPATH=src)
+python -m experiments.pilot50_20261104.evaluation inventory CENSUS.json BASELINES.json
+python -m experiments.pilot50_20261104.evaluation report MANIFEST.json DIAGNOSTICS.json
+python -m experiments.pilot50_20261104.evaluation native ROW.json NEW_OUTPUT_DIR
+The native command is restricted to a Slurm allocation; no model call is made by
+the inventory, report, packet preparation, validation or software tests.
