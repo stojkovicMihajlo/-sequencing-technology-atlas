@@ -1,0 +1,262 @@
+CURRENT REVIEWED WORKFLOWS — 19 methods
+Each row gives declared inputs -> Operation -> declared outputs.
+Rows describe graph connections; independent branches are not an asserted serial execution order.
+The full evidence and typed State properties remain in current_atlas.json.
+
+
+DR-Seq
+The assigned Illumina DR-Seq schematic and its three repeated poster rows: joint genomic-DNA and poly(A)-mRNA sequencing from the same single cell, with barcoded Ad-1x reverse transcription, Ad-2 quasilinear co-amplification, and a sample split into separate genome-directed PCR/Ad-2-removal/library and RNA-derived second-strand-cDNA/IVT/library readouts. Primary full text resolves product identity and branch specificity. Neighboring methods and chemical legends are context; MALBAC-like amplification and small-RNA library preparation are components, not additional target methods.
+
+Single cell containing genomic DNA and poly(A) mRNA -> [Lyse the single cell] -> Single-cell lysate containing poly(A) mRNA and genomic DNA
+Single-cell lysate containing poly(A) mRNA and genomic DNA + Ad-1x reverse-transcription primers -> [Reverse-transcribe poly(A) mRNA with barcoded Ad-1x] -> RNA-derived single-stranded cDNA together with genomic DNA
+RNA-derived single-stranded cDNA together with genomic DNA + Ad-2 random-priming adapters -> [Quasilinearly co-amplify cDNA and genomic DNA with Ad-2] -> Co-amplified genomic-DNA-derived and cDNA-derived amplicon mixture
+Co-amplified genomic-DNA-derived and cDNA-derived amplicon mixture -> [Split the co-amplified sample into two aliquots] -> Co-amplified mixture aliquot directed to transcriptome preparation + Co-amplified mixture aliquot directed to genome preparation
+Co-amplified mixture aliquot directed to transcriptome preparation -> [Synthesize second-strand cDNA in the transcriptome aliquot] -> Transcriptome-branch mixture containing double-stranded cDNA templates
+Transcriptome-branch mixture containing double-stranded cDNA templates -> [Amplify RNA-derived cDNA by in vitro transcription] -> Amplified RNA (aRNA) product from RNA-derived cDNA
+Amplified RNA (aRNA) product from RNA-derived cDNA -> [Prepare a sequencing library from amplified RNA] -> DNA sequencing library prepared from amplified RNA
+Co-amplified mixture aliquot directed to genome preparation -> [Amplify the genome aliquot, remove Ad-2 and prepare a DNA library] -> Genome-directed DNA sequencing library containing genomic and cDNA-derived inserts
+DNA sequencing library prepared from amplified RNA -> [Sequence the RNA-derived DNA library] -> Transcriptome-branch sequence reads
+Genome-directed DNA sequencing library containing genomic and cDNA-derived inserts -> [Sequence the genome-directed DNA library] -> Genome-directed sequence reads with genomic and cDNA contributions
+
+G&T-seq
+The depicted G&T-seq implementation jointly represents genomic DNA and full-length poly(A) mRNA from one cell. Biotinylated oligo(dT)/streptavidin magnetic-bead capture and physical separation route bead-bound RNA to the named Smart-seq2 transcriptome block and genomic DNA to MDA, followed by separate sequencing readouts and matched RNA/genome analysis. Smart-seq2 is an embedded procedure. Broader WGA compatibility, adjacent DR-Seq, scM&T-seq and scTrio-seq rows, and standalone chemical legends do not instantiate additional target workflows. This is a schematic architecture, not a complete execution protocol.
+
+Cell suspension -> [Isolate a single cell] -> Isolated single cell
+Isolated single cell -> [Lyse the isolated cell] -> Single-cell lysate containing RNA and genomic DNA
+Single-cell lysate containing RNA and genomic DNA + Streptavidin magnetic beads bearing biotinylated oligo(dT) capture primers -> [Capture poly(A) RNA on magnetic beads] -> Lysate with bead-captured poly(A) RNA and unseparated genomic DNA
+Lysate with bead-captured poly(A) RNA and unseparated genomic DNA -> [Separate bead-bound RNA from genomic DNA] -> Separated bead-bound poly(A) RNA preparation + Separated genomic-DNA preparation
+Separated bead-bound poly(A) RNA preparation -> [Generate amplified transcript-derived cDNA with Smart-seq2] -> Amplified transcript-derived cDNA preparation
+Separated genomic-DNA preparation -> [Amplify genomic DNA with MDA] -> MDA-amplified genomic-DNA preparation
+Amplified transcript-derived cDNA preparation -> [Sequence the transcriptome branch] -> Transcriptome-branch sequence reads
+MDA-amplified genomic-DNA preparation -> [Sequence the genome branch] -> Genome-branch sequence reads
+Transcriptome-branch sequence reads + Genome-branch sequence reads -> [Align and integrate matched RNA and genome sequences] -> Matched single-cell RNA/genome sequence analysis
+
+scM&T-seq
+Assigned Illumina scM&T-seq schematic: joint transcriptome and genome-wide DNA-methylome profiling from one isolated cell, using streptavidin magnetic-bead poly(A) RNA capture, physical RNA/DNA separation, a Smart-seq2 cDNA-library branch, and a distinct scBS-seq bisulfite-DNA-library branch. Smart-seq2 and scBS-seq are embedded components. The adjacent scMT-seq/RRBS, G&T-seq, sci-CAR, Div-Seq and SCRB-Seq rows and the separate chemical legend are outside this target.
+
+Cell suspension -> [Isolate a single cell] -> Isolated single cell
+Isolated single cell -> [Lyse the isolated cell] -> Single-cell lysate containing RNA and genomic DNA
+Single-cell lysate containing RNA and genomic DNA + Streptavidin magnetic beads carrying mRNA capture primers -> [Capture poly(A) RNA on streptavidin magnetic beads] -> Lysate with bead-captured poly(A) RNA and co-present genomic DNA
+Lysate with bead-captured poly(A) RNA and co-present genomic DNA -> [Physically separate bead-bound RNA and genomic DNA] -> Separated bead-bound poly(A) RNA fraction + Separated single-cell genomic DNA fraction
+Separated bead-bound poly(A) RNA fraction -> [Generate the transcript-derived cDNA library with Smart-seq2] -> Transcript-derived cDNA sequencing library
+Separated single-cell genomic DNA fraction -> [Prepare the scBS-seq bisulfite DNA library] -> Single-cell bisulfite-derived DNA sequencing library
+Transcript-derived cDNA sequencing library -> [Sequence the transcript-derived cDNA library] -> Sequence reads from the transcript-derived cDNA library
+Single-cell bisulfite-derived DNA sequencing library -> [Sequence the bisulfite-derived DNA library] -> Sequence reads from the bisulfite-derived DNA library
+Sequence reads from the transcript-derived cDNA library -> [Align transcript-derived reads] -> Aligned transcript-derived reads
+Sequence reads from the bisulfite-derived DNA library -> [Align bisulfite reads and obtain methylation calls] -> Aligned bisulfite reads and cytosine methylation calls
+
+Hi-SCL
+Hi-SCL RNA-seq implementation depicted in the three assigned Illumina rows: separate soluble cell-barcode oligonucleotide droplets and cell-lysis droplets are fused with RT-reagent supply; in-droplet oligo(dT)-primed barcoded cDNA synthesis precedes bulk library preparation and sequencing. The catalogue lack-of-UMI limitation is retained. Neighboring methods, associated kits and unshown adaptations are outside scope.
+
+Soluble barcoded DNA oligonucleotides -> [Insert soluble barcode oligonucleotides into droplets] -> Droplets containing soluble cell-barcode oligonucleotides
+Cell suspension + Cell-lysis buffer -> [Load cells with lysis buffer into droplets and lyse] -> Droplets containing single-cell lysates
+Droplets containing single-cell lysates + Droplets containing soluble cell-barcode oligonucleotides + RT enzyme-containing buffer -> [Fuse barcode and cell-lysate droplets while adding RT buffer] -> Fused droplets with cell lysate, barcoded primers and RT reagents
+Fused droplets with cell lysate, barcoded primers and RT reagents -> [Pool the intact fused droplets] -> Pooled intact droplets containing RT reaction mixtures
+Pooled intact droplets containing RT reaction mixtures -> [Synthesize barcoded cDNA and prepare an amplified library] -> Pooled amplified library of cell-barcoded cDNA
+Pooled amplified library of cell-barcoded cDNA -> [Sequence the cell-barcoded cDNA library] -> Sequence reads from cell-barcoded cDNA
+
+inDrop
+The inDrop single-cell poly(A)+ mRNA schematic shared by the website and the inDrop rows of two posters: hydrogel microspheres deliver photocleavable barcoded poly-T primers, followed by shared cell/RT compartments, UV release, intact-droplet collection, a broad cDNA synthesis/amplification block and library sequencing. Primary-paper co-encapsulation resolves catalogue combination/fusion wording within this one implementation. The adjacent Hi-SCL, DR-Seq and Nuc-Seq rows and the separate right-hand chemical legend are outside scope. The oligo-attachment illustration defines prepared bead material, not an extracted bead-synthesis protocol. CEL-Seq is a cited library-preparation component, not an additional target method.
+
+Single-cell suspension + Hydrogel microspheres bearing photocleavable barcoded primers + Lysis buffer + Reverse-transcription reagent mixture -> [Co-compartmentalize cells, barcoded microspheres and RT/lysis reagents] -> Shared droplets containing cell-derived material and primer-bearing microspheres
+Shared droplets containing cell-derived material and primer-bearing microspheres -> [UV-release the microsphere-linked primers] -> Droplets containing released barcoded primers and cellular mRNA
+Droplets containing released barcoded primers and cellular mRNA -> [Collect the intact droplets] -> Collected intact droplets with mRNA and released barcoded primers
+Collected intact droplets with mRNA and released barcoded primers -> [Synthesize barcoded cDNA and amplify the library] -> Amplified sequenceable DNA library carrying mRNA-derived sequences and cell barcodes
+Amplified sequenceable DNA library carrying mRNA-derived sequences and cell barcodes -> [Sequence the barcoded library] -> Sequence reads from the barcoded mRNA-derived library
+
+MARS-Seq
+The MARS-Seq row only: well-based single-cell mRNA profiling with FACS isolation, early oligo(dT)/UMI/partial-T7 priming and first reverse transcription, exonuclease-I primer removal, pooling and second-strand cDNA synthesis, transcriptional RNA amplification, DNase removal of DNA, RNA fragmentation, RNA-to-ssDNA adapter ligation, a further reverse transcription, and PCR/purification to P5/P7 cDNA. The three registered drawings show the same single route without an alternative branch. The catalogue supplies early preparation and the omitted transcription interface; the primary full-text body establishes FACS, pooled labeled processing, and molecular/cellular/plate tags. Cellular/plate tag placement, fragment-retention mechanism, and strand-information claims remain bounded uncertainties. Neighboring grouped Digital RNA/HiRes-Seq/FREQ-Seq/RNAtag-Seq, Quartz-Seq, and the chemical panel are outside this target.
+
+Cells presented for single-cell sorting -> [Isolate single cells by FACS] -> Single cells isolated in separate wells
+Single cells isolated in separate wells -> [Lyse the isolated cells] -> Separate single-cell lysates containing mRNA
+Separate single-cell lysates containing mRNA + Oligo(dT) reverse-transcription primer with UMI and partial T7 promoter -> [Add the tagged oligo(dT) primer and reverse-transcribe mRNA] -> First-strand cDNA preparations in separate wells
+First-strand cDNA preparations in separate wells -> [Remove leftover reverse-transcription primers with exonuclease I] -> Exonuclease-treated first-strand cDNA preparations in separate wells
+Exonuclease-treated first-strand cDNA preparations in separate wells -> [Pool the cellular lysates] -> Pooled first-strand cDNA-containing lysates
+Pooled first-strand cDNA-containing lysates -> [Synthesize the second cDNA strand] -> Pooled double-stranded cDNA templates
+Pooled double-stranded cDNA templates -> [Amplify RNA by in vitro transcription] -> Amplified RNA with DNA templates in the same preparation
+Amplified RNA with DNA templates in the same preparation -> [Remove DNA templates with DNase I] -> DNase-treated amplified RNA preparation
+DNase-treated amplified RNA preparation -> [Fragment the amplified RNA] -> Fragmented amplified RNA preparation
+Fragmented amplified RNA preparation + Single-stranded DNA adapter with partial read-1 sequence -> [Ligate the partial read-1 ssDNA adapter to RNA fragments] -> RNA fragments ligated to an ssDNA adapter
+RNA fragments ligated to an ssDNA adapter -> [Reverse-transcribe the adapter-ligated RNA] -> cDNA prepared from adapter-ligated RNA
+cDNA prepared from adapter-ligated RNA -> [PCR-amplify and purify the cDNA library] -> Purified P5/P7 barcoded cDNA library
+Unresolved details:
+What is the exact tag-sequence layout through transcription, and at what stages are the cellular and plate-level tags introduced? The primary body establishes all three barcode levels, but the row labels only UMI/T7 and the registered text omits the supplementary oligo layout. The drawing repeats red/green segments after RNA transcription without specifying the transcribed span of the green T7-labeled primer region. A registered primary supplementary oligo map and library-preparation passage is needed before assigning exact RNA tag identities or cellular/plate tag incorporation to a particular operation or physical segment.
+How does the scoped preparation retain the tag-bearing RNA fragments for the final library when untagged RNA pieces are also depicted? The row continues with a tagged ligation product but does not specify a selection or the fate of other pieces. A registered primary passage on adapter/primer specificity and fragment retention is needed to add that mechanism or any separated branch.
+Does this RNA-amplification/RNA-fragmentation MARS-Seq implementation retain recoverable transcript-strand information? The catalogue claims fragmentation eliminates it, whereas the cited review explains a loss via cDNA fragmentation across a multi-method discussion. The actual row explicitly fragments RNA. The registered primary body lacks the supplementary chemistry/read orientation needed to resolve that claim; acquire that registered passage before asserting strand loss or strand preservation.
+
+SCRB-Seq
+The SCRB-Seq row only: well-based FACS isolation of single cells, poly(A)+ mRNA priming with a poly(T)/UMI/well-barcode oligo, template-switching cDNA generation, cDNA pooling, amplification and modified transposon/Nextera XT library preparation for 3-prime digital expression. The website row and matching poster rows are repeat depictions of this assigned schematic, not evidence of interchangeable complete implementations. Adjacent Nuc-Seq, Div-Seq, scM&T-seq and smMIP rows, modified-SCRB applications and kit names do not add targets. The diagram stops at a cDNA material product.
+
+Cell suspension -> [Sort single cells into wells by FACS] -> Single cells in separate wells
+Single cells in separate wells -> [Lyse cells and make RNA available] -> RNA preparations from individual lysed cells
+RNA preparations from individual lysed cells + Barcoding oligo(dT) primer -> [Hybridize the barcoding primer to poly(A)+ mRNA] -> Single-cell RNA with annealed barcoding primer
+Single-cell RNA with annealed barcoding primer -> [Generate barcoded cDNA by template-switching reverse transcription] -> Barcoded cDNA in separate wells
+Barcoded cDNA in separate wells -> [Pool cDNA from the single-cell wells] -> Pooled barcoded cDNA
+Pooled barcoded cDNA -> [Amplify pooled cDNA and prepare the sequencing library] -> SCRB-Seq cDNA fragment library
+
+eCLIP
+The selected Illumina eCLIP RNase-I/RNP-capture and barcoded-cDNA implementation: the isolated row and the middle eCLIP poster row, interpreted with the registered method description and Van Nostrand et al. full text. One retained material route maps UV-crosslinked RBP-associated RNA fragments into a paired-end DNA library. The catalogue-described post-RT ssDNA-adapter/PCR/sequencing continuation is included; N5/N10 are within-protocol identifier options. Neighboring miR-CLIP/irCLIP rows, standalone chemical legends, catalogue kits and unshown primary-paper control branches are outside this extraction.
+
+RNA–protein complexes in the starting sample -> [UV crosslink RNA–protein interactions and lyse the sample] -> UV-crosslinked RNA–protein preparation after lysis
+UV-crosslinked RNA–protein preparation after lysis -> [Digest RNA with RNase I] -> RNase I-fragmented, UV-crosslinked RNA–protein complexes
+RNase I-fragmented, UV-crosslinked RNA–protein complexes + Antibody-bearing magnetic beads for RBP capture -> [Immunoprecipitate fragmented RNA–protein complexes] -> Immunoprecipitated RNA–protein complexes on antibody-bearing capture support
+Immunoprecipitated RNA–protein complexes on antibody-bearing capture support + RNA 3′ adapter for on-bead ligation -> [Dephosphorylate RNA and ligate its 3′ adapter on the captured complexes] -> Captured RNA–protein complexes with RNA 3′ adapter ligated
+Captured RNA–protein complexes with RNA 3′ adapter ligated -> [Purify, digest protein with proteinase K and extract RNA] -> Extracted RNA fragments bearing the RNA 3′ adapter after proteinase K digestion
+Extracted RNA fragments bearing the RNA 3′ adapter after proteinase K digestion -> [Reverse-transcribe recovered RNA into cDNA] -> cDNA copied from the recovered adapter-ligated RNA fragments
+cDNA copied from the recovered adapter-ligated RNA fragments + Single-stranded DNA adapter with an N5 or N10 random identifier -> [Ligate an N5/N10-bearing ssDNA adapter to the cDNA 3′ end] -> cDNA fragments with the random-identifier ssDNA adapter ligated at their 3′ ends
+cDNA fragments with the random-identifier ssDNA adapter ligated at their 3′ ends -> [PCR-amplify adapter-tagged cDNA into the eCLIP library] -> Amplified eCLIP DNA library representing captured RNA fragments
+Amplified eCLIP DNA library representing captured RNA fragments -> [Sequence the eCLIP DNA library with paired-end reads] -> Paired-end eCLIP sequence reads
+Unresolved details:
+What exactly does the diagram’s Random oligo label denote, and where are P5/P7 sequences installed in this implementation? The registered primary main text resolves the post-RT N5/N10 adapter ligation but does not identify the RT primer or complete oligonucleotide layout. To resolve the panel literally, acquire and register the corresponding Supplementary Protocol 1 RT/oligonucleotide passage and its adapter map. The present architecture therefore records RNA-to-cDNA conversion without assigning random priming or a complete P5/P7 arrangement to that step.
+
+Frag-seq
+Schematic architecture of P1 fragmentation sequencing for in vitro RNA structure probing: the P1-treated lane, untreated endogenous 5′-phosphate control, and kinase-treated endogenous 5′-OH control remain three parallel preparations through three separate cDNA products. Both supplied Illumina depictions identify the starting material as in vitro folded polyA RNA; this diagram-defined input is retained. The registered original implementation instead reports mouse nuclear RNA and 20–100-nt library fragments, not a demonstrated polyA-selected implementation. Its end-dependent library-entry chemistry clarifies the schematic, while its size isolation, PCR, barcoding, pooling and ABI SOLiD3 sequencing are source-specific context and are not added as depicted operations. The leftmost Frag-seq hairpin is a method icon; neighboring PARTE and CapSeq rows are outside scope.
+
+In vitro folded polyA RNA -> [Digest folded RNA with nuclease P1] -> P1-treated RNA fragment preparation
+In vitro folded polyA RNA -> [Retain the untreated endogenous 5′-phosphate control] -> Untreated RNA preparation in the endogenous 5′-phosphate control lane
+In vitro folded polyA RNA -> [Retain RNA for the endogenous 5′-OH control] -> Untreated RNA preparation entering the endogenous 5′-OH control lane
+Untreated RNA preparation entering the endogenous 5′-OH control lane -> [Phosphorylate endogenous 5′-OH RNA ends with T4 kinase] -> Kinase-treated endogenous-break control RNA preparation
+P1-treated RNA fragment preparation -> [Prepare cDNA from P1-treated RNA] -> P1-treatment cDNA library
+Untreated RNA preparation in the endogenous 5′-phosphate control lane -> [Prepare cDNA from the untreated endogenous-phosphate control] -> Untreated endogenous 5′-phosphate-control cDNA library
+Kinase-treated endogenous-break control RNA preparation -> [Prepare cDNA from the kinase-treated control] -> Kinase-treated endogenous-break-control cDNA library
+
+GMUCT 2.0
+GMUCT 2.0 only: capture of uncapped/cleaved polyadenylated RNA with ligatable free 5′ monophosphates, 5′ RNA-adapter ligation, a text-reported second poly(A) selection, adapter-bearing random-hexamer RT and PCR indexing to an indexed cDNA library. The upper GMUCT 1.0 row and cropped PARE row are context, not target workflows. The yellow-highlighted RNA icon identifies the target; it is not an additional degradation operation. No 1.0 oligo-dT/cDNA-fragmentation route or unshown application workflow is imported.
+
+Degraded RNA preparation containing capped RNA and uncapped poly(A) target fragments -> [Select poly(A) RNA] -> Poly(A)-selected RNA preparation containing capped and uncapped RNAs
+Poly(A)-selected RNA preparation containing capped and uncapped RNAs + 5′ RNA adapter reagent -> [Ligate a 5′ RNA adapter to ligatable uncapped RNA] -> RNA preparation after selective 5′ adapter ligation
+RNA preparation after selective 5′ adapter ligation -> [Repeat poly(A) RNA selection after ligation] -> RNA preparation after 5′ adapter ligation and a second poly(A) selection
+RNA preparation after 5′ adapter ligation and a second poly(A) selection + Random-hexamer reverse-transcription primer with a 5′ adapter extension -> [Prime with adapter-bearing random hexamers and reverse-transcribe] -> cDNA preparation containing target-derived strands flanked by adapter sequences
+cDNA preparation containing target-derived strands flanked by adapter sequences -> [PCR-amplify the adapter-flanked cDNA and add a sequencing index] -> Indexed adapter-flanked cDNA library representing captured uncapped or cleaved poly(A) RNAs
+Unresolved details:
+The diagrams still show capped, unadapted poly(A) RNA at RT, while the catalogue says the second poly(A) selection purifies desired mRNA away from unligated RNA. The registered primary abstract does not describe this cleanup. Which species are retained and rejected, and does this step distinguish ligation status among polyadenylated RNAs? Acquire and register the GMUCT 2.0 full-text post-ligation poly(A)-selection passage before resolving that specificity. The present graph records the reported repeat selection and does not assert complete removal of unligated poly(A) RNA.
+
+hiCLIP
+The assigned hiCLIP schematic: in vivo RBP-associated duplex capture by UV254 crosslinking, partial RNase digestion, immunoprecipitation, cloning/linker RNA-adapter ligation, linker deblocking, second-arm joining, proteinase K/RNA extraction, cDNA sequencing and paired-arm mapping. Same-RNA and different-RNA origins share the depicted route and are retained as mapping outcomes; their icons do not establish separate physical processing branches or a pooling step. The primary STAU1 implementation resolves adapter chemistry and the broad sequencing/mapping interfaces, without restricting the schematic’s generic RBP label to STAU1 or asserting applicability to every RBP. The left target icon is descriptive; green RNase, antibody and protease icons denote participants in actions, not additional transformations. Only the middle hiCLIP row of the poster applies; adjacent methods and chemical legend are outside scope. iCLIP names an embedded cDNA-library component, not a second target method.
+
+RBP-bound RNA duplexes of same-RNA or different-RNA origin -> [UV crosslink RNA to RBP] -> UV-crosslinked RBP–RNA duplex complexes
+UV-crosslinked RBP–RNA duplex complexes -> [Partially digest unprotected RNA] -> Partially RNase-digested, UV-crosslinked RBP–RNA duplex complexes
+Partially RNase-digested, UV-crosslinked RBP–RNA duplex complexes -> [Immunoprecipitate RBP–RNA complexes] -> Immunocaptured, partially digested RBP–RNA duplex complexes
+Immunocaptured, partially digested RBP–RNA duplex complexes + Prepared hiCLIP cloning and linker RNA adapters -> [Ligate cloning and linker adapters] -> Adapter-ligated, immunocaptured RBP–RNA duplex preparation
+Adapter-ligated, immunocaptured RBP–RNA duplex preparation -> [Remove linker 3′ phosphate and phosphorylate RNA 5′ ends] -> Linker-deblocked RBP–RNA duplex preparation with phosphorylated RNA 5′ ends
+Linker-deblocked RBP–RNA duplex preparation with phosphorylated RNA 5′ ends -> [Ligate the second RNA arm through the linker] -> RBP-associated RNA preparation containing linker-joined duplex-arm hybrids
+RBP-associated RNA preparation containing linker-joined duplex-arm hybrids -> [Digest protein with proteinase K and extract RNA] -> Proteinase K-treated, extracted RNA containing linker-joined duplex-arm hybrids
+Proteinase K-treated, extracted RNA containing linker-joined duplex-arm hybrids -> [Prepare the cDNA library and sequence] -> hiCLIP cDNA-library sequence reads
+hiCLIP cDNA-library sequence reads + Reference RNA and genome sequences for arm alignment -> [Map the two hybrid-read arms and classify their RNA origins] -> Mapped hiCLIP hybrid-arm pairs with same-RNA and different-RNA classifications
+
+HiTS-RAP
+HiTS-RAP Ter/Tus stalled-transcription implementation for sequence-indexed RNA–protein affinity profiling on an Illumina flowcell. DNA templates are sequenced, regenerated as dsDNA, Tus-bound, and transcribed into polymerase-tethered RNA displays; fluorescent protein binding is scanned at the sequenced clusters. The terminal depicted readout is fluorescence, while DNA sequencing supplies the RNA sequence index.
+
+RNA-encoding target DNA -> [Prepare libraries, sequence DNA and remove the sequencing-generated strand] -> Sequenced single-stranded DNA templates attached to the flowcell + DNA sequence reads indexed by flowcell cluster
+Sequenced single-stranded DNA templates attached to the flowcell + DNA regeneration primer bearing the Ter-labeled region -> [Hybridize the DNA regeneration primer] -> Flowcell DNA templates hybridized to regeneration primers
+Flowcell DNA templates hybridized to regeneration primers + Klenow and unmodified DNA nucleotides -> [Synthesize the second DNA strand with Klenow and unmodified nucleotides] -> Regenerated double-stranded DNA templates on the flowcell
+Regenerated double-stranded DNA templates on the flowcell + Escherichia coli replication terminator protein Tus -> [Add Tus and bind the DNA ter site] -> Tus-bound double-stranded DNA templates on the flowcell
+Tus-bound double-stranded DNA templates on the flowcell + T7 RNA polymerase and RNA nucleotide substrates -> [Transcribe RNA with T7 polymerase and halt at Tus–ter] -> Flowcell DNA–Tus–halted T7 polymerase complexes displaying RNA transcripts
+Flowcell DNA–Tus–halted T7 polymerase complexes displaying RNA transcripts + Fluorescently labeled target protein -> [Bind fluorescently labeled target protein to displayed RNA] -> Flowcell RNA display with bound fluorescent target protein
+Flowcell RNA display with bound fluorescent target protein -> [Scan the flowcell for protein-binding fluorescence] -> Cluster-resolved protein-binding fluorescence measurements
+
+ICE
+The assigned ICE schematic: paired untreated and acrylonitrile-treated RNA arms, with inosine converted to N1-cyanoethylinosine in the treatment arm, separate RT/PCR blocks, and sequencing of the resulting RNA-derived cDNA as stated in the accompanying method description. Only the ICE row of the poster is in scope. The diagram establishes the architecture; the Sakurai 2010 primary abstract supports the named cyanoethylation/RT principle, while the NGS extension is supported here by the secondary catalogue. This record does not equate all ICE and ICE-seq implementations.
+
+RNA preparation containing inosine-bearing fragments + Acrylonitrile reagent -> [Retain untreated control and cyanoethylate the treatment arm] -> Untreated control RNA + Acrylonitrile-treated RNA
+Untreated control RNA -> [Reverse transcription and PCR of untreated RNA] -> Amplified cDNA from untreated RNA
+Acrylonitrile-treated RNA -> [Reverse transcription and PCR of treated RNA] -> Amplified cDNA from treated RNA
+Amplified cDNA from untreated RNA -> [Deep sequence control cDNA] -> Sequence reads from control cDNA
+Amplified cDNA from treated RNA -> [Deep sequence treated cDNA] -> Sequence reads from treated cDNA
+Unresolved details:
+The registered primary evidence is only the Sakurai 2010 abstract. To independently verify how N1-cyanoethylinosine-dependent RT inhibition is converted into site-level differential sequencing representation in this NGS implementation, acquire and register the relevant methods/figure passages from the cited Sakurai 2014 or Suzuki 2015 ICE-seq publication. The current record retains the catalogue-supported paired-arm schematic and does not assert unshown endpoints, efficiency or calling rules.
+
+icSHAPE
+In vivo icSHAPE with NAI-N3 acylation, DIBO-biotin click tagging, poly(A)+ RNA recovery, fragmentation/3′-adapter preparation, RT-stop cDNA recovery, streptavidin selection and cDNA-library sequencing. The main image and only the icSHAPE poster row depict this route; the standalone left hairpin identifies the assay, and two RNA icons illustrate a population rather than independently routed branches. Separately processed NAI-N3 and DMSO reference arms are retained from the primary protocol. Broad preparation and readout blocks clarify the declared interfaces without reconstructing a laboratory recipe. The neighboring 1M7 SHAPE-Seq and DMS/CIRS-seq rows and in vitro/ex vivo adaptations are outside this implementation.
+
+Living cells containing folded RNA (NAI-N3 arm) -> [Acylate flexible RNA in living cells with NAI-N3] -> NAI-N3-treated cells containing RNA
+NAI-N3-treated cells containing RNA -> [Isolate and poly(A)-select RNA] -> Isolated poly(A)+ RNA from NAI-N3-treated cells
+Isolated poly(A)+ RNA from NAI-N3-treated cells -> [Tag NAI-N3-modified RNA with DIBO-biotin] -> DIBO-biotin-tagged poly(A)+ RNA preparation (NAI-N3 arm)
+DIBO-biotin-tagged poly(A)+ RNA preparation (NAI-N3 arm) -> [Fragment, end-repair and ligate RNA 3′ adapters] -> Fragmented, end-repaired, 3′-adapter-ligated RNA (NAI-N3 arm)
+Fragmented, end-repaired, 3′-adapter-ligated RNA (NAI-N3 arm) -> [Reverse-transcribe adapter-ligated RNA] -> RNA-template-associated first-strand cDNA (NAI-N3 arm)
+RNA-template-associated first-strand cDNA (NAI-N3 arm) + Streptavidin bead aliquot for the NAI-N3 arm -> [Capture RNA-associated cDNA on streptavidin beads] -> Bead-bound biotinylated RNA with associated cDNA (NAI-N3 arm)
+Bead-bound biotinylated RNA with associated cDNA (NAI-N3 arm) -> [Release cDNA from captured RNA] -> Released first-strand cDNA (NAI-N3 arm)
+Released first-strand cDNA (NAI-N3 arm) -> [Size-select, circularize and amplify cDNA] -> Amplified cDNA sequencing library (NAI-N3 arm)
+Amplified cDNA sequencing library (NAI-N3 arm) -> [Sequence the cDNA library] -> Sequence reads from the NAI-N3 cDNA library
+Living cells containing folded RNA (DMSO mock arm) -> [Mock-treat cells with DMSO] -> DMSO mock-treated cells containing RNA
+DMSO mock-treated cells containing RNA -> [Isolate and poly(A)-select RNA] -> Isolated poly(A)+ RNA from DMSO mock-treated cells
+Isolated poly(A)+ RNA from DMSO mock-treated cells -> [Process mock RNA through the DIBO-biotin reaction] -> DIBO-biotin-processed poly(A)+ RNA (DMSO arm)
+DIBO-biotin-processed poly(A)+ RNA (DMSO arm) -> [Fragment, end-repair and ligate RNA 3′ adapters] -> Fragmented, end-repaired, 3′-adapter-ligated RNA (DMSO mock arm)
+Fragmented, end-repaired, 3′-adapter-ligated RNA (DMSO mock arm) -> [Reverse-transcribe adapter-ligated RNA] -> RNA-template-associated first-strand cDNA (DMSO mock arm)
+RNA-template-associated first-strand cDNA (DMSO mock arm) + Streptavidin bead aliquot for the DMSO mock arm -> [Capture RNA-associated cDNA on streptavidin beads] -> Bead-bound biotinylated RNA with associated cDNA (DMSO mock arm)
+Bead-bound biotinylated RNA with associated cDNA (DMSO mock arm) -> [Release cDNA from captured RNA] -> Released first-strand cDNA (DMSO mock arm)
+Released first-strand cDNA (DMSO mock arm) -> [Size-select, circularize and amplify cDNA] -> Amplified cDNA sequencing library (DMSO mock arm)
+Amplified cDNA sequencing library (DMSO mock arm) -> [Sequence the cDNA library] -> Sequence reads from the DMSO mock cDNA library
+Sequence reads from the NAI-N3 cDNA library + Sequence reads from the DMSO mock cDNA library -> [Interpret treated and mock cDNA reads as RNA reactivity] -> Per-nucleotide in vivo RNA-flexibility scores
+Unresolved details:
+The registered 26878240 source is abstract-only and does not name icSHAPE; the catalogue identifies a 7SK application. Its full-text assay passage would be needed to verify that application’s relationship to this particular in vivo implementation. It remains unassigned background and is not used to establish the architecture.
+
+irCLIP
+The assigned standalone irCLIP schematic and middle irCLIP poster row: native RNA–protein binding-site mapping through UV254 capture, IP, on-bead RNase A/I-labeled trimming, IR800-biotin adapter ligation, gel/nitrocellulose/proteinase K recovery, RNA-derived cDNA preparation and circularization/PCR. Infrared visualization supports recovery/detection; the sequencing carrier is DNA. The left assay icon identifies the method; the standalone adapter is a reagent specification. Adjacent eCLIP/PAR-CLIP rows, CMCT legend, catalogue Other versions, and unshown analysis are outside scope.
+
+Native RNA–protein complexes in biological input -> [UV254 crosslink, lyse and fragment] -> UV254-crosslinked RNA–protein complexes in fragmented lysate
+UV254-crosslinked RNA–protein complexes in fragmented lysate -> [Immunoprecipitate RNA–protein complexes] -> Immunoprecipitated UV-crosslinked RNA–protein complexes on beads
+Immunoprecipitated UV-crosslinked RNA–protein complexes on beads -> [Trim captured RNA on beads] -> On-bead nuclease-trimmed UV-crosslinked RNA–protein complexes
+On-bead nuclease-trimmed UV-crosslinked RNA–protein complexes + Preadenylated IR800-biotin DNA ligation adapter -> [Dephosphorylate and ligate the RNA 3′ adapter] -> Bead-captured RNA–protein complexes with 3′ IR800-biotin DNA adapter
+Bead-captured RNA–protein complexes with 3′ IR800-biotin DNA adapter -> [Resolve, blot and recover RNA by proteinase K digestion] -> Recovered adapter-ligated RNA–peptide fragments
+Recovered adapter-ligated RNA–peptide fragments -> [Reverse-transcribe and affinity-purify cDNA] -> Released RNA-derived cDNA prepared for circularization
+Released RNA-derived cDNA prepared for circularization -> [Circularize cDNA and PCR-amplify the library] -> PCR-amplified RNA-derived DNA sequencing library
+
+miCLIP-m6A
+Anti-m6A antibody-crosslinking miCLIP-m6A architecture. The two supplied catalogue diagrams depict a common fragmented-RNA → antibody binding → UV crosslinking → immunoprecipitation → RT-truncation/cDNA route. The registered Linder full text and method description resolve the intervening iCLIP RNA recovery and library continuation, and support two separately retained antibody preparations: SySy-associated truncation/CITS and Abcam-associated substitution/CIMS. These are readout branches within this single named target, not additional target methods or pooled libraries. CITS also supports m6Am mapping. The catalogue UV365 labels conflict with primary UV254 and are retained with attribution. Input RNA may be purified total RNA or isolated mRNA in the supported implementations; mRNA isolation is not imposed on the total-RNA route. Adjacent poster assays and the NSun2/m5C namesake are excluded.
+
+Purified cellular RNA for miCLIP -> [Fragment purified RNA] -> Fragmented cellular RNA
+Fragmented cellular RNA + SySy anti-m6A antibody -> [Bind SySy anti-m6A antibody to fragmented RNA] -> Fragmented RNA incubated with SySy anti-m6A antibody
+Fragmented RNA incubated with SySy anti-m6A antibody -> [UV-crosslink antibody-RNA contacts] -> SySy antibody-crosslinked RNA preparation
+SySy antibody-crosslinked RNA preparation + Protein A/G affinity beads -> [Immunoprecipitate antibody-RNA complexes] -> Protein A/G bead-bound SySy antibody-RNA complexes
+Protein A/G bead-bound SySy antibody-RNA complexes -> [Prepare RNA ends and recover RNA after antibody proteolysis] -> Adapter-ligated RNA with SySy-derived peptide remnants
+Adapter-ligated RNA with SySy-derived peptide remnants -> [Reverse-transcribe peptide-bearing RNA] -> First-strand cDNA from SySy-crosslinked RNA, including truncated products
+First-strand cDNA from SySy-crosslinked RNA, including truncated products -> [Circularize cDNA] -> Circularized cDNA from the SySy preparation
+Circularized cDNA from the SySy preparation -> [Relinearize circularized cDNA] -> Relinearized cDNA from the SySy preparation
+Relinearized cDNA from the SySy preparation -> [PCR-amplify the cDNA library] -> PCR-amplified cDNA sequencing library, SySy preparation
+PCR-amplified cDNA sequencing library, SySy preparation -> [Sequence the amplified cDNA library] -> Sequencing reads from the SySy cDNA library
+Sequencing reads from the SySy cDNA library + Reference genome and transcript-start annotations -> [Map reads and infer sites from truncation signatures] -> CITS-derived candidate m6A and m6Am site map
+Fragmented cellular RNA + Abcam anti-m6A antibody -> [Bind Abcam anti-m6A antibody to fragmented RNA] -> Fragmented RNA incubated with Abcam anti-m6A antibody
+Fragmented RNA incubated with Abcam anti-m6A antibody -> [UV-crosslink antibody-RNA contacts] -> Abcam antibody-crosslinked RNA preparation
+Abcam antibody-crosslinked RNA preparation + Protein A/G affinity beads -> [Immunoprecipitate antibody-RNA complexes] -> Protein A/G bead-bound Abcam antibody-RNA complexes
+Protein A/G bead-bound Abcam antibody-RNA complexes -> [Prepare RNA ends and recover RNA after antibody proteolysis] -> Adapter-ligated RNA with Abcam-derived peptide remnants
+Adapter-ligated RNA with Abcam-derived peptide remnants -> [Reverse-transcribe peptide-bearing RNA] -> First-strand cDNA from Abcam-crosslinked RNA
+First-strand cDNA from Abcam-crosslinked RNA -> [Circularize cDNA] -> Circularized cDNA from the Abcam preparation
+Circularized cDNA from the Abcam preparation -> [Relinearize circularized cDNA] -> Relinearized cDNA from the Abcam preparation
+Relinearized cDNA from the Abcam preparation -> [PCR-amplify the cDNA library] -> PCR-amplified cDNA sequencing library, Abcam preparation
+PCR-amplified cDNA sequencing library, Abcam preparation -> [Sequence the amplified cDNA library] -> Sequencing reads from the Abcam cDNA library
+Sequencing reads from the Abcam cDNA library + Reference genome and transcript-start annotations -> [Map reads and infer sites from substitution signatures] -> CIMS-derived candidate m6A site map
+
+miR-CLIP
+The single miR-CLIP psoralen/biotin-conjugated synthetic pre-miRNA capture implementation depicted in both supplied images. The website route and only the MiR-CLIP poster row show probe association and paired UV254/UV365 irradiation, Ago2 immunoprecipitation, RNA extraction, streptavidin–biotin isolation and reverse transcription to cDNA. A broad text-supported cDNA-library/sequencing continuation explains target identification without reconstructing unshown library preparation. Synthetic RNA is the probe; captured cellular RNA, illustrated as mRNA and including lncRNA targets in the primary abstract, supplies the measured cDNA sequence. The left assay overview is descriptive, the probe legend identifies conjugates, and the poster's Pol II CLIP/eCLIP rows and separate right chemical legend are outside scope.
+
+Psoralen/biotin-conjugated synthetic pre-miRNA capture probe + Cellular RNA–protein complexes -> [Associate the capture probe with cellular targets and crosslink with UV254/UV365] -> Photo-crosslinked probe–target RNA complexes with associated proteins
+Photo-crosslinked probe–target RNA complexes with associated proteins -> [Immunopurify Ago2-associated complexes] -> Ago2-immunopurified probe-linked RNA–protein complexes
+Ago2-immunopurified probe-linked RNA–protein complexes -> [Extract RNA from the Ago2 capture] -> RNA extracted from the Ago2-immunopurified preparation
+RNA extracted from the Ago2-immunopurified preparation -> [Isolate probe-linked RNAs by streptavidin–biotin affinity] -> Streptavidin-selected probe-linked cellular RNAs
+Streptavidin-selected probe-linked cellular RNAs -> [Reverse-transcribe isolated target RNAs] -> cDNA derived from isolated cellular target RNAs
+cDNA derived from isolated cellular target RNAs -> [Process target-RNA cDNA into a library and sequence it] -> Sequence reads from the target-RNA-derived cDNA library
+Unresolved details:
+What molecular linkage is assigned to each of UV254 and UV365, and is an internal exposure order specified in this implementation? Both wavelengths and the combined crosslinking block are established, but the registered primary abstract does not separate their roles. A registered primary methods/figure passage specifying those roles would be needed before adding wavelength-specific mechanisms; this does not block the depicted composite architecture.
+What is the support-attachment and probe/crosslink disposition when streptavidin-isolated target RNA enters reverse transcription? The affinity icon depicts binding, followed by RT/cDNA, but no release, probe removal or crosslink reversal is specified in the registered sources. A registered primary methods passage spanning affinity recovery through RT would be needed to resolve that interface; no such hidden operation or on-support RT is asserted.
+
+cP-RNA-Seq
+The cP-RNA-Seq end-selective schematic from extracted, length-selected RNA through CIP, periodate, T4 PNK, adapter ligation and a purified RT-PCR-amplified cDNA library. Three original 3′ end-state lanes (cP, phosphate, hydroxyl) are traced as subpopulations of one RNA preparation with distinct ligation outcomes. The isolated row and the cP-RNA-Seq poster row agree. Neighboring poster workflows and the right-hand reaction panel are outside this scope; no sequencing or analysis block is added.
+
+Extracted RNA mixture with three 3′ end classes -> [CIP phosphatase treatment] -> CIP-treated RNA mixture
+CIP-treated RNA mixture -> [Periodate treatment of RNA ends] -> Periodate-treated RNA mixture with cP-protected and oxidized ends
+Periodate-treated RNA mixture with cP-protected and oxidized ends -> [T4 PNK end repair] -> T4 PNK-treated RNA mixture with ligatable cP-derived RNA
+T4 PNK-treated RNA mixture with ligatable cP-derived RNA -> [Adapter ligation] -> RNA ligation preparation with dual-adapter cP-derived RNA and blocked comparators
+RNA ligation preparation with dual-adapter cP-derived RNA and blocked comparators -> [Reverse transcription, PCR amplification and purification] -> Purified, RT-PCR-amplified cDNA library
+
+iCLIP
+Standard iCLIP at the architecture scope of the complete website schematic and the poster’s iCLIP row. Native RNA–protein complexes are UV-crosslinked, target-protein immunoprecipitated, 3′ RNA-adapter ligated, proteinase K digested and reverse transcribed to peptide-induced truncated cDNA. A distinct barcoded DNA RT primer supplies cleavable adapter regions; cDNA circularization, relinearization and PCR recover the RT-stop products. The primary full text resolves the poster’s adapter-before-IP drawing in favor of IP-before-adapter. The text-supported sequencing interface is included and identified separately from the image endpoint. PAR-CLIP, BrdU-CLIP, cropped irCLIP and the card’s mentions of HITS-CLIP/eCLIP are outside this target. The molecular icons next to the row identify materials; they do not create independent branches. This is a compact shared single-route schematic, not a reconstruction of all fractionation, gel or library-size operations in the hnRNP C experiment.
+
+Native RNA–protein complexes -> [UV-crosslink native RNA–protein complexes] -> UV-crosslinked RNA–protein complexes
+UV-crosslinked RNA–protein complexes -> [Immunoprecipitate crosslinked target-protein–RNA complexes] -> Immunoprecipitated crosslinked RNA–protein complexes
+Immunoprecipitated crosslinked RNA–protein complexes + RNA 3′ ligation adapter -> [Ligate an RNA adapter to the RNA 3′ end] -> 3′-adapter-ligated, immunoprecipitated RNA–protein complexes
+3′-adapter-ligated, immunoprecipitated RNA–protein complexes -> [Digest protein with proteinase K] -> 3′-adapter-bearing RNA with crosslinked peptide remnants
+3′-adapter-bearing RNA with crosslinked peptide remnants + Barcoded DNA RT primer with cleavable adapter regions -> [Reverse transcribe RNA to truncated barcoded cDNA] -> Truncated barcoded cDNA products
+Truncated barcoded cDNA products -> [Circularize truncated barcoded cDNA] -> Circularized barcoded cDNA
+Circularized barcoded cDNA -> [Cleave the cDNA circle and PCR-amplify] -> Linear PCR-amplified cDNA library
+Linear PCR-amplified cDNA library -> [Sequence the amplified cDNA library] -> iCLIP cDNA sequence reads
