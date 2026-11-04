@@ -104,3 +104,28 @@ source_recovery_needed records are retained; completed scientific artifacts are
 revalidated before reuse. A new source packet or deliberate repair requires its
 own recorded task/attempt. A missing paper does not justify another unchanged
 author/reviewer run. Historical frozen runtimes retain their original behavior.
+
+Review the existing results — no model calls
+The current product inventory and release plan are at the TOP of docs/STATUS.md.
+The older extraction_reference/atlas/viewer displays an earlier dataset.
+To build the current review site from archived results (run at repository root):
+
+  .venv/bin/python -m scripts.illumina.review_site.build \
+    --audit provenance/experiments/illumina_extraction_20261102/audit_01 \
+    --comparison provenance/experiments/method_pair_20261102 \
+    --output outputs/atlas_review_20261103
+
+Use a new output directory when rebuilding; existing exports are preserved.
+The input archive is not tracked by Git. Its checksum is recorded in AUDIT_STATUS;
+it is available locally and in the durable Sherlock audit backup.
+
+  python3 -m http.server 8772 --bind 127.0.0.1 \
+    --directory outputs/atlas_review_20261103
+
+Then open http://127.0.0.1:8772/#drop-seq .
+build.py verifies the archive receipt and overlays the later admission decisions.
+index.json lists all source occurrences; records/*.json preserve candidate/review
+values. app.js renders those values as an inspection view, without an LLM.
+The file-name hash is only a safe storage address, not semantic method identity.
+The paired comparison is kept visibly separate because its workflow versions
+predate this batch. This export is NOT canonical graph publication.

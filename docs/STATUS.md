@@ -1,5 +1,111 @@
 # Deployment status
 
+## Current product review — 3 November 2026
+
+This section supersedes the historical checkpoints below. The active work is
+Illumina schematic extraction, followed by paper-supported relationships tied to
+specific Operations. The older deep-protocol extractor remains separate.
+
+**What exists**
+
+- The November batch processed **478 source occurrences**, not 478 methods:
+  154 catalogue cards, 285 main poster rows and 39 footer/product/readout panels.
+- Later admission checks leave **424 supported, 33 research_needed, 17 failed and
+  4 integrity_error** records. The 424 include 39 footer/product/readout panels;
+  they must not be presented as 424 assays. Supported records contain 2,968
+  Operation instances, including repeated depictions of the same methods.
+- Every occurrence has an archived outcome. Mechanical audit covered all 478
+  records and rehashed 2,582 custody files. This is not an expert review of every
+  scientific statement. Four originally supported records failed the newer
+  evidence gate; their original reviews remain preserved.
+- A completed earlier **ATAC-seq–ChIPmentation comparison** retains three scoped
+  correspondences and one directed component-adoption claim, tied to exact
+  Operations and evidence. The adoption claim concerns custom Nextera primers,
+  not ancestry of the whole assay. These earlier workflow versions have not been
+  silently replaced with the November extractions.
+- Current graph tools provide record lookup, workflow retrieval, neighborhood
+  traversal, bounded walks, connected Operation groups, lexical candidate search
+  and a deterministic text view. They do not establish semantic equivalence.
+- The copied website under `extraction_reference/atlas/viewer` shows the older
+  **201 technology entries and 15 detailed workflow exports**. It is not a browser
+  of the November batch.
+
+**What you can review now**
+
+The read-only review export shows every November source occurrence, its current
+status, a State–Operation–Flow diagram, exact fields, evidence, corrections,
+unknowns and original model review. It links the separate paired comparison.
+It performs no model calls, scientific merges or new graph admission. Construction
+checks the archived checksum and reconciles admission counts.
+
+From the repository root, serve the prepared local copy with:
+
+```sh
+python3 -m http.server 8772 --bind 127.0.0.1 --directory outputs/atlas_review_20261103
+```
+
+Open `http://127.0.0.1:8772/#drop-seq`, then search ATAC, G&T or ChIP.
+Use the status filter to inspect held/rejected records. Click a node or arrow for
+its fields and evidence. The header links the completed paired example.
+The generated export is local and ignored by Git. Rebuild it using
+`scripts/illumina/review_site/build.py`; see [the workflow guide](ILLUMINA_WORKFLOW.txt).
+
+**What remains before calling this a method atlas**
+
+1. **Consolidate method identity before more extraction.** Keep source depictions
+   separately, but assign them to reviewed method/version records. Grouped cards
+   can cover several methods. Equal names, a shared PMID or an image hash propose
+   comparisons; they cannot authorize a merge. Use the existing nine development
+   cases, including repeated Drop-seq/G&T/ATAC, Nuc-Seq homonyms and grouped ChIP.
+   Acceptance: expected merges and separations, explicit unresolved identities,
+   preserved source differences and zero unchanged duplicate extraction tasks.
+2. **Publish scoped cross-method claims against those exact versions.** Reuse the
+   citation-lineage and paired-comparison code. Identify the adopted/changed
+   Operations, earlier demonstration, limitation, consequence and qualifications.
+   Acceptance: both endpoints resolve; source passages and independent review
+   are available; shared mechanism/comparison are not mislabeled as historical
+   development; a changed endpoint invalidates the old binding.
+3. **Demonstrate use by an agent.** Give it a desired measurement/specimen, let it
+   retrieve workflows and a reviewed change, then return a proposal naming the
+   Operations it would change, evidence for required properties, interface
+   hypotheses and missing protocol details. Check attribution, preservation of
+   qualifications and resistance to an incompatible substitution. This tests
+   graph use, not novelty or wet-lab success.
+4. **Repair remaining records by cause.** Missing evidence leads to acquisition;
+   identity ambiguity to scope review; invalid output to harness repair. Retain
+   legitimate uncertainty. Do not rerun unchanged evidence holds or re-extract the
+   accepted collection merely to change display names.
+
+The first usable release does not require connecting every method, making every
+annotation chemically executable, or eliminating every nonblocking unknown.
+It does require correct identity, inspectable workflow/evidence, scoped
+connections and demonstrated retrieval. The canonical method count is unknown.
+
+**How the atlas will support invention**
+
+Desired measurement → retrieve workflows → inspect connected Operations and
+reviewed changes → propose an architecture → retrieve execution details for that
+design → verify material/information interfaces.
+
+The atlas is an evidence and comparison memory. It is not the entire context of
+every agent and it is not the boundary of literature search. An initial design
+can cite exact retrieved Operations and claims; protocol expansion should fetch
+additional detail when required by that design. Lack of a graph connection does
+not demonstrate novelty. A shared transformation does not establish that its
+reagents/conditions transfer to another assay.
+
+From the inspected [Intern-Atlas paper and code audit](../experiments/reference_audits/intern_atlas_20261103/REPORT.txt),
+adopt separation of method identity, typed historical claims and evidence-backed
+retrieval. Adapt it by binding claims to actual assay Operations and interfaces.
+Its public local builder is not the complete hosted system; the audit found
+unsafe defaults for our use, including heuristic lineage fallback. No such
+fallback or speculative historical edge is introduced here.
+
+Evidence: [batch audit](../provenance/experiments/illumina_extraction_20261102/audit_01/REPORT.txt),
+[current admission counts](../provenance/experiments/illumina_extraction_20261102/audit_01/GRAPH_PUBLICATION.json),
+[paired comparison](../provenance/experiments/method_pair_20261102/RESULTS.json),
+[method planning decision](decisions/2026-11-03-harness-redesign.txt).
+
 ## Current development check, 2026-10-22 UTC
 
 The target is a reusable **source-only extraction harness**, not a manually

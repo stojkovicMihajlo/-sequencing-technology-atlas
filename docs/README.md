@@ -1,5 +1,9 @@
 # Documentation
 
+For the current product, start with the **3 November review and release plan** at
+the top of [STATUS.md](STATUS.md). It distinguishes the new Illumina results from
+the older atlas website and gives the command to open the current review export.
+
 Start with the [repository README](../README.md), then the
 [current Illumina call sequence](illumina/PIPELINE.md).
 
