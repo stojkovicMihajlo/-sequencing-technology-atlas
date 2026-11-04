@@ -26,6 +26,7 @@ from genomics_discovery.execution.codex_worker import CodexWorker, assess_archiv
 from genomics_discovery.illumina.models import (
     DiagramExtraction,
     DiagramReview,
+    CurrentDiagramReview,
     digest,
     export_graph,
     review_outcome,
@@ -331,7 +332,7 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
         paths, delivery = stage_images(images, attempt)
         if any(row["original_sha256"] != registry[row["source_id"]]["sha256"] for row in delivery):
             raise ValueError("Original diagram changed before image delivery")
-        model = DiagramExtraction if role == "author" else DiagramReview
+        model = DiagramExtraction if role == "author" else CurrentDiagramReview
         schema = attempt / "schema.json"
         write(schema, model.model_json_schema())
         context = {"record_id": card["record_id"], "title": card_title(card),
@@ -347,9 +348,11 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
         if role == "reviewer":
             candidate_path = attempt / "candidate.json"
             write(candidate_path, candidate.model_dump(mode="json"))
+            review_version = CurrentDiagramReview.model_fields["format_version"].default
             context.update(candidate=str(candidate_path), candidate_sha256=digest(candidate),
-                           review_targets=sorted(review_targets(candidate)))
-            context["self_check"] += f" --candidate {candidate_path}"
+                           review_format_version=review_version,
+                           review_targets=sorted(review_targets(candidate, format_version=review_version)))
+            context["self_check"] += " --candidate " + shlex.quote(str(candidate_path)) + " --review-format " + review_version
         prompt = build_prompt(role, context, schema,
             previous_candidate=candidate.model_dump(mode="json") if role == "author" and candidate else None,
             previous_review=review.model_dump(mode="json") if role == "author" and review else None)
@@ -556,6 +559,7 @@ def main(argv=None):
     check.add_argument("--registry", type=Path, required=True)
     check.add_argument("--record-id", required=True)
     check.add_argument("--candidate", type=Path)
+    check.add_argument("--review-format", choices=("illumina_diagram_review/1.0", "illumina_diagram_review/1.1"))
     check.add_argument("--card", type=Path, help="Read-only assigned card for the same scope/reference checks as admission")
     args = parser.parse_args(argv)
     if args.command == "run":
@@ -588,6 +592,8 @@ def main(argv=None):
         if args.candidate:
             candidate = DiagramExtraction.model_validate_json(args.candidate.read_bytes())
             document = DiagramReview.model_validate_json(args.artifact.read_bytes())
+            if args.review_format and document.format_version != args.review_format:
+                raise ValueError("Review does not use the required review contract: " + args.review_format)
             errors = validate_review(document, candidate, registry)
         else:
             document = DiagramExtraction.model_validate_json(args.artifact.read_bytes())

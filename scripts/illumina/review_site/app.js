@@ -53,11 +53,14 @@ function inspect(parent, item, kind, record) {
     fields(parent,[['Type',item.kind],['From',name(item.source)+' ['+item.source+']'],['To',name(item.target)+' ['+item.target+']']]);
   }
   fields(parent,[['Local ID',item.id]]);
-  const affected = c.corrections.filter(x=>x.target_id===item.id), unknowns = c.unknowns.filter(x=>x.affected_ids.includes(item.id));
+  const target = kind.toLowerCase()+':'+item.id;
+  const affected = c.corrections.filter(x=>x.target_id===target), unknowns = c.unknowns.filter(x=>x.affected_ids.includes(target));
   for (const x of affected) parent.append(el('p','Correction: '+x.primary_statement,'warning'));
   for (const x of unknowns) parent.append(el('p','Unknown: '+x.question,'warning'));
   parent.append(el('h3','Evidence for this record')); evidence(parent,item.evidence,record);
-  const checks = record.review?.checks?.filter(x=>x.target===item.id || x.target.endsWith(':'+item.id)) || [];
+  const labelTarget = kind.toLowerCase()+'_label:'+item.id;
+  const checks = record.review?.checks?.filter(x=>x.target===target || x.target===labelTarget) || [];
+  if (kind !== 'Flow' && !checks.some(x=>x.target===labelTarget)) parent.append(el('p','This archived review did not separately assess the label. Corrections and features remain part of its interpretation.','muted'));
   if (checks.length) raw(parent,'Recorded review of this target',checks);
   raw(parent,'Exact JSON record',item);
 }

@@ -11,7 +11,7 @@ import pytest
 
 from genomics_discovery.illumina import extraction as batch
 from genomics_discovery.execution.codex_worker import WorkerResult
-from genomics_discovery.illumina.models import DiagramExtraction, DiagramReview, digest, review_targets
+from genomics_discovery.illumina.models import DiagramExtraction, CurrentDiagramReview, digest, review_targets
 
 
 def png(pixel=b"\xff\xff\xff\xff"):
@@ -110,14 +110,15 @@ class FakeWorker:
             image = current.states[0].evidence
             checks = []
             first_review = sum(x["role"] == "reviewer" for x in self.calls) == 1
-            for target in sorted(review_targets(current)):
+            version = CurrentDiagramReview.model_fields["format_version"].default
+            for target in sorted(review_targets(current, format_version=version)):
                 evidence = current.paper_matches[0].evidence if target == "paper:match" else image
                 negative = self.request_correction and first_review and target == "operation:capture"
                 checks.append({"target": target, "verdict": "unsupported" if negative else "supported",
                                "action": "revise" if negative else "accept",
                                "rationale": "Source-backed repair requested" if negative else "Source checked",
                                "evidence": evidence})
-            document = DiagramReview(record_id=current.record_id, candidate_sha256=digest(current),
+            document = CurrentDiagramReview(record_id=current.record_id, candidate_sha256=digest(current),
                                      inspected_sources=current.inspected_sources, checks=checks)
         write(attempt / "artifact.json", document.model_dump(mode="json"))
         thread = "fake-thread-" + str(len(self.calls))

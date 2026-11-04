@@ -6,6 +6,15 @@ This section supersedes the historical checkpoints below. The active work is
 Illumina schematic extraction, followed by paper-supported relationships tied to
 specific Operations. The older deep-protocol extractor remains separate.
 
+Latest development correction: [the label meaning contract](ILLUMINA_WORKFLOW.txt)
+now separates scientific labels from source captions and requires separate label
+judgments in fresh reviews (review/1.1). Exact typed Correction/Unknown lookup was
+also fixed in the review viewer. **108 relevant software tests pass**, including
+nine new contract controls; all 428 originally supported archived records retain
+their candidate/review digests. This is not a new scientific acceptance of the
+four later-rejected records. The new contract has not been deployed on Sherlock
+or tested with a live model; no extraction outputs have been renamed or upgraded.
+
 **What exists**
 
 - The November batch processed **478 source occurrences**, not 478 methods:

@@ -152,6 +152,9 @@ def build_graph(batch_directory: Path, inventory_path: Path) -> dict:
                      candidate_sha256=graph["candidate_sha256"], review_sha256=graph["review_sha256"],
                      source_registry=graph["source_registry"], unknowns=graph["workflow"]["unknowns"],
                      scope=graph["workflow"]["scope"])
+        entry["review_format_version"] = graph["review"]["format_version"]
+        entry["label_checks"] = {c["target"]: copy.deepcopy(c) for c in graph["review"]["checks"]
+                                 if c["target"].startswith(("state_label:", "operation_label:"))}
         for node in graph["nodes"]:
             nodes.append({**node, "record_id": ident, "admission": admission})
             if node["node_type"] == "operation":
@@ -216,9 +219,14 @@ def _record_context(graph, node, incident):
     registry_artifact = ({"path": str(Path(card["attempt_directory"]) / "source_registry.json"),
                          "sha256": registry_pin, "status": "recorded_custody_pointer_verify_before_read"}
                         if registry_pin and card.get("attempt_directory") else None)
+    label_target = node["node_type"] + "_label:" + node["original"]["id"]
+    label_check = copy.deepcopy(card.get("label_checks", {}).get(label_target))
     return {"source_scope": copy.deepcopy(card.get("source_scope", {})),
             "source_provenance": copy.deepcopy(card.get("source_provenance", {})),
             "context_target_ids": sorted(targets), "affected_corrections": corrections,
+            "label_review": {"target": label_target, "check": label_check,
+                             "status": "separately_reviewed" if label_check else "not_separately_reviewed",
+                             "review_format_version": card.get("review_format_version")},
             "affected_unknowns": affected, "record_unknowns": general,
             "context_matching": "Exact record target and incident Flow target IDs; whole-record unknowns are separate. No inferred equivalence or new scientific edges.",
             "full_source_registry_artifact": registry_artifact}
@@ -340,6 +348,10 @@ def operation_group(graph: dict, record_id: str, operation_ids, *, include_diagn
         "corrections": [copy.deepcopy(n["original"]) for n in view["nodes"]
                         if n["node_type"] == "correction"],
         "unknowns": copy.deepcopy(card.get("unknowns", [])),
+        "review_format_version": card.get("review_format_version"),
+        "label_checks": {target: copy.deepcopy(check) for target, check in card.get("label_checks", {}).items()
+                         if target in {n["node_type"] + "_label:" + n["original"]["id"] for n in nodes.values()}},
+        "label_review_boundary": "Only explicit label judgments from the recorded review; absent checks were not separately assessed.",
         "full_source_registry_artifact": caveats["full_source_registry_artifact"],
         "routing_ambiguities": [row for key, row in
             _routing_ambiguities(graph, {n["id"]: n for n in graph["nodes"]}, include_diagnostic).items()

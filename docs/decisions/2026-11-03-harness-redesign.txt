@@ -212,6 +212,9 @@ validated, and it does not authorize another large extraction to discover that.
 
 Annotation contract proposal after the Drop-seq comparison
 Status: proposed representation rules, not implemented schema changes.
+Update: the bounded label-meaning/review contract below is now implemented in
+development. Full structured fact normalization and method consolidation remain
+proposals; this change does not claim to implement them.
 The five Operation captions in the three Drop-seq outputs are already identical.
 The observed differences concern detail coverage and fact placement, not just
 spelling. Controlled names alone cannot recover an omitted mechanism or move a
@@ -266,6 +269,43 @@ Next annotation test should separate same-meaning/different-wording cases from
 missing-fact cases and different-meaning/same-label cases. The existing Drop-seq
 outputs can test placement and coverage without another full extraction batch.
 No native model call was made for this annotation-design review.
+
+Implemented label-meaning contract following the atlas review
+Problem: the author preserved a misleading source caption inside State.label and
+put the correct readout interpretation in features/Correction. Whole-State review
+accepted that combination. Manually editing one display string would neither fix
+the extraction policy nor establish consistent interpretation across methods.
+The schema previously told Operations to preserve source captions; its State
+description did not explicitly distinguish the measured target from its carrier.
+
+Decision: use existing fields with explicit ownership. Scientific labels name
+the supported boundary entity/action. Evidence preserves source wording.
+Correction records the discrepancy and supported interpretation; the affected
+record must agree with the resolution. Unknown captures unresolved consequential
+meaning. Do not add a fixed biochemical noun vocabulary or reject quotation marks
+as a proxy for a scientific mistake. Do not infer that matched labels are identical
+methods, interchangeable components or historical descendants.
+
+Fresh review contract/1.1 adds separate label judgments to existing fresh reviews,
+not another agent or another model pass. Coverage and evidence provenance are
+mechanically enforced; scientific entailment remains a reviewer judgment. Current
+stages cannot submit a legacy review instead. Historical/1.0 records remain under
+their actual contract, preserving hashes and explicitly lacking separate checks.
+Graph record/group retrieval carries these judgments, alongside corrections and
+unknowns, so downstream agents need not infer review coverage from prose.
+
+Also corrected a consumer bug: the review viewer compared untyped local IDs with
+typed Correction/Unknown addresses. It now matches state:<id>, operation:<id> and
+flow:<id> exactly. Existing scientific labels/data are not rewritten by the UI.
+
+Evaluation: deterministic controls cover missing label judgments, a negative
+judgment overriding other positive checks, metadata-only support, primary-source
+requirements for corrections, legacy version refusal in fresh stages, and query
+visibility through a fake-worker extraction/publication. These are software
+controls, not measured improvement in LLM interpretation. The next bounded live
+test must distinguish wrong target/carrier labels, meaningful boundary changes,
+harmless wording variation and genuinely unresolved identities across methods.
+Run it on Sherlock with a newly frozen runtime before another extraction batch.
 
 Intern-Atlas full public implementation audit
 Read the full paper text/appendices and all 23 files in OpenRaiser/Intern-Atlas

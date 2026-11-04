@@ -55,7 +55,11 @@ EvidenceSet = Annotated[tuple[Evidence, ...], Field(min_length=1)]
 
 class State(StrictModel):
     id: Text
-    label: Text = Field(description="Material or data at this boundary, not a laboratory action.")
+    label: Text = Field(description=
+        "Concise source-supported name of the actual material or data at this boundary, "
+        "consistent with kind, features and connected Operations. Do not substitute the "
+        "biological target for its physical carrier or readout. Preserve a misleading source "
+        "caption in Evidence/Correction, not as the asserted label with a prose disclaimer.")
     kind: Literal["material", "data"]
     features: tuple[Text, ...] = Field(default=(), description=
         "Only consequential supported features: ends, attachment, compartment, barcode association. "
@@ -65,7 +69,10 @@ class State(StrictModel):
 
 class Operation(StrictModel):
     id: Text
-    label: Text = Field(description="Preserve the source caption where available.")
+    label: Text = Field(description=
+        "Concise source-supported action on the declared input, consistent with its output. "
+        "Reuse a source caption when it conveys that action accurately; otherwise retain "
+        "literal wording in Evidence/Correction. Do not invent hidden suboperations.")
     description: Text = Field(description=
         "What changes or is inspected at schematic scope. Do not expand routine execution details.")
     inputs: tuple[Text, ...]
@@ -117,7 +124,10 @@ class PaperMatch(StrictModel):
 
 class Correction(StrictModel):
     id: Text
-    target_id: Text = Field(description="Exact review target affected by the discrepancy.")
+    target_id: Text = Field(description=
+        "Exact affected scientific record target: state:<id>, operation:<id>, flow:<id>, "
+        "scope:<method> or paper:<id>. A state_label/operation_label review judgment is "
+        "not a Correction address; use its owning State/Operation.")
     diagram_observation: Text = Field(description="What the source drawing depicts, preserved faithfully.")
     primary_statement: Text = Field(description="What the inspected primary source reports instead.")
     disposition: Literal["use_primary", "keep_unresolved"] = Field(description=
@@ -133,7 +143,9 @@ class Unknown(StrictModel):
     blocking: bool = Field(description=
         "True only if an unresolved point prevents the scoped interpretation. Missing routine "
         "execution settings need not block a schematic architecture.")
-    affected_ids: tuple[Text, ...] = ()
+    affected_ids: tuple[Text, ...] = Field(default=(), description=
+        "Exact scientific record targets, e.g. state:<id> or operation:<id>, not separate "
+        "state_label/operation_label review judgments. Empty means a whole-record question.")
 
 
 class DiagramExtraction(StrictModel):
@@ -245,11 +257,18 @@ class ReviewCheck(StrictModel):
 
 
 class DiagramReview(StrictModel):
-    format_version: Literal["illumina_diagram_review/1.0"] = "illumina_diagram_review/1.0"
+    # Preserve historical defaults/digests. New stages use CurrentDiagramReview.
+    format_version: Literal["illumina_diagram_review/1.0", "illumina_diagram_review/1.1"] = "illumina_diagram_review/1.0"
     record_id: Text
     candidate_sha256: Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
     inspected_sources: Annotated[tuple[Text, ...], Field(min_length=1)]
     checks: Annotated[tuple[ReviewCheck, ...], Field(min_length=1)]
+
+
+class CurrentDiagramReview(DiagramReview):
+    """Fresh reviews require separate, evidenced State/Operation label judgments."""
+
+    format_version: Literal["illumina_diagram_review/1.1"] = "illumina_diagram_review/1.1"
 
 
 def digest(record: StrictModel | dict) -> str:
@@ -258,8 +277,26 @@ def digest(record: StrictModel | dict) -> str:
                                      ensure_ascii=False).encode()).hexdigest()
 
 
-def review_targets(candidate: DiagramExtraction) -> set[str]:
-    return set(_target_records(candidate))
+def review_targets(candidate: DiagramExtraction, *, format_version="illumina_diagram_review/1.0") -> set[str]:
+    return set(_review_records(candidate, format_version))
+
+
+def _review_records(candidate, format_version):
+    records = _target_records(candidate)
+    if format_version == "illumina_diagram_review/1.1":
+        records.update(("state_label:" + s.id, s) for s in candidate.states)
+        records.update(("operation_label:" + o.id, o) for o in candidate.operations)
+    elif format_version != "illumina_diagram_review/1.0":
+        raise ValueError("Unknown diagram review contract")
+    return records
+
+
+def _label_owner(target):
+    """A label judgment examines its owning record and the same source corrections."""
+    kind, separator, ident = target.partition(":")
+    if separator and kind in {"state_label", "operation_label"}:
+        return kind.removesuffix("_label") + ":" + ident
+    return target
 
 
 def _target_records(candidate: DiagramExtraction) -> dict[str, Any]:
@@ -411,23 +448,24 @@ def validate_review(review: DiagramReview, candidate: DiagramExtraction, sources
     if review.record_id != candidate.record_id or review.candidate_sha256 != digest(candidate):
         errors.append("Review is not bound to this exact candidate")
     targets = [x.target for x in review.checks]
-    if len(targets) != len(set(targets)) or set(targets) != review_targets(candidate):
+    if len(targets) != len(set(targets)) or set(targets) != review_targets(candidate, format_version=review.format_version):
         errors.append("Review requires exactly one judgment for every record target")
     images = {s for s in candidate.inspected_sources if sources.get(s, {}).get("kind") == "image"}
     if not images.issubset(review.inspected_sources):
         errors.append("Reviewer did not declare inspection of every candidate diagram")
-    records = _target_records(candidate)
+    records = _review_records(candidate, review.format_version)
     for check in review.checks:
         if check.verdict != "supported" or check.target not in records:
             continue
         target = records[check.target]
-        if check.target.startswith(("state:", "operation:", "flow:")) or (
+        owner = _label_owner(check.target)
+        if owner.startswith(("state:", "operation:", "flow:")) or (
                 check.target.startswith("scope:") and target.status == "resolved"):
             own_sources = {e.source_id for e in _evidence(target) if _scientific(e, sources)}
             if not any(e.source_id in own_sources and _scientific(e, sources) for e in check.evidence):
                 errors.append("Positive scientific review needs the target's scientific evidence: " + check.target)
         for correction in candidate.corrections:
-            if correction.target_id == check.target and correction.disposition == "use_primary":
+            if correction.target_id == owner and correction.disposition == "use_primary":
                 primary_ids = {e.source_id for e in correction.evidence if _primary(e, sources)}
                 if not any(e.source_id in primary_ids and _primary(e, sources) for e in check.evidence):
                     errors.append("Review of corrected target requires the correction's primary source: " + check.target)
@@ -474,8 +512,8 @@ def review_outcome(review: DiagramReview, candidate: DiagramExtraction,
         if errors:
             raise ValueError("; ".join(errors))
     elif (review.record_id != candidate.record_id or review.candidate_sha256 != digest(candidate)
-          or len(review.checks) != len(review_targets(candidate))
-          or {x.target for x in review.checks} != review_targets(candidate)):
+          or len(review.checks) != len(review_targets(candidate, format_version=review.format_version))
+          or {x.target for x in review.checks} != review_targets(candidate, format_version=review.format_version)):
         raise ValueError("Incomplete or stale review")
     # A correctable candidate error (including an erroneously expanded scope)
     # must reach the bounded repair round. Candidate-declared unresolved fields

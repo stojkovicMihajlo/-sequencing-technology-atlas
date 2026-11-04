@@ -95,7 +95,7 @@ REPRESENTATION RULES
    An Operation is a local transformation or inspection instance, not a reusable
    label. When independent branches are processed separately under a shared or
    repeated caption, record distinct Operation instances with branch-specific
-   inputs and outputs, retaining the source caption on each. A common caption
+   inputs and outputs, retaining each source caption in its evidence. A common caption
    does not establish pooling or a joint transformation. Keep genuine mixing,
    splitting and data-integration operations multi-input/output when supported;
    do not automatically split every such operation.
@@ -130,6 +130,29 @@ REPRESENTATION RULES
    fact. A missing detail that changes the scoped architecture is consequential:
    identify the precise question and the evidence needed, without filling it from
    memory. Do not use unsupported facts to make a graph appear complete.
+
+FIELD OWNERSHIP AND LABELS
+State.label names what is actually present at that boundary; State.kind says
+whether it is material or data. State.features records supported distinctions
+such as molecular form, attachment, compartment and information-bearing features.
+Do not name a readout or surrogate molecule as if it were the biological entity
+being measured. State labels must remain correct when read beside their kind and
+the adjacent Operation, without needing a disclaimer elsewhere. Use only the
+specificity supported by the evidence; do not invent a carrier or chemical form
+to make the label more precise.
+Operation.label names the action actually represented on its declared inputs.
+Operation.description explains the transformation; mechanism explains how it
+works, and information_effect explains what can be learned or remains linked.
+Keep source-caption wording when accurate, but literal transcription is not a
+requirement for a scientific label. Retain the exact caption/region in Evidence.
+If primary evidence corrects the diagram, put both accounts in Correction and
+make the affected label, kind, features and connected interface agree with the
+chosen interpretation. Quotation marks plus a qualifier are not a substitute for
+that correction. If evidence cannot resolve the meaning, retain a minimally
+supported label and a targeted Unknown rather than guessing a specific identity.
+These fields have fixed meanings, not a fixed vocabulary of biological entities.
+Equivalent supported wording is allowed. Labels are not identity keys, hashes of
+scientific meaning, or proof that Operations in different assays are equivalent.
 
 EXECUTION
 Work only in the caller-owned attempt directory. Sources, schemas and prior
@@ -204,6 +227,20 @@ need a paper-supported correction. Confirm that each correction uses evidence
 from the declared implementation and retains the source distinction. Assess
 paper identity separately from full scientific verification; do not claim to
 have verified unavailable full text or an unseen image.
+
+For each supplied state_label:<id> target, independently judge whether the label
+names the actual material/data at that boundary, agrees with kind and features,
+and is supported at the specificity asserted. Check it with the adjacent
+Operations and any Correction. A biological measurement target must not stand in
+for its surrogate, library or data product. A correct explanatory paragraph does
+not rescue a misleading label. For operation_label:<id>, judge the named action
+against its inputs, outputs and source scope; do not demand unshown suboperations.
+These are separate review judgments, not new graph nodes. Give a source-grounded
+rationale and evidence for each. Request revision for a misleading label that the
+available evidence can fix; request research only for a consequential unresolved
+interpretation. Do not reject synonyms, harmless punctuation or a faithful label
+merely because it differs from your preferred wording. A use_primary correction
+requires that primary evidence for the affected label judgment as well.
 
 Set the schema's positive verdict only when its required scientific checks are
 complete and no consequential unsupported assertion or omission remains. Use a

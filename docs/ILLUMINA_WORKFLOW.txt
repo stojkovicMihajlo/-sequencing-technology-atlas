@@ -40,6 +40,29 @@ What the extraction agent must inspect and record
 Instructions: src/genomics_discovery/illumina/prompts.py
 Data definitions and checks: src/genomics_discovery/illumina/models.py
 
+Label meaning contract — development update, 3 November
+Labels identify the supported material/data or action; they are not literal
+caption-transcription slots or semantic identity keys. Source captions remain in
+Evidence, and source disagreements in Correction. A resolved correction must be
+reflected consistently in the affected label, kind, features and interface.
+The common prompt assigns these responsibilities explicitly to each field.
+
+Fresh stages use review format illumina_diagram_review/1.1. In addition to the
+existing record judgments, it requires state_label:<id> and operation_label:<id>
+checks, with evidence and a rationale. These are review targets, not graph nodes.
+The host checks coverage; a negative label judgment enters the normal bounded
+revision/research path. A use_primary correction requires that primary source in
+the affected label review. The self-check uses the same required version.
+The host cannot determine semantic truth from a label string or a positive model
+judgment. No spelling dictionary, quotation-mark ban or automatic synonym merge
+has been added. A new live scientific evaluation is still required.
+
+Historical review/1.0 remains readable and retains its exact digest. It is not
+silently upgraded to the newer review contract. Graph get/group results expose
+explicit label checks when present and distinguish their absence. The viewer
+uses the same typed target addresses to attach corrections and unknowns.
+No archived candidate or frozen remote runtime was rewritten by this change.
+
 Tools actually supplied to the extraction agent
 - Diagram images attached to the native call.
 - `python -m genomics_discovery.illumina.extraction source --registry PATH`
