@@ -30,7 +30,7 @@ def validate_manifest(path):
     return manifest
 
 
-async def execute(manifest_path, output, first_records):
+async def execute(manifest_path, output, first_records, representation="illumina_diagram/1.0"):
     if not os.environ.get("SLURM_JOB_ID"):
         raise ValueError("Native extraction must execute in Slurm")
     manifest = validate_manifest(manifest_path)
@@ -48,7 +48,8 @@ async def execute(manifest_path, output, first_records):
 
     async def batch(name, source, workers, records=()):
         destination = output / name
-        state = await run(source, destination, workers=workers, records=records, max_revisions=1)
+        state = await run(source, destination, workers=workers, records=records, max_revisions=1,
+                          representation=representation)
         graph = build_graph(destination, Path(source).parent / "inventory.json")
         write(destination / "atlas.json", graph)
         publication_errors = [ident for ident, row in state["cards"].items()
@@ -89,7 +90,9 @@ if __name__ == "__main__":
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--first-record", action="append", required=True)
+    parser.add_argument("--representation", choices=("illumina_diagram/1.0", "illumina_diagram/1.1"),
+                        required=True, help="Explicit contract required; source-occurrence runner is not the method-level transcriptomics launcher.")
     args = parser.parse_args()
-    outcome = asyncio.run(execute(args.manifest.resolve(), args.output.resolve(), args.first_record))
+    outcome = asyncio.run(execute(args.manifest.resolve(), args.output.resolve(), args.first_record, args.representation))
     print(outcome)
     raise SystemExit(0 if outcome["status"] == "completed" else 1)

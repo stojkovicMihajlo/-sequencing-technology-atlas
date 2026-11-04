@@ -27,6 +27,10 @@ from genomics_discovery.illumina.models import (
     DiagramExtraction,
     DiagramReview,
     CurrentDiagramReview,
+    extraction_model,
+    review_model,
+    parse_extraction,
+    parse_review,
     digest,
     export_graph,
     review_outcome,
@@ -235,17 +239,18 @@ def card_sources(card, acquired, base):
 
 def paper_coverage(candidate, card):
     errors = []
+    prefix = card.get("reference_source_prefix", "")
     matched = {p.source_id for p in candidate.paper_matches}
     for reference in card_references(card):
         if reference.get("role", "recovered") not in {"references", "recovered"}:
             continue
         pmid = reference.get("pmid")
-        choices = {"reference:" + reference["reference_id"]}
+        choices = {prefix + "reference:" + reference["reference_id"]}
         if pmid:
-            choices.update({"paper:" + pmid, "metadata:" + pmid})
+            choices.update({prefix + "paper:" + pmid, prefix + "metadata:" + pmid})
         assessed_with_literal_reference = any(
             p.assessment in {"identity_verified", "content_checked"} and any(
-                e.source_id == "reference:" + reference["reference_id"] for e in p.evidence)
+                e.source_id == prefix + "reference:" + reference["reference_id"] for e in p.evidence)
             for p in candidate.paper_matches)
         if not matched.intersection(choices) and not assessed_with_literal_reference:
             errors.append("Listed method reference has no paper-match assessment: " + reference["reference_id"])
@@ -314,10 +319,32 @@ def verify_stage_inputs(attempt, delivery, pins):
         raise ValueError("Native command did not attach the requested images")
 
 
-async def extract_card(card, acquired, source_base, directory, worker, max_revisions=1):
+async def extract_card(card, acquired, source_base, directory, worker, max_revisions=1,
+                       representation="illumina_diagram/1.0"):
     registry, images = card_sources(card, acquired, source_base)
+    return await extract_registered_workflow(card, registry, images, directory, worker,
+        max_revisions=max_revisions, representation=representation)
+
+
+async def extract_registered_workflow(card, registry, images, directory, worker, max_revisions=1,
+                                      representation="illumina_diagram/1.1"):
+    """One scoped work unit, with its registered source bundle and independent review.
+
+    Method identity/scope planning is a separate gate. This function neither
+    merges methods nor creates identity from coincident names or source IDs.
+    """
+    author_model = extraction_model(representation)
+    review_version = ("illumina_diagram_review/1.2" if representation == "illumina_diagram/1.1"
+                      else "illumina_diagram_review/1.1")
+    reviewer_model = review_model(review_version)
     if not images:
         return {"status": "source_recovery_needed", "reason": "No acquired source diagram; retain card for recovery."}
+    verify_registry_files(registry)
+    if len({sid for sid, _ in images}) != len(images):
+        raise ValueError("Duplicate source image ID in workflow bundle")
+    for sid, image_path in images:
+        if registry.get(sid, {}).get("kind") != "image" or sha(image_path) != registry[sid].get("sha256"):
+            raise ValueError("Workflow image must match its registered source: " + sid)
     directory.mkdir(parents=True, exist_ok=False)
     write(directory / "card.json", card)
     card_pin = sha(directory / "card.json")
@@ -332,11 +359,13 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
         paths, delivery = stage_images(images, attempt)
         if any(row["original_sha256"] != registry[row["source_id"]]["sha256"] for row in delivery):
             raise ValueError("Original diagram changed before image delivery")
-        model = DiagramExtraction if role == "author" else CurrentDiagramReview
+        model = author_model if role == "author" else reviewer_model
         schema = attempt / "schema.json"
         write(schema, model.model_json_schema())
         context = {"record_id": card["record_id"], "title": card_title(card),
-            "scope": "The assigned Illumina schematic: its title/caption targets and depicted alternatives. Unshown adaptations or background references do not automatically add workflow targets.",
+            "representation_version": representation,
+            "scope": card.get("implementation_scope") or "The assigned Illumina schematic: its title/caption targets and depicted alternatives. Unshown adaptations or background references do not automatically add workflow targets.",
+            "source_bindings": card.get("source_bindings", []),
             "source_registry": str(source_path), "card": str(directory / "card.json"),
             "sources": [{"source_id": key, **{k: v for k, v in value.items()
                 if k in {"kind", "content_level", "title", "pmid", "url", "association_status"}},
@@ -348,11 +377,12 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
         if role == "reviewer":
             candidate_path = attempt / "candidate.json"
             write(candidate_path, candidate.model_dump(mode="json"))
-            review_version = CurrentDiagramReview.model_fields["format_version"].default
             context.update(candidate=str(candidate_path), candidate_sha256=digest(candidate),
                            review_format_version=review_version,
                            review_targets=sorted(review_targets(candidate, format_version=review_version)))
             context["self_check"] += " --candidate " + shlex.quote(str(candidate_path)) + " --review-format " + review_version
+        else:
+            context["self_check"] += " --extraction-format " + representation
         prompt = build_prompt(role, context, schema,
             previous_candidate=candidate.model_dump(mode="json") if role == "author" and candidate else None,
             previous_review=review.model_dump(mode="json") if role == "author" and review else None)
@@ -391,7 +421,9 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
                                    "inspect archived final.txt and command events before retrying.")
             document = model.model_validate_json((attempt / "artifact.json").read_bytes())
             errors = (validate_extraction(document, registry, expected_record_id=card["record_id"],
-                        expected_title=context["title"], require_paper_matches=requires_paper_matches(card)) + paper_coverage(document, card)
+                        expected_title=context["title"],
+                        expected_method_names=tuple(card["verified_method_names"]) if card.get("verified_method_names") else None,
+                        require_paper_matches=requires_paper_matches(card)) + paper_coverage(document, card)
                       if role == "author" else validate_review(document, candidate, registry))
             if errors:
                 raise StageFailure("artifact_validation", "; ".join(errors))
@@ -437,8 +469,8 @@ def revalidate_completed(row):
         raise ValueError("Completed extraction artifact changed")
     registry = read(directory / "source_registry.json")
     verify_registry_files(registry)
-    candidate = DiagramExtraction.model_validate_json((directory / "extraction.json").read_bytes())
-    review = DiagramReview.model_validate_json((directory / "review.json").read_bytes())
+    candidate = parse_extraction((directory / "extraction.json").read_bytes())
+    review = parse_review((directory / "review.json").read_bytes())
     if (validate_extraction(candidate, registry)
             or review_outcome(review, candidate, registry) != row["status"]):
         raise ValueError("Completed extraction no longer passes recorded review")
@@ -473,7 +505,8 @@ def source_excerpt(registry, source_id, *, query=None, start=0, limit=8000):
         "retrieval_basis": "literal text match; inspect the passage for scientific support"}
 
 
-async def run(sources, output, *, workers=8, records=(), max_revisions=1, resume=False):
+async def run(sources, output, *, workers=8, records=(), max_revisions=1, resume=False,
+              representation="illumina_diagram/1.0"):
     if not os.environ.get("SLURM_JOB_ID"):
         raise ValueError("Native extraction/review must run in a Sherlock Slurm allocation")
     sources, output = Path(sources).resolve(), Path(output).resolve()
@@ -489,6 +522,10 @@ async def run(sources, output, *, workers=8, records=(), max_revisions=1, resume
               "implementation": {p.name: sha(p) for p in (Path(__file__),
                   Path(__file__).with_name("models.py"),
                   Path(__file__).with_name("prompts.py"))}}
+    extraction_model(representation)
+    if representation != "illumina_diagram/1.0":
+        policy["representation_version"] = representation
+        policy["implementation"]["representation.py"] = sha(Path(__file__).with_name("representation.py"))
     if resume:
         state = read(output / "state.json")
         if state["policy"] != policy:
@@ -524,8 +561,10 @@ async def run(sources, output, *, workers=8, records=(), max_revisions=1, resume
             row.update(status="running", attempt_directory=str(directory), started_at=now())
             checkpoint(output, state, cards)
             try:
-                row.update(await extract_card(card, acquired, sources.parent, directory, worker,
-                                              max_revisions=max_revisions))
+                options = {"max_revisions": max_revisions}
+                if representation != "illumina_diagram/1.0":
+                    options["representation"] = representation
+                row.update(await extract_card(card, acquired, sources.parent, directory, worker, **options))
             except Exception as exc:
                 row.update(status="failed", reason=f"{type(exc).__name__}: {exc}",
                            failure_category=getattr(exc, "category", "unclassified_stage_error"))
@@ -546,6 +585,8 @@ def main(argv=None):
     launch.add_argument("--workers", type=int, default=8)
     launch.add_argument("--record", action="append", default=[])
     launch.add_argument("--max-revisions", type=int, default=1)
+    launch.add_argument("--representation", choices=("illumina_diagram/1.0", "illumina_diagram/1.1"),
+                        default="illumina_diagram/1.1", help="Fresh CLI runs use typed properties and local input roles; legacy records are read unchanged.")
     launch.add_argument("--resume", action="store_true", help=
         "Recover pending/running records only; preserve completed verdicts, holds and failures.")
     source = sub.add_parser("source")
@@ -559,14 +600,16 @@ def main(argv=None):
     check.add_argument("--registry", type=Path, required=True)
     check.add_argument("--record-id", required=True)
     check.add_argument("--candidate", type=Path)
-    check.add_argument("--review-format", choices=("illumina_diagram_review/1.0", "illumina_diagram_review/1.1"))
+    check.add_argument("--review-format", choices=("illumina_diagram_review/1.0", "illumina_diagram_review/1.1", "illumina_diagram_review/1.2"))
+    check.add_argument("--extraction-format", choices=("illumina_diagram/1.0", "illumina_diagram/1.1"))
     check.add_argument("--card", type=Path, help="Read-only assigned card for the same scope/reference checks as admission")
     args = parser.parse_args(argv)
     if args.command == "run":
         if not 1 <= args.workers <= 32 or not 0 <= args.max_revisions <= 2:
             parser.error("Use 1-32 workers and 0-2 scientific corrections")
         state = asyncio.run(run(args.sources, args.output, workers=args.workers,
-            records=args.record, max_revisions=args.max_revisions, resume=args.resume))
+            records=args.record, max_revisions=args.max_revisions, resume=args.resume,
+            representation=args.representation))
         print(json.dumps(state["counts"]))
         return 0 if set(state["counts"]) <= {"supported"} else 1
     registry = read(args.registry)
@@ -590,13 +633,15 @@ def main(argv=None):
         return 0
     try:
         if args.candidate:
-            candidate = DiagramExtraction.model_validate_json(args.candidate.read_bytes())
-            document = DiagramReview.model_validate_json(args.artifact.read_bytes())
+            candidate = parse_extraction(args.candidate.read_bytes())
+            document = parse_review(args.artifact.read_bytes())
             if args.review_format and document.format_version != args.review_format:
                 raise ValueError("Review does not use the required review contract: " + args.review_format)
             errors = validate_review(document, candidate, registry)
         else:
-            document = DiagramExtraction.model_validate_json(args.artifact.read_bytes())
+            document = parse_extraction(args.artifact.read_bytes())
+            if args.extraction_format and document.format_version != args.extraction_format:
+                raise ValueError("Extraction does not use the required contract: " + args.extraction_format)
             card = read(args.card) if args.card else None
             errors = validate_extraction(document, registry, expected_record_id=args.record_id,
                 expected_title=card_title(card) if card else None,

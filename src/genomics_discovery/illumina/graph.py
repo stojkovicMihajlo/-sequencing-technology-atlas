@@ -29,6 +29,9 @@ from genomics_discovery.illumina.extraction import (
 from genomics_discovery.illumina.models import (
     DiagramExtraction,
     DiagramReview,
+    parse_extraction,
+    parse_review,
+    property_target,
     PaperMatch,
     digest,
     export_graph,
@@ -69,8 +72,8 @@ def _load_card(row, card):
     if read(directory / "card.json") != card:
         raise ValueError("Attempt card does not match the pinned inventory")
     sources = read(directory / "source_registry.json")
-    candidate = DiagramExtraction.model_validate_json((directory / "extraction.json").read_bytes())
-    review = DiagramReview.model_validate_json((directory / "review.json").read_bytes())
+    candidate = parse_extraction((directory / "extraction.json").read_bytes())
+    review = parse_review((directory / "review.json").read_bytes())
     errors = validate_extraction(candidate, sources, expected_record_id=card["record_id"],
         expected_title=card_title(card),
         expected_method_names=tuple(card["verified_method_names"]) if card.get("verified_method_names") else None,
@@ -102,8 +105,8 @@ def _load_card(row, card):
             raise ValueError("Missing or changed original/delivered image")
         if "input_pins" in stage:
             verify_stage_inputs(attempt, delivery, stage["input_pins"])
-    authored = DiagramExtraction.model_validate_json((Path(stages[-2]["path"]) / "artifact.json").read_bytes())
-    reviewed = DiagramReview.model_validate_json((Path(stages[-1]["path"]) / "artifact.json").read_bytes())
+    authored = parse_extraction((Path(stages[-2]["path"]) / "artifact.json").read_bytes())
+    reviewed = parse_review((Path(stages[-1]["path"]) / "artifact.json").read_bytes())
     if digest(authored) != digest(candidate) or digest(reviewed) != digest(review):
         raise ValueError("Final extraction/review are not the last archived native artifacts")
     verify_registry_files(sources)
@@ -155,6 +158,11 @@ def build_graph(batch_directory: Path, inventory_path: Path) -> dict:
         entry["review_format_version"] = graph["review"]["format_version"]
         entry["label_checks"] = {c["target"]: copy.deepcopy(c) for c in graph["review"]["checks"]
                                  if c["target"].startswith(("state_label:", "operation_label:"))}
+        if graph["workflow"]["format_version"] == "illumina_diagram/1.1":
+            entry["representation_version"] = graph["workflow"]["format_version"]
+            entry["semantic_checks"] = {c["target"]: copy.deepcopy(c) for c in graph["review"]["checks"]
+                if c["target"] == "construction" or c["target"].startswith(
+                    ("state_property:", "state_properties:", "operation_semantics:"))}
         for node in graph["nodes"]:
             nodes.append({**node, "record_id": ident, "admission": admission})
             if node["node_type"] == "operation":
@@ -248,6 +256,16 @@ def get_record(graph: dict, kind: str, ident: str, *, include_diagnostic=False) 
         result.update(flows=[e for e in incident if e["kind"] in FLOW_KINDS], links=incident,
             provenance=graph["cards"][node["record_id"]]["source_registry"])
         result.update(_record_context(graph, node, incident))
+        if "properties" in node["original"]:
+            from .representation import property_view
+            result["property_view"] = property_view(node["original"])
+        checks = graph["cards"][node["record_id"]].get("semantic_checks", {})
+        if checks:
+            local = node["original"]["id"]
+            targets = {"construction", "state_properties:" + local} if kind == "state" else {"construction", "operation_semantics:" + local}
+            if kind == "state":
+                targets.update(property_target(local, p["id"]) for p in node["original"].get("properties", []))
+            result["semantic_review"] = {k: copy.deepcopy(v) for k, v in checks.items() if k in targets}
         if kind == "operation":
             result.update(inputs=[registry[e["source"]] for e in incident
                 if e["target"] == ident and e["kind"].endswith("_input")],
@@ -337,7 +355,7 @@ def operation_group(graph: dict, record_id: str, operation_ids, *, include_diagn
         "candidate_sha256": card.get("candidate_sha256"), "review_sha256": card.get("review_sha256"),
         "artifact_pins": card.get("artifact_pins", {})}
     caveats = get_record(graph, "operation", min(selected), include_diagnostic=include_diagnostic)
-    return {"format_version": "illumina_operation_group/1.0", "selection_sha256": digest(identity),
+    result = {"format_version": "illumina_operation_group/1.0", "selection_sha256": digest(identity),
         **identity, "scope": card.get("scope"), "source_scope": card.get("source_scope", {}),
         "admission": card.get("admission"), "nodes": [copy.deepcopy(nodes[k]) for k in sorted(nodes)],
         "flows": copy.deepcopy(incident), "input_state_ids": inputs, "output_state_ids": outputs,
@@ -359,6 +377,17 @@ def operation_group(graph: dict, record_id: str, operation_ids, *, include_diagn
         "provenance": copy.deepcopy(view["provenance"]),
         "status": "source_group_only; scientific_comparison_not_performed",
         "boundary": "Connectivity is not a shared transformation, substitute compatibility or ancestry claim. A boundary State may also be internal when a side branch exits the selected group."}
+    if card.get("semantic_checks"):
+        targets = {"construction"}
+        for node in nodes.values():
+            raw = node["original"]
+            if node["node_type"] == "state":
+                targets.add("state_properties:" + raw["id"])
+                targets.update(property_target(raw["id"], p["id"]) for p in raw.get("properties", []))
+            else:
+                targets.add("operation_semantics:" + raw["id"])
+        result["semantic_checks"] = {t: copy.deepcopy(c) for t, c in card["semantic_checks"].items() if t in targets}
+    return result
 
 
 def _route_context(graph, ident, direction, edge_kinds, include_diagnostic):
@@ -533,8 +562,8 @@ def protocol_text(candidate: DiagramExtraction | dict, review: DiagramReview | N
     """
     if isinstance(candidate, dict):
         graph = candidate
-        candidate = DiagramExtraction.model_validate(graph["workflow"])
-        review = DiagramReview.model_validate(graph["review"])
+        candidate = parse_extraction(graph["workflow"])
+        review = parse_review(graph["review"])
     outcome = review_outcome(review, candidate, sources) if review else "unreviewed"
     lines = ["Protocol architecture: " + candidate.title, "Record: " + candidate.record_id,
              "Scope: " + candidate.scope, "Review outcome: " + outcome,
@@ -568,6 +597,12 @@ def protocol_text(candidate: DiagramExtraction | dict, review: DiagramReview | N
         lines.extend((f"  STATE {state.id} ({state.kind}): {state.label}",
                       *( ["    Features: " + "; ".join(state.features)] if state.features else []),
                       "    Evidence: " + refs(state.evidence)))
+        for component in getattr(state, "components", ()):
+            lines.append(f"    Component {component.id}: {component.label}; Evidence: " + refs(component.evidence))
+        for prop in getattr(state, "properties", ()):
+            value = prop.model_dump(mode="json", exclude={"evidence", "id"})
+            lines.extend(("    Property " + prop.id + ": " + json.dumps(value, ensure_ascii=False),
+                          "      Evidence: " + refs(prop.evidence)))
     lines.extend(("", "Operations", "Reading order follows declared dependencies; use the Flows below to follow each branch."))
     for ident in order:
         op = records[ident]
@@ -576,6 +611,16 @@ def protocol_text(candidate: DiagramExtraction | dict, review: DiagramReview | N
             "    Output States: " + "; ".join(x + " (" + records[x].label + ")" for x in op.outputs)))
         if op.mechanism: lines.append("    Mechanism: " + op.mechanism)
         if op.information_effect: lines.append("    Information: " + op.information_effect)
+        if hasattr(op, "resolution"):
+            lines.append("    Source resolution: " + op.resolution + "; output grouping: " + op.output_grouping)
+            for role in op.input_roles:
+                subject = "" if role.subject == "self" else " / constituent " + role.subject
+                lines.append("    Input role " + role.state_id + subject + ": " + ", ".join(role.roles) + "; " + role.explanation)
+                lines.append("      Evidence: " + refs(role.evidence))
+            for effect in op.effects:
+                lines.append("    Effect [" + effect.aspect + "] " + ", ".join(effect.input_state_ids) + " -> " +
+                             ", ".join(effect.output_state_ids) + ": " + effect.statement)
+                lines.append("      Evidence: " + refs(effect.evidence))
         lines.append("    Evidence: " + refs(op.evidence))
     lines.extend(("", "Flows"))
     for flow in candidate.flows:

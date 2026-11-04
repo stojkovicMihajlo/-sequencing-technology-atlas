@@ -277,10 +277,21 @@ def build_prompt(
         schema_text = str(schema)
     else:
         raise ValueError("schema must be a nonempty schema dictionary, text or path")
-    sections = [SHARED_INSTRUCTIONS,
-                AUTHOR_INSTRUCTIONS if role == "author" else REVIEWER_INSTRUCTIONS,
+    shared = SHARED_INSTRUCTIONS
+    role_instructions = AUTHOR_INSTRUCTIONS if role == "author" else REVIEWER_INSTRUCTIONS
+    structured = context.get("representation_version") == "illumina_diagram/1.1"
+    if structured:
+        shared = shared.replace(
+            "State.features records supported distinctions\nsuch as molecular form, attachment, compartment and information-bearing features.",
+            "State.properties records typed, subject-specific assertions; leave legacy State.features empty.")
+        shared = shared.replace("label, kind, features and connected interface", "label, kind, properties and connected interface")
+        role_instructions = role_instructions.replace("agrees with kind and features", "agrees with kind and properties")
+    sections = [shared, role_instructions,
                 "CALLER CONTEXT\n" + json.dumps(context, indent=2, ensure_ascii=False),
                 "REQUIRED OUTPUT SCHEMA (or read-only schema path)\n" + schema_text]
+    if structured:
+        from .representation import STRUCTURED_INSTRUCTIONS
+        sections.insert(2, STRUCTURED_INSTRUCTIONS)
     for label, value in (("PREVIOUS CANDIDATE", previous_candidate),
                          ("PREVIOUS REVIEW", previous_review)):
         if value is not None:

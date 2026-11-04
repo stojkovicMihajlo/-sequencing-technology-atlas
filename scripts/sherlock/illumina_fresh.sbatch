@@ -14,6 +14,7 @@ source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
 : "${ATLAS_RUNTIME_NAME:=runtime_01}"
 : "${ATLAS_SOURCE_NAME:=sources_01}"
 : "${ATLAS_OUTPUT_NAME:=extractions_01}"
+: "${ATLAS_DIAGRAM_CONTRACT:?Select an explicit extraction contract; this legacy source-occurrence launcher is not the transcriptomics worklist launcher}"
 export ATLAS_REPOSITORY="$ATLAS_FRESH_RUN_ROOT/$ATLAS_RUNTIME_NAME"
 source "$ATLAS_REPOSITORY/scripts/sherlock/environment.sh"
 export PYTHONPATH="$ATLAS_REPOSITORY/src:$GROUP_HOME/mstojkov/software/atlas/illumina-20261031/python"
@@ -56,4 +57,5 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -q tests/
     --output "$ATLAS_FRESH_RUN_ROOT/$ATLAS_SOURCE_NAME"
 "$ATLAS_ENV_DIR/bin/python" scripts/illumina/extract_all.py \
     --manifest "$ATLAS_FRESH_RUN_ROOT/$ATLAS_SOURCE_NAME/manifest.json" \
-    --output "$ATLAS_FRESH_RUN_ROOT/$ATLAS_OUTPUT_NAME" --first-record atac-seq --first-record drop-seq
+    --output "$ATLAS_FRESH_RUN_ROOT/$ATLAS_OUTPUT_NAME" --first-record atac-seq --first-record drop-seq \
+    --representation "$ATLAS_DIAGRAM_CONTRACT"

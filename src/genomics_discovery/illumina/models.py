@@ -11,7 +11,7 @@ import hashlib
 import json
 from collections import Counter, deque
 from typing import Annotated, Any, Literal
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 from pydantic import Field, StringConstraints, model_validator
 
@@ -277,17 +277,60 @@ def digest(record: StrictModel | dict) -> str:
                                      ensure_ascii=False).encode()).hexdigest()
 
 
+def extraction_model(version="illumina_diagram/1.0"):
+    """Explicit version dispatch; never reinterpret an archived record's prose."""
+    if version == "illumina_diagram/1.0":
+        return DiagramExtraction
+    if version == "illumina_diagram/1.1":
+        from .representation import StructuredDiagramExtraction
+        return StructuredDiagramExtraction
+    raise ValueError("Unknown extraction contract: " + str(version))
+
+
+def review_model(version="illumina_diagram_review/1.0"):
+    if version == "illumina_diagram_review/1.0":
+        return DiagramReview
+    if version == "illumina_diagram_review/1.1":
+        return CurrentDiagramReview
+    if version == "illumina_diagram_review/1.2":
+        from .representation import StructuredDiagramReview
+        return StructuredDiagramReview
+    raise ValueError("Unknown review contract: " + str(version))
+
+
+def parse_extraction(value):
+    raw = json.loads(value) if isinstance(value, (str, bytes, bytearray)) else value
+    return extraction_model(raw.get("format_version", "illumina_diagram/1.0")).model_validate(raw)
+
+
+def parse_review(value):
+    raw = json.loads(value) if isinstance(value, (str, bytes, bytearray)) else value
+    return review_model(raw.get("format_version", "illumina_diagram_review/1.0")).model_validate(raw)
+
+
+def property_target(state_id, property_id):
+    return "state_property:" + quote(state_id, safe="") + ":" + quote(property_id, safe="")
+
+
 def review_targets(candidate: DiagramExtraction, *, format_version="illumina_diagram_review/1.0") -> set[str]:
     return set(_review_records(candidate, format_version))
 
 
 def _review_records(candidate, format_version):
     records = _target_records(candidate)
-    if format_version == "illumina_diagram_review/1.1":
+    if format_version in {"illumina_diagram_review/1.1", "illumina_diagram_review/1.2"}:
         records.update(("state_label:" + s.id, s) for s in candidate.states)
         records.update(("operation_label:" + o.id, o) for o in candidate.operations)
     elif format_version != "illumina_diagram_review/1.0":
         raise ValueError("Unknown diagram review contract")
+    if format_version == "illumina_diagram_review/1.2":
+        if candidate.format_version != "illumina_diagram/1.1":
+            raise ValueError("Structured review requires a structured extraction")
+        records["construction"] = candidate
+        for state in candidate.states:
+            records["state_properties:" + state.id] = state
+            records.update((property_target(state.id, prop.id), prop) for prop in state.properties)
+        records.update(("operation_semantics:" + o.id, o) for o in candidate.operations)
     return records
 
 
@@ -296,6 +339,12 @@ def _label_owner(target):
     kind, separator, ident = target.partition(":")
     if separator and kind in {"state_label", "operation_label"}:
         return kind.removesuffix("_label") + ":" + ident
+    if separator and kind == "operation_semantics":
+        return "operation:" + ident
+    if separator and kind == "state_properties":
+        return "state:" + ident
+    if separator and kind == "state_property":
+        return "state:" + unquote(ident.partition(":")[0])
     return target
 
 
@@ -402,6 +451,14 @@ def validate_extraction(candidate: DiagramExtraction, sources: dict, *,
             target.startswith("scope:") and record.status == "resolved"):
             if not any(_scientific(e, sources) for e in _evidence(record)):
                 errors.append("Scientific target cannot rely on publication metadata alone: " + target)
+    if candidate.format_version == "illumina_diagram/1.1":
+        assertions = [(property_target(s.id, p.id), p) for s in candidate.states for p in s.properties]
+        assertions += [("state_component:" + s.id + ":" + c.id, c) for s in candidate.states for c in s.components]
+        assertions += [("operation_role:" + o.id + ":" + r.state_id + ":" + r.subject, r) for o in candidate.operations for r in o.input_roles]
+        assertions += [("operation_effect:" + o.id + ":" + str(i), e) for o in candidate.operations for i, e in enumerate(o.effects)]
+        for target, assertion in assertions:
+            if not any(_scientific(e, sources) for e in _evidence(assertion)):
+                errors.append("Scientific assertion cannot rely on publication metadata alone: " + target)
     for paper in candidate.paper_matches:
         source = sources.get(paper.source_id)
         if source is None:
@@ -445,6 +502,8 @@ def validate_extraction(candidate: DiagramExtraction, sources: dict, *,
 
 def validate_review(review: DiagramReview, candidate: DiagramExtraction, sources: dict) -> list[str]:
     errors = _source_errors(review, sources, review.inspected_sources)
+    if candidate.format_version == "illumina_diagram/1.1" and review.format_version != "illumina_diagram_review/1.2":
+        errors.append("Structured extraction requires property and operation-semantics review")
     if review.record_id != candidate.record_id or review.candidate_sha256 != digest(candidate):
         errors.append("Review is not bound to this exact candidate")
     targets = [x.target for x in review.checks]
@@ -459,7 +518,7 @@ def validate_review(review: DiagramReview, candidate: DiagramExtraction, sources
             continue
         target = records[check.target]
         owner = _label_owner(check.target)
-        if owner.startswith(("state:", "operation:", "flow:")) or (
+        if check.target == "construction" or owner.startswith(("state:", "operation:", "flow:")) or (
                 check.target.startswith("scope:") and target.status == "resolved"):
             own_sources = {e.source_id for e in _evidence(target) if _scientific(e, sources)}
             if not any(e.source_id in own_sources and _scientific(e, sources) for e in check.evidence):
@@ -467,6 +526,13 @@ def validate_review(review: DiagramReview, candidate: DiagramExtraction, sources
         for correction in candidate.corrections:
             if correction.target_id == owner and correction.disposition == "use_primary":
                 primary_ids = {e.source_id for e in correction.evidence if _primary(e, sources)}
+                if check.target.startswith("state_property:") and not any(
+                        e.source_id in primary_ids and _primary(e, sources) for e in _evidence(target)):
+                    # The owning State correction does not make every unchanged,
+                    # diagram-supported property a paper-derived assertion. The
+                    # aggregate State/label/properties checks still assess the
+                    # full correction and its consequences.
+                    continue
                 if not any(e.source_id in primary_ids and _primary(e, sources) for e in check.evidence):
                     errors.append("Review of corrected target requires the correction's primary source: " + check.target)
         if check.target.startswith("paper:") and target.assessment != "listed_not_read":
@@ -507,6 +573,8 @@ def review_reasons(review: DiagramReview, candidate: DiagramExtraction) -> list[
 
 def review_outcome(review: DiagramReview, candidate: DiagramExtraction,
                    sources: dict | None = None) -> str:
+    if candidate.format_version == "illumina_diagram/1.1" and review.format_version != "illumina_diagram_review/1.2":
+        raise ValueError("Structured extraction requires property and operation-semantics review")
     if sources is not None:
         errors = validate_extraction(candidate, sources) + validate_review(review, candidate, sources)
         if errors:

@@ -1,18 +1,40 @@
 Atlas representation and delivery plan — 4 November 2026
-Status: proposed contract grounded in the source review below; NOT a deployed
-schema, a newly extracted atlas, or a completed scientific validation.
+Status: minimal State/Operation contract implemented in development (extraction
+1.1, review 1.2); native pilot submitted as Qiu job51060690. The larger vocabulary/profile design below
+remains proposed. This is not a newly extracted atlas or scientific validation.
 This is the current reading entry point for the representation decision.
 
 ACTIVE SCOPE — latest user steering, 4 November: transcriptomics first.
+The user subsequently authorized implementation/review followed by a larger
+transcriptomics re-extraction and citation-grounded graph construction. Execute
+the bounded pilot before scale. Current work is recorded in
+experiments/transcriptomics_revision_20261104/README.txt.
 Use experiments/representation_review_20261104/transcriptomics_scope.json and
 transcriptomics_checklist.csv. Start implementation/native checks with Smart-seq2
 and Drop-seq; CEL-seq and RASL-seq are contrasting checks. This replaces the
 earlier cross-domain fresh-test selection below, not the retained audit evidence.
 Preserve Illumina's RNA categories and joint RNA/non-RNA assays. Source occurrences
-are not canonical methods or independent jobs. No new native run is submitted.
+are not canonical methods or independent jobs. Native pilot job51060690 is submitted;
+no new scientific results are claimed before its review.
 Card references support baseline diagram extraction; primary sources are used
 for consequential clarification/correction and separate historical change claims.
 Do not require full-paper evidence for every fact directly depicted on a card.
+
+IMPLEMENTED MINIMUM (4 November, before native validation)
+- representation.py defines individually evidenced State properties, exact local
+  subjects, optional constituents, material/data distinctions, operation-local
+  roles (including constituent roles), effects and source-level grouping.
+- The author first identifies depicted action blocks and their actual boundary
+  preparations, preserves routes and avoids manufacturing fractions from species.
+- Review 1.2 requires decomposition, State property/omission and Operation
+  interpretation judgments; host checks references, types and source custody.
+- Queries/readable views preserve the typed assertions and review qualifications.
+- Legacy extraction/review objects keep their original formats and digests.
+This is NOT a complete ontology: action labels and many scientific property values
+remain source-specific. They cannot serve as semantic identity hashes. No shared
+operation concept or historical relationship follows from property equality.
+Method-level planning must consolidate duplicate depictions using source review
+before dispatch; archived outputs are comparison baselines, not author evidence.
 
 DECISION
 
@@ -24,8 +46,8 @@ protocol language or infer ancestry from workflow similarity.
 The main defect is semantic organization, not missing prose. Existing records
 already have State, Operation, Flow and evidence fields, but their contents are
 not consistently classified or named. Adding another miscellaneous description
-field would not resolve this. The draft representation.py adds useful evidence
-facets but does not yet provide the controlled descriptions specified here.
+field would not resolve this. The implemented minimum above addresses assertion placement and node construction;
+the larger profile/shared-vocabulary proposal below remains future work.
 
 WHAT WAS ACTUALLY EXAMINED
 
@@ -151,8 +173,8 @@ do not invent specificity to satisfy a template.
 
 State label = readable scientific name supported by the structured facts and
 producing/consuming Operations. It is not the semantic comparison key. Keep
-source wording separately. The current label/model implementation is unchanged;
-this rule must still be implemented and tested.
+source wording separately. This label/source-caption separation is implemented in contract1.1; scientific
+consistency still requires the current live pilot and review.
 
 Keep THREE distinctions explicit in the existing graph:
 - What the material IS: preparation identity, relevant constituents, molecular
