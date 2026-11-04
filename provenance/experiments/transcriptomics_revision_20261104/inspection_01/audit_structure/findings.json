@@ -1,0 +1,58 @@
+{
+  "snapshot_scope": "14 supported method workflows; active iCLIP reviewed candidate inspected separately. Original outputs unchanged.",
+  "findings": [
+    {
+      "id": "effect_readout_semantics",
+      "severity": "annotation_consistency",
+      "method": "cP-RNA-Seq",
+      "record_id": "dispatch_54b09e25a068eadc891d",
+      "path": "operations[id=rt_pcr_purify].effects[0].aspect",
+      "observed": "readout",
+      "material_input": "rna_adapters",
+      "material_output": "cdna_library",
+      "reason": "This operation produces a physical cDNA library. All14other readout effects in this14method snapshot produce data. Correct states and flows do not prevent a mislabeled effect. The literal OperationEffect.aspect enum has no separate value glossary or endpoint-kind validation.",
+      "consequence": "An agent filtering by readout may retrieve library production alongside instrument observation.",
+      "proposed_minimal_followup": "Define readout as an observation producing data and distinguish library generation as material_transformation; review effect labels against those definitions. Do not fabricate an unshown sequencing operation.",
+      "scientific_boundary": "The source-supported RT/PCR transformation and material endpoints are not shown incorrect by this finding."
+    },
+    {
+      "id": "iclip_correction_mismatch",
+      "severity": "caught_by_independent_review",
+      "method": "iCLIP",
+      "record_id": "dispatch_dccc124145bb990e6537",
+      "path": "stage_artifacts/002_reviewer/artifact.json checks[target=correction:order_resolution]",
+      "reason": "Initial candidate selected use_primary for immunopurification before RNA3prime adapter ligation while graph retained opposite poster route. Reviewer required disposition/interpretation to agree with actual topology; not a missing-source problem.",
+      "consequence": "A supported correction cannot merely live in prose while graph still represents another chronology.",
+      "boundary": "Snapshot is from an active revision; no final acceptance claimed. Source-faithful diagram routes with notes must not later be presented as executable primary protocols."
+    },
+    {
+      "id": "scope_limited_gaps",
+      "severity": "query_dependent_limit",
+      "methods": [
+        "MARS-Seq",
+        "eCLIP",
+        "GMUCT 2.0",
+        "ICE"
+      ],
+      "reason": "Six explicitly nonblocking unknowns remain: MARS barcode layout/introduction stages, tag-bearing fragment retention, strand information; eCLIP RT oligo/P5P7 layout; GMUCT postligation selection specificity; ICE independent primaryNGS implementation.",
+      "consequence": "Schematic support does not establish adequacy for all later protocol-design or component-substitution queries. Missing facts should gate the particular comparison, not be assumed.",
+      "proposed_minimal_followup": "Retrieve specified sourcepassages before a historical/design claim depends on them; do not globally enlarge every workflow."
+    }
+  ],
+  "positive_examples": [
+    {
+      "method": "cP-RNA-Seq",
+      "observation": "Three depicted terminal-chemistry classes remain components of one preparation through CIP, periodate and PNK, rather than becoming invented separate fractions. Endproperties explicitly distinguish five_prime and three_prime. AfterPNK cP-origin has5primephosphate and3primehydroxyl; oxidized comparator3primeends remainblocked.",
+      "sources": "Registered cP maintext plus inspected images/fd33fbf331cb40008e58.png."
+    },
+    {
+      "method": "hiCLIP",
+      "observation": "Separate cloning/linker adapters retain chemically different3prime blocks; removable linkerphosphate becomesOH while permanent cloningadapterddC staysblocked. Pairedregions survive as covalent RNA-linker-RNA reporter. Samegene mapping is qualified rather than treated as proof of one physicalRNA."
+    },
+    {
+      "method": "ICE",
+      "observation": "Untreated/treated physicalRNA/cDNA branches and sequence data are separate; acrylonitrile is a reagent input, and the physical modifiedRNA base is not mislabeled as the sequencedcarrier. Primaryabstract versus catalogueNGS support remains explicit."
+    }
+  ],
+  "limits": "Replayed model validators and exact graph export are structural/integrity checks, not independent semantic truth. Literal quotation tests establish presence in registeredtext only. Not all diagrams, fullpapers or supplements were inspected anew."
+}

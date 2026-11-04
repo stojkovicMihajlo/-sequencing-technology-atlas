@@ -1,0 +1,595 @@
+{
+  "summary": {
+    "methods": 14,
+    "operations": 105,
+    "states": 150,
+    "flows": 242,
+    "review_checks": 1686,
+    "quote_instances": 5965,
+    "unknowns": 6,
+    "corrections": 12,
+    "validation_failures": 0,
+    "export_mismatches": 0,
+    "isolated_nodes": 0,
+    "io_disagreements": 0,
+    "literal_quote_mismatches": 0
+  },
+  "methods": [
+    {
+      "name": "DR-Seq",
+      "record_id": "dispatch_23261758d9f8820b905e",
+      "operations": 10,
+      "states": 14,
+      "flows": 23,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 154,
+      "review_checks": 154,
+      "quote_instances": 695,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [
+        {
+          "id": "upper_amplification_product",
+          "target_id": "operation:ivt",
+          "disposition": "use_primary"
+        },
+        {
+          "id": "genome_branch_carryover",
+          "target_id": "state:dna_library",
+          "disposition": "use_primary"
+        }
+      ],
+      "paper_matches": [
+        {
+          "source": "dr-seq::paper:25599178",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": [
+        "rna_reads",
+        "dna_reads"
+      ]
+    },
+    {
+      "name": "G&T-seq",
+      "record_id": "dispatch_cf853eaf6f1252e68704",
+      "operations": 9,
+      "states": 12,
+      "flows": 21,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 150,
+      "review_checks": 150,
+      "quote_instances": 439,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [],
+      "paper_matches": [
+        {
+          "source": "g-t-seq::paper:25915121",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "abstract"
+        },
+        {
+          "source": "g-t-seq::paper:26752769",
+          "assessment": "content_checked",
+          "relationship": "background",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": [
+        "rna_reads",
+        "genome_reads",
+        "matched_analysis"
+      ]
+    },
+    {
+      "name": "scM&T-seq",
+      "record_id": "dispatch_66f07442182c2510bcda",
+      "operations": 10,
+      "states": 13,
+      "flows": 22,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 144,
+      "review_checks": 144,
+      "quote_instances": 375,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [
+        {
+          "id": "correct_scbs_caption",
+          "target_id": "operation:scbs_prep",
+          "disposition": "use_primary"
+        }
+      ],
+      "paper_matches": [
+        {
+          "source": "scm-t-seq::paper:26752769",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": [
+        "rna_reads",
+        "bs_reads",
+        "rna_alignments",
+        "methylation_data"
+      ]
+    },
+    {
+      "name": "Hi-SCL",
+      "record_id": "dispatch_51252495a00355bca533",
+      "operations": 6,
+      "states": 10,
+      "flows": 15,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 99,
+      "review_checks": 99,
+      "quote_instances": 403,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [
+        {
+          "id": "readout_carrier",
+          "target_id": "state:reads",
+          "disposition": "use_primary"
+        },
+        {
+          "id": "rt_supply",
+          "target_id": "operation:fuse",
+          "disposition": "use_primary"
+        }
+      ],
+      "paper_matches": [
+        {
+          "source": "hi-scl::paper:26000628",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": [
+        "reads"
+      ]
+    },
+    {
+      "name": "inDrop",
+      "record_id": "dispatch_b6b268148d5b9fbaaa21",
+      "operations": 5,
+      "states": 9,
+      "flows": 13,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 96,
+      "review_checks": 96,
+      "quote_instances": 459,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [
+        {
+          "id": "coencapsulation_resolution",
+          "target_id": "operation:compartmentalize",
+          "disposition": "use_primary"
+        },
+        {
+          "id": "barcode_carrier_resolution",
+          "target_id": "operation:make_library",
+          "disposition": "use_primary"
+        }
+      ],
+      "paper_matches": [
+        {
+          "source": "indrop::paper:26000487",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": [
+        "reads"
+      ]
+    },
+    {
+      "name": "MARS-Seq",
+      "record_id": "dispatch_99e14fc9b66be5864a5a",
+      "operations": 12,
+      "states": 15,
+      "flows": 26,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 160,
+      "review_checks": 160,
+      "quote_instances": 483,
+      "literal_quote_mismatches": [],
+      "unknowns": [
+        {
+          "id": "u_tag_layout",
+          "question": "What is the exact tag-sequence layout through transcription, and at what stages are the cellular and plate-level tags introduced? The primary body establishes all three barcode levels, but the row labels only UMI/T7 and the registered text omits the supplementary oligo layout. The drawing repeats red/green segments after RNA transcription without specifying the transcribed span of the green T7-labeled primer region. A registered primary supplementary oligo map and library-preparation passage is needed before assigning exact RNA tag identities or cellular/plate tag incorporation to a particular operation or physical segment.",
+          "blocking": false,
+          "affected_ids": [
+            "scope:MARS-Seq",
+            "operation:o_first_rt",
+            "operation:o_pool",
+            "state:s_fragments",
+            "state:s_ligated",
+            "state:s_library"
+          ]
+        },
+        {
+          "id": "u_fragment_retention",
+          "question": "How does the scoped preparation retain the tag-bearing RNA fragments for the final library when untagged RNA pieces are also depicted? The row continues with a tagged ligation product but does not specify a selection or the fate of other pieces. A registered primary passage on adapter/primer specificity and fragment retention is needed to add that mechanism or any separated branch.",
+          "blocking": false,
+          "affected_ids": [
+            "operation:o_fragment",
+            "operation:o_ligate",
+            "operation:o_pcr",
+            "state:s_fragments"
+          ]
+        },
+        {
+          "id": "u_strand_information",
+          "question": "Does this RNA-amplification/RNA-fragmentation MARS-Seq implementation retain recoverable transcript-strand information? The catalogue claims fragmentation eliminates it, whereas the cited review explains a loss via cDNA fragmentation across a multi-method discussion. The actual row explicitly fragments RNA. The registered primary body lacks the supplementary chemistry/read orientation needed to resolve that claim; acquire that registered passage before asserting strand loss or strand preservation.",
+          "blocking": false,
+          "affected_ids": [
+            "operation:o_fragment",
+            "state:s_library",
+            "paper:p_hrdlickova_2016"
+          ]
+        }
+      ],
+      "corrections": [],
+      "paper_matches": [
+        {
+          "source": "mars-seq::paper:24531970",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        },
+        {
+          "source": "mars-seq::paper:27198714",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": []
+    },
+    {
+      "name": "SCRB-Seq",
+      "record_id": "dispatch_52d326c1899829bfd2e7",
+      "operations": 6,
+      "states": 8,
+      "flows": 13,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 106,
+      "review_checks": 106,
+      "quote_instances": 341,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [
+        {
+          "id": "resolve_rna_synthesis_caption",
+          "target_id": "operation:synthesize_cdna",
+          "disposition": "use_primary"
+        },
+        {
+          "id": "resolve_late_rt_and_library_order",
+          "target_id": "operation:prepare_library",
+          "disposition": "use_primary"
+        }
+      ],
+      "paper_matches": [
+        {
+          "source": "scrb-seq::reference:scrb-seq:references:0",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": []
+    },
+    {
+      "name": "cP-RNA-Seq",
+      "record_id": "dispatch_54b09e25a068eadc891d",
+      "operations": 5,
+      "states": 6,
+      "flows": 10,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 87,
+      "review_checks": 87,
+      "quote_instances": 272,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [],
+      "paper_matches": [
+        {
+          "source": "cp-rna-seq::paper:26866791",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        },
+        {
+          "source": "cp-rna-seq::paper:26124144",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "abstract"
+        }
+      ],
+      "readout_data_states": []
+    },
+    {
+      "name": "eCLIP",
+      "record_id": "dispatch_01cacc6da877fc0bfc1d",
+      "operations": 9,
+      "states": 13,
+      "flows": 21,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 137,
+      "review_checks": 137,
+      "quote_instances": 612,
+      "literal_quote_mismatches": [],
+      "unknowns": [
+        {
+          "id": "rt_panel_oligo_assignment",
+          "question": "What exactly does the diagram\u2019s Random oligo label denote, and where are P5/P7 sequences installed in this implementation? The registered primary main text resolves the post-RT N5/N10 adapter ligation but does not identify the RT primer or complete oligonucleotide layout. To resolve the panel literally, acquire and register the corresponding Supplementary Protocol 1 RT/oligonucleotide passage and its adapter map. The present architecture therefore records RNA-to-cDNA conversion without assigning random priming or a complete P5/P7 arrangement to that step.",
+          "blocking": false,
+          "affected_ids": [
+            "operation:reverse_transcription",
+            "state:cdna_before_dna_adapter"
+          ]
+        }
+      ],
+      "corrections": [
+        {
+          "id": "resolve_rt_adapter_order",
+          "target_id": "operation:reverse_transcription",
+          "disposition": "use_primary"
+        }
+      ],
+      "paper_matches": [
+        {
+          "source": "eclip::paper:27018577",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        },
+        {
+          "source": "eclip::paper:27068461",
+          "assessment": "content_checked",
+          "relationship": "background",
+          "level": "abstract"
+        }
+      ],
+      "readout_data_states": [
+        "sequence_reads"
+      ]
+    },
+    {
+      "name": "Frag-seq",
+      "record_id": "dispatch_b335359a033e44c4a65b",
+      "operations": 7,
+      "states": 8,
+      "flows": 14,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 88,
+      "review_checks": 88,
+      "quote_instances": 227,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [],
+      "paper_matches": [
+        {
+          "source": "frag-seq::paper:21057495",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": []
+    },
+    {
+      "name": "GMUCT 2.0",
+      "record_id": "dispatch_2cc941a9dfb339dcf739",
+      "operations": 5,
+      "states": 8,
+      "flows": 12,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 95,
+      "review_checks": 95,
+      "quote_instances": 195,
+      "literal_quote_mismatches": [],
+      "unknowns": [
+        {
+          "id": "u_postligation_selectivity",
+          "question": "The diagrams still show capped, unadapted poly(A) RNA at RT, while the catalogue says the second poly(A) selection purifies desired mRNA away from unligated RNA. The registered primary abstract does not describe this cleanup. Which species are retained and rejected, and does this step distinguish ligation status among polyadenylated RNAs? Acquire and register the GMUCT 2.0 full-text post-ligation poly(A)-selection passage before resolving that specificity. The present graph records the reported repeat selection and does not assert complete removal of unligated poly(A) RNA.",
+          "blocking": false,
+          "affected_ids": [
+            "operation:o_repeat_polyA",
+            "state:s_reselected_rna"
+          ]
+        }
+      ],
+      "corrections": [],
+      "paper_matches": [
+        {
+          "source": "gmuct2::paper:23867340",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "abstract"
+        }
+      ],
+      "readout_data_states": []
+    },
+    {
+      "name": "hiCLIP",
+      "record_id": "dispatch_e69bce65d9debe6c5e28",
+      "operations": 9,
+      "states": 12,
+      "flows": 20,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 153,
+      "review_checks": 153,
+      "quote_instances": 673,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [
+        {
+          "id": "end_preparation_resolution",
+          "target_id": "operation:deblock",
+          "disposition": "use_primary"
+        },
+        {
+          "id": "mapping_interface_resolution",
+          "target_id": "operation:map",
+          "disposition": "use_primary"
+        }
+      ],
+      "paper_matches": [
+        {
+          "source": "hiclip::paper:25799984",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        },
+        {
+          "source": "hiclip::paper:26923056",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": [
+        "s8",
+        "references",
+        "s9"
+      ]
+    },
+    {
+      "name": "HiTS-RAP",
+      "record_id": "dispatch_cb86f3ae21677f2ac7d1",
+      "operations": 7,
+      "states": 14,
+      "flows": 20,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 139,
+      "review_checks": 139,
+      "quote_instances": 555,
+      "literal_quote_mismatches": [],
+      "unknowns": [],
+      "corrections": [],
+      "paper_matches": [
+        {
+          "source": "hits-rap::paper:24809628",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        },
+        {
+          "source": "hits-rap::paper:26182240",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "fulltext"
+        }
+      ],
+      "readout_data_states": [
+        "sequence_index",
+        "binding_fluorescence"
+      ]
+    },
+    {
+      "name": "ICE",
+      "record_id": "dispatch_851a1903a1c3f35b5f65",
+      "operations": 5,
+      "states": 8,
+      "flows": 12,
+      "parse_and_validation_errors": [],
+      "graph_reexport_exact": true,
+      "isolated_workflow_nodes": [],
+      "flow_io_missing": [],
+      "flow_io_extra": [],
+      "review_targets": 78,
+      "review_checks": 78,
+      "quote_instances": 236,
+      "literal_quote_mismatches": [],
+      "unknowns": [
+        {
+          "id": "primary_ngs_implementation",
+          "question": "The registered primary evidence is only the Sakurai 2010 abstract. To independently verify how N1-cyanoethylinosine-dependent RT inhibition is converted into site-level differential sequencing representation in this NGS implementation, acquire and register the relevant methods/figure passages from the cited Sakurai 2014 or Suzuki 2015 ICE-seq publication. The current record retains the catalogue-supported paired-arm schematic and does not assert unshown endpoints, efficiency or calling rules.",
+          "blocking": false,
+          "affected_ids": [
+            "scope:ICE",
+            "operation:rt_pcr_treated",
+            "operation:sequence_treated"
+          ]
+        }
+      ],
+      "corrections": [],
+      "paper_matches": [
+        {
+          "source": "ice::paper:20835228",
+          "assessment": "content_checked",
+          "relationship": "supports_architecture",
+          "level": "abstract"
+        }
+      ],
+      "readout_data_states": [
+        "reads_control",
+        "reads_treated"
+      ]
+    }
+  ],
+  "limits": "Structural checks and literal evidence verification do not establish semantic entailment, source completeness or scientific correctness. Quotes repeated in multiple fields are counted as instances, not independent evidence."
+}

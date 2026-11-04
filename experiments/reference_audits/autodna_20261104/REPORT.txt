@@ -1,0 +1,107 @@
+AutoDNA reference audit — 4 November 2026
+
+Scope and access
+---------------
+The user-linked item is James Zou's News & Views, “AI agents enter the ‘wet lab’”,
+published 4 November 2026. Its public opening, not its subscription-only body,
+was accessible. It comments on Wu et al.'s AutoDNA study.
+https://www.nature.com/articles/d41586-026-03270-1
+
+Final primary publication: “An AI-native experimental laboratory for autonomous
+biomolecular operations”, Wu et al., Nature, 4 November 2026.
+https://www.nature.com/articles/s41586-026-11228-6
+The abstract, availability statements and extended-figure captions were read;
+the final main text was subscription-only. Adding ?error=cookies_not_supported
+allowed access to the public preview rather than the publisher login redirect.
+
+The full 16-page public preprint was read. It is an EARLIER 2025 version titled
+“An AI-native experimental laboratory for autonomous biomolecular engineering”.
+It must not be treated as the complete final paper or used to silently replace
+updated final results.
+https://arxiv.org/abs/2507.02379
+https://arxiv.org/pdf/2507.02379
+
+The final publication's public 173-page Supplementary Information was downloaded.
+Relevant sections were read, not every page/table or execution transcript.
+https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-026-11228-6/MediaObjects/41586_2026_11228_MOESM1_ESM.pdf
+
+Local read-only research copies (temporary; not included in this repository):
+  /private/tmp/autodna_read_20261104/final_supplement.pdf
+  /private/tmp/autodna_read_20261104/final_supplement.txt
+  /private/tmp/autodna_read_20261104/2507.02379.pdf
+  /private/tmp/autodna_read_20261104/2507.02379.txt
+
+Published supplement: relevant findings
+--------------------------------------
+Page numbers below are one-based PDF page positions.
+
+S2.2, pp. 22–24: modified PaperQA2 uses original retrieved passages for final
+answer generation instead of their intermediate summaries. Its demonstration
+found context conflation between TdT validation and multibase synthesis, and a
+missing buffer formulation. Separate document identifiers avoid collisions when
+papers and supplements share a DOI. This is a bounded retrieval comparison,
+not a universal accuracy guarantee.
+
+S2.3, pp. 26–27: procedures use a part/step/option hierarchy and reagent checklist.
+S2.4, p. 31: reagent matching distinguishes a buffer from its separately available
+constituents and requires composition agreement for specified recipes.
+
+S9.2, pp. 167–168: authors report ten repetitions of the same synthesis prompt;
+60% yielded complete synthesis protocols that successfully produced the intended
+sequence. This is their reported compound plan/completion/outcome criterion,
+not extraction accuracy, per-operation correctness, or a broad task success rate.
+The section does not separately enumerate causes of all four unsuccessful cases.
+
+S9.3, pp. 168–169: of 14 observed hardware-error events, six required operator
+correction. Recovery depends on observable error signals. Thus the abstract's
+autonomy wording should not be expanded into a claim of zero intervention or
+uniform reliability.
+
+Official code inspected
+-----------------------
+Repository: https://github.com/IPADS-X/AutoDNA
+Branch: autodna
+Inspected commit: 914d14017fc434cc4f01e9ad8b034a125203f0bf
+Study's archived code/data: https://doi.org/10.5281/zenodo.20624108
+The repository commit was not independently equated to the archived study version.
+No code was executed or copied into our implementation.
+
+Files read:
+  AutoDNA-python/scientist/agents/Literature.py
+  AutoDNA-python/scientist/agents/Protocol.py
+  AutoDNA-python/scientist/prompts/agents/Protocol/prompt.py
+Selected sections, not the entire file:
+  AutoDNA-python/scientist/ai_scientist.py
+Also read the repository README and directory listings. This was not a complete
+repository audit.
+
+Literature.py uses targeted questions over a local modified PaperQA collection and
+returns file IDs for sharing results. Its cache is keyed by experiment name, so
+that implementation should not be copied as source/query-sensitive memoization.
+
+Protocol.py selects initialization, refinement, inventory adjustment or optimization
+using input/history metadata. The protocol prompt prescribes part/step/option
+organization. Some prompt variants remove a step when no reagent option remains
+and assume unlisted reagents available; those are unsuitable defaults for faithful
+historical extraction. Their existence is not evidence that a particular reported
+experiment failed because of these instructions.
+
+Full code URL prefix:
+https://github.com/IPADS-X/AutoDNA/blob/914d14017fc434cc4f01e9ad8b034a125203f0bf/
+
+Implications for this atlas — engineering judgments, not paper findings
+---------------------------------------------------------------------
+1. Use compact summaries for discovery, but original source passages and explicit
+   experimental context for admitting workflow details or historical changes.
+2. Keep document identity separate from method identity. Separate supplements must
+   remain retrievable without scheduling the same method as independent work.
+3. Distinguish source-supported descriptions, proposed adaptations and experimentally
+   validated outcomes. Source/model review cannot establish wet-lab performance.
+4. AutoDNA's atomic services describe instrument capabilities, not a universal
+   ontology of chemical primitives. Do not replace our scientific transformations
+   with hardware commands or infer chemical interchangeability from common purpose.
+5. Their study does not establish historical edge types or a data-derived change
+   taxonomy. Our citation-supported change extraction and subsequent grouping still
+   require their own evidence and evaluation.
+
+No atlas schema, prompts, workflows or running jobs were changed by this audit.

@@ -1,0 +1,85 @@
+{
+  "created_at": "2026-11-04T20:35:47.269383+00:00",
+  "boundary": "Read-only targeted scientific inspection of4supported workflows. Reopened extraction states,operations,flows, selected registered primary passages and G&T/inDrop source images. Not a complete expert audit of all14completed workflows; no native calls or original-artifact edits.",
+  "methods": [
+    "DR-Seq",
+    "G&T-seq",
+    "scM&T-seq",
+    "inDrop"
+  ],
+  "findings": [
+    {
+      "id": "resolution_consistency",
+      "severity": "representation_consistency",
+      "status": "confirmed_annotation_difference_not_demonstrated_scientific_error",
+      "records": [
+        "dispatch_cf853eaf6f1252e68704",
+        "dispatch_66f07442182c2510bcda"
+      ],
+      "fields": [
+        "operations[isolate].resolution",
+        "operations[lyse].resolution",
+        "operations[capture].resolution"
+      ],
+      "observation": "G&T labels these three source-level actions single_event; scM&T labels the equivalent depicted actions composite_block. Both preserve the same isolation,lysis,capture,physical-separation route. Current representation.py defines resolution broadly and does not explain why these comparable actions should differ.",
+      "consequence": "Do not use this field as a hard cross-method equality/filter rule. Similar action graphs can receive different granularity labels.",
+      "recommendation": "For this atlas matching pass, inspect actual transformations/interfaces and retain a small annotation-consistency finding. Clarify single_event versus composite_block criteria only if this field will affect matching; no wholesale extraction rerun is justified."
+    },
+    {
+      "id": "different_smartseq2_boundary",
+      "severity": "matching_contract",
+      "status": "source_scoped_boundary_difference",
+      "records": [
+        "dispatch_cf853eaf6f1252e68704",
+        "dispatch_66f07442182c2510bcda"
+      ],
+      "fields": [
+        "operations[smartseq2].outputs",
+        "operations[sequence_rna].description",
+        "operations[smart_seq2].outputs"
+      ],
+      "observation": "G&T Smart-seq2 outputs amplified_cdna; its downstream sequencing composite explicitly leaves intermediate library construction unresolved. scM&T Smart-seq2/library-preparation composite outputs rna_library and includes Nextera XT on primary support.",
+      "consequence": "Same method/component name does not establish identical operation boundaries or interchangeable outputs. Compare connected groups or attach scoped correspondence, not label equality.",
+      "recommendation": "Keep exact input/output scope with any future shared-component edge. Needed boundary expansion can be targeted during connection research."
+    },
+    {
+      "id": "gt_primary_source_level",
+      "severity": "history_handoff",
+      "status": "confirmed_source_limit",
+      "record": "dispatch_cf853eaf6f1252e68704",
+      "fields": [
+        "source_registry[g-t-seq::paper:25915121].content_level",
+        "paper_matches"
+      ],
+      "observation": "G&T original primary PMID25915121 is abstract-only (521characters). Available fulltext26752769 is scM&T and correctly classified background for G&T. Its relevant G&T processing passage supplies related context; it cannot substitute for full founder-paper citation tracing.",
+      "recommendation": "Require actual G&T primary recovery before its full-reference ancestry stage. content_checked must always be read with content_level, not assumed fulltext."
+    }
+  ],
+  "positive_checks": [
+    {
+      "method": "DR-Seq",
+      "record": "dispatch_23261758d9f8820b905e",
+      "evidence": "dr-seq::paper:25599178[b00006,b00007,b00011,b00030]",
+      "finding": "Correctly retains cDNA and gDNA together before and after aliquoting; split does not claim molecular purification. IVT produces aRNA then DNA sequencing library. Genome-directed library retains cDNA contribution and coding-region ambiguity. Cell-index and transcript-derived read attribution are source-supported."
+    },
+    {
+      "method": "G&T-seq",
+      "record": "dispatch_cf853eaf6f1252e68704",
+      "evidence": "G&T source diagram and poster images/99942bed25b6d87710b1.png,images/7294254207eb51226c3e.png; original abstract plus registered catalogue",
+      "finding": "Capture makes a complex within one lysate; a separate operation creates RNA-bead and DNA fractions. Sequencing creates data states. Joint analysis uses both datasets and does not imply physical pooling. No ordinary bisulfite/methylome step imported from neighboring scM&T."
+    },
+    {
+      "method": "scM&T-seq",
+      "record": "dispatch_66f07442182c2510bcda",
+      "evidence": "scm-t-seq::paper:26752769[b00005,b00016,b00017,b00020]",
+      "finding": "DNA bisulfite preparation follows physical RNA/DNA separation. Catalogue WGA wording is corrected; no ordinary genome preamplification invented. RNA branch remains separate and DNA readout is conversion-dependent."
+    },
+    {
+      "method": "inDrop",
+      "record": "dispatch_b6b268148d5b9fbaaa21",
+      "evidence": "indrop::paper:26000487[b00012,b00013,b00134,b00135];images/a61cb9736bceaf1341af.png",
+      "finding": "Catalogue fusion wording is corrected to co-encapsulation. UV releases hydrogel-linked primers. Collection preserves intact droplets; RNA becomes barcode-bearing cDNA before droplet breaking/combined amplification inside the composite library operation. Terminal state is sequence data, not literal barcoded RNA. Barcode collisions/doublets qualify single-cell attribution."
+    }
+  ],
+  "important_limit": "All four unknowns arrays are empty at schematic scope, but descriptions explicitly exclude execution details. This is not evidence of executable-protocol completeness."
+}

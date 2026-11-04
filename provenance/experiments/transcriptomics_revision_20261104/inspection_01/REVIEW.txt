@@ -1,0 +1,60 @@
+Extraction inspection —4 November2026
+
+Scope
+Snapshot inspection_01 contains14supported workflows plus active attempt records.
+Archive SHA256:1a8c7a297470466c2755f29618fc0729584d7f827e3c4e0d0309f1fdea123246.
+All114copied files verified against original-file SHA256 pins. Original extraction,
+review and running job files are untouched. Selected source diagrams were inspected.
+This is source/representation auditing, not expert certification or experimental
+validation. A supported schematic is not an executable protocol.
+
+What passed
+All14supported workflows replayed their schema/semantic validators and reproduced
+their existing graphs exactly.105Operations,150States,242Flows; no isolated nodes
+or declared-input/output-versus-Flow disagreements.1,686required review targets
+are covered.5,965quotation instances (with repetition) occur in registered texts;
+this proves presence, not that every quotation supports its attached claim.
+
+Scientific examples inspected
+DR-Seq preserves co-amplified gDNA/cDNA mixtures and correctly treats aliquoting
+as splitting a mixture. G&T/scM&T retain physical RNA/DNA separation and distinct
+branches. inDrop records co-encapsulation and barcode-bearing cDNA. cP-RNA-Seq keeps
+three end-chemistry populations inside one mixture. hiCLIP distinguishes removable
+and permanent adapter blocks. ICE separates physical treated/control samples from
+the resulting sequence data. See audit_content/audit.json and audit_structure/findings.json.
+
+Issues found
+1. cP-RNA-Seq rt_pcr_purify.effects[0].aspect is readout although its output is a
+physical cDNA library. All14other readout effects in this snapshot produce data.
+The current enum lacks per-value definitions. This is inconsistent annotation,
+not evidence that the recorded chemistry or material routing is incorrect.
+2. G&T uses single_event for isolation/lysis/capture while scM&T calls the comparable
+source actions composite_block. Do not use this flag as a hard equality rule.
+3. G&T and scM&T Smart-seq2-labelled blocks have different input/output boundaries:
+amplifiedcDNA versus sequencinglibrary. Connected-group correspondence must retain
+those scope differences; equal names do not establish equivalent operations.
+4. iCLIP's first reviewer caught use_primary chronology in the correction record
+while the graph retained the opposite poster order. It was sent back for revision.
+At latestcheck the revised candidate was in fresh review; no finalacceptanceclaimed.
+5. G&T,GMUCT2.0 andICE have onlyabstract-level original architecture papers in the
+supplied registrations. Their schematics can be source-supported, but primary
+bibliography/chemistry recovery remains necessary for relevant historical claims.
+
+Remaining evidence questions
+Sixnonblocking schematic unknowns acrossMARS-Seq(3),eCLIP(1),GMUCT2.0(1),ICE(1).
+They cover barcode layouts, fragment retention, strand information, adapteridentity,
+selection specificity and exactNGSimplementation. Block the specific downstream
+claim needing that information, not every unrelated use of the method graph.
+
+Small next steps
+Keep the reviewed extraction. Clarify existing operation-effect semantics and
+check those annotations against actual endpoints before matching. Verify that a
+paper-based correction agrees with topology. Recover only the evidence needed for
+particular historical/component claims. Preserve raw change descriptions; learn
+innovation categories by grouping those observations, not by forcing a taxonomy.
+No source artifacts or live runtime were modified by this inspection.
+
+Related reference
+experiments/reference_audits/autodna_20261104/REPORT.txt records the new AutoDNA
+paper/supplement/code audit. Its documented retrieval failures support checking
+original passages and experimental context rather than trusting summaries alone.
