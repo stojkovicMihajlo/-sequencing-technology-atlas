@@ -116,8 +116,10 @@ def history_rows(run, snapshot):
     review_complete = review_matches and len(findings) == len(review["findings"]) and set(findings) == set(claims)
     published = {x["id"]: x for x in graph.get("links", [])} if graph else {}
     withheld = {x["claim"]["id"]: x for x in graph.get("withheld", [])} if graph else {}
+    expected_graph_version = ("citation_lineage_pilot/3" if analysis.get("format_version") == "citation_analysis/3"
+                              else "citation_lineage_pilot/2")
     graph_consistent = bool(
-        graph and graph.get("format_version") == "citation_lineage_pilot/2"
+        graph and graph.get("format_version") == expected_graph_version
         and graph.get("analysis_sha256") == analysis_pin and review_complete
         and len(published) == len(graph["links"]) and len(withheld) == len(graph["withheld"])
         and not set(published) & set(withheld) and set(published) | set(withheld) == set(claims)
@@ -139,6 +141,11 @@ def history_rows(run, snapshot):
                 and finding.get("decision") == "accept" and not review.get("omitted_candidates")
                 and assessed and not any(x["blocks_relation"] for x in assessments)
                 and bool(claim.get("seed_evidence")) and bool(claim.get("predecessor_evidence")))
+        if expected_graph_version == "citation_lineage_pilot/3":
+            safe = (safe and bool(claim.get("citation_context"))
+                    and (layer != "history" or (claim.get("claim_scope") == "seed_workflow"
+                                                and bool(claim.get("seed_operation_ids"))))
+                    and {"seed", claim["reference_id"]} <= {e["source_id"] for e in finding.get("evidence", [])})
         status = "published_overlay" if safe else (
             "withheld" if graph_consistent and claim_id in withheld else "not_published")
         rows.append({
@@ -148,6 +155,8 @@ def history_rows(run, snapshot):
             "seed_method": analysis["seed_method"], "record_id": binding.get("record_id"),
             "contributor": claim["contributor"], "contributor_kind": claim["contributor_kind"],
             "reference_id": claim["reference_id"],
+            "citation_context": claim.get("citation_context"),
+            "claim_scope": claim.get("claim_scope", "not_recorded_in_archived_contract"),
             "relation": relation, "relationship_layer": layer,
             "published_edge": safe, "published_ancestry_edge": safe and layer == "history",
             "publication_status": status,

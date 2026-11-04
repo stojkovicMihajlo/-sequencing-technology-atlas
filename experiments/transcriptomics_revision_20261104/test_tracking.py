@@ -137,3 +137,35 @@ def test_methods_keep_failed_rows_hash_mismatch_and_distinct_implementations(tmp
     assert len([r for r in result["methods"] if r["extraction_status"] == "failed"]) == 2
     assert all(p.read_bytes() == data for p, data in before.items())
     with pytest.raises(FileExistsError): tracking.export(batches, [], tmp_path / "tracker")
+
+
+def test_version3_tracking_retains_context_and_prevents_outside_history(tmp_path):
+    run = history(tmp_path)
+    analysis = json.loads((run / 'analysis.json').read_text())
+    analysis['format_version'] = 'citation_analysis/3'
+    for c in analysis['claims']:
+        c.update(citation_context='The citation paragraph for this reference.', claim_scope='seed_workflow')
+    pin = write(run / 'analysis.json', analysis)
+    review = json.loads((run / 'review.json').read_text())
+    review['analysis_sha256'] = pin
+    for f, c in zip(review['findings'], analysis['claims']):
+        f['evidence'] += c['predecessor_evidence']
+    write(run / 'review.json', review)
+    state = json.loads((run / 'state.json').read_text()); state['final_analysis_sha256'] = pin
+    write(run / 'state.json', state)
+    graph = json.loads((run / 'graph.json').read_text())
+    graph.update(format_version='citation_lineage_pilot/3', analysis_sha256=pin)
+    for item in graph['links'] + graph['withheld']:
+        i = int(item['claim']['id']); item['claim'] = analysis['claims'][i]; item['review'] = review['findings'][i]
+    write(run / 'graph.json', graph)
+    result = tracking.export([], [run], tmp_path / 'v3')
+    assert result['change_claims'][0]['published_ancestry_edge']
+    assert result['change_claims'][0]['citation_context'] == analysis['claims'][0]['citation_context']
+    analysis['claims'][0].update(claim_scope='supporting_experiment', seed_operation_ids=[])
+    pin = write(run / 'analysis.json', analysis)
+    state['final_analysis_sha256'] = pin; write(run / 'state.json', state)
+    review['analysis_sha256'] = pin; write(run / 'review.json', review)
+    graph['analysis_sha256'] = pin; graph['links'][0]['claim'] = analysis['claims'][0]
+    write(run / 'graph.json', graph)
+    result = tracking.export([], [run], tmp_path / 'invalid_scope')
+    assert not result['change_claims'][0]['published_ancestry_edge']
