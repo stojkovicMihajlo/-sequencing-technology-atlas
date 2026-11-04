@@ -72,6 +72,12 @@ IDs and cannot produce evolutionary edges. Do not relabel a validation experimen
 as part of the workflow just to publish it. Retain it as a scoped research record.
 Check the earlier paper's title/identifiers against the reference. For historical
 claims distinguish explicit adoption from a merely earlier similar experiment.
+Apply the shared historical decision rules to the scope actually supported. Put
+the feature, earlier/later arrangements and what is retained in seed_design_change;
+do not emit a generic claim that the 'surrounding measurement strategy' is retained.
+The supplied schema describes the purpose of each narrative field. No technical
+change taxonomy is required. Unchanged component adoption and development without
+a demonstrated gain are legitimate if the historical attribution is supported.
 Record uncertain version/chronology in unresolved; never claim priority solely
 from publication year. Do not supply an invented before-side protocol or assume
 that a proposed catalogue match has been confirmed.
@@ -108,5 +114,12 @@ supporting experiment can be real without being an assay ancestor. Check the
 earlier demonstration, claimed change and measured gain separately. A plausible
 benefit is not a reported result; an earlier similar method is not necessarily
 what the authors adopted. Missing decisive evidence requires needs_evidence.
+For a historical finding, explain in rationale which shared definition is met:
+the documented starting assay plus retained/revised arrangement, or the named
+adopted contribution plus its actual destination. Check the attribution and
+earlier demonstration independently. A narrow component claim cannot substitute
+for missing evidence of whole-assay development. Count distinct scientific claims,
+not multiple labels for the same assertion. Do not demand a performance benefit
+or a component modification merely to accept a supported historical transfer.
 """,
 }

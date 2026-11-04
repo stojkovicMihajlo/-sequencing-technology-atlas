@@ -73,4 +73,10 @@ Assess every unresolved item exactly once by issue_index, saying whether it
 blocks this specific claim. A qualification may be nonblocking only if the claim
 actually avoids the unsupported assertion. Preserve it in the exported result.
 Return the supplied Review schema bound to the exact analysis SHA256.
+For history, state in rationale which shared definition is met: a documented
+starting assay with retained/revised arrangement, or a named adopted contribution
+and its destination. Check actual attribution independently of shared structure.
+Unchanged adoption is valid and a demonstrated gain is not required. Do not
+accept two historical labels for the same assertion; distinct contributions may
+have separate claims between the same pair.
 """

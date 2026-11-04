@@ -18,11 +18,29 @@ from genomics_discovery.illumina.graph import operation_group
 RELATIONS = {
     "method_development": {
         "layer": "history",
-        "meaning": "The later implementation explicitly develops/adapts the earlier assay architecture. Identify the retained architecture and the actual changes; a shared reagent, citation, comparator or prior date is insufficient.",
+        "meaning": "The later work identifies a particular earlier assay implementation as a starting point and documents its revision into the later assay. The claimed inheritance is an assay strategy or arrangement, not merely use of an isolated contribution.",
+        "required": (
+            "Identify both assay implementations and the later source passage that establishes development from the earlier one. An explicit procedural attribution can establish this; the exact word 'developed' is not required.",
+            "Describe the retained experimental strategy or connected arrangement specifically, then the supported earlier-to-later changes. Check the earlier description in the cited work; do not reconstruct it from the later paper alone.",
+            "Name the affected portion of the workflow. Several coordinated replacements are allowed; there is no required percentage of shared operations or identical biological application.",
+        ),
+        "exclusions": (
+            "A shared assay family, name, reagent, goal, publication date, background citation or performance comparison does not establish development.",
+            "Developing a method does not imply improved performance, inheritance of every component, a unique parent, or the earliest invention.",
+        ),
     },
     "component_adoption": {
         "layer": "history",
-        "meaning": "The later implementation explicitly adopts/adapts a specified earlier component or procedure, independently supported in the earlier work. Name the component and its destination; do not expand this to inheritance of its enclosing operation or whole assay.",
+        "meaning": "The later work attributes use or adaptation of an identifiable experimental contribution to the cited earlier work, which independently demonstrates that contribution at the claimed scope. Only that contribution is inherited.",
+        "required": (
+            "Name the adopted contribution and the demonstrated property or procedure being used: for example a reagent design, oligonucleotide feature, capture mechanism, preparation or analysis procedure. A component can be smaller than an Operation or span several Operations; it is not defined by size or a fixed primitive vocabulary.",
+            "Locate the later source's attribution and actual use, and verify the corresponding earlier demonstration. Mere availability of an enzyme or a similar earlier experiment establishes at most a precedent.",
+            "Describe the destination and function in the later workflow, what was retained, and any supported adaptation or changed context. Unchanged adoption is valid; do not invent a design change or a benefit.",
+        ),
+        "exclusions": (
+            "Do not expand adoption of a component to its enclosing Operation or entire earlier assay. Shared purpose, identical names and structural similarity are insufficient.",
+            "A demonstrated reagent class does not establish identity of every commercial construct, substrate compatibility, or transfer of its reported performance. Keep the claim at the supported scope.",
+        ),
     },
     "mechanistic_precedent": {
         "layer": "precedent",
@@ -45,10 +63,50 @@ RELATIONS = {
 }
 HISTORICAL_RELATIONS = frozenset(k for k, v in RELATIONS.items() if v["layer"] == "history")
 
+HISTORY_DECISION_RULES = """
+HISTORICAL DECISION RULES
+Direction is earlier contribution -> later implementation, justified by attribution
+and source identity, never by chronology alone. First identify what the citation
+actually attributes. If an earlier assay is the documented starting point and the
+retained arrangement and revisions are established, use method_development. If
+only a particular contribution is demonstrably adopted, use component_adoption.
+If neither is supported, use a justified nonhistorical relation or withhold it.
+Do not select component_adoption just because method_development is uncertain:
+adoption needs its own evidence. Do not publish both types for the same assertion;
+separate claims between the same methods are allowed for distinct contributions.
+
+Use the narrowest supported claim. 'As described in reference X' can support
+adoption of the procedure it modifies; it does not license transfer of everything
+in X. An introductory citation, 'unlike X', and outperforming X do not by themselves
+establish inheritance. Replacing all of a compared process is a description of
+change, not proof of descent from that comparator.
+
+A historical assertion is supported by the later attribution AND the earlier
+demonstration. Read both at their available evidence levels. Missing decisive
+support means needs_evidence or a narrower independently supported claim, never
+an invented parent. Absence of a history edge means not established in this
+evidence, not proof of independent invention. Record uncertainty about versions
+or priority without converting journal date into proof of influence.
+
+History type and technical change category are separate. Preserve the actual
+before/after description in natural language. Do not force changes into an enzyme,
+chemistry, routing or other taxonomy now; later clustering must retain these
+descriptions, sources and original relationship types.
+"""
+
 
 def relation_instructions(kinds):
     """The same definitions feed both citation following and paired comparison."""
-    return "RELATION DEFINITIONS\n" + "\n".join(f"{k} [{RELATIONS[k]['layer']}]: {RELATIONS[k]['meaning']}" for k in kinds)
+    kinds = tuple(kinds)
+    lines = ["RELATION DEFINITIONS"]
+    for kind in kinds:
+        rule = RELATIONS[kind]
+        lines.append(f"{kind} [{rule['layer']}]: {rule['meaning']}")
+        lines.extend("Required: " + text for text in rule.get("required", ()))
+        lines.extend("Does not establish: " + text for text in rule.get("exclusions", ()))
+    if HISTORICAL_RELATIONS.intersection(kinds):
+        lines.append(HISTORY_DECISION_RULES)
+    return "\n".join(lines)
 
 
 CHANGE_INSTRUCTIONS = """

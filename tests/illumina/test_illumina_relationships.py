@@ -108,3 +108,30 @@ def test_both_native_source_tools_return_empty_passage_on_query_miss(tmp_path, s
 
 def test_policy_has_only_two_historical_types():
     assert {k for k, v in RELATIONS.items() if v["layer"] == "history"} == {"method_development", "component_adoption"}
+
+
+def test_history_criteria_reach_both_native_authors_and_reviewers():
+    # Both run scripts prepend COMMON for every role. Test the imported shared
+    # policy rather than maintaining different definitions in separate prompts.
+    import importlib.util
+    from genomics_discovery.illumina.relationships import HISTORY_DECISION_RULES
+    for name in ('prompts', 'pair_prompts'):
+        spec = importlib.util.spec_from_file_location(
+            'relation_test_' + name, ROOT / 'experiments/citation_lineage_pilot' / (name + '.py'))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        assert HISTORY_DECISION_RULES in module.COMMON
+        for kind in ('method_development', 'component_adoption'):
+            for field in ('required', 'exclusions'):
+                assert all(text in module.COMMON for text in RELATIONS[kind][field])
+
+
+def test_graph_tool_returns_definition_and_criteria_without_reclassifying_old_claim():
+    g = pair()
+    before = copy.deepcopy(g)
+    packet = relationship_packet(g, 'c3')
+    assert packet['relation_definition'] == RELATIONS['component_adoption']
+    assert packet['relation_definition']['required']
+    assert packet['relation_definition']['exclusions']
+    assert packet['claim'] == before['historical_links'][0]['claim']
+    assert g == before

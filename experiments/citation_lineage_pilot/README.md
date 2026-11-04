@@ -122,3 +122,64 @@ only selected methodological leads. No expected irCLIP relationships enter promp
 The output retains comparisons, precedents and withheld claims separately; only
 method_development and component_adoption belong to the historical layer. Shared
 operation names and catalogue title matches cannot create historical relationships.
+
+Precise historical definitions, 4 November
+-----------------------------------------
+The canonical definitions and decision rules live in
+`src/genomics_discovery/illumina/relationships.py`, in `RELATIONS` and
+`HISTORY_DECISION_RULES`. `relation_instructions()` supplies the same meaning,
+required evidence and exclusions to citation nomination/analysis/review and the
+paired-workflow author/reviewer. `relationship_packet()` also returns the current
+definition to a downstream agent; this guidance does not re-review old claims.
+
+`method_development`: the later work identifies the earlier assay implementation
+as its starting point, with a specifically described retained strategy/arrangement
+and documented revisions. A citation, same assay family, similarity, or superiority
+is insufficient. There is no operation-count threshold or requirement of a gain.
+
+`component_adoption`: the later work attributes actual use/adaptation of a named
+contribution to earlier work that demonstrates it. Specify the property/procedure,
+destination, retained features and any adaptation. The contribution can be a
+feature within one operation or a multi-operation procedure. Unchanged adoption
+is valid. A reagent class must not be promoted to exact construct equivalence.
+
+The boundary is the scope of attributed inheritance, not how many steps changed.
+Do not label the same assertion twice; distinct contributions between the same
+methods may have separate claims. A comparator that is replaced is not thereby
+an ancestor. Method development and component adoption are the only historical
+types; the descriptions of technical changes remain natural language for later
+clustering. Missing development evidence does not automatically justify adoption.
+
+No new output fields or chemical ontology were introduced. Existing narrative
+fields now have explicit schema instructions. `seed_design_change` describes the
+compared feature, before/after, retained elements and affected workflow portion;
+`earlier_demonstration`, `limitation_addressed`, `reported_gain` and
+`tradeoffs_and_transfer_limits` keep their separate roles. Both sides retain source
+quotations. The reviewer must explain why the selected historical definition fits.
+Software additionally rejects method development whose declared contributor is
+only a component, and empty historical contribution/comparison descriptions.
+These are structural checks, not semantic entailment or proof of correct history.
+
+Reference basis: the pinned Intern-Atlas/EDC implementation audits in
+`experiments/reference_audits/intern_atlas_20261103/REPORT.txt`, and the concrete
+assay comparisons in `experiments/change_representation_20261104/REPORT.txt`.
+We adopt shared relation definitions and source-supported evidence packages;
+we reject similarity/name/date fallback as scientific attribution. No external
+code was copied. These are our operational definitions, not a claim that the
+literature establishes a universal taxonomy of innovation.
+
+The completed irCLIP job 51113321 used frozen runtime05 and the previous prompt
+wording. Its 11 published pilot links comprise one method development, one
+component adoption, four precedents and five comparisons; four claims were withheld.
+The new wording is a development change and has not had a new native model trial.
+The live schema still anchors claims to Operations; State/Flow addressing proposed
+in the requirements audit remains unimplemented. No existing run is upgraded or
+reclassified by this documentation change.
+
+Validation: 513 offline tests passed using the existing project environment and
+explicit `-p pytest_asyncio.plugin`. Seven added tests cover shared prompt wiring,
+tool-returned definitions, invalid whole-assay contributor declarations, blank
+historical descriptions and unchanged adoption without an asserted gain. They
+test software behavior, not an LLM's classification accuracy. The completed irCLIP
+overlay was also exactly reconstructed from its unchanged claims/sources/review;
+the native analysis hash and exported JSON equality were checked separately.

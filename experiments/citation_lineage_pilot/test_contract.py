@@ -196,6 +196,49 @@ def current_case():
     return a, r, sources
 
 
+def test_method_development_cannot_declare_just_a_component_as_its_ancestor():
+    a, r, sources = current_case()
+    a.claims[0].relation = 'method_development'
+    a.claims[0].contributor_kind = 'experimental_component'
+    with pytest.raises(ValueError, match='earlier assay'):
+        validate_analysis(a, sources, ['R1'], ['o1'], [])
+    with pytest.raises(ValueError, match='earlier assay'):
+        graph_overlay(a, r, sources, 'pin', {})
+
+
+@pytest.mark.parametrize('field', ['contributor', 'earlier_demonstration', 'seed_design_change'])
+def test_blank_history_descriptions_cannot_publish_even_after_acceptance(field):
+    a, r, sources = current_case()
+    a.claims[0].relation = 'component_adoption'
+    setattr(a.claims[0], field, '  \n')
+    with pytest.raises(ValueError, match='nonblank ' + field):
+        graph_overlay(a, r, sources, 'pin', {})
+
+
+def test_unchanged_adoption_without_reported_gain_remains_representable():
+    # Synthetic source fixture: the software must not require a new mechanism or
+    # a performance gain. This is not a model-based semantic classification test.
+    a, r, sources = current_case()
+    c = a.claims[0]
+    sources['seed']['text'] = 'We used the adapter design from method A without modification for RNA capture.'
+    sources['R1']['text'] = 'Method A demonstrated this adapter design for RNA capture.'
+    sources['bibliography']['text'] = json.dumps({'R1': {'contexts': [sources['seed']['text']]}})
+    c.citation_context = sources['seed']['text']
+    c.relation = 'component_adoption'
+    c.contributor_kind = 'experimental_component'
+    c.contributor = 'adapter design from method A'
+    c.earlier_demonstration = sources['R1']['text']
+    c.seed_design_change = 'The adapter design is retained without modification and used in the RNA capture operation.'
+    c.reported_gain = 'Not established; no performance comparison was reported.'
+    c.seed_evidence = [Evidence(source_id='seed', quote=sources['seed']['text'])]
+    c.predecessor_evidence = [Evidence(source_id='R1', quote=sources['R1']['text'])]
+    r.findings[0].evidence = c.seed_evidence + c.predecessor_evidence
+    validate_analysis(a, sources, ['R1'], ['o1'], [])
+    g = graph_overlay(a, r, sources, 'pin', {})
+    assert g['links'][0]['kind'] == 'component_adoption'
+    assert g['links'][0]['claim']['reported_gain'] == c.reported_gain
+
+
 def test_new_claim_requires_its_exact_citation_context():
     a, r, sources = current_case()
     validate_analysis(a, sources, ['R1'], ['o1'], [])

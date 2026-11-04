@@ -4,7 +4,7 @@ import json
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
-from genomics_discovery.illumina.relationships import RELATIONS
+from genomics_discovery.illumina.relationships import RELATIONS, HISTORICAL_RELATIONS
 
 
 class Record(BaseModel):
@@ -45,13 +45,13 @@ class Claim(Record):
     reference_id: str
     contributor: str
     contributor_kind: Literal["assay", "experimental_component", "general_method", "other"]
-    relation: Relation
+    relation: Relation = Field(description="Apply the shared RELATION DEFINITIONS. Only method_development and component_adoption assert historical transfer; the type is not a technical-change category.")
     seed_operation_ids: list[str]
-    earlier_demonstration: str
-    seed_design_change: str
-    limitation_addressed: str
-    reported_gain: str
-    tradeoffs_and_transfer_limits: str
+    earlier_demonstration: str = Field(description="Describe what the cited implementation demonstrably did or contained at the claimed scope, supported by predecessor_evidence. A title or general topic is not a demonstration.")
+    seed_design_change: str = Field(description="Natural-language comparison: identify the feature being compared, earlier versus later arrangement, retained elements and affected workflow portion. For component adoption name the contribution and its destination; unchanged use is valid. For method development specify the retained assay strategy and revisions. Do not substitute vague 'same backbone' wording or invent unsupported changes.")
+    limitation_addressed: str = Field(description="The reported limitation or reason for this change; state not established when absent. Keep author rationale distinct from measured consequences.")
+    reported_gain: str = Field(description="Reported consequence with metric, comparator and tested context. Say not established when absent. A history edge does not require a gain; whole-assay gains must not be assigned to one component without evidence.")
+    tradeoffs_and_transfer_limits: str = Field(description="Supported limitations and relevant context/interface differences. Distinguish documented trade-offs from unknown transferability; absence of a reported trade-off does not establish none exist.")
     seed_evidence: list[Evidence] = Field(min_length=1)
     predecessor_evidence: list[Evidence]
     catalogue_candidates: list[str]
@@ -161,6 +161,14 @@ def check_citation_binding(claim, sources):
         raise ValueError("A seed-workflow claim must locate at least one actual operation")
     if claim.claim_scope != "seed_workflow" and claim.seed_operation_ids:
         raise ValueError("An outside/unlocalized claim cannot borrow seed-workflow operation IDs")
+    # These reject contradictory/empty declarations, not scientifically false prose.
+    # Source entailment and the retained-versus-adopted distinction need review.
+    if claim.relation == "method_development" and claim.contributor_kind != "assay":
+        raise ValueError("Method development must identify an earlier assay, not just a component")
+    if claim.relation in HISTORICAL_RELATIONS:
+        for field in ("contributor", "earlier_demonstration", "seed_design_change"):
+            if not getattr(claim, field).strip():
+                raise ValueError(f"Historical claim needs a nonblank {field} description")
 
 
 def validate_review(document, analysis, analysis_sha256, sources):
