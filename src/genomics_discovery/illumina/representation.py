@@ -184,8 +184,30 @@ class InputRole(StrictModel):
     evidence: EvidenceSet
 
 
+EFFECT_ASPECT_GUIDE = """Effect aspects describe what the source-supported action does:
+- material_transformation: changes or produces physical molecules/material, such
+  as copying RNA into cDNA or attaching an adapter. Preparing a library for later
+  sequencing is a material transformation, not itself a readout.
+- selection: enriches, retains or excludes a specified population from an input.
+- organization: changes physical arrangement, partitioning or routing, such as
+  pooling or aliquoting. It does not by itself establish chemical conversion.
+- attribution: records or preserves an evidenced association with a sample,
+  molecule, cell, location or measured property; identify the actual carrier.
+- readout: obtains measurement data from an observation, such as sequencing.
+  The effect must reference at least one output State of kind data. A physical
+  library or reporter that could later be measured is not yet measurement data.
+- data_processing: transforms or interprets existing data, such as alignment or
+  counting; it does not itself describe a physical sample transformation.
+- unresolved: the available evidence does not establish the effect; bind an
+  Unknown to the Operation instead of asserting an unsupported mechanism.
+These aspects are not mutually exclusive descriptions of an Operation: record
+separate supported effects when needed. They do not establish shared mechanisms
+or equivalence between methods.
+"""
+
+
 class OperationEffect(StrictModel):
-    aspect: Literal["material_transformation", "selection", "organization", "attribution", "readout", "data_processing", "unresolved"]
+    aspect: Literal["material_transformation", "selection", "organization", "attribution", "readout", "data_processing", "unresolved"] = Field(description=EFFECT_ASPECT_GUIDE)
     input_state_ids: tuple[Text, ...]
     output_state_ids: tuple[Text, ...]
     statement: Text = Field(description=
@@ -195,7 +217,7 @@ class OperationEffect(StrictModel):
 
 class StructuredOperation(Operation):
     resolution: Literal["single_event", "composite_block", "unresolved_interface"] = Field(description=
-        "Source-level resolution, not an atomic-chemistry claim. Retain coupled/composite blocks unless an evidenced distinction requires subdivision.")
+        "Source-level grouping: single_event for one described action; composite_block for several described actions retained together; unresolved_interface when the transition between boundaries is not established. Not an atomic-chemistry claim or a cross-method equivalence key. Retain coupled/composite blocks unless an evidenced distinction requires subdivision.")
     input_roles: tuple[InputRole, ...]
     effects: Annotated[tuple[OperationEffect, ...], Field(min_length=1)]
     output_grouping: Literal["no_output", "one_output", "distinct_outputs", "unresolved"] = Field(description=
@@ -238,6 +260,10 @@ class StructuredDiagramExtraction(DiagramExtraction):
                     raise ValueError("Effect must identify an input when the Operation has inputs")
                 if not effect.input_state_ids and not effect.output_state_ids:
                     raise ValueError("Effect needs a declared participant")
+                if effect.aspect == "readout" and not any(
+                    states[state_id].kind == "data" for state_id in effect.output_state_ids
+                ):
+                    raise ValueError(f"Readout effect must reference a data output State; a physical library is not measurement data (operation {op.id})")
                 covered.update(effect.output_state_ids)
             if covered != set(op.outputs):
                 raise ValueError("Every declared output needs an effect assessment")
@@ -331,6 +357,13 @@ can remain in one composite block. Joint participation does not establish all-to
 molecular derivation. Output grouping distinguishes one preparation from genuinely
 separate products/fractions/datasets. Unresolved interpretations need a bound Unknown.
 No forced source-to-cell-to-RNA-to-DNA chain or universal module sequence applies.
+resolution describes source grouping, not whether two methods use the same
+transformation. A single_event is one described action; composite_block retains
+several described actions together; unresolved_interface marks a transition the
+available evidence does not establish. Compare the supported transformations and
+their input/output boundaries, not resolution flags or matching action labels.
+
+""" + EFFECT_ASPECT_GUIDE + """
 
 SOURCE-DERIVED REVIEW COUNTEREXAMPLES (not answers to every assay)
 - RASL: the RNA target/template and ligated DNA probes are not the same product;

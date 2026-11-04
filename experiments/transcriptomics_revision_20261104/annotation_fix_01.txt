@@ -1,0 +1,47 @@
+Operation annotation correction — 4 November 2026
+
+Reason
+The inspection_01 audit found rt_pcr_purify in cP-RNA-Seq labelled readout,
+although its only output is a physical cDNA library. OperationEffect.aspect
+previously enumerated labels without defining each meaning. This is a general
+representation problem, not a reason to add technology-specific extraction rules.
+
+Change
+representation.py now defines the existing seven effect labels in one shared
+text used by the schema and extraction/review instructions. Readout means
+obtaining measurement data; preparing a library for later sequencing is not
+itself a readout. A validator requires a readout effect to reference at least
+one data output. An unrelated data output elsewhere in the operation is not
+sufficient. Composite operations may retain material as well as produce data.
+No fields, enum values, scientific records or diagram steps were added.
+
+The existing resolution field now explicitly describes source grouping rather
+than cross-method equivalence. Different source block boundaries can remain
+legitimate. This clarification does not establish a shared-operation matcher.
+
+Reviewer instructions explicitly require tracing States and Flows when a
+use_primary correction changes operation order. The current reviewer had already
+caught iCLIP's correction/topology disagreement. This prompt clarification is not
+a claim that software can prove chronology from arbitrary prose.
+
+Validation
+488 tests passed, including five additional cases covering material-only readout
+rejection, valid measurement, retained material alongside data, an unrelated data
+output that must not rescue an invalid effect, and a missing output reference.
+Command from repository root:
+PYTHONPATH=src:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -p asyncio -q tests/illumina experiments/citation_lineage_pilot/test_contract.py experiments/citation_lineage_pilot/test_pair.py experiments/transcriptomics_revision_20261104/test_*.py
+
+All 14 completed inspection_01 extraction.json files were revalidated with
+StructuredDiagramExtraction.model_validate. Thirteen passed; cP-RNA-Seq alone
+failed the new readout rule, as expected. All 114 original snapshot file hashes
+still match manifest.json. The aspect description in the generated schema and
+the shared prompt were also checked to use the same definition text.
+
+Boundary and next use
+This is a tested development change, not a new model experiment. Runtime_03 and
+Slurm job 51094032 remain pinned to their original runtime. The snapshot records
+and their original review statuses were not rewritten. The affected cP-RNA-Seq
+record needs a separately versioned annotation repair and fresh review before
+publication under the stricter contract. Neither fresh model behavior nor
+scientific correctness of all outputs is established by the passing tests.
+Source-recovery questions and historical connections remain separate work.

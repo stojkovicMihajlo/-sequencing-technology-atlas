@@ -106,3 +106,61 @@ def test_unknown_transition_can_be_recorded_without_a_fake_mechanism():
                                 "blocking": True, "affected_ids": ["operation:copy"]}]
     parsed = StructuredDiagramExtraction.model_validate(with_unknown)
     assert parsed.operations[0].mechanism is None
+
+
+def test_physical_product_cannot_be_annotated_as_measurement_data():
+    raw = copying_example()
+    raw["operations"][0]["effects"][0]["aspect"] = "readout"
+    with pytest.raises(ValidationError, match="Readout effect must reference a data output"):
+        StructuredDiagramExtraction.model_validate(raw)
+
+
+def measurement_example(retain_material=False):
+    raw = copying_example()
+    raw["states"][0] = state("prepared", "Prepared DNA library")
+    data = state("reads", "Sequence reads")
+    data["kind"] = "data"
+    data["properties"].append({"id": "data_type", "subject": "self", "property": "data_type",
+                               "value": "sequence_reads", "evidence": EVIDENCE})
+    if retain_material:
+        raw["states"].append(data)
+    else:
+        raw["states"][1] = data
+        raw["flows"].pop()
+    raw["flows"].append({"id": "f_reads", "source": "copy", "target": "reads",
+                         "kind": "data_output", "evidence": EVIDENCE})
+    op = raw["operations"][0]
+    op.update(label="Measure library", description="Synthetic measurement control",
+              inputs=["prepared"], outputs=["product", "reads"] if retain_material else ["reads"],
+              output_grouping="distinct_outputs" if retain_material else "one_output",
+              input_roles=[{"state_id": "prepared", "subject": "self", "roles": ["sample"],
+                            "explanation": "Library being measured", "evidence": EVIDENCE}])
+    readout = {"aspect": "readout", "input_state_ids": ["prepared"], "output_state_ids": ["reads"],
+               "statement": "Obtain sequence reads", "evidence": EVIDENCE}
+    op["effects"] = [readout]
+    if retain_material:
+        op["effects"].append({"aspect": "organization", "input_state_ids": ["prepared"],
+                              "output_state_ids": ["product"], "statement": "Retain measured material",
+                              "evidence": EVIDENCE})
+    return raw
+
+
+@pytest.mark.parametrize("retain_material", [False, True])
+def test_readout_accepts_data_without_requiring_destruction_of_material(retain_material):
+    parsed = StructuredDiagramExtraction.model_validate(measurement_example(retain_material))
+    assert parsed.operations[0].effects[0].output_state_ids == ("reads",)
+
+
+def test_unrelated_data_output_does_not_rescue_a_material_only_readout_effect():
+    raw = measurement_example(retain_material=True)
+    op = raw["operations"][0]
+    op["effects"].append({**op["effects"][0], "output_state_ids": ["product"]})
+    with pytest.raises(ValidationError, match="Readout effect must reference a data output"):
+        StructuredDiagramExtraction.model_validate(raw)
+
+
+def test_readout_cannot_refer_to_a_missing_state():
+    raw = measurement_example()
+    raw["operations"][0]["effects"][0]["output_state_ids"] = ["absent"]
+    with pytest.raises(ValidationError, match="own declared inputs/outputs"):
+        StructuredDiagramExtraction.model_validate(raw)

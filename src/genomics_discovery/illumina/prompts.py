@@ -249,6 +249,9 @@ need a paper-supported correction. Confirm that each correction uses evidence
 from the declared implementation and retains the source distinction. Assess
 paper identity separately from full scientific verification; do not claim to
 have verified unavailable full text or an unseen image.
+When a use_primary correction changes operation order, trace the actual affected
+States and Flows and check that they implement that order. Correct chronology in
+the Correction's prose does not fix contradictory graph topology.
 
 For each supplied state_label:<id> target, independently judge whether the label
 names the actual material/data at that boundary, agrees with kind and features,
