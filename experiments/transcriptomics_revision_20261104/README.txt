@@ -106,12 +106,41 @@ nominate cross-batch questions; they never merge methods automatically. The outp
 always says global_identity_review_required and extraction_authorized=false.
 Even no detected collision is not proof of uniqueness: a global review must check
 aliases missed by retrieval. Same-scoped-method duplicates need a newly consolidated
-source plan before extraction. This final global review runner remains to be wired.
+source plan before extraction. The bounded global review development described
+below consumes this reconciliation; it has not been exercised with native models.
 
 Five batching controls pass: intact identity components, explicit scope/pending
 coverage, tamper rejection, bounded concurrency/hold preservation, and cross-batch
 collision reporting without extraction authorization. No native batch is launched
 by preparing rna_context_batches.
+
+Bounded global identity review — DEVELOPMENT ONLY
+global_plan.py prepare MANIFEST RUN_STATE OUTPUT groups only known cross-batch
+candidate collisions. Unaffected units retain their existing reviews. Each
+component carries exact prior implementation scopes and a compact all-unit index
+for finding possible aliases outside the component. A context cap holds oversized
+components instead of cutting their identity questions.
+
+global_plan.py run INDEX COMPONENT_ID OUTPUT uses a Slurm-only author/fresh-reviewer
+pair with one permitted revision. Every prior unit must be unchanged, a member of
+a source-supported same-implementation group, held, or excluded with a reason.
+Merging chooses one existing scope; it cannot invent a broader implementation.
+The reviewer covers every prior unit, group and nominated pair. Outside-alias
+requests hold both inside and outside units pending expanded review.
+
+global_plan.py admit INDEX COMPONENT_RUNS_JSON OUTPUT reopens original per-batch
+reviews and native global archives. It emits scoped dispatch decisions with exact
+coverage and unique dispatch IDs (artifact identifiers, not semantic hashes).
+Conflicting source bindings, unresolved components and alias requests stay held.
+The revised-extraction pilot gate and a global source-bundle dispatch adapter are
+still required. No large run is authorized by this development output alone.
+
+Twelve global controls pass, including a fake-native author/reviewer archive that
+reopens correctly when optional JSON defaults were omitted. Distinct variants,
+cross-batch merges, omitted units, missing-side evidence, stale review, conflicting
+source scopes and outside-alias holds are covered. These are software checks;
+native identity quality and missed-alias recall have not been evaluated. No model
+call or large dispatch has been launched from global_plan.py.
 
 Software controls: 13 tests pass, including a mocked two-source-to-one-work-unit
 author/reviewer/bundle handoff. That is a transport test, not a native scientific
@@ -123,3 +152,15 @@ and relationships.py definitions. An admitted extraction is not sufficient suppo
 for an evolutionary edge. Inspect later attribution plus earlier demonstrated
 procedure, attach changes to exact operations, and keep shared mechanism separate
 from documented method development or component adoption.
+
+Chemical representation follow-up (prepared, NOT submitted)
+chemical_contrast_sources.json selects cP-RNA-seq and RASL-seq plus their
+registered identity-neighbor depictions (4 source occurrences, not4methods).
+These complement Smart-seq2/Drop-seq: inspect whether end-chemistry populations
+remain correctly scoped within a preparation and whether the reporter product
+is distinguished from the RNA target/template. Evaluate current contract first.
+No automatic SMILES/formula conversion or new mandatory taxonomy was introduced.
+The scientific question is whether the relevant distinction is retrievable and
+source-supported, not whether a diagram has a prescribed number of nodes.
+See docs/ATLAS_PLAN.txt chemistry follow-up for primary representation precedents
+and the limitations of current State-level effect anchors.

@@ -534,3 +534,41 @@ cannot guarantee entailment, chemistry, novelty or wet-lab success. Automated
 scientific review is a gate to evaluate, not an infallible oracle. Unknowns remain
 targeted evidence tasks when they matter; routine omitted settings remain outside
 the architecture scope. There is no claim that today's draft has passed this plan.
+
+CHEMISTRY REPRESENTATION — 4 November follow-up (recommendation, not implemented)
+User questions whether material/data and Operation are descriptive enough for
+chemical comparison. They are graph roles, not a complete molecular ontology.
+Contract1.1 can address relevant constituents, end groups, modifications,
+associations and local input roles. It cannot yet mechanically map every changed
+input property to an output property or establish biochemical compatibility.
+
+Primary representation precedents inspected:
+- Reactome data model: distinguishes molecular identities, modified/localized
+  forms and complexes; supports explicitly grouped reaction-like events. A
+  Reactome EntitySet denotes contextual alternatives, NOT an experimental mixture.
+  https://reactome.org/documentation/data-model
+- Rhea reaction participants: represents reactive macromolecular parts through
+  ChEBI while naming the remaining macromolecule; formulas/charge and SMILES
+  support different checks. Its pH7.3 normalization is NOT an assay-condition
+  rule to copy into this extraction.
+  https://www.rhea-db.org/help/reaction-participant
+- ChEBI structure/role distinction and identifiers can normalize known chemical
+  identities. An identifier/valid structure does not prove a reaction works in
+  the assay context.
+  https://www.ebi.ac.uk/training/online/courses/chebi-the-online-chemical-dictionary-for-small-molecules/chebi-ontology/
+
+Proposed next bounded check, without mutating the active pilot:
+Use existing assertions to distinguish co-presence, hybridization and covalent
+linkage; distinguish relevant terminal/base states; trace whether an Operation
+chemically changes, copies, selects or merely relocates its subjects. For a
+chemical comparison, explicitly anchor the before/after property and reactive
+site to their constituent subjects. Add normalized external chemical references
+only when an exact match/scope has been verified. Atom-level encodings are optional
+for defined compounds/oligos, not mandatory for cells, lysates or arbitrary RNA
+mixtures. Formula-only similarity cannot define assay equivalence.
+
+Judge sufficiency by source-backed queries, not how many fields we add: can the
+graph distinguish the required chemical forms, distinguish chemical change from
+selection, and identify the needed interface evidence or its absence? Current
+software checks do not establish these scientific competencies. Larger dispatch
+remains gated on native interpretation and this review.
