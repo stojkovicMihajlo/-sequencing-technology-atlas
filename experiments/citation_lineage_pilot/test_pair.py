@@ -10,7 +10,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent))
 from models import Evidence, Finding, Review, UncertaintyAssessment
-from pair_models import PairAnalysis, PairClaim, OperationCoverage, DiagramAdequacy, export_pair, validate_pair
+from pair_models import PairAnalysis, PairClaim, OperationCoverage, DiagramAdequacy, export_pair, validate_pair, validate_pair_review
 import pair_run
 
 
@@ -182,6 +182,34 @@ def test_wrong_source_cannot_support_other_side():
     a, _, inputs = case(); a.claims[0].left_evidence = a.claims[0].right_evidence
     with pytest.raises(ValueError, match="Unregistered evidence"):
         validate_pair(a, inputs)
+
+
+@pytest.mark.parametrize("side", ["left", "right"])
+def test_accepted_pair_review_requires_both_bound_papers(side):
+    a, r, inputs = case()
+    r.findings[0].evidence = getattr(a.claims[0], side + "_evidence")
+    missing = "right" if side == "left" else "left"
+    with pytest.raises(ValueError, match=f"registered {missing}-method paper"):
+        validate_pair_review(r, a, inputs, "pin")
+    with pytest.raises(ValueError, match=f"registered {missing}-method paper"):
+        export_pair(a, r, inputs, "pin")
+
+
+@pytest.mark.parametrize("decision", ["reject", "revise", "needs_evidence"])
+def test_nonaccepted_pair_review_may_report_one_sided_failure(decision):
+    a, r, inputs = case()
+    r.findings[0].decision = decision
+    r.findings[0].evidence = a.claims[0].left_evidence
+    validate_pair_review(r, a, inputs, "pin")
+    assert not export_pair(a, r, inputs, "pin")["correspondences"]
+
+
+def test_no_relation_disposition_does_not_require_positive_two_sided_support():
+    a, r, inputs = case()
+    a.claims[0].relation = "no_established_relation"
+    r.findings[0].evidence = a.claims[0].left_evidence
+    validate_pair_review(r, a, inputs, "pin")
+    assert not export_pair(a, r, inputs, "pin")["correspondences"]
 
 
 def test_fabricated_quote_rejected():

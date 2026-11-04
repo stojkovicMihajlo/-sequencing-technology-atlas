@@ -218,6 +218,27 @@ def prepare_review_reuse(previous, output):
     return inputs, analysis_path
 
 
+async def review_cycle(stage, author_role, initial_analysis=None):
+    """One research/review pass and at most one correction, with issue continuity.
+
+    The stage runner owns independent sessions, source/prompt pins and validation.
+    This shared schedule keeps both citation and pair review on the same bound.
+    """
+    analysis_path = feedback = None
+    for revision in range(2):
+        previous_analysis_path, previous_review_path = analysis_path, feedback
+        if revision == 0 and initial_analysis is not None:
+            analysis, analysis_path = initial_analysis
+        else:
+            analysis, analysis_path = await stage(author_role,
+                analysis_path=analysis_path, feedback=feedback)
+        review, feedback = await stage('review', analysis_path=analysis_path,
+            feedback=previous_review_path, previous_analysis_path=previous_analysis_path)
+        if not any(x.decision == 'revise' for x in review.findings) and not review.omitted_candidates:
+            break
+    return analysis, analysis_path, review
+
+
 async def execute(args):
     if not os.environ.get("SLURM_JOB_ID"):
         raise ValueError("Native lineage runs require Sherlock Slurm")
@@ -241,7 +262,7 @@ async def execute(args):
     worker = CodexWorker(model=state["model"], effort=state["effort"], timeout_seconds=None,
                          web_search=False, network_access=False, pin_shell_environment=True)
 
-    async def stage(role, *, analysis_path=None, feedback=None):
+    async def stage(role, *, analysis_path=None, feedback=None, previous_analysis_path=None):
         attempt = root / "attempts" / f"{len(state['stages']) + 1:03d}_{role}"
         attempt.mkdir(parents=True)
         write(attempt / "schema.json", SCHEMAS[role].model_json_schema())
@@ -268,11 +289,13 @@ async def execute(args):
             context.update(analysis=str(analysis_path), analysis_sha256=sha(analysis_path))
         if feedback:
             context["previous_review"] = str(feedback)
+        if previous_analysis_path:
+            context["previous_analysis"] = str(previous_analysis_path)
         prompt = build_prompt(role, context)
         (attempt / "stage_prompt.txt").write_text(prompt)
         pins = {str(p): sha(p) for p in inputs.rglob('*') if p.is_file()}
         pins.update(implementation)
-        for p in [attempt / 'schema.json', attempt / 'stage_prompt.txt', attempt / 'image_delivery.json', analysis_path, feedback]:
+        for p in [attempt / 'schema.json', attempt / 'stage_prompt.txt', attempt / 'image_delivery.json', analysis_path, feedback, previous_analysis_path]:
             if p:
                 pins[str(p)] = sha(p)
         if (root / 'nominations.json').exists():
@@ -313,16 +336,8 @@ async def execute(args):
             state['status'] = 'acquiring_references'
             write(root / 'state.json', state)
             sources = acquire(inputs, nominations)
-        feedback, analysis_path = None, None
-        for revision in range(2):
-            if reused_analysis and revision == 0:
-                analysis_path = reused_analysis
-                analysis = validate('analyse', analysis_path, inputs)
-            else:
-                analysis, analysis_path = await stage('analyse', analysis_path=analysis_path, feedback=feedback)
-            review, feedback = await stage('review', analysis_path=analysis_path)
-            if not any(x.decision == 'revise' for x in review.findings) and not review.omitted_candidates:
-                break
+        initial = (validate('analyse', reused_analysis, inputs), reused_analysis) if reused_analysis else None
+        analysis, analysis_path, review = await review_cycle(stage, 'analyse', initial)
         overlay = graph_overlay(analysis, review, sources, sha(analysis_path), read(inputs / 'seed_binding.json'))
         write(root / 'analysis.json', analysis.model_dump())
         write(root / 'review.json', review.model_dump())

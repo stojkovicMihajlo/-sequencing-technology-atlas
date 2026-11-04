@@ -68,7 +68,7 @@ def test_published_comparison_and_accepted_background_are_not_ancestry(tmp_path)
     with (tmp_path / "tracker/changes.csv").open() as f:
         csv_rows = list(csv.DictReader(f))
     assert json.loads(csv_rows[0]["seed_evidence"]) == rows[0]["seed_evidence"]
-    assert len(result["artifacts"]) == 5
+    assert len(result["artifacts"]) == 6
     assert result["history_runs"][0]["published_ancestry_edges"] == 1
 
 
@@ -90,6 +90,65 @@ def test_inconsistent_or_blocked_publication_never_becomes_positive_edge(tmp_pat
     result = tracking.export([], [run], tmp_path / "tracker")
     assert not result["change_claims"][0]["published_edge"]
     assert not result["change_claims"][0]["published_ancestry_edge"]
+
+
+def test_coherent_export_mutation_cannot_inherit_native_review(tmp_path):
+    run = history(tmp_path)
+    analysis = json.loads((run / "analysis.json").read_text())
+    graph = json.loads((run / "graph.json").read_text())
+    analysis["claims"][0]["seed_design_change"] = "Unreviewed replacement of the original change description."
+    graph["links"][0]["claim"] = analysis["claims"][0]
+    write(run / "analysis.json", analysis)
+    write(run / "graph.json", graph)
+    result = tracking.export([], [run], tmp_path / "tracker")
+    assert not any(r["published_edge"] for r in result["change_claims"])
+    assert result["change_claims"][0]["analysis_integrity_status"] == "export_content_mismatch"
+    assert "differs from the reviewed native" in result["history_runs"][0]["tracker_limitation"]
+
+
+def test_legitimate_export_reserialization_retains_native_review_binding(tmp_path):
+    run = history(tmp_path)
+    path = run / "analysis.json"
+    path.write_text(json.dumps(json.loads(path.read_text()), separators=(",", ":"), sort_keys=True))
+    before = {p: p.read_bytes() for p in run.rglob("*.json")}
+    result = tracking.export([], [run], tmp_path / "tracker")
+    row = result["change_claims"][0]
+    assert row["analysis_file_sha256"] != row["review_bound_analysis_sha256"]
+    assert row["analysis_integrity_status"] == "matches_reviewed_native"
+    assert row["published_ancestry_edge"]
+    assert all(p.read_bytes() == raw for p, raw in before.items())
+
+
+def test_missing_native_bytes_do_not_establish_publication_binding(tmp_path):
+    run = history(tmp_path)
+    (run / "attempts/002_analyse/artifact.json").unlink()
+    result = tracking.export([], [run], tmp_path / "tracker")
+    assert not any(r["published_edge"] for r in result["change_claims"])
+    assert result["change_claims"][0]["analysis_integrity_status"] == "not_established"
+    assert "native analysis bytes unavailable" in result["history_runs"][0]["tracker_limitation"]
+
+
+def test_exact_native_copy_supports_unavailable_recorded_remote_path(tmp_path):
+    run = history(tmp_path)
+    native = run / "attempts/002_analyse/artifact.json"
+    copy_path = run / "native_analysis.json"
+    copy_path.write_bytes(native.read_bytes())
+    native.unlink()
+    result = tracking.export([], [run], tmp_path / "tracker")
+    row = result["change_claims"][0]
+    assert row["published_ancestry_edge"]
+    assert row["native_analysis_path"] == str(copy_path.resolve())
+    assert row["native_analysis_sha256"] == row["review_bound_analysis_sha256"]
+
+
+def test_modified_available_native_cannot_be_hidden_by_a_valid_backup(tmp_path):
+    run = history(tmp_path)
+    native = run / "attempts/002_analyse/artifact.json"
+    (run / "native_analysis.json").write_bytes(native.read_bytes())
+    native.write_text(native.read_text() + "\n")
+    result = tracking.export([], [run], tmp_path / "tracker")
+    assert not any(r["published_edge"] for r in result["change_claims"])
+    assert result["change_claims"][0]["analysis_integrity_status"] == "native_hash_mismatch"
 
 
 def test_running_revision_does_not_inherit_the_previous_review(tmp_path):
@@ -152,6 +211,8 @@ def test_version3_tracking_retains_context_and_prevents_outside_history(tmp_path
         f['evidence'] += c['predecessor_evidence']
     write(run / 'review.json', review)
     state = json.loads((run / 'state.json').read_text()); state['final_analysis_sha256'] = pin
+    write(Path(state['stages'][0]['path']) / 'artifact.json', analysis)
+    state['stages'][0]['artifact_sha256'] = pin
     write(run / 'state.json', state)
     graph = json.loads((run / 'graph.json').read_text())
     graph.update(format_version='citation_lineage_pilot/3', analysis_sha256=pin)
@@ -163,6 +224,8 @@ def test_version3_tracking_retains_context_and_prevents_outside_history(tmp_path
     assert result['change_claims'][0]['citation_context'] == analysis['claims'][0]['citation_context']
     analysis['claims'][0].update(claim_scope='supporting_experiment', seed_operation_ids=[])
     pin = write(run / 'analysis.json', analysis)
+    write(Path(state['stages'][0]['path']) / 'artifact.json', analysis)
+    state['stages'][0]['artifact_sha256'] = pin
     state['final_analysis_sha256'] = pin; write(run / 'state.json', state)
     review['analysis_sha256'] = pin; write(run / 'review.json', review)
     graph['analysis_sha256'] = pin; graph['links'][0]['claim'] = analysis['claims'][0]

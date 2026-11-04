@@ -11,6 +11,49 @@ from models import CurrentNominations, Nominations, validate_nominations
 from run import bibliography, prepare_review_reuse
 import json
 import copy
+from types import SimpleNamespace
+from run import review_cycle
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('author_role', ['analyse', 'author'])
+async def test_review_cycle_preserves_issues_for_fresh_reviewer_and_stops_at_cap(author_role):
+    calls = []
+    revisions = []
+
+    async def stage(role, **context):
+        calls.append((role, context))
+        if role == author_role:
+            return object(), Path(f'analysis_{len(calls)}.json')
+        doc = SimpleNamespace(findings=[SimpleNamespace(decision='revise')], omitted_candidates=[])
+        revisions.append(doc)
+        return doc, Path(f'review_{len(calls)}.json')
+
+    _, path, final_review = await review_cycle(stage, author_role)
+    assert [role for role, _ in calls] == [author_role, 'review', author_role, 'review']
+    assert calls[2][1]['analysis_path'] == Path('analysis_1.json')
+    assert calls[2][1]['feedback'] == Path('review_2.json')
+    assert calls[3][1] == {'analysis_path': Path('analysis_3.json'),
+                           'feedback': Path('review_2.json'),
+                           'previous_analysis_path': Path('analysis_1.json')}
+    assert path == Path('analysis_3.json') and final_review is revisions[-1]
+    # Still-revise is returned to normal withholding gates, never rewritten accept.
+    assert final_review.findings[0].decision == 'revise'
+
+
+@pytest.mark.asyncio
+async def test_review_existing_does_not_research_again_when_review_accepts():
+    calls = []
+    analysis = object()
+
+    async def stage(role, **context):
+        calls.append((role, context))
+        return SimpleNamespace(findings=[SimpleNamespace(decision='accept')], omitted_candidates=[]), Path('review.json')
+
+    result, path, _ = await review_cycle(stage, 'analyse', (analysis, Path('original.json')))
+    assert result is analysis and path == Path('original.json')
+    assert calls == [('review', {'analysis_path': Path('original.json'),
+                                 'feedback': None, 'previous_analysis_path': None})]
 
 
 SOURCES = {

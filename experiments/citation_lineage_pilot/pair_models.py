@@ -73,9 +73,23 @@ def validate_pair(document, inputs):
         raise ValueError("Assess adequacy of both original diagrams exactly once")
 
 
+def validate_pair_review(review, analysis, inputs, analysis_sha256):
+    """An accepted comparison must be reviewed against each bound paper side."""
+    validate_review(review, analysis, analysis_sha256, inputs["sources"])
+    claims = {claim.id: claim for claim in analysis.claims}
+    for finding in review.findings:
+        if (finding.decision != "accept" or
+                claims[finding.claim_id].relation == "no_established_relation"):
+            continue
+        cited = {evidence.source_id for evidence in finding.evidence}
+        for side in ("left", "right"):
+            if not cited.intersection(inputs["sides"][side]["paper_source_ids"]):
+                raise ValueError(f"Accepted pair review must cite registered {side}-method paper evidence")
+
+
 def export_pair(analysis, review, inputs, analysis_sha256):
     validate_pair(analysis, inputs)
-    validate_review(review, analysis, analysis_sha256, inputs["sources"])
+    validate_pair_review(review, analysis, inputs, analysis_sha256)
     decisions = {x.claim_id: x for x in review.findings}
     correspondences, history, withheld = [], [], []
     for claim in analysis.claims:

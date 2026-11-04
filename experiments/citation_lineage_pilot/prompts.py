@@ -4,6 +4,7 @@ import json
 
 from genomics_discovery.illumina.relationships import (
     CHANGE_INSTRUCTIONS, CHANGE_REVIEW_INSTRUCTIONS, REVISION_INSTRUCTIONS,
+    REVISION_REVIEW_INSTRUCTIONS,
     relation_instructions,
 )
 
@@ -138,4 +139,6 @@ def build_prompt(role, context):
     instructions = COMMON + '\n' + ROLES[role]
     if role == 'analyse' and context.get('previous_review'):
         instructions += '\n' + REVISION_INSTRUCTIONS
+    if role == 'review' and context.get('previous_review'):
+        instructions += '\n' + REVISION_REVIEW_INSTRUCTIONS
     return instructions + '\nCONTEXT\n' + json.dumps(context, indent=2)

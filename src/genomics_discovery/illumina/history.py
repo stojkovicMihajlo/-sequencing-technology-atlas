@@ -33,11 +33,80 @@ def _check_review(claim, review):
         raise ValueError("Unreviewed or blocking relationship qualification")
 
 
+def _check_current_citation(item):
+    """Keep v3 scope/review declarations intact when reading a pinned export.
+
+    This does not reread the bibliography or establish quotation entailment;
+    those checks belong to the source-backed author/reviewer/export stages.
+    """
+    claim, review = item["claim"], item["review"]
+    scope = claim.get("claim_scope")
+    if not claim.get("citation_context", "").strip():
+        raise ValueError("Current citation relation requires its located citation context")
+    if scope not in {"seed_workflow", "supporting_experiment", "unlocalized"}:
+        raise ValueError("Unknown current citation scope")
+    if bool(claim["seed_operation_ids"]) != (scope == "seed_workflow"):
+        raise ValueError("Citation scope disagrees with seed Operation anchors")
+    if claim["relation"] in HISTORICAL_RELATIONS and scope != "seed_workflow":
+        raise ValueError("Historical contribution must belong to the extracted seed workflow")
+    cited = {e["source_id"] for e in review.get("evidence", []) if e.get("quote", "").strip()}
+    if not {"seed", claim["reference_id"]} <= cited:
+        raise ValueError("Current citation review needs seed and exact predecessor evidence")
+    if (item.get("relationship_layer") != RELATIONS[claim["relation"]]["layer"] or
+            item.get("historical_development_edge") != (claim["relation"] == "method_development")):
+        raise ValueError("Citation relationship layer disagrees with its declared type")
+
+
+def _source_registry_context(entry, manifest_path, graph):
+    """Return pinned, referenced source metadata, never the registered paper text."""
+    specification = entry.get("source_registry")
+    if specification is None:
+        return {"status": "not_supplied", "path": None, "sha256": None, "sources": {},
+                "boundary": "No separately pinned source registry was supplied for this overlay."}
+    path = (manifest_path.parent / specification["path"]).resolve()
+    registry = _read(path, specification["sha256"])
+    referenced = set()
+
+    def collect(value):
+        if isinstance(value, dict):
+            if "source_id" in value and "quote" in value:
+                referenced.add(value["source_id"])
+            for child in value.values(): collect(child)
+        elif isinstance(value, list):
+            for child in value: collect(child)
+
+    for section in ("links", "historical_links", "correspondences", "withheld"):
+        collect(graph.get(section, []))
+    missing = referenced - registry.keys()
+    if missing:
+        raise ValueError("Evidence source IDs absent from supplied registry: " + ", ".join(sorted(missing)))
+    metadata = {}
+    document_fields = {"path", "sha256", "media_type", "format", "status"}
+    for sid in sorted(referenced):
+        source = registry[sid]
+        record = {k: copy.deepcopy(source[k]) for k in ("title", "content_level", "pmid", "url") if k in source}
+        documents = {}
+        for name, value in (("source_artifact", source),
+                            ("fulltext_acquisition", source.get("fulltext_acquisition", {})),
+                            ("provenance.original", source.get("provenance", {}).get("original", {})),
+                            ("metadata_receipt", source.get("metadata_receipt", {}))):
+            if value.get("path") or value.get("sha256"):
+                documents[name] = {k: copy.deepcopy(v) for k, v in value.items() if k in document_fields}
+        if documents:
+            record["document_artifacts"] = documents
+        metadata[sid] = record
+    return {"status": "pinned_metadata", "path": str(path), "sha256": specification["sha256"],
+            "sources": metadata,
+            "boundary": "Metadata for cited evidence sources only; no paper text. Registry bytes and source IDs "
+                        "are checked, not scientific entailment. Document paths/hashes are preserved provenance, "
+                        "not rebased or freshly verified file availability."}
+
+
 def build_history_index(manifest_path):
     manifest = json.loads(manifest_path.read_text())
     if manifest["format_version"] != "illumina_history_inputs/1":
         raise ValueError("Unknown history manifest")
-    nodes, edges, loaded = {}, [], set()
+    nodes, edges, loaded, withheld = {}, [], set(), []
 
     def workflow(record_id, extraction_sha, title):
         if len(extraction_sha) != 64:
@@ -54,7 +123,8 @@ def build_history_index(manifest_path):
             raise ValueError("Duplicate relationship overlay")
         loaded.add(pin)
         graph = _read(path, pin)
-        source = {"path": str(path), "sha256": pin, "format_version": graph["format_version"]}
+        source = {"path": str(path), "sha256": pin, "format_version": graph["format_version"],
+                  "source_registry": _source_registry_context(entry, manifest_path, graph)}
         if graph["format_version"] == "illumina_method_pair/1":
             # Reuse the pair reader's direction, anchor, evidence and review checks.
             graph = load_reviewed_pair(path, pin)
@@ -69,7 +139,7 @@ def build_history_index(manifest_path):
                               "relation": c["relation"], "claim": copy.deepcopy(c),
                               "review": copy.deepcopy(item["review"]), "artifact": source,
                               "claim_id": c["id"], "status": item["status"]})
-        elif graph["format_version"] == "citation_lineage_pilot/2":
+        elif graph["format_version"] in {"citation_lineage_pilot/2", "citation_lineage_pilot/3"}:
             original_nodes = {n["id"]: n for n in graph["nodes"]}
             if len(original_nodes) != len(graph["nodes"]):
                 raise ValueError("Duplicate citation node")
@@ -80,6 +150,10 @@ def build_history_index(manifest_path):
                 raise ValueError("Seed extraction identity mismatch")
             op_ids = {o["id"] for o in extraction["operations"]}
             target = workflow(binding["record_id"], pin_extraction, seed["name"])
+            for finding in graph.get("withheld", []):
+                withheld.append({"target": target, "artifact": copy.deepcopy(source),
+                                 "finding": copy.deepcopy(finding),
+                                 "status": "withheld_not_a_graph_edge"})
             for item in graph["links"]:
                 c, review, kind = item["claim"], item["review"], item["kind"]
                 _check_review(c, review)
@@ -87,6 +161,8 @@ def build_history_index(manifest_path):
                         or item["target"] != "seed" or item["source"] == "seed"
                         or item["status"] != "model_reviewed_pilot_overlay"):
                     raise ValueError("Invalid published citation relation")
+                if graph["format_version"] == "citation_lineage_pilot/3":
+                    _check_current_citation(item)
                 if not c["seed_evidence"] or not c["predecessor_evidence"]:
                     raise ValueError("Missing two-sided citation support")
                 if (any(e["source_id"] != "seed" for e in c["seed_evidence"]) or
@@ -119,7 +195,7 @@ def build_history_index(manifest_path):
         if not ready:
             raise ValueError("Historical contribution cycle needs review")
         pending = {n: predecessors - ready for n, predecessors in pending.items() if n not in ready}
-    return {"nodes": nodes, "edges": edges, "overlay_sha256": sorted(loaded),
+    return {"nodes": nodes, "edges": edges, "withheld": withheld, "overlay_sha256": sorted(loaded),
             "boundary": "Explicitly loaded, previously model-reviewed pilot overlays; no new scientific validation, "
                         "date/priority verification, or canonical method identity resolution."}
 
@@ -138,22 +214,114 @@ def technology_history(index, record_id, *, extraction_sha256=None, max_depth=2)
         incoming = [e for e in index["edges"] if e["target"] == node and e["relation"] in HISTORICAL_RELATIONS]
         if depth == max_depth or not incoming:
             stops.append({"node": copy.deepcopy(index["nodes"][node]),
-                          "reason": "depth_limit" if depth == max_depth and incoming else "no_further_history_in_loaded_evidence"})
+                          "reason": "depth_limit" if depth == max_depth and incoming else "no_further_history_in_loaded_evidence",
+                          "continuation_status": (
+                              "unbound_external_contribution" if index["nodes"][node].get("kind") != "bound_workflow"
+                              else "depth_limit" if depth == max_depth and incoming
+                              else "no_admitted_incoming_claims_in_loaded_evidence")})
             continue
         for edge in incoming:
             selected[edge["id"]] = copy.deepcopy(edge)
             if edge["source"] not in visited:
                 visited.add(edge["source"]); frontier.append((edge["source"], depth + 1))
+    other_direct = [copy.deepcopy(e) for e in index["edges"]
+                    if target["id"] in {e["source"], e["target"]} and e["relation"] not in HISTORICAL_RELATIONS]
+    related_ids = {n for e in other_direct for n in (e["source"], e["target"])} - visited
     return {
         "technology": copy.deepcopy(target), "max_depth": max_depth,
         "nodes": [copy.deepcopy(index["nodes"][n]) for n in sorted(visited)],
         "historical_contributions": list(selected.values()),
-        "other_direct_relationships": [copy.deepcopy(e) for e in index["edges"]
-            if target["id"] in {e["source"], e["target"]} and e["relation"] not in HISTORICAL_RELATIONS],
+        "other_direct_relationships": other_direct,
+        "other_relationship_nodes": [copy.deepcopy(index["nodes"][n]) for n in sorted(related_ids)],
+        "direct_withheld_claims": [copy.deepcopy(item) for item in index.get("withheld", [])
+                                   if item["target"] == target["id"]],
         "frontier": stops, "overlay_sha256": index["overlay_sha256"],
         "boundary": index["boundary"] + " Paths join distinct scoped claims; they do not establish transitive "
-                    "inheritance of a component or whole assay. A traversal endpoint is not proof of first invention.",
+                    "inheritance of a component or whole assay. A traversal endpoint is not proof of first invention. "
+                    "An external contribution has no verified workflow binding here; withheld findings are research leads, not edges.",
     }
+
+
+def select_history_claim(result, claim_id, *, overlay_sha256=None):
+    """Select an exact local claim within the already bounded history result.
+
+    Reused local IDs require the original overlay hash. Withheld findings remain
+    research leads and cannot supply an asserted predecessor endpoint.
+    """
+    if result.get("view") == "summary":
+        raise ValueError("Select a claim before creating the summary view")
+    matches = []
+    for section in ("historical_contributions", "other_direct_relationships", "direct_withheld_claims"):
+        for item in result.get(section, []):
+            local_id = item["finding"]["claim"]["id"] if section == "direct_withheld_claims" else item["claim_id"]
+            if local_id == claim_id and (overlay_sha256 is None or item["artifact"]["sha256"] == overlay_sha256):
+                matches.append((section, item))
+    if not matches:
+        raise ValueError("No exact claim in the loaded history selection")
+    if len(matches) != 1:
+        raise ValueError("Ambiguous local claim ID; supply its exact overlay hash")
+    section, item = matches[0]
+    selected = copy.deepcopy(result)
+    for key in ("historical_contributions", "other_direct_relationships", "direct_withheld_claims"):
+        selected[key] = [copy.deepcopy(item)] if key == section else []
+    endpoints = {item["target"]}
+    if section != "direct_withheld_claims":
+        endpoints.add(item["source"])
+    available = {n["id"]: n for n in result["nodes"] + result.get("other_relationship_nodes", [])}
+    if endpoints - available.keys():
+        raise ValueError("Selected claim has an endpoint absent from its loaded context")
+    selected["nodes"] = [copy.deepcopy(available[n]) for n in sorted(endpoints)]
+    selected["other_relationship_nodes"] = []
+    selected["frontier"] = [copy.deepcopy(stop) for stop in result["frontier"] if stop["node"]["id"] in endpoints]
+    selected["selection"] = {"claim_id": claim_id, "overlay_sha256": item["artifact"]["sha256"],
+                             "section": section, "scope": "One exact recorded finding, not the full method history."}
+    return selected
+
+
+def history_summary(result):
+    """Lossless read view of selected claims; index repeated quotes/artifact paths.
+
+    'Summary' describes the packaging, not an LLM rewrite. Every selected claim,
+    review, qualification and traversal limit remains available in this object.
+    Evidence IDs are local to this returned packet and identify exact stored
+    text within its source overlay, not semantic equivalence between passages.
+    """
+    summary = copy.deepcopy(result)
+    evidence, artifacts, evidence_lookup, artifact_lookup = {}, {}, {}, {}
+
+    def reference_quotes(value, artifact_id):
+        if isinstance(value, dict):
+            if "source_id" in value and "quote" in value:
+                record = {"artifact_id": artifact_id, "original": copy.deepcopy(value)}
+                key = json.dumps(record, sort_keys=True, ensure_ascii=False)
+                if key not in evidence_lookup:
+                    evidence_lookup[key] = "e" + str(len(evidence_lookup) + 1)
+                    evidence[evidence_lookup[key]] = record
+                ident = evidence_lookup[key]
+                return {"evidence_id": ident}
+            return {k: reference_quotes(v, artifact_id) for k, v in value.items()}
+        if isinstance(value, list):
+            return [reference_quotes(v, artifact_id) for v in value]
+        return value
+
+    for section in ("historical_contributions", "other_direct_relationships", "direct_withheld_claims"):
+        for edge in summary.get(section, []):
+            artifact = edge.pop("artifact")
+            pin = artifact["sha256"]
+            if pin not in artifact_lookup:
+                artifact_lookup[pin] = "a" + str(len(artifact_lookup) + 1)
+                artifacts[artifact_lookup[pin]] = artifact
+            artifact_id = artifact_lookup[pin]
+            edge["artifact_id"] = artifact_id
+            for field in ("claim", "review", "finding"):
+                if field in edge:
+                    edge[field] = reference_quotes(edge[field], artifact_id)
+    summary.update(format_version="illumina_history_context/1", view="summary",
+                   evidence=evidence, artifacts=artifacts,
+                   reading_note="Descriptions and review findings are unchanged. Resolve each evidence_id "
+                                "in evidence, then its artifact_id in artifacts. IDs are local to this packet. This is a deterministic "
+                                "reading view, not a new review or an executable protocol.")
+    return summary
 
 
 if __name__ == "__main__":
@@ -162,7 +330,17 @@ if __name__ == "__main__":
     p.add_argument("--record-id", required=True)
     p.add_argument("--extraction-sha256")
     p.add_argument("--max-depth", type=int, default=2)
+    p.add_argument("--view", choices=["summary", "full"], default="full",
+                   help="summary indexes repeated evidence without rewriting or truncating scientific text")
+    p.add_argument("--claim-id", help="Return one exact local claim ID from this history selection")
+    p.add_argument("--overlay-sha256", help="Disambiguate a claim ID reused across loaded overlays")
     args = p.parse_args()
+    if args.overlay_sha256 and not args.claim_id:
+        p.error("--overlay-sha256 requires --claim-id")
     result = technology_history(build_history_index(args.manifest), args.record_id,
         extraction_sha256=args.extraction_sha256, max_depth=args.max_depth)
+    if args.claim_id:
+        result = select_history_claim(result, args.claim_id, overlay_sha256=args.overlay_sha256)
+    if args.view == "summary":
+        result = history_summary(result)
     print(json.dumps(result, ensure_ascii=False, indent=2))

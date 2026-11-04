@@ -1,0 +1,524 @@
+{
+  "technology": {
+    "id": "workflow:dispatch_bb2854ef3594fbc43612:c7e3377d207b58be0a45a2b29f66185f213d5d2dc1fd2ed86e62fe85e613b470",
+    "name": "irCLIP",
+    "record_id": "dispatch_bb2854ef3594fbc43612",
+    "extraction_sha256": "c7e3377d207b58be0a45a2b29f66185f213d5d2dc1fd2ed86e62fe85e613b470",
+    "kind": "bound_workflow"
+  },
+  "max_depth": 1,
+  "nodes": [
+    {
+      "id": "external:8205d2de3db2d30900b532b0d38bb8d85176d2d85fb38779bc9a69b16b740459:contributor:C12",
+      "name": "Adaptation of the iCLIP assay/library architecture (Huppertz et al.)",
+      "kind": "assay",
+      "reference_id": "R16",
+      "identity_status": "scoped_to_cited_contribution; catalogue_matches_are_candidates",
+      "catalogue_candidates": [
+        "iclip"
+      ]
+    },
+    {
+      "id": "workflow:dispatch_bb2854ef3594fbc43612:c7e3377d207b58be0a45a2b29f66185f213d5d2dc1fd2ed86e62fe85e613b470",
+      "name": "irCLIP",
+      "record_id": "dispatch_bb2854ef3594fbc43612",
+      "extraction_sha256": "c7e3377d207b58be0a45a2b29f66185f213d5d2dc1fd2ed86e62fe85e613b470",
+      "kind": "bound_workflow"
+    }
+  ],
+  "historical_contributions": [
+    {
+      "id": "8205d2de3db2d30900b532b0d38bb8d85176d2d85fb38779bc9a69b16b740459:C12",
+      "source": "external:8205d2de3db2d30900b532b0d38bb8d85176d2d85fb38779bc9a69b16b740459:contributor:C12",
+      "target": "workflow:dispatch_bb2854ef3594fbc43612:c7e3377d207b58be0a45a2b29f66185f213d5d2dc1fd2ed86e62fe85e613b470",
+      "relation": "method_development",
+      "claim": {
+        "id": "C12",
+        "reference_id": "R16",
+        "contributor": "Adaptation of the iCLIP assay/library architecture (Huppertz et al.)",
+        "contributor_kind": "assay",
+        "relation": "method_development",
+        "seed_operation_ids": [
+          "trim",
+          "dephos_ligate",
+          "gel_blot_pk",
+          "rt_purify",
+          "circularize_pcr"
+        ],
+        "earlier_demonstration": "Primary protocol full text (PMID 24184352; DOI agrees) retains UV contact capture/IP, RNA 3′ ligation and radioactive 5′ labeling, SDS-PAGE/nitrocellulose/PK, adapter-primed RT stopping at residual peptide, and cDNA circularization/linearization/PCR to retain truncated products. It specifies in-lysate RNase I, urea/37 C recovery and SuperScript III.",
+        "seed_design_change": "Scoped development of that architecture is supported by the seed explicitly assessing iCLIP library construction and replacing its transformations. Retained: UV-C/IP-selected native RNA contacts, ligated RT-priming interface, residual-peptide-associated cDNA endpoints and circularization/PCR. Changed: trim is moved from lysate to IP beads; dephos_ligate adds infrared/biotin detection and affinity handles; gel_blot_pk changes urea/37 C to SDS/50 C; within rt_purify the RT becomes TGIRT-III and purification captures adapter-biotin RNA-cDNA hybrids; circularize_pcr uses released cDNA, carbon-spacer primer architecture and magnetic-bead cleanup/size selection instead of importing R16 gel/linearization steps. This is an architecture-level adaptation, not a claim that R16 is the unique parent or donor of every component.",
+        "limitation_addressed": "The seed documents difficult visualization, suboptimal fragment lengths, >80% precipitation loss and 90-95% loss in initial iCLIP library steps using adapter-ligated RNA versus a control cDNA bypassing RT/purification. Suspected lysate inhibition, column/transfer losses and urea mechanism are kept separate from measured recovery.",
+        "reported_gain": "Seed reports >10-100-fold faster IR visualization, better on-bead fragment recovery (Fig.1b), better coordinated SDS/temperature recovery (Fig.1c), 4-8-fold more cDNA by PCR-cycle proxy versus SuperScript III, and 2-3-fold recovery for AMPure/isopropanol versus silica columns. The 8 h library duration is for precipitated RNA -> dsDNA, not the entire assay; >100-fold cellular input reduction is a cumulative workflow claim, supported by the distinct R9 low-input comparison, not an isolated effect of this parent architecture.",
+        "tradeoffs_and_transfer_limits": "The biological measurement remains selected RBP-contact-associated RNA positions; sequenced material is amplified DNA, not protein, IR signal or a spatial/cell barcode. Protein attribution comes from IP and covalent contact retention; endpoints locate contacts. No guaranteed absolute molecule quantitation, unchanged RT-stop probability, barcode equivalence, exact retained photochemistry or universal compatibility follows. The original R16 linearization/gel interfaces are documented differences and are not silently copied into the seed route.",
+        "seed_evidence": [
+          {
+            "evidence_id": "e1"
+          },
+          {
+            "evidence_id": "e2"
+          },
+          {
+            "evidence_id": "e3"
+          },
+          {
+            "evidence_id": "e4"
+          },
+          {
+            "evidence_id": "e5"
+          },
+          {
+            "evidence_id": "e6"
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "evidence_id": "e7"
+          },
+          {
+            "evidence_id": "e8"
+          },
+          {
+            "evidence_id": "e9"
+          },
+          {
+            "evidence_id": "e10"
+          }
+        ],
+        "catalogue_candidates": [
+          "iclip"
+        ],
+        "unresolved": [
+          "Catalogue has no exact R16 PMID/DOI/title listing. iclip is a candidate by described truncated-cDNA architecture and its exact R8 reference, not an admitted R16 identity merge. Explicit protocol adaptation supports the scoped history; preprint/protocol-version chronology and earliest invention are unresolved and not claimed.",
+          "The existing composite operation IDs locate these conceptual changes unambiguously; no before-side IDs exist and none are invented. A more detailed extraction would be required to assert identical random-barcode/UMI counting rules, specific primer/linearization substitution ancestry or an obligatory RNase A+I cocktail; those stronger claims are withheld, and R16 methods plus seed b00019/b00023/b00026 identify the resolving sources."
+        ],
+        "citation_context": "Although it requires more than 30 steps and ~4 d, when compared to HITS-CLIP15,16, the iCLIP library construction method requires less time and fewer molecular biology steps. To assess the efficiency of iCLIP library construction, we used irCLIP-adaptor-ligated RNA and a control ‘cDNA’ (which bypassed reverse transcription and cDNA purification) and discovered 90–95% loss of irCLIP-adaptor-ligated RNA in the initial library steps.",
+        "claim_scope": "seed_workflow"
+      },
+      "review": {
+        "claim_id": "C12",
+        "decision": "accept",
+        "rationale": "Accept the scoped iCLIP architecture-development relationship. This rests on the seed's explicit assessment of iCLIP library construction and successive replacement of its transformations, together with R16's independently documented implementation, rather than only a citation or diagram resemblance. The retained architecture is UV/IP-selected contact-associated RNA, RNA-3-prime priming-adapter ligation, peptide-associated truncated-cDNA endpoints, and circularization/PCR. R16 methods substantiate in-lysate RNase I, urea/37 C PK recovery, SuperScript III, gel selection and restriction linearization; seed methods substantiate the stated compartment, labeling, recovery, RT, affinity, primer and bead-cleanup differences. Multiple coordinated changes define the adaptation, and no single source is made donor of every new component or unique parent. The reported PCR-cycle yield proxy, cleanup recovery comparison, approximate library duration and cumulative low-input result are not interchangeable causal gains. No UMI, precise photoproduct, arrest-probability or primer-ancestry equivalence is admitted.",
+        "evidence": [
+          {
+            "evidence_id": "e1"
+          },
+          {
+            "evidence_id": "e2"
+          },
+          {
+            "evidence_id": "e3"
+          },
+          {
+            "evidence_id": "e4"
+          },
+          {
+            "evidence_id": "e5"
+          },
+          {
+            "evidence_id": "e6"
+          },
+          {
+            "evidence_id": "e7"
+          },
+          {
+            "evidence_id": "e8"
+          },
+          {
+            "evidence_id": "e9"
+          },
+          {
+            "evidence_id": "e10"
+          },
+          {
+            "evidence_id": "e11"
+          },
+          {
+            "evidence_id": "e12"
+          }
+        ],
+        "unresolved_assessments": [
+          {
+            "issue_index": 0,
+            "blocks_relation": false,
+            "rationale": "The iclip catalogue card supports a family-level candidate through the R8 listing and described architecture; it is not an exact R16 bibliographic match. This does not block an externally evidenced development relationship. Missing version/preprint history prevents a priority claim, which is not made; it does not negate the seed's explicit evaluation and revision of the cited iCLIP architecture."
+          },
+          {
+            "issue_index": 1,
+            "blocks_relation": false,
+            "rationale": "The seven existing operation groups suffice to locate the claimed conceptual revisions. No earlier-side operation IDs are available or invented. Detailed barcode/UMI counting equivalence, attribution of a particular primer/linearization substitution and a mandatory RNase A+I mixture would require finer evidence/extraction; all are explicitly withheld. The seed methods and R16 distinguish the reported material states and architecture sufficiently for this scoped relationship."
+          }
+        ]
+      },
+      "claim_id": "C12",
+      "status": "model_reviewed_pilot_overlay",
+      "artifact_id": "a1"
+    }
+  ],
+  "other_direct_relationships": [],
+  "other_relationship_nodes": [],
+  "direct_withheld_claims": [],
+  "frontier": [
+    {
+      "node": {
+        "id": "external:8205d2de3db2d30900b532b0d38bb8d85176d2d85fb38779bc9a69b16b740459:contributor:C12",
+        "name": "Adaptation of the iCLIP assay/library architecture (Huppertz et al.)",
+        "kind": "assay",
+        "reference_id": "R16",
+        "identity_status": "scoped_to_cited_contribution; catalogue_matches_are_candidates",
+        "catalogue_candidates": [
+          "iclip"
+        ]
+      },
+      "reason": "no_further_history_in_loaded_evidence",
+      "continuation_status": "unbound_external_contribution"
+    }
+  ],
+  "overlay_sha256": [
+    "8205d2de3db2d30900b532b0d38bb8d85176d2d85fb38779bc9a69b16b740459"
+  ],
+  "boundary": "Explicitly loaded, previously model-reviewed pilot overlays; no new scientific validation, date/priority verification, or canonical method identity resolution. Paths join distinct scoped claims; they do not establish transitive inheritance of a component or whole assay. A traversal endpoint is not proof of first invention. An external contribution has no verified workflow binding here; withheld findings are research leads, not edges.",
+  "selection": {
+    "claim_id": "C12",
+    "overlay_sha256": "8205d2de3db2d30900b532b0d38bb8d85176d2d85fb38779bc9a69b16b740459",
+    "section": "historical_contributions",
+    "scope": "One exact recorded finding, not the full method history."
+  },
+  "format_version": "illumina_history_context/1",
+  "view": "summary",
+  "evidence": {
+    "e1": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "seed",
+        "quote": "Although it requires more than 30 steps and ~4 d, when compared to HITS-CLIP15,16, the iCLIP library construction method requires less time and fewer molecular biology steps. To assess the efficiency of iCLIP library construction, we used irCLIP-adaptor-ligated RNA and a control ‘cDNA’ (which bypassed reverse transcription and cDNA purification) and discovered 90–95% loss of irCLIP-adaptor-ligated RNA in the initial library steps."
+      }
+    },
+    "e2": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "seed",
+        "quote": "Recently, a pair of novel RT enzymes derived from group II introns was described. Compared with previously described enzymes, these enzymes have higher yield, efficiency, fidelity, and processivity, and they operate at higher temperatures for cDNA extension20. We compared one of these enzymes, TGIRT-III, to the commonly used SuperScript III enzyme. TGIRT-III produced four- to eight-fold more cDNA than SuperScript III (as assessed by requiring two or three fewer PCR cycles to generate the same amount of library material; Fig. 1d and Supplementary Fig. 5a). We further hypothesized that loss of cDNA could occur during cleanup reactions preceding PCR. To assess this, we replaced silica-column-based cDNA purification with an AMPure bead-isopropanol mixture (Beckman Coulter), which increased cDNA recovery two- to three-fold (Supplementary Fig. 5b). Lastly, while newer CLIP strategies including BrdU-CLIP10 and FAST-iCLIP11 reduce overall library construction times from ~4 to ~1.5 d, these methods still include a significant number of tube-column transfers that could contribute to systemic loss of material. We therefore leveraged the above use of magnetic-bead-based purification to develop an 8 h, 96-well-based ‘two-tube’ strategy that includes on-bead library size selection, eliminating all precipitations and column purifications present in other protocols (Fig. 1e and Online Methods). The cumulative methodological improvements of irCLIP thus allow a > 100-fold reduction in cellular inputs, approaching a strategy with minimal information loss (Fig. 1f,g)."
+      }
+    },
+    "e3": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "seed",
+        "quote": "Methodological papers for both HITS-CLIP15 and iCLIP16 recommend in-lysate nuclease digestions to cleave crosslinked RNA flanking the protein–RNA crosslink site. iCLIP, a recently developed version of CLIP, provides base resolution of protein–RNA contacts8 and relies on UV-C crosslinked peptide-RNA interactions to halt reverse transcriptase (RT). Given the high frequency of RT halting (~8O%18), cDNA molecules generated in iCLIP strategies are, on average, shorter than the isolated RNA crosslinked to the RBP of interest. Optimally digested RNA fragments should range from ~40 to 100 nucleotides (nt) in order to produce uniquely mappable cDNA inserts ranging from 20 to 50 nt. We reasoned that the complexity of initial lysates and/or the presence of inhibitory buffer components, which may vary greatly depending on experimental circumstances, might impede optimal digestion of crosslinked RNA. In support of this, we found that on-bead nuclease digestion markedly increased optimal RNA fragments for multiple classes of RNA-binding proteins (Fig. 1b and Supplementary Fig. 2a–h). To determine whether a particular nuclease was better at generating optimal RNA fragments, we compared on-bead nuclease digestions across the same panel of RBPs using RNase A, RNase 1, and S1 nuclease. While on-bead S1 digestions significantly outperformed in-lysate RNase A digestions (Supplementary Fig. 2), on-bead RNase A digestions produced the maximal number of optimal RNA fragments (Supplementary Fig. 3a–h). On-bead digestions may therefore maximize information recovery across CLIP experiments."
+      }
+    },
+    "e4": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "seed",
+        "quote": "Next, we the addressed liberation of protein–RNA complexes from nitrocellulose membranes by proteinase K (PK) digestion. This is commonly done at physiologic temperature (37 °C) in the presence of urea15,16. Initial quantification of urea—PK-released irCLIP-adaptor-ligated RNA revealed >80% loss of material during precipitation. Because urea increases the dielectric constant of the surrounding medium and therefore inhibits precipitation of nucleic acid19, we reasoned that replacement of urea with alternative stimulators of PK activity could increase the efficiency of RNA recovery. We found that replacing urea with SDS and increasing the temperature facilitated liberation of nitrocellulose-bound RNA-peptide complexes. These changes significantly improved precipitation of irCLIP-adaptor-ligated RNA compared to urea-PK digestions and did not impact RNA integrity (Fig. 1c and Supplementary Fig. 4a–c)."
+      }
+    },
+    "e5": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "seed",
+        "quote": "cDNA synthesis primers were purchased from IDT with three modifications, 5′ phosphorylation (/5phos/), and two internal carbon spacers (/iSpl8/), which are required for generation of linear PCR product using circularized cDNA as template."
+      }
+    },
+    "e6": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "seed",
+        "quote": "cDNA-RNA hybrids were captured by addition of 5 μL of MyOne Streptavidin C1 Dynabeads (Thermo Fisher Scientific, #65001) that had been rinsed and suspended in 100 μL of NT2 buffer and end-over-end rotation for 30 min at 4 °C. Beads were placed on a 96-well magnet and washed twice with 0.1 mL high-stringency buffer and twice with 0.1 mL of PBS. Beads were resuspended in 10 μL of cDNA elution/RNA degradation buffer (8.25 μL water, 1 μL of 1 μM P3short oligonucleotide, and 0.75 μL of 50 mM MnCl2) and placed in a thermocycler with the program: 5 min 95 °C, 1 min 75 °C, ramp 0.1° s−1 to 60 °C forever. After 15 min, tubes were removed and mixed with 5 μL of Circligase-II reaction buffer (3.3 μL water, 1.5 μL 10× Circligase-II buffer, and 0.2 μL of Circligase-II; Epicentre, #CL9021K). cDNA was circularized in a thermocycler for 1.5 h at 60 °C."
+      }
+    },
+    "e7": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "R16",
+        "quote": "The iCLIP protocol starts with UV irradiation, which forms covalent bonds at sites of protein–RNA interactions and thereby preserves the in vivo binding pattern (Fig. 1, step 1). Next, the cells are lysed and the RNAs are partially digested to obtain RNA fragments in an optimal size range (Fig. 1, steps 2 and 3). After immunoprecipitation of the protein–RNA complexes, the RNA is dephosphorylated, an adapter is ligated to the 3′ end of the RNA and the 5′ end is radioactively labeled (Fig. 1, steps 4–7). SDS–PAGE and transfer to nitrocellulose membrane enable to remove free RNA and to stringently purify the crosslinked protein–RNA complexes (Fig. 1, step 8). The RNA is recovered from the nitrocellulose membrane by digesting the protein with proteinase K, which leaves a polypeptide at the crosslink site (Fig. 1, step 9). The RNA is then reverse transcribed into cDNA, which most often truncates at the polypeptide remaining at the crosslink site (Fig. 1, step 10). Size selection of the cDNA removes free reverse transcription (RT) primers, and is followed by cDNA circularization, which attaches the second adapter to the 3′ end of cDNA (Fig. 1, steps 11–13). Restriction enzyme digestion linearizes the cDNA before PCR amplification (Fig. 1, steps 14 and 15). To increase the quantitative power of the method, the reverse transcription primers contain a randomized sequence (random barcode), which enables computational filtering of artifacts caused by variable PCR amplification of the cDNAs [19]. After high-throughput sequencing, the barcode sequence precedes the cDNA sequence. Truncated cDNAs represent over 80% of the cDNA library, and after mapping their sequence to the genome, the position of the preceding nucleotide corresponds to the crosslinking site [7]."
+      }
+    },
+    "e8": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "R16",
+        "quote": "Prepare two dilutions of RNase I in PBS6; we recommend to initially use a 1:50 dilution for high RNase and a 1:250 dilution for low RNase, but this needs to be carefully optimized (see Fig. 3A and comments at the end of this subchapter).•Add 10 μl of low or high RNase I dilution and 2 μl Turbo DNase to the cell lysate and immediately place the samples at 37 °C for 3 min, shaking at 1100 rpm. Immediately afterward transfer to ice for >3 min."
+      }
+    },
+    "e9": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "R16",
+        "quote": "Add 10 μl proteinase K in 200 μl PK buffer to the nitrocellulose pieces (all should be submerged). Incubate for 20 min shaking at 1100 rpm at 37 °C.•Add 200 μl PK buffer + 7 M urea and incubate for further 20 min at 37 °C and 1100 rpm."
+      }
+    },
+    "e10": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "R16",
+        "quote": "RT mix is added, mix by pipetting•RT mix 7 μlH2O 4 μl5 × First Strand Buffer 1 μl0.1 M DTT 0.5 μlRNasin 0.5 μlSuperscript III•25 °C 5 min, 42 °C 20 min, 50 °C 40 min, 80 °C 5 min, 4 °C hold"
+      }
+    },
+    "e11": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "seed",
+        "quote": "0.2 mL of proteinase K reaction buffer (100 mM Tris, pH 7.5; 50 mM NaCl; 1 mM EDTA; 0.2% SDS) containing 10 μL of proteinase K (Thermo Fisher Scientific, cat# AM2546) was added to each tube and incubated for 60 min at 50 °C in an Eppendorf Thermomixer, 15 s 1,000 r.p.m., 30 s rest."
+      }
+    },
+    "e12": {
+      "artifact_id": "a1",
+      "original": {
+        "source_id": "seed",
+        "quote": "(e) Approximate time requirement for conversion of precipitated RNA to double-stranded DNA (dsDNA)."
+      }
+    }
+  },
+  "artifacts": {
+    "a1": {
+      "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/transcriptomics_revision_20261104/irclip_history_01/graph.json",
+      "sha256": "8205d2de3db2d30900b532b0d38bb8d85176d2d85fb38779bc9a69b16b740459",
+      "format_version": "citation_lineage_pilot/3",
+      "source_registry": {
+        "status": "pinned_metadata",
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/transcriptomics_revision_20261104/irclip_history_01/inputs/sources.json",
+        "sha256": "0776c1ec94bd1be95427db080abcf55e3e819533740703198145ee08b5824ef3",
+        "sources": {
+          "R1": {
+            "title": "Intra-RNA and RNA-protein cross-linking techniques in Escherichia coli ribosomes.",
+            "content_level": "metadata",
+            "pmid": "3071669",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/3071669/",
+            "document_artifacts": {
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R10": {
+            "title": "HITS-CLIP and integrative modeling define the Rbfox splicing-regulatory network linked to brain development and autism.",
+            "content_level": "fulltext",
+            "pmid": "24613350",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/24613350/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/24613350/article.xml",
+                "sha256": "1c3c1768776cf8cb7210ad497f106999f1101e4f6666e97109fc3238dcbea957",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R11": {
+            "title": "Dissecting noncoding and pathogen RNA-protein interactomes.",
+            "content_level": "fulltext",
+            "pmid": "25411354",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/25411354/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/25411354/article.xml",
+                "sha256": "6874792206221964d41050bd7af0849327dbd137c2ba9c8f485c15e35793dcd6",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R15": {
+            "title": "Mapping Argonaute and conventional RNA-binding protein interactions with RNA at single-nucleotide resolution using HITS-CLIP and CIMS analysis.",
+            "content_level": "fulltext",
+            "pmid": "24407355",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/24407355/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/24407355/article.xml",
+                "sha256": "a53218360ab72488bcc12c9848c3460b231eb7f445984b0f69a7985211d42d98",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R16": {
+            "title": "iCLIP: protein-RNA interactions at nucleotide resolution.",
+            "content_level": "fulltext",
+            "pmid": "24184352",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/24184352/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/24184352/article.xml",
+                "sha256": "2911f3b8979ceadf601745cafd72af7df1efe5a27a06dd564a80333d9c624b76",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R18": {
+            "title": "A two-tracked approach to analyze RNA-protein crosslinking sites in native, nonlabeled small nuclear ribonucleoprotein particles.",
+            "content_level": "abstract",
+            "pmid": "12054894",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/12054894/",
+            "document_artifacts": {
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R19": {
+            "title": "Selective precipitation of DNA by spermine during the chemical extraction of insoluble cytoplasmic protein.",
+            "content_level": "abstract",
+            "pmid": "11735448",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/11735448/",
+            "document_artifacts": {
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R2": {
+            "title": "CLIP: a method for identifying protein-RNA interaction sites in living cells.",
+            "content_level": "abstract",
+            "pmid": "16314267",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/16314267/",
+            "document_artifacts": {
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R20": {
+            "title": "Thermostable group II intron reverse transcriptase fusion proteins and their use in cDNA synthesis and next-generation RNA sequencing.",
+            "content_level": "fulltext",
+            "pmid": "23697550",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/23697550/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/23697550/article.xml",
+                "sha256": "e0105ae04e4f1580d13c77bf6ee5b130f365e66a36d0a4931da4e6576e8360d8",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R3": {
+            "title": "HITS-CLIP yields genome-wide insights into brain alternative RNA processing.",
+            "content_level": "fulltext",
+            "pmid": "18978773",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/18978773/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/18978773/article.xml",
+                "sha256": "893fcb392c53f9a4c9c15950c64910dfc1b8bca15d3dd0f18c5d19c3183a6b0e",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R5": {
+            "title": "Genome-wide analysis of PTB-RNA interactions reveals a strategy used by the general splicing repressor to modulate exon inclusion or skipping.",
+            "content_level": "fulltext",
+            "pmid": "20064465",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/20064465/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/20064465/article.xml",
+                "sha256": "5c3b095e87a8298a3c37ea15698945e32fd5dc9a1f8f5232bd022d3b480b8bd2",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R8": {
+            "title": "iCLIP reveals the function of hnRNP particles in splicing at individual nucleotide resolution.",
+            "content_level": "fulltext",
+            "pmid": "20601959",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/20601959/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/20601959/article.xml",
+                "sha256": "47e048aedb33deaeec1980b748c063e99d24e57f51c67aa7e749a9f07ab393d0",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "R9": {
+            "title": "Direct competition between hnRNP C and U2AF65 protects the transcriptome from the exonization of Alu elements.",
+            "content_level": "fulltext",
+            "pmid": "23374342",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/23374342/",
+            "document_artifacts": {
+              "fulltext_acquisition": {
+                "status": "fulltext_acquired",
+                "path": "papers/23374342/article.xml",
+                "sha256": "708f07976bd85ec3c575ff5e861c03db72037dbf6fb6b9b95caa6e38476131af",
+                "media_type": "application/xml",
+                "format": "JATS"
+              },
+              "metadata_receipt": {
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104/irclip_history_01/inputs/retrieval/pubmed.xml",
+                "sha256": "a00b7bc5c2a3147a559c6579b2836e025ad927ae0d91ac5fe877b2847a41013c"
+              }
+            }
+          },
+          "seed": {
+            "title": "irCLIP platform for efficient characterization of protein-RNA interactions.",
+            "content_level": "fulltext",
+            "pmid": "27111506",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5477425/",
+            "document_artifacts": {
+              "provenance.original": {
+                "status": "fulltext_acquired",
+                "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_06/imports/58/58483f76ef095fc9016dd7e8d345cdee012b5af927c08ab03df86708048597ef.xml",
+                "sha256": "58483f76ef095fc9016dd7e8d345cdee012b5af927c08ab03df86708048597ef",
+                "media_type": "application/xml",
+                "format": "JATS"
+              }
+            }
+          }
+        },
+        "boundary": "Metadata for cited evidence sources only; no paper text. Registry bytes and source IDs are checked, not scientific entailment. Document paths/hashes are preserved provenance, not rebased or freshly verified file availability."
+      }
+    }
+  },
+  "reading_note": "Descriptions and review findings are unchanged. Resolve each evidence_id in evidence, then its artifact_id in artifacts. IDs are local to this packet. This is a deterministic reading view, not a new review or an executable protocol."
+}

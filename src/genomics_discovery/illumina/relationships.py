@@ -215,6 +215,24 @@ needs_evidence when necessary evidence is unavailable, and reject for a false
 relationship. Genuine gaps cannot be fixed by demanding more confident wording.
 Check that the same contribution was not counted as two different historical
 claims. Scientific similarity alone does not repair missing historical attribution.
+
+SCOPED BEFORE-TO-AFTER CHECK
+For each accepted historical claim, use the existing finding.rationale to explain
+the reconstruction at that claim's scope: starting with the evidenced earlier
+arrangement, what is retained, what changes (or is adopted unchanged), what
+material/information state results, and how that result serves the next operation
+or measurement. Identify the source support for the necessary connections. Do not
+merely repeat the author's comparison or state that it is plausible. If a necessary
+connection requires an unstated assumption, request correction or evidence rather
+than silently completing it from general knowledge. A source-backed earlier
+description is sufficient; do not require nonexistent predecessor graph IDs.
+
+This is conceptual reconstruction, not execution of a complete wet-lab recipe.
+A component-adoption edge need only reconstruct the adopted contribution and its
+destination, not the entire later assay. A method-development edge must account
+for the retained arrangement and the necessary coordinated changes it claims.
+Keep a novel proposed transfer separate: a reviewed historical implementation is
+evidence for what worked there, not a certificate that a new combination works.
 """
 
 
@@ -230,6 +248,21 @@ uncritically. Do not remove an unresolved item merely to obtain acceptance, inve
 an unavailable recipe, or rewrite unrelated source workflow graphs. Return a
 complete revised analysis under the same schema. A separate fresh review judges
 the revised artifact; your revision is not approval. The host bounds the cycle.
+"""
+
+
+REVISION_REVIEW_INSTRUCTIONS = """
+REVIEWING A REVISED ANALYSIS
+Read previous_review and previous_analysis as an issue record, not as scientific
+authority. Independently check the revised analysis against the original sources.
+In the existing review summary, account for each earlier requested correction,
+omission and blocking uncertainty: resolved with source support, narrowed or
+withdrawn, still unresolved, or a mistaken criticism with source-based reasoning.
+Check removed as well as retained claims. Deleting an uncertainty or claim does
+not establish that the underlying question was resolved; retain an important
+unanswered methodological lead in omitted_candidates. If necessary sources are
+outside the registered bundle, say which source is needed; do not accept confident
+wording as a substitute. Remain a fresh reviewer; previous approval is not proof.
 """
 
 
@@ -341,6 +374,7 @@ def relationship_packet(graph, claim_id):
         "format_version": "illumina_relationship_context/1",
         "claim": copy.deepcopy(claim), "review": copy.deepcopy(item["review"]),
         "relation_definition": copy.deepcopy(RELATIONS[claim["relation"]]),
+        "relation_definition_status": "Current retrieval guidance; not the original review contract and not a re-review of this archived claim.",
         "bindings": copy.deepcopy(graph["bindings"]),
         "groups": groups,
         "diagram_adequacy": copy.deepcopy(graph["diagram_adequacy"]),

@@ -142,6 +142,7 @@ def test_feedback_requests_revision_from_writer_and_keeps_review_independent(mod
     import importlib.util
     from genomics_discovery.illumina.relationships import (
         CHANGE_INSTRUCTIONS, CHANGE_REVIEW_INSTRUCTIONS, REVISION_INSTRUCTIONS,
+        REVISION_REVIEW_INSTRUCTIONS,
     )
     spec = importlib.util.spec_from_file_location(
         'revision_test_' + module_name,
@@ -149,7 +150,8 @@ def test_feedback_requests_revision_from_writer_and_keeps_review_independent(mod
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     first = {'analysis': '/fixture/prior.json'}
-    feedback = {**first, 'previous_review': '/fixture/review.json'}
+    feedback = {**first, 'previous_review': '/fixture/review.json',
+                'previous_analysis': '/fixture/earlier.json'}
     assert REVISION_INSTRUCTIONS not in module.build_prompt(author_role, first)
     assert CHANGE_INSTRUCTIONS in module.build_prompt(author_role, first)
     revised = module.build_prompt(author_role, feedback)
@@ -157,6 +159,8 @@ def test_feedback_requests_revision_from_writer_and_keeps_review_independent(mod
     assert json.loads(revised.split('\nCONTEXT\n')[1]) == feedback
     review = module.build_prompt('review', feedback)
     assert CHANGE_REVIEW_INSTRUCTIONS in review
+    assert REVISION_REVIEW_INSTRUCTIONS in review
+    assert REVISION_REVIEW_INSTRUCTIONS not in module.build_prompt('review', first)
     assert REVISION_INSTRUCTIONS not in review
     assert CHANGE_INSTRUCTIONS not in review
     if module_name == 'prompts':

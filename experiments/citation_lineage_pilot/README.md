@@ -1,5 +1,13 @@
 # Citation-guided method graph pilot
 
+Current pipeline and audit: [extraction -> changes -> ideation](../transcriptomics_revision_20261104/HANDOFF_REVIEW.txt).
+The irCLIP example is now readable through `illumina.history` with an exact
+`--claim-id`. The existing reviewer must explain the scoped before/after
+transition; corrected analyses receive a fresh review with the previous issue
+record. Both runners use `run.review_cycle`. This wording and runtime change
+remain untested by a new native run; completed results below retain their
+original contracts. Read the audit before treating a pilot as full-atlas release.
+
 The completed example is **ATAC-seq**, using gpt-6.1-sol/xhigh on Qiu Sherlock.
 [Read the results](../../provenance/experiments/citation_lineage_20261102/RESULTS.json),
 [inspect the graph](../../provenance/experiments/citation_lineage_20261102/atac/graph.json),

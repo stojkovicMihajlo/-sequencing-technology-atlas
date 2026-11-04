@@ -19,10 +19,10 @@ from genomics_discovery.execution.codex_worker import CodexWorker, assess_archiv
 from genomics_discovery.illumina.extraction import read, sha, source_excerpt, stage_images, verify_stage_inputs, write
 from genomics_discovery.illumina import relationships as relationship_policy
 from genomics_discovery.illumina.graph import _load_card, operation_group
-from models import Review, validate_review
-from pair_models import PairAnalysis, export_pair, validate_pair
+from models import Review
+from pair_models import PairAnalysis, export_pair, validate_pair, validate_pair_review
 from pair_prompts import build_prompt
-from run import bibliography
+from run import bibliography, review_cycle
 
 
 def prepare_primary(source, source_id, side, inputs):
@@ -131,7 +131,7 @@ def validate(role, artifact, inputs, analysis_path=None):
         result = Review.model_validate_json(artifact.read_bytes())
         analysis = PairAnalysis.model_validate_json(analysis_path.read_bytes())
         validate_pair(analysis, context)
-        validate_review(result, analysis, sha(analysis_path), context["sources"])
+        validate_pair_review(result, analysis, context, sha(analysis_path))
     return result
 
 
@@ -150,7 +150,7 @@ async def execute(args):
     policy_path = Path(relationship_policy.__file__).resolve()
     implementation[str(policy_path)] = sha(policy_path)
 
-    async def stage(role, analysis_path=None, feedback=None):
+    async def stage(role, analysis_path=None, feedback=None, previous_analysis_path=None):
         attempt = root / "attempts" / f"{len(state['stages'])+1:03d}_{role}"
         attempt.mkdir(parents=True)
         schema = PairAnalysis if role == "author" else Review
@@ -181,11 +181,13 @@ async def execute(args):
             context.update(analysis=str(analysis_path), analysis_sha256=sha(analysis_path))
         if feedback:
             context["previous_review"] = str(feedback)
+        if previous_analysis_path:
+            context["previous_analysis"] = str(previous_analysis_path)
         prompt = build_prompt(role, context)
         (attempt / "stage_prompt.txt").write_text(prompt)
         pins = {str(p): sha(p) for p in inputs.iterdir() if p.is_file()}
         pins.update(implementation)
-        for p in (attempt / "schema.json", attempt / "stage_prompt.txt", attempt / "image_delivery.json", analysis_path, feedback):
+        for p in (attempt / "schema.json", attempt / "stage_prompt.txt", attempt / "image_delivery.json", analysis_path, feedback, previous_analysis_path):
             if p:
                 pins[str(p)] = sha(p)
         write(attempt / "input_pins.json", pins)
@@ -210,12 +212,7 @@ async def execute(args):
         return document, attempt / "artifact.json"
 
     try:
-        feedback = analysis_path = None
-        for revision in range(2):
-            analysis, analysis_path = await stage("author", analysis_path, feedback)
-            review, feedback = await stage("review", analysis_path)
-            if not review.omitted_candidates and not any(x.decision == "revise" for x in review.findings):
-                break
+        analysis, analysis_path, review = await review_cycle(stage, 'author')
         graph = export_pair(analysis, review, load_inputs(inputs), sha(analysis_path))
         write(root / "analysis.json", analysis.model_dump())
         write(root / "review.json", review.model_dump())

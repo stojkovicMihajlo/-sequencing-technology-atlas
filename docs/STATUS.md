@@ -1,5 +1,26 @@
 # Deployment status
 
+## Extraction-to-ideation audit — 4 November 2026, afternoon
+
+Read the [current handoff review](../experiments/transcriptomics_revision_20261104/HANDOFF_REVIEW.txt)
+for the actual pipeline, before/after review test, source-backed example, fixes
+and remaining release gates. The Qiu scheduler check found no active atlas jobs.
+The current selection has **19 workflows**; completed irCLIP history job 51113321
+has **2 historical links, 4 precedents, 5 comparisons and 4 withheld findings**.
+Those history findings remain a pilot overlay, separate from the older website.
+
+This audit fixes current-format history reading, two-sided pair-review evidence,
+review issue continuity and exported/native analysis binding. Queries can select
+one exact claim and keep withheld findings as research leads. New review wording
+requires a scoped before-to-after explanation; it has not had a new native trial.
+The remaining integration work is review-triggered source recovery, explicit
+predecessor/version binding, and a bounded native acceptance test. No full-batch
+rerun or original-artifact rewrite was performed.
+**555 relevant offline tests passed**, with actual irCLIP history-query and
+native-analysis binding checks. These establish software behavior, not semantic
+completeness. The [C12 read example](../provenance/experiments/transcriptomics_revision_20261104/irclip_history_01/query_C12.json)
+retains the archived claim/review plus resolvable source metadata.
+
 ## Evolution-graph review — 4 November 2026
 
 The [all-record review and graph decision](../experiments/evolution_review_20261103/REPORT.txt)

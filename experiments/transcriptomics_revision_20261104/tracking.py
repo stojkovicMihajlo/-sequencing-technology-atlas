@@ -72,6 +72,45 @@ def method_rows(batch, snapshot):
     return result
 
 
+def completed_analysis_integrity(run, state, analysis, analysis_pin, snapshot):
+    """Bind a reserialized handoff to the exact native bytes named by its review."""
+    native_path = None
+    authors = [x for x in state.get("stages", [])
+               if x["role"] == "analyse" and x["status"] == "validated"]
+    if authors:
+        author = authors[-1]
+        if author.get("artifact_sha256") != analysis_pin:
+            return {"status": "not_established", "path": None,
+                    "reason": "Final analysis hash disagrees with the recorded native author stage"}
+        native_path = Path(author["path"]) / "artifact.json"
+    elif state.get("review_reuse"):
+        reuse = state["review_reuse"]
+        if reuse.get("analysis_sha256") != analysis_pin:
+            return {"status": "not_established", "path": None,
+                    "reason": "Final analysis hash disagrees with the recorded reused native analysis"}
+        native_path = Path(reuse["analysis_path"])
+    if native_path is None or not native_path.exists():
+        # A copied remote run may retain its original absolute paths. Only an
+        # exact-byte native copy can replace the unavailable author artifact.
+        copies = [run / "native_analysis.json"]
+        if state.get("review_reuse"):
+            copies.append(run / "inputs/prior_analysis.json")
+        native_path = next((p for p in copies if p.exists()), None)
+    if native_path is None:
+        return {"status": "not_established", "path": None,
+                "reason": "Reviewed native analysis bytes unavailable; exported JSON alone cannot establish review binding"}
+    native = snapshot.read(native_path)
+    native_pin = snapshot.pin(native_path)
+    result = {"path": str(native_path.resolve()), "sha256": native_pin}
+    if not analysis_pin or native_pin != analysis_pin:
+        return {**result, "status": "native_hash_mismatch",
+                "reason": "Native analysis bytes do not match the hash named by the completed review"}
+    if native != analysis:
+        return {**result, "status": "export_content_mismatch",
+                "reason": "Exported analysis content differs from the reviewed native analysis"}
+    return {**result, "status": "matches_reviewed_native", "reason": None}
+
+
 def history_rows(run, snapshot):
     run = Path(run).resolve()
     state = snapshot.read(run / "state.json")
@@ -109,9 +148,13 @@ def history_rows(run, snapshot):
     claims = {x["id"]: x for x in analysis["claims"]}
     if len(claims) != len(analysis["claims"]):
         raise ValueError("Duplicate claim IDs in history analysis")
-    review_matches = bool(review and analysis_pin and review.get("analysis_sha256") == analysis_pin)
-    if not completed and snapshot.pin(analysis_path) != analysis_pin:
-        review_matches = False
+    integrity = (completed_analysis_integrity(run, state, analysis, analysis_pin, snapshot) if completed else
+                 {"status": "matches_reviewed_native" if snapshot.pin(analysis_path) == analysis_pin else "native_hash_mismatch",
+                  "path": str(analysis_path), "sha256": snapshot.pin(analysis_path),
+                  "reason": None if snapshot.pin(analysis_path) == analysis_pin else "Native analysis bytes differ from the recorded author hash"})
+    summary["analysis_integrity"] = integrity
+    review_matches = bool(review and analysis_pin and review.get("analysis_sha256") == analysis_pin
+                          and integrity["status"] == "matches_reviewed_native")
     findings = {x["claim_id"]: x for x in review.get("findings", [])} if review_matches else {}
     review_complete = review_matches and len(findings) == len(review["findings"]) and set(findings) == set(claims)
     published = {x["id"]: x for x in graph.get("links", [])} if graph else {}
@@ -128,7 +171,7 @@ def history_rows(run, snapshot):
                 for k, x in {**published, **withheld}.items())
     )
     if completed and not graph_consistent:
-        summary["tracker_limitation"] = "Completed publication/analysis/review binding is missing or inconsistent"
+        summary["tracker_limitation"] = integrity["reason"] or "Completed publication/analysis/review binding is missing or inconsistent"
     rows = []
     seed_pin = binding.get("parent_artifact_pins", {}).get("extraction.json")
     for claim_id, claim in claims.items():
@@ -176,6 +219,8 @@ def history_rows(run, snapshot):
             "change_categories": [], "classification_status": "unassigned", "taxonomy_version": None,
             "history_run": str(run), "analysis_path": str(analysis_path),
             "analysis_file_sha256": snapshot.pin(analysis_path), "review_bound_analysis_sha256": analysis_pin,
+            "analysis_integrity_status": integrity["status"], "analysis_integrity_reason": integrity["reason"],
+            "native_analysis_path": integrity["path"], "native_analysis_sha256": integrity.get("sha256"),
             "review_path": str(review_path) if review is not None else None,
             "sources_path": str(sources_path) if sources is not None else None,
             "sources_sha256": snapshot.pin(sources_path) if sources is not None else None,
