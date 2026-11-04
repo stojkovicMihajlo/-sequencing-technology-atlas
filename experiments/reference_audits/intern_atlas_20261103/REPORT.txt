@@ -1,0 +1,199 @@
+Intern-Atlas audit for consistent genomics annotations
+2026-11-03. Status: research and offline probes completed; no atlas schema changed.
+
+Question
+Which parts of annotation must be fixed so agents can retrieve equivalent facts,
+while retaining new mechanisms, unusual workflows and genuine assay differences?
+The target remains our source-grounded assay architecture. A paper-citation graph
+alone does not represent material transformations or establish compatibility.
+
+Scope and provenance
+Read the paper's complete main text, references and appendices A-F in HTML:
+https://arxiv.org/html/2604.28158v1
+Figures were read through captions/text; no independent visual figure audit.
+Read all 23 files in the public repository snapshot, including all 12 source
+files, both test files, all three documentation files, examples and MIT license:
+https://github.com/OpenRaiser/Intern-Atlas/tree/1185dc36555c547b5b6e9553779cb498a15ce587
+manifest.json records exact retrieved-text hashes. The unmodified source snapshot
+is in /private/tmp/intern_atlas_audit_20261103/repo (temporary, not a dependency).
+No author code was copied into production; probe.py is our synthetic audit.
+Also inspected the paper-linked website and Hugging Face dataset file inventory.
+Did not download the 3.12GB dataset, query hosted model services, or reproduce
+the paper's experiments. These boundaries matter for all negative findings below.
+
+Paper versus repository
+Appendix A describes curated method identities, defined relation categories,
+two-phase extraction, and quote/date checks. Its method and taxonomy curation
+are part of the method, not an incidental detail. The inspected repository is a
+smaller local builder plus a hosted-service client; its README explicitly states
+that it is not the website implementation. The production alias resolver,
+classification/completion prompts and SGT-MCTS implementation are absent from
+this snapshot. Remote endpoint wrappers are not their implementations.
+
+Trace through the public local builder
+cli.py:main -> builder.py:build_from_sources -> io.py:load_records ->
+builder.py:enrich_paper -> infer_relations -> db.py:write_graph ->
+server.py:create_app / evidence.py:build_evidence_pack.
+
+1. Input and identity
+io.py:load_records retains duplicate paper IDs by suffixing the later record.
+It does not resolve scientific publication identity. PDF input reads at most
+8 pages by default and does not populate publication year from PDF content.
+builder.py:enrich_paper passes at most 12,000 text characters by default.
+util.py:method_key lowercases, trims and collapses whitespace. method_id_for
+hashes name text. Neither computes semantic identity. db.py:write_graph keys
+mentions by that normalized string and keeps the first method description.
+The alias table is populated with those same observed names. No reviewed
+definition lookup, homonym adjudication or production registry is shipped here.
+
+2. Candidate relation selection
+builder.py:select_candidate_pairs enumerates paper pairs, then ranks them using
+method-name overlap and title/abstract tokens. orient_pair uses publication year,
+with input order as the same-year tie-breaker. These are candidate heuristics,
+not evidence of historical inheritance. The local path does not require an
+actual citation anchor. This differs materially from the paper's account.
+
+3. Relation extraction and admission
+builder.py:llm_relation receives paper_brief objects: title, year, truncated
+abstract/contribution, bottlenecks and method descriptions. It does not receive
+the registered full paper text or reference-local source passages.
+The prompt enumerates edge types but does not include the paper's operational
+glossary. Bottleneck, mechanism and dimension remain free strings; source and
+target method strings are not checked against a canonical registry.
+No quote field, passage locator, trade-off record or semantic review is required.
+If a relation call raises, infer_relations can create a heuristic relation.
+Sharing a normalized method name can then produce an extends edge. The warning
+and mechanism text identify the fallback, but it still reaches the same store.
+db.py writes fine_status=success and contexts_json=[] for both paths.
+
+4. Persistence and retrieval
+citations has PRIMARY KEY(source_id,target_id). Two different relation claims
+between one paper pair overwrite rather than coexist. paper_methods likewise
+allows one relationship per paper-method pair. methods uses INSERT OR IGNORE:
+an earlier uses mention can leave the origin unset when introduces arrives later.
+The JSON export omits source_method, target_method and method_relation, although
+some API responses retain the first two. Retrieval mostly uses lexical matching
+and bounded BFS; the method_aliases table is not consulted by query helpers.
+evidence.py does provide a useful explicit evidence-pack interface: papers,
+edges, bottlenecks, mechanisms, timeline, parameters and a generated text view.
+This packaging is reusable in principle. A package named evidence does not
+establish that its underlying scientific annotations were verified.
+
+5. Hosted-client boundary
+remote.py forwards lineage, ideation and evaluation requests. No local MCTS or
+novelty scorer is implemented in those wrappers. evidence_context's 404/405
+fallback to assist_context does not forward the requested year range, depth,
+edge-type or method filters. This is particularly unsuitable as an unchecked
+temporal-cutoff guarantee in a historical benchmark.
+
+Offline checks
+probe.py contains nine synthetic cases; results.json records outcomes:
+- Case-normalized Drop-seq names collapse to one method (positive control).
+- Declared variants Drop-seq / Drop seq / DropSeq remain three methods.
+- Two synthetic meanings both named Nuc-Seq collapse into one method.
+- Identical input paper IDs survive as same and same_1.
+- A scripted invented relation is stored as success without source passages;
+  its unrecognized method names and invented dimension also pass through.
+- A scripted transport failure creates an extends heuristic for shared terms.
+- Reordering same-year records changes relation orientation.
+- Two relations for one paper pair leave only the last relation in SQLite.
+- A uses mention preceding introduces leaves the origin unset.
+These demonstrate software behavior, not model error rates or errors in the
+hosted graph. Inputs are synthetic, not newly extracted biological claims.
+The bundled no-LLM build test passes. Full upstream suite collection was blocked
+by missing FastAPI in our environment; dependencies were not installed and API
+tests were not claimed as passed. Native model calls: zero.
+
+Reproduce with an unmodified checkout of the pinned repository on PYTHONPATH:
+PYTHONPATH=/path/to/Intern-Atlas/src python probe.py --out results.json
+The interpreter needs the upstream import dependency httpx. Our run used the
+existing project virtualenv, not Codex or a remote model provider.
+
+Implications for our atlas
+Keep three separate questions:
+  Identity: do these sources depict the same scoped assay implementation?
+  Meaning: do these assertions describe the same transformation or property?
+  History: does evidence establish that this assay adopted another's component?
+A shared name, method concept, graph neighborhood or timestamp answers none of
+these alone. They nominate candidates for the appropriate decision.
+
+Our Drop-seq findings illustrate two additional problems that aliases cannot
+solve: a mechanism may be omitted, and a source discrepancy may be buried in
+Operation.description rather than indexed as a discrepancy. All five operation
+captions already matched across the three reviewed outputs.
+
+Adopt or adapt
+- Adopt explicit meanings for fields and allowed relation types, with examples
+  and counterexamples. Keep definitions versioned and visible to extraction,
+  normalization, review and graph tools through the same contract.
+- Adapt registry curation to scoped assay identities and operation concepts.
+  Retrieve definitions and examples before proposing reuse; a new term needs
+  a definition and evidence, not just a new ID or spelling.
+- Adapt bounded, structured evidence packs for downstream agents. Return
+  context restrictions, source access status and affected unknowns as well.
+- Keep human review for difficult vocabulary definitions and benchmark cases,
+  rather than pretending an extra unrestricted model pass establishes truth.
+- Preserve the current source-specific State/Operation/Flow graph. Normalize
+  assertions without forcing every source to have the same operation boundaries.
+
+Do not transfer
+- Automatic merging of assay versions, same-name homonyms or shared reagents.
+- Admission rules based on citation popularity or multiple-paper frequency:
+  one well-supported newly published assay must be representable.
+- Forcing an unfamiliar mechanism into the nearest existing category.
+- Heuristic scientific edges after provider failures.
+- Paper-level relation projection as proof of operation-level correspondence.
+- A graph-based novelty/feasibility score as wet-lab compatibility validation.
+  Missing connections can reflect incomplete retrieval or annotation. Existing
+  connections can refer to a different specimen, substrate or implementation.
+
+Minimal proposed annotation contract (not implemented here)
+Fixed:
+  Meaning/ownership of input, output, transformation, retained/introduced/lost
+  feature, physical carrier, evidence, discrepancy and uncertainty records.
+  Each assertion points to its operation/state and exact supporting evidence.
+  A recognized discrepancy must have an explicit discrepancy record even when
+  a display description also explains it.
+Reviewed but extensible:
+  Definitions and aliases for processes, material properties and information
+  features. Concept definitions state what counts and what does not count.
+  Exact term reuse remains separate from a claim of interchangeable operations.
+Open:
+  Source wording, local workflow structure, unanticipated mechanism, relevant
+  context and unresolved questions. Agents may propose a new concept or leave
+  a mapping unresolved rather than force an incorrect normalization.
+
+One source-supported operation may involve several process concepts. A shared
+process concept is a search/comparison key; its local substrate, output,
+compartment, feature carrier and constraints retain independent evidence.
+Names are display text. IDs are pointers. Neither is a proof of equivalence.
+Definitions must be checked against examples and exclusions before being reused.
+
+For the current Drop-seq discrepancy, a targeted query for an introduced
+amplification priming site should return a typed, evidenced assertion if the
+source supports one. It should not require searching every free-text field.
+If the extraction omitted that fact, normalization must report missing coverage;
+it cannot copy another extraction's assertion without source-based checking.
+
+Independent comparison
+The previous audit of EDC inspected clear-nus/edc at
+02aad17e2fc1e9845c84746b384e7fd3160edc1a, schema_canonicalization.py.
+Its definition retrieval plus contextual verification is a useful alternative
+to string normalization, but it canonicalizes relation labels and is not an
+assay-identity or operation-compatibility engine. See the existing decision:
+docs/decisions/2026-11-03-harness-redesign.txt
+Primary paper: https://aclanthology.org/2024.emnlp-main.548/
+No EDC code was copied or rerun in this audit.
+
+Next bounded test, before more extraction
+Reuse the archived three Drop-seq outputs and original source passages. Define
+the expected facts once, without prescribing source-specific wordings. Compare
+current lexical retrieval with normalized assertion retrieval. Include:
+  synonymous phrasing; a missing fact; a discrepancy in different locations;
+  one label with two meanings; and a shared purpose with different mechanisms.
+Measure missing supported facts, false matches, false splits, and consistency
+of answers to the same scientific query. Passing JSON validation is insufficient.
+Keep at least one other assay family outside definition development. No new
+full-method extraction batch is justified by this audit alone.
+
+This is a completed implementation audit, not a deployed annotation revision.
