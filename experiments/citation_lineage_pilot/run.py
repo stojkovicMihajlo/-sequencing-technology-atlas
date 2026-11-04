@@ -23,7 +23,7 @@ from genomics_discovery.illumina.extraction import (
 )
 from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jats_text, parse_pubmed
 from models import (
-    Analysis, CurrentNominations, Nominations, Review, graph_overlay, validate_analysis,
+    Analysis, CurrentAnalysis, CurrentNominations, Nominations, Review, graph_overlay, parse_analysis, validate_analysis,
     validate_nominations, validate_review,
 )
 from prompts import COMMON, ROLES
@@ -154,11 +154,12 @@ def acquire(inputs, nominations):
     return sources
 
 
-SCHEMAS = {"nominate": CurrentNominations, "analyse": Analysis, "review": Review}
+SCHEMAS = {"nominate": CurrentNominations, "analyse": CurrentAnalysis, "review": Review}
 
 
 def validate(role, artifact, inputs, analysis_path=None):
-    document = SCHEMAS[role].model_validate_json(Path(artifact).read_bytes())
+    document = (parse_analysis(read(Path(artifact))) if role == "analyse" else
+                SCHEMAS[role].model_validate_json(Path(artifact).read_bytes()))
     sources = read(inputs / ("sources_initial.json" if role == "nominate" else "sources.json"))
     if role == "nominate":
         validate_nominations(document, sources, read(inputs / "bibliography.json"))
@@ -168,7 +169,7 @@ def validate(role, artifact, inputs, analysis_path=None):
             [x["id"] for x in read(inputs / "seed_extraction.json")["operations"]],
             [x["record_id"] for x in read(inputs / "catalogue.json")])
     else:
-        analysis = Analysis.model_validate_json(analysis_path.read_bytes())
+        analysis = parse_analysis(read(analysis_path))
         validate_review(document, analysis, sha(analysis_path), sources)
     return document
 
@@ -293,6 +294,8 @@ async def execute(args):
             raise ValueError("Native prompt differs from planned prompt")
         verify_stage_inputs(attempt, delivery, pins)
         doc = validate(role, attempt / 'artifact.json', inputs, analysis_path)
+        if role == 'analyse' and not isinstance(doc, CurrentAnalysis):
+            raise ValueError("Fresh analysis must follow citation_analysis/3, not the archived contract")
         row.update(status="validated", thread_id=assessment.thread_id, usage=assessment.usage,
                    elapsed_seconds=time.monotonic()-stage_start, artifact_sha256=sha(attempt / 'artifact.json'))
         write(root / "state.json", state)

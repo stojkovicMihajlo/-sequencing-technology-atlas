@@ -1,5 +1,6 @@
 """Contracts for a one-hop, paper-guided lineage pilot, not canonical admission."""
 
+import json
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -62,6 +63,22 @@ class Analysis(Record):
     claims: list[Claim]
     reference_dispositions: dict[str, str]
     summary: str
+
+
+class CurrentClaim(Claim):
+    citation_context: str = Field(description="Copy one complete context verbatim from bibliography.json for this exact reference_id. Empty only if none is available; an empty context cannot publish a connection. This locates the citation, not proof of inheritance.")
+    claim_scope: Literal["seed_workflow", "supporting_experiment", "unlocalized"] = Field(description="seed_workflow means the claim concerns the extracted assay route and names its affected operation IDs. supporting_experiment means a separate validation/comparator experiment, not an inherited part of that route. unlocalized means no supported workflow location. Non-workflow claims cannot publish evolutionary edges.")
+
+
+class CurrentAnalysis(Analysis):
+    format_version: Literal["citation_analysis/3"] = "citation_analysis/3"
+    claims: list[CurrentClaim]
+
+
+def parse_analysis(data):
+    """Read archived contracts as archived; never relabel them as new checks."""
+    schema = CurrentAnalysis if data.get("format_version") == "citation_analysis/3" else Analysis
+    return schema.model_validate(data)
 
 
 class UncertaintyAssessment(Record):
@@ -130,6 +147,20 @@ def validate_analysis(document, sources, nominated, operation_ids, catalogue_ids
             raise ValueError("Claim invents an Illumina entry")
         check_evidence(claim.seed_evidence, sources, allowed={"seed"})
         check_evidence(claim.predecessor_evidence, sources, allowed={claim.reference_id})
+        if isinstance(claim, CurrentClaim):
+            check_citation_binding(claim, sources)
+
+
+def check_citation_binding(claim, sources):
+    refs = json.loads(sources["bibliography"]["text"])
+    if claim.reference_id not in refs:
+        raise ValueError("Claim reference is absent from the seed bibliography")
+    if claim.citation_context and claim.citation_context not in refs[claim.reference_id]["contexts"]:
+        raise ValueError("Citation context must come from this exact reference, not another citation or paragraph")
+    if claim.claim_scope == "seed_workflow" and not claim.seed_operation_ids:
+        raise ValueError("A seed-workflow claim must locate at least one actual operation")
+    if claim.claim_scope != "seed_workflow" and claim.seed_operation_ids:
+        raise ValueError("An outside/unlocalized claim cannot borrow seed-workflow operation IDs")
 
 
 def validate_review(document, analysis, analysis_sha256, sources):
@@ -142,6 +173,12 @@ def validate_review(document, analysis, analysis_sha256, sources):
     claims = {x.id: x for x in analysis.claims}
     for finding in document.findings:
         check_evidence(finding.evidence, sources)
+        claim = claims[finding.claim_id]
+        if (isinstance(claim, CurrentClaim) and finding.decision == "accept"
+                and claim.relation not in {"background", "no_established_relation"}):
+            cited = {x.source_id for x in finding.evidence}
+            if not {"seed", claim.reference_id} <= cited:
+                raise ValueError("Accepted new relationship review must cite seed and exact predecessor evidence")
         indices = [x.issue_index for x in finding.unresolved_assessments]
         expected_indices = set(range(len(claims[finding.claim_id].unresolved)))
         if len(indices) != len(set(indices)) or set(indices) != expected_indices:
@@ -160,6 +197,8 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
     for claim in analysis.claims:
         finding = decisions[claim.id]
         reason = None
+        if isinstance(claim, CurrentClaim):
+            check_citation_binding(claim, sources)
         if finding.decision != "accept":
             reason = finding.decision
         elif review.omitted_candidates:
@@ -170,6 +209,11 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
             reason = "no_independent_predecessor_evidence"
         elif claim.relation in {"background", "no_established_relation"}:
             reason = "no_methodological_link"
+        elif isinstance(claim, CurrentClaim) and not claim.citation_context:
+            reason = "no_located_citation_context"
+        elif (isinstance(claim, CurrentClaim) and
+              RELATIONS[claim.relation]["layer"] == "history" and claim.claim_scope != "seed_workflow"):
+            reason = "not_part_of_seed_workflow"
         if reason:
             withheld.append({"claim": claim.model_dump(), "reason": reason,
                              "review": finding.model_dump()})
@@ -187,7 +231,7 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
                       "relationship_layer": RELATIONS[claim.relation]["layer"],
                       "status": "model_reviewed_pilot_overlay",
                       "claim": claim.model_dump(), "review": finding.model_dump()})
-    return {"format_version": "citation_lineage_pilot/2", "nodes": nodes, "links": links,
+    return {"format_version": "citation_lineage_pilot/3" if isinstance(analysis, CurrentAnalysis) else "citation_lineage_pilot/2", "nodes": nodes, "links": links,
             "withheld": withheld, "analysis_sha256": analysis_sha256,
             "boundary": "One-hop source-guided pilot, not a complete lineage or canonical atlas admission."
                         " Shared evidence, comparisons and mechanistic precedents are not descent."

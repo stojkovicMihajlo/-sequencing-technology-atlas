@@ -179,3 +179,84 @@ def test_review_reuse_refuses_failed_run(tmp_path):
     with pytest.raises(ValueError,match='never a failed/provider-blocked'):
         prepare_review_reuse(previous,tmp_path/'new')
     assert not (tmp_path/'new').exists()
+
+
+def current_case():
+    from models import CurrentAnalysis
+    a, r = case()
+    raw = a.model_dump()
+    raw['format_version'] = 'citation_analysis/3'
+    raw['claims'][0].update(citation_context=SOURCES['seed']['text'], claim_scope='seed_workflow')
+    a = CurrentAnalysis.model_validate(raw)
+    sources = copy.deepcopy(SOURCES)
+    sources['bibliography'] = {'content_level': 'seed_reference_contexts', 'text': json.dumps({
+        'R1': {'contexts': [SOURCES['seed']['text']]},
+        'R2': {'contexts': ['A different reference is discussed here.']}})}
+    r.findings[0].evidence += a.claims[0].predecessor_evidence
+    return a, r, sources
+
+
+def test_new_claim_requires_its_exact_citation_context():
+    a, r, sources = current_case()
+    validate_analysis(a, sources, ['R1'], ['o1'], [])
+    a.claims[0].citation_context = 'A different reference is discussed here.'
+    with pytest.raises(ValueError, match='exact reference'):
+        validate_analysis(a, sources, ['R1'], ['o1'], [])
+    with pytest.raises(ValueError, match='exact reference'):
+        graph_overlay(a, r, sources, 'pin', {})
+
+
+def test_no_citation_context_withholds_even_an_accepted_claim():
+    a, r, sources = current_case(); a.claims[0].citation_context = ''
+    g = graph_overlay(a, r, sources, 'pin', {})
+    assert g['format_version'] == 'citation_lineage_pilot/3'
+    assert not g['links']
+    assert g['withheld'][0]['reason'] == 'no_located_citation_context'
+
+
+@pytest.mark.parametrize('scope', ['supporting_experiment', 'unlocalized'])
+def test_outside_adoption_cannot_become_assay_history(scope):
+    a, r, sources = current_case()
+    a.claims[0].relation = 'component_adoption'
+    a.claims[0].claim_scope = scope
+    a.claims[0].seed_operation_ids = []
+    validate_analysis(a, sources, ['R1'], ['o1'], [])
+    g = graph_overlay(a, r, sources, 'pin', {})
+    assert not g['links']
+    assert g['withheld'][0]['reason'] == 'not_part_of_seed_workflow'
+    assert g['withheld'][0]['claim']['relation'] == 'component_adoption'
+
+
+def test_claim_location_cannot_contradict_operation_binding():
+    a, _, sources = current_case(); a.claims[0].seed_operation_ids = []
+    with pytest.raises(ValueError, match='locate at least one'):
+        validate_analysis(a, sources, ['R1'], ['o1'], [])
+    a.claims[0].claim_scope = 'supporting_experiment'
+    a.claims[0].seed_operation_ids = ['o1']
+    with pytest.raises(ValueError, match='cannot borrow'):
+        validate_analysis(a, sources, ['R1'], ['o1'], [])
+
+
+def test_new_review_acceptance_requires_both_specific_papers():
+    a, r, sources = current_case()
+    r.findings[0].evidence = a.claims[0].seed_evidence
+    with pytest.raises(ValueError, match='exact predecessor'):
+        validate_review(r, a, 'pin', sources)
+    r.findings[0].decision = 'needs_evidence'
+    validate_review(r, a, 'pin', sources)
+
+
+def test_archived_analysis_does_not_acquire_new_assurances():
+    from models import parse_analysis, CurrentAnalysis
+    a, r = case()
+    assert type(parse_analysis(a.model_dump())) is Analysis
+    current, _, _ = current_case()
+    assert isinstance(parse_analysis(current.model_dump()), CurrentAnalysis)
+    assert graph_overlay(a, r, SOURCES, 'pin', {})['format_version'] == 'citation_lineage_pilot/2'
+
+
+def test_current_comparison_keeps_citation_context_without_becoming_history():
+    a, r, sources = current_case()
+    g = graph_overlay(a, r, sources, 'pin', {})
+    assert g['links'][0]['relationship_layer'] == 'comparison'
+    assert g['links'][0]['claim']['citation_context'] == SOURCES['seed']['text']

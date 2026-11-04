@@ -104,3 +104,21 @@ not automatically the earliest date attached to a paper. Dates can constrain an
 inheritance direction but cannot establish it. Uncertain chronology or documented
 unpublished contributions need explicit qualification. Shared-mechanism searches
 must not discard later methods merely because they cannot be predecessors.
+
+4 November, citation_analysis/3: new research adds two fields to each claim.
+`citation_context` copies the actual paragraph registered against that reference;
+`claim_scope` distinguishes the extracted seed workflow from a separate supporting
+experiment or an unlocalized contribution. The checker rejects wrong-reference
+contexts and contradictory operation bindings. Missing context withholds a link;
+non-workflow adoption/development cannot publish an evolutionary edge. A fresh
+review accepting a positive claim must itself cite both the seed and that exact
+predecessor. These are auditable constraints, not automatic semantic entailment.
+Legacy analyses remain readable under their old contract, never silently upgraded.
+
+The irCLIP pilot reuses the supported 4 November extraction. The seed was selected
+for available primary full text and existing workflow anchors, not a prescribed
+ancestor. Nomination must account for every bibliography entry; acquisition follows
+only selected methodological leads. No expected irCLIP relationships enter prompts.
+The output retains comparisons, precedents and withheld claims separately; only
+method_development and component_adoption belong to the historical layer. Shared
+operation names and catalogue title matches cannot create historical relationships.

@@ -59,6 +59,22 @@ shared idea to be an ancestor of the whole assay. Search the supplied catalogue
 for matching methods; check description and reference identity, not names alone.
 Keep unmatched contributions external. Record acquisition gaps in unresolved.
 If revision feedback exists, address it from evidence, retaining earlier attempts.
+For each claim, copy citation_context from the exact reference's contexts in
+bibliography.json. A nearby paragraph or another reference's context is invalid.
+If no context exists, leave it empty and explain the gap; no connection can then
+be published. That context locates attribution but does not itself prove adoption.
+Set claim_scope=seed_workflow only for the extracted assay route and name the
+actual affected seed_operation_ids. A component nested inside a composite
+operation must be identified explicitly in seed_design_change. Use
+supporting_experiment for a separate assay-validation/comparator experiment and
+unlocalized when the location is not established; both require empty operation
+IDs and cannot produce evolutionary edges. Do not relabel a validation experiment
+as part of the workflow just to publish it. Retain it as a scoped research record.
+Check the earlier paper's title/identifiers against the reference. For historical
+claims distinguish explicit adoption from a merely earlier similar experiment.
+Record uncertain version/chronology in unresolved; never claim priority solely
+from publication year. Do not supply an invented before-side protocol or assume
+that a proposed catalogue match has been confirmed.
 """,
     "review": """Independently examine the sources before judging every proposed link.
 Check citation context AND what the cited work actually demonstrates; a real
@@ -83,5 +99,14 @@ Do not use this distinction to accept an unsupported substrate, mechanism,
 historical transfer, gain or comparison. An accepted claim cannot have a blocking
 issue. Preserve all original qualifications, including the nonblocking ones.
 Return one finding per claim, bound to the exact supplied analysis SHA256.
+For EVERY accepted positive relationship, your finding.evidence must include
+source_id=seed AND source_id equal to the claim's exact reference_id. Verify
+that the cited publication is the intended reference and that each quote supports
+the stated scope, not just that its text exists. Check citation_context against
+the actual attribution, and claim_scope against the extracted workflow. A
+supporting experiment can be real without being an assay ancestor. Check the
+earlier demonstration, claimed change and measured gain separately. A plausible
+benefit is not a reported result; an earlier similar method is not necessarily
+what the authors adopted. Missing decisive evidence requires needs_evidence.
 """,
 }
