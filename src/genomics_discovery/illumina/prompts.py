@@ -45,6 +45,12 @@ retain what the diagram shows and state the specific paper-supported resolution
 in the schema's designated interpretation/correction fields. Do not silently
 rewrite the source, merge incompatible variants, or label a resolvable source
 discrepancy as an unexplained biological impossibility.
+Preserve a superseded depicted order in Correction.diagram_observation and its
+source evidence, not as contradictory asserted Flows. When primary evidence
+resolves the scoped implementation's order, use_primary requires the actual
+Operations, State histories and Flows to implement that order. keep_unresolved
+is for a scientific interpretation the available evidence cannot settle, not
+merely for two sources whose differing accounts are both known and resolved.
 
 Distinguish publication metadata, abstract-only evidence and full-text evidence.
 Illumina collection pages are secondary catalogue evidence, not primary papers.
