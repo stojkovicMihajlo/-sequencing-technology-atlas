@@ -60,6 +60,10 @@ and its input/output, compartment or information-carrier consequence when releva
 For a component inside a combined operation, explicitly limit the assertion to
 that component. Multiple changes or contributors are allowed; do not invent one
 parent or a linear tree. A method outside the catalogue may remain external.
+An adopted component is not necessarily the method's main innovation. Explain the
+distinguishing assay architecture in the analysis summary with source support;
+do not substitute a convenient minor adoption for that explanation, or force a
+historical parent when the distinguishing change is supported but ancestry is not.
 
 Separate a documented difference from an experimentally demonstrated benefit.
 For any claimed gain, record the metric, comparator and tested context in the

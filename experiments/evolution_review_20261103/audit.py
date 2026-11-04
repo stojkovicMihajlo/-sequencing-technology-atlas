@@ -142,7 +142,7 @@ def audit(directory, output):
     columns = ["record_id", "title", "batch", "status", "operations", "states", "flows",
                "unknown_count", "correction_count", "review_format", "separate_label_checks", "next_action", "reason"]
     with (output / "CHECKLIST.csv").open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=columns, extrasaction="ignore")
+        writer = csv.DictWriter(stream, fieldnames=columns, extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
         writer.writerows(records)
     return summary
