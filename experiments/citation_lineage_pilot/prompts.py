@@ -1,6 +1,11 @@
 """Technology-independent prompts; no expected ClickSeq relationships are supplied."""
 
-from genomics_discovery.illumina.relationships import CHANGE_INSTRUCTIONS, relation_instructions
+import json
+
+from genomics_discovery.illumina.relationships import (
+    CHANGE_INSTRUCTIONS, CHANGE_REVIEW_INSTRUCTIONS, REVISION_INSTRUCTIONS,
+    relation_instructions,
+)
 
 COMMON = """Build a small, evidence-grounded methodological neighborhood for the seed
 sequencing method. Use only the registered sources and existing operation IDs.
@@ -29,7 +34,7 @@ command before finishing. The host independently repeats it.
 """
 
 COMMON += "\n" + relation_instructions(("method_development", "component_adoption",
-    "mechanistic_precedent", "comparison", "background", "no_established_relation")) + CHANGE_INSTRUCTIONS
+    "mechanistic_precedent", "comparison", "background", "no_established_relation"))
 
 ROLES = {
     "nominate": """Identify the references in the seed paper that should be followed to
@@ -123,3 +128,14 @@ not multiple labels for the same assertion. Do not demand a performance benefit
 or a component modification merely to accept a supported historical transfer.
 """,
 }
+
+ROLES['analyse'] += '\n' + CHANGE_INSTRUCTIONS
+ROLES['review'] += '\n' + CHANGE_REVIEW_INSTRUCTIONS
+
+
+def build_prompt(role, context):
+    """Same source contract for every round; feedback adds an explicit revision task."""
+    instructions = COMMON + '\n' + ROLES[role]
+    if role == 'analyse' and context.get('previous_review'):
+        instructions += '\n' + REVISION_INSTRUCTIONS
+    return instructions + '\nCONTEXT\n' + json.dumps(context, indent=2)

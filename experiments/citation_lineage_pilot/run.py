@@ -26,7 +26,7 @@ from models import (
     Analysis, CurrentAnalysis, CurrentNominations, Nominations, Review, graph_overlay, parse_analysis, validate_analysis,
     validate_nominations, validate_review,
 )
-from prompts import COMMON, ROLES
+from prompts import build_prompt
 from genomics_discovery.illumina import relationships as relationship_policy
 
 
@@ -268,7 +268,7 @@ async def execute(args):
             context.update(analysis=str(analysis_path), analysis_sha256=sha(analysis_path))
         if feedback:
             context["previous_review"] = str(feedback)
-        prompt = COMMON + "\n" + ROLES[role] + "\nCONTEXT\n" + json.dumps(context, indent=2)
+        prompt = build_prompt(role, context)
         (attempt / "stage_prompt.txt").write_text(prompt)
         pins = {str(p): sha(p) for p in inputs.rglob('*') if p.is_file()}
         pins.update(implementation)

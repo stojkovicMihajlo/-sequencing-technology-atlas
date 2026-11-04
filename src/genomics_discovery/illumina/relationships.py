@@ -113,8 +113,37 @@ CHANGE_INSTRUCTIONS = """
 RECORDING A CHANGE
 Start from the existing Illumina operation groups. Use the primary papers to
 locate the specific contribution, not to expand every group into a full recipe.
-Name the retained component/transformation, what differs before versus after,
-and its input/output, compartment or information-carrier consequence when relevant.
+Begin with the later paper's stated methodological contributions and relevant
+Methods/figure/supplement descriptions. Account for each source-described change
+within the relationship's scope; do not stop after finding one convenient adopted
+reagent. An important change without a supported historical donor belongs in the
+source-backed method summary, not an invented ancestry edge.
+
+Write a short retained-arrangement description, then separate numbered entries
+for the distinct changes in the existing comparison field (seed_design_change in
+citation records; difference in pair records). Each entry must let a reader answer:
+what feature/process is compared; what the specified earlier implementation did;
+what the later implementation does instead; and what material, molecular feature,
+placement, ordering or interpretation makes that difference meaningful. Point to
+the affected existing workflow records and source support. Explain which next
+operation or measurement depends on the difference when the sources establish it.
+There is no fixed number of entries or mandatory set of changed assay stages.
+
+Keep interventions tested together together. If a buffer and temperature changed
+in the same comparison, describe the joint change and do not assign separate causal
+gains without separate evidence. Record reported consequences in the existing
+gain/consequence field, identifying which change or combined workflow they apply
+to, the comparator and tested context. Missing consequence is not an invitation
+to invent one. A retained feature must be named concretely, not 'same backbone'.
+
+DETAIL STOPPING RULE: retain a detail when removing it would obscure (1) what was
+actually changed, (2) which material/product reaches the next operation, (3) what
+feature carries the measured information, or (4) the scope of the demonstrated
+result. Thus location, tag carrier, end-group, reagent identity or a changed
+condition can be essential. Routine volumes/washes/catalogue numbers are not
+required unless consequential to this comparison. If the source lacks a decisive
+detail, state that limitation; neither invent it nor demand unrelated recipe data.
+
 For a component inside a combined operation, explicitly limit the assertion to
 that component. Multiple changes or contributors are allowed; do not invent one
 parent or a linear tree. A method outside the catalogue may remain external.
@@ -162,6 +191,45 @@ State precisely which distinction is missing and which source could resolve it.
 A gap nonblocking for the depicted route may block a UMI, compatibility, novelty
 or substitution claim. Do not inherit the workflow's supported verdict as a
 blanket permission to make those claims. Do not fill unrelated routine recipes.
+"""
+
+
+CHANGE_REVIEW_INSTRUCTIONS = """
+CHANGE COVERAGE REVIEW
+Read the papers' stated contributions and relevant Methods/figures before using
+the proposal as a checklist. Identify the necessary changes for the specified
+relationship, then compare them with the submitted record. This is a coverage
+check as well as a correctness check; agreeing that each included sentence is
+plausible is insufficient. No fixed number of changes or universal assay-stage
+list is expected. For development inspect the retained/revised assay arrangement;
+for adoption inspect the named contribution, destination and any adaptation.
+
+For every distinct change check the earlier/later descriptions, material and
+carrier identity, compartment/order where consequential, source support and the
+attribution of the reported consequence. Reject 'improved recovery' as a complete
+description when the sources establish a specific changed procedure. Do not split
+a jointly tested intervention into separately proven causal effects. Record an
+omitted necessary change in omitted_candidates with its source ID, passage and
+why it matters. Use revise for a correctable omission within an existing claim,
+needs_evidence when necessary evidence is unavailable, and reject for a false
+relationship. Genuine gaps cannot be fixed by demanding more confident wording.
+Check that the same contribution was not counted as two different historical
+claims. Scientific similarity alone does not repair missing historical attribution.
+"""
+
+
+REVISION_INSTRUCTIONS = """
+REVISION TASK
+Read previous_review and the previous analysis, then inspect the original source
+for every requested correction and omission. Revise the affected descriptions,
+relationship types or scope; preserve supported facts and source qualifications.
+In summary account for each requested correction: corrected with source support,
+narrowed/withdrawn, or still unresolved with the missing evidence named. If the
+reviewer was mistaken, explain why from the source; do not copy its assertions
+uncritically. Do not remove an unresolved item merely to obtain acceptance, invent
+an unavailable recipe, or rewrite unrelated source workflow graphs. Return a
+complete revised analysis under the same schema. A separate fresh review judges
+the revised artifact; your revision is not approval. The host bounds the cycle.
 """
 
 

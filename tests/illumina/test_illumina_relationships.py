@@ -135,3 +135,31 @@ def test_graph_tool_returns_definition_and_criteria_without_reclassifying_old_cl
     assert packet['relation_definition']['exclusions']
     assert packet['claim'] == before['historical_links'][0]['claim']
     assert g == before
+
+
+@pytest.mark.parametrize('module_name,author_role', [('prompts', 'analyse'), ('pair_prompts', 'author')])
+def test_feedback_requests_revision_from_writer_and_keeps_review_independent(module_name, author_role):
+    import importlib.util
+    from genomics_discovery.illumina.relationships import (
+        CHANGE_INSTRUCTIONS, CHANGE_REVIEW_INSTRUCTIONS, REVISION_INSTRUCTIONS,
+    )
+    spec = importlib.util.spec_from_file_location(
+        'revision_test_' + module_name,
+        ROOT / 'experiments/citation_lineage_pilot' / (module_name + '.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    first = {'analysis': '/fixture/prior.json'}
+    feedback = {**first, 'previous_review': '/fixture/review.json'}
+    assert REVISION_INSTRUCTIONS not in module.build_prompt(author_role, first)
+    assert CHANGE_INSTRUCTIONS in module.build_prompt(author_role, first)
+    revised = module.build_prompt(author_role, feedback)
+    assert REVISION_INSTRUCTIONS in revised
+    assert json.loads(revised.split('\nCONTEXT\n')[1]) == feedback
+    review = module.build_prompt('review', feedback)
+    assert CHANGE_REVIEW_INSTRUCTIONS in review
+    assert REVISION_INSTRUCTIONS not in review
+    assert CHANGE_INSTRUCTIONS not in review
+    if module_name == 'prompts':
+        nomination = module.build_prompt('nominate', first)
+        assert CHANGE_INSTRUCTIONS not in nomination
+        assert CHANGE_REVIEW_INSTRUCTIONS not in nomination

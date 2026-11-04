@@ -1,6 +1,11 @@
 """Fixed two-method experiment: preserve diagram granularity, test connections."""
 
-from genomics_discovery.illumina.relationships import CHANGE_INSTRUCTIONS, relation_instructions
+import json
+
+from genomics_discovery.illumina.relationships import (
+    CHANGE_INSTRUCTIONS, CHANGE_REVIEW_INSTRUCTIONS, REVISION_INSTRUCTIONS,
+    relation_instructions,
+)
 
 COMMON = """Compare the two supplied reviewed Illumina method graphs. The question is
 whether their existing diagram-level detail is sufficient to express supported
@@ -40,7 +45,7 @@ agents or use the network. Follow /etc/agents/AGENTS.md and actual tool permissi
 """
 
 COMMON += "\n" + relation_instructions(("method_development", "component_adoption",
-    "shared_mechanism", "shared_purpose", "comparison", "no_established_relation")) + CHANGE_INSTRUCTIONS
+    "shared_mechanism", "shared_purpose", "comparison", "no_established_relation"))
 
 AUTHOR = """ROLE: COMPARISON AUTHOR
 First read both diagrams and existing operations. Read both primary papers and
@@ -80,3 +85,13 @@ Unchanged adoption is valid and a demonstrated gain is not required. Do not
 accept two historical labels for the same assertion; distinct contributions may
 have separate claims between the same pair.
 """
+
+AUTHOR += '\n' + CHANGE_INSTRUCTIONS
+REVIEWER += '\n' + CHANGE_REVIEW_INSTRUCTIONS
+
+
+def build_prompt(role, context):
+    instructions = COMMON + '\n' + {'author': AUTHOR, 'review': REVIEWER}[role]
+    if role == 'author' and context.get('previous_review'):
+        instructions += '\n' + REVISION_INSTRUCTIONS
+    return instructions + '\nCONTEXT\n' + json.dumps(context, indent=2)

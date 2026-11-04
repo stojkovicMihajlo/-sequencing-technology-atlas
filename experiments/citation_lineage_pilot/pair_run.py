@@ -21,7 +21,7 @@ from genomics_discovery.illumina import relationships as relationship_policy
 from genomics_discovery.illumina.graph import _load_card, operation_group
 from models import Review, validate_review
 from pair_models import PairAnalysis, export_pair, validate_pair
-from pair_prompts import COMMON, AUTHOR, REVIEWER
+from pair_prompts import build_prompt
 from run import bibliography
 
 
@@ -181,7 +181,7 @@ async def execute(args):
             context.update(analysis=str(analysis_path), analysis_sha256=sha(analysis_path))
         if feedback:
             context["previous_review"] = str(feedback)
-        prompt = COMMON + "\n" + (AUTHOR if role == "author" else REVIEWER) + "\nCONTEXT\n" + json.dumps(context, indent=2)
+        prompt = build_prompt(role, context)
         (attempt / "stage_prompt.txt").write_text(prompt)
         pins = {str(p): sha(p) for p in inputs.iterdir() if p.is_file()}
         pins.update(implementation)

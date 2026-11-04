@@ -183,3 +183,55 @@ historical descriptions and unchanged adoption without an asserted gain. They
 test software behavior, not an LLM's classification accuracy. The completed irCLIP
 overlay was also exactly reconstructed from its unchanged claims/sources/review;
 the native analysis hash and exported JSON equality were checked separately.
+
+What each connection must capture and how it is revised
+-----------------------------------------------------
+The relation type names the scope of inheritance; it does not specify sufficient
+scientific detail by itself. The author now starts from the paper's stated
+methodological contributions and the relevant Methods/figures/supplements, then
+accounts for the necessary changes within the claimed relationship. A change
+without an evidenced donor stays in the method summary, not an invented edge.
+
+Keep a concrete retained-arrangement sentence plus numbered descriptions of the
+distinct changes in the existing natural-language comparison field. Each describes
+the feature, earlier/later arrangement, relevant material/carrier/location/order,
+and connection to the next operation or measurement when supported. The separate
+gain/consequence field identifies which change or combination a result applies to.
+Coupled interventions stay coupled; do not invent isolated causal contributions.
+Detail is sufficient when a reader can identify the actual modification, routed
+product, information carrier and scope of the demonstrated result. It need not
+specify a complete executable recipe or fill a universal list of assay stages.
+
+Example requirements from the existing audit (not expected answers in prompts):
+- iCLIP/irCLIP: digestion location; distinct visualization/affinity uses of adapter
+  features; coordinated recovery-buffer/temperature change; RT substitution and
+  tested substrate; purification/release/circularization arrangement; retained
+  contact-position interpretation. Exact routine wash recipes are not mandatory.
+- CEL-Seq/CEL-Seq2: distinguish adapter ligation from a primer-borne adapter at the
+  post-amplification RT stage; keep the local mapping comparison separate from
+  the full assay's gains. This is one of several changes, not the entire development.
+- Earlier transposase library preparation/ATAC: name the transposase contribution,
+  native-chromatin context and meaning of insertion/fragment information. A shared
+  enzyme label alone cannot explain the change from preparation to measurement.
+Primary and pinned-code rationale remains in the existing change-representation
+and Intern-Atlas audits; no new literature implementation or agent framework copied.
+
+The existing native loop is author -> fresh review -> optional revision in a fresh
+author session -> fresh review. One correction cycle is the current cost cap, not
+a demonstrated optimal count. Missing decisive evidence stays held; an unresolved
+revise decision cannot publish, and omitted_candidates blocks publication. No new
+always-on revision team was added. All native sessions and artifact hashes remain
+separate. No old extraction or frozen runtime is rewritten.
+
+The reviewer now explicitly checks omissions against the sources as well as
+accuracy of the included claims. It records omitted necessary changes with source
+locations in omitted_candidates and identifies correctable versus evidence-limited
+problems. The revision prompt requires a source-based disposition of the feedback;
+it cannot silently discard unknowns or treat reviewer suggestions as evidence.
+build_prompt() routes author/reviewer/revision instructions to their actual roles;
+reference nomination does not receive instructions to fill comparison fields.
+
+These are prompt and routing changes using the same output fields. Numbered prose
+is not a machine-validated per-change schema, and no claim is made that software
+can certify completeness or causal truth. 515 offline tests pass, including the
+feedback-routing checks. A new native trial has not been launched or evaluated.
