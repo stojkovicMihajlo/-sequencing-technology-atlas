@@ -122,29 +122,81 @@ from collapsing. New concepts use the same reviewed proposal path as Operations.
 
 STATE CONTRACT — FIXED SLOTS, OPEN SCIENTIFIC VALUES
 
+4 November follow-up: the five broad facets below are NOT sufficient extraction
+instructions or an exhaustive state ontology. In particular, components=[DNA,
+RNA, protein] is a coarse composition filter, not a scientifically useful
+description of an assay intermediate. The additional source review covers 24
+Illumina method descriptions (21 new description pages and 3 purposeful revisits)
+and six spatial/multiomic/temporal methods. Reading scopes and limitations are in
+experiments/representation_review_20261104/*material_review.json and source_review.json.
+These are source/design audits, not 30 new full-paper-verified extractions.
+
+The subject of a State is the actual preparation at the stated boundary: for
+example, immunoselected crosslinked chromatin on resin, cap-selected cDNA, or
+biotin-tagged RNA-derived cDNA. A substance name alone does not encode origin,
+selection, attachment, or library structure. A broad source boundary such as
+total RNA remains legitimate when the source supplies no narrower preparation;
+do not invent specificity to satisfy a template.
+
+State label = readable scientific name supported by the structured facts and
+producing/consuming Operations. It is not the semantic comparison key. Keep
+source wording separately. The current label/model implementation is unchanged;
+this rule must still be implemented and tested.
+
+Keep THREE distinctions explicit in the existing graph:
+- What the material IS: preparation identity, relevant constituents, molecular
+  structure and physical context. Named parts are introduced only to identify a
+  transformation, meaningful association, routing distinction or information carrier.
+- What it DOES HERE: template, primer, catalyst, probe, support, processed sample
+  or product in a particular Operation. This role belongs to participation in
+  that Operation, not a permanent label on the material. DNA can occupy several
+  of these roles in the same workflow.
+- What it TELLS US: the biological quantity/relationship and its reporter in the
+  method/readout record, anchored to the actual States, Operations and data.
+  A synthetic antibody-tag DNA readout is not a protein sequence or an RNA count.
+
+Selection and origin are recoverable through producing Operations when those
+Operations are in scope, not silently stored as present chemistry. A prepared
+input may carry a directly cited origin/selection assertion or an external
+preparation reference; do not invent a producer outside the extracted boundary.
+Cap-selected cDNA does not retain an RNA cap.
+Experimentally introduced methylation and endogenous methylation can have the
+same chemistry but different meaning. Summaries of provenance must reference
+the supporting route; do not create an independent, contradictory history field.
+
 Keep kind=material|data, but stop placing every property in features:[prose].
 Use a tagged payload: material fields cannot be used as data fields or vice versa.
 Every assertion retains evidence. The display label is rendered from these facts
 and checked against them; source_label is preserved separately when available.
 
-Material payload:
-  components: scientifically relevant constituents/classes. Each has a local ID,
-    entity_type, name and optional verified external identifier. Starting entity
-    types: DNA, RNA, protein, small_molecule, cell, nucleus, tissue,
-    biological_mixture, material_support, other. 'Other' requires a term proposal.
-    Do not enumerate every molecular constituent of a cell or a buffer.
-  molecular_features: component ID, property, value and evidence. Initial
+Material payload (facets used where relevant, not five compulsory substance bins):
+  components: optional addressable constituents of the named preparation, not
+    the preparation's sole description. Each has a local ID, specific identity,
+    a defined material concept and optional verified external identifier. DNA,
+    RNA and protein are coarse ancestor classes; they do not replace chromatin,
+    RNA-derived cDNA, a synthetic capture primer or a selected fragment population.
+    Do not flatten a cell into its constituent molecules. Do not turn every
+    preparation-plus-property combination into a new global concept. Normalize
+    concepts through definitions/aliases; retain typed properties and local roles.
+  molecular_features: subject, property, value and evidence. The subject may be
+    the preparation itself when unambiguous; use named components/strands or
+    subpopulations when needed to localize a claim. Initial
     properties: strandedness, topology, terminal_group, modification,
     sequence_segment. Chemical site/end is explicit when relevant. cDNA is DNA
     with a provenance/identity description, not a new fundamental substance type.
   associations: relations among named constituents/supports/compartments, using
     explicit relations such as hybridized_to, covalently_linked_to, bound_to,
     contained_in or co_present_with. Co-presence does not assert binding.
-  partition: identifies an independent fraction, intact compartment collection,
-    or pooled material when supported. Multiple molecular classes alone do not
-    establish separate fractions. Do not infer literal well/cell counts from icons.
+  partition: identifies independent handling and intact compartment membership
+    when supported. Distinguish where material is located from which fractions
+    are independently routed. Pooling is an Operation; the resulting collection
+    is a State. Multiple molecular classes alone do not establish fractions.
+    Do not infer literal well/cell counts from icons.
   attribution: what is associated with what (molecule, cell, sample, location,
     time window, contact), and the physical or experimental carrier of the link.
+    Attribution may depend on data, such as a measured barcode-to-coordinate map.
+    Link that Data State to the decoding Operation; a physical barcode alone is
+    not proof that its coordinate/cell/molecule association can be recovered.
 
 Data payload:
   data_type: sequence_reads, alignment, instrument_signal, measurement_table,
@@ -208,8 +260,11 @@ be locked/uniqued mechanically; semantic duplicates require review. No global lo
 around every extraction and no automatic union of similarity-linked definitions.
 
 Conditional requirements make the vocabulary operational:
-- Reverse transcription: identify the RNA template and DNA product; record a
-  priming/handle detail when supported and relevant to attribution or comparison.
+- Nucleic-acid copying: identify the actual template and product for each branch;
+  record a priming/handle detail when supported and relevant to attribution or
+  comparison. RNA-to-DNA copying is reverse transcription. A source block using
+  reverse transcriptase may ALSO copy DNA templates, as in original CITE-seq;
+  preserve the grouped block but distinguish its effects and template origins.
 - Ligation/coupling: identify the joined partners, linkage mechanism and relevant
   end groups. An enzyme name alone does not establish the compatible substrate.
 - Capture: identify the selected material, recognition basis, support when used,
@@ -223,6 +278,51 @@ Conditional requirements make the vocabulary operational:
 These are interpretation obligations. An unreported value becomes an addressed
 unknown, not a fabricated required value. Source-limited composite blocks may
 defer internal requirements until the specific comparison needs refinement.
+
+SCIENTIFIC REQUIREMENTS FOR EXTRACTION AND COMPARISON
+
+The practical unit of standardization is a defined property or relation with a
+subject and evidence, not a free-form bag of labels. For each registered property,
+specify its meaning, applicable material/Operation, permitted value form, required
+site or partner, and distinctions it must not collapse. For example, terminal
+blocking needs a named strand/end and effect; exonuclease protection does not
+establish extension blocking. A claim about all molecules versus a subpopulation
+must retain that scope. Missing properties cannot be automatically carried forward.
+
+Conditional requirements apply to the Operation and the exact comparison:
+
+Context                      Must remain explicitly answerable
+Nucleic-acid copying          Template versus primer; origin of product; copied
+                             segment/handle or informative endpoint when relevant.
+Joining/construct assembly   Exact partners and relevant strands/ends; covalent
+                             joining versus hybridization; retained handle topology.
+Selection/capture            Selected population, recognition target, binding
+                             reagent/handle, support and actual retained route.
+Chromatin/RNP processing     Native versus fixed context when stated; selected
+                             complex; protein/peptide association at that boundary.
+Modification/readout         Native mark versus introduced reporter; derivative,
+                             observed signal and necessary comparison/control.
+Spatial/cell assignment      Location of encoding; carrier and required map;
+                             physical sampling unit versus inferred biological unit.
+
+This is a starting set of obligations, not all possible operations. Each obligation
+gets a supported answer, an evidence-limited unknown or a justified out-of-scope
+status. A missing distinguishing fact blocks THAT comparison/compatibility claim;
+it need not erase an otherwise supported schematic. New operations may propose
+additional requirements, reviewed against contrasting examples before admission.
+
+Concrete checks are in comparison_requirements.json in the review directory.
+They test scientific answers rather than identical prose, operation count or an
+exact module decomposition. No automated biological pass rate has been measured.
+
+Scientist-facing comparison example: conventional CLIP versus iCLIP should show
+that residual peptide can truncate RT and that iCLIP recovers the truncated cDNA
+population through circularization. A summary saying both have RNA -> DNA, or
+merely tagging one as circular DNA, fails to explain the design change. Source:
+https://pmc.ncbi.nlm.nih.gov/articles/PMC3000544/ (selected original Methods/Fig1).
+The contribution is encoded as an evidence-bearing change claim with exact
+affected Operations, retained backbone, changed product recovery and consequence.
+Shared materials or even a shared mechanism do not by themselves prove ancestry.
 
 GRANULARITY RULE AND THE ROLE OF MODULES
 
@@ -347,6 +447,16 @@ OBI assay standardization: distinguish materials/roles, measured target and data
 output; check that a type's constraints hold across its intended instances. Do
 not assume using an ontology proves annotation consistency.
 https://doi.org/10.1093/database/baab040
+
+ISA: adapt material/process/data graph separation and material characteristics
+represented as defined category/value/unit; keep parameters on the process.
+Docs: https://isa-specs.readthedocs.io/en/latest/isamodel.html
+Official code pin: ISA-tools/isa-api 50c01e87be1c86dd918bd2ccd8ef9f476a2b1414,
+isatools/model/material.py and characteristic.py (read), process.py (selected
+input/output and serialization implementation). No code copied or executed.
+Its generic characteristics and Extract/LabeledExtract types do not supply the
+genomics-specific interpretation rules above. Do not import execution metadata
+or claim that string/ontology types guarantee correct scientific descriptions.
 
 DELIVERY ORDER AND ACCEPTANCE TESTS
 

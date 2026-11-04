@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-04",
+  "status": "Engineering source review; not a new extraction, independent scientific validation, or canonical atlas admission",
+  "purpose": "Test whether broad Material State components hide distinctions needed to compare spatial, multiomic and temporal assays.",
+  "scope": "Six primary papers. Selected fulltext Methods and workflow explanations were read for CITE-seq, DBiT-seq, SHARE-seq and SLAM-seq. Original Spatial Transcriptomics and Slide-seq were inspected at main-text workflow/figure-caption level; their original supplementary Methods were not successfully retrieved. No full-paper comprehensive review is claimed.",
+  "revisit_reason": "The user challenged whether components and the five proposed Material State fields are scientifically useful. These examples specifically test molecular origin, reporter identity, prepared context, spatial addressing and branch routing; they are not unchanged extraction reruns.",
+  "cases": [
+    {
+      "method": "Spatial Transcriptomics (2016)",
+      "source_url": "https://jef.works/genomic-data-visualization-2024/resources/readings/stahl-et-al_science-aaf2403.pdf",
+      "doi": "10.1126/science.aaf2403",
+      "read_sections": ["Main-text workflow on printed page 78", "Figures 1 and 2 captions on printed pages 79-80"],
+      "read_limit": "Primary paper mirrored in a university course; original supplementary Methods not obtained. Text inspection only; no numerical measurements inferred from OCR.",
+      "prepared_material": "Tissue section over an array of positional capture primers; captured mRNA is copied into cDNA associated with array-feature identifiers.",
+      "essential_distinction": "The probe includes a capture region, spatial barcode, UMI, cleavage site and amplification/sequencing functions. DNA alone does not identify whether the molecule is a capture primer or RNA-derived reporter.",
+      "measurement_link": "Transcript-derived sequences are assigned to capture features using positional barcodes and image registration; a feature is not automatically an individual cell.",
+      "graph_use": "Locate the operation that converts physical array position into a recoverable sequence identifier. Keep the coordinate map as a required information dependency."
+    },
+    {
+      "method": "Slide-seq (2019)",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6927209/",
+      "doi": "10.1126/science.aaw1219",
+      "read_sections": ["Main-text technology description preceding Figure 1", "Figure 1 caption", "Spatial cell-type assignment and stereological caveat preceding Figure 2"],
+      "read_limit": "Supplementary docx returned a browser challenge and publisher PDF access failed; no supplement-level recipe claim.",
+      "prepared_material": "A monolayer of DNA-barcoded beads whose barcode positions have been decoded; a frozen tissue section supplies RNA captured by those beads.",
+      "essential_distinction": "The beads are randomly arranged and their sequence-to-position map is measured. A bead preparation without that map is chemically similar but cannot provide the same spatial attribution.",
+      "measurement_link": "Sequenced transcript tags are mapped to bead positions. One bead can sample material from more than one cell type.",
+      "graph_use": "Distinguish spatial capture on decoded bead arrays from capture on predefined spatial arrays, while retaining their shared RNA capture purpose."
+    },
+    {
+      "method": "DBiT-seq (2020)",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7736559/",
+      "doi": "10.1016/j.cell.2020.10.026",
+      "read_sections": ["STAR Methods: tissue handling and fixation", "Application of DNA-antibody conjugates", "First barcodes and reverse transcription", "Second barcodes and ligation", "cDNA collection and purification", "Amplicon purification and library preparation", "Discussion limitations"],
+      "prepared_material": "Fixed tissue containing RNA-derived cDNA, subsequently carrying two spatial barcode identities introduced through orthogonal microfluidic channels.",
+      "essential_distinction": "Barcoding occurs in tissue before lysis, rather than requiring RNA transfer to a barcoded capture surface. Later cDNA recovery uses streptavidin beads; bead use therefore has a different role from Slide-seq spatial capture.",
+      "measurement_link": "Combined barcodes identify channel-intersection pixels. The paper explicitly states these do not directly resolve single cells. The optional antibody-tag branch reports a selected protein panel.",
+      "graph_use": "Compare where identity is attached and what material is retained at that point; do not match all bead-associated cDNA as the same spatial encoding operation."
+    },
+    {
+      "method": "CITE-seq (2017)",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5669064/",
+      "doi": "10.1038/nmeth.4380",
+      "read_sections": ["Main-text workflow preceding Figure 1", "ONLINE METHODS: Conjugation of Antibodies to DNA-barcoding oligonucleotides", "Antibody-oligo sequences", "Cell staining with DNA-barcoded antibodies", "Single-cell ADT data processing"],
+      "prepared_material": "Cells stained with DNA-tagged antibodies; after droplet lysis, endogenous mRNAs and synthetic poly(A)-tailed antibody oligonucleotides are captured on oligo(dT) beads.",
+      "essential_distinction": "The antibody tag is synthetic DNA reporting antibody identity, not endogenous RNA or protein sequence. The Methods explicitly invoke reverse transcriptase's DNA-dependent polymerase activity to copy the tag. Antibody-derived products and transcript-derived cDNA are separated by size for library preparation.",
+      "measurement_link": "Cell identifiers associate antibody-tag counts and transcript counts with the same partition. This is a joint measurement, not direct sequencing of protein molecules.",
+      "graph_use": "Find adoption of an RNA-library capture interface by a synthetic protein reporter; retain reporter origin and primer/handle requirements even when both final branches are DNA."
+    },
+    {
+      "method": "SHARE-seq (2020)",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7669735/",
+      "doi": "10.1016/j.cell.2020.09.056",
+      "read_sections": ["Results: SHARE-seq for joint profiling", "STAR Methods: preparing oligonucleotides", "Fixation", "Transposition", "Reverse transcription", "Hybridization and ligation", "Reverse crosslinking and affinity pull-down", "scATAC-seq and cDNA library preparation"],
+      "prepared_material": "Fixed cells or nuclei retain transposed genomic DNA and biotin-tagged RNA-derived cDNA while split-pool barcodes are applied. Reverse crosslinking then releases the barcoded molecules.",
+      "essential_distinction": "Both molecular products are DNA, but their origin and handles differ. Streptavidin capture recovers the biotin-tagged cDNA on beads, while the supernatant containing transposed genomic fragments proceeds to the ATAC library branch.",
+      "measurement_link": "Shared barcode combinations link chromatin accessibility and RNA expression at the cell level; they do not establish a same-molecule association.",
+      "graph_use": "A query must distinguish RNA-derived DNA from genomic fragments and recover their separate routes. DNA-only classification erases the assay's branch separation and co-measurement design."
+    },
+    {
+      "method": "SLAM-seq (2017)",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5712218/",
+      "doi": "10.1038/nmeth.4435",
+      "read_sections": ["Results: Detection of 4-thiouridine by sequencing", "Online Methods: Carboxyamidomethylation of s4U", "Metabolic labeling", "RNA library preparation"],
+      "prepared_material": "Total RNA from metabolically labeled cells, containing labeled and unlabeled transcripts, followed by chemical derivatization of incorporated 4-thiouridine.",
+      "essential_distinction": "Iodoacetamide modifies the incorporated thiolated nucleotide. The distinguishing signal is generated during copying and appears as excess T-to-C changes in sequencing data; neither RNA nor modified RNA alone specifies this mechanism.",
+      "measurement_link": "The chemical mark supports synthesis-window or turnover inference under the labeling design. It is not an exact molecule birth timestamp and does not require physical isolation of all newly synthesized RNA.",
+      "graph_use": "Separate the metabolic mark, its chemical derivatization and its sequence readout; compare alternatives that enrich marked molecules versus convert the mark into sequence evidence."
+    }
+  ],
+  "design_inferences_not_paper_claims": [
+    "Lead a State description with the source-described preparation, not a bag of broad substance types. Cells, a tissue section, an RNA eluate and a cDNA library are preparation identities at different workflow boundaries.",
+    "Retain material origin separately from chemistry: genomic DNA, RNA-derived cDNA and synthetic antibody tags may all be DNA but carry different evidence and follow different routes.",
+    "Use constituent-level detail only when it locates a transformation, a consequential physical relationship or an information carrier. Do not enumerate every constituent of a cell or reaction mixture.",
+    "Put substrate, catalyst and reagent roles on their participation in an Operation. A bead or oligonucleotide does not have one universal role across the atlas.",
+    "Keep assay target-to-reporter interpretation at the assay level, but anchor each reporter and encoding transition to concrete State/Operation records. Otherwise agents cannot identify where information was recorded or lost.",
+    "A physical State alone is not enough for spatial attribution: barcode-to-coordinate maps and their registration provenance are data dependencies. Do not imply the physical barcode alone determines a position.",
+    "A source preparation name is not sufficient normalization. Conditional descriptors must expose origin, selected population, end chemistry/functional sequence regions, support/compartment and identity/routing when they distinguish the compared operations.",
+    "The minimum useful comparison unit is a transformation with prepared input, prepared output and local roles. Same RNA/DNA labels, same bead use or same enzyme name do not prove equivalence or historical influence."
+  ],
+  "critique_of_parent_minimal_rule": {
+    "supported": "A source-described preparation plus conditional consequential descriptors is more useful and compact than requiring a universal exhaustive components inventory. Operation-local roles and assay-level target/reporter separation resolve concrete ambiguities in these cases.",
+    "must_add_or_clarify": [
+      "Source labels require normalization with preserved literal source wording; source authors can call synthetic DNA products cDNA or refer to targets when describing reporters. Naming must not override the actual stated molecular origin.",
+      "Preparation descriptions must preserve both molecular origin and current chemical form; source identity cannot be reduced to DNA/RNA type.",
+      "Attribution is partly physical and partly a data dependency, especially the measured barcode-to-coordinate map in Slide-seq.",
+      "Independent branches and co-measurement units must remain explicit: same cell or pixel does not imply same molecule or direct molecular interaction.",
+      "Conditional requirements must be comparison- and evidence-sensitive. They should request a missing differentiator rather than invent it or force a source-level block into a complete molecular reaction."
+    ]
+  },
+  "candidate_competency_checks": [
+    "Retrieve the two SHARE-seq products that are both DNA and explain why one is bead-bound while the other is in the supernatant.",
+    "Identify which CITE-seq read sequence reports an endogenous transcript and which reports a synthetic antibody tag; do not label both as biological RNA measurements.",
+    "Distinguish the role of beads in Slide-seq spatial capture from their later purification role in DBiT-seq.",
+    "Find the required mapping data that converts a Slide-seq bead barcode into spatial position.",
+    "Identify where SLAM-seq's temporal chemical mark becomes sequence evidence and which stage still contains a mixed labeled/unlabeled RNA population.",
+    "Reject same-cell claims inferred only from a DBiT spatial pixel or same-molecule claims inferred only from paired SHARE-seq cell barcodes."
+  ]
+}

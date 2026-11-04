@@ -137,6 +137,107 @@
         "uml/behavior.py"
       ],
       "scope": "Read typed parameter implementation in full and compared pinned contents with develop. No execution, package installation or source copying."
+    },
+    {
+      "repository": "ISA-tools/isa-api",
+      "commit": "50c01e87be1c86dd918bd2ccd8ef9f476a2b1414",
+      "files": [
+        "isatools/model/material.py",
+        "isatools/model/characteristic.py",
+        "isatools/model/process.py"
+      ],
+      "scope": "Read pinned material and characteristic classes, selected Process constructors/input/output/serialization code. Read model specification. No installation, code copying or execution. Material/property flexibility does not enforce our scientific distinctions."
     }
-  ]
+  ],
+  "followup_review": {
+    "reason": "User challenged broad components field and requested more technologies with scientifically useful comparisons.",
+    "status": "Design/source audit only. No archived extraction, publication status, production schema or native runtime changed.",
+    "coverage": {
+      "illumina_method_descriptions": 24,
+      "new_illumina_description_pages": 21,
+      "purposeful_illumina_revisits": 3,
+      "additional_spatial_multiomic_temporal_methods": 6,
+      "not_claimed": "30 complete primary papers read or 30 new validated extractions"
+    },
+    "family_reviews": [
+      "rna_material_review.json",
+      "dna_material_review.json",
+      "spatial_material_review.json"
+    ],
+    "root_reading": {
+      "document": "rna_collection",
+      "description_pages": [
+        27,
+        28,
+        29,
+        30,
+        38,
+        72,
+        73,
+        76
+      ],
+      "scope": "Method explanation, diagram text and advantages/limitations; selected cited source passages. Not all bibliographies or full cited papers.",
+      "visually_inspected_pages": [
+        73
+      ]
+    },
+    "primary_checks": [
+      {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4487409/",
+        "scope": "Results, Figure 1, crosslinking, library preparation and selected analysis Methods",
+        "finding": "Crosslinked residual antibody peptide generates sequence signatures; antibody choice matters. Figure 1 and Methods specify 254 nm, while Illumina RNA p73 diagram says 365 nm. Catalogue wording must remain provenance, not an unchecked physical parameter."
+      },
+      {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3460573/",
+        "scope": "Abstract, chromatin preparation and protocol sections 6-8",
+        "finding": "ChIRP captures RNA-associated chromatin, then recovers DNA for sequencing. This original-method protocol reports several-hundred-base mapping resolution; collection p27 says single-base resolution. Do not infer read length or assay positional resolution from generic sequencing."
+      },
+      {
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5502525/",
+        "scope": "Overview, limitations, alternatives, run-on composition passages",
+        "finding": "PRO-seq distinguishes run-on variants and acknowledges one/few nucleotide extension and mapping limits; not every version is the four-reaction collection schematic."
+      }
+    ],
+    "standards": [
+      {
+        "url": "https://isa-specs.readthedocs.io/en/latest/isamodel.html",
+        "scope": "Material/process/data graph and characteristic/parameter definitions",
+        "adopt": "Qualified material characteristics and operation-local parameters; preserve graph provenance.",
+        "not_adopt": "Generic string characteristics alone do not define genomics-specific semantics."
+      },
+      {
+        "url": "https://academic.oup.com/database/article-pdf/doi/10.1093/database/baab040/38888599/baab040.pdf",
+        "scope": "Results/design pattern, pages 6-8; surrounding methods excerpts",
+        "adopt": "Distinguish evaluated material, analyte and reagent roles; ensure constraints hold across intended type instances.",
+        "not_adopt": "Do not require a particular molecule or device for every assay variant; do not claim ontology reasoning proves scientific correctness."
+      }
+    ],
+    "comparison_checks": "comparison_requirements.json; 8 source-informed competency cases, not executed model benchmark or expert gold standard",
+    "design_review": {
+      "reviewers": [
+        "rna_material_review",
+        "spatial_multiomic_review"
+      ],
+      "scope": "Both reviewed the revised design text and comparison requirements; not an independent re-review of all source papers.",
+      "corrections_applied": [
+        "Copying rule now identifies actual template per branch; RT enzyme use does not imply only RNA templates.",
+        "Molecular feature can target the preparation directly if constituent decomposition is unnecessary.",
+        "Prepared input can have source-qualified history outside the extracted workflow without invented producer.",
+        "Comparison checks scoped to cited implementations, not every later variant."
+      ],
+      "checks_run": [
+        "All five JSON review/requirement files parse.",
+        "Eight unique comparison cases have questions, required answers, counterexamples and scoped evidence.",
+        "Method-description/page counts agree with reading ledgers.",
+        "Original three source PDF SHA256 hashes unchanged.",
+        "git diff --check."
+      ],
+      "not_run": [
+        "Fresh native extraction",
+        "Automated biological interpretation benchmark",
+        "Canonical correction/publication",
+        "Production schema migration"
+      ]
+    }
+  }
 }

@@ -1,0 +1,72 @@
+{
+  "status": "Source-informed design checks; not an executed benchmark, expert gold standard or admitted graph",
+  "purpose": "Require scientifically useful answers from extracted States, Operations and change claims instead of accepting broad composition labels.",
+  "assessment": "For each required answer, identify the exact extracted assertion and evidence, or report not represented / unresolved. Do not fill missing graph content from model memory. Equivalent scientifically correct wording/grouping is allowed. Sufficient answers do not automatically establish historical influence or protocol compatibility.",
+  "implementation_scope": "All cases refer to the implementations in their cited sources, not invariant requirements for every later variant. In particular: original CITE-seq (2017), SHARE-seq (2020), Slide-seq (2019) and DBiT-seq (2020). Prepared inputs may have directly evidenced history outside the extracted graph; no invented producer is required.",
+  "cases": [
+    {
+      "id": "clip_product_recovery",
+      "methods": ["conventional CLIP", "iCLIP"],
+      "question": "What cDNA population does the design recover, and why does that change the information available?",
+      "required_answers": ["Residual crosslinked peptide can terminate reverse transcription.", "Truncated cDNA and read-through cDNA are different product populations.", "iCLIP uses circularization in recovering truncated cDNAs; the endpoint provides crosslink-position information."],
+      "reject_conflations": ["RNA and DNA labels establish an equivalent workflow.", "All post-digestion material still carries intact protein.", "Circular topology alone explains the measurement improvement."],
+      "evidence": [{"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3000544/", "scope": "Introduction, Figure 1 and selected iCLIP Methods; RNA review"}]
+    },
+    {
+      "id": "methylation_rna_readout",
+      "methods": ["MeRIP-seq", "miCLIP-m6A"],
+      "question": "How does the method turn antibody recognition into positional sequence evidence?",
+      "required_answers": ["Enriched RNA fragments alone do not locate a modified base at single-nucleotide resolution.", "miCLIP induces antibody-RNA crosslinks; residual peptide affects copying.", "Antibody-dependent substitutions or truncations are the readout used for site inference."],
+      "reject_conflations": ["All methylated RNA has the same observable signature.", "Any anti-m6A antibody is demonstrated to yield the same mutation pattern.", "Copying an Illumina caption establishes the correct UV wavelength."],
+      "evidence": [{"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4487409/", "scope": "Results, Figure 1, crosslinking/library-preparation Methods"}]
+    },
+    {
+      "id": "protected_extendable_primer",
+      "methods": ["MDA / cited multiply-primed RCA precedent"],
+      "question": "Which DNA is the template, which DNA is the primer, and can the primer be extended?",
+      "required_answers": ["Template and primer occupy different operation-local roles.", "The cited Dean implementation protects primers from exonuclease while retaining extension."],
+      "reject_conflations": ["3-prime protected means extension-blocked.", "The cited circular-template study establishes every later genomic MDA implementation."],
+      "evidence": [{"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC311129/", "scope": "Selected Results, Figure 1, Discussion and Methods; DNA review"}]
+    },
+    {
+      "id": "share_seq_routes",
+      "methods": ["SHARE-seq"],
+      "question": "Why do the two DNA products enter different library branches?",
+      "required_answers": ["RNA-derived cDNA and transposed genomic fragments have different origin despite both being DNA.", "Biotin-tagged cDNA is recovered on streptavidin beads; genomic fragments are recovered from supernatant.", "Shared barcodes link measurements at the cell level, not the same original molecule."],
+      "reject_conflations": ["All DNA has one origin and one downstream route.", "Two constituent classes automatically mean two fractions before the separation."],
+      "evidence": [{"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7669735/", "scope": "STAR Methods: reverse transcription, barcoding, reverse crosslinking and affinity pull-down; spatial review"}]
+    },
+    {
+      "id": "cite_seq_reporter",
+      "methods": ["CITE-seq"],
+      "question": "Which sequence reports a transcript and which reports an antibody identity?",
+      "required_answers": ["Endogenous RNA templates and synthetic poly(A)-tailed DNA antibody tags are distinct captured templates.", "The antibody tag is copied through reverse transcriptase DNA-dependent polymerase activity.", "Tag counts and transcript counts are associated through cell identifiers; protein molecules are not directly sequenced."],
+      "reject_conflations": ["Everything captured by oligo(dT) is endogenous RNA.", "All DNA products in the library derive from biological RNA."],
+      "evidence": [{"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5669064/", "scope": "Main workflow and Online Methods: antibody oligonucleotides, capture/copying and library separation; spatial review"}]
+    },
+    {
+      "id": "spatial_encoding_location",
+      "methods": ["Slide-seq", "DBiT-seq"],
+      "question": "Where is spatial identity encoded, and what extra information decodes it?",
+      "required_answers": ["Slide-seq captures RNA on spatially decoded beads and requires their barcode-to-position map.", "DBiT introduces positional identifiers in tissue through intersecting microfluidic channels; later bead purification is not the spatial-encoding operation.", "Physical capture unit/pixel is distinct from an inferred cell identity."],
+      "reject_conflations": ["A bead always serves the same purpose.", "A DNA barcode alone establishes a spatial coordinate.", "A pixel or bead automatically represents exactly one cell."],
+      "evidence": [{"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6927209/", "scope": "Main workflow and Figure 1; original supplement unavailable"}, {"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7736559/", "scope": "STAR Methods: barcodes, ligation and cDNA recovery; spatial review"}]
+    },
+    {
+      "id": "nome_mark_origin",
+      "methods": ["NOMe-seq"],
+      "question": "Which methylation is endogenous and which records accessibility during the assay?",
+      "required_answers": ["Accessibility is recorded in chromatin before DNA extraction.", "Introduced GpC methylation and endogenous CpG methylation have different measurement roles.", "Sequence context and its ambiguity must be respected when interpreting the bisulfite readout."],
+      "reject_conflations": ["All methylation in the final DNA is a native biological mark.", "DNA extraction alone preserves the original protein occupancy without prior encoding."],
+      "evidence": [{"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3514679/", "scope": "Abstract, selected library-construction and GCH/HCG analysis Methods; DNA review"}]
+    },
+    {
+      "id": "run_on_variant_scope",
+      "methods": ["GRO-seq", "PRO-seq"],
+      "question": "How does run-on chemistry affect the RNA endpoint being measured?",
+      "required_answers": ["The labeled RNA originates from transcriptionally engaged polymerases under run-on conditions.", "PRO-seq limits extension through biotin-NTP incorporation; the RNA 3-prime endpoint is used for positional inference.", "One/few nucleotide extension and NTP composition are implementation-scoped; the 2016 protocol includes alternative mixes."],
+      "reject_conflations": ["All nascent RNA labeling is an identical operation.", "The collection's four separate reactions define every PRO-seq variant."],
+      "evidence": [{"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5502525/", "scope": "Overview, limitations and alternative run-on mixes; not all procedural settings audited"}]
+    }
+  ]
+}

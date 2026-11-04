@@ -1,0 +1,134 @@
+{
+  "date": "2026-11-04",
+  "status": "Engineering/source review; not a fresh model extraction, canonical correction, or universal schema validation",
+  "question": "Which preparation and molecular distinctions must remain retrievable for a scientist comparing sequencing technologies?",
+  "read_scope": {
+    "illumina_document": "DNA Sequencing Methods Collection",
+    "url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/dna-sequencing-methods-review-web.pdf",
+    "sha256": "daba474a8c1d7283e9158e6635fe4d404737f518a0e5de1dae1ff35fb9d92084",
+    "complete_description_pages_read": [44, 48, 72, 79, 86, 92, 104, 123],
+    "additional_page_read": [107],
+    "page_numbering": "one-based PDF page; matches printed page for these pages",
+    "new_description_pages_relative_to_source_review_json": [44, 48, 79, 92, 123],
+    "revisited_pages": [72, 86, 104],
+    "revisit_reason": "User challenges proposed Material State fields; reassess whether comparison-defining distinctions are representable and source wording is reliable. No repeat model extraction.",
+    "rendered_and_visually_inspected_pages": [44, 92, 123],
+    "primary_scope": "Selected primary-source abstract, figure, results, discussion, or Methods passages retrieved through indexed full-text views. Not full independent review of all eight primary papers or supplements. Some direct PMC opens returned CAPTCHA; indexed primary-source text supplied the stated passages."
+  },
+  "methods": [
+    {
+      "method": "MDA",
+      "illumina_page": 44,
+      "material_distinction": "Template DNA and random DNA primers are different participants despite both being DNA. Primer resistance to exonuclease must not be represented as extension blocking.",
+      "roles": {"template": "DNA to be copied", "primer": "extendable random oligonucleotide", "catalyst": "phi29 DNA polymerase"},
+      "before_after": "Primed DNA template becomes displaced amplification products; polymerase is not the material product.",
+      "scientific_query": "Which priming systems survive a proofreading polymerase while retaining extension competence?",
+      "source_issue": "Illumina labels the primers 3-prime blocked. Its cited Dean2001 primary instead describes thiophosphate protection against exonuclease and successful extension. Preserve source wording, but do not canonically encode an extension-blocked primer.",
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC311129/",
+      "primary_scope": "Results, Figure 1, Discussion and selected Methods passages; original study is multiply-primed RCA and should not establish every modern MDA variant."
+    },
+    {
+      "method": "MALBAC",
+      "illumina_page": 48,
+      "material_distinction": "Genomic template, semi-amplicon and full amplicon have different sequence architecture and amplification behavior. Full amplicon terminal sequences hybridize intramolecularly.",
+      "before_after": "Primer extension creates semi-amplicons, then full amplicons; terminal complementarity permits looping before the later PCR stage.",
+      "scientific_query": "Which amplification designs reduce re-amplification of completed products, and what product structure causes it?",
+      "do_not_conflate": "A hybridized loop is not automatically a covalently closed DNA circle. A single strandedness label cannot describe all regions of the structure.",
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3600412/",
+      "primary_scope": "Figure 1 and surrounding amplification comparison passages."
+    },
+    {
+      "method": "PBAT",
+      "illumina_page": 72,
+      "material_distinction": "DNA entering bisulfite treatment lacks sequencing adaptors; adaptors are introduced afterward through random-primer extension.",
+      "before_after": "Bisulfite-treated DNA is used for post-conversion adaptor tagging rather than exposing already tagged templates to the damaging treatment.",
+      "scientific_query": "Which methods change adaptor-addition order to reduce loss of sequenceable templates?",
+      "do_not_conflate": "Same DNA class and same listed operations do not imply equivalent workflow; adaptor presence at the conversion boundary and operation order matter.",
+      "primary_support": "https://pubmed.ncbi.nlm.nih.gov/22649061/",
+      "primary_scope": "Primary abstract and figure material; direct full-text open was blocked. No full-paper verification claimed."
+    },
+    {
+      "method": "T-WGBS / Tn5mC-seq precursor",
+      "illumina_page": 79,
+      "material_distinction": "The tagmented preparation must have methylated adaptor sequence and the relevant covalent attachment on each strand before bisulfite exposure.",
+      "before_after": "Tagmented DNA undergoes oligonucleotide replacement and repair to obtain bisulfite-compatible tagged templates.",
+      "scientific_query": "Which changes make a tagmentation product usable in a bisulfite workflow?",
+      "do_not_conflate": "Adapter-tagged DNA is insufficient: a hybridized oligonucleotide and a covalently attached strand have different survival through denaturation and conversion.",
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3371708/",
+      "primary_scope": "Original 2012 Tn5mC-seq abstract/design passage; Illumina cites the later Wang2013 T-WGBS protocol. Shared design claim only, not identity of every recipe/version."
+    },
+    {
+      "method": "oxBS-seq",
+      "illumina_page": 86,
+      "material_distinction": "5hmC-containing DNA is chemically changed before bisulfite; comparison with a matched ordinary bisulfite branch supports the 5hmC estimate.",
+      "before_after": "Oxidation changes 5hmC to 5fC; downstream base readout differs from the untreated-with-oxidant branch.",
+      "scientific_query": "Which observed bases distinguish original modifications, and which comparison branch is required?",
+      "do_not_conflate": "Modified-base populations within one preparation are not separate isolated fractions. Two processing branches are separate even if both are simply named DNA.",
+      "support_status": "Illumina description read; original Booth2012 not independently read here. Primary redBS study by Booth et al. corroborates prior oxBS mechanism and comparison requirement.",
+      "corroborating_primary": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4188980/"
+    },
+    {
+      "method": "TAB-seq",
+      "illumina_page": 92,
+      "material_distinction": "The identity and origin of each base modification must remain linked: protected 5hmC versus 5mC oxidized to 5caC before bisulfite.",
+      "before_after": "Glucosylation protects one base class while oxidation makes another class convertible; both classes remain in the same DNA preparation.",
+      "scientific_query": "What chemically distinguishes protection of the target from conversion of competing modifications?",
+      "do_not_conflate": "DNA plus modified base is not enough, and unchanged sequence identity is not unchanged chemical identity. Reporter base must remain linked to its precursor modification.",
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3589129",
+      "primary_scope": "Indexed article metadata and targeted glucosylation/oxidation passages only; no complete primary paper verification."
+    },
+    {
+      "method": "ChIP family / ChIP-exo",
+      "illumina_page": 104,
+      "material_distinction": "Protein-crosslinked, immunoselected chromatin and purified DNA are not interchangeable inputs to exonuclease footprinting. The protein barrier establishes where trimming stops.",
+      "before_after": "On-resin ChIP material with an initial adaptor is exonuclease-trimmed; crosslink reversal and subsequent library operations follow in the primary protocol.",
+      "scientific_query": "Which change shifts positional information from random fragment boundaries to a protein-associated exonuclease boundary?",
+      "source_issue": "Grouped Illumina page places exonuclease before immunoprecipitation and assigns it to a broad ChIP schematic. Primary ChIP-exo protocol describes exonuclease after ChIP on resin. Do not distribute grouped operations across all named members or publish source order as canonical without qualification.",
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/pmid/23026909/",
+      "primary_scope": "Indexed primary protocol Figure 1 caption; corroborating Methods in https://pmc.ncbi.nlm.nih.gov/articles/PMC5880240/ . Original 2011 paper direct open blocked."
+    },
+    {
+      "method": "NOMe-seq",
+      "illumina_page": 123,
+      "material_distinction": "Native chromatin context is needed when accessibility is recorded; after treatment, introduced GpC methylation and endogenous CpG methylation can be read from extracted DNA.",
+      "before_after": "A chromatin-accessibility distinction becomes a chemical mark on the DNA; extraction later removes chromatin context without necessarily removing that recorded mark.",
+      "scientific_query": "Which methods preserve an earlier protein-accessibility distinction in a DNA readout, and can it be associated with endogenous methylation on the same molecule?",
+      "do_not_conflate": "Methylation as an assay-introduced reporter differs from methylation as the native analyte, even though their chemistry is the same. Overlapping sequence contexts require disambiguation in analysis.",
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3514679/",
+      "primary_scope": "Primary abstract, library-construction Methods and within-read GCH/HCG analysis passages."
+    }
+  ],
+  "cross_case_findings": [
+    "A substance list cannot establish a useful scientific state. DNA may be template, primer, adapter, amplified copy, endogenous analyte or reporter; the role belongs to a specified operation or measurement.",
+    "The scientifically useful record starts with the actual preparation being handed between operations. Structural facts are attached to named material parts rather than to an undifferentiated mixture.",
+    "An introduced mark requires both chemical identity and production provenance. NOMe-seq shows why modification chemistry alone cannot distinguish biological analyte from experimental reporter.",
+    "Sequence constructs need a representation of relevant segments and their connection, orientation or pairing. MALBAC and T-WGBS cannot be compared reliably using only DNA, single-stranded and adapter-present labels.",
+    "A State requires source-qualified facts at a workflow boundary. False certainty from broad normalization is a bigger risk than temporarily retaining a source-qualified description.",
+    "Graph evolution requires an explicit before/after comparison of those facts and operation order, not an edge inferred from common material types."
+  ],
+  "minimal_contract_recommendation": {
+    "status": "Proposal for parent review, not implemented",
+    "scientist_facing_start": "Name the actual preparation/product and the operation that produced or consumes it; e.g. bisulfite-treated untagged DNA, crosslinked immunoselected chromatin on resin, or tagmented DNA with methylated covalent adaptors.",
+    "mandatory_common_information": [
+      "Which preparation is being passed, with source evidence and exact workflow boundary",
+      "Which material part is acted on and its local role",
+      "Which supported structural, chemical, contextual or association facts are required to understand the next operation or the claimed difference",
+      "What measurement association or encoded information survives, with experimental origin and carrier",
+      "Which fractions are genuinely separate; do not split coexisting chemical classes"
+    ],
+    "conditional_property_groups": {
+      "nucleic_acid_construct": "Polymer, strand/segment organization, end chemistry, sequence handles, modifications and relevant covalent versus hybridized connections",
+      "chromatin_preparation": "Native or crosslinked preparation, selected protein-associated population, accessibility context, support and crosslink-removal boundary",
+      "chemical_encoding": "Precursor modification, introduced derivative, selective protection/conversion, comparator branch, observed base and inference"
+    },
+    "why_conditional": "Do not require exhaustive features for every state. Require the properties that the operation class and specific comparison depend upon, recording unknown rather than inventing a value. Retain source grouping unless it prevents answering the concrete comparison.",
+    "meaningful_negative_controls": [
+      "Reject equating extendable exonuclease-protected primers with extension-blocked primers",
+      "Reject identifying hybridization-looped MALBAC amplicons as covalently circular DNA",
+      "Reject treating tagmented DNA with merely hybridized oligos as bisulfite-ready covalently tagged strands",
+      "Reject treating native and experimentally introduced cytosine methylation as the same measurement",
+      "Reject assigning exonuclease digestion to every member of an Illumina grouped ChIP card",
+      "Reject collapsing oxBS and BS processing branches because both contain genomic DNA"
+    ]
+  }
+}

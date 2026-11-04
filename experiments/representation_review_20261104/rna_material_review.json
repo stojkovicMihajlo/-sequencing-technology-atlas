@@ -1,0 +1,225 @@
+{
+  "date": "2026-11-04",
+  "status": "engineering source review; not native extraction, scientific atlas admission, or exhaustive ontology validation",
+  "purpose": "Test whether generic RNA/DNA/protein components and the proposed five Material State fields support scientifically meaningful assay comparisons.",
+  "source": {
+    "url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+    "sha256": "8a333cee2159153c1dd49bffe3a5ec2e3ee143670f63c903793f2430a793b2ae",
+    "text_pages_read": [
+      10,
+      40,
+      41,
+      42,
+      43,
+      44,
+      50,
+      51,
+      55,
+      56,
+      58
+    ],
+    "new_method_pages": [
+      10,
+      40,
+      41,
+      44,
+      50,
+      55,
+      56,
+      58
+    ],
+    "visual_pages_read": [
+      55,
+      58
+    ],
+    "revisit_reason": "None of these eight method pages was listed in prior source_review.json; neighboring NET/mNET pages were read for comparison only. No unchanged extraction rerun."
+  },
+  "methods": [
+    {
+      "method": "RNA CaptureSeq",
+      "page": 10,
+      "material_at_distinguishing_boundary": "Adapter-bearing cDNA library fragments hybridized to sequence-specific capture probes",
+      "analyte": "Transcripts from chosen genomic regions",
+      "physical_reporter": "Captured RNA-derived DNA library fragments",
+      "before_after": "Broad RNA-derived cDNA library -> probe-selected cDNA library",
+      "comparison_required_facts": [
+        "Selection is performed on cDNA in this described implementation, although the biological target is RNA.",
+        "Probe sequence determines represented regions; generic DNA does not encode selected transcript population."
+      ],
+      "source_limit": "Array/capture implementation described on this page; do not generalize its support format to every CaptureSeq version.",
+      "source_url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "source_scope": "Full Illumina page text inspected; selected primary passages only where marked."
+    },
+    {
+      "method": "CAGE",
+      "page": 40,
+      "material_at_distinguishing_boundary": "Cap-selected RNA-cDNA hybrids, followed by recovered 5-prime-complete cDNA",
+      "analyte": "Capped RNA transcription start sites and their expression",
+      "physical_reporter": "DNA tags derived from capped RNA 5-prime ends",
+      "before_after": "Reverse-transcribed RNA mixture -> cap-selected cDNA -> short 5-prime tags",
+      "comparison_required_facts": [
+        "The selected RNA end and cap-derived selection basis distinguish CAGE from other end-sequencing assays.",
+        "After RNA removal, cDNA no longer physically carries an RNA cap; cap selection is provenance, not a DNA terminal modification."
+      ],
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4094379/",
+      "source_limit": "2012 EcoP15I-based implementation; no assertion that all later CAGE variants use this workflow.",
+      "source_url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "source_scope": "Full Illumina page text inspected; selected primary passages only where marked."
+    },
+    {
+      "method": "3-prime NT",
+      "page": 41,
+      "material_at_distinguishing_boundary": "Insoluble RNAPII-chromatin preparation carrying nascent RNA, then extracted cap-selected nascent RNA",
+      "analyte": "Positions of elongating or arrested RNA polymerase II",
+      "physical_reporter": "DNA copies preserving nascent RNA 3-prime endpoints",
+      "before_after": "Cell/nuclear material -> insoluble transcription complexes -> extracted nascent RNA -> cDNA",
+      "comparison_required_facts": [
+        "Protein-DNA-RNA is an organized retained transcription complex, not merely three component labels.",
+        "Fractionation/retention basis differs from antibody selection even when endpoint cDNA represents related biology."
+      ],
+      "source_limit": "Illumina description only in this review; original Weber2014 paper not independently read.",
+      "source_url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "source_scope": "Full Illumina page text inspected; selected primary passages only where marked."
+    },
+    {
+      "method": "PARE-seq",
+      "page": 44,
+      "material_at_distinguishing_boundary": "Uncapped polyadenylated RNA degradation products with adapter-ligatable 5-prime phosphate ends",
+      "analyte": "RNA cleavage/degradation endpoints",
+      "physical_reporter": "Short cDNA tags from adapter-linked RNA 5-prime ends",
+      "before_after": "Polyadenylated RNA mixture -> 5-prime adapter-ligated uncapped RNA -> restriction-generated DNA tags",
+      "comparison_required_facts": [
+        "Same RNA class and 5-prime-end purpose as CAGE do not imply identical selected population.",
+        "End group, capping status and retained end-to-read correspondence are essential."
+      ],
+      "source_limit": "Collection prose and diagram support the representation example; do not promote as fully verified primary extraction.",
+      "source_url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "source_scope": "Full Illumina page text inspected; selected primary passages only where marked."
+    },
+    {
+      "method": "HITS-CLIP",
+      "page": 50,
+      "material_at_distinguishing_boundary": "Immunoselected UV-crosslinked protein-RNA complexes, then RNA fragments carrying crosslink-derived residues",
+      "analyte": "RNA regions associated with a selected RNA-binding protein",
+      "physical_reporter": "Sequenced cDNA fragments derived from recovered RNA",
+      "before_after": "Native interacting complexes -> covalently crosslinked selected fragments -> RNA -> cDNA",
+      "comparison_required_facts": [
+        "Native binding, induced covalent crosslinking and a residual peptide after digestion are different material states.",
+        "Conventional library recovery may lose cDNA terminating at a crosslink; the shared RNA/DNA labels conceal that difference."
+      ],
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3000544/",
+      "source_limit": "The conventional CLIP comparison is supported by the iCLIP authors; not a full re-review of every original HITS-CLIP variant.",
+      "source_url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "source_scope": "Full Illumina page text inspected; selected primary passages only where marked."
+    },
+    {
+      "method": "PAR-CLIP",
+      "page": 56,
+      "material_at_distinguishing_boundary": "Photoactivatable-nucleoside-containing RNA crosslinked to selected RNA-binding proteins",
+      "analyte": "RNA-protein interaction regions",
+      "physical_reporter": "cDNA sequence changes enriched at crosslinked labeled positions",
+      "before_after": "Labeled transcripts -> UV-crosslinked RNPs -> crosslink-bearing RNA -> cDNA",
+      "comparison_required_facts": [
+        "For the 4SU implementation, modification identity and crosslink context explain the characteristic T-to-C read signature.",
+        "Presence of 4SU alone does not prove a particular RNA-protein contact; the operation and evidence matter."
+      ],
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2861495/",
+      "source_limit": "Illumina footnote102 cites a 2008 cDNA-library method, not the 2010 PAR-CLIP introduction; citation role must be checked.",
+      "source_url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "source_scope": "Full Illumina page text inspected; selected primary passages only where marked."
+    },
+    {
+      "method": "iCLIP",
+      "page": 58,
+      "material_at_distinguishing_boundary": "RNA bearing residual covalent peptide, then RT-truncated cDNA that is recovered through circularization",
+      "analyte": "Selected protein crosslink sites on RNA",
+      "physical_reporter": "cDNA truncation positions and molecular barcodes",
+      "before_after": "Peptide-bearing RNA -> truncated cDNA -> circular cDNA -> linear amplifiable cDNA",
+      "comparison_required_facts": [
+        "The informative difference from conventional CLIP is which cDNA products enter the library, not merely DNA topology.",
+        "Random molecular barcode and experiment barcode have distinct roles."
+      ],
+      "primary_support": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3000544/",
+      "source_limit": "Illumina claim that iCLIP avoids nucleases is contradicted by original Methods using RNase I; original Fig1 specifies residual peptide rather than an intact undigested protein.",
+      "source_url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "source_scope": "Full Illumina page text inspected; selected primary passages only where marked."
+    },
+    {
+      "method": "irCLIP",
+      "page": 55,
+      "material_at_distinguishing_boundary": "RNA ligated to an infrared/biotin adapter, then RNA-cDNA hybrids captured on streptavidin beads",
+      "analyte": "RNA associated with an immunoselected RNA-binding protein",
+      "physical_reporter": "Infrared signal during recovery and ultimately DNA sequence library",
+      "before_after": "Adapter-linked recovered RNA -> RNA-cDNA hybrid -> streptavidin-bound hybrid -> eluted cDNA for circularization",
+      "comparison_required_facts": [
+        "The affinity handle is on a particular linked molecule; bead-bound DNA alone does not explain capture or release.",
+        "A post-RT affinity capture is not interchangeable with immunoprecipitation of an RNP."
+      ],
+      "primary_support": "https://bio-protocol.org/exchange/minidetail?id=794230&type=30",
+      "source_limit": "Read the published-method excerpt attributed to original DOI10.1038/nmeth.3840; direct PMC fetch was captcha-blocked. It describes streptavidin capture where Illumina says immunopurify.",
+      "source_url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "source_scope": "Full Illumina page text inspected; selected primary passages only where marked."
+    }
+  ],
+  "primary_checks": [
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3000544/",
+      "read_scope": "Introduction, Fig1 description, Methods iCLIP analyses; selected passages, not complete paper/supplement audit",
+      "locator": "Introduction paragraphs beginning An additional disadvantage / Here we exploited; Fig1; Methods iCLIP analyses",
+      "findings": [
+        "Residual peptide can truncate reverse transcription.",
+        "Circularization permits recovery of truncated cDNAs; this is the relevant documented design move.",
+        "RNase I fragmentation is explicitly used."
+      ]
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2861495/",
+      "read_scope": "Results on T-to-C changes at crosslink sites and Discussion comparison with UV254 CLIP; selected passages",
+      "locator": "T to C mutations occur at the crosslinking sites; Discussion",
+      "findings": [
+        "4SU crosslink-derived sequence changes help distinguish binding signal.",
+        "Chemical label, induced covalent association and read signature are related but separate claims."
+      ]
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4094379/",
+      "read_scope": "Abstract/introduction and indexed protocol passages on cap-selected ss-cDNA and second-strand cleanup; not complete protocol audit",
+      "locator": "Development and previous use of CAGE; cap-selected single-strand cDNA",
+      "findings": [
+        "Cap selection explains RNA origin of DNA tags; RNA cap is not a modification that should be assigned to recovered DNA."
+      ]
+    },
+    {
+      "url": "https://bio-protocol.org/exchange/minidetail?id=794230&type=30",
+      "read_scope": "Entire displayed irCLIP library-construction excerpt; identifies original DOI10.1038/nmeth.3840",
+      "locator": "Paragraph after cDNA synthesis, cDNA-RNA hybrids capture",
+      "findings": [
+        "Post-RT RNA-cDNA hybrids are captured with streptavidin beads.",
+        "This source qualifies Illumina immunopurify caption; no separate new immune selection should be inferred."
+      ]
+    }
+  ],
+  "design_conclusion": {
+    "diagnosis": "The difficulty is not that components is too short a name. RNA/DNA/protein alone encodes chemistry class while losing selected biological population, preparation and representational origin. More free-text slots will not fix this.",
+    "scientist_facing_state": "Display the actual preparation, such as cap-selected 5-prime-complete cDNA, peptide-crosslinked RNA fragment, or RT-truncated cDNA. Back the phrase with addressable facts rather than an independent unsupported label.",
+    "minimal_change": [
+      "Retain molecule class as a coarse filter, not the principal description.",
+      "Represent relevant material entities with their type and specific identity; link covalent/hybridization relations to exact partners.",
+      "Derive selection history and molecular origin through producing Operations, with a queryable summary; do not pretend a selected property remains chemically present after transfer to cDNA.",
+      "Record consequential end chemistry, topology, modifications and copied/attached sequence segments when they determine the operation or comparison.",
+      "State the observed signal and biological interpretation at method/readout level; sequence identity, truncation, substitutions and abundance are different readouts."
+    ],
+    "conditional_rules": [
+      "For affinity capture, identify what is captured, recognition partner/handle and whether handle is direct or on an associated molecule.",
+      "For RT, identify RNA population and whether the assay uses full-length, truncated or mutation-bearing cDNA.",
+      "For end-based assays, identify which original molecular end is represented and what makes that population selectable."
+    ],
+    "negative_controls": [
+      "CAGE and PARE are not equivalent just because both recover RNA 5-prime information.",
+      "iCLIP linear cDNA before and after circularization/linearization can share DNA/topology labels but differ in amplifiability and recovered population.",
+      "PAR-CLIP and temporal 4SU assays must not acquire a shared biological purpose simply from a common label.",
+      "irCLIP post-RT streptavidin capture is not an immune capture because both appear as purification on beads."
+    ],
+    "evolution_use": "A comparison should state retained substrate/workflow, changed operation or retained population, new observable, benefit and limitations. Shared RNA/DNA label supplies a retrieval filter only, never a scientific edge."
+  }
+}
