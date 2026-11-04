@@ -1,0 +1,437 @@
+{
+  "format_version": "illumina_rna_source_patterns/1.0",
+  "date": "2026-11-04",
+  "status": "bounded direct source-pattern review; not native extraction, primary-protocol validation, canonical graph admission or evolutionary-edge evidence",
+  "purpose": "Identify scientifically meaningful BEFORE/change/AFTER distinctions in six actual Illumina RNA diagrams and chemical panels, without inventing one common protocol or treating every structure drawing as a reaction.",
+  "revisit_reason": "User explicitly requested direct visual analysis of chemical drawings and their use in a useful graph; revisits these pages for drawing-role and transformation comparison, not duplicate extraction.",
+  "sources": [
+    {
+      "id": "rna_collection",
+      "path": "/tmp/atlas_guide_review_20261104/rna-methods.pdf",
+      "temporary_path": true,
+      "sha256": "8a333cee2159153c1dd49bffe3a5ec2e3ee143670f63c903793f2430a793b2ae",
+      "url": "https://assets.illumina.com/content/dam/illumina-marketing/documents/products/research_reviews/rna-sequencing-methods-review-web.pdf",
+      "pages_visually_read": [
+        11,
+        12,
+        14,
+        18,
+        32,
+        40
+      ],
+      "rendering": "pdftoppm -scale-to 1700, each complete selected page; figures and paragraphs visually read"
+    },
+    {
+      "id": "rna_poster",
+      "path": "provenance/experiments/illumina_full_20261031/sources/poster_originals/asset_0874cf2191fc1a5bbbd7d1c3.pdf",
+      "sha256": "f1694e317a7e5f11de86b8dacbcb08c980192849cccc9e83e3d22e12c55a6976",
+      "url": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+      "reading_extent": "Full-page overview; high-resolution left intercolumn chemical legend crops; not exhaustive inspection of all poster rows.",
+      "crop_coordinate_system": "PDF points, top-left origin; derived from pdftoppm144dpi crops; broad coordinates preserve neighboring context",
+      "crops": [
+        {
+          "name": "chemical_legend_top",
+          "pdf_bbox": [
+            1055,
+            485,
+            1215,
+            1435
+          ]
+        },
+        {
+          "name": "chemical_legend_terminal",
+          "pdf_bbox": [
+            1055,
+            2610,
+            1215,
+            2950
+          ]
+        }
+      ]
+    },
+    {
+      "id": "earlier_rna_review",
+      "path": "experiments/representation_review_20261104/rna_material_review.json",
+      "sha256": "4f7abc01d1d2d685b86818aa2c9f707db9cb1f5f9647f29940daf988a1a9f121",
+      "role": "prior engineering source review consulted; not new primary reading"
+    },
+    {
+      "id": "earlier_50_method_findings",
+      "path": "experiments/representation_review_20261104/findings.json",
+      "sha256": "09722caac943be783d946ad5aaeb361f2228a2eb76ece0c12b7c0be1580727c5",
+      "role": "prior engineering findings consulted; not a scientific benchmark"
+    }
+  ],
+  "methods": [
+    {
+      "method_id": "cp-rna-seq",
+      "method_name": "cP-RNA-seq",
+      "reading_extent": "Entire Illumina collection page visually inspected, including schematic and explanatory paragraphs; no new complete primary-paper or supplement review. Poster inspected at overview plus explicitly listed chemical-panel crops.",
+      "collection_page_one_based": 14,
+      "transitions": [
+        {
+          "before": "One RNA preparation containing molecules with different 3-prime ends, depicted as cyclic phosphate, phosphate and hydroxyl.",
+          "change": "CIP treatment removes accessible terminal phosphates; cyclic-phosphate-bearing molecules remain a distinct chemical subpopulation.",
+          "after": "One treated mixture, not three physically isolated fractions.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p14 paragraph 2 and first three schematic columns"
+            }
+          ]
+        },
+        {
+          "before": "Treated RNA mixture, including hydroxyl-ended and cyclic-phosphate-ended RNA.",
+          "change": "Periodate treatment changes susceptible RNA ends while cyclic-phosphate ends remain protected in this depicted route.",
+          "after": "Mixture containing ligation-incompetent oxidized ends and retained cyclic-phosphate ends.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p14 paragraph 2; Periodate (NaIO4) treatment column"
+            }
+          ]
+        },
+        {
+          "before": "Cyclic-phosphate-bearing molecules within that mixture.",
+          "change": "T4 PNK treatment makes the protected class adapter-ligatable; adapters are ligated before RT/PCR.",
+          "after": "Adapter-bearing RNA from the selected class, followed by amplified DNA library; the original cyclic phosphate is not retained on the DNA reporter.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p14 paragraph 2; Kinase treatment through RT-PCR columns"
+            }
+          ]
+        }
+      ],
+      "measurement_role": "Enrich sequence representation of an RNA population defined by its original 3-prime chemistry.",
+      "distinguishing_change": "Selection can arise through differential chemical susceptibility and later ligatability, without a physical separation after every reaction.",
+      "chemical_drawing_roles": [
+        {
+          "role": "analyte_reactive_group",
+          "observation": "cP/P/OH/X symbols annotate RNA end classes in the workflow; several horizontal molecules coexist.",
+          "source": "rna_collection",
+          "locator": "p14 schematic"
+        },
+        {
+          "role": "mechanism_panel",
+          "observation": "Poster separately draws RNA terminal chemical structures and arrows labelled CIP/T4 PNK or HCl+CIP/T4 PNK; this is a contextual terminal-chemistry panel, not evidence that every listed alternative is performed in this workflow.",
+          "source": "rna_poster",
+          "locator": "p1 left intercolumn legend, 3-prime Terminal structure of RNA; crop PDF points x1055..1215,y2610..2950"
+        }
+      ],
+      "source_qualifications": [
+        "Collection explicitly warns that some 2-prime-O-methylated RNA can evade periodate cleavage; original end chemistry alone is not a perfect specificity guarantee.",
+        "Do not infer discarded fractions or sequentially apply all alternatives in the separate terminal-chemistry panel."
+      ]
+    },
+    {
+      "method_id": "clickseq",
+      "method_name": "ClickSeq",
+      "reading_extent": "Entire Illumina collection page visually inspected, including schematic and explanatory paragraphs; no new complete primary-paper or supplement review. Poster inspected at overview plus explicitly listed chemical-panel crops.",
+      "collection_page_one_based": 12,
+      "transitions": [
+        {
+          "before": "RNA templates, semi-random primers, and a dNTP/AzNTP mixture.",
+          "change": "Reverse transcription with stochastic incorporation of chain-terminating azido nucleotides.",
+          "after": "Single-stranded cDNA fragments with the relevant 3-prime azido terminus.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p12 paragraph 2; RNA to Purify single-stranded cDNA"
+            }
+          ]
+        },
+        {
+          "before": "Azido-terminated cDNA and an alkyne-modified DNA adapter.",
+          "change": "Click ligation connects the cDNA terminus to the adapter, followed by PCR.",
+          "after": "Adapter-linked DNA amplified into a sequencing library.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p12 paragraph 2; Click-ligate alkyne-modified adapter through PCR"
+            }
+          ]
+        }
+      ],
+      "measurement_role": "Generate sequenceable RNA-derived fragments without the depicted conventional fragmentation stage.",
+      "distinguishing_change": "The reactive cDNA terminus and adapter chemistry implement the joining interface; generic ligation would conceal the distinguishing mechanism.",
+      "chemical_drawing_roles": [
+        {
+          "role": "reagent_structure",
+          "observation": "AzNTP drawing identifies a modified nucleotide substrate, not an independent workflow Operation.",
+          "source": "rna_poster",
+          "locator": "p1 left intercolumn legend, AzNTP at PDF points x1055..1215,y485..680"
+        },
+        {
+          "role": "mechanism_panel",
+          "observation": "The adjacent panel explicitly shows azido-blocked cDNA plus a 5-prime-hexynyl DNA adapter, Cu(I), and the joined product; reactive fragments have symbolic cDNA/DNA remainders rather than whole-transcript structures.",
+          "source": "rna_poster",
+          "locator": "p1 left intercolumn legend, Copper-catalysed cycloaddition; PDF points x1055..1215,y680..970"
+        }
+      ],
+      "source_qualifications": [
+        "Collection describes reduced artifactual recombination and reduced conversion efficiency; these are reported comparisons, not universal guarantees.",
+        "Exact atom mapping, catalyst concentration and a balanced reaction have not been reconstructed in this review."
+      ]
+    },
+    {
+      "method_id": "rasl-seq",
+      "method_name": "RASL-seq",
+      "reading_extent": "Entire Illumina collection page visually inspected, including schematic and explanatory paragraphs; no new complete primary-paper or supplement review. Poster inspected at overview plus explicitly listed chemical-panel crops.",
+      "collection_page_one_based": 11,
+      "transitions": [
+        {
+          "before": "Target RNA plus adjacent complementary probe pairs.",
+          "change": "Hybridization positions probes on their RNA target; ligation joins the probe pair.",
+          "after": "Joined probe reporter associated with the selected target.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p11 paragraph 2; Add targeted primers and Ligate columns"
+            }
+          ]
+        },
+        {
+          "before": "Target-associated joined probe reporter and the depicted oligo(dT)/biotin capture arrangement.",
+          "change": "Selection, reporter elution, addition of a barcoded P7 primer and amplification prepare the reporter for sequencing.",
+          "after": "Indexed amplification product representing the selected probe target.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p11 paragraph 2; Selection through Indexed cDNA columns"
+            }
+          ]
+        }
+      ],
+      "measurement_role": "Count predefined RNA targets using a ligated probe reporter.",
+      "distinguishing_change": "RNA provides target recognition/alignment; the joined probe sequence is the reporter. This is not equivalent to copying the target RNA sequence by RT.",
+      "chemical_drawing_roles": [
+        {
+          "role": "reactive_group_and_reagent_architecture",
+          "observation": "P/OH labels mark ligatable probe ends; P5/index/P7 labels show probe or amplification architecture. The streptavidin shape denotes capture support, not a new analyte.",
+          "source": "rna_collection",
+          "locator": "p11 schematic"
+        },
+        {
+          "role": "source_endpoint_label",
+          "observation": "The schematic endpoint is literally Indexed cDNA, but the depicted and described route joins probes; that label must not cause an invented reverse-transcription Operation.",
+          "source": "rna_collection",
+          "locator": "p11 final schematic column"
+        }
+      ],
+      "source_qualifications": [
+        "The prose describes selection in a different order from the displayed Ligate then Selection schematic. Preserve this catalogue discrepancy and resolve the actual ordering from the scoped primary protocol before presenting an executable route.",
+        "No primary RASL protocol newly read for this review."
+      ]
+    },
+    {
+      "method_id": "tif-seq",
+      "method_name": "TIF-seq",
+      "reading_extent": "Entire Illumina collection page visually inspected, including schematic and explanatory paragraphs; no new complete primary-paper or supplement review. Poster inspected at overview plus explicitly listed chemical-panel crops.",
+      "collection_page_one_based": 18,
+      "transitions": [
+        {
+          "before": "RNA population containing capped and uncapped molecules.",
+          "change": "The prose describes removal of exposed phosphates on uncapped RNA, then cap removal to expose phosphates on formerly capped molecules and enable oligonucleotide ligation.",
+          "after": "RNA tagged at selected original capped 5-prime ends.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p18 explanatory paragraph 2; diagram starts at capped mRNA and omits the initial uncapped-RNA treatment"
+            }
+          ]
+        },
+        {
+          "before": "Selected RNA with its transcript ends still represented.",
+          "change": "Full-length copying and end-primer incorporation produce DNA; circularization connects the represented ends before fragmentation and recovery.",
+          "after": "DNA fragments containing the end-to-end junction selected for library preparation.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p18 paragraph 2; RT through Circularize and fragment and Purify"
+            }
+          ]
+        }
+      ],
+      "measurement_role": "Associate the 5-prime and 3-prime boundaries of the same transcript in the described implementation.",
+      "distinguishing_change": "End relationship is made sequenceable by circularization/junction recovery, rather than independently cataloguing one transcript end.",
+      "chemical_drawing_roles": [
+        {
+          "role": "analyte_reactive_group",
+          "observation": "Cap and phosphate symbols describe the changing RNA 5-prime end.",
+          "source": "rna_collection",
+          "locator": "p18 schematic first columns"
+        },
+        {
+          "role": "reporter_topology_and_handle",
+          "observation": "Circular DNA and biotin symbols identify reporter organization and recovery handle; the circle is a product state, while circularization is the Operation.",
+          "source": "rna_collection",
+          "locator": "p18 Incorporate biotinylated primers through Purify"
+        }
+      ],
+      "source_qualifications": [
+        "Two-tube barcodes and later pooling appear in the explanatory prose but not the compressed schematic; the omitted branch is consequential to chimera control.",
+        "The specific NotI implementation and bias described on this page should not be generalized to every future end-pairing assay."
+      ]
+    },
+    {
+      "method_id": "cage",
+      "method_name": "CAGE, EcoP15I collection implementation",
+      "reading_extent": "Entire Illumina collection page visually inspected, including schematic and explanatory paragraphs; no new complete primary-paper or supplement review. Poster inspected at overview plus explicitly listed chemical-panel crops.",
+      "collection_page_one_based": 40,
+      "transitions": [
+        {
+          "before": "Capped RNA and cDNA generated with the depicted random-primer/EcoP15I-site architecture.",
+          "change": "Biotinylation and RNase treatment select RNA-cDNA hybrids whose cDNA reaches the RNA 5-prime end.",
+          "after": "Selected full-length-at-the-5-prime-end cDNA associated with the capture process.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p40 paragraph 2; Reverse transcription through Capture only complete 5-prime ends"
+            }
+          ]
+        },
+        {
+          "before": "Selected cDNA representing capped RNA 5-prime ends.",
+          "change": "Recover cDNA, add linker and use the depicted EcoP15I route to prepare DNA tags.",
+          "after": "Sequencing library representing RNA transcription-start positions.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p40 paragraph 2; Purify cDNA and Add linker and digest with EcoP15I"
+            }
+          ]
+        }
+      ],
+      "measurement_role": "Use selection through the RNA cap to recover a transcription-start-site readout.",
+      "distinguishing_change": "The selected RNA feature defines origin of the DNA tag; it is not a cap chemically present on recovered DNA.",
+      "chemical_drawing_roles": [
+        {
+          "role": "analyte_feature_and_capture_handle",
+          "observation": "Black cap squares and biotin symbols refer to RNA cap/end selection and affinity recovery, not a DNA terminal cap.",
+          "source": "rna_collection",
+          "locator": "p40 schematic"
+        },
+        {
+          "role": "sequence_feature",
+          "observation": "EcoP15I site is an engineered sequence/restriction feature; it is not a generic molecule-class label.",
+          "source": "rna_collection",
+          "locator": "p40 primer legend and final digestion"
+        }
+      ],
+      "source_qualifications": [
+        "The exact handling of hybrids and release is compressed in the collection; this review does not invent reagent-level release details.",
+        "The earlier RNA review checked selected primary CAGE passages, not every CAGE variant; this record remains scoped to collection p40."
+      ]
+    },
+    {
+      "method_id": "bru-seq",
+      "method_name": "Bru-seq",
+      "reading_extent": "Entire Illumina collection page visually inspected, including schematic and explanatory paragraphs; no new complete primary-paper or supplement review. Poster inspected at overview plus explicitly listed chemical-panel crops.",
+      "collection_page_one_based": 32,
+      "transitions": [
+        {
+          "before": "A transcriptionally active sample with RNA synthesis during bromouridine labelling.",
+          "change": "Bromouridine becomes incorporated into newly synthesized RNA.",
+          "after": "RNA preparation containing labelled and unlabelled transcripts.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p32 opening paragraph; Label with bromouridine schematic"
+            }
+          ]
+        },
+        {
+          "before": "Mixed RNA preparation containing bromouridine-labelled transcripts.",
+          "change": "Antibody-associated magnetic-bead enrichment and elution select labelled RNA; library preparation produces RNA-derived DNA.",
+          "after": "DNA library derived from the labelled RNA cohort.",
+          "evidence": [
+            {
+              "source": "rna_collection",
+              "locator": "p32 opening paragraph; Bead coated with anti-BrdU antibody through cDNA"
+            }
+          ]
+        }
+      ],
+      "measurement_role": "Enrich transcripts synthesized during a defined labelling period; inferred synthesis or turnover requires the experimental timing/comparison.",
+      "distinguishing_change": "Time-of-labelling information is introduced through a nucleotide analogue and recovered by selection, rather than an explicit nucleotide-level time barcode.",
+      "chemical_drawing_roles": [
+        {
+          "role": "incorporated_label_and_reagent",
+          "observation": "Stars on RNA and a Br-UTP caption denote incorporation in the schematic; the separate nucleoside drawings in the poster are chemical references, not independent reactions or evidence of use by every nearby method.",
+          "source": "rna_collection",
+          "locator": "p32 label panel; poster p1 left intercolumn Photoactivatable Nucleosides legend"
+        },
+        {
+          "role": "capture_support",
+          "observation": "Antibody-coated bead is the selection apparatus/association. Its generic shape does not establish an RNA-protein interaction assay.",
+          "source": "rna_collection",
+          "locator": "p32 antibody-bead column"
+        }
+      ],
+      "source_qualifications": [
+        "Collection prose places fragmentation after elution, whereas the diagram has Isolate and hydrolyze before capture. This ordering discrepancy is unresolved here; the common labelling and selection pattern remains interpretable.",
+        "Do not infer exact RNA birth time or a turnover rate from the presence of the label alone."
+      ]
+    }
+  ],
+  "cross_method_lessons": [
+    {
+      "lesson": "A shared library endpoint does not imply a shared measurement mechanism.",
+      "examples": [
+        "ClickSeq creates RNA-derived cDNA fragments; RASL ligates probe reporters; both yield DNA libraries."
+      ]
+    },
+    {
+      "lesson": "The useful shared unit is a scoped input-change-output relation, including what makes selection/copying/joining possible.",
+      "examples": [
+        "cP-RNA needs original and post-treatment RNA end chemistry.",
+        "ClickSeq needs azido terminus and alkyne adapter partner."
+      ]
+    },
+    {
+      "lesson": "The same physical feature may be biological information, a reagent handle, or an artifact-control device depending on role.",
+      "examples": [
+        "CAGE cap is an original RNA selection feature.",
+        "TIF barcodes include chimera controls.",
+        "Biotin is a recovery handle across different selected objects."
+      ]
+    },
+    {
+      "lesson": "Chemical drawings have explicit roles; do not turn a legend molecule into an input or a reaction.",
+      "examples": [
+        "AzNTP is a reagent structure; click-cycloaddition panel is an explicit transformation; biotin/psoralen figures are chemical references."
+      ]
+    },
+    {
+      "lesson": "A preparation can contain multiple chemical classes without branching the workflow.",
+      "examples": [
+        "cP-RNA mixtures",
+        "Bru-seq labelled and unlabelled RNA before enrichment"
+      ]
+    },
+    {
+      "lesson": "Provenance survives even when the original chemical feature does not.",
+      "examples": [
+        "Cap-selected cDNA is not capped DNA.",
+        "cP-selected DNA is not DNA carrying the original RNA cyclic phosphate."
+      ]
+    }
+  ],
+  "minimal_graph_use": {
+    "within_method": "Represent source-described actions and preparation boundaries; attach specific reactive group, association, sequence/topology and selection-origin claims to the relevant participant. Preserve source grouping unless evidence requires a distinction.",
+    "cross_method_candidates": [
+      "CAGE/TIF: compare use of capped RNA ends, but distinguish selection mechanism and single-end versus paired-end information.",
+      "RASL/ClickSeq: compare reporter-construction objectives while keeping probe ligation distinct from RNA copying and chemical adapter joining.",
+      "cP-RNA/Bru: compare selection logic, while distinguishing native end chemistry from introduced temporal label."
+    ],
+    "historical_edges": "No historical edge established by this review. Follow explicit cited primary development claims before recording built_on, adapted_from or a corresponding edge.",
+    "chemical_encoding": "Use supported reactive structures or identifiers at named constituents/groups when needed; symbolic RNA/DNA remainder is allowed. Whole mixed preparation need not have one formula/SMILES.",
+    "do_not_infer": [
+      "Exact reaction conditions from a generic mechanism panel.",
+      "Physical separation from multiple molecule lines.",
+      "Same mechanism from shared action names or reagent shapes.",
+      "A chronological predecessor merely from a shared feature."
+    ]
+  }
+}

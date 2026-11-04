@@ -103,6 +103,19 @@ REPRESENTATION RULES
    Pooling intact compartments differs from mixing their contents. An unchanged
    molecule in a different attachment or compartment state may have a different
    role. Do not manufacture chemical structures or formulas from a generic icon.
+   Distinguish a standalone molecule/legend drawing from a depicted reaction.
+   A legend identifies an entity; it does not establish that a nearby method uses
+   it. A reaction panel may clarify a workflow only when its named participants,
+   action and source context establish that association; cite both locations.
+   For that reaction, record the affected molecular part (end, base, strand or
+   linked partner), its supported before/after features, and its workflow role.
+   Keep symbolic RNA/DNA remainders when the source uses them. Do not invent a
+   whole-molecule structure, balanced equation or atom mapping. Do not silently
+   repair disagreement between a structural drawing and its caption.
+   An original analyte feature can determine selection without remaining on the
+   final reporter. Distinguish what is physically present from what its origin
+   allows the readout to represent. Neither a common molecule nor a common
+   purpose establishes the same mechanism.
 5. A shared operation name or reagent does not establish equivalence. Different
    local operations may implement the same purpose. Never assert interchangeability
    or a historical development edge from labels, resemblance, dates or citation
@@ -173,6 +186,15 @@ for the artifact. Preserve an early valid draft, then refine it as needed.
 
 
 AUTHOR_INSTRUCTIONS = """ROLE: AUTHOR
+When expected_method_names is supplied in CALLER CONTEXT, copy exactly those
+planning-owned labels into method_names, preserving spelling and capitalization.
+Use the same exact labels in method_scopes, paper_matches and scope references.
+These labels identify the assigned targets; they are not permission to assume
+scientific equivalence or expand scope. If sources contradict the assignment,
+record the source-backed scope uncertainty rather than silently renaming it.
+Run the supplied self_check with its --card argument before finishing; correct
+identity/format errors in this attempt and rerun that check. A valid check does
+not replace independent scientific review.
 First inventory what the diagram actually depicts: labels, materials, major
 transformations, branches and final product. Build the compact architecture and
 its source anchors from that inventory. Read the supplied method description and

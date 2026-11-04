@@ -1,0 +1,152 @@
+{
+  "format_version": "rna_comparison_groups/1.0",
+  "status": "development comparison overlays; independent admission not performed",
+  "groups": [
+    {
+      "id": "rna_copying_into_cdna",
+      "label": "Copy RNA into a cDNA reporter",
+      "kind": "shared_mechanism",
+      "members": [
+        {
+          "record_id": "clickseq",
+          "operation_ids": [
+            "op_rt"
+          ],
+          "explanation": "RNA-templated DNA synthesis is combined with stochastic AzNTP termination; the copied product has an intentionally blocked reactive end."
+        },
+        {
+          "record_id": "cage-seq",
+          "operation_ids": [
+            "op_rt"
+          ],
+          "explanation": "RNA-templated DNA synthesis yields cap-reaching and premature cDNA outcomes; downstream cap trapping treats those outcomes differently."
+        }
+      ],
+      "summary": "Both selected operations copy RNA into DNA by reverse transcription. Their primer architecture, termination behavior and desired products differ; this grouping asserts only that scoped copying mechanism.",
+      "evidence": [
+        {
+          "source_path": "experiments/transcriptomics_revision_20261104/patterns/rna_source_patterns.json",
+          "sha256": "ee66441f2e6b8087147aab370b80eca89a8474d7e49912ebf9b702d1c4783c1d",
+          "locator": "methods entries; Illumina collection pages 12,40",
+          "basis": "direct visual diagram and explanatory text review"
+        },
+        {
+          "source_path": "provenance/experiments/illumina_extraction_20261102/audit_01/records.jsonl.gz",
+          "sha256": "9414e1866f056c3504f06a811d63dae19abee9e7b8723145203b22704e4ce0fb",
+          "locator": "clickseq.candidate.operations[op_rt]; cage-seq.candidate.operations[op_rt]",
+          "basis": "archived candidate operations, mechanisms and source corrections inspected; cited primary passages not independently reopened for this comparison"
+        }
+      ],
+      "status": "source_grounded_comparison_candidate_not_canonical_or_historical",
+      "limitations": [
+        "Not a statement that the entire operations are equivalent or interchangeable.",
+        "Shared reverse transcription does not establish lineage or transfer of conditions.",
+        "CAGE archived separate output States describe molecular outcomes, not proven separate reaction fractions; this grouping does not endorse that old state partition."
+      ]
+    },
+    {
+      "id": "rna_original_end_selection",
+      "label": "Select RNA-origin reporters through terminal features",
+      "kind": "shared_purpose",
+      "members": [
+        {
+          "record_id": "cp-rna-seq",
+          "operation_ids": [
+            "o_cip",
+            "o_periodate",
+            "o_pnk",
+            "o_ligate"
+          ],
+          "explanation": "Differential end treatment makes originally cyclic-phosphate-bearing RNA dual-adapter-ligatable while susceptible other ends remain blocked; the entire sequence is needed to explain the selection."
+        },
+        {
+          "record_id": "cage-seq",
+          "operation_ids": [
+            "op_rt",
+            "op_bio_short",
+            "op_bio_full",
+            "op_rnase_short",
+            "op_rnase_full",
+            "op_capture_short",
+            "op_capture_full",
+            "op_purify"
+          ],
+          "explanation": "Copying, biotinylation, RNase protection and capture retain cDNA associated with a capped RNA end. Both successful and rejected molecular outcomes are included; the short branch fails capture."
+        }
+      ],
+      "summary": "Both recover a reporter population determined by an original RNA-end feature. cP-RNA selects through chemical protection and ligatability; CAGE selects cap-associated, 5-prime-complete cDNA through a hybrid/capture route.",
+      "evidence": [
+        {
+          "source_path": "experiments/transcriptomics_revision_20261104/patterns/rna_source_patterns.json",
+          "sha256": "ee66441f2e6b8087147aab370b80eca89a8474d7e49912ebf9b702d1c4783c1d",
+          "locator": "methods entries; Illumina collection pages 14,40",
+          "basis": "direct visual diagram and explanatory text review"
+        },
+        {
+          "source_path": "provenance/experiments/illumina_extraction_20261102/audit_01/records.jsonl.gz",
+          "sha256": "9414e1866f056c3504f06a811d63dae19abee9e7b8723145203b22704e4ce0fb",
+          "locator": "cp-rna-seq.candidate.operations[o_cip,o_periodate,o_pnk,o_ligate]; cage-seq.candidate.operations[op_rt through op_purify, both outcome branches]",
+          "basis": "archived candidate operations, mechanisms and source corrections inspected; cited primary passages not independently reopened for this comparison"
+        }
+      ],
+      "status": "source_grounded_comparison_candidate_not_canonical_or_historical",
+      "limitations": [
+        "Different end features, selected populations, substrates and mechanisms; this is a comparison of purpose, not a reusable interchangeable module.",
+        "Archived cP and CAGE split molecular fates into separate State records. They must not be rendered as independently aliquoted samples or new physical separations.",
+        "Neither the original cyclic phosphate nor RNA cap should be assigned as a chemical modification on the recovered DNA reporter."
+      ]
+    },
+    {
+      "id": "reporter_library_handles",
+      "label": "Connect reporter sequence to library handles",
+      "kind": "shared_purpose",
+      "members": [
+        {
+          "record_id": "clickseq",
+          "operation_ids": [
+            "op_click",
+            "op_pcr"
+          ],
+          "explanation": "Chemical adapter joining creates a triazole-linked cDNA template; subsequent PCR depends on polymerase read-through of that junction."
+        },
+        {
+          "record_id": "cp-rna-seq",
+          "operation_ids": [
+            "o_pnk",
+            "o_ligate",
+            "o_rt_pcr"
+          ],
+          "explanation": "End conversion establishes an adapter-ligatable RNA substrate, then ligation and RT-PCR make a DNA library from dual-adapter-bearing RNA."
+        },
+        {
+          "record_id": "rasl-seq",
+          "operation_ids": [
+            "op_index"
+          ],
+          "explanation": "The source-level barcoding/P7 block is resolved by the archived primary correction as PCR on ligated DNA probes. Its library is probe-derived, not an RNA-to-cDNA product."
+        }
+      ],
+      "summary": "These connected source blocks give the reporter the handles needed for library amplification, using different substrates and interfaces: click-linked cDNA, enzymatically adapter-ligated RNA, and primer-incorporated handles on a DNA probe reporter.",
+      "evidence": [
+        {
+          "source_path": "experiments/transcriptomics_revision_20261104/patterns/rna_source_patterns.json",
+          "sha256": "ee66441f2e6b8087147aab370b80eca89a8474d7e49912ebf9b702d1c4783c1d",
+          "locator": "methods entries; Illumina collection pages 11,12,14",
+          "basis": "direct visual diagram and explanatory text review"
+        },
+        {
+          "source_path": "provenance/experiments/illumina_extraction_20261102/audit_01/records.jsonl.gz",
+          "sha256": "9414e1866f056c3504f06a811d63dae19abee9e7b8723145203b22704e4ce0fb",
+          "locator": "clickseq.candidate.operations[op_click,op_pcr] and correction_click_product; cp-rna-seq.candidate.operations[o_pnk,o_ligate,o_rt_pcr]; rasl-seq.candidate.operations[op_index] and corr_product",
+          "basis": "archived candidate operations, mechanisms and source corrections inspected; cited primary passages not independently reopened for this comparison"
+        }
+      ],
+      "status": "source_grounded_comparison_candidate_not_canonical_or_historical",
+      "limitations": [
+        "Broad shared purpose only; neither a shared reaction nor an assertion of comparable yields.",
+        "RASL catalogue capture/ligation ordering differs from its primary protocol; selection of op_index avoids endorsing the disputed earlier order.",
+        "ClickSeq polymerase read-through must remain an interface requirement; a joined DNA-looking glyph alone does not establish amplifiability."
+      ]
+    }
+  ]
+}

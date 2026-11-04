@@ -7,7 +7,7 @@ let inventory = [], selected = '', request = 0;
 function link(text, url) { const a = el('a',text); if (/^https?:\/\//.test(url || '')) { a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } return a; }
 function section(parent, title) { const d = el('details',null,'section'); d.append(el('summary',title)); parent.append(d); return d; }
 function raw(parent, title, value) { const d = section(parent,title); d.append(el('pre',JSON.stringify(value,null,2))); }
-function fields(parent, rows) { const d = el('div',null,'fields'); for (const [name,value] of rows) { if (value == null || value === '') continue; d.append(el('b',name),el('span',Array.isArray(value) ? value.join('; ') : String(value))); } parent.append(d); }
+function fields(parent, rows) { const d = el('div',null,'fields'); for (const [name,value] of rows) { if (value == null || value === '' || (Array.isArray(value) && !value.length)) continue; d.append(el('b',name),el('span',Array.isArray(value) ? value.join('; ') : String(value))); } parent.append(d); }
 function evidence(parent, items, record) {
   for (const e of items || []) {
     const box = el('div',null,'evidence'), s = record.sources[e.source_id] || {};

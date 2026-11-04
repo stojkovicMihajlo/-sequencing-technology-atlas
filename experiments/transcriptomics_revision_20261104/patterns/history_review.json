@@ -1,0 +1,177 @@
+{
+  "reviewed_file": "experiments/transcriptomics_revision_20261104/patterns/rna_history_relations.json",
+  "reviewed_sha256": "87a9ac9525148bf76306b929bf82927877c44dbc4a5f903d88c873e963ee2303",
+  "date": "2026-11-04",
+  "verdict": "development prototype supported in substance; two targeted representation corrections recommended",
+  "review_scope": "Independent engineering-agent check of the two proposed historical examples against primary Results/Methods and archived operation meanings. Not expert experimental validation, exhaustive lineage reconstruction or canonical graph admission.",
+  "primary_sources": [
+    {
+      "paper": "Picelli et al. 2013 Smart-seq2",
+      "path": "../technology_atlas/v2/work/component_curation_20261008/run01/drafts/rna_batch04_sources/smartseq2_main_nature.pdf",
+      "sha256": "bb8ee0c7f0b815b53b91a0cc26c206eb2c5c4d194370ada1e28a00e2dd49dd97",
+      "url": "https://www.nature.com/articles/nmeth.2639",
+      "locations_checked": "PDF pp1–3 Results and figures; p4 Online Methods RT and PCR; no new supplement audit."
+    },
+    {
+      "paper": "Hashimshony et al. 2016 CEL-Seq2",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4848782/",
+      "doi": "10.1186/s13059-016-0938-8",
+      "pmid": "27121950",
+      "locations_checked": "Results optimization, ligation-free library preparation, platform implementation; Methods CEL-Seq/CEL-Seq2 and C1; discussion of 3-prime bias. Browser full text; no original binary content pin created here."
+    }
+  ],
+  "anchor_source": {
+    "path": "provenance/experiments/illumina_extraction_20261102/audit_01/records.jsonl.gz",
+    "sha256": "9414e1866f056c3504f06a811d63dae19abee9e7b8723145203b22704e4ce0fb",
+    "selected_operation_records": {
+      "cel-seq": {
+        "prep": {
+          "label": "Fragment, add adapters and reverse transcribe",
+          "inputs": [
+            "amplified_rna"
+          ],
+          "outputs": [
+            "library"
+          ]
+        }
+      },
+      "smart-seq-nanocage-cagescan": {
+        "o_first": {
+          "label": "First strand synthesis with Moloney murine leukemia virus reverse transcriptase",
+          "inputs": [
+            "s_rna",
+            "s_dt"
+          ],
+          "outputs": [
+            "s_first"
+          ]
+        },
+        "o_second": {
+          "label": "Second strand synthesis",
+          "inputs": [
+            "s_first",
+            "s_tso"
+          ],
+          "outputs": [
+            "s_double"
+          ]
+        },
+        "o_pcr": {
+          "label": "PCR amplification",
+          "inputs": [
+            "s_double"
+          ],
+          "outputs": [
+            "s_amplified"
+          ]
+        },
+        "o_purify": {
+          "label": "Purify",
+          "inputs": [
+            "s_amplified"
+          ],
+          "outputs": [
+            "s_dna"
+          ]
+        }
+      },
+      "smart-seq2": {
+        "op_rt": {
+          "label": "First strand synthesis with Moloney murine leukemia virus reverse transcriptase",
+          "inputs": [
+            "s_rna",
+            "s_primer"
+          ],
+          "outputs": [
+            "s_first"
+          ]
+        },
+        "op_switch": {
+          "label": "Template-switching / cDNA synthesis",
+          "inputs": [
+            "s_first",
+            "s_tso"
+          ],
+          "outputs": [
+            "s_switched"
+          ]
+        },
+        "op_pcr": {
+          "label": "PCR",
+          "inputs": [
+            "s_switched"
+          ],
+          "outputs": [
+            "s_amp"
+          ]
+        }
+      }
+    }
+  },
+  "relation_checks": [
+    {
+      "relation": "smart-seq_to_smart-seq2",
+      "primary_support": "Confirmed: terminal LNA guanylate replacement, altered RT conditions/order, and omission of first-strand cleanup with KAPA preamplification are explicitly reported. Tested commercial SMARTer comparisons must not be generalized to every historical variant.",
+      "gain_and_tradeoff": "Qualitative gains and amplification-dependent expression-bias warning are supported. The existing caution against adding individual gains is appropriate.",
+      "anchor_result": "Target op_switch/op_rt/op_pcr exist and are relevant. o_purify is downstream of PCR, so leaving it out of the removed-cleanup claim is correct. The TSO change lacks its relevant predecessor anchor o_second.",
+      "concentration_check": "No current stock-versus-final error found: 6 mM MgCl2 is explicitly a final SMARTer-buffer concentration in Results p2. Online Methods p4 lists 100 mM MgCl2 and 5 M betaine as stocks alongside added volumes, not final reaction concentrations. Do not promote these stock values to method conditions or derive finals without a consistent scoped reaction volume."
+    },
+    {
+      "relation": "cel-seq_to_cel-seq2",
+      "primary_support": "The later paper explicitly attributes its development to CEL-Seq and reports replacing aRNA-adaptor ligation with a tailed random primer during RT.",
+      "gain_and_tradeoff": "93.8% versus 60.9% is the stated same-aRNA mapping comparison. The three-prime/splicing qualification and warning about a UMI-modified comparison arm are supported.",
+      "anchor_result": "The archived prep operation covers the affected library-conversion block. Leaving target operations empty is appropriate because no CEL-Seq2 workflow was extracted.",
+      "scope_check": "Bead cleanup describes the manual optimization. C1 instead omits cDNA cleanup, heat-inactivates enzymes, performs IVT separately, and pools aRNA afterward. Early barcoding remains supported; current prose does not wrongly assert early pooling."
+    }
+  ],
+  "corrections_needed": [
+    {
+      "id": "missing_predecessor_tso_anchor",
+      "relation": "smart-seq_to_smart-seq2",
+      "severity": "moderate",
+      "field": "source_operation_ids and changes[0]",
+      "action": "Include o_second as the source-side TSO/template-switch anchor, with op_switch on the target side. It is a broader archived block, not an exact one-to-one operation identity.",
+      "status": "applied_and_rechecked"
+    },
+    {
+      "id": "celseq2_variant_scope",
+      "relation": "cel-seq_to_cel-seq2",
+      "severity": "moderate",
+      "field": "changes[1] and summary scope",
+      "action": "Qualify bead-cleanup optimization as the manual CEL-Seq2 workflow; preserve C1 as a distinct implementation if later expanded into a graph.",
+      "status": "applied_and_rechecked"
+    }
+  ],
+  "retain": [
+    "Both typed method_development relations have explicit later-primary-paper support, rather than relying on shared vocabulary or publication dates alone.",
+    "Keep the grouped Smart-Seq card restricted to its Smart-Seq method scope.",
+    "Keep paper-reported missing cleanup distinct from the depicted post-PCR cleanup.",
+    "Do not fabricate a CEL-Seq2 target workflow to satisfy operation-level anchors.",
+    "Preserve comparison-specific gains and exact before-baseline qualifications."
+  ],
+  "before_canonical_admission": [
+    "Bind each relation to exact workflow artifact/version hashes, not only local operation IDs.",
+    "Register a pinned CEL-Seq2 primary-source rendition and evidence locators; this browser check does not replace source custody.",
+    "Preserve original predecessor papers as distinct evidence with truthful read scope."
+  ],
+  "changes_made": "Only this review file; proposed relations and archived extractions were not edited.",
+  "rechecks": [
+    {
+      "scope": "Only the two requested corrections; no expanded scientific review.",
+      "corrected_file": "experiments/transcriptomics_revision_20261104/patterns/rna_history_relations.json",
+      "corrected_file_sha256": "87a9ac9525148bf76306b929bf82927877c44dbc4a5f903d88c873e963ee2303",
+      "status": "both_requested_corrections_applied_and_rechecked",
+      "checks": [
+        {
+          "issue_id": "missing_predecessor_tso_anchor",
+          "result": "o_second is now included among predecessor operation anchors; the TSO change retains target op_switch."
+        },
+        {
+          "issue_id": "celseq2_variant_scope",
+          "result": "The bead-cleanup change now explicitly says In the manual protocol."
+        }
+      ],
+      "verdict": "The two identified corrections are resolved for this development prototype; original canonical-admission limitations remain."
+    }
+  ]
+}

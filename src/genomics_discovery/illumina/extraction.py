@@ -79,6 +79,34 @@ def card_references(card):
     return [*card.get("references", []), *card.get("recovered_references", [])]
 
 
+def expected_method_names(card):
+    """Identity comes from planning; spelling is not inferred from assay labels."""
+    names = card.get("verified_method_names") if card else None
+    return tuple(names) if names else None
+
+
+def author_schema(model, card):
+    """Bind the assigned identity without changing the scientific record schema."""
+    schema = model.model_json_schema()
+    names = expected_method_names(card)
+    if names:
+        field = schema["properties"]["method_names"]
+        field.update(minItems=len(names), maxItems=len(names), uniqueItems=True)
+        field["items"] = {**field["items"], "enum": list(names)}
+    return schema
+
+
+def validate_assigned_extraction(document, registry, card, *, record_id):
+    """The worker self-check and final admission apply the same assignment checks."""
+    errors = validate_extraction(document, registry, expected_record_id=record_id,
+        expected_title=card_title(card) if card else None,
+        expected_method_names=expected_method_names(card),
+        require_paper_matches=requires_paper_matches(card) if card else False)
+    if card:
+        errors += paper_coverage(document, card)
+    return errors
+
+
 def requires_paper_matches(card):
     return bool(card.get("require_paper_matches")) or any(r.get("role", "recovered") in {"references", "recovered"}
                for r in card_references(card))
@@ -361,8 +389,9 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
             raise ValueError("Original diagram changed before image delivery")
         model = author_model if role == "author" else reviewer_model
         schema = attempt / "schema.json"
-        write(schema, model.model_json_schema())
+        write(schema, author_schema(model, card) if role == "author" else model.model_json_schema())
         context = {"record_id": card["record_id"], "title": card_title(card),
+            "expected_method_names": expected_method_names(card),
             "representation_version": representation,
             "scope": card.get("implementation_scope") or "The assigned Illumina schematic: its title/caption targets and depicted alternatives. Unshown adaptations or background references do not automatically add workflow targets.",
             "source_bindings": card.get("source_bindings", []),
@@ -420,10 +449,7 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
                 raise StageFailure("missing_artifact", "Native process completed without the required artifact.json; "
                                    "inspect archived final.txt and command events before retrying.")
             document = model.model_validate_json((attempt / "artifact.json").read_bytes())
-            errors = (validate_extraction(document, registry, expected_record_id=card["record_id"],
-                        expected_title=context["title"],
-                        expected_method_names=tuple(card["verified_method_names"]) if card.get("verified_method_names") else None,
-                        require_paper_matches=requires_paper_matches(card)) + paper_coverage(document, card)
+            errors = (validate_assigned_extraction(document, registry, card, record_id=card["record_id"])
                       if role == "author" else validate_review(document, candidate, registry))
             if errors:
                 raise StageFailure("artifact_validation", "; ".join(errors))
@@ -643,11 +669,7 @@ def main(argv=None):
             if args.extraction_format and document.format_version != args.extraction_format:
                 raise ValueError("Extraction does not use the required contract: " + args.extraction_format)
             card = read(args.card) if args.card else None
-            errors = validate_extraction(document, registry, expected_record_id=args.record_id,
-                expected_title=card_title(card) if card else None,
-                require_paper_matches=requires_paper_matches(card) if card else False)
-            if card:
-                errors += paper_coverage(document, card)
+            errors = validate_assigned_extraction(document, registry, card, record_id=args.record_id)
     except Exception as exc:
         errors = [str(exc)]
     result = {"valid": not errors, "errors": errors,

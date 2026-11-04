@@ -1,0 +1,134 @@
+{
+  "format_version": "rna_history_examples/1.0",
+  "created_at": "2026-11-04",
+  "scope": "Two manually source-checked historical development examples for the small RNA prototype. This is not a full historical audit, independent scientific validation, or canonical graph admission. Existing extracted workflows remain unchanged.",
+  "relations": [
+    {
+      "id": "smart-seq_to_smart-seq2",
+      "source": "smart-seq-nanocage-cagescan",
+      "source_method": "Smart-Seq",
+      "target": "smart-seq2",
+      "kind": "method_development",
+      "status": "source_checked_prototype",
+      "summary": "Smart-seq2 retains the Smart-seq template-switching approach while changing the template-switch oligo, reverse-transcription conditions and preamplification.",
+      "design_change": "Use a 3\u2032 terminal LNA guanylate in the template-switching oligo; add betaine with increased MgCl2; introduce dNTPs before RNA denaturation; use KAPA HiFi preamplification without the intervening first-strand cDNA bead cleanup.",
+      "changes": [
+        {
+          "before": "The tested commercial SMARTer IIA template-switching oligo.",
+          "after": "Template-switching oligo terminating in rGrG+G, with +G denoting LNA guanylate.",
+          "change_type": "reagent_structure",
+          "affected_operation_ids": [
+            "op_switch"
+          ],
+          "source_locator": "Picelli et al. 2013, PDF p1, first results paragraph and Fig1a."
+        },
+        {
+          "before": "SMARTer-like reverse-transcription buffer with 6 mM MgCl2.",
+          "after": "Betaine and higher MgCl2 concentrations; dNTPs introduced before RNA denaturation in the optimized procedure.",
+          "change_type": "conditions_and_order",
+          "affected_operation_ids": [
+            "op_rt"
+          ],
+          "source_locator": "PDF pp1\u20132, Fig1b\u2013c; Online Methods, Reverse transcription."
+        },
+        {
+          "before": "Bead purification of first-strand cDNA followed by Advantage 2 preamplification.",
+          "after": "KAPA HiFi preamplification directly after reverse transcription, omitting that intermediate cleanup.",
+          "change_type": "enzyme_and_workflow_interface",
+          "affected_operation_ids": [
+            "op_pcr"
+          ],
+          "source_locator": "PDF p2, paragraph beginning 'The sensitivity and accuracy'; PDF p4, PCR preamplification."
+        }
+      ],
+      "source_operation_ids": [
+        "o_first",
+        "o_second",
+        "o_pcr"
+      ],
+      "target_operation_ids": [
+        "op_rt",
+        "op_switch",
+        "op_pcr"
+      ],
+      "limitation_addressed": "Low cDNA recovery, length and transcript detection from single-cell input; an intermediate cleanup also complicates low-volume processing.",
+      "reported_gain": "The authors report increased cDNA yield/length and improved transcript detection and coverage in their tested settings. Individual modifications and the combined protocol are distinct comparisons; gains must not be assumed additive.",
+      "tradeoffs": "The paper reports amplification-dependent expression bias and warns that comparisons across amplification procedures can be complicated.",
+      "evidence": [
+        {
+          "url": "https://www.nature.com/articles/nmeth.2639",
+          "locator": "Picelli et al. 2013, pp1096\u20131098 and Online Methods; local PDF pp1\u20134",
+          "quote": "improved reverse transcription, template switching and preamplification",
+          "source_path": "../technology_atlas/v2/work/component_curation_20261008/run01/drafts/rna_batch04_sources/smartseq2_main_nature.pdf",
+          "source_sha256": "bb8ee0c7f0b815b53b91a0cc26c206eb2c5c4d194370ada1e28a00e2dd49dd97",
+          "read_scope": "Main results and protocol passages concerning the listed changes; supplementary files not newly reviewed for this relation."
+        },
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3467340/",
+          "locator": "Ramskold et al. 2012; predecessor identity, also reference7 of Picelli et al. 2013",
+          "support": "Predecessor identity and template-switching full-length transcriptome profiling; detailed before/after claim is reported by Picelli et al."
+        }
+      ],
+      "limitations": "Source diagram groups Smart-Seq with nanoCAGE/CAGEscan; this edge applies only to the Smart-Seq scope. The displayed o_purify follows PCR and is NOT the first-strand cleanup removed in Smart-seq2. That removed operation is described in the paper but absent from the selected diagram, so no false operation anchor is supplied. This edge is not an assertion that every current commercial SMART product has the same protocol. The TSO change anchors o_second because the archived broad source block includes template switching even though its literal caption says Second strand synthesis.",
+      "source_year": 2012,
+      "target_year": 2013
+    },
+    {
+      "id": "cel-seq_to_cel-seq2",
+      "source": "cel-seq",
+      "source_method": "CEL-Seq",
+      "target": "cel-seq2",
+      "target_method": "CEL-Seq2",
+      "target_workflow_status": "not_extracted_in_this_prototype",
+      "kind": "method_development",
+      "status": "source_checked_prototype",
+      "summary": "CEL-Seq2 retains early cell barcoding and IVT amplification, but changes primers, enzymes, cleanup and library construction.",
+      "design_change": "A useful isolated change replaces adapter ligation to amplified RNA with an adapter-tailed random hexamer during its reverse transcription into cDNA.",
+      "changes": [
+        {
+          "before": "Attach the second sequencing adapter to amplified RNA by ligation, then reverse transcribe.",
+          "after": "Introduce that adapter through the 5\u2032 tail of a random hexamer used for reverse transcription.",
+          "change_type": "handle_introduction_mechanism",
+          "source_operation_ids": [
+            "prep"
+          ],
+          "affected_operation_ids": [],
+          "source_locator": "Results: Ligation-free library preparation improves read mapping; Fig1; Methods: CEL-Seq and CEL-Seq2."
+        },
+        {
+          "before": "Original long primer and original enzyme/column cleanup workflow.",
+          "after": "In the manual protocol: shorter UMI-bearing primer, modified cDNA synthesis reagents and bead cleanup.",
+          "change_type": "multiple_component_optimization",
+          "source_operation_ids": [],
+          "affected_operation_ids": [],
+          "source_locator": "Results: Optimization of the CEL-Seq protocol; Methods."
+        }
+      ],
+      "source_operation_ids": [
+        "prep"
+      ],
+      "target_operation_ids": [],
+      "limitation_addressed": "Inefficient library conversion and primer-dimer interference associated with adapter ligation, alongside incomplete transcript recovery.",
+      "reported_gain": "For libraries made from the same amplified RNA, the paper reports 93.8% versus 60.9% mapping of barcoded reads with the no-ligation versus ligation preparation. This is the specific comparison, not a universal yield guarantee.",
+      "tradeoffs": "CEL-Seq2 remains a strongly 3\u2032-biased counting assay and does not recover most splice information. The paper's comparison arm already included a UMI modification; do not attribute all observed gains solely to first introducing UMIs.",
+      "evidence": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4848782/",
+          "locator": "Hashimshony et al. 2016, Results: Ligation-free library preparation improves read mapping; Fig1; Methods",
+          "quote": "thus eliminating the ligation step",
+          "read_scope": "Results and Methods passages reporting precursor, design changes, comparisons and limitations; supplementary detailed protocol not read for this small relation."
+        },
+        {
+          "url": "https://doi.org/10.1016/j.celrep.2012.08.003",
+          "locator": "Original CEL-Seq paper, reference6 in CEL-Seq2",
+          "support": "Predecessor bibliographic identity. Before/after comparison here is explicitly described by the later primary paper; this is not a claim of fresh full-text review of the earlier paper."
+        }
+      ],
+      "limitations": "The existing CEL-Seq depiction groups fragmentation, adapter addition and reverse transcription in prep, so the edge anchors that composite operation. CEL-Seq2 is a literature endpoint only in this prototype; no workflow is invented. It is displayed separately from the eight archived workflow depictions. Bead-cleanup wording refers to the manual protocol. The C1 implementation instead heat-inactivates second-strand enzymes, performs IVT separately, and pools amplified RNA afterward; do not infer one universal pooling/cleanup route.",
+      "source_year": 2012,
+      "target_year": 2016
+    }
+  ],
+  "comparison_groups": [],
+  "independent_review": "history_review.json; two requested scope/anchor corrections applied before export."
+}
