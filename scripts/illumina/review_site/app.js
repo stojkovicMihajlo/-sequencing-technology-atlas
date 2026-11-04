@@ -27,7 +27,17 @@ function filterRecords() {
   for (const r of found) {
     const b = el('button',r.title,r.record_id === selected ? 'active' : '');
     b.append(el('small',batchLabel(r.batch)+' · '+labels[r.status]));
-    b.onclick = () => { location.hash = encodeURIComponent(r.record_id); }; $('records').append(b);
+    b.type = 'button';
+    b.setAttribute('aria-controls', 'detail');
+    b.setAttribute('aria-pressed', String(r.record_id === selected));
+    b.onclick = () => {
+      // Load directly, including a second click on the current record. A hash
+      // change alone neither retries that record nor reveals an offscreen panel.
+      const hash = '#' + encodeURIComponent(r.record_id);
+      try { if (location.hash !== hash) window.history.pushState(null, '', hash); } catch (_) { /* Navigation still works without URL access. */ }
+      return openRecord(r.record_id, {reveal: true});
+    };
+    $('records').append(b);
   }
 }
 function inspect(parent, item, kind, record) {
@@ -95,18 +105,20 @@ function renderRecord(r) {
   for(const check of r.review?.checks||[]){const d=section(review,check.target+' · '+check.verdict);d.append(el('p',check.rationale));evidence(d,check.evidence,r);}
   raw(root,'All exact State / Operation / Flow records',c);raw(root,'Audit flags and research questions',{flags:r.flags,errors:r.errors,research_questions:r.research_questions,attempt_directory:r.attempt_directory});
 }
-async function openRecord(id) {
+async function openRecord(id, {reveal = false} = {}) {
+  const ticket = ++request;
   const row=inventory.find(r=>r.record_id===id);if(!row){$('detail').replaceChildren(el('p','No source record has this ID.'));return;}
-  selected=id;filterRecords();const ticket=++request;$('detail').replaceChildren(el('p','Loading '+row.title+'…'));
-  try{const response=await fetch(row.file);if(!response.ok)throw Error('Record could not be loaded');const r=await response.json();if(ticket===request)renderRecord(r);}catch(e){if(ticket===request)$('detail').replaceChildren(el('p',e.message,'warning'));}
+  selected=id;filterRecords();$('detail').replaceChildren(el('p','Loading '+row.title+'…'));
+  if (reveal) { $('detail').focus({preventScroll:true}); $('detail').scrollIntoView({behavior:'smooth',block:'start'}); }
+  try{const response=await fetch(row.file,{cache:'no-store'});if(!response.ok)throw Error('Record could not be loaded (HTTP '+response.status+')');const r=await response.json();if(ticket===request)renderRecord(r);}catch(e){if(ticket===request)$('detail').replaceChildren(el('p','Could not display '+row.title+': '+e.message+'. Click the card to retry.','warning'));}
 }
 async function start(){
-  const response=await fetch('index.json');if(!response.ok)throw Error('Inventory could not be loaded');const data=await response.json();inventory=data.records;
+  const response=await fetch('index.json',{cache:'no-store'});if(!response.ok)throw Error('Inventory could not be loaded');const data=await response.json();inventory=data.records;
   const stats=[['Source depictions',data.manifest.source_occurrences],...Object.entries(data.manifest.counts).map(([k,v])=>[labels[k],v]),['Unique methods','Not consolidated']];
   for(const[label,value]of stats){const d=el('div',null,'stat');d.append(el('strong',value),el('span',label));$('summary').append(d);}
   if(data.manifest.comparison){$('pair').href=data.manifest.comparison.url;$('pair').hidden=false;}
   for(const id of ['search','status','batch'])$(id).addEventListener('input',filterRecords);
-  window.addEventListener('hashchange',()=>openRecord(decodeURIComponent(location.hash.slice(1))));
+  window.addEventListener('hashchange',()=>openRecord(decodeURIComponent(location.hash.slice(1)), {reveal:true}));
   await openRecord(decodeURIComponent(location.hash.slice(1))||'drop-seq');
 }
 start().catch(e=>{$('detail').replaceChildren(el('p','Could not open this review export. Serve its directory with python3 -m http.server. '+e.message,'warning'));});
