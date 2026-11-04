@@ -1,0 +1,28 @@
+PURPOSE
+Produce the transcriptomics portion of the sequencing technology atlas using the existing Illumina schematic representation and reviewed paper-based connections. This is a bounded production batch, not development of a universal extraction framework.
+
+THIS BATCH
+48 original source occurrences, approximately 19 candidate method names, in four identity-planning batches. Identity planners and fresh reviewers determine the actual scoped implementations. A repeated depiction is evidence for a method, not a new extraction job by default. Names, shared citations and hashes nominate/check records; they do not prove scientific identity.
+
+Coverage: larger_01/source_scope.csv accounts for all478 source occurrences:48 selected,6 completed-pilot sources reused,10 held,414 pending. The existing source census and all earlier attempts remain unchanged.
+
+EXECUTION
+batch.sbatch -> atlas_batch.py -> batching.execute_batches -> global_plan.prepare_global/execute_component/admit_global -> native_planning.write_workflow_bundles -> extract_registered_workflow -> build_graph.
+Four concurrent planning/extraction workers; at most two simultaneous cross-batch identity reviews. Same requested gpt-6.1-sol/xhigh and independent review. No prior generated extraction is used as scientific evidence. Oversized or unresolved identities are held explicitly. One correction/review cycle per extraction.
+
+TRACKING
+source_scope.json and source_dispositions.json account for source occurrences.
+state.json and extractions/state.json distinguish planning, identity review, extraction, supported graphs and failures.
+tracking.py exports methods.csv, changes.csv and ledger.json from existing results, preserving artifact paths and hashes. This is a read-only report, not another scientific reviewer.
+
+CONNECTIONS AND CLASSIFICATION
+A connection record preserves the earlier method/component, relationship type, exact design-change description, affected operations, limitation, reported gain, trade-offs, evidence and review outcome. One existing claim may contain several design changes.
+Relationship types currently distinguish whole-method development, component adoption, mechanistic precedent and comparison. Shared mechanism/purpose comparisons also exist in the paired-method runner. Comparison or mechanistic similarity is not ancestry.
+Change categories are deliberately unassigned. After collecting supported changes, review the actual descriptions, split multi-change claims where evidence supports it, and draft a small codebook with examples and exclusion rules. Assign multiple categories where needed; keep unresolved cases visible. Version these annotations separately so revising a category never requires re-extracting the workflow. Categories are research outputs, not predetermined universal axes.
+
+HISTORY HANDOFF
+This Slurm batch automatically extracts and reviews workflows. Existing citation_lineage_pilot separately traces reviewed methods through primary-paper citations. Before scheduling its next batch, verify each scoped method's actual primary source from PaperMatch; a related full-text paper is not automatically that method's primary paper. The current full-citation runner requires registered JATS bibliography. PDF-aware paired comparison does not provide PDF bibliography extraction. Do not silently select the first available full text or claim history ran when only extraction completed.
+
+COMPLETED PILOTS
+Smart-seq2: supported source schematic after fresh review,5Operations/7States/11Flows; no revision.
+Drop-seq history:21 claims,13 published overlay relationships,8 withheld. Published breakdown:3 component adoptions,5 mechanistic precedents,5 comparisons;0 whole-method development edges. This demonstrates the separation of relationship types, not full-atlas completion or expert-validated accuracy.
