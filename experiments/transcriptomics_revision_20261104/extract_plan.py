@@ -80,12 +80,31 @@ def load_plan(directory):
     return worklist, bundles
 
 
-async def execute(planning_run, output, *, workers=2, worker=None):
+def select_bundles(worklist, bundles, unit_ids=None):
+    """Select exact reviewed units without changing their identity or source plan."""
+    planned_ids = [unit['unit_id'] for unit in worklist['units']]
+    requested = list(planned_ids if unit_ids is None else unit_ids)
+    if not requested:
+        raise ValueError('Select at least one reviewed work unit')
+    if len(requested) != len(set(requested)):
+        raise ValueError('Duplicate requested work unit IDs')
+    unknown = set(requested) - set(planned_ids)
+    if unknown:
+        raise ValueError('Unknown reviewed work unit IDs: ' + ', '.join(sorted(unknown)))
+    by_id = {bundle['unit_id']: bundle for bundle in bundles}
+    selected = set(requested)
+    return [by_id[unit_id] for unit_id in planned_ids if unit_id in selected]
+
+
+async def execute(planning_run, output, *, workers=2, worker=None, unit_ids=None):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Native extraction must run in a Sherlock Slurm allocation')
     if not 1 <= workers <= 16:
         raise ValueError('Use 1–16 explicitly selected workers')
-    worklist, bundles = load_plan(planning_run)
+    # Reopen the complete reviewed plan and every source pin before selection.
+    # A partial retry must not hide a modified or inconsistent parent plan.
+    worklist, all_bundles = load_plan(planning_run)
+    bundles = select_bundles(worklist, all_bundles, unit_ids)
     output.mkdir(parents=True, exist_ok=False)
     cards = [read(b['card_path']) for b in bundles]
     inventory = output / 'inventory.json'
@@ -94,6 +113,11 @@ async def execute(planning_run, output, *, workers=2, worker=None):
         'model': 'gpt-6.1-sol', 'effort': 'xhigh', 'workers': workers, 'max_revisions': 1,
         'inventory_sha256': sha(inventory), 'record_ids': [c['record_id'] for c in cards],
         'worklist_sha256': digest(worklist), 'planning_run': str(planning_run),
+        'unit_selection': {'mode': 'all_reviewed' if unit_ids is None else 'explicit_subset',
+            'requested_unit_ids': None if unit_ids is None else list(unit_ids),
+            'selected_unit_ids': [b['unit_id'] for b in bundles],
+            'unselected_unit_ids': [u['unit_id'] for u in worklist['units']
+                                    if u['unit_id'] not in {b['unit_id'] for b in bundles}]},
         'prior_extractions_used_as_evidence': False}
     state = {'format_version': 'illumina_batch/1.0', 'started_at': now(),
         'slurm_job_id': os.environ['SLURM_JOB_ID'], 'policy': policy,
@@ -137,14 +161,16 @@ async def execute(planning_run, output, *, workers=2, worker=None):
     return report
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument('--census', type=Path, help='First run independent source-identity planning.')
     source.add_argument('--planning-run', type=Path, help='Reuse an exact completed reviewed plan.')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--workers', type=int, default=2)
-    args = parser.parse_args()
+    parser.add_argument('--unit-id', action='append', dest='unit_ids',
+                        help='Extract only this exact reviewed work unit; repeat for a subset.')
+    args = parser.parse_args(argv)
 
     async def both():
         if args.census:
@@ -153,7 +179,8 @@ def main():
                 return {'passed': False, 'reason': 'source identity plan held; extraction not launched'}
         else:
             planning = args.planning_run.resolve()
-        return await execute(planning, args.output.resolve() / 'extractions', workers=args.workers)
+        return await execute(planning, args.output.resolve() / 'extractions', workers=args.workers,
+                             unit_ids=args.unit_ids)
 
     report = asyncio.run(both())
     print(report)

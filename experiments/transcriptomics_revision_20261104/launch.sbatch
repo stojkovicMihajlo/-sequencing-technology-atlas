@@ -60,8 +60,17 @@ PY
 "$ATLAS_CODEX_BIN_DIR/codex" login status
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p asyncio -q \
     tests/illumina experiments/citation_lineage_pilot/test_contract.py \
-    experiments/citation_lineage_pilot/test_pair.py experiments/transcriptomics_revision_20261104 \
+    experiments/citation_lineage_pilot/test_pair.py experiments/transcriptomics_revision_20261104/test_*.py \
     --junitxml="$ATLAS_REVISION_ROOT/software_${SLURM_JOB_ID}.xml"
+source_args=()
+if [[ -n "${ATLAS_PLANNING_RUN:-}" ]]; then
+    source_args=(--planning-run "$ATLAS_PLANNING_RUN")
+    # sbatch positional arguments are exact reviewed unit IDs, not shell text.
+    for unit_id in "$@"; do source_args+=(--unit-id "$unit_id"); done
+else
+    [[ "$#" -eq 0 ]] || { printf 'Unit retries require ATLAS_PLANNING_RUN\n' >&2; exit 2; }
+    source_args=(--census "$ATLAS_REPOSITORY/experiments/transcriptomics_revision_20261104/pilot_sources.json")
+fi
 "$ATLAS_ENV_DIR/bin/python" experiments/transcriptomics_revision_20261104/extract_plan.py \
-    --census "$ATLAS_REPOSITORY/experiments/transcriptomics_revision_20261104/pilot_sources.json" \
-    --output "$ATLAS_REVISION_ROOT/$ATLAS_REVISION_OUTPUT" --workers 2
+    "${source_args[@]}" --output "$ATLAS_REVISION_ROOT/$ATLAS_REVISION_OUTPUT" \
+    --workers "${ATLAS_EXTRACTION_WORKERS:-2}"

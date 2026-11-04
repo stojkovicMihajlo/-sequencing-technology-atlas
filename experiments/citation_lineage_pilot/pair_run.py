@@ -6,12 +6,14 @@ Uses the existing image transport, graph group query and source/review gates.
 
 import argparse
 import asyncio
+import hashlib
 import json
 import os
 from pathlib import Path
 import shlex
 import sys
 import time
+import xml.etree.ElementTree as ET
 
 from genomics_discovery.execution.codex_worker import CodexWorker, assess_archived_attempt
 from genomics_discovery.illumina.extraction import read, sha, source_excerpt, stage_images, verify_stage_inputs, write
@@ -21,6 +23,34 @@ from models import Review, validate_review
 from pair_models import PairAnalysis, export_pair, validate_pair
 from pair_prompts import COMMON, AUTHOR, REVIEWER
 from run import bibliography
+
+
+def prepare_primary(source, source_id, side, inputs):
+    """Copy the registered original; do not mistake unparsed PDF references for none."""
+    original = source["original"]
+    article = Path(original["path"])
+    raw = article.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != original.get("sha256"):
+        raise ValueError("Primary paper original differs from its registered hash")
+    if raw.startswith(b"%PDF-"):
+        source_format, status, references = "PDF", "not_parsed", None
+        limitation = (
+            "The registered full-text PDF is available, but this paired runner does not "
+            "extract its bibliography or citation contexts. This does not mean the paper "
+            "has no references. Inspect the registered text for claim-specific support; "
+            "if a required citation context is absent, keep the historical claim unresolved."
+        )
+    else:
+        root = ET.fromstring(raw)
+        if root.tag.split("}")[-1] != "article":
+            raise ValueError("Primary paper must be a registered full-text PDF or JATS article")
+        source_format, status, references = "JATS", "parsed", bibliography(raw)
+        limitation = None
+    destination = inputs / (side + "_primary" + (article.suffix or (".pdf" if source_format == "PDF" else ".xml")))
+    destination.write_bytes(raw)
+    return {"source_id": source_id, "source_format": source_format, "status": status,
+            "original_path": str(article), "original_sha256": original["sha256"],
+            "local_path": str(destination), "references": references, "limitation": limitation}
 
 
 def prepare(plan_path, output):
@@ -72,9 +102,7 @@ def prepare(plan_path, output):
                     if source.get("content_level") != "fulltext":
                         raise ValueError("This paired experiment requires both original full texts")
                     paper_ids.append(scoped)
-                    article = Path(source["original"]["path"])
-                    (inputs / (side + "_primary.xml")).write_bytes(article.read_bytes())
-                    references[side] = bibliography(article.read_bytes())
+                    references[side] = prepare_primary(source, scoped, side, inputs)
         if len(paper_ids) != 1:
             raise ValueError("Primary paper must be present exactly once")
         sides[side] = {"record_id": ident, "title": graph["cards"][ident]["title"],
@@ -139,6 +167,12 @@ async def execute(args):
                            for n in data["graph"]["nodes"] if n["node_type"] == "operation"],
             "sources": {k: {"title": v.get("title"), "level": v.get("content_level"), "characters": len(v["text"])}
                         for k, v in data["sources"].items()},
+            "bibliography": str(inputs / "bibliography.json"),
+            "primary_bibliography_status": {side: {
+                "source_id": entry["source_id"], "source_format": entry["source_format"],
+                "status": entry["status"], "limitation": entry["limitation"],
+                "reference_count": len(entry["references"]) if entry["references"] is not None else None}
+                for side, entry in read(inputs / "bibliography.json").items()},
             "source_tool": shlex.join([*command, "read", "--inputs", str(inputs)]) + " --id SOURCE_ID [--query TEXT] [--start N] [--limit N]",
             "group_tool": shlex.join([*command, "group", "--inputs", str(inputs)]) + " --side left|right --operations GLOBAL_OPERATION_ID ...",
             "schema": str(attempt / "schema.json"), "output": str(attempt / "artifact.json"),

@@ -1,0 +1,54 @@
+{
+  "checked_at": "2026-11-04T18:10:08.854725+00:00",
+  "remote_root": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/transcriptomics_revision_20261104",
+  "runtime": "runtime_02",
+  "runtime_archive_sha256": "913bc16159c6c0dd7ab2ddbc95e24b1c422d7b4f367271ba5f616febabdd5c2c",
+  "runtime_files": 274,
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "account_configuration": "scripts/sherlock/atlas-account.sh; dedicated atlas-agent-runs login",
+  "frozen_local_checks": {
+    "passed": 462,
+    "seconds": 11.42
+  },
+  "extraction": {
+    "job_id": "51086963",
+    "status": "submitted",
+    "output": "pilot_02",
+    "planning_run": "pilot_01/planning",
+    "unit_ids": [
+      "smart_seq2"
+    ],
+    "workers": 1,
+    "reuses_reviewed_plan": true,
+    "repeats_drop_seq": false,
+    "fix": "Planning-owned names exposed to prompt and JSON schema and checked identically by CLI self-check and runtime."
+  },
+  "history": {
+    "job_id": "51086969",
+    "status": "submitted",
+    "output": "drop_seq_history_01",
+    "seed_batch": "pilot_01/extractions",
+    "seed_record_id": "drop_seq",
+    "primary_paper": "drop-seq::paper:26000488",
+    "primary_sha256": "9b688d3e23adc095547de6fa575226d76eef9b6f9d46e79572f8100f8163ba7c",
+    "stages": [
+      "nominate_methodological_references",
+      "acquire_sources",
+      "analyse_scoped_relationships",
+      "fresh_review",
+      "publish_supported_overlay"
+    ],
+    "canonical_merge": false
+  },
+  "preservation": "runtime_01 and pilot_01 unchanged; EXIT trap archives each output and frozen runtime under Qiu group home.",
+  "not_submitted": [
+    "Full transcriptomics extraction batch",
+    "Smart-seq2 PDF citation lineage"
+  ],
+  "limitations": [
+    "Citation tracing still requires JATS references and PMID/PMC acquisition; publisher/DOI-only evidence may remain unavailable.",
+    "Pair runner now accepts registered full-text PDFs; this does not extract their bibliography or register the separately recovered Smart-seq2 primary automatically.",
+    "Software and independent model review do not establish expert-validated accuracy."
+  ]
+}

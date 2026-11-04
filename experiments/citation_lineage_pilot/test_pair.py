@@ -1,6 +1,8 @@
 """Negative controls for matching two immutable diagram graphs."""
 
 import copy
+import hashlib
+import json
 from pathlib import Path
 import sys
 
@@ -9,6 +11,125 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent))
 from models import Evidence, Finding, Review, UncertaintyAssessment
 from pair_models import PairAnalysis, PairClaim, OperationCoverage, DiagramAdequacy, export_pair, validate_pair
+import pair_run
+
+
+JATS_PRIMARY = b'''<article><body><p>We adapted the earlier method <xref ref-type="bibr" rid="r1">1</xref>.</p></body>
+<back><ref-list><ref id="r1"><element-citation><article-title>Earlier method</article-title>
+<pub-id pub-id-type="pmid">1234</pub-id></element-citation></ref></ref-list></back></article>'''
+PDF_PRIMARY = b"%PDF-1.7\nRegistered original PDF bytes for the preparation test."
+
+
+def primary_source(tmp_path, name, raw):
+    path = tmp_path / name
+    path.write_bytes(raw)
+    return {"text": "Registered full-text rendition.", "content_level": "fulltext",
+            "original": {"path": str(path), "sha256": hashlib.sha256(raw).hexdigest()}}
+
+
+def test_pdf_original_is_preserved_without_claiming_an_empty_bibliography(tmp_path):
+    source = primary_source(tmp_path, "original.PDF", PDF_PRIMARY)
+    inputs = tmp_path / "inputs"
+    inputs.mkdir()
+    entry = pair_run.prepare_primary(source, "right:paper", "right", inputs)
+    assert (inputs / "right_primary.PDF").read_bytes() == PDF_PRIMARY
+    assert not (inputs / "right_primary.xml").exists()
+    assert entry["source_format"] == "PDF"
+    assert entry["status"] == "not_parsed"
+    assert entry["references"] is None
+    assert "does not mean the paper has no references" in entry["limitation"]
+    assert entry["original_sha256"] == source["original"]["sha256"]
+
+
+def test_jats_keeps_original_extension_and_parses_references_and_context(tmp_path):
+    source = primary_source(tmp_path, "original.nxml", JATS_PRIMARY)
+    inputs = tmp_path / "inputs"
+    inputs.mkdir()
+    entry = pair_run.prepare_primary(source, "left:paper", "left", inputs)
+    assert (inputs / "left_primary.nxml").read_bytes() == JATS_PRIMARY
+    assert entry["source_format"] == "JATS"
+    assert entry["status"] == "parsed" and entry["limitation"] is None
+    assert "Earlier method" in str(entry["references"]["r1"])
+    assert "We adapted the earlier method" in str(entry["references"]["r1"])
+
+
+@pytest.mark.parametrize("suffix,raw", [("pdf", PDF_PRIMARY), ("xml", JATS_PRIMARY)])
+@pytest.mark.parametrize("recorded_hash", [None, "wrong-hash"])
+def test_primary_original_hash_is_required_and_checked(tmp_path, suffix, raw, recorded_hash):
+    source = primary_source(tmp_path, "original." + suffix, raw)
+    source["original"]["sha256"] = recorded_hash
+    inputs = tmp_path / "inputs"
+    inputs.mkdir()
+    with pytest.raises(ValueError, match="registered hash"):
+        pair_run.prepare_primary(source, "left:paper", "left", inputs)
+    assert not list(inputs.iterdir())
+
+
+def test_nonarticle_xml_is_not_silently_a_paper_with_no_references(tmp_path):
+    source = primary_source(tmp_path, "original.xml", b"<html><body>Access denied</body></html>")
+    with pytest.raises(ValueError, match="PDF or JATS article"):
+        pair_run.prepare_primary(source, "left:paper", "left", tmp_path)
+
+
+def pair_preparation_case(tmp_path, monkeypatch):
+    """Isolate source copying from the separately tested native review reopening gate."""
+    plan, registries, reopened = {}, {}, []
+    for side, suffix, raw in (("left", "xml", JATS_PRIMARY), ("right", "pdf", PDF_PRIMARY)):
+        batch = tmp_path / side
+        attempt = batch / "attempt"
+        attempt.mkdir(parents=True)
+        for name in ("extraction.json", "graph.json", "review.json"):
+            (attempt / name).write_text("{}")
+        (attempt / "card.json").write_text(json.dumps({"record_id": side}))
+        source = primary_source(attempt, "paper." + suffix, raw)
+        registries[side] = {"paper": source}
+        pins = {"source_registry.json": "source-registry-pin"}
+        row = {"status": "supported", "attempt_directory": str(attempt), "artifact_pins": pins}
+        (batch / "state.json").write_text(json.dumps({"cards": {side: row}}))
+        plan[side] = {"batch": str(batch), "record_id": side, "primary_paper": "paper"}
+
+    def reopen(row, card):
+        reopened.append(card["record_id"])
+        return {"workflow": {"title": card["record_id"], "scope": "fixture", "unknowns": []},
+                "candidate_sha256": "candidate-pin", "review_sha256": "review-pin",
+                "source_registry": {}, "nodes": [], "edges": []}, registries[card["record_id"]]
+
+    monkeypatch.setattr(pair_run, "_load_card", reopen)
+    plan_path = tmp_path / "plan.json"
+    plan_path.write_text(json.dumps(plan))
+    return plan_path, registries, reopened
+
+
+def test_prepare_accepts_reviewed_mixed_jats_pdf_and_records_unparsed_status(tmp_path, monkeypatch):
+    plan, _, reopened = pair_preparation_case(tmp_path, monkeypatch)
+    inputs = pair_run.prepare(plan, tmp_path / "run")
+    assert reopened == ["left", "right"]
+    references = json.loads((inputs / "bibliography.json").read_text())
+    assert references["left"]["status"] == "parsed"
+    assert references["right"]["status"] == "not_parsed"
+    assert references["right"]["references"] is None
+    assert (inputs / "right_primary.pdf").read_bytes() == PDF_PRIMARY
+    sources = json.loads((inputs / "sources.json").read_text())
+    assert sources["right:paper"]["text"] == "Registered full-text rendition."
+    assert sources["right:paper"]["original"]["sha256"] == references["right"]["original_sha256"]
+
+
+def test_pdf_support_does_not_relax_fulltext_requirement(tmp_path, monkeypatch):
+    plan, registries, _ = pair_preparation_case(tmp_path, monkeypatch)
+    registries["right"]["paper"]["content_level"] = "abstract"
+    with pytest.raises(ValueError, match="both original full texts"):
+        pair_run.prepare(plan, tmp_path / "run")
+
+
+def test_format_handling_does_not_bypass_extraction_review_gate(tmp_path, monkeypatch):
+    plan, _, _ = pair_preparation_case(tmp_path, monkeypatch)
+
+    def reject(row, card):
+        raise ValueError("Completed extraction review integrity failed")
+
+    monkeypatch.setattr(pair_run, "_load_card", reject)
+    with pytest.raises(ValueError, match="review integrity failed"):
+        pair_run.prepare(plan, tmp_path / "run")
 
 
 def case():
