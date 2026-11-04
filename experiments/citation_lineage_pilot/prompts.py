@@ -1,5 +1,7 @@
 """Technology-independent prompts; no expected ClickSeq relationships are supplied."""
 
+from genomics_discovery.illumina.relationships import CHANGE_INSTRUCTIONS, relation_instructions
+
 COMMON = """Build a small, evidence-grounded methodological neighborhood for the seed
 sequencing method. Use only the registered sources and existing operation IDs.
 Keep earlier assay development, component adoption, mechanistic precedent,
@@ -26,6 +28,9 @@ using the supplied schema; do not substitute a final prose answer. Use the check
 command before finishing. The host independently repeats it.
 """
 
+COMMON += "\n" + relation_instructions(("method_development", "component_adoption",
+    "mechanistic_precedent", "comparison", "background", "no_established_relation")) + CHANGE_INSTRUCTIONS
+
 ROLES = {
     "nominate": """Identify the references in the seed paper that should be followed to
 understand its assay architecture, changed operations, contributing experimental
@@ -37,6 +42,10 @@ candidate retrieval: do not decide final historical links before checking the
 cited papers. Selection must be your source-grounded judgment, not a fixed number
 of required predecessors. Account for uncertain potentially relevant references
 in unresolved_searches rather than silently treating them as excluded evidence.
+Account for EVERY reference in the supplied bibliography: nominate it, or give a
+context-specific reason in excluded_references. Uncertain relevant contributions
+should be nominated. This accounts for retrieval choices; it does not require
+downloading every background citation. No fixed number of positive edges is needed.
 """,
     "analyse": """Read the retrieved nominated papers at their available evidence levels,
 and the seed's existing operation records. For each nomination, explicitly record
@@ -59,6 +68,8 @@ Check operation attribution, predecessor scope, comparison versus descent, and
 that performance improvements remain tied to the experiment and comparator.
 Reject claims of direct component reuse supported only by a broad precedent.
 Inspect nomination dispositions for important omitted methodological candidates.
+Inspect excluded_references against their citation contexts as well; a complete
+list can still contain a scientifically wrong exclusion.
 Use accept only for a supported claim as written; use revise for correctable
 wording/type errors, needs_evidence for unavailable evidence and reject for a
 false relation. Do not rewrite claims and then accept your own revision.

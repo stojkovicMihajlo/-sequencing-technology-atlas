@@ -1,0 +1,310 @@
+Evolution-graph review — started 3 November, completed 4 November 2026
+
+Decision
+Keep the Illumina State–Operation–Flow extractions as source-qualified assay
+architectures. Do not restart full protocol extraction or force identical module
+boundaries. Build the historical graph through primary-paper citation contexts,
+with separate claims anchored to the affected parts of these architectures.
+Similarity remains useful for finding analogies; it cannot establish history.
+
+An evolutionary graph here is a directed multigraph, not a single-parent tree.
+An implementation can adopt several contributions, have several distinct links
+to the same earlier method, or have no established predecessor in our corpus.
+Version-scoped historical relations should be temporally coherent; the entire
+graph also contains undirected correspondences and therefore is not one DAG.
+
+What was reviewed, and what was NOT
+audit.py reopened the pinned archive and inspected all 478 source occurrences,
+their current admission status, candidate/review digest binding, operation I/O
+versus typed flows, method-scope references, evidence-level annotations, field
+coverage, corrections and unknowns. results/CHECKLIST.csv has all 478 entries;
+results/records.jsonl retains per-record findings and the exact unresolved items.
+No structural errors were found by these checks. This is NOT a fresh independent
+scientific review of every sentence against every full paper. The archive carries
+source metadata and quoted evidence, not all original source bodies. The previous
+source/custody audit and its four quarantined records remain authoritative.
+
+Current inventory
+  424 supported; 33 research_needed; 17 failed; 4 integrity_error.
+  Of the supported records, 385 are nonfooter source occurrences and 39 are
+  footer/product/readout panels. None of these counts is a unique assay count.
+  Supported records contain 2,968 Operations, 4,162 States and 6,796 Flows.
+  243 supported occurrences have a Correction: 409 Corrections in total.
+  104 supported occurrences have an Unknown: 127 Unknowns in total.
+  707 Operations have no dedicated mechanism text; 94 lack information_effect.
+  These are field-coverage observations, not 801 proven scientific errors.
+  72 supported nonfooter occurrences have no content_checked architecture/variant
+  PaperMatch to a full-text source. This is not proof that full text is unavailable
+  elsewhere, or that their supported diagram-level claims are wrong.
+  All 475 stored reviews use legacy review/1.0; three records have no review.
+  None received the separate label judgments introduced later in review/1.1.
+
+The principal remaining problems are semantic scope and source coverage, not
+whether we can serialize JSON. A valid material route can still lack the detail
+needed to explain a particular innovation. Duplicate source depictions are still
+not consolidated into reviewed method/version identities. A footer panel is not
+automatically an assay. Abstract support is not evidence for unseen protocol
+internals. A reviewer accepting a whole State did not establish a separate check
+of its display label. The newer rules cannot be retroactively credited to old runs.
+
+Which edges to keep
+These six relation names already existed across the two pilots. They are now
+defined once in src/genomics_discovery/illumina/relationships.py and supplied to
+both prompts. This is our task-specific policy, not a universal ontology.
+
+  method_development    HISTORY. Later implementation develops/adapts the
+                        earlier assay architecture; identify retained structure
+                        and changes, with actual attribution and two-sided support.
+  component_adoption    HISTORY. Later implementation adopts/adapts a specified
+                        component/procedure. The surrounding block is not inherited
+                        merely because it contains that component.
+  mechanistic_precedent PRECEDENT. Earlier work demonstrates a relevant experimental
+                        property/mechanism, but adoption is not established.
+  comparison            COMPARISON. A paper actually compares methods/results.
+                        A reported advantage is not proof of ancestry.
+  shared_mechanism      CORRESPONDENCE. Two scoped transformations share a supported
+                        mechanism, with substrate and context differences retained.
+  shared_purpose        CORRESPONDENCE. Comparable function; mechanism need not match.
+
+Background and no_established_relation remain dispositions, not positive edges.
+Within-workflow material_input/output, data_input/output and precedes remain
+unchanged. Those Flows must never be traversed as historical contributions.
+
+Do not add a general 'improves' ancestry type. A method may beat a comparator
+without developing from it. Improvement belongs in a specific result statement
+with metric, comparator and tested conditions. Likewise, 'replaces' can describe
+a changed component without establishing who invented it. Multiple design moves
+can appear on one contribution claim or in separate claims when evidence differs.
+
+What each relationship records
+The existing paired representation already provides the necessary starting point:
+  relation + direction       Which claim is made; history is earlier -> later.
+  left/right_operation_ids   Exact affected groups in the two immutable workflows.
+  shared_description        The scoped common transformation or adopted component.
+  difference                Before versus after, including relevant material,
+                            compartment, carrier and surrounding-stage differences.
+  consequence               Reported capability/gain/tradeoff, or not established.
+  rationale                 Why this type and scope follow from the cited context.
+  left/right_evidence       Supporting primary passages on both sides.
+  unresolved                Qualifications, each independently assessed for whether
+                            it blocks this particular relationship.
+
+The citation-following pilot additionally records the nominated reference,
+earlier demonstration, limitation addressed, reported gain, transfer limits and
+candidate catalogue identities. Those identities remain candidates until reviewed.
+It should not invent before-side Operation IDs for an unextracted contributor.
+
+Use the same evidential questions in both stages; do not add another incompatible
+universal edge schema now. The remaining production work is a reviewed method/
+version registry and a source-located date/citation-identity record. Neither is
+implemented by a name hash or by this relationship-query module. Date checking
+must distinguish journal, preprint and protocol versions; lack of an earlier
+retrieved paper is not proof of historical priority.
+
+Is the current detail sufficient?
+For SOME scoped relationships, yes; for arbitrary protocol design, no. Adequacy
+must be asked for the proposed claim, not as one blanket score per workflow.
+
+1. Existing ATAC-seq–ChIPmentation pair
+   Two and three Operations sufficed for the earlier model-reviewed comparison.
+   Shared tagmentation is a mechanism correspondence. Custom Nextera primer
+   adoption is a historical contribution inside the two coarse amplification/
+   recovery blocks. The earlier pilot did not establish whole-assay descent.
+   Paper annotations locate the primer contribution without inventing a primer-
+   only Operation. A claim about a changed internal cleanup order would need
+   finer evidence/anchoring. Original supplements were not separately inspected.
+
+2. ClickSeq, four Operations in the current catalogue extraction
+   The stored architecture identifies azido-terminated cDNA, alkyne-adapter
+   coupling and subsequent polymerase read-through, including its limits.
+   Those interface properties are more informative than 'adapter ligation'.
+   This is enough to pose a comparison with enzymatic adapter attachment. It
+   does not establish interchangeability of all polymers, ends or polymerases.
+
+3. cP-RNA-Seq, five Operations
+   The stored description distinguishes terminal chemical states through CIP,
+   periodate and PNK treatment. The starting modification is removed, while
+   selection history survives as differential library competence. Keeping those
+   end-group distinctions matters more than expanding every handling step.
+   A chemical formula alone would not record that selection history.
+
+4. UMI-4C catalogue record, seven Operations, supported with two Unknowns
+   The route is recorded but the physical UMI feature and its point of origin
+   remain unresolved. The same gap can be nonblocking for diagram transcription
+   and blocking for a molecule-counting comparison or a proposed UMI substitution.
+   This is a concrete reason not to treat 'supported' as design-ready.
+
+5. RASL-Seq and scAba-Seq
+   RASL-Seq explicitly distinguishes the target RNA from the probe-derived DNA
+   reporter and records a source-order discrepancy. scAba-Seq is held because
+   the depicted DNA endpoint and T7-IVT interpretation leave a consequential
+   product transition unresolved. A shared 'amplification' label cannot settle
+   either interface. These are targeted source/interpretation tasks, not a reason
+   to reconstruct every experiment from both papers.
+
+Cases 2–5 inspect existing extracted assertions and their recorded limits, not
+new independent primary-paper verification. Their exact records are in the pinned
+archive and per-record ledger. Only case 1 has the prior paired relationship run.
+
+Literature/code audit and the transferred principles
+Intern-Atlas (2026): https://arxiv.org/html/2604.28158v1
+  Its useful distinction is method-level typed citation relations with attached
+  bottleneck/mechanism/tradeoff evidence, followed by restricted graph traversal.
+  Reuse that separation. Our adaptation needs two-sided experimental support and
+  anchors into material/information transformations; cited prose alone does not
+  establish biochemical compatibility. We do not treat 'causal' relation labels
+  as experimentally identified causes of performance.
+  The previously completed full audit is retained at
+  experiments/reference_audits/intern_atlas_20261103/REPORT.txt.
+  Official OpenRaiser/Intern-Atlas pin: 1185dc36555c547b5b6e9553779cb498a15ce587.
+  builder -> enrichment/infer_relations -> store -> evidence-pack paths were
+  inspected there. Its public local toolkit is not the complete hosted system;
+  heuristic fallback and single-edge-per-pair behavior are not suitable defaults.
+
+SciCite (NAACL 2019): https://aclanthology.org/N19-1361/
+  Citation-context intent is classified separately as background, method use or
+  result comparison. That supports our retrieval/disposition stage, not automatic
+  inheritance. Inspected the primary task/category definitions and official
+  scicite/predictors/predictor_scicite.py at
+  allenai/scicite@b33a8cd0df5743c9d483b1d0fdce8ec62bc8f135 (Apache-2.0).
+  predict_json retains citation IDs, context, prediction and probabilities;
+  dump_line drops context/probabilities. We retain the original context and exact
+  evidence through export instead. No classifier was run or source code copied.
+
+SciMON (ACL 2024): https://aclanthology.org/2024.acl-long.18/
+  Inspected retrieval, novelty revision, evaluation and limitations sections,
+  plus the official Iterative/calculate_sim.py and gpt4_iter1.py at
+  EagleW/Scientific-Inspiration-Machines-Optimized-for-Novelty@
+  2dc17a1e2e22c22a6b595c212d3bbeca2b0dd89e (Apache-2.0).
+  The implementation retrieves nearby prior ideas, then supplies similar examples
+  to a revision prompt. Adopt retrieve–compare–revise as a design check. Reject
+  a cosine threshold as proof of novelty or physical feasibility. Its own
+  evaluation distinguishes being different from being more novel and reports
+  limited technical depth. Our changes must specify experimental mechanisms and
+  interfaces, not merely become textually dissimilar. No code was copied or run.
+
+What changed in this iteration
+- One shared relation policy now feeds both existing relationship prompts and
+  controls which types the read-only query treats as history.
+- Fresh citation nominations must account for every bibliography entry: selected
+  with a contribution/reason, or excluded with a reason. The reviewer checks
+  exclusions too. This prevents silent omission, but cannot guarantee correct
+  scientific selection. Legacy nominations remain readable, not upgraded.
+- Accepted relationship support cannot come from a catalogue/metadata record or
+  an article-title quotation, even after a positive reviewer verdict. Exact quote
+  occurrence remains necessary but insufficient for semantic entailment.
+- Both citation tools now use the existing bounded source_excerpt function:
+  a query miss returns an empty passage and found=false, not unrelated opening text.
+- A read-only query returns the scoped edge, review, exact operation groups,
+  boundary states/flows, caveats and source pointers. It reduces unrelated
+  provenance while preserving full-registry paths/hashes for further retrieval.
+- Shared policy code is pinned with future native run implementations.
+
+Validation
+97 relevant software checks pass, including actual archived-pair retrieval,
+wrong-layer/direction/source/anchor controls, rejected and incomplete reviews,
+stale artifact hashes, metadata/title-only scientific support and both source-tool
+CLIs on a query miss. Full bibliography accounting has coverage/exclusion controls.
+The earlier source graphs and candidate/review files were not rewritten.
+For the primer claim, default-JSON context decreased from 165,263 to 62,881 bytes;
+the same claim, review, three qualifications and material boundaries remain.
+This is a payload measurement, not an observed model latency/accuracy improvement.
+No new native model calls, independent scientific rereview, canonical graph
+admission or Sherlock deployment took place in this iteration.
+
+Added in response to the request to query each technology's prior contributions
+src/genomics_discovery/illumina/history.py now loads explicitly pinned citation
+and paired-workflow overlays. The real demonstration has 13 nodes and 15 distinct
+claims across the two prior pilots. It joins ATAC only because the record ID AND
+extraction hash are identical in both. No matching by name or description occurs.
+External cited contributions remain separate from unverified catalogue candidates.
+
+The ChIPmentation query walks two historical contribution edges:
+  Adey 2010 -> ATAC-seq: tagmentation/library component applied to native chromatin,
+                       with accessibility-dependent sampling as the measurement.
+  ATAC-seq -> ChIPmentation: explicitly attributed custom-primer component.
+The path joins two distinct contributions. It does not assert that a single
+component propagated unchanged, or that either whole assay was inherited.
+The output keeps the original before/after descriptions, evidence, review and
+qualifications. Other direct relations are returned separately. Traversal stops
+with 'no_further_history_in_loaded_evidence', not a claim of first invention.
+Missing methods and ambiguous versions cannot silently return an empty ancestry.
+Cycles and inconsistent extraction bindings are rejected. This is a working
+query over previously reviewed pilots, not historical coverage of all 478 sources.
+
+Run from the repository root:
+  PYTHONPATH=src .venv/bin/python -m genomics_discovery.illumina.history \
+    --manifest experiments/evolution_review_20261103/history_inputs.json \
+    --record-id chipmentation --max-depth 2
+The exact demonstration output is results/chipmentation_history.json.
+
+What is important specifically for sequencing technologies
+The shared instructions now ask five concrete questions for each claimed change:
+  1. Which biological quantity, specimen/context and unit are measured?
+  2. What physical selection/recording makes it observable, and what molecule is
+     actually read? The biological target and sequenced reporter can differ.
+  3. What preserves attribution to the original molecule, cell, location or contact
+     after handling or pooling? Identify the physical carrier where established.
+  4. Which input/output molecular properties and surrounding operations determine
+     whether the changed stage connects to the rest of the assay?
+  5. What specificity, recovery, bias, resolution or quantitative interpretation
+     changes, in which measured comparison, and with what remaining uncertainty?
+These are evidence questions, not five compulsory stages or five free-standing
+agents. Keep unchanged versus unknown distinct. They are expressed in the existing
+claim's scoped description, difference, consequence, evidence and qualifications.
+Their inclusion in a prompt is not yet a demonstration of consistent model use.
+
+How an invention agent should use it
+First state the desired capability and specimen/context. Retrieve relevant assay
+architectures, their documented changes and nearby alternatives. The graph should
+help answer 'what changed, where, why, and under which constraints?', not merely
+return a predecessor list. Follow precedent/correspondence layers separately when
+looking outside a method's historical family.
+
+Your proposed new-node-plus-key-change approach is useful as a PROPOSAL format:
+  desired capability and comparison;
+  one or more explicit changes to material/information transformations;
+  evidence for the required primitive properties;
+  untested interfaces and predicted consequences;
+  decisive tests and the closest known alternatives found during retrieval.
+Changes can have several contributing methods or no existing parent. A combined
+gain is not required to be a single edge. An unsupported transfer remains a
+hypothesis even if both components separately work. Keep proposed nodes/changes
+out of the historical graph until they are demonstrated. Search beyond the atlas
+before claiming novelty: a missing edge may reflect missing literature or extraction.
+Expand into an execution protocol only after the architectural claim is explicit.
+
+Minimal next native evaluation, before more scale
+Use the existing ATAC–ChIPmentation pair as a development control. Choose held-out
+relations from different families using primary evidence (e.g. chemistry/terminal
+selection, cell identity/pooling, conformation capture). Have reference judgments
+for claim type, actual transferred component, direction, necessary qualifications
+and missing evidence, without prescribing identical operation counts or labels.
+Compare citation-only, citation-context-only and two-sided evidence + workflow
+anchors on the SAME candidates; this isolates the value of the graph contract.
+Report historical-edge precision, relevant-contribution recall, component-anchor
+correctness, preserved qualifications, unsupported interface claims, abstention/
+evidence recovery, and cost per accepted claim. Audit a sample of excluded
+references; recall over only the nominated list would hide retrieval failures.
+Do not substitute exact historical-protocol reproduction for these measurements.
+
+Remaining blockers for a full method graph
+1. Reviewed method/version identities before dispatch, preserving each source view.
+2. Broader source recovery: the current citation pilot retrieves PubMed/PMC and
+   explicitly leaves DOI-only/publisher recovery pending. It cannot yet follow
+   every external chemistry or engineering contribution. Do not call that complete.
+3. Structured version/date evidence and reference identity checking, including
+   preprints where needed, before a production historical ordering claim.
+4. Native tests of the new instructions and independently evaluated edge quality
+   on more than the one chosen development pair.
+5. Targeted recovery of claim-blocking gaps, not blanket re-extraction or arbitrary
+   filling of every optional field. A more detailed graph is not automatically
+   a more accurate or more useful graph.
+
+Where to start reading
+  This report: decision, evidence, limitations and next evaluation.
+  results/CHECKLIST.csv and summary.json: all-source accounting and measured findings.
+  src/genomics_discovery/illumina/relationships.py: six types and query behavior.
+  src/genomics_discovery/illumina/history.py: exact bindings and historical traversal.
+  experiments/citation_lineage_pilot/: the existing native citation/pair harness.
+  results/primer_adoption_context.json: actual downstream-agent context, not a mock.

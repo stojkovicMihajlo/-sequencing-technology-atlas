@@ -1,0 +1,1442 @@
+{
+  "format_version": "illumina_relationship_context/1",
+  "claim": {
+    "id": "c3",
+    "left_operation_ids": [
+      "illumina:atac-seq:operation:op_purify_amplify"
+    ],
+    "right_operation_ids": [
+      "illumina:chipmentation:operation:op_recover_amplify"
+    ],
+    "relation": "component_adoption",
+    "direction": "left_to_right",
+    "shared_description": "Within the existing combined purification/amplification blocks, ChIPmentation explicitly adopts the custom Nextera primer implementation described for ATAC-seq to prepare/amplify the tagged DNA library. This is a historical claim about that primer component, not inheritance of the entire block or assay.",
+    "difference": "Left: the original ATAC-seq paper independently reports using custom Nextera PCR primers 1 and 2 with NEBnext after purification of transposed nuclear DNA. Right: the ChIPmentation paper explicitly attributes its custom Nextera primers to ATAC-seq while using KAPA enrichment on recovered ChIPmentation DNA. Its bead recovery, crosslink reversal, cycle estimation and size selection remain its own reported implementation context. Adoption of the primer component does not establish adoption of the left substrate preparation or accessibility-selection architecture.",
+    "consequence": "The citation establishes an implemented transfer of the library-amplification primer component into the later workflow. Neither paper isolates a performance benefit caused by that transfer, and it does not imply identical complete adapters, cycling behavior, library representation or measured biological output.",
+    "rationale": "The right Online Methods amplification section states 'as described for ATAC-seq4'; reference 4 in the right bibliography resolves to Buenrostro et al., PMID 24097267, the registered left original paper. The left Methods independently describe the cited custom-primer implementation. This combination satisfies component_adoption and supplies direction through explicit attribution, rather than publication dates or a shared Tn5 label. The exact existing broad Operation IDs are used to attach this qualified component annotation; no primer-only operation is created.",
+    "left_evidence": [
+      {
+        "source_id": "left:paper:24097267",
+        "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+      },
+      {
+        "source_id": "left:paper:24097267",
+        "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+      }
+    ],
+    "right_evidence": [
+      {
+        "source_id": "right:paper:26280331",
+        "quote": "Library preparation was performed using custom Nextera primers as described for ATAC-seq4."
+      },
+      {
+        "source_id": "right:paper:26280331",
+        "quote": "Final enrichment of the libraries was performed in a 50 μl reaction using 0.75 μM primers and 25 μl 2x KAPA HiFi HotStart ReadyMix."
+      },
+      {
+        "source_id": "right:paper:26280331",
+        "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA3. Furthermore, tagmentation of intact chromatin followed by sequencing (ATAC-seq) was shown to yield open chromatin profiles comparable to those obtained by DNase-seq4. In contrast, this technique has not yet been adapted for ChIP-seq sample preparation."
+      }
+    ],
+    "unresolved": [
+      "No method_development relation for the complete ATAC-seq assay architecture is established here. The right introduction frames extension of chromatin tagmentation to ChIP, but separately attributes generic tagmentation to Adey et al. (reference 3), also credited as prior tagmentation by the left paper (reference 11). The explicit implementation transfer identified here concerns custom Nextera primers; enzyme reuse and an ATAC citation alone do not establish whole-assay inheritance.",
+      "The separate ATAC-seq experiment described in the right paper is an adapted open-chromatin control for its analyses, not evidence that ChIPmentation itself runs the complete ATAC-seq workflow.",
+      "Complete primer/adaptor sequence identity is not reconstructed from the diagrams' colored ends. The historical conclusion is limited to the implementation explicitly attributed by the authors."
+    ]
+  },
+  "review": {
+    "claim_id": "c3",
+    "decision": "accept",
+    "rationale": "Accepted as written as directed component_adoption, left to right. The right amplification Methods explicitly say that custom Nextera primers were used as described for ATAC-seq reference 4; that bibliography entry identifies Buenrostro, Giresi, Zaba, Chang and Greenleaf, PMID 24097267, DOI 10.1038/nmeth.2688. The registered left original independently reports the custom Nextera PCR-primer implementation and production of libraries with it. This is implemented component attribution, not an inference from dates or a generic enzyme citation. The same complete operation boundaries inspected for c2 apply here. Both encompass amplification, making them valid existing attachment points for the specifically delimited primer annotation; neither is relabeled as a primer-only operation. The claim preserves NEBnext versus KAPA and nuclear versus recovered ChIP DNA contexts, and does not assert inheritance of the entire recovery block or ATAC accessibility assay. The right introduction also credits generic tagmentation separately to Adey (reference 3), while the left credits that work as reference 11; c3 does not misattribute the origin of generic tagmentation to ATAC-seq.",
+    "evidence": [
+      {
+        "source_id": "left:paper:24097267",
+        "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+      },
+      {
+        "source_id": "left:paper:24097267",
+        "quote": "The libraries were purified using a Qiagen PCR cleanup kit yielding a final library concentration of ~30 nM in 20 μL. Libraries were amplified for a total of 10–12 cycles."
+      },
+      {
+        "source_id": "right:paper:26280331",
+        "quote": "Library preparation was performed using custom Nextera primers as described for ATAC-seq4."
+      },
+      {
+        "source_id": "right:paper:26280331",
+        "quote": "4BuenrostroJDGiresiPGZabaLCChangHYGreenleafWJNat Methods201310121312182409726710.1038/nmeth.2688PMC3959825"
+      },
+      {
+        "source_id": "right:paper:26280331",
+        "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA3. Furthermore, tagmentation of intact chromatin followed by sequencing (ATAC-seq) was shown to yield open chromatin profiles comparable to those obtained by DNase-seq4. In contrast, this technique has not yet been adapted for ChIP-seq sample preparation."
+      },
+      {
+        "source_id": "left:paper:24097267",
+        "quote": "11AdeyARapid, low-input, low-bias construction of shotgun fragment libraries by high-density in vitro transpositionGenome Biol11R11920102114386210.1186/gb-2010-11-12-r119PMC3046479"
+      }
+    ],
+    "unresolved_assessments": [
+      {
+        "issue_index": 0,
+        "blocks_relation": false,
+        "rationale": "Preserved historical limit: no method_development relation for the complete ATAC-seq assay architecture is asserted. The introduction discusses adapting chromatin tagmentation to ChIP and separately cites generic tagmentation, whereas the precise implemented transfer claimed here is custom Nextera primers. The actual claim remains within that narrower, explicitly supported component adoption."
+      },
+      {
+        "issue_index": 1,
+        "blocks_relation": false,
+        "rationale": "Preserved workflow distinction: the adapted K562 ATAC-seq experiment in the right paper is a separate open-chromatin comparator. It does not show that ChIPmentation performs the complete ATAC workflow. The claim relies on the right library-amplification attribution and left implementation, not on importing that comparator into the ChIPmentation graph."
+      },
+      {
+        "issue_index": 2,
+        "blocks_relation": false,
+        "rationale": "Preserved sequence limit: full primer/adapter sequences and exact end structures are not reconstructed from the colored diagram marks. The claim is explicitly limited to the custom-primer implementation attributed by the right authors and independently used on the left. It does not claim exact complete adapter identity or performance transfer."
+      }
+    ]
+  },
+  "relation_definition": {
+    "layer": "history",
+    "meaning": "The later implementation explicitly adopts/adapts a specified earlier component or procedure, independently supported in the earlier work. Name the component and its destination; do not expand this to inheritance of its enclosing operation or whole assay."
+  },
+  "bindings": {
+    "left": {
+      "record_id": "atac-seq",
+      "title": "ATAC-Seq",
+      "paper_source_ids": [
+        "left:paper:24097267"
+      ],
+      "parent_attempt": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/scope_repair_pilot_01/cards/atac-seq/attempt_001",
+      "extraction_sha256": "d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+      "graph_sha256": "627d60c0a4e392822edf906d67b5d91905c51c87f71ce75842ebf322af7b6941",
+      "artifact_pins": {
+        "card.json": "c248c1de2aac8686bbe84b3675be58e1370688886980bf898f6e61352c32b0e1",
+        "source_registry.json": "8ea7fa4aef7bfb1e6d2a15efe328c46d6128d54e8179c1dec0fa31ad61090fe5",
+        "extraction.json": "d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+        "review.json": "487bde1585f64bb74784ae1494eacdb999a8af01f8c4d094cc284cd48e3f7371",
+        "graph.json": "627d60c0a4e392822edf906d67b5d91905c51c87f71ce75842ebf322af7b6941",
+        "stages.json": "6f8a0d0f1ad705e0c5fbe4a394ae557a6ea9b2838613deb036db403d2162b60b"
+      }
+    },
+    "right": {
+      "record_id": "chipmentation",
+      "title": "ChIPmentation",
+      "paper_source_ids": [
+        "right:paper:26280331"
+      ],
+      "parent_attempt": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/all_cards_01/cards/chipmentation/attempt_001",
+      "extraction_sha256": "01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+      "graph_sha256": "27bfebef7a499641a94e007833386cdc7a53bce10cf32de7df8e5f0ed4cba71c",
+      "artifact_pins": {
+        "card.json": "efb45266931cbacb8a882382cc4f82ddd485f1e3cdb82aca693ce830967ceaca",
+        "source_registry.json": "6191fbf9a99eae30c7b886d26e34d5d933975fbdabd2ce8467656257671c79ba",
+        "extraction.json": "01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+        "review.json": "c5657e1c43df7041dc1d73dd3baa85575f5117552621c5b1328bf52696168667",
+        "graph.json": "27bfebef7a499641a94e007833386cdc7a53bce10cf32de7df8e5f0ed4cba71c",
+        "stages.json": "d2880fbfbe38c260f6c859c701ad593d198559025e964c29de3bbf894364bef6"
+      }
+    }
+  },
+  "groups": {
+    "left": {
+      "format_version": "illumina_operation_group/1.0",
+      "selection_sha256": "56d84908997e33f3264973c53ade6b1065ef85b4da99eac45c4783ed42eb82ae",
+      "record_id": "atac-seq",
+      "operation_ids": [
+        "illumina:atac-seq:operation:op_purify_amplify"
+      ],
+      "candidate_sha256": "8a6491b149d76b16401a69164e4dde3956bfcd2a565e8be09379be547b3f58ec",
+      "review_sha256": "49be0e298a84c143e6bf4caf436c1a5f85c0cd7bf1851e4231a7a829bb0b0bc9",
+      "artifact_pins": {
+        "card.json": "c248c1de2aac8686bbe84b3675be58e1370688886980bf898f6e61352c32b0e1",
+        "source_registry.json": "8ea7fa4aef7bfb1e6d2a15efe328c46d6128d54e8179c1dec0fa31ad61090fe5",
+        "extraction.json": "d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+        "review.json": "487bde1585f64bb74784ae1494eacdb999a8af01f8c4d094cc284cd48e3f7371",
+        "graph.json": "627d60c0a4e392822edf906d67b5d91905c51c87f71ce75842ebf322af7b6941",
+        "stages.json": "6f8a0d0f1ad705e0c5fbe4a394ae557a6ea9b2838613deb036db403d2162b60b"
+      },
+      "scope": "The single generic ATAC-Seq library-construction route in the assigned Illumina schematic: native chromatin with accessible DNA is tagmented by adapter-loaded Tn5, yielding fragmented and primed DNA, followed by the combined depicted DNA purification/amplification block and a DNA library. The left assay vignette identifies the target and repeats the substrate; it does not depict a separate chromatin-opening treatment. Tn5 is a catalytic reagent carrying adapter DNA, not a biological material converted into library. No alternative workflow, compartment indexing, pooling, or sequencing/analysis operation is drawn. Fast-ATAC, neuron/freezing and biobank preparations, single-cell implementations, THS-seq, FAIRE-seq and catalogue kit names are contextual mentions rather than schematic targets.",
+      "source_scope": {},
+      "admission": "supported",
+      "nodes": [
+        {
+          "id": "illumina:atac-seq:operation:op_purify_amplify",
+          "node_type": "operation",
+          "original": {
+            "id": "op_purify_amplify",
+            "label": "DNA purification / Amplification",
+            "description": "The fragmented and adapter-tagged DNA enters the single broad block labelled DNA purification and Amplification. DNA is recovered from the reaction and amplifiable tagged fragments are copied by PCR, producing the depicted free DNA library. The combined block is retained at its drawn granularity; its routine internal handling is not reconstructed.",
+            "inputs": [
+              "s_tagged_fragments"
+            ],
+            "outputs": [
+              "s_library"
+            ],
+            "mechanism": "The primary paper identifies the amplification as PCR following purification. PCR uses the adapter-associated priming interface; compatible fragment ends and spacing constrain which tagged molecules become represented.",
+            "information_effect": "Genomic inserts and insertion-derived ends remain the physical carriers of accessibility information after amplification. Sequencing and genomic mapping can localize accessible sites; paired-end fragment lengths can additionally inform nucleosome packing, as reported by the paper. Those readout operations are explanatory context beyond the diagram endpoint. Recovery and PCR do not guarantee equal or complete representation of tagged molecules.",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Rightward arrow to “Fragmented and primed”: discontinuous DNA, detached central fragment and short colored terminal strokes; nucleosome-bound DNA remains visible.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.623,
+                  0.0,
+                  0.813,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Arrow and two-line caption “DNA purification / Amplification”, then rightmost linear DNA fragments with colored terminal strokes labelled “DNA”.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.818,
+                  0.12,
+                  1.0,
+                  0.98
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Online Methods [b00027], PCR, first sentence",
+                "basis": "text",
+                "support": "reported",
+                "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "card:atac-seq",
+                "locator": "jcr:content/par/text_1/text, limitations",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Only half of the molecules contain the adapters in the orientation required for PCR amplification\nDistance between adapter sites may not be optimal for PCR amplification6",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Results, “ATAC-seq insert sizes disclose nucleosome positions”, [b00011]",
+                "basis": "text",
+                "support": "reported",
+                "quote": "We found that ATAC-seq paired-end reads produce detailed information about nucleosome packing and positioning.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "b00021; inspected full-text passage",
+                "basis": "text",
+                "support": "reported",
+                "quote": "These insights are derived from both the position of insertion and the distribution of insert lengths captured during the transposition reaction.",
+                "bbox": null,
+                "rationale": "Mapped genomic inserts and insertion-derived ends are the information carriers. This supports the readout interpretation without adding sequencing or analysis as an operation to the diagram."
+              }
+            ]
+          },
+          "record_id": "atac-seq",
+          "admission": "supported"
+        },
+        {
+          "id": "illumina:atac-seq:state:s_library",
+          "node_type": "state",
+          "original": {
+            "id": "s_library",
+            "label": "Purified, amplified DNA library",
+            "kind": "material",
+            "features": [
+              "Rightmost product is labelled “DNA”: three linear blue DNA-fragment strokes with short pink and yellow-green terminal segments; nucleosomes and transposome icons are absent. The three strokes represent library fragments, not three separate workflow branches.",
+              "Genomic DNA fragments, rather than RNA, histones or transposase protein, are the sequencing readout carrier; adapter sequences provide the amplification/sequencing interface.",
+              "The library is enriched for accessible-site-derived fragments, not a complete or perfectly specific inventory of all nucleosome-free bases."
+            ],
+            "evidence": [
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Arrow and two-line caption “DNA purification / Amplification”, then rightmost linear DNA fragments with colored terminal strokes labelled “DNA”.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.818,
+                  0.12,
+                  1.0,
+                  0.98
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Results, “ATAC-seq probes chromatin accessibility with transposons”, [b00008]",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Online Methods [b00027], PCR, first sentence",
+                "basis": "text",
+                "support": "reported",
+                "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Results [b00008], accessibility-dependent preference",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a).",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "atac-seq",
+          "admission": "supported"
+        },
+        {
+          "id": "illumina:atac-seq:state:s_tagged_fragments",
+          "node_type": "state",
+          "original": {
+            "id": "s_tagged_fragments",
+            "label": "Fragmented and primed chromatin DNA",
+            "kind": "material",
+            "features": [
+              "Genomic DNA is now discontinuous, with short pink and yellow-green terminal marks and a free central fragment; nucleosome-associated pieces are also still depicted.",
+              "The terminal marks are interpreted as transferred sequencing-adapter sequences from the loaded Tn5 complex, supported by the paper and card. The image supplies no color legend, terminal polarity, chemical end groups or barcode identity.",
+              "Accessible-site insertion positions and retained genomic inserts physically encode the chromatin-accessibility sampling. The cartoon does not define separate experimental branches for each fragment or nucleosome icon."
+            ],
+            "evidence": [
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "“Tn5 Transposome” blue icon carrying pink and yellow-green strokes; adjacent rightward reagent-introduction arrow.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.357,
+                  0.03,
+                  0.444,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Rightward arrow to “Fragmented and primed”: discontinuous DNA, detached central fragment and short colored terminal strokes; nucleosome-bound DNA remains visible.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.623,
+                  0.0,
+                  0.813,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Results, “ATAC-seq probes chromatin accessibility with transposons”, [b00008]",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "card:atac-seq",
+                "locator": "jcr:content/par/text_1/text, method description",
+                "basis": "text",
+                "support": "reported",
+                "quote": "In this method, gDNA is incubated with Tn5 transposomes, which fragments it and adds adapters simultaneously, in open chromatin regions.",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "atac-seq",
+          "admission": "supported"
+        }
+      ],
+      "flows": [
+        {
+          "id": "illumina:atac-seq:flow:f03",
+          "source": "illumina:atac-seq:state:s_tagged_fragments",
+          "target": "illumina:atac-seq:operation:op_purify_amplify",
+          "kind": "material_input",
+          "original": {
+            "id": "f03",
+            "source": "s_tagged_fragments",
+            "target": "op_purify_amplify",
+            "kind": "material_input",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Rightward arrow to “Fragmented and primed”: discontinuous DNA, detached central fragment and short colored terminal strokes; nucleosome-bound DNA remains visible.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.623,
+                  0.0,
+                  0.813,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Arrow and two-line caption “DNA purification / Amplification”, then rightmost linear DNA fragments with colored terminal strokes labelled “DNA”.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.818,
+                  0.12,
+                  1.0,
+                  0.98
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Online Methods [b00027], PCR, first sentence",
+                "basis": "text",
+                "support": "reported",
+                "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "atac-seq",
+          "admission": "supported"
+        },
+        {
+          "id": "illumina:atac-seq:flow:f04",
+          "source": "illumina:atac-seq:operation:op_purify_amplify",
+          "target": "illumina:atac-seq:state:s_library",
+          "kind": "material_output",
+          "original": {
+            "id": "f04",
+            "source": "op_purify_amplify",
+            "target": "s_library",
+            "kind": "material_output",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Arrow and two-line caption “DNA purification / Amplification”, then rightmost linear DNA fragments with colored terminal strokes labelled “DNA”.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.818,
+                  0.12,
+                  1.0,
+                  0.98
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Online Methods [b00027], PCR, first sentence",
+                "basis": "text",
+                "support": "reported",
+                "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "atac-seq",
+          "admission": "supported"
+        }
+      ],
+      "input_state_ids": [
+        "illumina:atac-seq:state:s_tagged_fragments"
+      ],
+      "output_state_ids": [
+        "illumina:atac-seq:state:s_library"
+      ],
+      "internal_state_ids": [],
+      "boundary_flows": [
+        {
+          "id": "illumina:atac-seq:flow:f02",
+          "source": "illumina:atac-seq:operation:op_tagmentation",
+          "target": "illumina:atac-seq:state:s_tagged_fragments",
+          "kind": "material_output",
+          "original": {
+            "id": "f02",
+            "source": "op_tagmentation",
+            "target": "s_tagged_fragments",
+            "kind": "material_output",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Rightward arrow to “Fragmented and primed”: discontinuous DNA, detached central fragment and short colored terminal strokes; nucleosome-bound DNA remains visible.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.623,
+                  0.0,
+                  0.813,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Results, “ATAC-seq probes chromatin accessibility with transposons”, [b00008]",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "atac-seq",
+          "admission": "supported"
+        }
+      ],
+      "surrounding_operations": [
+        {
+          "id": "illumina:atac-seq:operation:op_tagmentation",
+          "node_type": "operation",
+          "original": {
+            "id": "op_tagmentation",
+            "label": "Insert in regions of open chromatin → Fragmented and primed",
+            "description": "Adapter-loaded Tn5 transposomes contact exposed genomic DNA in the native chromatin substrate. Tagmentation cuts DNA and transfers adapter sequences, changing continuous chromatin DNA into tagged fragments. The transposome-engaged illustration and the following fragmented/primed illustration are local views of this one coupled transformation, not independent cleavage and adapter-ligation workflows. Grey nucleosomes illustrate relative protection and remain visible on some output pieces.",
+            "inputs": [
+              "s_native_chromatin"
+            ],
+            "outputs": [
+              "s_tagged_fragments"
+            ],
+            "mechanism": "Tn5 transposase is supplied preloaded with sequencing adapters (blue complex with colored strokes in this diagram). It simultaneously fragments and tags DNA; accessible DNA is preferentially attacked because less accessible chromatin reduces transposition. The icon is a reagent/catalyst annotation, not a consumed sample state. “Primed” denotes adapter-tagged fragments available for subsequent PCR; no separate primer-annealing operation is depicted.",
+            "information_effect": "Insertion sites and genomic sequences between insertions carry information about chromatin accessibility. Enrichment is preferential: lack of a fragment does not prove absolute inaccessibility. The card cautions that mechanical processing can expose previously bound regions, so tagging reports accessibility under the preparation and reaction context rather than perfect in vivo specificity.",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Left assay-identification vignette and repeated substrate labelled “Open DNA”: grey nucleosomes joined by exposed DNA; yellow emphasis only in left vignette.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.0,
+                  0.0,
+                  0.36,
+                  0.98
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "“Tn5 Transposome” blue icon carrying pink and yellow-green strokes; adjacent rightward reagent-introduction arrow.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.357,
+                  0.03,
+                  0.444,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "“Insert in regions of open chromatin”: blue transposomes on exposed DNA between and beside grey nucleosomes.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.45,
+                  0.0,
+                  0.616,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_d58dd2c61046500f9e625c8d",
+                "locator": "Rightward arrow to “Fragmented and primed”: discontinuous DNA, detached central fragment and short colored terminal strokes; nucleosome-bound DNA remains visible.",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.623,
+                  0.0,
+                  0.813,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Results, “ATAC-seq probes chromatin accessibility with transposons”, [b00008]",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11).",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:24097267",
+                "locator": "Results [b00008], accessibility-dependent preference",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a).",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "card:atac-seq",
+                "locator": "jcr:content/par/text_1/text, method description",
+                "basis": "text",
+                "support": "reported",
+                "quote": "In this method, gDNA is incubated with Tn5 transposomes, which fragments it and adds adapters simultaneously, in open chromatin regions.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "card:atac-seq",
+                "locator": "jcr:content/par/text_1/text, limitations",
+                "basis": "text",
+                "support": "reported",
+                "quote": "During mechanical sample processing, bound chromatin regions might open and be tagged by the transposome",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "atac-seq",
+          "admission": "supported"
+        }
+      ],
+      "method_scopes": [],
+      "corrections": [],
+      "unknowns": [],
+      "review_format_version": null,
+      "label_checks": {},
+      "label_review_boundary": "Only explicit label judgments from the recorded review; absent checks were not separately assessed.",
+      "full_source_registry_artifact": {
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/scope_repair_pilot_01/cards/atac-seq/attempt_001/source_registry.json",
+        "sha256": "8ea7fa4aef7bfb1e6d2a15efe328c46d6128d54e8179c1dec0fa31ad61090fe5",
+        "status": "recorded_custody_pointer_verify_before_read"
+      },
+      "routing_ambiguities": [],
+      "status": "source_group_only; scientific_comparison_not_performed",
+      "boundary": "Connectivity is not a shared transformation, substitute compatibility or ancestry claim. A boundary State may also be internal when a side branch exits the selected group.",
+      "provenance": {
+        "card:atac-seq": {
+          "kind": "text",
+          "content_level": "catalogue",
+          "url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/atac-seq.html",
+          "title": "ATAC-Seq"
+        },
+        "diagram:asset_d58dd2c61046500f9e625c8d": {
+          "kind": "image",
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_05/imports/62/62c3c2fe88ab815ad08bc3e3e8c0f26b5173daa6631427652fc79fbf1545f929.png",
+          "sha256": "62c3c2fe88ab815ad08bc3e3e8c0f26b5173daa6631427652fc79fbf1545f929",
+          "url": "https://www.illumina.com/content/dam/illumina-marketing/images/tools/sequencing/atac-seq.png",
+          "content_level": "diagram"
+        },
+        "paper:24097267": {
+          "kind": "text",
+          "content_level": "fulltext",
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_05/imports/b3/b37eaf1ba3bc24b972d270df27205300ccdcec2d08557b7f992c331c6d2f2b5e.txt",
+          "sha256": "b37eaf1ba3bc24b972d270df27205300ccdcec2d08557b7f992c331c6d2f2b5e",
+          "pmid": "24097267",
+          "title": "Transposition of native chromatin for fast and sensitive epigenomic profiling of open chromatin, DNA-binding proteins and nucleosome position.",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3959825/"
+        }
+      },
+      "provenance_projection": "Only sources referenced in this context are indexed here. Full custody records remain at full_source_registry_artifact; evidence and selected workflow records are unchanged."
+    },
+    "right": {
+      "format_version": "illumina_operation_group/1.0",
+      "selection_sha256": "d9ea2c8fe27110950c9ebf08c8fe9b1ae05a2027b4d957aa2be858b0779db405",
+      "record_id": "chipmentation",
+      "operation_ids": [
+        "illumina:chipmentation:operation:op_recover_amplify"
+      ],
+      "candidate_sha256": "50255353dae7853323c20b30d36d9d65ce4fd354fb3274e58885f875da9bebf7",
+      "review_sha256": "b9156056209ac4bf0d88450311d605c40760d3d2622fffaf60932211e40e51ab",
+      "artifact_pins": {
+        "card.json": "efb45266931cbacb8a882382cc4f82ddd485f1e3cdb82aca693ce830967ceaca",
+        "source_registry.json": "6191fbf9a99eae30c7b886d26e34d5d933975fbdabd2ce8467656257671c79ba",
+        "extraction.json": "01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+        "review.json": "c5657e1c43df7041dc1d73dd3baa85575f5117552621c5b1328bf52696168667",
+        "graph.json": "27bfebef7a499641a94e007833386cdc7a53bce10cf32de7df8e5f0ed4cba71c",
+        "stages.json": "d2880fbfbe38c260f6c859c701ad593d198559025e964c29de3bbf894364bef6"
+      },
+      "scope": "Illumina explanatory ChIPmentation schematic, resolved to the bead-bound-chromatin implementation described by Schmidl et al. (PMID 26280331): antibody-mediated chromatin capture, Tn5 tagmentation while bead-bound, and the depicted combined DNA purification/amplification block yielding a DNA library. The far-left overview cartoon/caption names the method rather than supplying an extra upstream transformation. The three upstream ChIP protocols reported in the paper share this bead-bound interface at the level extracted here. Purified-DNA ChIP-tagmentation and ATAC-seq are distinct workflows discussed by the sources, with no separate route for either in this diagram. Sequencing is the supported use of the final DNA library, not a drawn operation.",
+      "source_scope": {},
+      "admission": "supported",
+      "nodes": [
+        {
+          "id": "illumina:chipmentation:operation:op_recover_amplify",
+          "node_type": "operation",
+          "original": {
+            "id": "op_recover_amplify",
+            "label": "DNA purification / Amplification",
+            "description": "The depicted combined DNA purification / Amplification block converts tagmented chromatin to recovered DNA and enriches the library by amplification. The paper specifies elution from beads, reverse-crosslinking and DNA purification after on-bead tagmentation, followed by library amplification; these are retained within the broad drawn block rather than expanded into an execution recipe.",
+            "inputs": [
+              "s_tagged_chromatin"
+            ],
+            "outputs": [
+              "s_library"
+            ],
+            "mechanism": "Recovery releases genomic DNA from the captured chromatin, and PCR amplification produces additional copies of the adapter-bearing library.",
+            "information_effect": "Purified genomic DNA is the sequenced carrier. Mapping its inserts can establish the genomic distribution of enrichment associated with the immunoprecipitated chromatin protein or modification. Protein removal breaks the physical protein-DNA association while library composition retains the selection history; antibody specificity and Tn5 bias constrain the resulting interpretation. The schematic ends at DNA library production.",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "DNA purification / Amplification arrow to final DNA line",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.865,
+                  0.18,
+                  1.0,
+                  0.91
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00004, Abstract",
+                "basis": "text",
+                "support": "reported",
+                "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00067, Figure 1 caption, panel i: final library amplification by PCR",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Library preparation time was measured up to the point when sequencing-compatible adapters are introduced, excluding the final library amplification by PCR that is similar for all methods.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00026, Online Methods, Amplification and sequencing of libraries",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Sequencing was performed by the Biomedical Sequencing Facility at CeMM using the Illumina HiSeq 2000/2500 platform (see Supplementary Table 2 for details).",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00005, Introduction: biological readout",
+                "basis": "text",
+                "support": "reported",
+                "quote": "ChIP-seq combines chromatin immunoprecipitation with next generation sequencing in order to measure the genome-wide distribution of chromatin proteins and their posttranslational modifications1.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00022, Online Methods, ChIPmentation: elution, reverse-crosslinking and DNA purification",
+                "basis": "text",
+                "support": "inferred",
+                "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+                "bbox": null,
+                "rationale": "Recovery removes the chromatin attachment represented before purification. Together with the reported ChIP-seq mapping purpose, this supports interpreting purified genomic DNA as the readout carrier of prior antibody enrichment; proteins themselves are not the sequenced product."
+              },
+              {
+                "source_id": "paper:27297499",
+                "locator": "b00092, section 5, ChIP-seq: antibody specificity",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Antibodies may show poor reactivity to their target or bind to other DNA-binding proteins nonspecifically, leading to false inferences of protein binding localization (Landt et al., 2012).",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00011, main text: interpreting Tn5 patterns",
+                "basis": "text",
+                "support": "reported",
+                "quote": "However, some of these patterns were also present in genome sequencing libraries prepared by tagmentation of purified genomic DNA (Supplementary Fig. 7a), suggesting that they originate in part from DNA sequence biases of the transposase.",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "chipmentation",
+          "admission": "supported"
+        },
+        {
+          "id": "illumina:chipmentation:state:s_library",
+          "node_type": "state",
+          "original": {
+            "id": "s_library",
+            "label": "DNA (purified, amplified sequencing library)",
+            "kind": "material",
+            "features": [
+              "Final blue DNA line retains pink and yellow-green terminal segments after the arrow labelled DNA purification / Amplification.",
+              "Purified and PCR-enriched genomic DNA fragments carry the sequencing readout; their genomic origins represent enrichment through the selected chromatin protein or histone modification.",
+              "The protein association is used for selection upstream; it is represented by the composition of the recovered DNA library after elution, reverse-crosslinking and purification. Exact adapter structures and end chemistry are not specified in the drawing."
+            ],
+            "evidence": [
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "DNA purification / Amplification arrow to final DNA line",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.865,
+                  0.18,
+                  1.0,
+                  0.91
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00004, Abstract",
+                "basis": "text",
+                "support": "reported",
+                "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00067, Figure 1 caption, panel i: final library amplification by PCR",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Library preparation time was measured up to the point when sequencing-compatible adapters are introduced, excluding the final library amplification by PCR that is similar for all methods.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00026, Online Methods, Amplification and sequencing of libraries",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Sequencing was performed by the Biomedical Sequencing Facility at CeMM using the Illumina HiSeq 2000/2500 platform (see Supplementary Table 2 for details).",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00005, Introduction: biological readout",
+                "basis": "text",
+                "support": "reported",
+                "quote": "ChIP-seq combines chromatin immunoprecipitation with next generation sequencing in order to measure the genome-wide distribution of chromatin proteins and their posttranslational modifications1.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00022, Online Methods, ChIPmentation: elution, reverse-crosslinking and DNA purification",
+                "basis": "text",
+                "support": "inferred",
+                "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+                "bbox": null,
+                "rationale": "Recovery removes the chromatin attachment represented before purification. Together with the reported ChIP-seq mapping purpose, this supports interpreting purified genomic DNA as the readout carrier of prior antibody enrichment; proteins themselves are not the sequenced product."
+              }
+            ]
+          },
+          "record_id": "chipmentation",
+          "admission": "supported"
+        },
+        {
+          "id": "illumina:chipmentation:state:s_tagged_chromatin",
+          "node_type": "state",
+          "original": {
+            "id": "s_tagged_chromatin",
+            "label": "Fragmented and primed (DNA within tagmented, bead-bound chromatin)",
+            "kind": "material",
+            "features": [
+              "DNA is further fragmented and carries sequencing-compatible adapter sequences introduced during tagmentation.",
+              "The depicted blue DNA line has a pink segment at one end and a yellow-green segment at the other. The label primed indicates the adapter/priming state at schematic scope; explicit primer annealing is not shown.",
+              "In the primary-supported implementation, the immediate tagmentation product remains bead-bound chromatin pending recovery. The free DNA line abstracts the modified DNA, rather than establishing an earlier protein-removal operation."
+            ],
+            "evidence": [
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "Adapter insertion: chromatin with blue Tn5 icons; right-hand chromatin icon is pale",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.555,
+                  0.05,
+                  0.7,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "Arrow to Fragmented and primed; blue DNA line with pink and yellow-green end segments",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.725,
+                  0.24,
+                  0.84,
+                  0.91
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "card:chipmentation",
+                "locator": "description_verbatim / jcr:content/par/text_1/text",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00004, Abstract",
+                "basis": "text",
+                "support": "reported",
+                "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00006, main text: definition of ChIPmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00011, main text: tagmentation substrate",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4.",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "chipmentation",
+          "admission": "supported"
+        }
+      ],
+      "flows": [
+        {
+          "id": "illumina:chipmentation:flow:f_tagged_recover",
+          "source": "illumina:chipmentation:state:s_tagged_chromatin",
+          "target": "illumina:chipmentation:operation:op_recover_amplify",
+          "kind": "material_input",
+          "original": {
+            "id": "f_tagged_recover",
+            "source": "s_tagged_chromatin",
+            "target": "op_recover_amplify",
+            "kind": "material_input",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "Arrow to Fragmented and primed; blue DNA line with pink and yellow-green end segments",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.725,
+                  0.24,
+                  0.84,
+                  0.91
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "DNA purification / Amplification arrow to final DNA line",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.865,
+                  0.18,
+                  1.0,
+                  0.91
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00006, main text: definition of ChIPmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "chipmentation",
+          "admission": "supported"
+        },
+        {
+          "id": "illumina:chipmentation:flow:f_recover_library",
+          "source": "illumina:chipmentation:operation:op_recover_amplify",
+          "target": "illumina:chipmentation:state:s_library",
+          "kind": "material_output",
+          "original": {
+            "id": "f_recover_library",
+            "source": "op_recover_amplify",
+            "target": "s_library",
+            "kind": "material_output",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "DNA purification / Amplification arrow to final DNA line",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.865,
+                  0.18,
+                  1.0,
+                  0.91
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00067, Figure 1 caption, panel i: final library amplification by PCR",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Library preparation time was measured up to the point when sequencing-compatible adapters are introduced, excluding the final library amplification by PCR that is similar for all methods.",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "chipmentation",
+          "admission": "supported"
+        }
+      ],
+      "input_state_ids": [
+        "illumina:chipmentation:state:s_tagged_chromatin"
+      ],
+      "output_state_ids": [
+        "illumina:chipmentation:state:s_library"
+      ],
+      "internal_state_ids": [],
+      "boundary_flows": [
+        {
+          "id": "illumina:chipmentation:flow:f_tagment_tagged",
+          "source": "illumina:chipmentation:operation:op_tagment",
+          "target": "illumina:chipmentation:state:s_tagged_chromatin",
+          "kind": "material_output",
+          "original": {
+            "id": "f_tagment_tagged",
+            "source": "op_tagment",
+            "target": "s_tagged_chromatin",
+            "kind": "material_output",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "Adapter insertion: chromatin with blue Tn5 icons; right-hand chromatin icon is pale",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.555,
+                  0.05,
+                  0.7,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "Arrow to Fragmented and primed; blue DNA line with pink and yellow-green end segments",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.725,
+                  0.24,
+                  0.84,
+                  0.91
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00006, main text: definition of ChIPmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "chipmentation",
+          "admission": "supported"
+        }
+      ],
+      "surrounding_operations": [
+        {
+          "id": "illumina:chipmentation:operation:op_tagment",
+          "node_type": "operation",
+          "original": {
+            "id": "op_tagment",
+            "label": "Adapter insertion",
+            "description": "Add Tn5 transposome to immunoprecipitated, bead-bound chromatin. Tagmentation further fragments the already fragmented chromatin DNA and introduces sequencing-compatible adapter sequences, summarized by the Fragmented and primed line. The supported substrate is captured chromatin, including its protein protection, rather than purified ChIP DNA.",
+            "inputs": [
+              "s_selected_chromatin",
+              "s_tn5"
+            ],
+            "outputs": [
+              "s_tagged_chromatin"
+            ],
+            "mechanism": "Tn5-mediated tagmentation couples DNA fragmentation and adapter tagging in one reaction on bead-bound chromatin; the blue transposome is the reagent, not a specimen branch.",
+            "information_effect": "Introduce library priming handles into genomic DNA enriched by ChIP. Detailed insertion patterns can also reflect transposase sequence bias; the primary biological readout is genomic enrichment for the antibody target.",
+            "evidence": [
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "Tn5 Transposome label, blue icon with short pink and yellow-green arms and addition arrow",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.47,
+                  0.08,
+                  0.535,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "Adapter insertion: chromatin with blue Tn5 icons; right-hand chromatin icon is pale",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.555,
+                  0.05,
+                  0.7,
+                  0.85
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+                "locator": "Arrow to Fragmented and primed; blue DNA line with pink and yellow-green end segments",
+                "basis": "image",
+                "support": "depicted",
+                "quote": null,
+                "bbox": [
+                  0.725,
+                  0.24,
+                  0.84,
+                  0.91
+                ],
+                "rationale": null
+              },
+              {
+                "source_id": "card:chipmentation",
+                "locator": "description_verbatim / jcr:content/par/text_1/text",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00005, Introduction",
+                "basis": "text",
+                "support": "reported",
+                "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA3.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00004, Abstract",
+                "basis": "text",
+                "support": "reported",
+                "quote": "ChIPmentation introduces sequencing-compatible adapters in a single-step reaction directly on bead-bound chromatin, which reduces time, cost, and input requirements, thus providing a convenient and broadly useful alternative to existing ChIP-seq protocols.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00006, main text: definition of ChIPmentation",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00011, main text: tagmentation substrate",
+                "basis": "text",
+                "support": "reported",
+                "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00011, main text: interpreting Tn5 patterns",
+                "basis": "text",
+                "support": "reported",
+                "quote": "However, some of these patterns were also present in genome sequencing libraries prepared by tagmentation of purified genomic DNA (Supplementary Fig. 7a), suggesting that they originate in part from DNA sequence biases of the transposase.",
+                "bbox": null,
+                "rationale": null
+              },
+              {
+                "source_id": "paper:26280331",
+                "locator": "b00008, main text: reason for retaining chromatin proteins",
+                "basis": "text",
+                "support": "reported",
+                "quote": "We reasoned that performing tagmentation directly on the immunoprecipitated and bead-bound chromatin would allow chromatin proteins to protect the DNA from excessive tagmentation.",
+                "bbox": null,
+                "rationale": null
+              }
+            ]
+          },
+          "record_id": "chipmentation",
+          "admission": "supported"
+        }
+      ],
+      "method_scopes": [],
+      "corrections": [
+        {
+          "id": "c_dna_abstraction",
+          "target_id": "state:s_tagged_chromatin",
+          "diagram_observation": "The diagram places a free-looking, protein-free blue DNA line with pink and yellow-green ends labelled Fragmented and primed before the DNA purification / Amplification block. It does not draw an intervening elution or protein-removal step.",
+          "primary_statement": "The primary paper places tagmentation directly on bead-bound chromatin and only afterward resumes elution, reverse-crosslinking and DNA purification. Accordingly, the affected state is authored as adapter-tagged DNA still in bead-bound chromatin at the end of tagmentation; the free-line drawing is preserved as a schematic abstraction of DNA modification, and recovery remains in the downstream combined block.",
+          "disposition": "use_primary",
+          "evidence": [
+            {
+              "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+              "locator": "After Adapter insertion arrow: single blue line with pink and yellow-green end segments labelled Fragmented and primed, before DNA purification / Amplification",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.725,
+                0.24,
+                0.843,
+                0.91
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "paper:26280331",
+              "locator": "b00006, main text: definition of ChIPmentation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "paper:26280331",
+              "locator": "b00022, Online Methods, ChIPmentation: recovery after on-bead tagmentation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "elution from beads, reverse-crosslinking, and DNA purification.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        },
+        {
+          "id": "c_retained_substrate",
+          "target_id": "operation:op_tagment",
+          "diagram_observation": "The Adapter insertion panel depicts blue transposome icons beside both a solid support-bound chromatin icon and a pale apparently unattached chromatin icon. There is no legend explaining the fading and no bifurcating material arrow.",
+          "primary_statement": "The card and primary paper explicitly define the ChIPmentation reaction on bead-bound, immunoprecipitated chromatin. The operation and its retained output are therefore authored for that fraction; the pale icon is recorded without assigning it a separate retained or purified-DNA tagmentation route. Its graphical fading alone does not specify a biochemical fate.",
+          "disposition": "use_primary",
+          "evidence": [
+            {
+              "source_id": "diagram:asset_20083ca733fbaa508edf5f27",
+              "locator": "Adapter insertion panel: solid antibody/support-bound chromatin and a pale apparently unattached chromatin icon, both adjacent to blue transposome icons; no bifurcating arrow or legend",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.555,
+                0.04,
+                0.7,
+                0.86
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "card:chipmentation",
+              "locator": "description_verbatim / jcr:content/par/text_1/text",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Tagmentation is performed directly on bead-bound, immunoprecipitated chromatin, followed by standard library preparation methods.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "paper:26280331",
+              "locator": "b00006, main text: definition of ChIPmentation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "unknowns": [
+        {
+          "id": "u_end_identity",
+          "question": "Which exact adapter sequences and strand-end polarities do the pink and yellow-green segments denote? The diagram has no legend; an annotated oligonucleotide map would be needed to resolve them. This does not prevent interpreting the adapter-tagged DNA architecture.",
+          "blocking": false,
+          "affected_ids": [
+            "state:s_tn5",
+            "state:s_tagged_chromatin",
+            "state:s_library"
+          ]
+        }
+      ],
+      "review_format_version": null,
+      "label_checks": {},
+      "label_review_boundary": "Only explicit label judgments from the recorded review; absent checks were not separately assessed.",
+      "full_source_registry_artifact": {
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/all_cards_01/cards/chipmentation/attempt_001/source_registry.json",
+        "sha256": "6191fbf9a99eae30c7b886d26e34d5d933975fbdabd2ce8467656257671c79ba",
+        "status": "recorded_custody_pointer_verify_before_read"
+      },
+      "routing_ambiguities": [],
+      "status": "source_group_only; scientific_comparison_not_performed",
+      "boundary": "Connectivity is not a shared transformation, substitute compatibility or ancestry claim. A boundary State may also be internal when a side branch exits the selected group.",
+      "provenance": {
+        "card:chipmentation": {
+          "kind": "text",
+          "content_level": "catalogue",
+          "url": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/chipmentation.html",
+          "title": "ChIPmentation"
+        },
+        "diagram:asset_20083ca733fbaa508edf5f27": {
+          "kind": "image",
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/b1/b19388034db94ab4b3dfafba2785ad829e49a753ecfc90927203da1c31ca8af3.png",
+          "sha256": "b19388034db94ab4b3dfafba2785ad829e49a753ecfc90927203da1c31ca8af3",
+          "url": "https://www.illumina.com/content/dam/illumina-marketing/images/tools/sequencing/chipmentation.png",
+          "content_level": "diagram"
+        },
+        "paper:26280331": {
+          "kind": "text",
+          "content_level": "fulltext",
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/e7/e79684b3acbcb3d9bc424fa63e5615aeaa4adcddd1fb61354e2c5d80ee435850.txt",
+          "sha256": "e79684b3acbcb3d9bc424fa63e5615aeaa4adcddd1fb61354e2c5d80ee435850",
+          "pmid": "26280331",
+          "title": "ChIPmentation: fast, robust, low-input ChIP-seq for histones and transcription factors.",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4589892/"
+        },
+        "paper:27297499": {
+          "kind": "text",
+          "content_level": "fulltext",
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/illumina_full_20261031/sources_04/imports/c8/c80148fee7f6c38309f99ff639ab4986f38be9ea56f5f08c8b1f5f477fe33a06.txt",
+          "sha256": "c80148fee7f6c38309f99ff639ab4986f38be9ea56f5f08c8b1f5f477fe33a06",
+          "pmid": "27297499",
+          "title": "Next generation sequencing technology and genomewide data analysis: Perspectives for retinal research.",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5112143/"
+        }
+      },
+      "provenance_projection": "Only sources referenced in this context are indexed here. Full custody records remain at full_source_registry_artifact; evidence and selected workflow records are unchanged."
+    }
+  },
+  "diagram_adequacy": [
+    {
+      "record_id": "atac-seq",
+      "verdict": "sufficient_with_paper_annotations",
+      "explanation": "The existing two operations suffice for the qualified tagmentation mechanism, broad library-production function, primer-component adoption annotation and whole-group readout comparison. 'Open DNA' describes accessible DNA within native chromatin; the repeated vignette is not an opening operation, and final multiple DNA strokes do not form alternative routes. The original paper supplies the unfixed nuclear context, preferential rather than absolute accessibility sampling, custom-primer implementation, purification variation at low input, and lack of size selection. No finer extraction is required for these claims. Separately addressable purification-versus-PCR comparisons or an operation-level alignment of downstream footprint analysis would require distinctions absent from the current broad block/library endpoint; those narrower questions remain unresolved."
+    },
+    {
+      "record_id": "chipmentation",
+      "verdict": "sufficient_with_paper_annotations",
+      "explanation": "The three existing operations preserve the key additional antibody-selection step and support qualified correspondence of tagmentation and downstream library production. Paper annotations are essential: tagmentation is on already fragmented immunoprecipitated bead-bound chromatin; the free-looking tagged-DNA line remains attached until the combined recovery block; and the pale unattached icon does not define another retained workflow. Elution, reverse-crosslinking, primer adoption and size selection can be explained inside the existing broad block without editing it. The original papers support the recorded claims at this level. Separate operation-level attribution of bead release, crosslink reversal, cleanup and PCR, or alignment of downstream footprint-correction operations, would require finer extraction for those specified unresolved questions, not an executable recipe or redesign during this run."
+    }
+  ],
+  "analysis_sha256": "449f990224021a68035c19c9df8a1e8a874020f9e2ef857c197c11d2a59b879e",
+  "status": "model_reviewed_pair_pilot",
+  "boundary": "Read-only retrieval of a previously reviewed pilot claim. Source quotes were checked in that run; this query does not reread the papers. Component scope must not expand to its enclosing operation. Shared mechanism is not interchangeability. New design transfers remain hypotheses. Dates/priority and canonical method identity are not newly verified here."
+}

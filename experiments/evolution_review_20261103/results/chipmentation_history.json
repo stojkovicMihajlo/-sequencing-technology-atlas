@@ -1,0 +1,711 @@
+{
+  "technology": {
+    "id": "workflow:chipmentation:01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+    "name": "ChIPmentation",
+    "record_id": "chipmentation",
+    "extraction_sha256": "01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+    "kind": "bound_workflow"
+  },
+  "max_depth": 2,
+  "nodes": [
+    {
+      "id": "external:8bd1b05c1249907b8d915cf7e3ea6860e2ef73ff7401940304bd49cd4b3ee3a4:contributor:claim_r11",
+      "name": "Adey et al. (2010): Nextera/Tn5 fragmentation with adapter incorporation and PCR library construction",
+      "kind": "experimental_component",
+      "reference_id": "R11",
+      "identity_status": "scoped_to_cited_contribution; catalogue_matches_are_candidates",
+      "catalogue_candidates": []
+    },
+    {
+      "id": "workflow:atac-seq:d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+      "name": "ATAC-Seq",
+      "record_id": "atac-seq",
+      "extraction_sha256": "d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+      "kind": "bound_workflow"
+    },
+    {
+      "id": "workflow:chipmentation:01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+      "name": "ChIPmentation",
+      "record_id": "chipmentation",
+      "extraction_sha256": "01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+      "kind": "bound_workflow"
+    }
+  ],
+  "historical_contributions": [
+    {
+      "id": "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de:c3",
+      "source": "workflow:atac-seq:d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+      "target": "workflow:chipmentation:01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+      "relation": "component_adoption",
+      "claim": {
+        "id": "c3",
+        "left_operation_ids": [
+          "illumina:atac-seq:operation:op_purify_amplify"
+        ],
+        "right_operation_ids": [
+          "illumina:chipmentation:operation:op_recover_amplify"
+        ],
+        "relation": "component_adoption",
+        "direction": "left_to_right",
+        "shared_description": "Within the existing combined purification/amplification blocks, ChIPmentation explicitly adopts the custom Nextera primer implementation described for ATAC-seq to prepare/amplify the tagged DNA library. This is a historical claim about that primer component, not inheritance of the entire block or assay.",
+        "difference": "Left: the original ATAC-seq paper independently reports using custom Nextera PCR primers 1 and 2 with NEBnext after purification of transposed nuclear DNA. Right: the ChIPmentation paper explicitly attributes its custom Nextera primers to ATAC-seq while using KAPA enrichment on recovered ChIPmentation DNA. Its bead recovery, crosslink reversal, cycle estimation and size selection remain its own reported implementation context. Adoption of the primer component does not establish adoption of the left substrate preparation or accessibility-selection architecture.",
+        "consequence": "The citation establishes an implemented transfer of the library-amplification primer component into the later workflow. Neither paper isolates a performance benefit caused by that transfer, and it does not imply identical complete adapters, cycling behavior, library representation or measured biological output.",
+        "rationale": "The right Online Methods amplification section states 'as described for ATAC-seq4'; reference 4 in the right bibliography resolves to Buenrostro et al., PMID 24097267, the registered left original paper. The left Methods independently describe the cited custom-primer implementation. This combination satisfies component_adoption and supplies direction through explicit attribution, rather than publication dates or a shared Tn5 label. The exact existing broad Operation IDs are used to attach this qualified component annotation; no primer-only operation is created.",
+        "left_evidence": [
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          }
+        ],
+        "right_evidence": [
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Library preparation was performed using custom Nextera primers as described for ATAC-seq4."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Final enrichment of the libraries was performed in a 50 μl reaction using 0.75 μM primers and 25 μl 2x KAPA HiFi HotStart ReadyMix."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA3. Furthermore, tagmentation of intact chromatin followed by sequencing (ATAC-seq) was shown to yield open chromatin profiles comparable to those obtained by DNase-seq4. In contrast, this technique has not yet been adapted for ChIP-seq sample preparation."
+          }
+        ],
+        "unresolved": [
+          "No method_development relation for the complete ATAC-seq assay architecture is established here. The right introduction frames extension of chromatin tagmentation to ChIP, but separately attributes generic tagmentation to Adey et al. (reference 3), also credited as prior tagmentation by the left paper (reference 11). The explicit implementation transfer identified here concerns custom Nextera primers; enzyme reuse and an ATAC citation alone do not establish whole-assay inheritance.",
+          "The separate ATAC-seq experiment described in the right paper is an adapted open-chromatin control for its analyses, not evidence that ChIPmentation itself runs the complete ATAC-seq workflow.",
+          "Complete primer/adaptor sequence identity is not reconstructed from the diagrams' colored ends. The historical conclusion is limited to the implementation explicitly attributed by the authors."
+        ]
+      },
+      "review": {
+        "claim_id": "c3",
+        "decision": "accept",
+        "rationale": "Accepted as written as directed component_adoption, left to right. The right amplification Methods explicitly say that custom Nextera primers were used as described for ATAC-seq reference 4; that bibliography entry identifies Buenrostro, Giresi, Zaba, Chang and Greenleaf, PMID 24097267, DOI 10.1038/nmeth.2688. The registered left original independently reports the custom Nextera PCR-primer implementation and production of libraries with it. This is implemented component attribution, not an inference from dates or a generic enzyme citation. The same complete operation boundaries inspected for c2 apply here. Both encompass amplification, making them valid existing attachment points for the specifically delimited primer annotation; neither is relabeled as a primer-only operation. The claim preserves NEBnext versus KAPA and nuclear versus recovered ChIP DNA contexts, and does not assert inheritance of the entire recovery block or ATAC accessibility assay. The right introduction also credits generic tagmentation separately to Adey (reference 3), while the left credits that work as reference 11; c3 does not misattribute the origin of generic tagmentation to ATAC-seq.",
+        "evidence": [
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "The libraries were purified using a Qiagen PCR cleanup kit yielding a final library concentration of ~30 nM in 20 μL. Libraries were amplified for a total of 10–12 cycles."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Library preparation was performed using custom Nextera primers as described for ATAC-seq4."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "4BuenrostroJDGiresiPGZabaLCChangHYGreenleafWJNat Methods201310121312182409726710.1038/nmeth.2688PMC3959825"
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA3. Furthermore, tagmentation of intact chromatin followed by sequencing (ATAC-seq) was shown to yield open chromatin profiles comparable to those obtained by DNase-seq4. In contrast, this technique has not yet been adapted for ChIP-seq sample preparation."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "11AdeyARapid, low-input, low-bias construction of shotgun fragment libraries by high-density in vitro transpositionGenome Biol11R11920102114386210.1186/gb-2010-11-12-r119PMC3046479"
+          }
+        ],
+        "unresolved_assessments": [
+          {
+            "issue_index": 0,
+            "blocks_relation": false,
+            "rationale": "Preserved historical limit: no method_development relation for the complete ATAC-seq assay architecture is asserted. The introduction discusses adapting chromatin tagmentation to ChIP and separately cites generic tagmentation, whereas the precise implemented transfer claimed here is custom Nextera primers. The actual claim remains within that narrower, explicitly supported component adoption."
+          },
+          {
+            "issue_index": 1,
+            "blocks_relation": false,
+            "rationale": "Preserved workflow distinction: the adapted K562 ATAC-seq experiment in the right paper is a separate open-chromatin comparator. It does not show that ChIPmentation performs the complete ATAC workflow. The claim relies on the right library-amplification attribution and left implementation, not on importing that comparator into the ChIPmentation graph."
+          },
+          {
+            "issue_index": 2,
+            "blocks_relation": false,
+            "rationale": "Preserved sequence limit: full primer/adapter sequences and exact end structures are not reconstructed from the colored diagram marks. The claim is explicitly limited to the custom-primer implementation attributed by the right authors and independently used on the left. It does not claim exact complete adapter identity or performance transfer."
+          }
+        ]
+      },
+      "artifact": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/method_pair_20261102/graph.json",
+        "sha256": "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de",
+        "format_version": "illumina_method_pair/1"
+      },
+      "claim_id": "c3",
+      "status": "model_reviewed_pair_pilot"
+    },
+    {
+      "id": "8bd1b05c1249907b8d915cf7e3ea6860e2ef73ff7401940304bd49cd4b3ee3a4:claim_r11",
+      "source": "external:8bd1b05c1249907b8d915cf7e3ea6860e2ef73ff7401940304bd49cd4b3ee3a4:contributor:claim_r11",
+      "target": "workflow:atac-seq:d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+      "relation": "component_adoption",
+      "claim": {
+        "id": "claim_r11",
+        "reference_id": "R11",
+        "contributor": "Adey et al. (2010): Nextera/Tn5 fragmentation with adapter incorporation and PCR library construction",
+        "contributor_kind": "experimental_component",
+        "relation": "component_adoption",
+        "seed_operation_ids": [
+          "op_tagmentation",
+          "op_purify_amplify"
+        ],
+        "earlier_demonstration": "Primary full text, PMID 21143862: characterized hyperactive Tn5 with free synthetic mosaic-end adapters, coupling target-DNA fragmentation to joining adapters to target 5-prime ends; limited-cycle PCR appended platform-specific sequences. Experiments used purified genomic DNA, including human DNA, and sequenced the resulting libraries. Separate extensions included very low DNA input and a distinct PCR-free branch. Its Figure 4 discusses a homodimer acting on a duplicated 9-bp region; that is the insertion-geometry precedent the seed cites for read-offset interpretation.",
+        "seed_design_change": "The seed explicitly attributes prior tagmentation to R11, supporting adoption of the coupled fragmentation/adapter-tagging component and its PCR-compatible output. The coordinated seed change applies that reaction to native unfixed eukaryotic nuclei and uses accessibility-dependent sampling as the measurement. The seed also reports monitored PCR, omission of pre-PCR purification at low cell input and avoidance of size selection; specific inheritance of those choices from R11 is not established.",
+        "limitation_addressed": "R11 replaces separate fragmentation, end processing and adapter ligation in shotgun library preparation. The seed combines assay selection with adapter insertion to simplify accessibility-library generation. Calling every removed conventional step a directly inherited before-side operation would exceed the supplied extraction.",
+        "reported_gain": "R11 reports a 5-minute fragmentation/tagging reaction, comparable overall genomic coverage bias to conventional libraries, and over 2 million uniquely mapped read pairs from 10 pg human DNA with reduced complexity. The seed demonstrates accessibility profiling from 500–50,000 cells, reports DNase correlations of 0.79/0.83 and diminished sensitivity at smaller inputs. These are measurements of different workflows; the fraction of ATAC gain caused by this component alone is not established. Seed authors explain efficiency by coupling assay and library construction, without a component-ablation experiment.",
+        "tradeoffs_and_transfer_limits": "Purified genomic DNA and native nuclei differ materially. R11 sequence bias, size constraints and low-input DNA performance cannot be transferred quantitatively to chromatin. The seed uses Illumina transposase and custom Nextera PCR primers; exact equality of its loaded oligonucleotides, proprietary enzyme variant, buffer or full chemical end structure to R11 is not established. R11 PCR-free full-adapter/nick-translation chemistry is a separate branch, not evidence that ATAC used it. The seed 9-bp-derived mapping offsets are analysis context, not a new diagram operation.",
+        "seed_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          },
+          {
+            "source_id": "seed",
+            "quote": "The entire assay and library construction can be carried out in a simple two-step process involving Tn5 insertion and PCR."
+          },
+          {
+            "source_id": "seed",
+            "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+          },
+          {
+            "source_id": "seed",
+            "quote": "To reduce GC and size bias in our PCR we monitored the PCR reaction using qPCR in order to stop amplification prior to saturation."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Also, we eliminated the Qiagen Minelute purification prior to PCR and instead took the 5 μL reaction immediately after transposition directly into the 50 μL PCR."
+          },
+          {
+            "source_id": "seed",
+            "quote": "During the ATAC-seq protocol, we chose to avoid a size selection step to maximize the library complexity."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Previous descriptions of the Tn5 transposase show that the transposon binds as a dimer and inserts two adapters separated by 9 bps (main text ref. 11)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Peak intensities were highly reproducible between technical replicates (R=0.98), and highly correlated between ATAC-seq and DNase-seq (R=0.79 and R=0.83, Supplementary Fig. 1), and we note that the majority of reads within peaks come from intersections of DNase and ATAC-seq peaks (Supplementary Fig. 2)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Highly sensitive open chromatin detection is maintained even when using 5,000 or 500 human nuclei as starting material (Supplementary Fig. 3 and 6), although sensitivity is diminished for smaller numbers of input material, as can be seen in Fig 1c."
+          }
+        ],
+        "predecessor_evidence": [
+          {
+            "source_id": "R11",
+            "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA."
+          },
+          {
+            "source_id": "R11",
+            "quote": "To generate fragment libraries compatible with massively parallel DNA sequencing, limited-cycle PCR is used to append platform-specific primers (Figure 1b)."
+          },
+          {
+            "source_id": "R11",
+            "quote": "With transposase-mediated adaptor insertion, fragmentation and adaptor insertion occur in a single 5-min in vitro step, followed by PCR."
+          },
+          {
+            "source_id": "R11",
+            "quote": "Next, we generated a library from 10 pg human genomic DNA, or roughly three copies of the human genome, which produced over 2 million uniquely mapped read-pairs. Although complexity was reduced because of the significant decrease in progenitor molecules entering PCR, the potential advantages of sequencing from material approaching a single equivalent of the human genome are substantial."
+          },
+          {
+            "source_id": "R11",
+            "quote": "The roughly 110 Å transposase homodimer (grey) is bound to genomic DNA (blue), such that the core of the enzyme acts on a 9 bp region drawn out to 41 Å as well as approximately 10 additional bases of DNA flanking either side (~34 Å each) that are essentially protected from a subsequent transposase attack due to steric hindrance. Since the core region is duplicated in the process, the minimum spacing of transposition events is approximately 38 bp."
+          },
+          {
+            "source_id": "R11",
+            "quote": "The effective bias associated with transposase-catalyzed adaptor insertion is thus greater than with standard library construction, but only modestly so."
+          }
+        ],
+        "catalogue_candidates": [],
+        "unresolved": [
+          "No catalogue reference identity for PMID 21143862 or stand-alone matching shotgun Nextera implementation was found. Other entries use Nextera/Tn5 on different substrates or in later assays; these do not resolve R11 identity. Retain the contribution externally.",
+          "Exact loaded adapter and enzyme-variant equivalence is not established. This does not block the explicitly evidenced conceptual component adoption, but it blocks a claim of identical complete chemical interface.",
+          "Reported low-cell purification and no-size-selection choices are documented seed modifications, not independently proven causes of gain or established adoptions from R11. No before-side operation IDs were supplied or invented."
+        ]
+      },
+      "review": {
+        "claim_id": "claim_r11",
+        "decision": "accept",
+        "rationale": "Accept the original component_adoption claim at its stated conceptual scope. R11 primary full text demonstrates hyperactive Tn5 with free synthetic mosaic-end adapters, attachment to target-DNA 5-prime ends, and limited-cycle PCR adding platform sequences; libraries from purified genomic DNA were sequenced. The seed explicitly attributes tagmentation to R11 and uses the same coupled fragmentation/tagging plus PCR principle on a materially different substrate, native unfixed nuclei. This supports op_tagmentation and the PCR interface of op_purify_amplify without claiming full purification-recipe inheritance. R11 independently supports its five-minute reaction, genome-coverage comparisons, 10-pg human-DNA result with reduced complexity, and homodimer/9-bp geometry. The PCR-free full-adapter/nick-translation branch is separate. The original claim preserves coordinated seed changes, exact-reagent uncertainty, the lack of before-side IDs, and the distinction between measured whole-workflow results and the authors' efficiency explanation; it does not claim an isolated component-caused ATAC gain.",
+        "evidence": [
+          {
+            "source_id": "seed",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          },
+          {
+            "source_id": "R11",
+            "quote": "When free synthetic ME adaptors are used instead (isolated from one another, in contrast to ME-flanked DNA in which two ME sequences are linked by the intervening DNA), transposase activity results in fragmentation and end-joining of the synthetic ME adaptor to the 5' end of target DNA."
+          },
+          {
+            "source_id": "R11",
+            "quote": "To generate fragment libraries compatible with massively parallel DNA sequencing, limited-cycle PCR is used to append platform-specific primers (Figure 1b)."
+          },
+          {
+            "source_id": "R11",
+            "quote": "Next, we generated a library from 10 pg human genomic DNA, or roughly three copies of the human genome, which produced over 2 million uniquely mapped read-pairs."
+          },
+          {
+            "source_id": "R11",
+            "quote": "Although complexity was reduced because of the significant decrease in progenitor molecules entering PCR, the potential advantages of sequencing from material approaching a single equivalent of the human genome are substantial."
+          },
+          {
+            "source_id": "R11",
+            "quote": "After transposition, a nick translation is performed resulting in Illumina-ready libraries."
+          },
+          {
+            "source_id": "seed",
+            "quote": "To reduce GC and size bias in our PCR we monitored the PCR reaction using qPCR in order to stop amplification prior to saturation."
+          },
+          {
+            "source_id": "seed",
+            "quote": "Also, we eliminated the Qiagen Minelute purification prior to PCR and instead took the 5 μL reaction immediately after transposition directly into the 50 μL PCR."
+          },
+          {
+            "source_id": "seed",
+            "quote": "During the ATAC-seq protocol, we chose to avoid a size selection step to maximize the library complexity."
+          }
+        ],
+        "unresolved_assessments": [
+          {
+            "issue_index": 0,
+            "blocks_relation": false,
+            "rationale": "Original qualification retained: No catalogue reference identity for PMID 21143862 or stand-alone matching shotgun Nextera implementation was found. Other entries use Nextera/Tn5 on different substrates or in later assays; these do not resolve R11 identity. Retain the contribution externally.\nAssessment: Nonblocking: no matching stand-alone R11 Nextera library entry or PMID 21143862 identity is established in the catalogue. Primary evidence and the explicit seed attribution support an external component contribution; later assays using Tn5 on other substrates are not substituted or merged."
+          },
+          {
+            "issue_index": 1,
+            "blocks_relation": false,
+            "rationale": "Original qualification retained: Exact loaded adapter and enzyme-variant equivalence is not established. This does not block the explicitly evidenced conceptual component adoption, but it blocks a claim of identical complete chemical interface.\nAssessment: Nonblocking for the original conceptual component-adoption claim: both sources explicitly establish coupled Tn5 fragmentation/adapter insertion and PCR-compatible output. Exact loaded oligonucleotide, enzyme-variant, buffer and complete chemical-interface equivalence remain unestablished and are not asserted. This uncertainty would block that stronger equivalence claim; it does not license inference of unseen chemistry."
+          },
+          {
+            "issue_index": 2,
+            "blocks_relation": false,
+            "rationale": "Original qualification retained: Reported low-cell purification and no-size-selection choices are documented seed modifications, not independently proven causes of gain or established adoptions from R11. No before-side operation IDs were supplied or invented.\nAssessment: Nonblocking: the seed documents monitored PCR, omission of pre-PCR purification specifically at low cell input, and avoidance of size selection. Their inheritance from R11 and their isolated causal contributions to gain remain withheld. No predecessor operation IDs, full purification-recipe adoption or component-ablation experiment is asserted."
+          }
+        ]
+      },
+      "artifact": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/citation_lineage_20261102/atac/graph.json",
+        "sha256": "8bd1b05c1249907b8d915cf7e3ea6860e2ef73ff7401940304bd49cd4b3ee3a4",
+        "format_version": "citation_lineage_pilot/2"
+      },
+      "claim_id": "claim_r11",
+      "status": "model_reviewed_pilot_overlay"
+    }
+  ],
+  "other_direct_relationships": [
+    {
+      "id": "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de:c1",
+      "source": "workflow:atac-seq:d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+      "target": "workflow:chipmentation:01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+      "relation": "shared_mechanism",
+      "claim": {
+        "id": "c1",
+        "left_operation_ids": [
+          "illumina:atac-seq:operation:op_tagmentation"
+        ],
+        "right_operation_ids": [
+          "illumina:chipmentation:operation:op_tagment"
+        ],
+        "relation": "shared_mechanism",
+        "direction": "undirected",
+        "shared_description": "At the coupled tagmentation abstraction, adapter-loaded Tn5 fragments genomic DNA within chromatin and transfers sequencing-adapter sequences, producing tagged fragments that can enter library amplification. The shared transformation is DNA fragmentation plus adapter tagging; the transposome supplies the adapter payload and catalysis, while genomic DNA is the eventual readout carrier.",
+        "difference": "Left: Tn5 interrogates accessible DNA in native chromatin from unfixed nuclei, without chromatin immunoprecipitation; less accessible chromatin reduces insertion probability. Right: Tn5 acts on already fragmented, immunoprecipitated chromatin retained on beads, with subsequent reverse-crosslinking reported in Methods. Antibody selection of a protein or histone modification precedes tagging. Thus neither the substrate preparation nor the selection principle is shared. The left drawing retains nucleosome-associated pieces after tagging; the right free-looking 'Fragmented and primed' line is an abstraction of tagged DNA still in bead-bound chromatin, not evidence that DNA was deproteinized before tagmentation. Both later recover and amplify DNA, but from these different physical inputs.",
+        "consequence": "Left authors report preferential production of amplifiable fragments at open chromatin, making insertion positions and insert lengths informative about accessibility and chromatin organization. Right authors retain the antibody-selected genomic population, with antibody quality limiting applicability. They proposed that retained chromatin proteins protect against excessive tagmentation and observed robustness over a 25-fold transposase-concentration range in their tested ChIPmentation experiments. That observation does not isolate protein protection as its cause and is not a demonstration that ChIPmentation is more robust than ATAC-seq.",
+        "rationale": "The left paper explicitly establishes simultaneous fragmentation and adapter tagging, and the right paper explicitly applies tagmentation to immunoprecipitated bead-bound chromatin. This supports the same specified DNA transformation despite different preparation, carrier attachment and selection. The relation rests on the transformation and substrate context, rather than the enzyme name alone; it does not align accessibility selection with antibody capture.",
+        "left_evidence": [
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "ATAC-seq uses Tn5 transposase to integrate its adapter payload into regions of accessible chromatin, whereas steric hindrance less accessible chromatin makes transposition less probable. Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a)."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "These insights are derived from both the position of insertion and the distribution of insert lengths captured during the transposition reaction."
+          }
+        ],
+        "right_evidence": [
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "The development of a hyperactive Tn5 transposase that enables simultaneous DNA fragmentation and adapter tagging (“tagmentation”) presents an opportunity for faster and more sensitive library preparation from purified DNA3."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "We reasoned that performing tagmentation directly on the immunoprecipitated and bead-bound chromatin would allow chromatin proteins to protect the DNA from excessive tagmentation. Our ChIPmentation protocol (Fig. 1a, Supplementary Fig. 1 and Online Methods) was indeed robust over a 25-fold difference in transposase concentrations according to five different metrics: measured size distribution of ChIPmentation libraries (Supplementary Fig. 3), size distribution inferred from paired-end sequencing reads (Fig. 1b), read mapping performance (Fig. 1c), concordance between sequencing profiles (Fig. 1d), and signal correlations (Fig. 1e)."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Nevertheless, as with every ChIP approach, low-input ChIPmentation depends on antibody quality and may not be feasible for all histone marks and transcription factors."
+          }
+        ],
+        "unresolved": [
+          "The matching reaction does not establish identical accessible genomic populations, safe interchange of substrates or reaction conditions, equal insertion bias, equal sensitivity, or equal performance.",
+          "The unbound-looking and faded chromatin icons on the right have no separately retained output or bifurcating material flow in the reviewed graph. Their fate is not assigned a new branch, and the purified-ChIP-DNA comparator discussed in the paper is not imported into this diagram.",
+          "The colored adapter marks do not specify complete adapter sequences, strand polarities or terminal chemistry. Exact end-structure equivalence is not established and is unnecessary for this qualified tagmentation correspondence."
+        ]
+      },
+      "review": {
+        "claim_id": "c1",
+        "decision": "accept",
+        "rationale": "Accepted as written. Both originals establish coupled Tn5 DNA fragmentation and sequencing-adapter tagging in a chromatin substrate, rather than merely naming the same enzyme. The selected singleton boundaries are left op_tagmentation: native chromatin -> tagged fragments, and right op_tagment: selected bead-bound chromatin plus the separate Tn5 reagent input -> tagged chromatin. The outgoing recovery edges and incoming right ChIP edge remain outside these groups. The claim accurately retains the unfixed nuclear context versus already fragmented, antibody-selected bead-bound chromatin, genomic DNA as readout carrier, and different subsequent recovery. The drawing itself supplies no nuclear compartment boundary; the claim correctly obtains that context from the left paper. On the right, post-tagmentation bead washes followed by elution and reverse-crosslinking support the paper annotation that the free-looking line does not depict an earlier deproteinization step. The 25-fold robustness observation concerns the tested ChIPmentation libraries and its listed size, mapping and signal metrics; the protein-protection explanation is author reasoning, not an isolated causal result or an ATAC-seq performance comparison. The wording makes these limits explicit.",
+        "evidence": [
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Because transposons have been shown to integrate into active regulatory elements in vivo12, we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a)."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Here, we demonstrate tagmentation of immunoprecipitated chromatin in a robust one-step reaction performed directly on bead-bound chromatin."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "We reasoned that performing tagmentation directly on the immunoprecipitated and bead-bound chromatin would allow chromatin proteins to protect the DNA from excessive tagmentation."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Our ChIPmentation protocol (Fig. 1a, Supplementary Fig. 1 and Online Methods) was indeed robust over a 25-fold difference in transposase concentrations according to five different metrics: measured size distribution of ChIPmentation libraries (Supplementary Fig. 3), size distribution inferred from paired-end sequencing reads (Fig. 1b), read mapping performance (Fig. 1c), concordance between sequencing profiles (Fig. 1d), and signal correlations (Fig. 1e)."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification."
+          }
+        ],
+        "unresolved_assessments": [
+          {
+            "issue_index": 0,
+            "blocks_relation": false,
+            "rationale": "Preserved qualification: equal genomic populations, substrate or condition interchangeability, insertion bias, sensitivity and performance are not established. The claim specifies only the coupled DNA transformation and explicitly distinguishes selection and substrate context; none of those stronger assertions is needed or made."
+          },
+          {
+            "issue_index": 1,
+            "blocks_relation": false,
+            "rationale": "Preserved routing limit: the pale and unattached chromatin icons have no separate retained output in the image or frozen graph. The group tool shows selected chromatin and Tn5 as inputs and one tagged-chromatin output, with no alternate purified-DNA branch. The claim does not assign an unsupported biochemical fate to the pale material or import the paper comparator as a depicted operation."
+          },
+          {
+            "issue_index": 2,
+            "blocks_relation": false,
+            "rationale": "Preserved end-structure uncertainty: the colored marks do not establish complete adapter sequences, strand polarity or terminal chemistry. The claim asserts fragmentation and adapter transfer at the declared abstraction, not exact chemical-end equivalence; the missing detail does not block that correspondence."
+          }
+        ]
+      },
+      "artifact": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/method_pair_20261102/graph.json",
+        "sha256": "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de",
+        "format_version": "illumina_method_pair/1"
+      },
+      "claim_id": "c1",
+      "status": "model_reviewed_pair_pilot"
+    },
+    {
+      "id": "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de:c2",
+      "source": "workflow:atac-seq:d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+      "target": "workflow:chipmentation:01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+      "relation": "shared_purpose",
+      "claim": {
+        "id": "c2",
+        "left_operation_ids": [
+          "illumina:atac-seq:operation:op_purify_amplify"
+        ],
+        "right_operation_ids": [
+          "illumina:chipmentation:operation:op_recover_amplify"
+        ],
+        "relation": "shared_purpose",
+        "direction": "undirected",
+        "shared_description": "The complete combined recovery/amplification blocks serve a comparable function: turn the respective tagmented chromatin-derived material into a purified, amplified genomic DNA library carrying adapter-associated priming handles. Library DNA preserves genomic origins, but those origins reflect different upstream selection histories.",
+        "difference": "Left: the standard implementation purifies immediately after transposition and amplifies with NEBnext and custom Nextera primers; qPCR guides stopping before saturation. The authors avoid size selection to maximize library complexity. Their low-cell-number implementation omits the pre-PCR Minelute purification, showing that the broad diagram block is not a universal fixed sequence of handling steps. Right: the combined block must recover DNA after bead-bound tagmentation through bead elution, reverse-crosslinking and purification, followed by KAPA-based enrichment, qPCR-based cycle estimation and SPRI size selection removing long fragments above 600 bp. Left library composition primarily samples accessible chromatin; right library composition retains the history of antibody selection after protein association and bead attachment are removed.",
+        "consequence": "Both yield DNA suitable for sequencing, but matching endpoint labels do not imply identical recovery chemistry, fragment-length representation or quantitative recovery. The left authors' complexity rationale explains their decision to avoid size selection; the right Methods document length selection. These passages do not measure a causal advantage of either choice over the other method, and they do not establish equal library complexity or amplification bias.",
+        "rationale": "This claim compares the functions of the entire broad blocks. PCR copying is explicitly present in both, but that common component does not establish a common mechanism for the whole recovery ensemble, especially release and crosslink reversal on the right. Therefore the block-level relation is shared_purpose, without implying chemical equivalence. The primer adoption inside these same unsplit blocks is separately supported in c3.",
+        "left_evidence": [
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Directly following transposition the sample was purified using a Qiagen Minelute kit."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "To reduce GC and size bias in our PCR we monitored the PCR reaction using qPCR in order to stop amplification prior to saturation."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Also, we eliminated the Qiagen Minelute purification prior to PCR and instead took the 5 μL reaction immediately after transposition directly into the 50 μL PCR."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "During the ATAC-seq protocol, we chose to avoid a size selection step to maximize the library complexity."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "ATAC-seq is an information rich assay, allowing simultaneous interrogation of factor occupancy, nucleosome positions in regulatory sites, and chromatin accessibility genome-wide."
+          }
+        ],
+        "right_evidence": [
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Final enrichment of the libraries was performed in a 50 μl reaction using 0.75 μM primers and 25 μl 2x KAPA HiFi HotStart ReadyMix. Libraries were amplified for N cycles, where N is equal to the rounded-up Cq value determined in the qPCR reaction."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Enriched libraries were purified with size-selection using SPRI AMPure XP beads at a beads-to-sample ratio of 0.7:1 to remove long fragments (>600 bp), recovering the remaining DNA in the reaction using a beads-to-sample ratio of 2:1."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "ChIP-seq combines chromatin immunoprecipitation with next generation sequencing in order to measure the genome-wide distribution of chromatin proteins and their posttranslational modifications1."
+          }
+        ],
+        "unresolved": [
+          "The blocks do not expose separate operations for elution, crosslink reversal, cleanup, amplification or length selection. An operation-level comparison isolating any one of those processes would require a finer extraction; no such internal IDs are invented here. Paper annotations are sufficient for the present whole-block functional comparison.",
+          "Neither the identical caption nor the shared use of PCR establishes that the complete blocks can be substituted across the two input materials. Differences in recovery loss and amplification bias are not quantified in a matched comparison by these passages."
+        ]
+      },
+      "review": {
+        "claim_id": "c2",
+        "decision": "accept",
+        "rationale": "Accepted as written as shared_purpose for the two whole, unsplit recovery/amplification operations. The group boundaries are left tagged fragments -> purified amplified library and right tagged bead-bound chromatin -> purified amplified library; each has only the preceding tagmentation output as an external incident edge. Comparable library-production function is supported independently on both sides. The left standard purification/PCR description, its low-cell-number omission of pre-PCR cleanup, and its deliberate avoidance of size selection are all in the original Methods. The right Methods specify recovery after on-bead tagmentation, KAPA enrichment guided by qPCR, and SPRI selection against long library fragments. The claim correctly keeps these as annotations within the existing blocks and does not turn the shared PCR component into a shared mechanism for the entire recovery ensemble. The right >600-bp statement concerns the reported library-fragment size-selection procedure; it does not establish an equal genomic-insert distribution across methods. The left complexity rationale and intention to reduce PCR bias are not presented as measured cross-method benefits. Selection history is retained in genomic library composition, not as a claim that purified DNA still bears the selected proteins.",
+        "evidence": [
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Directly following transposition the sample was purified using a Qiagen Minelute kit."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions:"
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "To reduce GC and size bias in our PCR we monitored the PCR reaction using qPCR in order to stop amplification prior to saturation."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "Also, we eliminated the Qiagen Minelute purification prior to PCR and instead took the 5 μL reaction immediately after transposition directly into the 50 μL PCR."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "During the ATAC-seq protocol, we chose to avoid a size selection step to maximize the library complexity."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Afterward, the chosen ChIP protocol was resumed with the final bead wash, elution from beads, reverse-crosslinking, and DNA purification."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Final enrichment of the libraries was performed in a 50 μl reaction using 0.75 μM primers and 25 μl 2x KAPA HiFi HotStart ReadyMix. Libraries were amplified for N cycles, where N is equal to the rounded-up Cq value determined in the qPCR reaction."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Enriched libraries were purified with size-selection using SPRI AMPure XP beads at a beads-to-sample ratio of 0.7:1 to remove long fragments (>600 bp), recovering the remaining DNA in the reaction using a beads-to-sample ratio of 2:1."
+          }
+        ],
+        "unresolved_assessments": [
+          {
+            "issue_index": 0,
+            "blocks_relation": false,
+            "rationale": "Preserved granularity limit: neither graph provides separate elution, crosslink-reversal, cleanup, PCR or length-selection operation IDs. Isolating those processes as operation correspondences would require a finer extraction. This claim explicitly compares complete block functions and keeps the paper detail as annotation, so the present boundary resolution suffices."
+          },
+          {
+            "issue_index": 1,
+            "blocks_relation": false,
+            "rationale": "Preserved compatibility and measurement limit: shared captions and PCR do not establish substitutable complete recovery blocks, matched recovery losses or equal amplification bias. The claim uses shared_purpose and expressly disclaims those conclusions, so their absence does not block the stated relation."
+          }
+        ]
+      },
+      "artifact": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/method_pair_20261102/graph.json",
+        "sha256": "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de",
+        "format_version": "illumina_method_pair/1"
+      },
+      "claim_id": "c2",
+      "status": "model_reviewed_pair_pilot"
+    },
+    {
+      "id": "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de:c4",
+      "source": "workflow:atac-seq:d95473a44a205a1f9665218611e7f7f22e1b94ea907fa33cefa550f45127ee28",
+      "target": "workflow:chipmentation:01d209d02a5d5b0f334afee113cd067650660c8c1d3f03fb0d5b4911177c8faf",
+      "relation": "comparison",
+      "claim": {
+        "id": "c4",
+        "left_operation_ids": [
+          "illumina:atac-seq:operation:op_tagmentation",
+          "illumina:atac-seq:operation:op_purify_amplify"
+        ],
+        "right_operation_ids": [
+          "illumina:chipmentation:operation:op_tagment",
+          "illumina:chipmentation:operation:op_recover_amplify"
+        ],
+        "relation": "comparison",
+        "direction": "undirected",
+        "shared_description": "The papers support a documented comparison of local Tn5 insertion/footprint information carried by libraries produced by the connected tagmentation-to-library groups. Both can carry information about protein-associated protection, but their genomic sampling and interpretation differ. This relation records the published methodological comparison; sequencing and computational analysis remain downstream annotations beyond these diagrams' library endpoints.",
+        "difference": "Left: the original ATAC-seq paper demonstrates footprint-based inference of factor occupancy from accessible chromatin, including CTCF in GM12878, and combines insertion data with motif score and evolutionary conservation. Right: ChIPmentation starts this selected group with already immunoprecipitated bead-bound chromatin; its primary readout is target enrichment. The right authors generated ATAC-seq controls with minor adaptations for K562 cells, then compared motif-centered ChIPmentation, ATAC-seq, DNase-seq and naked-genomic-DNA tagmentation signals. They corrected ChIPmentation and ATAC-seq patterns using the naked-DNA background. Thus this was not a comparison of identical input fractions or an unchanged replication of every original ATAC implementation detail.",
+        "consequence": "The original left paper reports a CTCF protection footprint and occupancy inference concordant with ChIP-seq in its tested cell line. The right authors report that, after correction, ChIPmentation footprints for CTCF and REST resembled ATAC-seq and DNase-seq footprints, while none of those methods detected footprints for GATA1 and PU.1 in that analysis. They also observed patterns in naked-DNA libraries and attributed part of the signal to transposase sequence bias. These are limited observed similarities and an author interpretation of bias, not evidence of general assay equivalence, universal factor occupancy detection or equal performance.",
+        "rationale": "The right paper explicitly asks whether fragmented-chromatin tagmentation patterns track local structure as described for ATAC-seq, reports the comparative result, and specifies the compared signals and background normalization. The left paper independently establishes the referenced ATAC footprint readout. This is a documented comparison rather than an ancestry claim. The full group boundaries retain native nuclear chromatin on the left versus antibody-selected bead-bound chromatin and a Tn5 reagent input on the right; neither group absorbs a new analysis operation or the right upstream ChIP operation.",
+        "left_evidence": [
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "We reasoned that DNA sequences directly occupied by DNA-binding proteins are protected from transposition; the resulting sequence “footprint” reveals the presence of the DNA-binding protein at each site, analogous to DNase digestion footprints24."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "At a specific CTCF binding site on chromosome 1, we observed a clear footprint (a deep notch of ATAC-seq signal), similar to footprints seen by DNase-seq25,26, at the precise location of the CTCF motif that coincides with the summit of the CTCF ChIP-seq signal in GM12878 cells (Fig 4a)."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "We inferred the CTCF binding probability from motif consensus score, evolutionary conservation, and ATAC-seq insertion data to generate a posterior probability of CTCF binding at all loci (Fig. 4c)27. Results using ATAC-seq closely recapitulate ChIP-seq binding data in this cell line and compare favorably to DNase-based factor occupancy inference (see Supplementary Fig. 9), suggesting that factor occupancy data can be extracted from these ATAC-seq data allowing reconstruction of regulatory networks."
+          }
+        ],
+        "right_evidence": [
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "However, some of these patterns were also present in genome sequencing libraries prepared by tagmentation of purified genomic DNA (Supplementary Fig. 7a), suggesting that they originate in part from DNA sequence biases of the transposase. After bioinformatic correction we observed footprints for CTCF and REST, which resembled those found in ATAC-seq and DNase-seq data, but none of these methods detected footprints for GATA1 and PU.1 (Supplementary Fig. 7b and Online Methods)."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Open chromatin mapping was performed using the ATAC-seq method as described4 with minor adaptations for K562 cells."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "We retrieved a 400 bp window around each motif and used these windows to count four signals: Tn5 insertion events for ChIPmentation of the respective factor, ATAC-seq hits (5′ position of overlapping reads), DNase-seq cut sites in K562 cells from ENCODE25, and Tn5 insertion sites (5′ position of overlapping reads) for a Nextera whole genome sequencing sample prepared from genomic DNA."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "To normalize the ChIPmentation and ATAC-seq signals, we divided the observed value at each position by the exponential of the Nextera background signal at the same position."
+          }
+        ],
+        "unresolved": [
+          "The registered original full texts and relevant citation contexts were accessible and read. Supplementary figures and the detailed ChIP Supplementary Note referred to in the right main text were not separately available as registered evidence; their underlying figures/protocol variants were not independently inspected. Reported footprint outcomes here rely on the accessible main-text and Online Methods statements.",
+          "The current diagrams end at DNA libraries. They can anchor this qualified comparison of reported downstream readouts, but an operation-level alignment of sequencing, insertion-coordinate adjustment, background correction or occupancy inference would require a finer extraction of those missing analysis distinctions. None is added during this run.",
+          "Similar corrected aggregate footprints at tested factors do not establish that accessibility profiling substitutes for antibody-based target mapping, or that either assay provides universally accurate footprints."
+        ]
+      },
+      "review": {
+        "claim_id": "c4",
+        "decision": "accept",
+        "rationale": "Accepted as written as an undirected documented comparison. The connected left group contains exactly op_tagmentation and op_purify_amplify, from native chromatin to library, with no boundary side edges. The right group contains exactly op_tagment and op_recover_amplify, from already selected bead-bound chromatin plus the Tn5 reagent to library. Its external ChIP -> selected-chromatin edge remains visible; the upstream capture operation is not absorbed. The right original explicitly compares motif-centered ChIPmentation, adapted K562 ATAC-seq, DNase-seq and genomic-DNA tagmentation signals, describes the Nextera-background correction, and reports the limited CTCF/REST similarity and GATA1/PU.1 nondetection. The left original independently demonstrates CTCF footprint-based inference using insertion data, motif score and conservation in GM12878. Thus the measurement compared is local insertion/footprint information from differently sampled libraries, not equal target enrichment, a direct universal occupancy assay or identical original implementations. Correction, sequencing and occupancy analysis are expressly downstream paper annotations beyond both depicted endpoints. Similarity after correction is not a chemical-equivalence, ancestry, interchangeability or general-performance claim.",
+        "evidence": [
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "At a specific CTCF binding site on chromosome 1, we observed a clear footprint (a deep notch of ATAC-seq signal), similar to footprints seen by DNase-seq25,26, at the precise location of the CTCF motif that coincides with the summit of the CTCF ChIP-seq signal in GM12878 cells (Fig 4a)."
+          },
+          {
+            "source_id": "left:paper:24097267",
+            "quote": "We inferred the CTCF binding probability from motif consensus score, evolutionary conservation, and ATAC-seq insertion data to generate a posterior probability of CTCF binding at all loci (Fig. 4c)27."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Given that ChIPmentation involves tagmentation of fragmented chromatin instead of purified ChIP DNA, we also investigated whether the tagmentation patterns correlate with local chromatin structure as described for ATAC-seq4."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "However, some of these patterns were also present in genome sequencing libraries prepared by tagmentation of purified genomic DNA (Supplementary Fig. 7a), suggesting that they originate in part from DNA sequence biases of the transposase. After bioinformatic correction we observed footprints for CTCF and REST, which resembled those found in ATAC-seq and DNase-seq data, but none of these methods detected footprints for GATA1 and PU.1 (Supplementary Fig. 7b and Online Methods)."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "Open chromatin mapping was performed using the ATAC-seq method as described4 with minor adaptations for K562 cells."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "We retrieved a 400 bp window around each motif and used these windows to count four signals: Tn5 insertion events for ChIPmentation of the respective factor, ATAC-seq hits (5′ position of overlapping reads), DNase-seq cut sites in K562 cells from ENCODE25, and Tn5 insertion sites (5′ position of overlapping reads) for a Nextera whole genome sequencing sample prepared from genomic DNA."
+          },
+          {
+            "source_id": "right:paper:26280331",
+            "quote": "To normalize the ChIPmentation and ATAC-seq signals, we divided the observed value at each position by the exponential of the Nextera background signal at the same position."
+          }
+        ],
+        "unresolved_assessments": [
+          {
+            "issue_index": 0,
+            "blocks_relation": false,
+            "rationale": "Preserved source-access limit: both registered original full texts, Methods and relevant citation contexts were accessible and inspected; the right Supplementary Fig. 7 and detailed ChIP Supplementary Note were not separately available as registered evidence and were not independently inspected. The actual claim attributes the outcomes to the authors and relies on explicit accessible result and analysis-method statements. It does not claim independent reanalysis, visual verification of supplementary plots or validation of every upstream ChIP variant."
+          },
+          {
+            "issue_index": 1,
+            "blocks_relation": false,
+            "rationale": "Preserved endpoint limit: both graphs end at libraries and contain no sequencing, insertion-coordinate adjustment, background-correction or occupancy-inference operations. The actual claim explicitly records a published downstream comparison as annotation on the library-producing groups. It does not purport to align those absent operations. Such an operation-level question would require finer extraction of the named missing analysis distinctions."
+          },
+          {
+            "issue_index": 2,
+            "blocks_relation": false,
+            "rationale": "Preserved biological and performance limit: corrected aggregate footprints at CTCF/REST and nondetection at GATA1/PU.1 in the reported analysis do not show universal occupancy detection or substitution of accessibility profiling for antibody-target mapping. The claim specifically limits its result to those observations and keeps the different sampling populations explicit."
+          }
+        ]
+      },
+      "artifact": {
+        "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/method_pair_20261102/graph.json",
+        "sha256": "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de",
+        "format_version": "illumina_method_pair/1"
+      },
+      "claim_id": "c4",
+      "status": "model_reviewed_pair_pilot"
+    }
+  ],
+  "frontier": [
+    {
+      "node": {
+        "id": "external:8bd1b05c1249907b8d915cf7e3ea6860e2ef73ff7401940304bd49cd4b3ee3a4:contributor:claim_r11",
+        "name": "Adey et al. (2010): Nextera/Tn5 fragmentation with adapter incorporation and PCR library construction",
+        "kind": "experimental_component",
+        "reference_id": "R11",
+        "identity_status": "scoped_to_cited_contribution; catalogue_matches_are_candidates",
+        "catalogue_candidates": []
+      },
+      "reason": "no_further_history_in_loaded_evidence"
+    }
+  ],
+  "overlay_sha256": [
+    "8bd1b05c1249907b8d915cf7e3ea6860e2ef73ff7401940304bd49cd4b3ee3a4",
+    "8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de"
+  ],
+  "boundary": "Explicitly loaded, previously model-reviewed pilot overlays; no new scientific validation, date/priority verification, or canonical method identity resolution. Paths join distinct scoped claims; they do not establish transitive inheritance of a component or whole assay. A traversal endpoint is not proof of first invention."
+}

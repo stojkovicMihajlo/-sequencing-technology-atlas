@@ -5,6 +5,7 @@ from typing import Literal
 from pydantic import Field, model_validator
 
 from genomics_discovery.illumina.graph import operation_group
+from genomics_discovery.illumina.relationships import HISTORICAL_RELATIONS
 from models import Evidence, Record, Review, check_evidence, validate_review
 
 
@@ -24,7 +25,7 @@ class PairClaim(Record):
 
     @model_validator(mode="after")
     def direction_matches_relation(self):
-        historical = self.relation in {"component_adoption", "method_development"}
+        historical = self.relation in HISTORICAL_RELATIONS
         if historical == (self.direction == "undirected"):
             raise ValueError("Only historical relations have a direction; historical relations require one")
         return self
@@ -58,7 +59,7 @@ def validate_pair(document, inputs):
         for side in ("left", "right"):
             binding = sides[side]
             operation_group(graph, binding["record_id"], getattr(c, side + "_operation_ids"))
-            check_evidence(getattr(c, side + "_evidence"), sources, allowed=set(binding["paper_source_ids"]))
+            check_evidence(getattr(c, side + "_evidence"), sources, allowed=set(binding["paper_source_ids"]), scientific=True)
     expected = {n["id"] for n in graph["nodes"] if n["node_type"] == "operation"}
     actual = [x.operation_id for x in document.operation_coverage]
     if len(actual) != len(set(actual)) or set(actual) != expected:

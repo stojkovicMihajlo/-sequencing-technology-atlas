@@ -14,7 +14,8 @@ import sys
 import time
 
 from genomics_discovery.execution.codex_worker import CodexWorker, assess_archived_attempt
-from genomics_discovery.illumina.extraction import read, sha, stage_images, verify_stage_inputs, write
+from genomics_discovery.illumina.extraction import read, sha, source_excerpt, stage_images, verify_stage_inputs, write
+from genomics_discovery.illumina import relationships as relationship_policy
 from genomics_discovery.illumina.graph import _load_card, operation_group
 from models import Review, validate_review
 from pair_models import PairAnalysis, export_pair, validate_pair
@@ -118,6 +119,8 @@ async def execute(args):
     worker = CodexWorker(model=state["model"], effort=state["effort"], timeout_seconds=None,
                          web_search=False, network_access=False, pin_shell_environment=True)
     implementation = {str(p.resolve()): sha(p) for p in Path(__file__).parent.glob("*.py")}
+    policy_path = Path(relationship_policy.__file__).resolve()
+    implementation[str(policy_path)] = sha(policy_path)
 
     async def stage(role, analysis_path=None, feedback=None):
         attempt = root / "attempts" / f"{len(state['stages'])+1:03d}_{role}"
@@ -240,15 +243,10 @@ def main():
             result.pop(key, None)
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
-        source = read(args.inputs / "sources.json")[args.id]
-        text = source["text"]
-        found = text.casefold().find(args.query.casefold()) if args.query else None
-        start = max(0, found-400) if found is not None and found >= 0 else max(0, args.start)
-        print(json.dumps({"source_id": args.id, "level": source.get("content_level"),
-            "start": start, "end": min(len(text), start + min(max(args.limit, 1), 12000)),
-            "query_found": None if found is None else found >= 0,
-            "text": text[start:start + min(max(args.limit, 1), 12000)],
-            "total_characters": len(text)}, ensure_ascii=False))
+        registry = read(args.inputs / "sources.json")
+        result = source_excerpt(registry, args.id, query=args.query, start=args.start, limit=args.limit)
+        result.update(query_found=result["found"], level=registry[args.id].get("content_level"))
+        print(json.dumps(result, ensure_ascii=False))
 
 
 if __name__ == "__main__":

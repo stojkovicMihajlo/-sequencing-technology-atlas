@@ -1,5 +1,26 @@
 # Deployment status
 
+## Evolution-graph review — 4 November 2026
+
+The [all-record review and graph decision](../experiments/evolution_review_20261103/REPORT.txt)
+keeps Illumina architectures and builds scoped, paper-supported relationships over
+them. All 478 archived occurrences have a new structure/field-coverage ledger;
+this is **not** an independent scientific rereview of every assertion. Current
+admission counts remain 424 supported, 33 held, 17 failed and 4 quarantined.
+
+Development changes centralize the six relationship meanings, require fresh
+citation nominations to account for every reference, reject metadata/title-only
+support for admitted scientific relations, and fix both older source-query tools
+to return no text on a miss. Read-only relationship queries preserve evidence,
+operation boundaries and qualifications. **97 relevant software tests passed**;
+the actual earlier pair yields one scoped primer adoption in the history layer.
+The history query also joins the earlier citation pilot through the identical ATAC
+extraction hash, yielding a two-edge Adey→ATAC→ChIPmentation contribution path.
+The two edges concern different components and do not imply whole-assay ancestry.
+No new native model calls or Sherlock deployment occurred. Method/version
+consolidation, broader citation-source recovery, date/version checks and held-out
+scientific evaluation remain unfinished. Existing frozen runs are unchanged.
+
 ## Current product review — 3 November 2026
 
 This section supersedes the historical checkpoints below. The active work is

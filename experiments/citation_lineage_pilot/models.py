@@ -3,6 +3,7 @@
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
+from genomics_discovery.illumina.relationships import RELATIONS
 
 
 class Record(BaseModel):
@@ -25,6 +26,11 @@ class Nominations(Record):
     references: list[Nomination]
     selection_rationale: str
     unresolved_searches: list[str]
+
+
+class CurrentNominations(Nominations):
+    format_version: Literal["citation_nomination/2"] = "citation_nomination/2"
+    excluded_references: dict[str, str] = Field(description="Every bibliography reference not nominated, mapped to its source-context reason for not following. Do not silently omit a reference; uncertain methodological leads should be nominated.")
 
 
 Relation = Literal[
@@ -79,13 +85,20 @@ class Review(Record):
     summary: str
 
 
-def check_evidence(items, sources, *, allowed=None):
+def check_evidence(items, sources, *, allowed=None, scientific=False):
     for item in items:
         if item.source_id not in sources or (allowed is not None and item.source_id not in allowed):
             raise ValueError(f"Unregistered evidence source: {item.source_id}")
         # Exact text support, not semantic entailment. No fuzzy quote repair.
         if item.quote not in sources[item.source_id]["text"]:
             raise ValueError(f"Quote absent from {item.source_id}: {item.quote[:90]}")
+        if scientific:
+            source = sources[item.source_id]
+            if source.get("content_level") not in {"fulltext", "abstract"}:
+                raise ValueError("Scientific relationship needs primary content, not metadata/catalogue")
+            normalize = lambda text: " ".join(text.casefold().split()).strip(". ")
+            if source.get("title") and normalize(item.quote) == normalize(source["title"]):
+                raise ValueError("An article title cannot support a scientific relationship")
 
 
 def validate_nominations(document, sources, bibliography):
@@ -94,6 +107,12 @@ def validate_nominations(document, sources, bibliography):
         raise ValueError("Duplicate or unknown nominated reference")
     for item in document.references:
         check_evidence(item.seed_evidence, sources, allowed={"seed"})
+    if isinstance(document, CurrentNominations):
+        excluded = document.excluded_references
+        if set(ids) & set(excluded) or (set(ids) | set(excluded)) != set(bibliography):
+            raise ValueError("Account for every bibliography reference exactly once: nominated or excluded")
+        if any(not reason.strip() for reason in excluded.values()):
+            raise ValueError("Excluded reference needs a context-specific reason")
 
 
 def validate_analysis(document, sources, nominated, operation_ids, catalogue_ids):
@@ -155,6 +174,8 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
             withheld.append({"claim": claim.model_dump(), "reason": reason,
                              "review": finding.model_dump()})
             continue
+        check_evidence(claim.seed_evidence, sources, allowed={"seed"}, scientific=True)
+        check_evidence(claim.predecessor_evidence, sources, allowed={claim.reference_id}, scientific=True)
         contributor_id = "contributor:" + claim.id
         nodes.append({"id": contributor_id, "kind": claim.contributor_kind,
                       "name": claim.contributor, "reference_id": claim.reference_id,
@@ -163,6 +184,7 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
         links.append({"id": claim.id, "source": contributor_id, "target": "seed",
                       "kind": claim.relation,
                       "historical_development_edge": claim.relation == "method_development",
+                      "relationship_layer": RELATIONS[claim.relation]["layer"],
                       "status": "model_reviewed_pilot_overlay",
                       "claim": claim.model_dump(), "review": finding.model_dump()})
     return {"format_version": "citation_lineage_pilot/2", "nodes": nodes, "links": links,

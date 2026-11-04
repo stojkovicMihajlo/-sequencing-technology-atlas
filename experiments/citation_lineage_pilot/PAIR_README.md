@@ -59,3 +59,23 @@ passed on Qiu. The original hashes, exact quotations, operation groups, review
 sessions and exported graph were revalidated locally. Eleven qualifications
 remain visible. This is a selected model-reviewed example; supplements and an
 independent human accuracy assessment are outside this completed test.
+# Development update: 4 November 2026
+
+Relation meanings are shared with the citation-following harness in
+`src/genomics_discovery/illumina/relationships.py`. Historical component adoption
+and method development stay separate from correspondence and comparison. The
+new prompts/evidence gates have software tests; they have not had a new native run.
+
+Read the existing reviewed pair without changing it:
+
+```sh
+PYTHONPATH=src .venv/bin/python -m genomics_discovery.illumina.relationships \
+  --graph provenance/experiments/method_pair_20261102/graph.json \
+  --sha256 8c042d91b8c2e304003d54e962c39ff4f6c643d677cb24b157343a17755007de \
+  --record-id chipmentation --layer history
+```
+
+Use `--claim-id c3` instead of `--record-id ... --layer ...` for the exact claim,
+review, affected workflow boundaries, evidence and qualifications. This query is
+an earlier pilot overlay; it does not attach it to a new source depiction by name.
+`--layer all` also returns the separately reviewed nonhistorical relationships.

@@ -7,13 +7,15 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent))
 from models import Analysis, Claim, Evidence, Finding, Review, UncertaintyAssessment, graph_overlay, validate_analysis, validate_review
+from models import CurrentNominations, Nominations, validate_nominations
 from run import bibliography, prepare_review_reuse
 import json
+import copy
 
 
 SOURCES = {
-    'seed': {'text': 'We compared the assay against method A.'},
-    'R1': {'text': 'Method A prepares a sequencing library.'},
+    'seed': {'text': 'We compared the assay against method A.', 'content_level': 'fulltext'},
+    'R1': {'text': 'Method A prepares a sequencing library.', 'content_level': 'fulltext'},
 }
 
 
@@ -36,6 +38,53 @@ def test_comparison_does_not_become_descent():
     g=graph_overlay(a,r,SOURCES,'pin',{})
     assert g['links'][0]['kind']=='comparison'
     assert g['links'][0]['historical_development_edge'] is False
+    assert g['links'][0]['relationship_layer'] == 'comparison'
+
+
+@pytest.mark.parametrize('level', ['metadata', 'catalogue', 'unavailable'])
+def test_positive_review_cannot_promote_metadata_into_scientific_support(level):
+    a, r = case(); sources = copy.deepcopy(SOURCES)
+    sources['R1']['content_level'] = level
+    with pytest.raises(ValueError, match='primary content'):
+        graph_overlay(a, r, sources, 'pin', {})
+
+
+def test_title_quote_in_fulltext_is_not_scientific_support():
+    a, r = case(); sources = copy.deepcopy(SOURCES)
+    sources['R1']['title'] = sources['R1']['text']
+    with pytest.raises(ValueError, match='article title'):
+        graph_overlay(a, r, sources, 'pin', {})
+
+
+def test_fresh_nomination_accounts_for_all_references_without_fetching_all():
+    n = CurrentNominations(references=[], selection_rationale='No methodological references in this fixture',
+        unresolved_searches=[], excluded_references={'R1': 'Biological result only', 'R2': 'Application comparison outside this scope'})
+    validate_nominations(n, SOURCES, {'R1': {}, 'R2': {}})
+    n.excluded_references.pop('R2')
+    with pytest.raises(ValueError, match='every bibliography'):
+        validate_nominations(n, SOURCES, {'R1': {}, 'R2': {}})
+    n.excluded_references['invented'] = 'Invented reference'
+    with pytest.raises(ValueError, match='every bibliography'):
+        validate_nominations(n, SOURCES, {'R1': {}, 'R2': {}})
+
+
+def test_nomination_cannot_both_follow_and_exclude_or_give_blank_reason():
+    n = CurrentNominations(references=[{'reference_id': 'R1', 'contribution': 'method',
+        'reason_to_follow': 'Potential adopted component',
+        'seed_evidence': [{'source_id': 'seed', 'quote': SOURCES['seed']['text']}]}],
+        selection_rationale='Methodological lead', unresolved_searches=[], excluded_references={'R1': 'Background'})
+    with pytest.raises(ValueError, match='every bibliography'):
+        validate_nominations(n, SOURCES, {'R1': {}})
+    n.excluded_references = {'R2': ' '}
+    with pytest.raises(ValueError, match='context-specific'):
+        validate_nominations(n, SOURCES, {'R1': {}, 'R2': {}})
+
+
+def test_legacy_nomination_is_readable_without_implying_complete_accounting():
+    raw = {'references': [], 'selection_rationale': 'Archived', 'unresolved_searches': []}
+    assert Nominations.model_validate(raw).model_dump() == raw
+    with pytest.raises(ValueError):
+        CurrentNominations.model_validate(raw)
 
 
 @pytest.mark.parametrize('decision',['revise','needs_evidence','reject'])

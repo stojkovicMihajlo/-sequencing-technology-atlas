@@ -24,7 +24,7 @@ def case():
             graph["edges"].append({"id": side + ":" + kind, "source": side + ":" + a,
                 "target": side + ":" + b, "kind": kind, "record_id": side,
                 "admission": "supported", "original": {"id": kind}})
-        sources[side] = {"text": "The demonstrated transformation produces a tagged library."}
+        sources[side] = {"text": "The demonstrated transformation produces a tagged library.", "content_level": "fulltext"}
         sides[side] = {"record_id": side, "paper_source_ids": [side]}
     c = PairClaim(id="c1", left_operation_ids=["left:op"], right_operation_ids=["right:op"],
         relation="shared_mechanism", direction="undirected", shared_description="Source-supported tagging",

@@ -1,5 +1,7 @@
 """Fixed two-method experiment: preserve diagram granularity, test connections."""
 
+from genomics_discovery.illumina.relationships import CHANGE_INSTRUCTIONS, relation_instructions
+
 COMMON = """Compare the two supplied reviewed Illumina method graphs. The question is
 whether their existing diagram-level detail is sufficient to express supported
 shared transformations and meaningful differences. Both actual diagrams are
@@ -14,19 +16,6 @@ If even a qualified correspondence is impossible at this level, explicitly say
 which missing distinction would require a finer extraction. That is a legitimate
 experimental result, not an instruction to redesign the graphs during this run.
 
-RELATION RULES
-shared_mechanism: both sources support the same specified physical transformation
-at the declared abstraction. Explicitly retain substrate, compartment, carrier,
-selection and downstream differences. Same enzyme name alone is insufficient.
-shared_purpose: the evidenced outputs/functions are comparable but a common
-mechanism is not established. Do not imply chemical equivalence.
-component_adoption: the later paper explicitly supports adopting/adapting the
-earlier contribution and the earlier paper independently demonstrates it.
-method_development: explicit development of that earlier assay architecture;
-component reuse or citation alone cannot establish this stronger relation.
-comparison: a documented methodological comparison, not ancestry.
-no_established_relation: a considered candidate whose proposed connection is
-unsupported. Do not force positive links or a minimum number of claims.
 Only the two historical types have a direction. Explain any historical claim
 using the actual citation context and cited implementation, not dates alone.
 Several coordinated changes can explain a relation. There is no expected answer.
@@ -49,6 +38,9 @@ repeats it. Write artifact.json under the supplied schema. Work only in your own
 attempt directory; do not change inputs, sources, code or other runs. Do not spawn
 agents or use the network. Follow /etc/agents/AGENTS.md and actual tool permissions.
 """
+
+COMMON += "\n" + relation_instructions(("method_development", "component_adoption",
+    "shared_mechanism", "shared_purpose", "comparison", "no_established_relation")) + CHANGE_INSTRUCTIONS
 
 AUTHOR = """ROLE: COMPARISON AUTHOR
 First read both diagrams and existing operations. Read both primary papers and

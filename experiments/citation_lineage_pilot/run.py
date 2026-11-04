@@ -19,14 +19,15 @@ import xml.etree.ElementTree as ET
 
 from genomics_discovery.execution.codex_worker import CodexWorker, assess_archived_attempt
 from genomics_discovery.illumina.extraction import (
-    card_title, read, revalidate_completed, sha, stage_images, verify_stage_inputs, write,
+    card_title, read, revalidate_completed, sha, source_excerpt, stage_images, verify_stage_inputs, write,
 )
 from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jats_text, parse_pubmed
 from models import (
-    Analysis, Nominations, Review, graph_overlay, validate_analysis,
+    Analysis, CurrentNominations, Nominations, Review, graph_overlay, validate_analysis,
     validate_nominations, validate_review,
 )
 from prompts import COMMON, ROLES
+from genomics_discovery.illumina import relationships as relationship_policy
 
 
 def local(element):
@@ -153,7 +154,7 @@ def acquire(inputs, nominations):
     return sources
 
 
-SCHEMAS = {"nominate": Nominations, "analyse": Analysis, "review": Review}
+SCHEMAS = {"nominate": CurrentNominations, "analyse": Analysis, "review": Review}
 
 
 def validate(role, artifact, inputs, analysis_path=None):
@@ -234,6 +235,8 @@ async def execute(args):
         prior_threads = state['review_reuse']['prior_threads']
     write(root / "state.json", state)
     implementation = {str(p): sha(p) for p in Path(__file__).parent.glob('*.py')}
+    policy_path = Path(relationship_policy.__file__).resolve()
+    implementation[str(policy_path)] = sha(policy_path)
     worker = CodexWorker(model=state["model"], effort=state["effort"], timeout_seconds=None,
                          web_search=False, network_access=False, pin_shell_environment=True)
 
@@ -297,7 +300,9 @@ async def execute(args):
 
     try:
         if reused_analysis:
-            nominations = Nominations.model_validate_json((root / 'nominations.json').read_bytes())
+            nomination_data = read(root / 'nominations.json')
+            schema = CurrentNominations if "excluded_references" in nomination_data else Nominations
+            nominations = schema.model_validate(nomination_data)
             sources = read(inputs / 'sources.json')
         else:
             nominations, path = await stage('nominate')
@@ -366,14 +371,9 @@ def main():
         if not args.id:
             print(json.dumps({k:{'level':v['content_level'],'title':v.get('title'),'characters':len(v['text'])} for k,v in sources.items()},indent=2))
         else:
-            text = sources[args.id]['text']
-            start = args.start
-            found = None
-            if args.query:
-                found = text.casefold().find(args.query.casefold())
-                start = max(0,found-500) if found >= 0 else 0
-            print(json.dumps({'source_id':args.id,'start':start,'query_found':None if found is None else found>=0,
-                'text':text[start:start+min(max(args.limit,1),18000)],'total_characters':len(text)},ensure_ascii=False))
+            result = source_excerpt(sources, args.id, query=args.query, start=args.start, limit=args.limit)
+            result.update(query_found=result['found'], level=sources[args.id].get('content_level'))
+            print(json.dumps(result, ensure_ascii=False))
 
 
 if __name__ == '__main__':
