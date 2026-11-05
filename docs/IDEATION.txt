@@ -1,0 +1,368 @@
+ATLAS-CONDITIONED ASSAY IDEATION
+Implementation decision and reading guide — 5 November 2026
+
+Purpose
+-------
+Given a research request, produce proposed genomics sequencing assay architectures
+that can be inspected using the same State–Operation–Flow meanings as the atlas.
+The output should make the proposed change, its precedents, its unsupported
+assumptions and its decisive tests visible. It is not an automatically validated
+invention, an executable laboratory recipe, or a claim of exhaustive prior-art search.
+
+The atlas is a read-only source of reported workflows and, when loaded, reviewed
+historical relationships. Proposed designs live in a separate overlay. A proposed
+new connection must never silently become evidence about an existing technology.
+
+What to read, in order
+---------------------
+1. src/genomics_discovery/ideation/run.py
+   Request, ResearchPlan and pipeline define the stage order and saved artifacts.
+   The runner owns the number of experts/revisions and checks outputs after every
+   stage. It reuses execution/codex_worker.py for native model execution.
+2. src/genomics_discovery/ideation/prompts.py
+   build_prompt(role, context) supplies the exact plan/propose/literature/review/revise
+   instructions. Context supplies file paths and tool commands, not the whole
+   atlas or repeated paper text. Each actual stage_prompt.txt is archived.
+3. src/genomics_discovery/ideation/models.py
+   CandidateIdea contains the proposed graph, design changes and assessment ledger.
+   IdeaReview records the closest prior work, issues and a bounded disposition.
+4. src/genomics_discovery/ideation/context.py
+   AtlasContext provides version-bound atlas lookup, bounded source reads and an
+   audit log. This is the interface through which an agent conditions on the atlas.
+
+One run
+-------
+Original request
+  -> coordinator defines an agenda and two distinct expert mandates
+  -> the two experts independently produce candidate assay graphs
+  -> a separate literature investigator checks cited sources and searches closest priors
+  -> a fresh reviewer sees both graphs and checks mechanisms, interfaces and prior art
+  -> candidates marked revise receive the review and the other candidate
+  -> each requested revision runs once, with a response to every review issue
+  -> a fresh review checks revised graphs and tracks previous issues
+  -> export the separate candidate graphs, reviews and evidence records
+
+Two initial experts and one revision are prototype resource choices, not an
+experimentally established optimum. The coordinator selects expertise appropriate
+to the question; it does not assign the same fixed scientific specialties to every
+request. Review has a distinct role and session. Calling two copies of a model
+experts does not establish independent knowledge or substitute for expert validation.
+The literature investigator has its own session and can research both drafts; the
+design experts retain independent literature access. This role targets a concrete
+failure mode: author-supplied citations may exist but fail to support the required
+property, or may already describe the supposed advance.
+
+Interaction happens through concrete artifacts: the reviewer compares both designs,
+and revision authors can inspect the other proposal and the critique. This is not
+an unrestricted chat room or an assertion that multiple agents are always better.
+Different useful architectures remain separate; there is no forced final merger.
+If a stage fails, the run records that failure rather than pretending all experts
+contributed. A failed or held proposal is not upgraded merely to fill the quota.
+
+Request format
+--------------
+The request is a JSON object with prompt, constraints, preferences and origin.
+The coordinator must preserve prompt and explicit constraints verbatim. Its own
+interpretation and assumptions occupy separate fields. Preferences are not silently
+converted into hard exclusions. A human or another LLM may supply the request.
+
+Example request, not a demonstrated novel opportunity:
+{
+  "prompt": "Propose a sequencing assay that distinguishes newly synthesized from pre-existing RNA while retaining cell-level attribution. Identify a useful improvement over the closest existing assays.",
+  "constraints": [],
+  "preferences": ["Prefer equipment normally available in a genomics laboratory; disclose any new equipment requirement."],
+  "origin": "human request"
+}
+
+This question is not hard-coded in the engine. An empty constraints list does not
+mean there are no physical constraints. Physical requirements belong in the design
+and its review; an unrequested equipment restriction should not be invented.
+
+What a candidate contains
+-------------------------
+CandidateIdea (format_version proposed_assay/1.0):
+  id, title, biological_question, measurement, expected_benefit
+  workflow: states, operations, flows
+  changes: earlier references, retained arrangement, changed arrangement,
+           affected proposal records and expected gain
+  assessments: evidence status and assumptions for every graph record/property
+
+State: the material preparation or dataset at a particular workflow boundary.
+Operation: an action or inspection of particular input States with particular
+           output States; it records input roles and effects.
+Flow: an explicit material/data input, output or ordering dependency. It connects
+      records by ID; it is not a historical-development relationship.
+
+These reuse the atlas's meanings and property vocabulary. The proposal schema
+deliberately does not reuse extraction's requirement that every proposed action
+already be a reported action in a source. That would forbid the very innovation
+we are asking for, or encourage fictitious evidence.
+
+Instead, ClaimAssessment targets each State, State property, Operation and Flow:
+  precedent: the required behavior is supported in the cited setting;
+  transfer: that behavior is proposed in a different context, with an explicit
+            compatibility assumption and a decisive test;
+  hypothesis: the required behavior lacks support, with the unsupported property
+              and a decisive test stated explicitly.
+
+The status applies to the exact claim, not to the whole reagent or method name.
+For instance, evidence that an enzyme acts on one substrate does not demonstrate
+that it will act on a modified or immobilized substrate in the proposed workflow.
+The existing enzymatic property and the proposed contextual transfer differ.
+This example describes an evidence distinction, not a claim about a named enzyme.
+
+Graph records have proposal-local IDs. References to the atlas use an existing
+record_id, extraction_sha256 and node_id. A new architecture can have no whole-
+method predecessor while still citing component precedents. Changes may affect
+several States, Operations and Flows; no single-operation novelty rule is imposed.
+
+How agents use the atlas and papers
+----------------------------------
+Each stage receives a tool_command with the pinned atlas, stage source registry
+and audit log already specified. The agent appends a command:
+
+  list                              browse the available methods
+  search '<terms>'                  shortlist States/Operations by lexical terms
+  workflow <record_id>              inspect one reported workflow
+  node <node_id>                    inspect one State or Operation
+  group <record_id> <operation_ids> inspect a connected group and its boundaries
+  history <record_id>               inspect reviewed historical claims, if loaded
+  claim <claim_id>                  retrieve one exact historical claim
+  atlas-source <record_id> ...      inspect byte-pinned extraction sources/passages
+  source-fetch <url> --title ...    fetch public source bytes and a reading rendition
+  source-add <path> --url ... --title ... --content-level ...
+                                    register actual retrieved text, not a summary
+  source-read <source_id> ...        read bounded text windows or a literal match
+  result-read <result_id> ...        continue an oversized tool response
+
+Search is currently lexical candidate retrieval, including structured properties,
+roles and effects. It is not semantic equivalence or a biochemical compatibility
+algorithm. Agents inspect the selected records and can use external web search;
+the atlas is not the boundary of permissible scientific knowledge.
+
+Large responses are stored with a continuation handle. Repeated evidence objects
+are indexed once. This limits prompt growth while keeping exact records accessible;
+it does not pretend a short summary contains every scientific detail. The source
+registry preserves captured text and hashes; a literal quote match proves only
+that the quote appears in the captured text. Agent-imported text still needs review
+for source authenticity and whether it supports the scientific claim.
+source-fetch preserves requested/final URLs, HTTP status, raw bytes and hash, text
+rendition and hash. It accepts public HTTPS HTML, JATS article XML and plain text;
+PDF rendition is explicitly unavailable in this first helper. It reuses jats_text
+from the existing source pipeline. Its small HTTP downloader validates redirects
+before following them; the older fetch helper did not expose that interception.
+Address checks are not a substitute for managed network policy. HTML rendition can
+omit figures/layout, and a successful fetch can return a login or challenge page.
+The investigator must inspect it. Acquired text is conservatively marked excerpt;
+a host receipt establishes origin, not complete full text or scientific validity.
+
+A missing historical manifest is reported as not loaded. A missing edge, an empty
+search, and an inaccessible paper are not proof that a capability is new or impossible.
+
+Review and what the checks mean
+------------------------------
+Software checks exact IDs and graph connectivity, typed property/endpoint rules,
+Operation input/output consistency, assessment coverage, referenced versions,
+captured quotations, review binding and issue-response coverage. A fresh reviewer
+must inspect the scientific meaning as well. Neither check proves a new assay works.
+
+LiteratureReport separates citation identity from scientific entailment. It binds
+findings to both exact candidate versions, checks each central measurement and design
+change, and names other graph records inspected. Every distinct external source
+used in the drafts receives a citation check. The investigator reopens the original
+publication, compares bibliographic identity and actual wording/context, and stores
+verification evidence; rereading an author's imported file does not suffice.
+Metadata alone cannot verify a scientific passage. Claim verdicts distinguish
+supported_in_cited_setting, transfer_not_established, contradicted and not_found.
+The latter is a search result, not proof of impossibility. A verified_agent_review
+citation status means an agent checked identity/capture, not that the assay works.
+Coverage limits and inaccessible sources remain visible. New claims/references
+introduced in revision require fresh review; the old report cannot certify new bytes.
+
+ReviewPanel records one IdeaReview per candidate, a comparison of the designs,
+actual searches performed and access limitations. On a later review it records
+previous_issue_resolutions. Unresolved issues must remain visible. The runner checks
+that a non-incomplete novelty assessment has an observed external search execution;
+that check does not prove the search was sufficient or the result was interpreted well.
+
+Novelty status is direct_overlap, possible_distinction or search_incomplete.
+The review names the nearest prior work, the overlap and the residual difference.
+It must not transform a search failure into a novelty claim. The disposition is
+revise, retain_for_testing, hold or drop. retain_for_testing means retain for further
+expert/experimental assessment, not an experimentally established technology or a
+ready-to-execute protocol. Critical unsupported primitive properties and incompatible
+interfaces must remain blocking issues until resolved or the claim is narrowed.
+
+The distinction matters for our use case: the useful output is a proposed physical
+measurement with inspectable interfaces, not only a biological explanation or a
+more confident paragraph. The graph should let a scientist point to exactly where
+a cell label is introduced, where a molecule changes form, and which proposed
+transfer still needs evidence or a test.
+
+Commands and artifacts
+----------------------
+Prepare/check can run locally. Native model execution belongs in a Qiu Sherlock
+Slurm allocation under the existing project deployment instructions. Use the
+selected frozen runtime and its environment; do not start local model jobs.
+
+  PYTHONPATH=src python -m genomics_discovery.ideation.run prepare \
+    --request REQUEST.json --atlas REVIEWED_ATLAS.json --output NEW_RUN_DIRECTORY
+
+  PYTHONPATH=src python -m genomics_discovery.ideation.run run \
+    --directory NEW_RUN_DIRECTORY
+
+Optionally supply --history-manifest when preparing a run whose reviewed history
+matches the selected workflow versions. Graph conditioning does not require every
+catalogue entry to be present, but the run must report what context was available.
+
+The run directory retains inputs/, config.json, state.json, plan.json, attempts/,
+candidates/<expert_id>/initial.json and any revised.json/issue_responses.json,
+literature_report.json, initial_review.json, final_review.json and sources.json. Each attempt keeps its
+contract, exact prompt, schema, output, native trace and tool-call log. The input
+atlas remains unchanged. For demonstration, show the request, selected precedents,
+two candidate graphs, a concrete critique and the corresponding revision or hold.
+
+Reference-implementation decision record
+---------------------------------------
+Contract fixed for this implementation:
+- Observable inputs: original request, a pinned atlas, optional version-matched
+  historical claims, actual retrieved literature, and artifacts from earlier stages.
+- Output: proposed assay graphs plus traceable comparisons and uncertainties.
+- Required invariants: proposal/evidence separation; preserved request; resolvable
+  record IDs; explicit material/data routes; no unreviewed promotion into the atlas.
+- Unavailable conclusions: experimental success, exhaustive novelty, optimal expert
+  composition, or the superiority of graph conditioning without matched evaluation.
+- Deployment: fixed bounded stage graph through the existing native worker; no new
+  autonomous scheduler, unlimited debate loop or learned policy is introduced.
+
+Material alternatives:
+A. Put the whole atlas in every prompt versus retrieve relevant bounded records.
+   Choose retrieval for inspectability and context cost. It can miss relevant work;
+   external search and coverage reporting remain necessary.
+B. Reuse the extraction schema unchanged versus separate proposed claim status.
+   Choose shared scientific semantics with a proposal-specific assessment ledger.
+C. Force a single combined idea versus retain distinct candidates through review.
+   Choose independent candidates and optional cross-candidate refinement.
+D. Score novelty from graph topology versus compare claims with retrieved prior art.
+   Choose explicit prior-art comparisons; do not label absent edges as discoveries.
+E. Install a separate hosted literature platform versus use current search tools
+   behind an evidence-report contract. Use native web search, bounded source reads
+   and captured provenance for the prototype; no PaperQA service is silently assumed.
+
+Inspected precedents and decisions:
+1. Intern-Atlas, arXiv 2604.28158, sections 3.3, 4.3 and Appendix F.
+   https://arxiv.org/html/2604.28158v1
+   ADAPT: local method/edge context, documented bottlenecks and mechanisms as useful
+   inputs to ideation. REJECT for this prototype: treating topology-based novelty
+   or feasibility scores as calibrated genomics judgments. Its domain is AI methods,
+   and the paper itself discusses extraction error and domain-specific assumptions.
+   Its generation evaluation includes graph-based scoring and human comparisons;
+   it does not establish wet-lab compatibility or experimental success.
+
+2. OpenRaiser/Intern-Atlas toolkit, MIT, inspected local commit
+   1185dc36555c547b5b6e9553779cb498a15ce587.
+   https://github.com/OpenRaiser/Intern-Atlas/tree/1185dc36555c547b5b6e9553779cb498a15ce587
+   src/intern_atlas/evidence.py: search_relevant_paper_ids,
+   expand_from_seed_papers, build_evidence_pack. ADAPT the bounded evidence-pack
+   pattern. This local implementation uses lexical search and neighborhood expansion;
+   its remote client delegates idea generation to a hosted endpoint. Official
+   authorship/equivalence to the paper's research implementation was not established.
+   The paper website currently lists GitHub as coming soon:
+   https://intern-atlas.opendatalab.org.cn/
+
+3. Virtual Lab, Nature 2025, MIT implementation, pinned commit
+   8a3a4fd9ccc0cd297bd523751e03bc9527c91832.
+   https://www.nature.com/articles/s41586-025-09442-9
+   https://github.com/zou-group/virtual-lab/tree/8a3a4fd9ccc0cd297bd523751e03bc9527c91832
+   Inspected Agent, run_meeting and prompts in src/virtual_lab/. ADAPT explicit
+   expertise/mandates, bounded discussion, critic feedback and saved meeting outputs.
+   Its executable loop passes discussion between participants; it includes optional
+   PubMed search and full meeting history. Human direction is part of the published
+   system. Our file-backed artifacts and assay graph contract are task-specific
+   adaptations, not features demonstrated by copying its role names.
+
+4. ROBIN, Nature 2026, Apache-2.0 implementation, pinned commit
+   4a5cce310f3bc7663a67117db88af43b84733ffe.
+   https://www.nature.com/articles/s41586-026-10652-y
+   https://github.com/Future-House/robin/tree/4a5cce310f3bc7663a67117db88af43b84733ffe
+   Inspected experimental_assay in robin/assays.py, therapeutic_candidates in
+   robin/candidates.py, call_platform in robin/utils.py and robin/prompts.py.
+   ADAPT proposal-specific evidence investigation and explicit output contracts.
+   The public orchestrator calls hosted Edison literature agents; it does not expose
+   all Crow/Falcon internals. Its drug-repurposing constraints and ranking priorities
+   are not genomics architecture rules. No source code was copied into this module.
+
+5. Co-Scientist, Nature 2026.
+   https://www.nature.com/articles/s41586-026-10644-y
+   ADAPT externally searched novelty critique: its reported ablation on published
+   ideas finds that search reduces false novelty assessments. Full source is not
+   publicly released. We do not claim to reproduce its tournament/evolution system.
+
+6. SciMON, ACL 2024, and Si et al., ICLR 2025.
+   https://aclanthology.org/2024.acl-long.18/
+   https://proceedings.iclr.cc/paper_files/paper/2025/hash/ea94957d81b1c1caf87ef5319fa6b467-Abstract-Conference.html
+   SciMON supports iterative comparison against retrieved prior work. The ICLR human
+   study reports generation-diversity and model self-evaluation limitations. These
+   motivate preserving alternatives and external comparison, not guaranteed creativity.
+
+7. PaperQA2, primary paper and current public implementation, Apache-2.0.
+   https://arxiv.org/html/2409.13740v1
+   https://github.com/Future-House/paper-qa/tree/57e89f7223b0960d5ee5ea048c69e3c47e088572
+   Inspected src/paperqa/agents/tools.py: PaperSearch, GatherEvidence;
+   src/paperqa/docs.py: Docs.retrieve_texts, Docs.aget_evidence. ADAPT separation
+   of finding papers from question-specific evidence retrieval and synthesis. This
+   version searches a configured local index and uses vector retrieval plus optional
+   contextual summaries. The paper distinguishes its hosted retrieval infrastructure
+   from the public package. We have not installed PaperQA2 or reproduced its benchmark.
+   Our source registry preserves quotations and source context instead of treating a
+   model summary as primary evidence. Later PaperQA integration is a backend choice,
+   not a prerequisite for the dedicated literature investigator.
+
+8. OpenScholar, Nature 2026; inspected Apache-2.0 implementation at
+   0e9b8fb912273d3dae39e593da86e4f6d3bf8de1.
+   https://www.nature.com/articles/s41586-025-10072-4
+   https://arxiv.org/html/2411.14199v1
+   https://github.com/AkariAsai/OpenScholar/tree/0e9b8fb912273d3dae39e593da86e4f6d3bf8de1
+   Inspected src/open_scholar.py: run, get_feedback, edit_with_feedback_retrieval,
+   insert_attributions_posthoc_paragraph_all. ADAPT targeted retrieval for a specific
+   missing claim and subsequent citation checking. The pinned code's feedback path
+   comments out peS2o retrieval; optional Semantic Scholar search supplies abstracts.
+   This is not an off-the-shelf full-paper/supplement recovery solution. Its attribution
+   pass is model-generated support checking, not an origin guarantee. Our separate
+   citation-origin checks and version-bound graph targets are task-specific additions;
+   their benefit still needs evaluation. No external source code was copied.
+
+What to test before claiming the atlas helps
+------------------------------------------
+Structural negative controls: an invented atlas ID; wrong extraction hash; a quote
+absent from captured text; a material Flow connected to a data State; missing
+assessment; a changed graph paired with an old review; an unanswered review issue;
+and a novelty assertion with no observed search. These should fail predictably.
+Also test wrong-publication citations, imported text that differs from the reopened
+source, metadata-only access claimed as passage verification, and evidence reports
+bound to an earlier candidate after revision. Origin and entailment must be evaluated
+separately rather than combined into a single citation-validity score.
+
+Scientific controls: a deliberately rediscovered existing assay, a familiar enzyme
+placed at an incompatible interface, and two paraphrases of the same design. Check
+whether the reviewer locates the actual issue and whether revision preserves it.
+These require source/expert assessment; a software pass is insufficient.
+
+First matched comparison: the same question, model, source access and approximate
+budget with ordinary text evidence versus structured atlas evidence. Next compare
+one proposal with independent proposals plus review. Keep the source snapshots and
+evaluation criteria fixed. Record unsupported assertions, interface problems,
+traceability, distinct physical design moves, latency and expert judgments.
+Do not call structural validity, similarity to a historical assay or a model's
+own novelty rating an innovation metric.
+
+Remaining uncertainty
+---------------------
+This prototype's graph format makes proposals inspectable; whether it improves
+scientific ideas remains an empirical question. Lexical retrieval may miss analogies.
+Two experts may converge on the same idea, reviewers may share model blind spots,
+and imported text can have provenance/interpretation errors. A single revision
+cannot close every scientific gap. Keep those outcomes in the demonstration rather
+than replacing them with an unsupported success claim. Native run status and test
+receipts belong in the experiment directory and deployment status, not this design
+record; this document does not assert a completed live ideation experiment.
