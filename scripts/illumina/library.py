@@ -252,15 +252,20 @@ def index_page(library):
     escape = html.escape
     cards = []
     workflows = library['workflows']
+    depictions = {r['record_id']: r for r in library['depictions']}
     for entry in sorted(library['technologies'], key=lambda t: t['name'].casefold()):
         versions = []
         for mid in entry['workflow_versions']:
             m = workflows[mid]['metadata']
             versions.append(f'<li><a href="methods/{escape(mid)}/graph.html">{escape(m["name"])}</a>'
-                            f' · {escape(m["status"])}<p>{escape(m["scope"])}</p></li>')
+                            f' · {escape(m["status"])} · <code>{escape(mid)}</code><p>{escape(m["scope"])}</p></li>')
         sources = []
         for s in entry['source_occurrences']:
-            sources.append(f'<li><a href="source_views/index.html#{escape(s["record_id"])}">{escape(s["record_id"])}</a>'
+            depiction = depictions[s['record_id']]
+            source_type = {'initial_two':'website card','catalogue':'website card',
+                           'posters':'poster row','footer_panels':'footer panel'}.get(depiction['batch'],depiction['batch'])
+            caption = depiction['title'] + ' — ' + source_type
+            sources.append(f'<li><a href="source_views/index.html#{escape(s["record_id"])}">{escape(caption)}</a>'
                            f' · {escape("; ".join(s["bases"]))}</li>')
         papers = ' · '.join(f'<a href="https://pubmed.ncbi.nlm.nih.gov/{p[5:]}/">{escape(p)}</a>'
                             for p in entry['origin_paper_ids'] if p.startswith('pmid:') and p[5:].isdigit())
@@ -273,6 +278,7 @@ def index_page(library):
 <title>Sequencing technology atlas</title><style>body{{font:16px/1.6 Arial,Helvetica,sans-serif;max-width:1120px;margin:40px auto;padding:0 24px;background:#111821;color:#dfe8f2}}a{{color:#8ccaff}}h1{{font-size:30px}}h3{{font-size:16px}}p{{color:#b4c4d4}}input{{width:100%;padding:14px;box-sizing:border-box;font:inherit;background:#1c2938;color:white;border:1px solid #62798e;border-radius:8px}}.entry{{margin:12px 0;padding:16px 20px;background:#1a2532;border:1px solid #35485e;border-radius:8px}}summary{{cursor:pointer}}li{{margin:8px 0}}pre{{white-space:pre-wrap;font-size:13px}}</style>
 <h1>Sequencing technology atlas</h1><p>One entry per working technology, with scoped workflow versions, complementary source depictions and papers beneath it.</p>
 <p><a href="technologies.csv">Technology table</a> · <a href="papers.csv">Paper table</a> · <a href="depictions.csv">Source coverage</a> · <a href="identity_queue.csv">Missing technologies / aliases to resolve</a> · <a href="history.html">Historical changes</a></p>
+<p><strong>{library['counts']['working_technology_entries']} working entries · {library['counts']['scoped_workflow_versions']} scoped workflow versions · {library['counts'].get('historical_edges',0)} historical links</strong></p>
 <details><summary>Counts and their definitions</summary><pre>{counts}</pre></details>
 <p>The seed is an earlier curated catalogue. New workflow versions retain their exact scope and model-review status. Label-only source associations are candidates. They establish neither assay equivalence nor evolutionary edges.</p>
 <input id="search" type="search" placeholder="Find a technology, PMID or workflow ID…" aria-label="Find a technology">
