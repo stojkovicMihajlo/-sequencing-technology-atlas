@@ -2,6 +2,14 @@
 
 ## Completed pilot and ideation iteration — 5 November 2026
 
+Live check at **16:07 UTC**: revised ideation job **51210749 is running** after
+266 Sherlock software checks and exact baseline-input verification. Correction
+job **51210466** passed 486 checks, completed its author and is in independent
+review. Baseline ideation job **51200765** remains in revision. These are ongoing
+tests, not completed scientific validations. The release passed 880 combined
+offline checks; a missing test-fixture dependency caught before model startup was
+fixed in the replacement ideation package and tested in isolation.
+
 Job **51127481 completed**. Its final extraction outcomes are **47 supported by
 model review, two research holds and one transport failure**. The history stage
 produced **19 admitted historical edges across 29 reviewed pair overlays**;
