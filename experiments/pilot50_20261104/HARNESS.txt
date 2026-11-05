@@ -67,6 +67,46 @@ publication is held and a request records the existing extraction hash. Automati
 refinement is not implemented in this pilot: a changed workflow must be separately
 extracted/reviewed and then its relationships reviewed again.
 
+OPEN LIMITATION SOURCE_RECOVERY-001 — reviewer requests do not acquire sources
+Recorded4Nov2026 at the user's explicit request. Status: identified, NOT fixed.
+The extraction author/reviewer loop receives one registered source bundle. A
+correction pass reuses that bundle; it cannot obtain a missing supplement merely
+by rewriting an assertion. A research-only outcome is held; if the review also
+requires a correctable revision, that revision can run without resolving the
+source gap. The citation runner acquires nominated papers before analysis, but
+its later correction/review cycle likewise does not expand its source registry.
+
+Observed example: job51127481, run_01/extractions/cards/mars_seq/attempt_001/
+attempts/002_reviewer/artifact.json. The first reviewer requested Jaitin2014
+supplementary methods for the amplification/DNase sequence and the cell-tag
+carrier across pooling. It separately required correction of an unsupported
+local all-tag-preservation claim. A fresh review of the corrected extraction was
+still running in the23:56UTC snapshot; do not treat it as accepted or completed.
+Implementation locations: illumina/extraction.py:extract_registered_workflow;
+citation_lineage_pilot/run.py:acquire and its later review cycle.
+
+Required behavior for a future source-recovery handoff (not yet implemented):
+1. Distinguish a fix possible from registered evidence from a missing document,
+   an uninspected existing passage, a failed download or a source contradiction.
+2. Name the missing fact, affected graph/claim records and requested document or
+   section. Do not let a generic request for more literature trigger new work.
+3. Check the old source-packet/cache index first; open registered original
+   passages if available, otherwise attempt lawful source/supplement recovery.
+4. Preserve old bundles. Register new document and passage hashes in a new source
+   bundle version; record acquisition attempts and precise failure reasons.
+5. Resume only affected extraction/claim work, then require a fresh review bound
+   to the updated bundle and output. Unresolved consequential gaps remain held.
+6. Bound acquisition/revision attempts. Unchanged evidence must not silently
+   clear a missing-evidence issue or cause repeated whole-method rewrites.
+
+Acceptance checks before deployment: a cached supplement is reused without
+redownload; a newly acquired supplement is registered and passed to the author
+and fresh reviewer; a failed download stays a retrieval failure; an unavailable
+document keeps the dependent claim held; an existing overlooked passage can
+resolve the issue without a download; different assay versions cannot substitute
+for the requested source; no original bundle, extraction or review is overwritten.
+No active runtime/input was modified to record this limitation.
+
 Success will be reported as coverage, source/support holds, exact-version paired
 edges, rejected/withheld claims, refinement requests, baseline comparison findings,
 and latency/token usage. Completion of software execution alone is not success.

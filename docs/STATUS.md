@@ -1,5 +1,21 @@
 # Deployment status
 
+## Active pilot and recorded source-recovery limitation — 4 November 2026
+
+Pilot job **51127481** is running on Qiu with 50 scoped method/version targets.
+At 23:56 UTC, three extractions had passed model review, four were running and
+43 were pending. Historical-link review and baseline comparison had not started.
+These are timestamped observations, not live counts or expert validation.
+
+**Open issue SOURCE_RECOVERY-001:** a reviewer can request a missing supplement,
+but the correction pass reuses the existing source bundle. There is no automatic
+review-triggered acquisition and resumption handoff. The observed MARS-Seq case,
+required behavior and acceptance checks are recorded in the pilot's
+[HARNESS.txt](../experiments/pilot50_20261104/HARNESS.txt). This issue is recorded,
+not fixed; the active frozen runtime remains unchanged. The latest run receipts
+and progress snapshots are in
+[the pilot resume record](../provenance/experiments/pilot50_20261104/RESUME.txt).
+
 ## Extraction-to-ideation audit — 4 November 2026, afternoon
 
 Read the [current handoff review](../experiments/transcriptomics_revision_20261104/HANDOFF_REVIEW.txt)
