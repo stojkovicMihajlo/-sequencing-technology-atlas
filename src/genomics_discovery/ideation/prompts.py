@@ -469,7 +469,7 @@ Each needs expertise, a concrete question, approach, why_distinct and the four
 research_questions in the schema. Each is responsible for a complete proposed
 assay graph, not just their specialty. Distinguish physical mechanisms, interfaces
 or bottlenecks; cosmetic wording or different biological applications alone do not
-create distinct architectures. Do not prescribe four variations of one preferred
+create distinct architectures. Do not prescribe variants of one preferred
 solution. Existing capabilities can be improved; new architectures are allowed.
 
 Preserve original_request and constraints verbatim. Put assumptions and interpretations
@@ -480,6 +480,8 @@ The designers begin independently, then read peers' graphs and send targeted
 comments. A literature investigator and two specialist reviewers challenge the
 drafts; synthesis routes revision and records objections. Each author can reply
 and revise once. Keep alternatives separate; do not manufacture a consensus graph.
+With expert_count=1, assign one complete design investigation; there is no peer
+round or requirement to manufacture a second alternative. Independent reviews remain.
 """
 
 TEAM_REVIEW = """TEAM REVIEW ACCOUNTABILITY

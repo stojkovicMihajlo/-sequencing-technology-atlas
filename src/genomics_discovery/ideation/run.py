@@ -86,7 +86,7 @@ class AssayResearchPlan(ResearchPlan):
 
 
 class TeamResearchPlan(ResearchPlan):
-    experts: Annotated[tuple[ResearchExpertMandate, ...], Field(min_length=2)]
+    experts: Annotated[tuple[ResearchExpertMandate, ...], Field(min_length=1)]
 
 
 class ReviewPanel(StrictModel):
@@ -464,8 +464,8 @@ def validate_artifact(contract, path):
 
 
 def prepare(request_path, atlas_path, output, *, history_manifest=None, team=False, expert_count=4, max_parallel=4):
-    if team and (isinstance(expert_count, bool) or not isinstance(expert_count, int) or expert_count < 2):
-        raise ValueError('A design team requires at least two designers')
+    if team and (isinstance(expert_count, bool) or not isinstance(expert_count, int) or expert_count < 1):
+        raise ValueError('Designer count must be a positive integer')
     if isinstance(max_parallel, bool) or not isinstance(max_parallel, int) or max_parallel < 1:
         raise ValueError('max_parallel must be a positive integer')
     request = Request.model_validate(read(request_path))
@@ -486,7 +486,7 @@ def prepare(request_path, atlas_path, output, *, history_manifest=None, team=Fal
         'boundary': 'Untested proposal overlay; no canonical atlas writes or scientific novelty guarantee.'}
     if team:
         config.update(format_version='ideation_run/3', expert_count=expert_count,
-                      max_parallel=max_parallel, peer_rounds=1,
+                      max_parallel=max_parallel, peer_rounds=int(expert_count > 1),
                       specialist_lenses=['chemistry_interfaces', 'measurement_benefit'])
     if history_manifest:
         # Refer to an exact manifest; the history reader verifies every linked artifact.

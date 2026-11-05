@@ -12,6 +12,8 @@ source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
 : "${ATLAS_IDEATION_ROOT:?Set a fresh experiment root}"
 : "${ATLAS_IDEATION_RUNTIME:?Set the frozen code directory}"
 : "${ATLAS_IDEATION_PILOT:?Set the read-only source pilot}"
+export ATLAS_IDEATION_DESIGNERS="${ATLAS_IDEATION_DESIGNERS:-4}"
+export ATLAS_IDEATION_MAX_PARALLEL="${ATLAS_IDEATION_MAX_PARALLEL:-4}"
 export ATLAS_REPOSITORY="$ATLAS_IDEATION_ROOT/$ATLAS_IDEATION_RUNTIME"
 export ATLAS_CODEX_BIN_DIR="$GROUP_HOME/mstojkov/software/codex/0.163.0/bin"
 source "$ATLAS_REPOSITORY/scripts/sherlock/environment.sh"
@@ -56,6 +58,6 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p pytest
 : "${ATLAS_IDEATION_REFERENCE_RUN:?Set the exact reference run}"
 "$ATLAS_ENV_DIR/bin/python" -m experiments.ideation_demo_20261105.snapshot \
     --reference-run "$ATLAS_IDEATION_REFERENCE_RUN" --output "$ATLAS_IDEATION_ROOT/run_01" \
-    --team --designers 4 --max-parallel 4
+    --team --designers "$ATLAS_IDEATION_DESIGNERS" --max-parallel "$ATLAS_IDEATION_MAX_PARALLEL"
 "$ATLAS_ENV_DIR/bin/python" -u -m genomics_discovery.ideation.run run \
     --directory "$ATLAS_IDEATION_ROOT/run_01"

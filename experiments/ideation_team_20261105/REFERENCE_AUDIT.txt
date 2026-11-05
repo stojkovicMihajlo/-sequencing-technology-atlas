@@ -70,6 +70,47 @@ REFERENCES, PINS, AND ACCESS
 
 PANTHEONOS: ACTUAL CODE PATHS AND TRANSFER DECISIONS
 
+Provider and executable-reuse addendum, 2026-11-05
+------------------------------------------------
+The original audit did not inspect provider compatibility deeply enough. Follow-up
+inspection at the SAME pinned commit finds an existing Codex OAuth provider:
+
+  pantheon/agent.py::_resolve_model_spec_with_current_provider
+  pantheon/utils/llm_providers.py::call_llm_provider
+  pantheon/utils/adapters/codex_adapter.py::CodexAdapter.acompletion
+
+The explicit codex/ prefix selects a dedicated adapter. CodexAdapter sends HTTP
+Responses-format requests to the ChatGPT Codex endpoint using OAuth credentials,
+rather than spawning the native Codex CLI. This makes a Codex-backed Pantheon team
+possible in principle; it does NOT demonstrate our requested model/effort, account
+isolation, managed sandbox, tool approvals or Sherlock compatibility. No provider
+request was made, credentials copied or execution route changed in this inspection.
+Do not claim that Pantheon lacks Codex support. Do not describe our CLI worker as
+an already compatible Pantheon Agent.
+
+The inspected AgentAsToolTeam registers list_sub_agents and call_sub_agent on the
+leader, and optionally on peers with fully_connected=True. The leader can actually
+invoke a worker through a tool; the worker result returns to its caller. Our
+current coordinator instead emits a validated research plan, and Python dispatches
+the fixed stages. These are related coordination patterns, not the same executable
+implementation. No Pantheon runtime is imported or vendored in our pipeline.
+
+Recommended bounded reuse path: keep the proposed-assay graph, evidence custody
+and acceptance checks; expose AtlasContext functions through Pantheon's ToolSet;
+then test a delegation adapter against AgentAsToolTeam without silently replacing
+the existing worker's authentication, sandbox or approval behavior. Test task and
+tool delivery, return/error propagation and context isolation before a live assay
+run. Conversation Memory is useful for session bookkeeping, but must not replace
+the original scientific sources. This is an integration recommendation, not a
+completed adapter or evidence that Pantheon's runtime will improve assay designs.
+
+This follow-up read the full small AgentAsToolTeam and base Team implementations,
+the Codex adapter, and relevant agent/provider/toolset code. It does not claim a
+full-repository audit or an upstream runtime test. pyproject.toml also brings a
+substantial dependency stack; importing the framework is not a free substitution.
+
+The remaining original audit follows below.
+
 All paths below are relative to the pinned PantheonOS repository.
 
 pantheon/team/pantheon.py

@@ -127,7 +127,25 @@ def test_history_navigation_replays_same_failed_overlay_without_changing_it(tmp_
     fixture = root / "provenance/experiments/ideation_demo_20261105/history_replay"
     if not fixture.exists():
         pytest.skip("Frozen pair observation not packaged in this runtime")
-    manifest = fixture / "manifest.json"
+    # The archived receipt contains the original acquisition machine's paths.
+    # Re-register the SAME pinned bytes for this machine in a fresh test bundle;
+    # never rewrite the historical receipt or assume its paths exist on Sherlock.
+    archived_manifest = fixture / "manifest.json"
+    archived_bytes = archived_manifest.read_bytes()
+    registration = json.loads(archived_bytes)
+    portable = tmp_path / "registered_history"
+    portable.mkdir()
+    for index, entry in enumerate(registration["overlays"]):
+        for specification, name in ((entry, "graph.json"), (entry["source_registry"], "sources.json")):
+            original_path = Path(specification["path"])
+            archived_file = fixture / original_path.parent.name / name
+            content = archived_file.read_bytes()
+            assert hashlib.sha256(content).hexdigest() == specification["sha256"]
+            local_name = f"{index}_{name}"
+            (portable / local_name).write_bytes(content)
+            specification["path"] = local_name
+    manifest = portable / "manifest.json"
+    manifest.write_text(json.dumps(registration))
     graph_path = fixture / "0349406d2bdf1daf7696a5f9/graph.json"
     before = graph_path.read_bytes()
     graph = json.loads(before)
@@ -148,6 +166,7 @@ def test_history_navigation_replays_same_failed_overlay_without_changing_it(tmp_
     assert context.history_list("quartz_seq2", offset=1)["data"]["relationships"] == []
     assert context.history_list("quartz_seq")["data"]["total"] == 0
     assert graph_path.read_bytes() == before
+    assert archived_manifest.read_bytes() == archived_bytes
     assert not receipt(context)["historical_claim_ids_delivered"]
 
 

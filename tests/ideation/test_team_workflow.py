@@ -1,4 +1,4 @@
-"""Offline four-designer handoffs; fake science must not become real validation."""
+"""Offline design-team handoffs; fake science must not become real validation."""
 import asyncio
 import copy
 from pathlib import Path
@@ -18,12 +18,13 @@ from tests.ideation.test_run import FakeStages
 
 
 @pytest.fixture
-def team_run(context, tmp_path, monkeypatch):
-    request = tmp_path/'request.json'
-    write(request, {'prompt': 'Develop a sequencing assay for the requested molecular distinction.',
+def team_run(context, tmp_path, monkeypatch, request):
+    count, parallel = getattr(request, 'param', (4, 4))
+    request_path = tmp_path/'request.json'
+    write(request_path, {'prompt': 'Develop a sequencing assay for the requested molecular distinction.',
         'constraints': ['Keep biological identity linked to the readout.']})
     directory = tmp_path/'team_run'
-    prepare(request, context.path, directory, team=True, expert_count=4, max_parallel=4)
+    prepare(request_path, context.path, directory, team=True, expert_count=count, max_parallel=parallel)
     monkeypatch.setitem(sys.modules, 'genomics_discovery.ideation.report', SimpleNamespace(
         export_report=lambda output, config, files, panel: write(output/'report_handoff.json',
             {'candidate_files': files, 'panel': panel})))
@@ -61,6 +62,7 @@ class TeamStages(FakeStages):
                     expert.update(id='expert_'+chr(ord('a')+len(payload['experts'])),
                         expertise='Alternative physical measurement', approach='A different fixture design route.')
                     payload['experts'].append(expert)
+                payload['experts'] = payload['experts'][:contract['expert_count']]
             elif role == 'review' and contract['revision_round'] == 0:
                 payload['specialist_issue_resolutions'] = []
                 for path in contract['specialist_report_files']:
@@ -149,6 +151,44 @@ class TeamStages(FakeStages):
         write(attempt/'artifact.json', payload)
         return {'thread_id': 'offline-team-'+attempt.name, 'usage': {},
             'web_search_event_observed': False, 'elapsed_seconds': 0}
+
+
+@pytest.mark.parametrize('count,parallel', [(0, 2), (-1, 2), (True, 2), (2.5, 2), (2, 0), (2, True)])
+def test_invalid_team_size_rejected_before_preparing_inputs(tmp_path, count, parallel):
+    output = tmp_path/'not_prepared'
+    with pytest.raises(ValueError, match='positive integer'):
+        prepare(tmp_path/'not_read_request.json', tmp_path/'not_read_atlas.json',
+                output, team=True, expert_count=count, max_parallel=parallel)
+    assert not output.exists()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('team_run', [(1, 1), (3, 2), (10, 3)], indirect=True)
+async def test_designer_count_and_concurrency_control_different_things(team_run):
+    config = read(team_run/'config.json')
+    count, parallel = config['expert_count'], config['max_parallel']
+    stages = TeamStages()
+    state = await pipeline(team_run, stages)
+    assert state['status'] == 'completed'
+    assert state['designers_requested'] == state['valid_initial_candidates'] == count
+    assert len(state['candidate_files']) == count
+    assert len(read(team_run/'plan.json')['experts']) == count
+    assert stages.max_active == parallel
+    assert len([c for c in stages.contracts if c['stage'] == 'propose']) == count
+    assert {c['specialism'] for c in stages.contracts if c['stage'] == 'specialist'} == {
+        'chemistry_interfaces', 'measurement_benefit'}
+    peers = [c for c in stages.contracts if c['stage'] == 'peer']
+    assert len(peers) == (count if count > 1 else 0)
+    conversation = read(team_run/'conversation.json')
+    assert conversation['rounds'] == int(count > 1)
+    assert conversation['peer_round_status'] == (
+        'scheduled' if count > 1 else 'not_applicable_single_valid_candidate')
+    if count == 1:
+        assert conversation['comments'] == []
+    # Exact plan cardinality is enforced before any designer is dispatched.
+    plan_schema = read(team_run/'attempts/01_plan/schema.json')
+    assert plan_schema['properties']['experts']['minItems'] == count
+    assert plan_schema['properties']['experts']['maxItems'] == count
 
 
 @pytest.mark.asyncio

@@ -39,8 +39,8 @@ What to read, in order
 
 Current bounded team run (--team)
 --------------------------------
-Request -> coordinator chooses four distinct design mandates
-  -> four independently instructed designers research and produce separate graphs
+Request -> coordinator chooses N distinct design mandates
+  -> N independently instructed designers research and produce separate graphs
   -> one peer-critique round and proposal-specific literature investigation
   -> chemistry/interfaces and measurement/benefit specialists review in parallel
   -> synthesis reviews the graphs and explicitly disposes of each specialist issue
@@ -55,9 +55,24 @@ reviewer reasons. Failed stages remain visible; missing required specialist or
 literature review stops completion. No forced graph merging, recursive hiring,
 automatic repetition of provider-blocked tasks, or canonical atlas publication.
 
-Four designers, one peer round and one revision are bounded development settings,
-not literature-established optima. The coordinator selects design expertise for
-this request. Specialists review all candidates through two defined lenses.
+Four designers is the current experiment setting. Use --designers N to choose the
+number of designers and --max-parallel K to cap simultaneous native calls. These
+are different controls. N counts complete candidate-design owners, not all roles
+or total model calls. The coordinator, literature investigator, two specialists
+and synthesis/final review are additional stages. With one valid candidate there
+is no peer-critique stage; literature and specialist review still run.
+
+The coordinator emits a plan: expertise, question, approach, why_distinct and four
+research questions for each designer. Python validates the plan's exact requested
+cardinality and dispatches the workers. The coordinator does not currently have a
+create-agent tool, recruit extra workers or control the stage sequence. Each
+designer owns a separate complete graph; the four designers are not four partial
+contributors to one graph. Peer feedback can influence revisions without merging
+the candidates. The peer/revision stages restore an author's mandate and relevant
+artifacts in fresh sessions; they are not persistent chat participants.
+
+One peer round and one revision are bounded development settings, not literature-
+established optima. Specialists review all candidates through two defined lenses.
 Fresh model sessions and separate input manifests are used; the filesystem is not
 claimed to blind designers. Initial prompts prohibit reading sibling drafts, and
 native tool traces remain available to audit that instruction.
@@ -85,8 +100,11 @@ Reference audit and current experiment
 --------------------------------------
 See experiments/ideation_team_20261105/REFERENCE_AUDIT.txt for pinned PantheonOS,
 ROBIN and Virtual Lab code, licensing, adoption limits and source-access limits.
-We adapted delegation/context and critique patterns; we did not import Pantheon's
-entire runtime or claim to reproduce Crow/Falcon internals. Native execution keeps
+We adapted delegation/context and critique patterns; no Pantheon runtime code is
+imported or vendored in the ideation pipeline. We do not reproduce Crow/Falcon
+internals. The reference audit's provider addendum records Pantheon's Codex OAuth
+adapter and why it is not equivalent to our managed native CLI execution.
+Native execution keeps
 the existing gpt-6.1-sol/xhigh Codex worker, account and managed sandbox.
 DECISION.txt records the scope; IMPLEMENTATION_REVIEW.txt records concrete defects;
 ATLAS_TOOLS.txt records real retrieval checks. This multi-change experiment is not
@@ -316,11 +334,20 @@ Prepare/check can run locally. Native model execution belongs in a Qiu Sherlock
 Slurm allocation under the existing project deployment instructions. Use the
 selected frozen runtime and its environment; do not start local model jobs.
 
-  PYTHONPATH=src python -m genomics_discovery.ideation.run prepare --team --designers 4 \
+  PYTHONPATH=src python -m genomics_discovery.ideation.run prepare --team \
+    --designers 4 --max-parallel 4 \
     --request REQUEST.json --atlas REVIEWED_ATLAS.json --output NEW_RUN_DIRECTORY
 
   PYTHONPATH=src python -m genomics_discovery.ideation.run run \
     --directory NEW_RUN_DIRECTORY
+
+For six candidate designers with at most three simultaneous native calls, use
+--designers 6 --max-parallel 3 in prepare. Count/concurrency are recorded in
+config.json. The coordinator's output schema requires exactly that many mandates.
+The Qiu experiment launch.sbatch also accepts ATLAS_IDEATION_DESIGNERS and
+ATLAS_IDEATION_MAX_PARALLEL (both default to 4). Freeze a new runtime for future
+submissions; never edit a queued experiment's frozen files. Large N increases
+peer and reviewer context, so configurable size is not evidence of tested scale.
 
 Optionally supply --history-manifest when preparing a run whose reviewed history
 matches the selected workflow versions. Graph conditioning does not require every

@@ -36,15 +36,17 @@ async def run_team_workflow(directory, config, stage):
     # not depend on discussion completing, so independent I/O can overlap.
     shared = dict(research_plan_file=str(plan_file), candidate_files=candidate_files,
                   source_inputs=[plan_sources, *author_sources])
+    peer_candidates = candidate_files if len(candidate_files) > 1 else []
     jobs = [stage('peer', '03_peer_'+read(p)['id'], expert_id=read(p)['id'], **shared)
-            for p in candidate_files]
+            for p in peer_candidates]
     jobs.append(stage('literature', '03_literature', **shared))
     results = await asyncio.gather(*jobs, return_exceptions=True)
     peer_results, literature_result = results[:-1], results[-1]
     peer_files, peer_sources = [], []
-    conversation = {'format_version': 'ideation_conversation/1', 'rounds': 1,
+    conversation = {'format_version': 'ideation_conversation/1', 'rounds': int(bool(peer_candidates)),
+                    'peer_round_status': 'scheduled' if peer_candidates else 'not_applicable_single_valid_candidate',
                     'reports': [], 'comments': [], 'failed_peer_authors': []}
-    for original, result in zip(candidate_files, peer_results):
+    for original, result in zip(peer_candidates, peer_results):
         if isinstance(result, Exception):
             conversation['failed_peer_authors'].append(read(original)['id'])
             continue
