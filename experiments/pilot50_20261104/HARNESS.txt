@@ -147,6 +147,24 @@ no frozen bundle is rewritten. For causal harness claims, use matched source and
 model conditions with repeats; report changed-source comparisons separately.
 No implementation or new experiment is authorized by the recording alone.
 
+OPEN FAILURE CORRECTION_CONTEXT-001 — oversized correction prompt
+Observed 4 November 2026 in job51127481, SPLiT-seq attempt_001/attempts/003_author.
+Status: diagnosed, not fixed. Author and first reviewer completed, but the
+correction turn was rejected before model execution: input_too_large, actual
+1,674,497 characters against a 1,048,576-character maximum. The failed process
+exited with code1 after about4.45seconds and reported no model usage.
+The correction stage receives the full previous candidate and full previous
+review in its prompt. Their repetition of evidence makes this unsafe for larger
+outputs. Inspect illumina/extraction.py's stage prompt construction and the
+prompt builder before repairing; do not confuse this with missing literature.
+Proposed remedy to test: preserve full immutable artifacts as readable files;
+provide a bounded issue/target index and exact file/passage access rather than
+embedding both artifacts. Preflight prompt length. Never truncate away unresolved
+review issues or their evidence. Acceptance checks must cover this actual large
+record plus small cases, complete issue accessibility and fresh review after
+revision. Retry only under a new recorded attempt/runtime after validation; the
+active frozen pilot remains unchanged. No corrected result has been produced.
+
 Reference audit for SOURCE_RECOVERY-001 (4 November 2026)
 Scope: how to read/retrieve evidence and resume after a missing-evidence review.
 The target remains a source-supported workflow or before-to-after relationship,

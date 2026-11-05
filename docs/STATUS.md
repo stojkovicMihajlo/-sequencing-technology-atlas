@@ -2,9 +2,13 @@
 
 ## Active pilot and recorded source-recovery limitation — 4 November 2026
 
-Pilot job **51127481** is running on Qiu with 50 scoped method/version targets.
-At 23:56 UTC, three extractions had passed model review, four were running and
-43 were pending. Historical-link review and baseline comparison had not started.
+Pilot job **51127481** was running on Qiu with 50 scoped method/version targets
+at **4 November, 5:04 PM Pacific** (5 November 01:04 UTC): **18 supported by model
+review, 1 held for research, 1 failed, 4 running and 26 pending**. Historical-link
+review and baseline comparison had not started. SPLiT-seq's correction prompt
+exceeded the CLI input limit (1,674,497 characters versus 1,048,576); its author
+and first reviewer completed, but the correction could not start. This is
+**CORRECTION_CONTEXT-001**, diagnosed but not fixed, in the pilot HARNESS.txt.
 These are timestamped observations, not live counts or expert validation.
 
 **Open issue SOURCE_RECOVERY-001:** a reviewer can request a missing supplement,
