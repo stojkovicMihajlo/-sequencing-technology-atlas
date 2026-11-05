@@ -26,6 +26,27 @@ def write(path, value):
     path.write_text(json.dumps(value))
 
 
+@pytest.mark.parametrize("size,expected", [((1081, 70), [2162, 140]), ((2880, 195), [2880, 195])])
+def test_image_delivery_preserves_native_resolution_without_claiming_quality(tmp_path, size, expected):
+    image_module = pytest.importorskip("PIL.Image")
+    original = tmp_path / "source.png"
+    image_module.new("RGBA", size, (0, 0, 0, 0)).save(original)
+    original_bytes = original.read_bytes()
+    attempt = tmp_path / "attempt"
+    attempt.mkdir()
+    paths, receipts = batch.stage_images([("diagram:test", original)], attempt)
+    receipt = receipts[0]
+    assert original.read_bytes() == original_bytes
+    assert receipt["original_dimensions_pixels"] == list(size)
+    assert receipt["attachment_dimensions_pixels"] == expected
+    assert receipt["source_detail_added"] is False
+    assert receipt["visual_quality"] == "requires_inspection"
+    with image_module.open(paths[0]) as delivered:
+        assert list(delivered.size) == expected
+        assert delivered.getpixel((0, 0)) == (255, 255, 255)
+    assert batch.read(attempt / "image_delivery.json") == receipts
+
+
 @pytest.fixture
 def acquired(tmp_path):
     root = tmp_path / "sources"

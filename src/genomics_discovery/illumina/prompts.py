@@ -62,6 +62,18 @@ A nearby caption or paper-supported interpretation does not make an unshown
 feature visible. Separate direct depiction, text-supported clarification or
 correction, and inference in the existing evidence and description fields.
 
+Check image usability before interpreting it: can you read the relevant molecular
+symbols, captions and arrow endpoints, and are those regions fully included?
+Image-delivery hashes and pixel dimensions establish neither legibility nor
+complete boundaries. Display enlargement adds no source detail. If a region is
+unreadable or clipped, inspect a registered higher-quality depiction of the same
+implementation, when available. Do not guess from neighboring drawings or memory.
+Text may independently support a claim, but does not make an unreadable feature
+visually verified. If the unresolved region affects the workflow, record the
+specific source/region and needed replacement in Unknown; distinguish this source
+quality problem from missing scientific knowledge. The reviewer must assess this
+independently and must not accept a depicted claim whose region is unreadable.
+
 The diagram establishes what is depicted. A cited primary paper can establish
 which implementation is meant or resolve an important ambiguity. If they differ,
 retain what the diagram shows and state the specific paper-supported resolution

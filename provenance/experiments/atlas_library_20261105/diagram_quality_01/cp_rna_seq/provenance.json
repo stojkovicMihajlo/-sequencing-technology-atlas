@@ -1,0 +1,68 @@
+{
+  "purpose": "Inspect source-image quality; no new assay extraction or method identity admission",
+  "website_url": "https://www.illumina.com/content/dam/illumina-marketing/images/tools/sequencing/cp-rna-seq.png",
+  "website_file": "website-original.png",
+  "website_sha256": "8c98885435fd49290a6770a65cc3bc1c305d2d13223ab9737ad91050404ae983",
+  "website_dimensions_pixels": [
+    1081,
+    70
+  ],
+  "pdf": "provenance/experiments/illumina_full_20261031/sources/poster_originals/asset_0874cf2191fc1a5bbbd7d1c3.pdf",
+  "pdf_sha256": "f1694e317a7e5f11de86b8dacbcb08c980192849cccc9e83e3d22e12c55a6976",
+  "page": 1,
+  "outputs": [
+    {
+      "file": "workflow.png",
+      "sha256": "ab3e67c99369d5ba97c3b294f75d43f41f8ff631a18ba3e9bb6d6dff11d305a3",
+      "dimensions_pixels": [
+        3840,
+        260
+      ],
+      "pdf_point_box_xywh": [
+        82,
+        759,
+        960,
+        65
+      ],
+      "dpi": 288,
+      "command": [
+        "pdftoppm",
+        "-f",
+        "1",
+        "-l",
+        "1",
+        "-r",
+        "288",
+        "-x",
+        "328",
+        "-y",
+        "3036",
+        "-W",
+        "3840",
+        "-H",
+        "260",
+        "-singlefile",
+        "-png",
+        "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/illumina_full_20261031/sources/poster_originals/asset_0874cf2191fc1a5bbbd7d1c3.pdf",
+        "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/provenance/experiments/atlas_library_20261105/diagram_quality_01/cp_rna_seq/workflow"
+      ],
+      "visual_review": {
+        "status": "inspected",
+        "checks": [
+          "Method title and complete row included",
+          "5-prime and 3-prime labels visible",
+          "cP, P, OH and X symbols readable",
+          "Operation captions and final cDNA endpoint fully included"
+        ],
+        "limitation": "Visual/source-quality check, not independent verification of depicted chemistry."
+      }
+    }
+  ],
+  "scope": "Corresponding cP-RNA-seq schematic; poster is a separate source, not a higher-resolution copy of identical PNG bytes.",
+  "discarded_preview_note": "Two narrower preview crops were discarded because neighboring symbols/captions were cut by the rectangular boundaries. Only the complete row is delivered.",
+  "harness_validation": {
+    "command": "PYTHONPATH=src .venv/bin/python -m pytest tests/illumina/test_illumina_batch_controls.py tests/illumina/test_representation_pipeline.py tests/illumina/test_illumina_label_review.py -q -p no:cacheprovider",
+    "result": "42 passed; no native model execution",
+    "deployment": "Development only; frozen runs and original source records unchanged"
+  }
+}

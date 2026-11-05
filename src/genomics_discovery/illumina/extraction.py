@@ -308,23 +308,30 @@ def stage_images(images, directory):
     for index, (source_id, original) in enumerate(images):
         destination = directory / f"diagram_{index:02d}.png"
         derivation = "byte-preserving copy"
+        original_dimensions, attachment_dimensions = None, None
         try:
             from PIL import Image
             with Image.open(original) as image:
+                original_dimensions = list(image.size)
                 rgba = image.convert("RGBA")
                 display = Image.new("RGBA", rgba.size, "white")
                 display.alpha_composite(rgba)
                 display = display.convert("RGB")
-                # Display-only enlargement makes tiny schematic captions readable.
+                # Enlargement changes display size, not source detail or legibility.
                 if display.width < 1600:
                     display = display.resize((display.width * 2, display.height * 2))
+                attachment_dimensions = list(display.size)
                 display.save(destination)
             derivation = "RGBA composited on white; 2x display enlargement if original width <1600"
         except ImportError:
             shutil.copyfile(original, destination)
         receipts.append({"source_id": source_id, "original": str(original),
             "original_sha256": sha(original), "attachment": str(destination),
-            "attachment_sha256": sha(destination), "derivation": derivation})
+            "attachment_sha256": sha(destination), "derivation": derivation,
+            "original_dimensions_pixels": original_dimensions,
+            "attachment_dimensions_pixels": attachment_dimensions,
+            "source_detail_added": False,
+            "visual_quality": "requires_inspection"})
         attached.append(destination)
     write(directory / "image_delivery.json", receipts)
     return attached, receipts
