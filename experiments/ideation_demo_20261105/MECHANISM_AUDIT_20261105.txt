@@ -1,0 +1,218 @@
+Independent mechanism audit — 2026-11-05
+
+Scope
+This audits the actual candidate artifacts, not a newly proposed assay and not an
+exhaustive novelty search. No candidate, prompt, source record or historical result
+was changed. “Not validated” and “mechanistically invalid” are separate judgments.
+The initial review was inspected as a list of concerns, not accepted as evidence.
+
+Pinned inputs, relative to repository root
+provenance/experiments/ideation_demo_20261105/observation_02/candidates/rna_age_encoding/initial.json
+  SHA256 284e3ecebd98d3ea4e14cd4ebacaef19c5a23802d5d891074b8a5d452fc280f3
+provenance/experiments/ideation_demo_20261105/observation_02/candidates/physical_rna_selection/initial.json
+  SHA256 0d1b2fc4e89df46c6299be84b008979e4e2a0fac13a54074955c10ad027a8c1e
+provenance/experiments/ideation_demo_20261105/observation_05/rna_age_encoding/revision_artifact.json
+  SHA256 2d03ba27e506283c4c7447149874964a6ce1124908a7caaa470969915548e2f4
+provenance/experiments/ideation_demo_20261105/observation_04/initial_review.json
+  SHA256 1d7b884d56fa2f0b5d0d6545a267ff9e165d797909563a61331470a6adec7ce4
+
+Verdicts
+
+1. Revised RNA-age candidate: mechanistically plausible, with a substantially
+   better specified signal and identity path than the initial draft. No decisive
+   chemical impossibility was found in the inspected sources. It is a proposed
+   compatibility experiment, not a validated coassay or a demonstrated advance.
+
+   Its path is 4sU-marked RNA -> on-bead conversion -> conventional NASC-style
+   copying -> indexed RNA library. A separately released antibody-DNA reporter
+   leaves in the first supernatant before conversion and receives its own indexed
+   library in a mapped daughter well. The paired indices and realized well map
+   preserve cell association. Revision removed the initial custom bead-bound
+   cell-barcode/UMI library interface and uses established copying and late indexing.
+   That removal reduces risk; it is not itself a new scientific contribution.
+
+2. Physical-selection initial candidate: the EU-labelled RNA/cDNA-hybrid selection
+   principle is credible and has direct precedent. The proposed new combination
+   remains less completely specified. In particular, the bound hybrid -> released
+   material -> sequencing library transition is delegated to an uninspected
+   supplement. The exact release attachment path and realized transfer record also
+   need clarification. These are evidence/specification gaps, not proof that a
+   compatible mechanism cannot exist. No physical-selection revision was available
+   locally, so this verdict must not be applied to an unseen revision.
+
+3. Neither artifact establishes novelty or usefulness. Both use a closely related
+   early reporter-routing idea, followed by different RNA measurements. Count the
+   shared routing proposition once when assessing portfolio diversity. Originality,
+   mechanistic coherence, and net measurement benefit require separate judgments.
+
+Most consequential findings
+
+A. Establish the bottleneck before claiming an improvement.
+The strongest concern is the motivation for the extra split. The CITE-seq authors
+report no observed competition between RNA and antibody oligos for polyT primers
+in their tested settings [3]. Their updated protocol also says the cleavable linker
+added no benefit to their original streptavidin-biotin architecture and could be
+detrimental with direct conjugation [2]. These observations do not refute a new
+routing use of release, or every possible competition regime. They do remove any
+justification for treating either issue as an established general bottleneck.
+
+The revised RNA-age draft appropriately makes its advantage conditional. Once
+binding has been encoded in reporter DNA plus well identity, retaining native
+antibody activity during RNA chemistry need not be necessary. The relevant question
+is whether reporter information or RNA recovery is actually lost. A native-antibody
+denaturation argument alone would not establish this.
+
+B. Known components do not establish the integrated assay, but context transfers
+are legitimate hypotheses.
+NASC-seq demonstrates on-bead conversion, modified Smart-seq2 copying, tagmentation
+and indexing [1]. The revised late-index RNA path follows that architecture. It
+does not establish compatibility with the proposed release chemistry and reporter
+split. Importantly, the original NASC bulk chemistry includes DTT before IAA and
+a later quench: a categorical “any residual reductant makes this impossible” rule
+would be incorrect. Release-reagent carryover is a quantitative context question.
+
+Original CITE-seq methods support the mixed noncovalent biotin-streptavidin and
+covalent reducible DNA-linker architecture [4]. The revised draft distinguishes
+these bonds correctly. A custom non-poly(A) reporter and release construct still
+need actual characterization; familiar chemistry is not proof of the complete
+product or its recovery.
+
+Official Feature Barcoding documentation already separates the protein-tag capture
+sequence from RNA oligo(dT) capture [5]. Orthogonal reporter capture is therefore
+an established component, not the proposed novelty. SPARC demonstrates that a
+single-cell lysate can be separated into bead-captured RNA and a protein-containing
+supernatant, followed by different readouts [6]. Its native-protein preservation
+requirements cannot automatically be imported into an already DNA-encoded reporter
+assay. Neither precedent establishes this metabolic-label combination.
+
+C. Physical-selection concerns need calibrated wording.
+scEU-seq explicitly places a cell barcode, UMI and T7-containing library sequence
+on cDNA, pools RNA/cDNA hybrids, then uses EU-derived biotin on RNA for affinity
+selection [7]. Thus transient hybrid linkage and pooling are demonstrated principles,
+not intrinsically invalid steps. spinDrop further describes an adapted nascent-RNA
+selection implementation [8]. Neither establishes the draft's low-input, off-cell
+click chemistry after reporter capture/copying. Whether that changed preparation
+preserves hybrids and RNA yield remains testable, not settled negatively.
+
+The physical draft's operation ps_make_rna_libraries does not trace the required
+strands and handles through the downstream library block. Retrieve the referenced
+supplement and specify that transition before calling this a complete design. Its
+ps_manifest describes planned pairing, while ps_route lacks a realized transfer
+record. Planned mapping cannot demonstrate that each transfer actually occurred.
+The RNA-age revision has already made this distinction explicit.
+
+D. What can actually be inferred?
+The RNA-age revision correctly limits its endpoint to labelled-window RNA surviving
+to lysis and represented in recovered reads. Without UMIs, read support is not a
+count of independent original molecules. Sparse convertible sites, background
+substitutions and first-copy errors limit new/old inference. A single pulse does
+not separately identify synthesis and degradation rates. NASC's tested cold-handling
+control also means continued labelling during handling must be calibrated in the
+actual setting, not asserted as an inevitable fatal effect [1].
+
+For physical selection, bound reads represent recovered labelled RNA; unbound is
+not necessarily pure old RNA. Recovery and capture efficiency must be calibrated
+before interpreting fractions as biological abundance. Reporter-copy UMIs count
+copying events unless a one-to-one original-reporter relationship is established;
+they do not automatically count original proteins.
+
+E. Compare against a real alternative and use the right denominator.
+The revised RNA-age draft has a stronger comparison than the initial shared-polyA
+baseline: early routing versus a specified orthogonal reporter co-processing/late
+separation architecture. However, that comparison arm is also engineered and must
+work before a superiority claim is interpretable. RNA-only and reporter-only
+controls distinguish integration loss from biological signal. A plate-based
+index-sort fluorescence plus RNA-age sequencing approach is a legitimate simpler
+comparator under the user's broad measurement goal; its exact combination is not
+claimed here to have been demonstrated. The goal does not require every modality
+to be read by sequencing.
+
+Report joint usable profiles per input cell at comparable total sequencing effort
+and false-call criteria, with component recovery and costs visible. Restricting the
+denominator to surviving paired profiles could turn extra losses into apparent
+quality gains. Species mixing cannot detect every swap between cells of the same
+species; known per-well identities are needed for that stronger linkage claim.
+
+Smallest decisive checks, ordered by decision value
+These are experimental questions, not an executable protocol.
+
+1. RNA-age motivation: does the actual reporter product lose recoverable identity
+   when exposed to the intended RNA chemistry, compared with matched unexposed
+   material? If not, chemistry isolation is not yet a demonstrated advantage.
+2. Integrated mass balance: with distinguishable RNA and reporters, compare early
+   routing to the fair orthogonal baseline, counting retained material, transferred
+   supernatant, washes, failed cells and wrong pairings. Ask whether there is a net
+   gain in joint measurement, not just a cleaner surviving fraction.
+3. RNA inference: label/no-label and conversion/no-conversion controls plus known
+   mixtures should establish false-new calls and uncertainty at the intended
+   coverage. PCR-derived read multiplicity cannot be treated as independent truth.
+4. Physical selection: first recover and specify the published downstream library
+   block. Then test whether known labelled/unlabelled hybrids bearing different
+   cell identities retain the correct selection relationship through the proposed
+   changed processing and pooling. Compare with unpooled material.
+5. Library handoff: demonstrate that both physical-selection fractions yield the
+   intended cell, target and fraction identities in their library products. This
+   resolves a missing implementation link rather than testing a broad claim that
+   RNA/cDNA hybrid selection is impossible.
+
+Primary sources and access record
+
+[1] NASC-seq, Nature Communications 2019.
+https://www.nature.com/articles/s41467-019-11028-9.pdf
+Full primary PDF accessible; inspected figure 1, Methods and discussion. The HTML
+and PMC routes were access-limited. This audit does not claim a supplement review.
+
+[2] CITE-seq authors' protocol page and protocol PDF.
+https://citeseq.wordpress.com/protocols/
+https://citeseq.wordpress.com/wp-content/uploads/2018/09/antibody-oligo_conjugation_protocol_180921.pdf
+Both opened and read relevant sections. These are direct author protocol updates,
+not an independent controlled benchmark of the new proposed architecture.
+
+[3] CITE-seq authors' FAQ.
+https://citeseq.wordpress.com/faq/
+Opened; capture-competition answer read directly. Its negative observation applies
+to the authors' tested conditions, not every future coassay.
+
+[4] Original CITE-seq, Nature Methods 2017.
+https://www.nature.com/articles/nmeth.4380
+https://pmc.ncbi.nlm.nih.gov/articles/PMC5669064/
+Relevant primary Methods passage available through indexed search. Direct full-text
+access blocked; do not characterize this audit as a fresh full-paper reading.
+
+[5] 10x Genomics, cell-surface protein labelling / Feature Barcoding, Rev C.
+https://assets.ctfassets.net/an68im79xiti/3CuT1ZcQc4Sd2qZWp2sJA2/d106392c033b911b65ff5d3d7709d07c/CG000149_DemonstratedProtocol_CellSurfaceProteinLabeling_RevC.pdf
+Full official PDF opened; table 1 and capture schematic inspected. It establishes
+orthogonal capture, not IAA compatibility or the draft's custom release construct.
+
+[6] SPARC, Communications Biology 2021.
+https://www.nature.com/articles/s42003-021-02142-w.pdf
+Full primary PDF opened; figure 1 and relevant separation/lysis methods inspected.
+Its protein readout is proximity extension/qPCR, not the proposed metabolic coassay.
+
+[7] scEU-seq, Science 2020, DOI 10.1126/science.aax3072.
+https://www.science.org/doi/10.1126/science.aax3072
+https://www.hubrecht.eu/app/uploads/2017/11/VanOudenaarden_SCIENCE2020.pdf
+Fresh web requests were blocked/timed out. Read the locally preserved author-hosted
+main PDF conversion at provenance/experiments/ideation_demo_20261105/pdf_replay/converted.txt.
+Original PDF SHA256 f2395d67e91b546c5087359ad06c842a683e2b8849daaa8b2db7920f505c0664;
+converted text SHA256 fbaaed94879281b05b9bb831668bb79e04c4901d21a166bdaf4035ee939294f2.
+Read main-text hybrid-selection description and figure-1 explanation. Supplement
+not retrieved; exact downstream handling is deliberately not invented here.
+
+[8] spinDrop, Nature Communications 2023.
+https://www.nature.com/articles/s41467-023-40322-w
+https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM7688449
+Relevant primary figure-5 / nascent-RNA Methods text available through indexed
+search; direct full Nature access failed. Author-deposited GEO description provided
+an additional primary record of the EU preparation and selection. The surface-
+antibody and nascent-RNA demonstrations are not treated as proof of one combined
+assay in the draft's context.
+
+Harness consequence
+Review output should distinguish an absent mechanism, a demonstrated incompatibility,
+an explicitly specified but untested transfer, and an unsupported benefit. Every
+review claim needs its evidence and scope. Calling all of these “blocking” without
+the distinction obscures whether the next action is source recovery, design
+clarification, a decisive experiment, or rejection. An access failure is not a
+negative scientific result. A complete, source-grounded draft remains a hypothesis
+until its integrated measurement and advantage are established.

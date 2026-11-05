@@ -1,0 +1,259 @@
+Independent novelty audit of the actual ideation demonstration
+Date: 2026-11-05
+Scope: primary literature and author/vendor protocols; no model rerun, no candidate edits.
+
+ASSESSMENT
+
+These are two untested assay-design hypotheses, not two established inventions.
+The broad objective—combining RNA dynamics with protein phenotype—is already
+anticipated in published literature. Several individual mechanisms and even the
+general strategy of separating an RNA fraction from a protein-associated fraction
+are established. I did not find a demonstrated implementation of either exact
+proposed pre-chemistry reporter-routing arrangement in this bounded search.
+That leaves exact architectural novelty unresolved; it does not establish it.
+
+The most defensible possible contribution is whether this particular early split
+improves the fraction of input cells giving reliable, correctly paired RNA-window
+and surface-marker results, compared with a strong implementation that omits or
+delays that split. No candidate or retrieved source establishes that improvement.
+Nor is a dominant reporter-damage or RNA/reporter capture-competition problem
+established in these proposed conditions. A different arrangement is not yet a
+useful advance. Conversely, established components do not rule out a useful new
+architecture if its interfaces and benefit can be demonstrated.
+
+ARTIFACTS INSPECTED
+
+Paths are relative to the repository. Original bytes remain unchanged.
+
+1. provenance/experiments/ideation_demo_20261105/observation_02/candidates/rna_age_encoding/initial.json
+   SHA256 284e3ecebd98d3ea4e14cd4ebacaef19c5a23802d5d891074b8a5d452fc280f3
+   Title: Paired-well RNA-age sequencing with a non-poly(A) surface-reporter branch.
+2. provenance/experiments/ideation_demo_20261105/observation_02/candidates/physical_rna_selection/initial.json
+   SHA256 0d1b2fc4e89df46c6299be84b008979e4e2a0fac13a54074955c10ad027a8c1e
+   Title: Pre-click routing of surface reporters with pooled selection of cell-indexed EU-RNA hybrids.
+3. provenance/experiments/ideation_demo_20261105/observation_05/rna_age_encoding/revision_artifact.json
+   SHA256 2d03ba27e506283c4c7447149874964a6ce1124908a7caaa470969915548e2f4
+   Revised title: Pre-IAA reporter routing with NASC-style RNA libraries and paired adapter indexes.
+   This contains a candidate and responses, not a completed independent review.
+
+WHAT THE ACTUAL IDEAS ADD
+
+RNA-age candidate, latest available revision:
+  4sU-labeled cells receive surface antibody-DNA reporters with a non-poly(A)
+  docking sequence. Within each single-cell well, oligo-dT capture retains RNA;
+  a paired daughter receives released reporters before RNA alkylation. RNA then
+  follows a NASC-style library, and separate RNA/reporter library indexes map back
+  to the original well. The revision correctly withdraws the initial custom RNA
+  UMI/library claim and acknowledges that fragment counts are not molecule counts.
+  Orthogonal docking and early physical fractionation are expressly no longer
+  claimed as new. The remaining proposal is the exact pre-IAA split and its
+  conditional gain in joint information recovery. That is an appropriately narrow
+  claim, but its novelty and usefulness remain to be established.
+
+Physical-selection candidate, initial version only:
+  EU-labeled cells receive non-poly(A) surface reporters. The reporter fraction
+  is captured and copied separately, while RNA is routed to another daughter for
+  off-cell click biotinylation, cell-indexed reverse transcription and pooled
+  selection of labeled RNA/cDNA hybrids. The putative difference is moving the
+  click step into an isolated low-input RNA fraction after reporter routing.
+  EU labeling, click biotinylation, indexing and hybrid selection are established.
+  The exact off-cell, low-input, paired-protein implementation is not established
+  by those precedents. The candidate also leaves the selected-hybrid-to-library
+  dependency incompletely inspected. I have not evaluated a later revision.
+
+These branches differ in RNA labeling/readout—substitution inference versus
+physical enrichment—but both center on early separation of surface reporters.
+They should not be described as two independently discovered measurement
+principles or as evidence of a broadly diverse solution portfolio.
+
+PRIMARY COMPARISONS AND WHAT THEY DO / DO NOT ESTABLISH
+
+[1] CITE-seq, Stoeckius et al., Nature Methods 2017.
+    https://www.nature.com/articles/nmeth.4380
+    Author manuscript: https://pmc.ncbi.nlm.nih.gov/articles/PMC5669064/
+    Location inspected: opening method description, Fig. 1, Supplementary Fig. 1
+    captions, and antibody-oligo/library preparation passages returned by search.
+    Establishes same-cell surface-marker and ordinary RNA sequencing. Original
+    conjugates use a streptavidin–biotin bridge and a cleavable disulfide, with
+    poly(A) oligos captured alongside RNA. It does not distinguish pulse-labeled
+    newly synthesized RNA. Thus it supplies components, not an exact solution to
+    the full demonstration question. Calling its bridge wholly covalent is wrong.
+
+[2] 10x Genomics, CG000149 Rev C, official demonstrated protocol.
+    https://assets.ctfassets.net/an68im79xiti/3CuT1ZcQc4Sd2qZWp2sJA2/d106392c033b911b65ff5d3d7709d07c/CG000149_DemonstratedProtocol_CellSurfaceProteinLabeling_RevC.pdf
+    Location: Table 1, printed p.3; capture illustration p.6; conjugation guidance.
+    The Feature Barcode oligo has a defined capture sequence instead of a poly(A)
+    tail. Consequently, non-poly(A) reporter docking is already standard prior
+    art. Its existence does not validate the candidate's custom cleavable H-tail
+    reagent, selective partition, or its compatibility with RNA-age chemistry.
+
+[3] CITE-seq authors' protocol updates and FAQ (primary author guidance, not a
+    quantified head-to-head test of these candidates).
+    https://citeseq.wordpress.com/protocols/
+    https://citeseq.wordpress.com/faq/
+    Location: October 2017 updates; FAQ sections on conjugation and competition.
+    Authors report no observed mRNA/antibody-oligo competition for polyT under
+    tested panels, and say a cleavable linker did not help the original bridge
+    strategy. They describe later covalent iEDDA conjugation without cleavage.
+    This weakens treating shared capture or cleavage as a generally established
+    problem/innovation. It does NOT show that a specific pre-IAA routing scheme
+    cannot help; that would require its own comparison and a reason for cleavage.
+
+[4] SPARC, Reimegard et al., Communications Biology 2021.
+    https://www.nature.com/articles/s42003-021-02142-w
+    https://pmc.ncbi.nlm.nih.gov/articles/PMC8149646/
+    Location: Introduction and Fig. 1a; explanation of PEA readout.
+    Oligo-dT magnetic beads retain mRNA, while the protein-containing supernatant
+    is removed for proximity extension analysis; RNA undergoes modified
+    Smart-seq2. Protein reporters in this study are decoded by real-time PCR.
+    This directly precedes early same-cell RNA/protein fractionation. It is not
+    nascent-RNA/surface-ADT sequencing, and does not validate H-DNA recovery.
+
+[5] NASC-seq, Hendriks et al., Nature Communications 2019.
+    https://www.nature.com/articles/s41467-019-11028-9
+    Location: method overview and Discussion; indexed primary passages.
+    Combines 4sU labeling/alkylation and single-cell RNA sequencing. The paper
+    explicitly identifies UMI incorporation as a future improvement. This is
+    relevant support for the revised RNA path, not the current strongest RNA
+    baseline and not evidence for the reporter branch.
+
+[6] NASC-seq2, Ramskold et al., Nature Cell Biology 2024.
+    https://www.nature.com/articles/s41556-024-01486-9
+    https://pmc.ncbi.nlm.nih.gov/articles/PMC11469958/
+    Authors' protocol: https://www.protocols.io/view/nasc-seq2-protocol-cjjiukke.pdf
+    Location: Results, "Improved new RNA profiling in single mouse cells";
+    Methods, "NASC-seq2 sequencing library preparation"; protocol primer list.
+    It miniaturizes alkylation, dilutes DMSO instead of bead purification before
+    amplification, includes Smart-seq3 UMI logic, and reports improved sensitivity
+    against NASC-seq at matched depth. This is a consequential omitted current
+    comparator. Reintroducing capture/washes plus a no-UMI RNA library might cost
+    sensitivity or quantification quality. That is a comparison to measure, not
+    proof the candidate is worse. This paper alone does not demonstrate the
+    proposed surface-protein coassay.
+
+[7] scEU-seq, Battich et al., Science 2020.
+    https://doi.org/10.1126/science.aax3072
+    Accessible primary article copy:
+    https://public.websites.umich.edu/~zhanglab/clubPaper/05_22_2020.pdf
+    Location: p.1 method summary and Fig. 1A; main article PDF inspected.
+    Cells are fixed/permeabilized, EU-RNA is biotinylated in situ, and indexed
+    RNA/cDNA hybrids are pooled and separated with streptavidin beads. Labeled
+    and unlabeled fractions produce libraries. This establishes the candidate's
+    central selection logic; it does not establish moving click chemistry into
+    the proposed single-cell RNA daughter after surface-reporter separation.
+    The detailed supplement was not independently inspected in this audit.
+
+[8] spinDrop, De Jonghe et al., Nature Communications 2023.
+    https://www.nature.com/articles/s41467-023-40322-w
+    Location: "High-throughput nascent RNA sequencing using spinDrop", Fig. 5A.
+    Primary supplement, Supplementary Fig. 2C–F:
+    https://api.repository.cam.ac.uk/server/api/core/bitstreams/b7df6dea-61f3-4681-ba07-efee28b70e43/content
+    Dataset: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM7688449
+    This implements scEU-style nascent RNA profiling in droplets. The nascent
+    experiment explicitly runs without sorting. Surface-marker-based B-cell
+    enrichment is a separate demonstration. Those results cannot be combined
+    on paper into a demonstrated same-cell RNA-age/protein coassay. It also uses
+    specialized droplet sorting/picoinjection, which is an equipment comparison,
+    not automatically an option available to a lab with only a sequencer.
+
+[9] scNT-seq2 / Spatial NT-seq, Nature Neuroscience, published August 2026.
+    https://www.nature.com/articles/s41593-026-02420-y
+    Location: "Development and benchmarking of scNT-seq2 using in vitro-labeled
+    K562 cells"; "In vivo scNT-seq2 library preparation and sequencing".
+    Full publisher methods sections were accessible. Optimized second-strand
+    synthesis and conversion improve the RNA-side assay. Neither inspected
+    workflow is a surface-antibody reporter coassay. The candidate cites an
+    earlier preprint; the final methods/benchmark must inform current comparison.
+
+[10] SOM3B, Nature Communications 2019.
+     https://www.nature.com/articles/s41467-019-09128-7
+     Location: method overview and Discussion; accessible full article.
+     Combines biosynthesis labeling with cell identity/function by mass cytometry.
+     This already addresses synthesis activity and phenotype, but not
+     gene-resolved new-RNA sequencing. The Discussion suggests combining with
+     CITE-seq prospectively; that sentence is not a reported CITE implementation.
+
+[11] inCITE-seq, Nature Methods 2021.
+     https://www.nature.com/articles/s41592-021-01278-1
+     https://pmc.ncbi.nlm.nih.gov/articles/PMC8532076/
+     Location: Discussion paragraph beginning "Future studies can also combine";
+     inspected indexed primary text. It proposes future metabolic-labeling
+     integration with protein/transcriptome measurement. This is conceptual
+     anticipation, not experimental realization of either present design.
+
+[12] NOTE-seq, Lyu et al., Cell Reports Methods, January 2026.
+     https://doi.org/10.1016/j.crmeth.2025.101252
+     https://pmc.ncbi.nlm.nih.gov/articles/PMC12853190/
+     Location: Discussion; Methods, "Workflow of the NOTE-seq assay" and
+     "Flow cytometry" (indexed primary text).
+     Provides new/pre-existing RNA profiling on 10x. Separate surface-staining
+     and flow-cytometry methods occur in the paper, but the inspected text does
+     not establish a surface-protein measurement linked to each sequenced cell.
+     Treat it as another current RNA assay, not an exact-overlap positive.
+
+[13] Metabolic-labeling benchmark, Nature Communications 2025.
+     https://www.nature.com/articles/s41467-025-61375-z
+     https://pmc.ncbi.nlm.nih.gov/articles/PMC12215390/
+     Location: Results, "Experimental design and computational quality control
+     assessment"; Fig. 2; Methods, "Chemical conversion reactions".
+     Compares chemistry and conversion location on a common Drop-seq basis using
+     RNA integrity, conversion, and RNA recovery. It demonstrates why the
+     chemistry name alone cannot predict performance. It supplies relevant
+     comparison dimensions, not evidence for pre-chemistry reporter removal.
+
+WHAT TO CLAIM NOW
+
+Broad measurement novelty: not established; published authors have already
+suggested combining metabolic labeling with antibody/RNA profiling.
+Exact implementation overlap: no exact complete match found in this audit;
+unresolved, particularly for supplements, unindexed protocols and patents.
+Primitive novelty: not the intended contribution; most are known mechanisms.
+Architecture novelty: potentially a narrow new arrangement, not proven unique.
+Performance novelty: untested; neither proposal has measured improvement.
+Validity: mechanistically motivated hypotheses with unresolved interfaces, not
+validated protocols. A testable transfer is not automatically invalid because it
+has not been run; nor does several individually working parts prove the assembly.
+
+The RNA revision is scientifically more modest than its initial artifact. That
+is improvement in claim discipline, not evidence of improved experimental yield.
+
+IMPLICATIONS FOR THE DEMONSTRATION / HARNESS
+
+1. Compare the exact proposed change, not just the full assay's novel name.
+   Here the critical contrast is early physical reporter separation versus the
+   best feasible matched alternative, with the same reporter chemistry/readout.
+2. Include current descendants and author protocol updates in literature review.
+   NASC-seq2 and the CITE authors' guidance materially change the comparison.
+3. Do not combine different experiments within a paper into a joint assay claim.
+   spinDrop is a concrete false-overlap trap. Likewise, an assay listed beside
+   another assay in a dataset does not establish same-cell joint measurement.
+4. Search alternative readouts allowed by the request. Index-sorting surface
+   fluorescence followed by a modern metabolic RNA library is a relevant
+   candidate comparator, not a demonstrated combination established here. The
+   request does not itself require every modality to be sequenced.
+5. Ask whether the proposed interface solves an observed problem. Generic claims
+   of reporter damage, capture competition or higher sensitivity cannot become
+   the novelty rationale without evidence or an explicit falsifiable hypothesis.
+6. Keep conceptual novelty, precise implementation, and useful improvement
+   separate. A bounded negative search cannot return "novel=true". The next
+   scientific discriminator is a fair comparison, not another rhetorical score.
+
+SEARCH AND ACCESS LIMITS
+
+Queries covered combinations of nascent/newly synthesized RNA, surface protein,
+antibody-derived tags, CITE-seq, metabolic labeling, 4sU and EU; targeted follow-up
+covered NASC/NASC-seq2, SPARC, spinDrop, scEU-seq, scNT-seq2, SOM3B, inCITE and
+NOTE-seq. Representative exact queries: "CITE-seq" "4sU";
+"metabolic labeling" "antibody-derived"; "newly synthesized RNA" "cell surface";
+"nascent RNA" "surface proteins" sequencing; "spinDrop" "nascent";
+"NASC-seq2" "UMIs"; "SPARC" "mRNA" "supernatant"; "inCITE-seq" "metabolic".
+
+Some publisher and PMC opens were blocked or returned browser challenges.
+Where full text could not be opened, the audit uses identifiable primary Results,
+Methods or Discussion passages returned by search and labels this above. The
+scEU main PDF, spinDrop supplement, 10x protocol and scNT-seq2 full methods were
+accessible; this is not a claim to have read all supplements start to finish.
+No access control was bypassed. A public Europe PMC XML endpoint was also tried
+and unavailable. No exhaustive patent search, raw-data reanalysis, human assay
+review or wet-lab validation was performed. This document is an independent
+assessment and does not alter candidate statuses or count as a passed review.
