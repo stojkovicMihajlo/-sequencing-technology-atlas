@@ -31,14 +31,15 @@ paper_candidates/: retrieved leads whose method association is not established.
 related_papers/: the website's separately labelled background/related literature.
 index.html: locally openable human view of the same data, without a server.
 
-Extraction boundary
-The existing Illumina shared extraction prompt is exported unchanged as
-EXTRACTION_CONTRACT.txt. Diagram and matching prose set the architecture's
-organization/granularity. Primary papers clarify necessary molecular states,
-transformations, information carriers, interfaces and method distinctions.
-Parameters are included when needed for those claims, not merely because an
-experiment happened to use them. Independent scientific review is still required.
-Source collection does not automatically create a reviewed method/version job.
+Curation comes before extraction
+This command has no model calls, extraction stage or automatic dispatch. It does
+not import the extraction prompt. First review method identity, versions,
+classification, paper association, file availability and source-image quality.
+The existing source-name grouping remains provisional until that review.
+Later workflow extraction is a separate command with its own instructions.
+For methods outside Illumina, a paper schematic is optional: record whether one
+was actually found and inspected. Neither the presence nor absence of a schematic
+decides the appropriate extraction detail during this source-collection stage.
 
 Run on Sherlock, in Slurm
 PYTHONPATH=src:. python -m scripts.illumina.technology_sources \

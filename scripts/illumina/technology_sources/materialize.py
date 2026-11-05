@@ -209,6 +209,7 @@ def materialize(inventory, output, manifests):
 def publish(root, state):
     """Make per-technology views; download status never means scientific approval."""
     root = Path(root)
+    from .inventory import catalogue_group
     for ident, p in state['papers'].items():
         write(root / 'shared/papers' / ident / 'paper.json', p)
     for mid, m in state['inventory']['methods'].items():
@@ -242,6 +243,9 @@ def publish(root, state):
             labels = [slug(str(x)) for x in c['path'] if str(x).strip()]
             if labels:
                 link(directory, root / 'classification' / Path(*labels) / mid)
+        m['catalogue_group'] = catalogue_group(m)
+        if m['kind'] == 'technology':
+            link(directory, root / 'groups' / Path(*m['catalogue_group']) / mid)
         m['directory'] = str(directory.relative_to(root))
         m['collection'] = {'diagrams': diagrams, 'catalogue': cat, 'documents': list(documents.values()),
             'listed_references': [{**ref, 'depiction': rid} for rid in m['source_records']
@@ -251,3 +255,12 @@ def publish(root, state):
         m['source_readiness'] = 'collected_for_review' if diagrams else 'missing_diagram'
         write(directory / 'method.json', m)
     write(root / 'collection.json', state)
+    (root / 'groups/README.txt').parent.mkdir(parents=True, exist_ok=True)
+    (root / 'groups/README.txt').write_text(
+        'These are links to the single technology source folder, not copied methods.\n'
+        'Genome, Transcriptome and Epigenome preserve recovered Illumina catalogue placements.\n'
+        'Combined catalogue categories preserves methods listed in more than one of those categories.\n'
+        'These placements do not establish which quantities an assay jointly measures.\n'
+        'Category review pending retains poster-only/unclassified entries; original poster sections\n'
+        'remain available in classification/ and method.json. A DNA poster is not a Genome label.\n'
+        'New literature methods need a documented curator assignment, not an invented Illumina placement.\n')

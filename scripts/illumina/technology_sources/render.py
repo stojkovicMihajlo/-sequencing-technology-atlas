@@ -63,10 +63,15 @@ def render(root, state):
         (directory / 'README.txt').write_text('\n'.join(text) + '\n')
         primary = [x for x in collection['papers'] if any(b['role'] == 'references' for b in x['bindings'])]
         row = {'technology': method['name'], 'directory': method['directory'], 'kind': method['kind'],
+               'catalogue_group': ' / '.join(method['catalogue_group']),
                'classifications': '; '.join(classifications), 'depictions': len(method['source_records']),
                'diagrams': len(collection['diagrams']), 'listed_papers': len(primary),
                'listed_fulltexts': sum(state['papers'][p['paper_id']]['status'] == 'fulltext_acquired' for p in primary),
                'candidate_papers': sum(any(b['role'].startswith('candidate') for b in x['bindings']) for x in collection['papers']),
+               'identity_review': 'pending',
+               'paper_association_review': 'pending',
+               'classification_review': 'pending',
+               'diagram_quality_review': 'pending',
                'graph_extraction_status': 'not_run_in_this_collection'}
         rows.append(row)
     with (root / 'CHECKLIST.csv').open('w') as f:
@@ -79,6 +84,6 @@ def render(root, state):
         'scientific_review': False, 'new_model_extractions': 0}
     write(root / 'SUMMARY.json', summary)
     table = ''.join('<tr><td><a href="' + e(r['directory']) + '/index.html">' + e(r['technology']) + '</a></td><td>' + e(r['classifications']) + '</td><td>' + str(r['depictions']) + '</td><td>' + str(r['diagrams']) + '</td><td>' + str(r['listed_fulltexts']) + '/' + str(r['listed_papers']) + '</td></tr>' for r in rows)
-    body = '<h1>Illumina technology source collection</h1><p>Original descriptions, diagrams and papers organized by source name. This directory count is not a validated count of distinct assays; versions and unresolved aliases remain visible.</p><p><a href="CHECKLIST.csv">Coverage checklist</a> · <a href="SUMMARY.json">Acquisition results</a> · <a href="EXTRACTION_CONTRACT.txt">Extraction contract</a></p><input id="q" placeholder="Filter technologies or classifications"><table id="methods"><thead><tr><th>Technology</th><th>Illumina classification</th><th>Depictions</th><th>Diagrams</th><th>Listed fulltexts / papers</th></tr></thead><tbody>' + table + '</tbody></table><script>document.getElementById("q").oninput=function(){for(const r of document.querySelectorAll("tbody tr")){r.hidden=!r.innerText.toLowerCase().includes(this.value.toLowerCase())}}</script>'
+    body = '<h1>Illumina technology source collection</h1><p>Original descriptions, diagrams and papers organized by source name. This directory count is not a validated count of distinct assays; versions and unresolved aliases remain visible. This stage collects sources only; it does not define or extract States, Operations, protocols or historical edges.</p><p><a href="CHECKLIST.csv">Coverage checklist</a> · <a href="SUMMARY.json">Acquisition results</a></p><input id="q" placeholder="Filter technologies or classifications"><table id="methods"><thead><tr><th>Technology</th><th>Illumina classification</th><th>Depictions</th><th>Diagrams</th><th>Listed fulltexts / papers</th></tr></thead><tbody>' + table + '</tbody></table><script>document.getElementById("q").oninput=function(){for(const r of document.querySelectorAll("tbody tr")){r.hidden=!r.innerText.toLowerCase().includes(this.value.toLowerCase())}}</script>'
     (root / 'index.html').write_text(page('Illumina sources', body))
     return summary

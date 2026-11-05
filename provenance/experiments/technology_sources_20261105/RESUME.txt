@@ -7,14 +7,35 @@ Use Qiu scratch; do not run new model jobs locally or mutate old source packets.
 
 Code: scripts/illumina/technology_sources/{inventory,materialize,recover,render}.py
 CLI: python -m scripts.illumina.technology_sources
-Inventory: inventory.json in this directory. Uses raw card fields, not model
+Inventory: inventory.json.gz in this directory. Uses raw card fields, not model
 candidate/review content, from the 2 November source-occurrence audit archive.
 478 source occurrences are accounted for; they are not 478 distinct technologies.
 Source names produce a provisional set of folders, not an established assay count.
 Read source name decisions and unresolved collision groups before claiming identity.
 
-Completed local checks: 23 tests across new collection tests and source acquisition.
-Next: frozen source-only collection run on Sherlock, verify outputs, preserve backup.
+Current user steering: CURATION BEFORE EXTRACTION. Read CURATION_PLAN.txt.
+Post-2016 expansion is a literature discovery/curation task. New papers need not
+have an Illumina-style schematic. post_2016_candidates.json records initial leads,
+not extracted or admitted graph nodes. Do not dispatch models from that queue.
+
+Job 51257293 completed: all478 source registries collected,0file/hash errors,
+alllinksportable. 293provisional technology-name folders and25support folders.
+185/280distinct explicitly listed PMID papers have fulltext;95metadata-only.
+Do not confuse265fulltexts across allpaperroles with original-paper coverage.
+Current original backup is collection_51257293.tar.gz in Qiu GROUP_HOME
+mstojkov/atlas-results/technology_sources_20261105. Prior pending51257046 was
+canceled to fix scATAC variant labels; correctedjob ranzero model calls.
+New local classification/source-stage changes:7collection tests pass.
+Applied derived navigation update on Qiu using separatecuration_03runtime;
+frozenruntime_02and originalarchive remainunchanged. groups/ now contains links
+to single-category and combined catalogue placements.158source-name entries
+still lack a recovered website top-level category; their printed poster sections
+are preserved inclassification/. Do not call those158technologies unclassified
+in their original source. They need a documented crosswalk/category review.
+Small actual receipts/checklist are saved in completed_51257293/. The34post-2016
+primary-paper leads include2exactexistingname matches(CITE-seq,scNMT-seq), not34
+admitted newtechnologies. Aliases, versions, scientificcategory andfigurespending.
+Next: identity/category/paper-association curation and missing-source recovery.
 Remote intended output:
 $GROUP_SCRATCH/mstojkov/agents_snRNA/technology_sources/illumina_20261105
 

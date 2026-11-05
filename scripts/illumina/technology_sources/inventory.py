@@ -36,6 +36,23 @@ def slug(name):
     return re.sub(r"[^a-z0-9]+", "-", text).strip("-")
 
 
+def catalogue_group(method):
+    """Group literal catalogue placements, not inferred measurement capabilities.
+
+    A DNA poster is not the Genome category: it also contains epigenetic assays.
+    Similarly, repeated appearance in posters is not evidence of multi-omics.
+    Poster-only entries retain their original sections pending category curation.
+    """
+    domains = sorted({c['path'][0] for c in method.get('classifications', [])
+                      if c.get('path') and c['path'][0] in
+                      ('Genome', 'Transcriptome', 'Epigenome')})
+    if len(domains) > 1:
+        return ['Combined catalogue categories', ' + '.join(domains)]
+    if domains:
+        return domains
+    return ['Category review pending']
+
+
 def taxonomy(paths):
     """Recover original category paths from the saved Illumina CMS page tree."""
     result = defaultdict(list)

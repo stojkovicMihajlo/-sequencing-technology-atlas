@@ -19,8 +19,6 @@ def main():
         from .recover import recover
         recover(args.output, state)
     publish(args.output, state)
-    from genomics_discovery.illumina.prompts import SHARED_INSTRUCTIONS
-    (args.output / 'EXTRACTION_CONTRACT.txt').write_text('Exact development shared prompt; no extraction was run by source preparation.\n\n' + SHARED_INSTRUCTIONS)
     result = render(args.output, state)
     # Integrity is checked after links and public views are made.
     failures = []

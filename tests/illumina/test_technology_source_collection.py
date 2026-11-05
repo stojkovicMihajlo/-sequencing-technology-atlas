@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.illumina.technology_sources.inventory import key, slug
+from scripts.illumina.technology_sources.inventory import catalogue_group, key, slug
 from scripts.illumina.technology_sources.materialize import Store, link, materialize, publish
 from scripts.illumina.technology_sources.render import render
 
@@ -14,6 +14,19 @@ def test_names_do_not_erase_scientifically_relevant_punctuation():
     assert slug('CapSeq') != slug('CAP-seq')
     assert slug('3′-Seq') != slug('3Seq')
     assert slug('scM&T-seq') != slug('scMT-seq')
+
+
+def test_catalogue_group_preserves_multiple_placements_without_inventing_domains():
+    def method(*paths):
+        return {'classifications': [{'path': p} for p in paths]}
+    assert catalogue_group(method(['Transcriptome', 'RNA Low-Level Detection'],
+                                  ['Genome', 'DNA Low-Level Detection'])) == [
+                                      'Combined catalogue categories', 'Genome + Transcriptome']
+    assert catalogue_group(method(['Transcriptome', 'RNA Low-Level Detection'],
+                                  ['rna_poster', 'RNA Low-Level Detection'],
+                                  ['single_cell_poster', 'RNA Low-Level Detection'])) == ['Transcriptome']
+    assert catalogue_group(method(['dna_poster', 'Epigenetics'])) == ['Category review pending']
+    assert catalogue_group(method(['single_cell_poster', 'Integrated Techniques'])) == ['Category review pending']
 
 
 def test_store_rejects_corrupt_source_and_deduplicates_bytes(tmp_path):
@@ -66,6 +79,7 @@ def test_shared_depiction_has_separate_method_folders_not_duplicate_files(tmp_pa
     assert not (a / 'papers/pmid-2').exists()
     assert 'Shared card &lt;literal&gt;' in (a / 'index.html').read_text()
     assert (tmp_path / 'out/classification/transcriptome/rna-transcription/a').resolve() == a
+    assert (tmp_path / 'out/groups/Transcriptome/a').resolve() == a
     assert not state['errors']
 
 
