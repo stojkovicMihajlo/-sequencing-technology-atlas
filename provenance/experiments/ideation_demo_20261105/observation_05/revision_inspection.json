@@ -1,0 +1,32 @@
+{
+  "observed_at": "2026-11-05T16:03:32.048014+00:00",
+  "baseline_job": "51200765",
+  "stage": "05_rna_age_encoding",
+  "stage_status": "validated",
+  "artifact_sha256": "2d03ba27e506283c4c7447149874964a6ce1124908a7caaa470969915548e2f4",
+  "title": "Pre-IAA reporter routing with NASC-style RNA libraries and paired adapter indexes",
+  "issues": {
+    "AGE-001": "unresolved",
+    "AGE-002": "unresolved",
+    "AGE-003": "addressed",
+    "AGE-004": "addressed",
+    "AGE-005": "unresolved",
+    "AGE-006": "addressed"
+  },
+  "structural_changes": [
+    {
+      "id": "orthogonal_tail_and_pre_encoding_branch",
+      "changed": "Use H-tail reporters with a specified cleavable bridge, remove their first soluble fraction to recorded daughters BEFORE RNA IAA, and wash the retained RNA support while explicitly accounting for wash losses. Build the two libraries separately and join their distinct source-mapped adapter index pairs. H docking and early branching are component precedents; the proposed difference is this pre-IAA selective partition/cleanup, timing and net joint-information trade-off."
+    },
+    {
+      "id": "replace_anchored_umi_library",
+      "changed": "Remove the custom long barcode/UMI capture-primer extension and end-anchored library selection. Use conventional biotin-dT/TSO copying, soluble amplified cDNA, gene-body tagmentation and per-well adapter indexing before pooling. Reporter adapter indexes are added independently in daughters. New IDs replace the materially changed library States and copying Operations; unchanged boundary IDs and unchanged Flows are retained."
+    }
+  ],
+  "counts": {
+    "states": 19,
+    "operations": 11,
+    "flows": 40
+  },
+  "boundary": "Unchanged native revision, structurally checked. Author issue responses are not independent confirmation; fresh final review still pending. No experimental feasibility/novelty conclusion."
+}
