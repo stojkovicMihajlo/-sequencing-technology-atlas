@@ -10,6 +10,7 @@ import argparse
 from collections import Counter
 import gzip
 import hashlib
+import html
 import json
 from pathlib import Path
 import shutil
@@ -29,6 +30,25 @@ def read(path: Path):
 
 def write(path: Path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, separators=(",", ":")))
+
+
+def standalone(record: dict, output: Path) -> None:
+    """Render a saved workflow directly, with inline data and no local server."""
+    assets = Path(__file__).parent
+    data = json.dumps(record, ensure_ascii=False).replace('<', '\\u003c')
+    style = (assets/'style.css').read_text()
+    script = (assets/'app.js').read_text().replace('</script', '<\\/script')
+    title = html.escape(record['title'])
+    page = f'''<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title>
+<style>{style}</style><header><div><h1>{title}</h1>
+<p>Saved workflow inspection. Click a State, Operation or Flow to read its exact fields and evidence.</p>
+<p>Supported means the recorded model review admitted this scope; it is not experimental validation.</p>
+</div><a href="../../index.html">Technology atlas</a></header>
+<main style="grid-template-columns:minmax(0,1fr)"><article id="detail" tabindex="-1"></article></main>
+<script id="record-data" type="application/json">{data}</script><script>{script}</script></html>'''
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(page)
 
 
 def build(audit: Path, output: Path, *, comparison: Path | None = None) -> dict:

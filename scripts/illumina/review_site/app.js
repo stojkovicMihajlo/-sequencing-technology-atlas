@@ -2,12 +2,20 @@
 const $ = id => document.getElementById(id);
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; };
 const labels = {supported:'Supported', research_needed:'Further research', failed:'Failed', integrity_error:'Rejected on revalidation'};
-const batchLabel = b => ({initial_two:'Catalogue card', catalogue:'Catalogue card', posters:'Main poster row', footer_panels:'Footer / product / readout panel'})[b] || b;
+const batchLabel = b => ({initial_two:'Catalogue card', catalogue:'Catalogue card', posters:'Main poster row', footer_panels:'Footer / product / readout panel', scoped_method:'Scoped workflow'})[b] || b;
 let inventory = [], selected = '', request = 0;
 function link(text, url) { const a = el('a',text); if (/^https?:\/\//.test(url || '')) { a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } return a; }
 function section(parent, title) { const d = el('details',null,'section'); d.append(el('summary',title)); parent.append(d); return d; }
 function raw(parent, title, value) { const d = section(parent,title); d.append(el('pre',JSON.stringify(value,null,2))); }
 function fields(parent, rows) { const d = el('div',null,'fields'); for (const [name,value] of rows) { if (value == null || value === '' || (Array.isArray(value) && !value.length)) continue; d.append(el('b',name),el('span',Array.isArray(value) ? value.join('; ') : String(value))); } parent.append(d); }
+function assertions(parent,title,items,record) {
+  if(!items?.length)return;
+  const box=section(parent,title);
+  for(const item of items){
+    fields(box,Object.entries(item).filter(([k])=>k!=='evidence').map(([k,v])=>[k,typeof v==='object'?JSON.stringify(v):v]));
+    evidence(box,item.evidence,record);
+  }
+}
 function evidence(parent, items, record) {
   for (const e of items || []) {
     const box = el('div',null,'evidence'), s = record.sources[e.source_id] || {};
@@ -48,6 +56,8 @@ function inspect(parent, item, kind, record) {
   const names = ids => (ids || []).map(id => (states.get(id)?.label || id)+' ['+id+']');
   if (kind === 'Operation') fields(parent,[['Description',item.description],['Input States',names(item.inputs)],['Output States',names(item.outputs)],['Mechanism',item.mechanism || 'Not specified'],['Information effect',item.information_effect || 'Not specified']]);
   if (kind === 'State') fields(parent,[['Kind',item.kind],['Features',item.features]]);
+  if (kind === 'State') { assertions(parent,'State properties',item.properties,record); if(item.constituents?.length)raw(parent,'Named constituents',item.constituents); }
+  if (kind === 'Operation') { assertions(parent,'Input roles',item.input_roles,record); assertions(parent,'Effects on input/output States',item.effects,record); }
   if (kind === 'Flow') {
     const nodes = [...c.states,...c.operations], name = id => nodes.find(n => n.id === id)?.label || id;
     fields(parent,[['Type',item.kind],['From',name(item.source)+' ['+item.source+']'],['To',name(item.target)+' ['+item.target+']']]);
@@ -89,7 +99,7 @@ function renderRecord(r) {
   const root=$('detail');root.replaceChildren(el('span',labels[r.status],'badge'),el('span',batchLabel(r.batch),'badge'),el('h2',r.title));
   root.append(el('p',r.record_id,'muted'));
   if(r.status!=='supported') root.append(el('p','Diagnostic candidate only — excluded from supported retrieval. '+(r.reason||'Inspect the review and research questions for the unresolved outcome.'),'warning'));
-  const links=el('div',null,'links'),download=el('a','Download exact saved candidate + review');download.href=r.file;download.download='';links.append(download);
+  const links=el('div',null,'links'),download=el('a',r.download_label||'Download exact saved candidate + review');download.href=r.file;download.download='';links.append(download);
   if(r.card.source_page_url)links.append(link('Original Illumina page',r.card.source_page_url));root.append(links);
   const c=r.candidate;if(!c){root.append(el('p','No authored candidate was recovered.'));raw(root,'Failure record',r);return;}
   root.append(el('p',c.scope),el('p',`${c.operations.length} Operations · ${c.states.length} States · ${c.flows.length} Flows · ${c.corrections.length} Corrections · ${c.unknowns.length} Unknowns`,'muted'));
@@ -124,4 +134,6 @@ async function start(){
   window.addEventListener('hashchange',()=>openRecord(decodeURIComponent(location.hash.slice(1)), {reveal:true}));
   await openRecord(decodeURIComponent(location.hash.slice(1))||'drop-seq');
 }
-start().catch(e=>{$('detail').replaceChildren(el('p','Could not open this review export. Serve its directory with python3 -m http.server. '+e.message,'warning'));});
+const standalone=document.getElementById('record-data');
+if(standalone){renderRecord(JSON.parse(standalone.textContent));}
+else start().catch(e=>{$('detail').replaceChildren(el('p','Could not open this review export. Serve its directory with python3 -m http.server. '+e.message,'warning'));});

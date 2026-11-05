@@ -1,0 +1,3313 @@
+{
+  "format_version": "illumina_diagram/1.1",
+  "record_id": "ths_seq",
+  "title": "THS-seq",
+  "method_names": [
+    "THS-seq"
+  ],
+  "scope": "Sos 2016 THS-seq implementation; retain specified transposition/readout differences. The extraction follows the standalone Illumina THS-seq schematic and the corresponding THS-seq middle row of the poster. It starts at chromatin accessible to transposition and ends at the barcoded Illumina DNA library. Primary text resolves IVT output as RNA and dsDNA synthesis as cDNA synthesis, specifies Tn5059 initial chromatin tagging versus EzTn5 cDNA tagging, and supplies the single-end/sample-index readout interpretation. Neighboring ATAC-seq and CATCH-IT rows, proposed adaptations, pooling, sequencing execution and data analysis are outside the depicted route.",
+  "inspected_sources": [
+    "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+    "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+    "ths-seq::card:ths-seq",
+    "poster_811c3e77c9c8e34cad980f6f::collection:dna:page:118",
+    "poster_811c3e77c9c8e34cad980f6f::reference:poster_811c3e77c9c8e34cad980f6f:references:0",
+    "ths-seq::metadata:26846207",
+    "ths-seq::reference:pilot_selected_primary",
+    "poster_811c3e77c9c8e34cad980f6f::card:poster_811c3e77c9c8e34cad980f6f",
+    "primary:paper:26846207",
+    "ths-seq::paper:26846207"
+  ],
+  "states": [
+    {
+      "id": "chromatin",
+      "label": "Chromatin in gently lysed cells",
+      "kind": "material",
+      "features": [],
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Left chromatin cartoons: highlighted accessible linker and caption Open DNA; nucleosomes remain present",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            0.35,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row, left title/highlighted linker and Open DNA cartoon",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.02,
+            0.41,
+            0.4,
+            0.67
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Figure 1 caption within [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Schematic overview of THS-seq. High efficiency tagmentation is performed on gently lysed cells, followed by in vitro transcription, and custom RNA-seq to generate barcoded sequencing libraries.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "source_label": "Open DNA",
+      "components": [],
+      "properties": [
+        {
+          "id": "identity",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Left chromatin cartoons: highlighted accessible linker and caption Open DNA; nucleosomes remain present",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.0,
+                0.0,
+                0.35,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row, left title/highlighted linker and Open DNA cartoon",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.02,
+                0.41,
+                0.4,
+                0.67
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Figure 1 caption within [b00010]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Schematic overview of THS-seq. High efficiency tagmentation is performed on gently lysed cells, followed by in vitro transcription, and custom RNA-seq to generate barcoded sequencing libraries.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "identity",
+          "value": "Cellular chromatin containing accessible DNA regions and nucleosome-associated DNA."
+        },
+        {
+          "id": "context",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Left chromatin cartoons: highlighted accessible linker and caption Open DNA; nucleosomes remain present",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.0,
+                0.0,
+                0.35,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row, left title/highlighted linker and Open DNA cartoon",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.02,
+                0.41,
+                0.4,
+                0.67
+              ],
+              "rationale": null
+            }
+          ],
+          "property": "physical_context",
+          "value": "Chromatin remains organized with nucleosomes; accessible linker regions are exposed to transposome insertion."
+        }
+      ]
+    },
+    {
+      "id": "transposome",
+      "label": "Tn5059 transposome carrying custom T7/read-primer transposons",
+      "kind": "material",
+      "features": [],
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Tn5 Transposome icon; Read primer in red, T7 promoter in green; arrow toward insertion cartoon",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.45,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row, Tn5 Transposome icon and Read primer/T7 promoter labels",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.39,
+            0.42,
+            0.47,
+            0.64
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], custom transposon",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], transposome orientation design",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Additionally, to address the efficiency loss from incorrect adaptor orientations that is seen with PCR-based methods, the transposome complex dimer that consists of two Tn5 molecules and two transposons, where one Tn5 molecule is bound to one transposon, was designed and generated so that every single insertion yields usable ends regardless of the orientation of the transposon after insertion.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "source_label": "Tn5 Transposome",
+      "components": [
+        {
+          "id": "enzyme",
+          "label": "Tn5059 transposase",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        },
+        {
+          "id": "transposon",
+          "label": "Custom transposon DNA",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Tn5 Transposome icon; Read primer in red, T7 promoter in green; arrow toward insertion cartoon",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.35,
+                0.0,
+                0.45,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row, Tn5 Transposome icon and Read primer/T7 promoter labels",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.39,
+                0.42,
+                0.47,
+                0.64
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], custom transposon",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "id": "identity",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Tn5 Transposome icon; Read primer in red, T7 promoter in green; arrow toward insertion cartoon",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.35,
+                0.0,
+                0.45,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row, Tn5 Transposome icon and Read primer/T7 promoter labels",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.39,
+                0.42,
+                0.47,
+                0.64
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], custom transposon",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], transposome orientation design",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Additionally, to address the efficiency loss from incorrect adaptor orientations that is seen with PCR-based methods, the transposome complex dimer that consists of two Tn5 molecules and two transposons, where one Tn5 molecule is bound to one transposon, was designed and generated so that every single insertion yields usable ends regardless of the orientation of the transposon after insertion.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "identity",
+          "value": "Custom THS-seq transposome: a dimer of Tn5 molecules with bound transposon DNA; the scoped initial insertion uses Tn5059."
+        },
+        {
+          "id": "enzyme_identity",
+          "subject": "enzyme",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "identity",
+          "value": "Engineered Tn5 super-mutant Tn5059 for the initial chromatin transposition."
+        },
+        {
+          "id": "transposon_segments",
+          "subject": "transposon",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Tn5 Transposome icon; Read primer in red, T7 promoter in green; arrow toward insertion cartoon",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.35,
+                0.0,
+                0.45,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row, Tn5 Transposome icon and Read primer/T7 promoter labels",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.39,
+                0.42,
+                0.47,
+                0.64
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], custom transposon",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "sequence_segment",
+          "value": "Tn5 mosaic end, T7 promoter, and Illumina-compatible read-primer/adaptor sequence.",
+          "location": null
+        },
+        {
+          "id": "cargo_binding",
+          "subject": "transposon",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], transposome orientation design",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Additionally, to address the efficiency loss from incorrect adaptor orientations that is seen with PCR-based methods, the transposome complex dimer that consists of two Tn5 molecules and two transposons, where one Tn5 molecule is bound to one transposon, was designed and generated so that every single insertion yields usable ends regardless of the orientation of the transposon after insertion.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "association",
+          "value": "bound_to",
+          "partner": "enzyme"
+        }
+      ]
+    },
+    {
+      "id": "tagged_chromatin",
+      "label": "Transposed chromatin with T7/read-primer-tagged DNA ends",
+      "kind": "material",
+      "features": [],
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.64,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.39,
+            0.41,
+            0.62,
+            0.65
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "source_label": null,
+      "components": [],
+      "properties": [
+        {
+          "id": "identity",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.35,
+                0.0,
+                0.64,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.39,
+                0.41,
+                0.62,
+                0.65
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "identity",
+          "value": "Chromatin after accessible-region transposition, with transposon-tagged genomic DNA ends."
+        },
+        {
+          "id": "end_segments",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.35,
+                0.0,
+                0.64,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.39,
+                0.41,
+                0.62,
+                0.65
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], custom transposon",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "sequence_segment",
+          "value": "Inserted T7 promoter and read-primer/adaptor segments at transposition-generated DNA ends.",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "purified_dna",
+      "label": "Purified transposon-tagged genomic DNA",
+      "kind": "material",
+      "features": [],
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Purify arrow between inserted chromatin and isolated parallel tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.27,
+            0.76,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row Purify arrow leading from chromatin to isolated tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.46,
+            0.72,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "source_label": null,
+      "components": [],
+      "properties": [
+        {
+          "id": "identity",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Purify arrow between inserted chromatin and isolated parallel tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.61,
+                0.27,
+                0.76,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row Purify arrow leading from chromatin to isolated tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.6,
+                0.46,
+                0.72,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "identity",
+          "value": "Protein-depleted, transposon-tagged genomic DNA recovered from the transposed chromatin for end fill-in and IVT."
+        },
+        {
+          "id": "end_segments",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], custom transposon",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "sequence_segment",
+          "value": "Custom transposon T7 promoter and read-primer/adaptor sequences on recovered genomic DNA.",
+          "location": null
+        }
+      ]
+    },
+    {
+      "id": "ivt_rna",
+      "label": "IVT RNA transcripts of insertion-site flanking DNA",
+      "kind": "material",
+      "features": [],
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "End fill-in and IVT amplification: two purple horizontal tracks with red segments following Purify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.25,
+            0.77,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row End fill-in and IVT amplification: two purple tracks with red segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.65,
+            0.47,
+            0.72,
+            0.67
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, In vitro transcription [b00034]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "After in vitro transcription, RNA was purified with Zymo RNA Clean and Concentrator and eluted with 10 μL nuclease-free water.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "source_label": null,
+      "components": [],
+      "properties": [
+        {
+          "id": "identity",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "End fill-in and IVT amplification: two purple horizontal tracks with red segments following Purify",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.66,
+                0.25,
+                0.77,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row End fill-in and IVT amplification: two purple tracks with red segments",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.65,
+                0.47,
+                0.72,
+                0.67
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Online methods, In vitro transcription [b00034]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "After in vitro transcription, RNA was purified with Zymo RNA Clean and Concentrator and eluted with 10 μL nuclease-free water.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "identity",
+          "value": "Amplified RNA copied from transposon-tagged genomic DNA by T7 in vitro transcription; purified RNA is the input to cDNA synthesis."
+        }
+      ]
+    },
+    {
+      "id": "double_stranded_cdna",
+      "label": "Double-stranded cDNA derived from IVT RNA",
+      "kind": "material",
+      "features": [],
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Arrow from purple tracks to blue paired tracks; dsDNA synthesis caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.26,
+            0.87,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row dsDNA synthesis: arrow from purple to blue tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.47,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "source_label": null,
+      "components": [],
+      "properties": [
+        {
+          "id": "identity",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Arrow from purple tracks to blue paired tracks; dsDNA synthesis caption",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.76,
+                0.26,
+                0.87,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row dsDNA synthesis: arrow from purple to blue tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.72,
+                0.47,
+                0.82,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "identity",
+          "value": "Double-stranded cDNA made from the IVT RNA amplification products."
+        },
+        {
+          "id": "duplex",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Arrow from purple tracks to blue paired tracks; dsDNA synthesis caption",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.76,
+                0.26,
+                0.87,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row dsDNA synthesis: arrow from purple to blue tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.72,
+                0.47,
+                0.82,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "strandedness",
+          "value": "double_stranded"
+        }
+      ]
+    },
+    {
+      "id": "library",
+      "label": "Barcoded Illumina DNA library derived from IVT RNA",
+      "kind": "material",
+      "features": [],
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Final arrow and Add barcodes and sequencing adaptors; blue paired tracks with retained red segment and new terminal colored segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.26,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row final arrow and Add barcodes and sequencing adaptors",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.47,
+            0.92,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], final library amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "source_label": null,
+      "components": [],
+      "properties": [
+        {
+          "id": "identity",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Final arrow and Add barcodes and sequencing adaptors; blue paired tracks with retained red segment and new terminal colored segments",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.86,
+                0.26,
+                1.0,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row final arrow and Add barcodes and sequencing adaptors",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.81,
+                0.47,
+                0.92,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], final library amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "identity",
+          "value": "Illumina-compatible DNA sequencing library made from the cDNA derived from accessible-site genomic DNA ends."
+        },
+        {
+          "id": "duplex",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Final arrow and Add barcodes and sequencing adaptors; blue paired tracks with retained red segment and new terminal colored segments",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.86,
+                0.26,
+                1.0,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row final arrow and Add barcodes and sequencing adaptors",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.81,
+                0.47,
+                0.92,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], final library amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "strandedness",
+          "value": "double_stranded"
+        },
+        {
+          "id": "adaptors",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Final arrow and Add barcodes and sequencing adaptors; blue paired tracks with retained red segment and new terminal colored segments",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.86,
+                0.26,
+                1.0,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row final arrow and Add barcodes and sequencing adaptors",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.81,
+                0.47,
+                0.92,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], final library amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "sequence_segment",
+          "value": "Illumina sequencing adaptors.",
+          "location": null
+        },
+        {
+          "id": "sample_index",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], final library amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Online methods, Primary data processing [b00038], THS-seq readout",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Sequencing was performed on HiSeq with 50 × 6 single end reads with single 6 base pair indexing for THS-seq data, and 50 × 8 × 8 single end reads with dual 8 base pair indexing for ATAC-seq data.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "sequence_segment",
+          "value": "Sample-specific barcode (single 6-base index in the reported THS-seq readout).",
+          "location": null
+        },
+        {
+          "id": "sample_link",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], final library amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "attribution",
+          "value": {
+            "unit": "sample",
+            "carrier": "DNA sample barcode in the library",
+            "association": "Associates a library molecule with its source sample; the barcode described here is a sample index."
+          }
+        },
+        {
+          "id": "target_link",
+          "subject": "self",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq validation [b00012], interpretation after alignment and clonal read removal",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Each THS-seq unique read by design represents a unique transposon insertion event on a single chromosomal molecule.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "property": "attribution",
+          "value": {
+            "unit": "other",
+            "carrier": "Genomic sequence adjacent to the initial Tn5 insertion, represented through RNA and cDNA copies",
+            "association": "Connects the library to accessible chromatin insertion sites. In the reported design, a mapped unique read after clonal removal represents a transposon insertion on a chromosomal molecule."
+          }
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "insert",
+      "label": "Insert custom transposons into accessible chromatin",
+      "description": "Tn5059 transposomes act on cellular chromatin, inserting custom DNA tags and creating tagged genomic DNA ends in accessible regions.",
+      "inputs": [
+        "chromatin",
+        "transposome"
+      ],
+      "outputs": [
+        "tagged_chromatin"
+      ],
+      "mechanism": "Custom Tn5059 transposome insertion; the Sos 2016 optimized initial tagmentation buffer contains 16% DMF. The custom dimer/cargo design yields usable ends in either transposon orientation.",
+      "information_effect": "Genomic DNA next to initial insertion sites becomes linked to a T7-driven amplification interface. Accessibility is sampled through insertion; this does not establish absolute exclusion of background insertion.",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.64,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.39,
+            0.41,
+            0.62,
+            0.65
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], custom transposon",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Concentration titrations were performed on Tn5059 for optimal activity for THS-seq with cellular input (Additional file 1: Figure S5a-d), as well as development of an optimized tagmentation reaction buffer that includes 16 % DMF (Additional file 1: Figure S5e, f).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], transposome orientation design",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Additionally, to address the efficiency loss from incorrect adaptor orientations that is seen with PCR-based methods, the transposome complex dimer that consists of two Tn5 molecules and two transposons, where one Tn5 molecule is bound to one transposon, was designed and generated so that every single insertion yields usable ends regardless of the orientation of the transposon after insertion.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "resolution": "single_event",
+      "input_roles": [
+        {
+          "state_id": "chromatin",
+          "subject": "self",
+          "roles": [
+            "sample"
+          ],
+          "explanation": "Chromatin DNA is the substrate whose accessible regions are tagged.",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Left chromatin cartoons: highlighted accessible linker and caption Open DNA; nucleosomes remain present",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.0,
+                0.0,
+                0.35,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row, left title/highlighted linker and Open DNA cartoon",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.02,
+                0.41,
+                0.4,
+                0.67
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.35,
+                0.0,
+                0.64,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.39,
+                0.41,
+                0.62,
+                0.65
+              ],
+              "rationale": null
+            }
+          ]
+        },
+        {
+          "state_id": "transposome",
+          "subject": "enzyme",
+          "roles": [
+            "catalyst"
+          ],
+          "explanation": "The transposase component catalyzes insertion into chromatin.",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], transposome orientation design",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Additionally, to address the efficiency loss from incorrect adaptor orientations that is seen with PCR-based methods, the transposome complex dimer that consists of two Tn5 molecules and two transposons, where one Tn5 molecule is bound to one transposon, was designed and generated so that every single insertion yields usable ends regardless of the orientation of the transposon after insertion.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        },
+        {
+          "state_id": "transposome",
+          "subject": "transposon",
+          "roles": [
+            "reagent"
+          ],
+          "explanation": "The custom transposon DNA supplies the inserted promoter and adaptor segments.",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], custom transposon",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "aspect": "material_transformation",
+          "input_state_ids": [
+            "chromatin",
+            "transposome"
+          ],
+          "output_state_ids": [
+            "tagged_chromatin"
+          ],
+          "statement": "Accessible chromatin DNA acquires transposon-derived end segments, including a T7 promoter and read-primer/adaptor sequence.",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.35,
+                0.0,
+                0.64,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.39,
+                0.41,
+                0.62,
+                0.65
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], custom transposon",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        },
+        {
+          "aspect": "selection",
+          "input_state_ids": [
+            "chromatin"
+          ],
+          "output_state_ids": [
+            "tagged_chromatin"
+          ],
+          "statement": "Initial transposition preferentially tags accessible regions of chromatin, defining the origin of the subsequent library.",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.35,
+                0.0,
+                0.64,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.39,
+                0.41,
+                0.62,
+                0.65
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Figure 1 caption within [b00010]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Schematic overview of THS-seq. High efficiency tagmentation is performed on gently lysed cells, followed by in vitro transcription, and custom RNA-seq to generate barcoded sequencing libraries.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "output_grouping": "one_output"
+    },
+    {
+      "id": "purify",
+      "label": "Purify transposon-tagged genomic DNA",
+      "description": "Remove chromatin-associated proteins and transposase, recovering the tagged DNA for polymerase reactions.",
+      "inputs": [
+        "tagged_chromatin"
+      ],
+      "outputs": [
+        "purified_dna"
+      ],
+      "mechanism": "Sos 2016 uses guanidine hydrochloride to remove proteins before recovery of the tagged DNA. The schematic retains this as one purification block.",
+      "information_effect": "Retains the tagged genomic substrate and insertion-site sequence relationship for amplification; purification itself is not an accessibility measurement.",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Purify arrow between inserted chromatin and isolated parallel tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.27,
+            0.76,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row Purify arrow leading from chromatin to isolated tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.46,
+            0.72,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "resolution": "single_event",
+      "input_roles": [
+        {
+          "state_id": "tagged_chromatin",
+          "subject": "self",
+          "roles": [
+            "sample"
+          ],
+          "explanation": "Transposed chromatin contains the genomic DNA to recover and proteins to remove.",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Purify arrow between inserted chromatin and isolated parallel tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.61,
+                0.27,
+                0.76,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row Purify arrow leading from chromatin to isolated tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.6,
+                0.46,
+                0.72,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "aspect": "selection",
+          "input_state_ids": [
+            "tagged_chromatin"
+          ],
+          "output_state_ids": [
+            "purified_dna"
+          ],
+          "statement": "Tagged DNA is recovered from transposed chromatin while chromatin proteins and transposase are removed.",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Purify arrow between inserted chromatin and isolated parallel tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.61,
+                0.27,
+                0.76,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row Purify arrow leading from chromatin to isolated tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.6,
+                0.46,
+                0.72,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "output_grouping": "one_output"
+    },
+    {
+      "id": "fill_ivt",
+      "label": "Fill DNA ends and amplify by T7 in vitro transcription",
+      "description": "Fill gaps in the recovered tagged DNA, then use its introduced T7 promoter to make RNA amplification products for the next block.",
+      "inputs": [
+        "purified_dna"
+      ],
+      "outputs": [
+        "ivt_rna"
+      ],
+      "mechanism": "DNA gap fill-in precedes T7 RNA polymerase transcription. Linear amplification of insertion-end sequences is independent of the distance between neighboring initial insertion sites; the DNA template is not itself converted into RNA.",
+      "information_effect": "RNA copies carry sequence information from accessible-site DNA ends, rather than measuring endogenous cellular RNA abundance. End amplification avoids requiring a PCR-amplifiable genomic interval between adjacent initial insertions.",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "End fill-in and IVT amplification: two purple horizontal tracks with red segments following Purify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.25,
+            0.77,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row End fill-in and IVT amplification: two purple tracks with red segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.65,
+            0.47,
+            0.72,
+            0.67
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "resolution": "composite_block",
+      "input_roles": [
+        {
+          "state_id": "purified_dna",
+          "subject": "self",
+          "roles": [
+            "template"
+          ],
+          "explanation": "Transposon-tagged genomic DNA is filled and serves as the IVT template.",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "aspect": "material_transformation",
+          "input_state_ids": [
+            "purified_dna"
+          ],
+          "output_state_ids": [
+            "ivt_rna"
+          ],
+          "statement": "End fill-in enables T7 transcription of tagged DNA; linear amplification generates RNA copies of insertion-site flanking sequences. The RNA product proceeds to cDNA synthesis.",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "End fill-in and IVT amplification: two purple horizontal tracks with red segments following Purify",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.66,
+                0.25,
+                0.77,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row End fill-in and IVT amplification: two purple tracks with red segments",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.65,
+                0.47,
+                0.72,
+                0.67
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "output_grouping": "one_output"
+    },
+    {
+      "id": "synthesize_cdna",
+      "label": "Convert IVT RNA to double-stranded cDNA",
+      "description": "Convert the RNA amplification product into double-stranded cDNA for DNA library construction.",
+      "inputs": [
+        "ivt_rna"
+      ],
+      "outputs": [
+        "double_stranded_cdna"
+      ],
+      "mechanism": "The broad dsDNA synthesis block comprises first-strand cDNA synthesis, RNase H removal of RNA in hybrids, and second-strand DNA synthesis, as specified in the primary paper.",
+      "information_effect": "Transfers insertion-site-associated sequence information from the RNA amplification product to a DNA library substrate.",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Arrow from purple tracks to blue paired tracks; dsDNA synthesis caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.26,
+            0.87,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row dsDNA synthesis: arrow from purple to blue tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.47,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To remove RNA in DNA/RNA hybrids, samples were incubated for 20 min with 0.5 Units/μL RNase H at 37 °C.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "resolution": "composite_block",
+      "input_roles": [
+        {
+          "state_id": "ivt_rna",
+          "subject": "self",
+          "roles": [
+            "template"
+          ],
+          "explanation": "The RNA made by IVT provides the template information for first-strand cDNA synthesis.",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "aspect": "material_transformation",
+          "input_state_ids": [
+            "ivt_rna"
+          ],
+          "output_state_ids": [
+            "double_stranded_cdna"
+          ],
+          "statement": "IVT RNA is copied to cDNA; RNA in DNA/RNA hybrids is removed and a complementary DNA strand is synthesized, producing double-stranded cDNA.",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Arrow from purple tracks to blue paired tracks; dsDNA synthesis caption",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.76,
+                0.26,
+                0.87,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row dsDNA synthesis: arrow from purple to blue tracks",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.72,
+                0.47,
+                0.82,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To remove RNA in DNA/RNA hybrids, samples were incubated for 20 min with 0.5 Units/μL RNase H at 37 °C.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "output_grouping": "one_output"
+    },
+    {
+      "id": "add_adaptors",
+      "label": "Fragment/tag cDNA and add sample barcodes and sequencing adaptors",
+      "description": "Convert the double-stranded cDNA into a barcoded Illumina DNA library through the final depicted library-preparation block.",
+      "inputs": [
+        "double_stranded_cdna"
+      ],
+      "outputs": [
+        "library"
+      ],
+      "mechanism": "Sos 2016 uses EzTn5 loaded with ME_BOT/ME_TOP for the second, cDNA-directed transposition; this is distinct from initial Tn5059 chromatin tagging. The subsequent protease, end fill-in, and barcode/adaptor PCR remain inside this broad block. The proposed Tn5059 substitute for this step was not used in the reported experiment.",
+      "information_effect": "Produces a physical DNA library of insertion-site-derived sequences. The reported THS-seq measurement uses single-end reads and a single sample index; unique mapped reads after clonal removal represent initial insertion events. The diagram stops at the library, so no sequencing data or analysis operation is asserted.",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Final arrow and Add barcodes and sequencing adaptors; blue paired tracks with retained red segment and new terminal colored segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.26,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row final arrow and Add barcodes and sequencing adaptors",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.47,
+            0.92,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036], second tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Fragmentation and 3’ end tagging of double-stranded cDNA was simultaneously performed by adding 1 μL tagmentation buffer, and 1 μL loaded custom 0.1 μM final in reaction EzTn5 transposomes (ME_BOT, ME_TOP (Additional file 1: Table S5)) to the solution and then incubating at 55 °C for 6 min, followed by cooling on ice.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods [b00036], actual second-transposition enzyme versus proposed substitute",
+          "basis": "text",
+          "support": "reported",
+          "quote": "0.14 μM final in reaction Tn5059 can also be used in place of EzTn5 and would provide better read diversity, however for this experiment we did not have Tn5059 with ME_BOT and ME_TOP available.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], final library amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods [b00036], after cDNA tagmentation and protease",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Gap fill-in was performed by addition of 6 μL of 2× Taq PCR master mix (NEB), and incubated at 72 °C for 3 min.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, Primary data processing [b00038], THS-seq readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was performed on HiSeq with 50 × 6 single end reads with single 6 base pair indexing for THS-seq data, and 50 × 8 × 8 single end reads with dual 8 base pair indexing for ATAC-seq data.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq validation [b00012], interpretation after alignment and clonal read removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Each THS-seq unique read by design represents a unique transposon insertion event on a single chromosomal molecule.",
+          "bbox": null,
+          "rationale": null
+        }
+      ],
+      "resolution": "composite_block",
+      "input_roles": [
+        {
+          "state_id": "double_stranded_cdna",
+          "subject": "self",
+          "roles": [
+            "sample",
+            "template"
+          ],
+          "explanation": "Double-stranded cDNA is the substrate for second transposition and the template for final library amplification.",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036], second tagmentation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Fragmentation and 3’ end tagging of double-stranded cDNA was simultaneously performed by adding 1 μL tagmentation buffer, and 1 μL loaded custom 0.1 μM final in reaction EzTn5 transposomes (ME_BOT, ME_TOP (Additional file 1: Table S5)) to the solution and then incubating at 55 °C for 6 min, followed by cooling on ice.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], final library amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "aspect": "material_transformation",
+          "input_state_ids": [
+            "double_stranded_cdna"
+          ],
+          "output_state_ids": [
+            "library"
+          ],
+          "statement": "A second transposition fragments and tags cDNA 3′ ends. Protease treatment releases fragments, gap fill-in processes tagged ends, and PCR produces DNA library molecules bearing Illumina adaptors and sample barcodes.",
+          "evidence": [
+            {
+              "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+              "locator": "Final arrow and Add barcodes and sequencing adaptors; blue paired tracks with retained red segment and new terminal colored segments",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.86,
+                0.26,
+                1.0,
+                1.0
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+              "locator": "THS-seq row final arrow and Add barcodes and sequencing adaptors",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.81,
+                0.47,
+                0.92,
+                0.66
+              ],
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036], second tagmentation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Fragmentation and 3’ end tagging of double-stranded cDNA was simultaneously performed by adding 1 μL tagmentation buffer, and 1 μL loaded custom 0.1 μM final in reaction EzTn5 transposomes (ME_BOT, ME_TOP (Additional file 1: Table S5)) to the solution and then incubating at 55 °C for 6 min, followed by cooling on ice.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], final library amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "Online methods [b00036], after cDNA tagmentation and protease",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Gap fill-in was performed by addition of 6 μL of 2× Taq PCR master mix (NEB), and incubated at 72 °C for 3 min.",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        },
+        {
+          "aspect": "attribution",
+          "input_state_ids": [
+            "double_stranded_cdna"
+          ],
+          "output_state_ids": [
+            "library"
+          ],
+          "statement": "Sample barcodes added during PCR associate library DNA molecules with their source sample.",
+          "evidence": [
+            {
+              "source_id": "primary:paper:26846207",
+              "locator": "THS-seq design and implementation [b00010], final library amplification",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+              "bbox": null,
+              "rationale": null
+            }
+          ]
+        }
+      ],
+      "output_grouping": "one_output"
+    }
+  ],
+  "flows": [
+    {
+      "id": "insert_in_1",
+      "source": "chromatin",
+      "target": "insert",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.64,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.39,
+            0.41,
+            0.62,
+            0.65
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], custom transposon",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Concentration titrations were performed on Tn5059 for optimal activity for THS-seq with cellular input (Additional file 1: Figure S5a-d), as well as development of an optimized tagmentation reaction buffer that includes 16 % DMF (Additional file 1: Figure S5e, f).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], transposome orientation design",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Additionally, to address the efficiency loss from incorrect adaptor orientations that is seen with PCR-based methods, the transposome complex dimer that consists of two Tn5 molecules and two transposons, where one Tn5 molecule is bound to one transposon, was designed and generated so that every single insertion yields usable ends regardless of the orientation of the transposon after insertion.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "insert_in_2",
+      "source": "transposome",
+      "target": "insert",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.64,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.39,
+            0.41,
+            0.62,
+            0.65
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], custom transposon",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Concentration titrations were performed on Tn5059 for optimal activity for THS-seq with cellular input (Additional file 1: Figure S5a-d), as well as development of an optimized tagmentation reaction buffer that includes 16 % DMF (Additional file 1: Figure S5e, f).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], transposome orientation design",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Additionally, to address the efficiency loss from incorrect adaptor orientations that is seen with PCR-based methods, the transposome complex dimer that consists of two Tn5 molecules and two transposons, where one Tn5 molecule is bound to one transposon, was designed and generated so that every single insertion yields usable ends regardless of the orientation of the transposon after insertion.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "insert_out_1",
+      "source": "insert",
+      "target": "tagged_chromatin",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Insert in regions of open chromatin: broken accessible linker with green/red terminal segments; input arrow from transposome",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.35,
+            0.0,
+            0.64,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row: transposome arrow and Insert in regions of open chromatin",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.39,
+            0.41,
+            0.62,
+            0.65
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], custom transposon",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To this end we designed a custom transposon that, in addition to the mosaic end sequences for transposase binding, includes a T7 promoter sequence for in vitro transcription, and an adaptor sequence compatible with constructing Illumina sequencing libraries (Additional file 1: Figure S1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], final sentence",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Concentration titrations were performed on Tn5059 for optimal activity for THS-seq with cellular input (Additional file 1: Figure S5a-d), as well as development of an optimized tagmentation reaction buffer that includes 16 % DMF (Additional file 1: Figure S5e, f).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], transposome orientation design",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Additionally, to address the efficiency loss from incorrect adaptor orientations that is seen with PCR-based methods, the transposome complex dimer that consists of two Tn5 molecules and two transposons, where one Tn5 molecule is bound to one transposon, was designed and generated so that every single insertion yields usable ends regardless of the orientation of the transposon after insertion.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "purify_in_1",
+      "source": "tagged_chromatin",
+      "target": "purify",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Purify arrow between inserted chromatin and isolated parallel tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.27,
+            0.76,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row Purify arrow leading from chromatin to isolated tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.46,
+            0.72,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "purify_out_1",
+      "source": "purify",
+      "target": "purified_dna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Purify arrow between inserted chromatin and isolated parallel tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.61,
+            0.27,
+            0.76,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row Purify arrow leading from chromatin to isolated tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.6,
+            0.46,
+            0.72,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "fill_ivt_in_1",
+      "source": "purified_dna",
+      "target": "fill_ivt",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "End fill-in and IVT amplification: two purple horizontal tracks with red segments following Purify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.25,
+            0.77,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row End fill-in and IVT amplification: two purple tracks with red segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.65,
+            0.47,
+            0.72,
+            0.67
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "fill_ivt_out_1",
+      "source": "fill_ivt",
+      "target": "ivt_rna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "End fill-in and IVT amplification: two purple horizontal tracks with red segments following Purify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.25,
+            0.77,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row End fill-in and IVT amplification: two purple tracks with red segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.65,
+            0.47,
+            0.72,
+            0.67
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], protein removal before end fill-in/IVT",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Next, all proteins were removed by treatment with guanidine hydrochloride, followed by end fill-in and linear in vitro transcription amplification by T7 RNA polymerase, which in theory has a lower bias compared with exponential PCR amplification.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "synthesize_cdna_in_1",
+      "source": "ivt_rna",
+      "target": "synthesize_cdna",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Arrow from purple tracks to blue paired tracks; dsDNA synthesis caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.26,
+            0.87,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row dsDNA synthesis: arrow from purple to blue tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.47,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To remove RNA in DNA/RNA hybrids, samples were incubated for 20 min with 0.5 Units/μL RNase H at 37 °C.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "synthesize_cdna_out_1",
+      "source": "synthesize_cdna",
+      "target": "double_stranded_cdna",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Arrow from purple tracks to blue paired tracks; dsDNA synthesis caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.26,
+            0.87,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row dsDNA synthesis: arrow from purple to blue tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.47,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "To remove RNA in DNA/RNA hybrids, samples were incubated for 20 min with 0.5 Units/μL RNase H at 37 °C.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "add_adaptors_in_1",
+      "source": "double_stranded_cdna",
+      "target": "add_adaptors",
+      "kind": "material_input",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Final arrow and Add barcodes and sequencing adaptors; blue paired tracks with retained red segment and new terminal colored segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.26,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row final arrow and Add barcodes and sequencing adaptors",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.47,
+            0.92,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036], second tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Fragmentation and 3’ end tagging of double-stranded cDNA was simultaneously performed by adding 1 μL tagmentation buffer, and 1 μL loaded custom 0.1 μM final in reaction EzTn5 transposomes (ME_BOT, ME_TOP (Additional file 1: Table S5)) to the solution and then incubating at 55 °C for 6 min, followed by cooling on ice.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods [b00036], actual second-transposition enzyme versus proposed substitute",
+          "basis": "text",
+          "support": "reported",
+          "quote": "0.14 μM final in reaction Tn5059 can also be used in place of EzTn5 and would provide better read diversity, however for this experiment we did not have Tn5059 with ME_BOT and ME_TOP available.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], final library amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods [b00036], after cDNA tagmentation and protease",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Gap fill-in was performed by addition of 6 μL of 2× Taq PCR master mix (NEB), and incubated at 72 °C for 3 min.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, Primary data processing [b00038], THS-seq readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was performed on HiSeq with 50 × 6 single end reads with single 6 base pair indexing for THS-seq data, and 50 × 8 × 8 single end reads with dual 8 base pair indexing for ATAC-seq data.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq validation [b00012], interpretation after alignment and clonal read removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Each THS-seq unique read by design represents a unique transposon insertion event on a single chromosomal molecule.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    },
+    {
+      "id": "add_adaptors_out_1",
+      "source": "add_adaptors",
+      "target": "library",
+      "kind": "material_output",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Final arrow and Add barcodes and sequencing adaptors; blue paired tracks with retained red segment and new terminal colored segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.86,
+            0.26,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row final arrow and Add barcodes and sequencing adaptors",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.81,
+            0.47,
+            0.92,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036], second tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Fragmentation and 3’ end tagging of double-stranded cDNA was simultaneously performed by adding 1 μL tagmentation buffer, and 1 μL loaded custom 0.1 μM final in reaction EzTn5 transposomes (ME_BOT, ME_TOP (Additional file 1: Table S5)) to the solution and then incubating at 55 °C for 6 min, followed by cooling on ice.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods [b00036], actual second-transposition enzyme versus proposed substitute",
+          "basis": "text",
+          "support": "reported",
+          "quote": "0.14 μM final in reaction Tn5059 can also be used in place of EzTn5 and would provide better read diversity, however for this experiment we did not have Tn5059 with ME_BOT and ME_TOP available.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], final library amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Transposase was digested by protease to release DNA fragments and then to generate sequencing libraries, PCR amplification was performed that added sequence containing Illumina adaptors and a sample barcode (Additional file 1: Figure S4a-d).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods [b00036], after cDNA tagmentation and protease",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Gap fill-in was performed by addition of 6 μL of 2× Taq PCR master mix (NEB), and incubated at 72 °C for 3 min.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, Primary data processing [b00038], THS-seq readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was performed on HiSeq with 50 × 6 single end reads with single 6 base pair indexing for THS-seq data, and 50 × 8 × 8 single end reads with dual 8 base pair indexing for ATAC-seq data.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq validation [b00012], interpretation after alignment and clonal read removal",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Each THS-seq unique read by design represents a unique transposon insertion event on a single chromosomal molecule.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "method_scopes": [
+    {
+      "method": "THS-seq",
+      "operation_ids": [
+        "insert",
+        "purify",
+        "fill_ivt",
+        "synthesize_cdna",
+        "add_adaptors"
+      ],
+      "status": "resolved",
+      "rationale": "All five action blocks belong to the named THS-seq row and standalone schematic. Open DNA is a starting-material caption, not a DNA-opening operation; the Tn5/Read primer/T7 promoter icon supplies the transposome input, not a separate action. Poster neighbors are context, not grouped targets. The primary paper describes this THS-seq architecture and resolves the two distinct transposition substrates and enzymes. Its custom RNA-seq is an internal library-conversion component, not an additional target method. Reported single-end sequencing explains the library readout without adding an unshown data branch.",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Whole THS-seq schematic, left to right: title; Open DNA; Tn5 Transposome with Read primer/T7 promoter legend; Insert in regions of open chromatin; Purify; End fill-in and IVT amplification; dsDNA synthesis; Add barcodes and sequencing adaptors",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq middle row only (between ATAC-Seq above and CATCH-IT below), including full left-to-right route and Read primer/T7 promoter legend",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.02,
+            0.4,
+            0.93,
+            0.67
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036], second tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Fragmentation and 3’ end tagging of double-stranded cDNA was simultaneously performed by adding 1 μL tagmentation buffer, and 1 μL loaded custom 0.1 μM final in reaction EzTn5 transposomes (ME_BOT, ME_TOP (Additional file 1: Table S5)) to the solution and then incubating at 55 °C for 6 min, followed by cooling on ice.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, Primary data processing [b00038], THS-seq readout",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sequencing was performed on HiSeq with 50 × 6 single end reads with single 6 base pair indexing for THS-seq data, and 50 × 8 × 8 single end reads with dual 8 base pair indexing for ATAC-seq data.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "paper_matches": [
+    {
+      "id": "sos_2016",
+      "source_id": "ths-seq::paper:26846207",
+      "methods": [
+        "THS-seq"
+      ],
+      "assessment": "content_checked",
+      "relationship": "supports_architecture",
+      "evidence": [
+        {
+          "source_id": "ths-seq::card:ths-seq",
+          "locator": "THS-Seq reference and related-publication entries",
+          "basis": "text",
+          "support": "reported",
+          "quote": "THS-Seq: Sos B. C., Fung H. L., Gao D. R., Osothprarop T. F., Kia A., et al. (2016) Characterization of chromatin accessibility with a transposome hypersensitive sites sequencing (THS-seq) assay. Genome Biol 17: 20",
+          "bbox": null,
+          "rationale": "The same paper is listed again as a related publication; both entries are assessed here as one publication."
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::reference:poster_811c3e77c9c8e34cad980f6f:references:0",
+          "locator": "citation_fragment_as_listed; source_label THS-seq; Poppler layout.txt line792, separated cells11-12",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Sos BC et al. (2016) Genome Biol 17:20",
+          "bbox": null,
+          "rationale": "The fragment agrees with the complete THS-seq catalogue reference and the identified primary paper; the fragment alone is secondary bibliographic evidence."
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::collection:dna:page:118",
+          "locator": "Heading THS-seq: Transposome Hypersensitive Sites Sequencing; References and entry 282",
+          "basis": "text",
+          "support": "reported",
+          "quote": "THS-seq: Transposome Hypersensitive Sites Sequencing",
+          "bbox": null,
+          "rationale": "The page heading, matching schematic labels, and Sos et al. reference verify applicability of this candidate secondary page to the assigned THS-seq target, rather than an adjacent assay."
+        },
+        {
+          "source_id": "ths-seq::metadata:26846207",
+          "locator": "PubMed metadata, title / pmid / identifiers",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Characterization of chromatin accessibility with a transposome hypersensitive sites sequencing (THS-seq) assay.",
+          "bbox": null,
+          "rationale": "PMID 26846207 and DOI 10.1186/s13059-016-0882-7 identify the 2016 Genome Biology paper. Metadata establishes identity only; the inspected full text establishes the architecture."
+        },
+        {
+          "source_id": "ths-seq::paper:26846207",
+          "locator": "Article title [b00001]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Characterization of chromatin accessibility with a transposome hypersensitive sites sequencing (THS-seq) assay",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "ths-seq::paper:26846207",
+          "locator": "Results and discussion, THS-seq design and implementation [b00010]",
+          "basis": "text",
+          "support": "reported",
+          "quote": "We therefore developed the THS-seq method, which uses a customized Tn5 transposome system to attach a T7 promoter [22–25] to the end of every DNA molecule after in vitro transposition.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "ths-seq::paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], initial transposase and optimized buffer",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Finally, we replaced the standard EzTn5 transposase with a novel Tn5 super-mutant (Tn5059), which resulted from a semi-rational design and has a higher activity and less sequence-specific bias than EzTn5 on purified DNA.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "Online methods, RNA-seq (custom transposon mediated fragmentation) [b00036], second tagmentation",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Fragmentation and 3’ end tagging of double-stranded cDNA was simultaneously performed by adding 1 μL tagmentation buffer, and 1 μL loaded custom 0.1 μM final in reaction EzTn5 transposomes (ME_BOT, ME_TOP (Additional file 1: Table S5)) to the solution and then incubating at 55 °C for 6 min, followed by cooling on ice.",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "ths-seq::reference:pilot_selected_primary",
+          "locator": "Pilot-selected primary candidate lead",
+          "basis": "text",
+          "support": "reported",
+          "quote": "Pilot-selected primary candidate PMID 26846207 for THS-seq. This selection is not scientific evidence of method identity or mechanism.",
+          "bbox": null,
+          "rationale": "This recovered-reference lead is independently resolved by the primary title/content and PubMed identity above; it is not used as mechanism evidence."
+        }
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "resolve_ivt_material",
+      "target_id": "state:ivt_rna",
+      "diagram_observation": "After Purify, two parallel purple tracks with red segments appear under End fill-in and IVT amplification; an arrow then leads to blue paired tracks under dsDNA synthesis. The drawing does not explicitly name the purple product as RNA, and the parallel strokes do not specify its molecular strandedness.",
+      "primary_statement": "The primary paper explicitly identifies the IVT products as RNA molecules made from insertion-site end sequences, followed by conversion to double-stranded cDNA. Accordingly, the purple-product boundary is RNA, and the following blue-product boundary is double-stranded cDNA. Two drawn tracks do not create two isolated branches or a DNA duplex at the RNA boundary.",
+      "disposition": "use_primary",
+      "evidence": [
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "End fill-in and IVT amplification: two purple horizontal tracks with red segments following Purify",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.66,
+            0.25,
+            0.77,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row End fill-in and IVT amplification: two purple tracks with red segments",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.65,
+            0.47,
+            0.72,
+            0.67
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "ths-seq::diagram:asset_c6bd448b659c99fbaa6aebeb",
+          "locator": "Arrow from purple tracks to blue paired tracks; dsDNA synthesis caption",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.76,
+            0.26,
+            0.87,
+            1.0
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "poster_811c3e77c9c8e34cad980f6f::diagram:poster_crop_c9fc4ba3fa7f20e58fb74d2d",
+          "locator": "THS-seq row dsDNA synthesis: arrow from purple to blue tracks",
+          "basis": "image",
+          "support": "depicted",
+          "quote": null,
+          "bbox": [
+            0.72,
+            0.47,
+            0.82,
+            0.66
+          ],
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], insertion-end amplification",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The end sequences of the insertion sites were then linearly amplified with in vitro transcription by roughly 1,000-fold, regardless of the distance between two adjacent Tn5 insertion sites, and the resulting RNA molecules were then converted into sequencing libraries efficiently through seven enzymatic reactions (single-stranded cDNA synthesis, RNase H digestion, double-stranded cDNA synthesis, transposition, protease digestion, end fill-in, and PCR amplification) (Fig. 1).",
+          "bbox": null,
+          "rationale": null
+        },
+        {
+          "source_id": "primary:paper:26846207",
+          "locator": "THS-seq design and implementation [b00010], RNA to cDNA and second transposition",
+          "basis": "text",
+          "support": "reported",
+          "quote": "The resulting RNA molecules (Additional file 1: Figure S3a-d) were converted to double-stranded cDNA, followed by a second round of transposition to tag 3’-ends of double-stranded cDNA.",
+          "bbox": null,
+          "rationale": null
+        }
+      ]
+    }
+  ],
+  "unknowns": []
+}

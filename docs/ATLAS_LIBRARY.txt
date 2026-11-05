@@ -1,0 +1,124 @@
+OPEN THE ATLAS
+
+The inspection folder is atlas/ in this repository. Start at atlas/index.html.
+It is ONE working technology index. Cards, posters and guides are complementary
+sources attached beneath its entries. A source depiction is not another assay.
+
+Inspect one saved workflow without a server:
+  PYTHONPATH=src .venv/bin/python -m scripts.illumina.library show drop_seq --open
+
+For source-depiction pages as well, serve the folder on your Mac:
+  .venv/bin/python -m http.server 8765 --bind 127.0.0.1 --directory atlas
+Then open http://127.0.0.1:8765/ . Stop the server with Ctrl-C.
+Do not run a web server on a Sherlock login node.
+
+WHAT IS IN THE FOLDER
+
+index.html                     technology entries with versions, papers, sources
+technologies.csv/json          one row per working technology entry
+papers.csv/json                one row per indexed PubMed publication
+depictions.csv                 every collected source occurrence and association
+identity_queue.csv/json        missing-technology versus alias/scope questions
+historical_changes.json        the existing 19 paired historical claims
+history.html                   readable changes, consequences, evidence and review
+methods/<workflow_id>/
+  graph.json                   saved extracted States, Operations and Flows
+  graph.html                   clickable visualization of that saved workflow
+  record.json                  scope, sources, review, native paths and hashes
+source_views/                  every archived source depiction, including holds
+manifest.json                  exact input snapshots and counts
+
+For example, Drop-seq is one entry with workflow drop_seq and three source
+depictions. Repeated registration of its card does not create a fourth depiction.
+The original iCLIP and the Huppertz protocol remain separate scoped workflow
+versions beneath the existing iCLIP entry; they are not identical graph objects.
+
+WHAT THE COUNTS MEAN IN THIS EXPORT
+
+210 working entries: the on-disk curated seed has 200 (190 catalogue-derived and
+10 foundation entries); 10 additional explicitly selected pilot targets extend it.
+These include CITE-seq, MULTI-seq, sci-RNA-seq, Seq-Well and scNMT-seq. They would
+be lost if we used only the old website seed. A previous conversational count
+of 201 must not be substituted for the actual, hash-pinned seed used here.
+
+50 scoped workflow versions: 47 recorded model-reviewed supported, two requiring
+research and one failed. These are the completed pilot's results. They do not
+include the six-method extraction job 51239527 currently running separately.
+Supported is the recorded model/admission outcome, not independent expert or
+wet-lab validation. Failed candidates remain available only as diagnostics.
+
+478 source occurrences: 154 website cards, 285 main poster rows and 39 footer
+panels. A grouped card can cover multiple technologies; one technology can occur
+on several posters. They must not become 478 technology entries or extraction jobs.
+
+905 indexed PMIDs: 880 have a source registration in the combined source/pilot
+inputs; 25 additional IDs occur only in the older atlas's publication index.
+The 880 registrations comprise 269 full-text, 607 abstract and four metadata-only
+papers at their highest registered level. Availability is not proof of reading,
+correct association, or experimental support. Non-PMID resources remain in the
+original registries rather than being counted as PubMed publications.
+
+More papers than technologies is expected. A card can list the founding paper,
+follow-up protocols, applications, reviews and comparisons. One paper can also
+introduce multiple distinct assays. Neither PMID equality nor citation count
+defines method identity. recorded_roles distinguishes publication registration
+from the declared primary paper for a specific scoped workflow.
+
+149 distinct unmatched source labels remain in identity_queue.csv. They are not
+149 established missing technologies: the queue includes aliases, kit/product
+names, grouped labels and potentially new methods. This is the explicit remaining
+consolidation work. The final distinct-method count across all resources is not
+yet established. No unresolved source was silently discarded.
+
+HOW GROUPING AND HISTORY ARE LIMITED
+
+The old catalogue's source bindings seed the display. An exact name or sole
+existing card parent can place a scoped workflow beneath an entry, while retaining
+its exact implementation scope. Unmatched selected pilot targets extend the index.
+Other exact source-label matches are marked as candidate associations. This
+export does not independently verify assay equivalence or merge workflow nodes.
+
+Historical links are a different assertion. Their pair graph hashes, exact claims,
+reviews, direction and endpoint extraction hashes are checked against the pinned
+pilot archive before display. A newer extraction cannot silently inherit an old
+edge's approval. The page distinguishes method development from component adoption;
+neither similarity nor shared purpose is promoted into ancestry.
+
+graph.json and record.json are inspection serializations. Native byte hashes refer
+to the archived originals. The export checks the native candidate/review binding
+and batch pins before showing completed outcomes. A failed partial attempt has no
+completed batch pins and is clearly diagnostic. Labels and scientific descriptions
+are copied from the saved extraction; Python does not invent a new protocol.
+
+CODE TO READ
+
+scripts/illumina/library.py
+  assemble: technology/paper/source index and preserved workflow versions
+  bind_history: exact-version checks for existing historical claims
+  build/export_library: immutable-input export with atomic directory publication
+  main: build or show one saved workflow
+
+scripts/illumina/review_site/build.py
+  standalone: puts the saved data and existing renderer into one HTML file
+  build: the existing all-source review export, preserving later admission holds
+
+scripts/illumina/review_site/app.js
+  drawGraph: draws the saved State/Operation nodes and Flow arrows
+  inspect: shows exact fields, properties/effects, evidence and review
+
+REBUILD FROM THE SAME INPUTS
+
+Choose a new output directory; the builder refuses to overwrite an existing one.
+Original archives and frozen remote runs are not reorganized in place.
+
+  PYTHONPATH=src .venv/bin/python -m scripts.illumina.library build \
+    --audit provenance/experiments/illumina_extraction_20261102/audit_01 \
+    --snapshot provenance/experiments/pilot50_20261104/deep_audit_20261105/snapshot.json.gz \
+    --selection experiments/pilot50_20261104/selection_candidates.json \
+    --legacy ../technology_atlas/v2/output/technology_graph.json \
+    --history provenance/experiments/atlas_library_20261105/historical_changes.json \
+    --output atlas_rebuilt
+
+The manifest records input hashes. The raw snapshot and legacy graph are retained
+research artifacts; possession of this script alone is not possession of them.
+Rendering/indexing makes no model calls and does not change a scientific verdict.
