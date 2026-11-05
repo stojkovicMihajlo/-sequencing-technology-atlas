@@ -16,6 +16,17 @@ not fixed; the active frozen runtime remains unchanged. The latest run receipts
 and progress snapshots are in
 [the pilot resume record](../provenance/experiments/pilot50_20261104/RESUME.txt).
 
+Two additional follow-ups are **open, not fixed**, in the same HARNESS.txt:
+- **EVIDENCE_SCOPE-001:** align evidence requirements with the admitted claim
+  (Illumina workflow, paper-supported correction, or historical relationship).
+- **SOURCE_BUNDLE-001:** consolidate duplicate document registrations while
+  retaining provenance, and separate source-enrichment effects from harness
+  changes when comparing old/new outputs.
+
+Their observations and limits are in the
+[early paired inspection](../provenance/experiments/pilot50_20261104/early_comparison/REVIEW.txt).
+These are follow-ups to examine after the pilot, not changes to its active runtime.
+
 ## Extraction-to-ideation audit — 4 November 2026, afternoon
 
 Read the [current handoff review](../experiments/transcriptomics_revision_20261104/HANDOFF_REVIEW.txt)
