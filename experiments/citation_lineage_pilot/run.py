@@ -23,6 +23,7 @@ from genomics_discovery.illumina.extraction import (
     verify_registry_files,
 )
 from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jats_text, parse_pubmed
+from genomics_discovery.illumina.citations import bibliography
 from models import (
     Analysis, CurrentAnalysis, CurrentNominations, Nominations, Review, graph_overlay, parse_analysis, validate_analysis,
     validate_nominations, validate_review,
@@ -33,24 +34,6 @@ from genomics_discovery.illumina import relationships as relationship_policy
 
 def local(element):
     return element.tag.rsplit("}", 1)[-1]
-
-
-def bibliography(raw):
-    tree = ET.fromstring(raw)
-    refs = {}
-    for ref in (e for e in tree.iter() if local(e) == "ref"):
-        ids = {e.get("pub-id-type"): "".join(e.itertext()).strip()
-               for e in ref.iter() if local(e) == "pub-id"}
-        refs[ref.attrib["id"]] = {"reference_id": ref.attrib["id"],
-            "citation": " ".join("".join(ref.itertext()).split()),
-            "identifiers": ids, "contexts": []}
-    for paragraph in (e for e in tree.iter() if local(e) == "p"):
-        cited = {rid for x in paragraph.iter() if local(x) == "xref"
-                 and x.get("ref-type") == "bibr" for rid in x.get("rid", "").split()}
-        text = " ".join("".join(paragraph.itertext()).split())
-        for rid in cited & refs.keys():
-            refs[rid]["contexts"].append(text)
-    return refs
 
 
 def validate_reference_cache(cache):

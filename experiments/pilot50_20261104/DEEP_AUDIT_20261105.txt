@@ -1,0 +1,329 @@
+PILOT AUDIT AND RELEASE DECISIONS — 5 November 2026
+
+Start here
+The next release needs better recovery and review decisions, not another broad
+State/Operation schema rewrite. Some important requirements are already in the
+prompts. We have not yet established that the models follow them consistently.
+Do not launch another large extraction solely because software tests pass.
+
+What was inspected
+The completed Qiu pilot is job 51127481, run_01 under
+$GROUP_SCRATCH/mstojkov/agents_snRNA/technology_atlas/v2/work/pilot50_20261104/.
+The local inspection directory is
+provenance/experiments/pilot50_20261104/deep_audit_20261105/.
+
+audit.json is the machine-readable index: all 50 method/version assignments,
+all extraction stage outcomes, 59 nonaccept checks across extraction reviews,
+42 final citation analyses (608 claims), their 45 nonaccept findings and
+19 omission reports, 32 pair runs, and 43 completed A/B comparisons. It includes
+73 comparison findings selected for follow-up. Source paths, SHA256 and JSON
+pointers lead back to the original findings; repeated evidence quotations are
+not copied into the index. A missing target in a comparison is a lead to inspect,
+not automatically a confirmed omitted fact.
+
+The underlying inspection snapshot has 1,852 records and 124 source inventories:
+snapshot.json.gz, SHA256
+764328eb76f5ebb6441a68621f41e549c3f2bf0c16d054f9aa68b8bf357e7693.
+Source bodies and complete native traces remain in their original archives.
+The snapshot's required-record check passed; it is not a claim that every optional
+diagnostic was captured. In particular, native evaluation diagnostics were
+inspected separately and pinned in transport_diagnosis.json. The collector now
+also captures evaluation attempt results and stderr.log for future snapshots.
+
+This was a full pilot-record audit plus targeted source/figure/code checks.
+It was NOT a new expert reading of every sentence in every primary paper.
+Model-reported defects remain labelled as such unless independently checked.
+No old source bundle, extraction, review, or graph was silently repaired.
+
+Observed outcomes, not accuracy scores
+- Extraction: 47 model-reviewed supported, two research-needed (MARS-seq and
+  HITS-CLIP), one failed correction (SPLiT-seq).
+- History: 42 citation analyses completed, seven held, one failed (SHAPE-MaP).
+  32 pair runs completed; 29 overlays published, three held for finer extraction.
+  The combined pilot contains 19 historical edges: 10 method-development and
+  nine component-adoption edges. Citation-level mechanism/comparison links are
+  separate from these paired historical edges.
+- A/B evaluation: 43 completed, four unpaired, three transport failures.
+  Model outcomes: 13 candidate-better, 18 equivalent, five baseline-better,
+  three mixed, four undetermined. ALL 43 used different source content.
+  These results do not isolate the effect of a harness revision.
+- The 563 accepted citation findings include acceptance of negative/background
+  dispositions. They are not 563 accepted historical connections.
+
+Issues and decisions
+
+01. Oversized correction delivery — repaired; one live case validated
+SPLiT-seq's original correction prompt was 1,674,497 characters. The review had
+441 checks, of which three requested changes to one barcode-history assertion.
+Inlining the complete candidate and repeated evidence caused the transport failure.
+The earlier repair uses pinned candidate/review files and a complete addressable
+feedback index; the replay prompt was 31,630 characters. No findings were dropped.
+Fresh correction job 51210466 completed with a fresh supported review: 19
+Operations, 40 States, 64 Flows. See transport_diagnosis.json/split_correction.
+This establishes that the repaired handoff worked for this case, not that every
+scientific field is independently correct. Keep bounded readers and exact pins.
+
+02. Citation ranges lose relevant references — fixed in this audit
+Some JATS paragraphs print 7–11 but link only endpoints 7 and 11. The old parser
+missed 8–10, even when a reviewer correctly requested the contribution in one of
+those papers. The agent could not satisfy the citation-context gate with that
+bundle. This is a parser failure, not a reason to relax historical evidence.
+illumina/citations.py expands only an unambiguous printed numeric range whose
+endpoints and every interior reference have unique explicit bibliography labels.
+It records the derivation separately from explicit XML links. No reference-ID
+number guessing, comma expansion, or inference of ancestry is allowed.
+Source-derived replay recovers seven middle-reference contexts in Bru-seq,
+THS-seq, Smart-seq and PRO-seq. See citation_parser_replay.json and its fixture.
+Independent review identified a nested-block false-expansion case; a negative
+regression and structural-boundary guard are part of the repair.
+Remaining limitation: this is paragraph-based JATS support, not complete handling
+of every citation style, tables, HTML or PDF bibliographies.
+
+03. Missing documents are sent to a correction author — recovery still missing
+The existing correction deliberately has a fixed evidence bundle. Its prompt
+already says so. Rewriting cannot obtain a missing supplement or delegated
+protocol. MARS-seq's pooled cellular-identity question and original HITS-CLIP's
+protocol/version questions require different evidence from routine wording fixes.
+Required change: a review issue identifies the scientific question, affected
+claim/record and document needed. The host routes it to existing source acquisition,
+checks document identity and lawful access, registers a new immutable bundle, and
+requests a fresh affected extraction/review. A failure to obtain it stays explicit.
+Do not silently replace an original paper with a later implementation.
+Do not change the existing exact-bundle correction seed to accept arbitrary bytes.
+
+04. JATS-only history seeds — genuine implementation restriction
+history_stage._paper permits a registered PDF for pair evidence, but initiating
+citation tracing requires JATS/XML. Thus a readable PDF does not make the history
+stage ready. This is not evidence that the method has no predecessor.
+Required change: an alternative citation-index adapter must preserve source file,
+page/paragraph locator, reference identity and resolution uncertainty. PDF/HTML
+support needs validation of both bibliography matching and callout location.
+An LLM-generated list of plausible predecessor papers is not an equivalent input.
+
+05. Submitted-claim checking misses absent information — enforcement unvalidated
+An evidence quotation may contain a fact that the graph never asserts. The prior
+five-case audit confirmed this for MARS-seq's cleanup before pooling; comparable
+questions arise for capture handles and readout allocation. Counting reviewed
+States/Operations does not measure coverage of the source.
+Current prompts ALREADY ask for source-to-graph coverage, assertions outside
+quotations, and scoped interface/carrier details. Do not call these absent rules.
+Required change: make that check observable with a compact source-grounded list
+of consequential facts and a disposition for each: asserted at a record/field,
+outside the fixed scope with a reason, or unresolved with an evidence request.
+No fixed fact count and no required new Operation for each fact. A composite
+Operation can contain the necessary assertion. Presence of the list still does
+not prove the list itself is complete; evaluate it against curated test cases.
+
+06. Equivalence can hide the same omission on both sides — evaluation blind spot
+28 comparison findings have no targets on either side. These are investigation
+leads, not 28 independently established shared omissions. Targeted checks found:
+- CITE-seq: unbound-antibody removal before encapsulation is in the supplied
+  primary text but absent from the asserted graph. It can be part of the binding
+  operation, rather than requiring a separate wash node.
+- DroNc-seq: the smaller bead/channel compatibility requirement matters to the
+  smaller-droplet arrangement. A generic statement about miniaturization omits it.
+- MULTI-seq: additive-primer amplification is described in the source, but there
+  is a stated exception in a proof-of-concept nuclei experiment. Recording it as
+  universally mandatory would be another error.
+- Microfluidic scATAC: Tn5-complex release is a consequential interface mechanism.
+  A condition tested in an explanatory panel must not be promoted automatically
+  to the final protocol's recipe.
+- Smart-seq2: the catalogue lists more changes than LNA alone. Its mention of
+  eliminated purification does not license deleting every cleanup from the graph.
+Other evaluator suggestions remain unadjudicated; audit.json preserves them.
+Required test: score against scoped source facts, including common omissions,
+not merely whether a candidate resembles or improves on the old extraction.
+
+07. Scope is allowed to drift — tighter boundary, flexible internal grouping
+The same named assay/version can have different starts, endpoints and branches.
+icSHAPE is a clear example: an Illumina strip ends at cDNA; complete reactivity
+measurement also needs controls and downstream processing. Those are different
+coverage targets. Conversely, preparation of the RT substrate can clarify an
+interface inside the depicted route without expanding to a full assay.
+Current author/review/evaluation prompts distinguish these cases, but the pilot
+does not provide a controlled test of their revised wording.
+Required change: freeze assignment scope before scoring: source depiction,
+method/version, start, endpoint and required branches. Keep an explicit extension
+separate from that baseline. Do not let either author or evaluator move the
+boundary to justify a preferred output. A grouped schematic is not proof that
+all listed technologies have identical implementations.
+
+08. Source modality can be misattributed — confirmed accepted-output defect
+CEL-seq's candidate attributed full paired-strand detail to a diagram that did
+not show it. RT was supported by other prose; the visual attribution was wrong.
+The previous audit inspected the actual registered image. A valid source ID and
+an accurate quotation elsewhere do not validate an assertion about an image.
+Modality separation is now explicit in prompts; independent detection performance
+is untested. Add a reviewer test with a true fact attributed to the wrong source
+modality, alongside a properly attributed positive control.
+
+09. Corrections must update topology and state histories, not just prose
+The BruChase comparison showed improvement when corrected ordering was expressed
+in the actual graph rather than only a correction note. SPLiT-seq's reviewer
+caught a barcode-history claim that placed an identifier before its introduction.
+Keep the existing instruction to update affected Operations, State histories and
+Flows together. Test that swapping order or introducing a carrier too early is
+detected even when the narrative and citations look plausible. JSON validity
+and acyclicity cannot prove the scientific order.
+
+10. Global omission holds conflate incomplete coverage and invalid claims
+Citation publication currently applies omitted_candidates to every accepted claim
+before several other eligibility gates run. There are 178 such hold rows:
+39 component-adoption, eight method-development, 55 mechanistic-precedent,
+50 comparison, 15 no-established-relation and 11 background claims.
+Thus 152 non-background/non-negative claims received this reason, but only 47 are
+historical types. They are NOT 152 independently publishable historical edges.
+Across the 178 rows, 17 historical claims also concern something outside the seed
+workflow, 16 lack citation context and three lack predecessor evidence. Flags
+can overlap; other semantic/source checks may fail too.
+Similarly, three pair overlays are withheld as a whole when one missing route
+needs finer extraction. The iCLIP/eCLIP examples concern a control-route distinction;
+the existing comparisons are not all automatically invalidated by that omission.
+Required change: a fresh review identifies affected claim IDs and whether the
+issue invalidates them, leaves the neighborhood incomplete, or invalidates the
+whole analysis. Preserve a global-invalidity option and ALL other admission gates.
+Do not reinterpret old prose as authorization to release old held relationships.
+Current prompt says adequacy is claim-specific; publisher/schema cannot yet fully
+express that distinction. This is an orchestration mismatch, not just wording.
+
+11. Revision stopping must depend on the issue, not endless rewriting
+Prior-critique delivery and instructions to account for it are already present.
+Current bounded cycles do not deterministically establish resolution of every
+scientific objection. No particular round count is established as optimal.
+For each outstanding issue distinguish: repair from current evidence, acquire
+evidence, clarify scope, reject the claim, or stop for execution/policy failure.
+Stop when the claim is resolved/withdrawn, necessary evidence remains unavailable,
+or a revision changes neither the relevant evidence nor the unresolved assertion.
+A maximum round count bounds expense; reaching it never implies acceptance.
+An independent reviewer should judge resolution; the author cannot self-approve.
+Multi-round ideation-author revision remains separate pending work.
+
+12. Provider failure, missing acknowledgement and scientific abstention differ
+transport_diagnosis.json pins the exact terminal events and result files.
+SHAPE-MaP citation nomination ended in a provider biological-risk rejection.
+It remains stopped; no prompt rephrasing or alternate provider was used to bypass
+that decision. It must not be counted as a missing-source or malformed-JSON case.
+Quartz-seq2, Bru-seq and ChIPmentation evaluations instead ended with exit code 0,
+turn.completed and written artifacts, but an empty required final acknowledgement.
+The existing transport check rejected them. Explicit acknowledgement instructions
+are already in the current evaluator; their effectiveness needs a fresh run.
+Do not weaken terminal-success, custody or validation gates to inflate completion.
+
+13. Retrieval duplication and failures inflate work and blur evidence quality
+The citation bundles contain 526 non-seed source registrations: 286 full text,
+221 abstracts, seven metadata-only, 12 unavailable. These are registrations,
+not distinct papers or independent supporting observations.
+The audit finds duplicate candidates in all 50 extraction bundles using matching
+identifier/title/text. This is not authority to merge methods or different versions.
+The existing search tool already consolidates exact duplicate renditions while
+preserving association IDs. Upstream acquisition consolidation remains separate.
+67 registration records contain HTTP 400 and three contain HTTP 429 diagnostics;
+these are not necessarily unique requests. Bad-request parsing/rate limiting
+needs a different response from an absent or inaccessible paper.
+Required change: classify retrieval failures, retain response diagnostics safely,
+reuse verified cached originals, and retry only appropriate transient failures.
+Source presence, content readability and applicability to this implementation
+are three different checks.
+
+14. External contributions should not be forced into atlas method nodes
+The pair candidate log contains 403 unbound nominations: 216 outside the extracted
+workflow, 187 without an extracted implementation for the cited primary paper.
+Many citations legitimately concern analysis, chemistry or general components.
+Keep the scope/disposition rather than manufacturing an Illumina assay match.
+Publication identity is candidate retrieval; a fresh comparison decides whether
+the same implementation and the claimed historical contribution are supported.
+Likewise, earlier publication alone is not demonstrated inheritance or priority.
+
+15. Review volume and latency — remove duplication, not meaningful branches
+Recorded extraction attempts total about 13.79 worker-hours; citation/pair work
+about 40.72 worker-hours. These sums are not elapsed wall time or price estimates.
+History is a substantial cost center, not a negligible final placement step.
+PRO-seq's separate nucleotide routes and PIP-seq's footprint/control routes have
+meaningful ordering differences. Collapsing them solely to reduce node count
+would lose scientific content. Reuse addressable evidence and common descriptions,
+but retain distinct branch identity and actual transitions.
+Prioritize investigating in-scope methodological contributions; retain cheap
+documented dispositions for background/comparison citations. Never impose a
+quota requiring a positive ancestor edge for every method.
+
+What to keep
+Illumina-level architecture as the baseline; paper-supported clarifications with
+provenance; local Operation/State/Flow instances; separate historical and similarity
+relationships; exact source/graph pins; independent review sessions; retained
+unknowns; original artifacts; rejection of unsupported links. More agents, fixed
+universal module lists, or detailed chemistry for every node do not follow from
+this audit. Nor does it establish that current accepted graphs are all wrong.
+
+Minimal next release and its tests
+1. Ship the citation parser regression repair and retain all later relation gates.
+2. Wire one explicit recovery handoff into existing acquisition/registration tools.
+   Test a recoverable supplement, an unavailable document, a wrong-version match
+   and a bundle change that must invalidate the old review. Recovering a document
+   is not itself scientific acceptance.
+3. Make source-fact coverage and review-issue disposition visible at fixed scope.
+   Test omitted-but-quoted facts, false visual attribution, wrong ordering and a
+   legitimate out-of-scope detail. Use the existing reviewer, not a new permanent
+   specialist team by default.
+4. Add claim-specific impact to omission/refinement review before relaxing global
+   holds. Test unrelated omissions, genuinely dependent claims, global identity
+   failure and every existing downstream gate. Old reviews remain held.
+5. Freeze source bundle, assignment and model configuration for old/new harness
+   comparisons. Use MARS-seq/CEL-seq and one held history pair for development,
+   then reserve an unaffected family for evaluation. This is a proposed small
+   validation set, not a submitted batch or proof of generalization.
+
+Report separate measures: execution completion; supported consequential assertions;
+unsupported assertions; missing required source facts; correctly retained unknowns;
+reviewer detection of deliberately seeded errors; and historical claims whose
+before/after change can be reconstructed from the evidence. Do not combine these
+into a single uncalibrated quality number. Exact wording/node count is not a target.
+Human/adjudicated source checks remain necessary to calibrate scientific scoring.
+
+Implementation references and why they matter
+- NISO JATS 1.4 rid specification:
+  https://jats.nlm.nih.gov/archiving/tag-library/1.4/attribute/rid.html
+  rid links existing IDs; it does not define a numeric interval. Our printed-range
+  derivation therefore needs explicit bibliography labels and separate provenance.
+- GROBID 0.8.2, ReferenceMarkerMatcher.getNumberedLabels/matchNumberedCitation:
+  https://github.com/grobidOrg/grobid/blob/0.8.2/grobid-core/src/main/java/org/grobid/core/utilities/matching/ReferenceMarkerMatcher.java
+  It expands numeric callouts and matches bibliography labels, retaining unmatched
+  cases. We inspected this related implementation; no code/dependency was copied.
+  Our JATS input already supplies endpoint IDs, so we additionally require their
+  agreement with unique labels. We do not adopt its arbitrary MAX_RANGE=20 cap;
+  our bound follows the supplied bibliography and complete label coverage.
+- OpenScholar, pinned 0e9b8fb912273d3dae39e593da86e4f6d3bf8de1,
+  src/open_scholar.py, get_feedback and edit_with_feedback_retrieval:
+  https://github.com/AkariAsai/OpenScholar/blob/0e9b8fb912273d3dae39e593da86e4f6d3bf8de1/src/open_scholar.py
+  Its separation of feedback-driven retrieval from editing is the relevant
+  precedent. For us, retrieved documents also need identity/custody registration
+  and a new evidence-bound review. This recovery integration is still proposed.
+- PaperQA2, tools at c692d0dfeac4a0296599f7fe21a253a58b7ac12a:
+  https://github.com/Future-House/paper-qa/blob/c692d0dfeac4a0296599f7fe21a253a58b7ac12a/src/paperqa/agents/tools.py
+  Search, evidence gathering and answer generation are separate tools. That
+  supports explicit source/evidence transitions; it does not establish assay
+  compatibility or historical ancestry. PaperQA2 is not integrated into this pilot.
+
+Reproduce the record audit locally (no model calls)
+  .venv/bin/python scripts/evaluation/summarize_pilot_audit.py \
+    provenance/experiments/pilot50_20261104/deep_audit_20261105/snapshot.json.gz \
+    --output /tmp/pilot50_audit.json
+collect_pilot_audit.py is the read-only collector for a project-owned remote run;
+it does not change verdicts or serve as evidence for future extraction. Full
+native traces remain in their source archive. The raw snapshot is retained locally
+and remotely; the compact audit and receipts are versioned in Git.
+
+Release status
+Only the citation-location repair is a new extraction/history runtime change in
+this audit. Other recommendations above are decisions with acceptance tests,
+not claims of completed integration. No new extraction pilot was submitted.
+Software validation and the source-derived parser replay are recorded separately
+from scientific review outcomes. Existing frozen/live runtimes are unchanged.
+
+Validation of this audit's code
+  PYTHONPATH=src .venv/bin/python -m pytest tests/illumina \
+    experiments/citation_lineage_pilot experiments/pilot50_20261104 -q
+  572 passed in 7.68 seconds.
+The four source-derived parser cases were replayed after the independent
+structural-boundary correction; all seven recovered reference contexts remained.
+validation.json records the code hashes, audit hash, replay hash and test result.
+These were offline checks; no new native extraction or history run was launched.
