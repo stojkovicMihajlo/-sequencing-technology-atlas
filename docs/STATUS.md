@@ -3,8 +3,8 @@
 ## Active pilot and recorded source-recovery limitation — 4 November 2026
 
 Pilot job **51127481** was running on Qiu with 50 scoped method/version targets
-at **4 November, 5:04 PM Pacific** (5 November 01:04 UTC): **18 supported by model
-review, 1 held for research, 1 failed, 4 running and 26 pending**. Historical-link
+at **4 November, 5:26 PM Pacific** (5 November 01:26 UTC): **23 supported by model
+review, 2 held for research, 1 failed, 4 running and 20 pending**. Historical-link
 review and baseline comparison had not started. SPLiT-seq's correction prompt
 exceeded the CLI input limit (1,674,497 characters versus 1,048,576); its author
 and first reviewer completed, but the correction could not start. This is
