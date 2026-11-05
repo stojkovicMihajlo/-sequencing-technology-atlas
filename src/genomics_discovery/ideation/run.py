@@ -362,7 +362,8 @@ def prepare(request_path, atlas_path, output, *, history_manifest=None):
     if history_manifest:
         # Refer to an exact manifest; the history reader verifies every linked artifact.
         config.update(history_manifest=str(Path(history_manifest).resolve()), history_sha256=sha(history_manifest))
-        context_for({**config, 'sources_file': str(output/'unused_sources.json')})
+        config['history_preflight'] = context_for(
+            {**config, 'sources_file': str(output/'unused_sources.json')}).validate_history_inputs()
     write(output / 'config.json', config)
     write(output / 'state.json', {'status': 'prepared', 'stages': [], 'failures': []})
     return config
@@ -422,6 +423,9 @@ async def pipeline(directory, execute_stage):
         raise ValueError('Run already started; preserve it and prepare a new experiment instead of silently replaying')
     if sha(config['atlas_file']) != config['atlas_sha256'] or sha(config['request_file']) != config['request_sha256']:
         raise ValueError('Prepared input changed')
+    # A source file can change after preparation even if the manifest is unchanged.
+    # Fail before spending a model call, using the same reader as the agent tool.
+    context_for({**config, 'sources_file': str(directory/'unused_sources.json')}).validate_history_inputs()
     source_registries = []
 
     async def stage(role, name, *, source_inputs=(), **extra):

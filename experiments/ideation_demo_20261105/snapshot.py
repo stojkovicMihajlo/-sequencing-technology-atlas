@@ -9,6 +9,7 @@ from pathlib import Path
 import shutil
 
 from genomics_discovery.illumina.extraction import read, sha, write
+from genomics_discovery.illumina.history import build_history_index
 from genomics_discovery.illumina.relationships import load_reviewed_pair
 
 
@@ -47,9 +48,13 @@ def snapshot(pilot, output):
             entry['source_registry'] = {'path': str((dest/'sources.json').relative_to(output)), 'sha256': sha(dest/'sources.json')}
         manifest['overlays'].append(entry)
     write(output/'history_inputs.json', manifest)
+    # Exercise the actual consumer before spending any native model calls.
+    # Checking pair-file hashes alone misses registry namespace/handoff errors.
+    history_index = build_history_index(output/'history_inputs.json')
     receipt = {'source_atlas': str(base), 'atlas_sha256': pin,
         'supported_workflows': sum(x.get('admission') == 'supported' for x in graph['cards'].values()),
         'reviewed_history_overlays': len(manifest['overlays']), 'not_loaded': held,
+        'history_preflight': {'status': 'passed', 'indexed_relationships': len(history_index['edges'])},
         'boundary': 'Snapshot of completed model-reviewed artifacts only. Missing history is not absence of prior art.'}
     write(output/'receipt.json', receipt)
     return receipt

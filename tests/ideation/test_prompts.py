@@ -1,0 +1,44 @@
+"""Stage prompts must not give non-authors an impossible author-only contract."""
+import json
+
+import pytest
+
+from genomics_discovery.ideation.prompts import build_prompt
+from genomics_discovery.ideation.run import SCHEMAS
+
+
+@pytest.mark.parametrize("role", list(SCHEMAS))
+def test_role_contract_matches_output_schema(role):
+    context = {"stage": role, "schema_file": "schema.json", "output_file": "artifact.json"}
+    if role in {"propose", "revise"}:
+        context["expert_id"] = "author_a"
+    prompt = build_prompt(role, context)
+    is_author = role in {"propose", "revise"}
+    assert ("AUTHOR OUTPUT CONTRACT" in prompt) == is_author
+    assert ("Candidate id must equal expert_id" in prompt) == is_author
+    assert ("The candidate uses proposed_assay/1.0" in prompt) == is_author
+    assert "Your ROLE below defines your responsibility and output schema" in prompt
+    assert "Never modify the input atlas" in prompt
+    assert "Do not dump the full atlas" in prompt
+    assert json.loads(prompt.split("\nCONTEXT\n", 1)[1]) == context
+
+
+def test_coordinator_has_planning_done_condition_without_claiming_design_completion():
+    prompt = build_prompt("plan", {})
+    assert "Finish planning when" in prompt
+    assert "Pass unresolved mechanisms" in prompt
+    assert "write their final proposals" in prompt  # explicitly forbidden
+
+
+def test_review_distinguishes_inherited_search_from_own_and_revised_claims():
+    prompt = build_prompt("review", {"literature_search_observed": True})
+    assert "either in this" in prompt
+    assert "candidate versions they actually" in prompt
+    assert "never list them as searches you performed" in prompt
+    assert "inherited search receipt alone does not" in prompt
+    assert "actual external web search in this review\nsession" not in prompt
+
+
+def test_unknown_role_is_rejected():
+    with pytest.raises(ValueError, match="Unknown ideation role"):
+        build_prompt("invented_role", {})

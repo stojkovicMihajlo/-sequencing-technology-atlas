@@ -240,6 +240,28 @@ async def test_prepared_input_mutation_rejected_before_any_agent(prepared):
     assert not stages.contracts
 
 
+@pytest.mark.asyncio
+async def test_changed_history_overlay_is_rejected_before_any_agent(prepared):
+    from experiments.ideation_demo_20261105.snapshot import snapshot
+    from tests.ideation.test_snapshot import make_pilot, add_pair_registry
+    from genomics_discovery.illumina.extraction import sha
+
+    root, overlay = make_pilot(prepared.parent/'history_fixture')
+    add_pair_registry(root, overlay)
+    output = prepared.parent/'history_snapshot'
+    snapshot(root, output)
+    manifest = output/'history_inputs.json'
+    config = read(prepared/'config.json')
+    config.update(history_manifest=str(manifest), history_sha256=sha(manifest))
+    write(prepared/'config.json', config)
+    # Break nested bytes without changing the top-level manifest hash.
+    (output/'pairs/one/sources.json').write_text('{}')
+    stages = FakeStages()
+    with pytest.raises(ValueError, match='History input changed'):
+        await pipeline(prepared, stages)
+    assert not stages.contracts
+
+
 def test_source_merge_accepts_same_capture_with_distinct_custody_locations(tmp_path):
     paths = []
     for index in range(2):

@@ -15,10 +15,14 @@ COMMON = """TASK AND SCOPE
 Develop genomics sequencing technology ideas in response to the original request.
 Read request_file first. Preserve that request and its constraints; distinguish
 any assumptions you introduce from requirements supplied by the requester. The
-request may come from a human or another system. You are proposing an assay
-architecture, not reporting an accomplished invention or a validated protocol.
+request may come from a human or another system. This pipeline develops proposed
+assay architectures; it does not report accomplished inventions or validated protocols.
+Your ROLE below defines your responsibility and output schema. Produce only that
+stage artifact. The coordinator plans, experts author, the literature investigator
+checks evidence, and the technical reviewer critiques. Do not perform another role
+merely because its artifact is described in these shared instructions.
 
-Your result must explain the biological measurement and the physical design
+The pipeline's candidates must explain the biological measurement and physical design
 change. A biological hypothesis or an application of an unchanged existing assay
 alone does not answer a request for a new measurement technology. A useful change
 can improve an existing capability; the capability need not be wholly absent.
@@ -48,30 +52,13 @@ is preserved'. Capture distinctions needed to assess the proposed change and
 interfaces. Routine execution details can remain unspecified when they do not
 determine the architecture; do not invent concentrations or operating settings.
 
-Existing atlas records describe reported methods. Your graph describes a proposal.
+Existing atlas records describe reported methods. Candidate graphs describe proposals.
 Reuse exact atlas identifiers when citing a precedent; new proposal-local records
 must not masquerade as existing atlas records. A proposed connection to a method
 is a claimed design relationship, not a newly established historical fact. Keep
 reported scientific facts, proposed transfers and unsupported hypotheses distinct.
 Never modify the input atlas or publish your proposal as an established method.
 
-The candidate uses proposed_assay/1.0. workflow contains states, operations and
-flows; changes identifies the specific before/after design moves. assessments is
-a separate ledger covering every State, State property, Operation and Flow once.
-Its targets use state:<id>, operation:<id>, flow:<id>, and
-state_property:<URL-encoded-state-id>:<URL-encoded-property-id>. Read the schema
-for all required fields and legal values rather than inventing new field names.
-Candidate id must equal expert_id. The graph must include an explicit sequencing
-readout Operation with an appropriate data State; a biological question or a
-measurement table alone is not an assay design. State properties use the atlas's
-typed meanings (including explicit attribution unit, carrier and association).
-For each assessment, required_property names the behavior the design needs.
-status=precedent means that behavior is demonstrated in the cited setting;
-status=transfer means a demonstrated behavior is proposed in a new context and
-requires a compatibility_assumption and decisive_test; status=hypothesis means
-the necessary behavior lacks support and requires unsupported_property and
-decisive_test. A source showing an individual component does not demonstrate its
-proposed interface. Assign the status that applies to this exact scoped claim.
 
 EVIDENCE AND CREATIVE FREEDOM
 Use the atlas to find relevant workflows, documented changes and limitations.
@@ -139,6 +126,27 @@ count and final export. Follow actual tool permissions and Sherlock instructions
 """
 
 
+DESIGN_OUTPUT = """AUTHOR OUTPUT CONTRACT
+The candidate uses proposed_assay/1.0. workflow contains states, operations and
+flows; changes identifies the specific before/after design moves. assessments is
+a separate ledger covering every State, State property, Operation and Flow once.
+Its targets use state:<id>, operation:<id>, flow:<id>, and
+state_property:<URL-encoded-state-id>:<URL-encoded-property-id>. Read the schema
+for all required fields and legal values rather than inventing new field names.
+Candidate id must equal expert_id. The graph must include an explicit sequencing
+readout Operation with an appropriate data State; a biological question or a
+measurement table alone is not an assay design. State properties use the atlas's
+typed meanings (including explicit attribution unit, carrier and association).
+For each assessment, required_property names the behavior the design needs.
+status=precedent means that behavior is demonstrated in the cited setting;
+status=transfer means a demonstrated behavior is proposed in a new context and
+requires a compatibility_assumption and decisive_test; status=hypothesis means
+the necessary behavior lacks support and requires unsupported_property and
+decisive_test. A source showing an individual component does not demonstrate its
+proposed interface. Assign the status that applies to this exact scoped claim.
+
+"""
+
 PLAN = """ROLE: RESEARCH COORDINATOR
 Turn the request into a clear research agenda without silently narrowing it to
 your preferred solution. Inspect the atlas landscape as useful; distinguish a
@@ -162,6 +170,10 @@ ResearchPlan.original_request must copy request.prompt verbatim. ResearchPlan.co
 must copy request.constraints exactly, in order. Put your interpretations in
 interpreted_goal and assumptions; do not promote preferences into hard constraints.
 Each experts entry records id, expertise, question, approach and why_distinct.
+Finish planning when the request is preserved and the two mandates pose distinct,
+actionable design questions. Pass unresolved mechanisms, competing priors and
+interface questions to the experts rather than trying to complete both designs
+in planning. Use literature to establish useful directions, not to certify novelty.
 """
 
 
@@ -317,9 +329,14 @@ do not use this as a checkbox without review. Put the evidence reasoning in the
 nearest_prior records and issue reasons, and the actual search scope/access limits
 in searches_performed. Allowed novelty_status values are direct_overlap,
 possible_distinction and search_incomplete; none means 'proven novel'. A novelty_status
-other than search_incomplete requires actual external web search in this review
-session. If unavailable or unsuccessful, use search_incomplete and state the limit;
-do not claim external searching on the basis of inherited notes or atlas lookup.
+other than search_incomplete requires observed external search, either in this
+session or in the supplied literature stage (literature_search_observed=true).
+Inherited searches apply only to the claims and candidate versions they actually
+checked. Inspect the findings and supporting sources, identify inherited searches
+as such, and never list them as searches you performed. Search again for uncovered
+questions or changed design claims; an inherited search receipt alone does not
+justify a conclusion about them. If relevant coverage is unavailable or insufficient,
+use search_incomplete and state the limit. Atlas lookup alone is not external search.
 A disposition of retain_for_testing means a candidate for further expert/experimental assessment,
 not experimental validation or a ready-to-execute protocol.
 """
@@ -362,6 +379,7 @@ def build_prompt(role: str, context: Mapping[str, Any]) -> str:
     """
     if role not in _ROLES:
         raise ValueError(f"Unknown ideation role: {role!r}")
-    return COMMON + "\n" + _ROLES[role] + "\nCONTEXT\n" + json.dumps(
+    author_contract = "\n" + DESIGN_OUTPUT if role in {"propose", "revise"} else ""
+    return COMMON + "\n" + _ROLES[role] + author_contract + "\nCONTEXT\n" + json.dumps(
         dict(context), indent=2, ensure_ascii=False
     )

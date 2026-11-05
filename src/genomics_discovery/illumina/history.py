@@ -76,7 +76,16 @@ def _source_registry_context(entry, manifest_path, graph):
             for child in value: collect(child)
 
     for section in ("links", "historical_links", "correspondences", "withheld"):
-        collect(graph.get(section, []))
+        for item in graph.get(section, []):
+            # Pair claims/reviews use left:/right: IDs from the pair registry.
+            # Embedded operation groups retain extraction-local IDs and their own
+            # provenance. They are not fields returned by this history index and
+            # must not be resolved against the pair's differently scoped registry.
+            if graph["format_version"] == "illumina_method_pair/1":
+                collect(item.get("claim", {}))
+                collect(item.get("review", {}))
+            else:
+                collect(item)
     missing = referenced - registry.keys()
     if missing:
         raise ValueError("Evidence source IDs absent from supplied registry: " + ", ".join(sorted(missing)))

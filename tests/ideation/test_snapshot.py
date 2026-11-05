@@ -26,6 +26,33 @@ def make_pilot(tmp_path):
     return root, overlay
 
 
+def add_pair_registry(root, overlay):
+    """Real pair export, synthetic source metadata; no fabricated scientific review."""
+    identifiers = set()
+
+    def collect(value):
+        if isinstance(value, dict):
+            if 'source_id' in value and 'quote' in value:
+                identifiers.add(value['source_id'])
+            for child in value.values():
+                collect(child)
+        elif isinstance(value, list):
+            for child in value:
+                collect(child)
+
+    for section in ('historical_links', 'correspondences', 'withheld'):
+        for row in overlay.get(section, []):
+            collect(row.get('claim', {}))
+            collect(row.get('review', {}))
+    registry = {sid: {'title': 'Synthetic metadata for namespace regression',
+                      'content_level': 'excerpt'} for sid in identifiers}
+    directory = root/'history/one/inputs'
+    directory.mkdir()
+    path = directory/'sources.json'
+    path.write_text(json.dumps(registry))
+    return path
+
+
 def test_snapshot_only_admits_completed_exact_versions_and_preserves_sources(tmp_path):
     root, _ = make_pilot(tmp_path)
     original = (root/'extractions'/'atlas.json').read_bytes()
@@ -35,6 +62,32 @@ def test_snapshot_only_admits_completed_exact_versions_and_preserves_sources(tmp
     assert result['not_loaded'] == [{'pair_id':'two','reason':'not_completed_at_snapshot'}]
     assert (root/'extractions'/'atlas.json').read_bytes() == original == (output/'atlas.json').read_bytes()
     assert build_history_index(output/'history_inputs.json')['edges']
+
+
+def test_pair_registry_keeps_claim_scope_separate_from_embedded_workflow_scope(tmp_path):
+    root, overlay = make_pilot(tmp_path)
+    source = add_pair_registry(root, overlay)
+    output = tmp_path/'snapshot'
+    receipt = snapshot(root, output)
+    assert receipt['history_preflight']['status'] == 'passed'
+    assert receipt['history_preflight']['indexed_relationships'] > 0
+    assert (output/'pairs/one/sources.json').read_bytes() == source.read_bytes()
+    index = build_history_index(output/'history_inputs.json')
+    sources = index['edges'][0]['artifact']['source_registry']['sources']
+    assert sources and all(sid.startswith(('left:', 'right:')) for sid in sources)
+    assert (output/'pairs/one/graph.json').read_bytes() == (root/'history/one/graph.json').read_bytes()
+
+
+def test_snapshot_fails_preflight_for_missing_claim_source_before_native_calls(tmp_path):
+    root, overlay = make_pilot(tmp_path)
+    source = add_pair_registry(root, overlay)
+    registry = json.loads(source.read_text())
+    registry.pop(next(iter(registry)))
+    source.write_text(json.dumps(registry))
+    output = tmp_path/'snapshot'
+    with pytest.raises(ValueError, match='Evidence source IDs absent'):
+        snapshot(root, output)
+    assert not (output/'receipt.json').exists()
 
 
 def test_snapshot_excludes_pairs_requiring_finer_extraction(tmp_path):

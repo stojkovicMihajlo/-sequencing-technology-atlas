@@ -102,6 +102,13 @@ class AtlasContext:
             self.history_index = build_history_index(self.history_manifest)
         return self.history_index
 
+    def validate_history_inputs(self):
+        """Exercise all pinned overlays and registries before native execution."""
+        index = self._history()
+        return {"status": "not_loaded" if index is None else "passed",
+                "indexed_relationships": 0 if index is None else len(index["edges"]),
+                "boundary": "Input readability/integrity only; not fresh scientific review."}
+
     def _card(self, record_id):
         if record_id not in self.cards:
             raise ValueError("Unknown or unsupported workflow: " + record_id)
