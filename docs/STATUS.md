@@ -1,5 +1,28 @@
 # Deployment status
 
+## Configurable design team and corrected submission — 5 November 2026, 19:14 UTC
+
+Four-designer job **51227731** has been submitted on Qiu; native execution has not
+been inspected at this checkpoint. It replaces **51226376**, which failed before
+model calls because a test fixture retained its Mac acquisition paths. The test
+now registers the same pinned files at their current location; original graph,
+source bytes and historical receipt remain unchanged. **382 software checks passed
+locally** before the replacement submission.
+
+Designer count and maximum concurrent calls are separate settings. Offline complete
+workflow checks cover 1, 3, 4 and 10 designers; one valid candidate skips peer critique
+but still gets literature and specialist review. Each designer owns a complete
+candidate graph. The coordinator assigns mandates; Python dispatches stages.
+No Pantheon runtime is imported. The updated reference audit records its actual
+Codex OAuth adapter, delegation tools and the limits of our current pattern reuse.
+
+Read [the ideation guide](IDEATION.txt) and the
+[replacement receipt](../provenance/experiments/ideation_team_20261105/deployment_02/submission.json).
+This run keeps gpt-6.1-sol/xhigh and the prior request/atlas/history pins. Do not
+submit another copy while this job is pending or running. Earlier status entries
+below are historical checkpoints.
+
+
 ## Completed pilot and ideation iteration — 5 November 2026
 
 Live check at **16:07 UTC**: revised ideation job **51210749 is running** after
