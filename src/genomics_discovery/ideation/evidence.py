@@ -10,7 +10,10 @@ import ipaddress
 import json
 from html.parser import HTMLParser
 from pathlib import Path
+import shutil
 import socket
+import subprocess
+import tempfile
 from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 from uuid import uuid4
@@ -20,6 +23,40 @@ from genomics_discovery.illumina.sources import jats_text
 
 
 MAX_BYTES = 20_000_000
+
+
+def _pdf_text(raw: bytes) -> tuple[str, str]:
+    """Use the same Poppler layout rendition as sources/cached_documents.py.
+
+    This is a text view, not OCR or interpretation of figures/chemical diagrams.
+    The caller preserves the retrieved original and hashes the exact returned text.
+    """
+    if not raw.startswith(b"%PDF-"):
+        raise ValueError("PDF content has no valid PDF signature")
+    executable = shutil.which("pdftotext")
+    if executable is None:
+        raise ValueError("PDF rendition needs pdftotext; original bytes remain captured")
+    try:
+        version = subprocess.run([executable, "-v"], check=True, capture_output=True,
+                                 timeout=10)
+        with tempfile.TemporaryDirectory(prefix="atlas_pdf_") as temporary:
+            original, output = Path(temporary)/"original.pdf", Path(temporary)/"text.txt"
+            original.write_bytes(raw)
+            subprocess.run([executable, "-layout", "-enc", "UTF-8", str(original), str(output)],
+                           check=True, capture_output=True, timeout=120)
+            if output.stat().st_size > MAX_BYTES:
+                raise ValueError("PDF text rendition exceeds byte limit")
+            text = output.read_text(encoding="utf-8")
+    except (OSError, subprocess.SubprocessError) as error:
+        raise ValueError(f"PDF rendition failed ({type(error).__name__}); inspect the original") from error
+    if not text.strip():
+        raise ValueError("PDF has no extractable text; original needs visual inspection/OCR")
+    identity = (version.stderr or version.stdout).decode("utf-8", errors="replace").splitlines()
+    rendition = (f"PDF text via {executable} -layout -enc UTF-8; "
+                 f"{identity[0] if identity else 'version unavailable'}; "
+                 "form-feed page boundaries retained; images, tables, formulas and reading order "
+                 "may be lost or incomplete; no OCR or scientific interpretation")
+    return text, rendition
 
 
 def _public_url(url: str) -> str:
@@ -68,7 +105,7 @@ def render_source(raw: bytes, content_type: str, charset: str = "utf-8") -> tupl
     """A reading view; original bytes remain authoritative. No inferred fulltext claim."""
     media = content_type.partition(";")[0].lower().strip()
     if raw.startswith(b"%PDF") or media == "application/pdf":
-        raise ValueError("PDF rendition unavailable in this tool; use an accessible HTML/XML source or explicit source-add excerpt")
+        return _pdf_text(raw)
     if "xml" in media or raw.lstrip().startswith(b"<?xml"):
         root = ElementTree.fromstring(raw)
         if root.tag.split("}")[-1] != "article":

@@ -1,5 +1,43 @@
 # Deployment status
 
+## Completed pilot and ideation iteration — 5 November 2026
+
+Job **51127481 completed**. Its final extraction outcomes are **47 supported by
+model review, two research holds and one transport failure**. The history stage
+produced **19 admitted historical edges across 29 reviewed pair overlays**;
+three other pair publications remain held for workflow refinement. These are
+model-reviewed records, not experimentally or human-expert validated assertions.
+
+The old/new comparisons were mixed: 13 candidate_better, 18 equivalent, five
+baseline_better, three mixed, four undetermined, four unpaired holds and three
+transport failures. The [regression audit](../experiments/pilot50_20261104/comparison_regressions_20261105.txt)
+checked the five reported baseline advantages against their actual registered
+sources. It identifies both missed graph assertions and inconsistent comparison
+coverage. Sources changed between runs, so the counts do not measure a causal
+harness improvement. Original outputs and verdicts remain unchanged.
+
+Three engineering agents reviewed extraction/history, ideation orchestration and
+evidence/graph tools. The [ideation guide](IDEATION.txt) explains the updated
+coordinator, two design experts, independent literature investigation, shared
+technical review and bounded revision. Research findings now bind to exact graph
+targets; changed claims need a new novelty search; unresolved blockers remain
+visible. A historical-change tool provides exact before/after navigation without
+loading an entire neighborhood. Proposed changes remain separate from the atlas.
+
+The extraction correction now uses pinned, addressable feedback instead of a
+million-character inline prompt. Its exact SPLiT replay preserves all 441 checks;
+native validation is being prepared. The baseline ideation job **51200765** remains
+on its original frozen runtime; do not attribute new safeguards to that run.
+Fresh validation will reuse the baseline's exact atlas/request/history inputs.
+Read the [ideation resume record](../provenance/experiments/ideation_demo_20261105/RESUME.txt)
+and [pilot resume record](../provenance/experiments/pilot50_20261104/RESUME.txt)
+for timestamped observations and subsequent submissions.
+
+Automatic review-triggered supplement recovery remains unfinished. Source
+availability, scientific sufficiency, novelty-search coverage and biochemical
+compatibility still require separate assessment. Successful software tests or
+completed scheduling do not close these scientific questions.
+
 ## Active pilot and recorded source-recovery limitation — 5 November 2026
 
 Pilot job **51127481** was running on Qiu at **5 November, 3:55 AM Pacific**,

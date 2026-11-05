@@ -1,0 +1,110 @@
+EXTRACTION / HISTORICAL-EDGE RELIABILITY ITERATION — 5 November 2026
+
+Scope
+Code changes below apply only to a newly frozen runtime. No original extraction,
+review, source registry, historical edge, or published result was rewritten.
+Software tests and an exact-byte handoff replay do not establish scientific
+correctness or end-to-end native success.
+
+CORRECTION_CONTEXT-001 — fixed at the transport boundary; native replay pending
+Confirmed failure: SPLiT-seq run_01/attempt_001 correction author was given the
+entire previous candidate plus full review inline. Its prompt was 1,674,497
+characters, beyond the observed 1,048,576 transport limit. The review contains
+441 checks (438 accept, three revise); the three findings concern one local
+chronology assertion, not 441 separate missing experimental facts.
+
+Change: complete candidate and review are written to pinned files. A complete
+feedback index gives every check's target, decision and JSON pointer, plus
+blocking unknowns and unresolved corrections. A deterministic artifact tool reads
+the exact requested value in bounded pages with an explicit next_start cursor.
+This is addressable storage, not LLM summarization, truncation, or discarded
+accepted checks. The stage pins all feedback files against mutation. Prompts
+above 100,000 characters fail before a native call; this is a conservative
+transport guard, not an optimal context budget or scientific completeness rule.
+
+Exact replay: provenance/experiments/pilot50_20261104/
+reliability_replay_20261105/transport_replay_02/RESULT.json
+Original 1,674,497 -> proposed 31,630 characters, using the old caller context
+and schema path plus the new handoff. All 441 checks were reconstructed exactly
+through the bounded reader. Original input hashes were unchanged. The receipt
+records source, code and prior-artifact SHA256 values. The actual new remote
+prompt will have its new attempt paths. No native calls occurred in this replay.
+
+REVISION_REVIEW-001 — fixed in information delivery; semantic compliance unproven
+Confirmed gap: the old runtime gave the new reviewer the corrected candidate
+without the old critique. Now author and fresh reviewer both receive the same
+bound old candidate/review, while the reviewer separately receives the revised
+candidate. Review instructions require tracing previous nonaccept findings.
+This does not deterministically prove that the reviewer resolved each finding;
+the fresh source-grounded review and structural/coverage gates still apply.
+
+TARGETED_REPLAY-001 — implemented, not a general restart mechanism
+The explicit revision seed has exactly directory and pins for card.json,
+source_registry.json, extraction.json and review.json. It must match the supplied
+bytes, assignment, registry and representation; the old candidate/review must
+validate and have an actual needs_revision outcome. The run creates a fresh
+directory, performs exactly one correction author and one fresh reviewer, and
+records the seed in final artifact pins. It cannot change the frozen source
+bundle, silently upgrade a source, or convert the old failure into success.
+The real copied SPLiT seed passes these structural checks (19 operations,
+441 review checks). Source-document file verification remains for Sherlock,
+where those original paths exist.
+
+Native invocation after freezing code, sourcing the Qiu environment and entering
+a Slurm allocation (replace OUTPUT with a new path):
+  PYTHONPATH=src python -m experiments.pilot50_20261104.replay_correction_context run \
+    provenance/experiments/pilot50_20261104/reliability_replay_20261105/transport_replay_02/revision_seed.json \
+    --output OUTPUT
+The seed manifest points to the original Qiu SPLiT attempt. Root owns submission.
+
+SOURCE_BUNDLE-001 — retrieval duplication addressed; acquisition consolidation deferred
+Confirmed in SPLiT: the poster registration and selected-primary registration
+contain identical full text, title, PMID, access level and URL. Their association
+statuses differ. Both provenance IDs are retained. The source search now returns
+identical text once only when all declared bibliographic fields and content
+level match, lists every registration and its association status, and separately
+reports registration count and distinct text-rendition count. The prompt flags
+duplicate registrations as non-independent evidence. Different texts, titles,
+PMIDs or content levels are never collapsed by this rule. Sources with no
+bibliographic identity remain distinct. No model-based identity merging occurs.
+Upstream acquisition can still cache/register duplicates, and comparison against
+older runs remains confounded by source-bundle changes. This change does not
+claim to resolve those separate scheduling/causal-evaluation issues.
+
+SOURCE_RECOVERY-001 — still open; do not disguise as a correction
+The current correction operates on a fixed registered source bundle. A reviewer
+request for a missing supplement does not download/register it. Current prompts
+make this boundary explicit; unresolved evidence stays held. A future recovery
+task must obtain the actual missing material, preserve source identity/custody,
+create a new bundle, then obtain fresh extraction/review. Rewriting unsupported
+claims or re-running the same bundle cannot supply missing evidence. The targeted
+seed path intentionally rejects source changes. Access restrictions and missing
+documents require separate recovery, not a stronger author instruction.
+
+EVIDENCE_SCOPE-001 — existing distinction retained; audit/calibration still needed
+The extraction prompt already targets depicted assay architecture. A clear
+diagram can support that architecture without demonstrating a missing reaction
+mechanism. The historical relationship contract separately requires source
+support for a scoped before/after change, attribution and consequences, and
+distinguishes method development from component adoption and mere mechanism or
+purpose similarity. Do not require an executable recipe for every architecture,
+and do not reuse architecture acceptance as historical proof. No paper-specific
+scientific criterion was added in this iteration. Reviewer consistency across
+more technologies remains an empirical evaluation issue.
+
+HISTORY_PUBLICATION-001 — existing fail-closed boundary verified, not rewritten
+experiments/pilot50_20261104/history_stage.py refuses to publish a pair overlay
+when diagram_adequacy says needs_finer_extraction and emits extraction-hash-bound
+refinement requests. It does not automatically perform refinement. The existing
+source-namespace fix remains untouched. The new correction seed does not admit
+historical links or remove these holds. Native pair refinement and scientific
+history assessment are still separate work.
+
+Validation
+  .venv/bin/python -m pytest tests/illumina -q
+  402 passed in 4.67 seconds.
+Includes large-feedback reconstruction, old candidate/review binding, exact JSON
+pointer semantics, mutation rejection, preflight without spending native calls,
+correction+fresh-review-only execution, changed-seed rejection, duplicate text
+retrieval without lost associations, and the existing extraction/graph/history
+suite. FakeWorker tests exercise orchestration, not model scientific judgment.

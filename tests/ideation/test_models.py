@@ -6,7 +6,7 @@ from pydantic import ValidationError
 
 from genomics_discovery.illumina.models import digest, parse_extraction, property_target
 from genomics_discovery.ideation.models import (
-    CandidateIdea, IdeaReview, ProposedWorkflow, candidate_targets, validate_review_binding,
+    CandidateIdea, IdeaReview, ProposedWorkflow, candidate_targets, review_targets, validate_review_binding,
 )
 
 
@@ -58,7 +58,7 @@ def atlas_ref():
 
 def review_data(idea):
     return {"candidate_id": idea.id, "candidate_sha256": digest(idea),
-            "reviewed_targets": sorted(candidate_targets(idea) | {"candidate"} | {"change:" + c.id for c in idea.changes}),
+            "reviewed_targets": sorted(review_targets(idea)),
             "novelty_status": "search_incomplete", "nearest_prior": [], "issues": [],
             "disposition": "hold", "summary": "Not a novelty result; software fixture."}
 

@@ -16,10 +16,13 @@ def test_role_contract_matches_output_schema(role):
     is_author = role in {"propose", "revise"}
     assert ("AUTHOR OUTPUT CONTRACT" in prompt) == is_author
     assert ("Candidate id must equal expert_id" in prompt) == is_author
-    assert ("The candidate uses proposed_assay/1.0" in prompt) == is_author
+    assert ("The candidate uses proposed_assay/1.1" in prompt) == is_author
     assert "Your ROLE below defines your responsibility and output schema" in prompt
     assert "Never modify the input atlas" in prompt
     assert "Do not dump the full atlas" in prompt
+    assert "send one nonempty final\nresponse sentence" in prompt
+    assert "actual check result" in prompt
+    assert "Do not write final.txt yourself" in prompt
     assert json.loads(prompt.split("\nCONTEXT\n", 1)[1]) == context
 
 
@@ -37,6 +40,22 @@ def test_review_distinguishes_inherited_search_from_own_and_revised_claims():
     assert "never list them as searches you performed" in prompt
     assert "inherited search receipt alone does not" in prompt
     assert "actual external web search in this review\nsession" not in prompt
+    assert "inherited_search_coverage" in prompt
+    assert "eligible=false" in prompt
+
+
+def test_review_separates_testable_transfer_from_missing_essential_mechanism():
+    prompt = build_prompt('review', {})
+    assert 'Lack of a completed wet-lab test alone does not block' in prompt
+    assert 'unsupported required NEW primitive' in prompt
+    assert 'unexplained essential handoff' in prompt
+    assert 'An unresolved blocking issue must remain blocking' in prompt
+
+
+def test_research_findings_point_to_graph_without_repeating_the_graph():
+    prompt = build_prompt('propose', {})
+    assert 'do not repeat the workflow or assessment ledger as four long essays' in prompt
+    assert 'preserve actual\ncomponent precedent, mark contextual transfers' in prompt
 
 
 def test_unknown_role_is_rejected():

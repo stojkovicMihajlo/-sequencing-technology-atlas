@@ -1,0 +1,211 @@
+AUDIT OF FIVE MODEL-REPORTED BASELINE ADVANTAGES — 5 November 2026
+
+Evidence boundary
+Inputs are the frozen A/B packets, evaluations, registered source text and private
+label mappings copied under provenance/experiments/pilot50_20261104/
+completed_review_20261105/{cel_seq,mars_seq,sci_rna_seq,icshape,net_seq}/.
+This is a second source-grounded audit, not human-expert adjudication. No biology,
+extraction, schema or prior verdict was changed. The subsequent prompt changes
+for a future frozen runtime are recorded at the end of this document.
+All five raw packet hashes match the evaluator's packet_sha256. All 16 text-quote
+occurrences supporting the seven non-equivalent findings exist verbatim in the
+named registered sources. Every decisive source was available to BOTH A and B.
+All five overall source bundles differ, so this still cannot identify the causal
+effect of the new harness. Availability also does not prove an author read or
+used a passage. The comparison packets do not contain author/reviewer reasoning
+traces, so an explanation of why the model omitted something remains an inference.
+CEL-Seq and icSHAPE source_0003 PNGs were subsequently copied, checked against
+their registered SHA256 and inspected. White compositing and 3x enlargement were
+used only as temporary display renders; the source images remained unchanged.
+
+Main result
+These are not five broken assay graphs. Four evaluations prefer the baseline for
+one narrowly identified item; icSHAPE has three differential findings. The most
+repeatable issue is failure to make selected source-supported information an
+assertion in the graph, despite having the relevant source available. A separate
+evaluation issue is an unstable boundary between the depicted subworkflow and
+the entire assay. More fields or more nodes would not automatically fix either.
+
+1. CEL-Seq — provenance precision, not wrong RT architecture
+A=candidate, B=baseline. result.json /assessment/findings/2.
+Targets: A state:first_cdna_1/2/3 and operation:rt_1/2/3.
+Candidate source_0003 locators assert that the pre-second-strand drawing shows
+two aligned purple strands. Baseline state:first_1/2/3 instead distinguishes drawn
+primer annealing from first-strand extension established by text. source_0001
+explicitly reports indexed RT in individual tubes, so the RT transformation is
+supported even if the drawing itself abbreviates extension.
+Status: confirmed against the actual source_0003 image. Before the labelled
+second-strand arrow, each lane has one long purple RNA line with the short
+TT(T)n/index/adaptor/promoter primer; the full paired long strands occur later.
+Do not describe this as a wrong RNA-to-cDNA workflow. General issue: a combined
+image/text citation must not assign the image credit for a detail supplied only
+by text. A text-supported interpretation is legitimate when labelled accurately.
+
+2. MARS-seq — quoted cleanup did not become an asserted transformation
+A=candidate, B=baseline. result.json /assessment/findings/0.
+source_0001, catalogue description characters [427,640), explicitly places
+exonuclease-I removal of leftover RT primers before pooling. The exact sentence
+appears in A's evidence for operation:o_prime_rt and state:s_first. However,
+o_prime_rt.description/mechanism/effects describe priming and RT only; its output
+goes to o_pool without an assertion that leftover primer has been removed.
+B records operation:o_exoi -> state:s_first_clean -> operation:o_pool.
+Assessment: supported omission at the catalogue level. A separate cleanup node
+is NOT required; the change and before-pooling order could be retained in a
+composite operation and its output description. This is not missing-source
+recovery: the candidate already quotes the decisive source. The original primary
+supplementary chemistry was unavailable to both, so do not upgrade this into
+independent primary-protocol confirmation. Candidate was research_needed rather
+than admitted; that caution is not itself evidence of a worse extraction.
+General issue: storing a quotation does not make every fact in it a graph claim.
+Separate from the losing comparison, A u_rna_interface_primary demands primary
+supplementary confirmation of IVT-before-DNase despite the catalogue reporting
+that sequence; the evaluator correctly calls the represented sequence equivalent
+at the available evidence level. This exposes evidence-tier policy calibration,
+not an omitted source. A u_index_placement is a different, consequential unresolved
+question about cellular identity through pooling. Do not remove all holds merely
+because one boundary can be described from secondary evidence.
+
+3. sci-RNA-seq — information-carrier enumeration without readout allocation
+A=candidate, B=baseline. result.json /assessment/findings/5.
+source_0004, Cao 2017 full text (PMID28818938), Figure1B caption [b00193], assigns
+Index2/read1 collectively to i5, UMI and RT barcode, and Index1/read2 collectively
+to i7 and the cDNA fragment. B state:s_final_library explicitly records that
+allocation. A state:indexed_well_libraries and state:pooled_library record the
+barcode combination, UMI, cDNA and i5/i7 interfaces, but do not assign components
+to read/index paths. The shared source caption supports the omitted allocation.
+Assessment: a real, narrow information-recoverability difference, not an incorrect
+cell-barcode architecture. Its priority depends on whether the atlas promises to
+explain decoding at the library endpoint; exact read cycles or nucleotide-level
+orientation were not established and should not be invented. No extra split-pool
+round follows from the two sequencing index names.
+General issue: listing carried identifiers is weaker than explaining how the
+readout retrieves them. This can be recorded in existing State properties and
+Operation information_effect rather than adding a new universal schema.
+
+4. icSHAPE — one within-route omission plus a scope-policy conflict
+A=baseline, B=candidate. result.json /assessment/findings/4,5,6.
+B explicitly scopes itself to the depicted treated-RNA route ending at eluted
+first-strand cDNA. It excludes mock controls, library completion and sequencing.
+A includes DMSO and treated branches plus final reactivity estimation. These are
+the same named implementation but not equal workflow coverage. The evaluator's
+same_implementation decision does not settle which coverage the task required.
+
+Finding4: source_0007 (PMID26766114) [b00031] requires fragmentation for identifying
+modification sites; source_0005 (PMID25799993) [b00057] describes repair of the
+fragmentation-derived 3-prime phosphate; source_0001 specifies end repair and
+adapter ligation before RT. B routes s_biotinylated_rna directly to
+o_reverse_transcribe, labelled single_event, without these preparations asserted
+in its states/description/effects. A t_prepare/m_prepare records a composite
+fragment/end-repair/adapter-preparation block. This is the strongest defensible
+omission because it explains the physical RT substrate INSIDE B's chosen route.
+It does not require copying reaction quantities or every preparation substep.
+
+Finding5: the DMSO arm's biotinylated adapter versus the treated arm's ddC-blocked
+adapter is genuinely supported by source_0007 [b00215] and source_0005 [b00059].
+source_0007 [b00026] explains why a reference separates poor coverage from low
+reactivity. This is important to a complete reactivity assay. But B explicitly
+excluded that branch. Treat it as an endpoint/coverage-policy dispute until the
+required output is fixed, rather than proof the candidate disobeyed a clear rule.
+
+Finding6: circularization, later sequencing and corrected nucleotide reactivity
+are supported by source_0005 [b00065,b00074], source_0007 [b00298] and the catalogue.
+B intentionally ends earlier. The nucleotide offset helps explain the eventual
+readout, but requiring entire later operations expands its declared boundary.
+The evaluation combines content importance with coverage choice. Do not require
+all downstream operations simply because a source contains them.
+
+Assessment: preserve finding4 as an actionable interface-content concern; do not
+treat findings5/6 as clean harness regressions without an agreed endpoint. The
+current extractor emphasizes retaining the depicted grouping and avoiding
+unshown operations; the A/B prompt asks for consequential scoped assay content
+but supplies no fixed required endpoint. That policy ambiguity is general and
+more important than adding icSHAPE-specific instructions.
+Direct image inspection confirms that the registered strip itself ends at cDNA
+and omits fragment/adapter preparation, the mock branch and later library work.
+Thus finding4 is a text-supported interface clarification, NOT a missed labelled
+diagram operation. B does not explicitly claim that fragmentation never occurs;
+its graph omits the distinction. Whether that omission requires repair depends
+on the agreed requirement to explain the RT substrate, not chemical impossibility
+inferred from a simplified drawing.
+
+5. NET-seq — capture-handle specificity, supported retrospectively
+A=baseline, B=candidate. result.json /assessment/findings/3.
+source_0019, human NET-seq protocol PMID27010758 [b00007,b00009], explicitly
+describes original yeast capture using C-terminal 3xFLAG-tagged Rpb3 and contrasts
+it with human fractionation. A operation:o1.mechanism retains this attribution.
+B operation:o_ip and state:s_complex retain antibody-mediated Pol-II/RNA capture,
+and say the diagram supplies no epitope, but do not add the text-supported tag.
+Assessment: a supported specificity omission relevant to what affinity handle
+makes this implementation work. It is not evidence that B describes mNET-seq or
+that the 2011 original full protocol was read. The source is a later explicit
+retrospective account, and no exact original antibody reagent is established.
+General issue: a correct statement that the diagram omits a detail must not be
+treated as proof the registered evidence cannot establish it. Include a supplied
+mechanistic clarification when it identifies the operation's selectivity basis;
+keep the evidence origin and narrower scope explicit.
+
+Prioritized general interventions, without paper-specific patches
+P0. Define comparison coverage before judging completeness: starting preparation,
+    terminal material/readout and included branches. Same assay name/version is
+    insufficient. Compare shared boundaries separately from justified extensions.
+    Do not let either an author or evaluator silently redefine the benchmark.
+P1. Use the existing review pass for a two-way check: each asserted consequential
+    claim needs evidence; each selected consequential source fact must be asserted
+    somewhere, consciously outside scope, or explicitly unresolved. Inspect graph
+    assertions outside evidence quotations. Grouping and exact node counts remain
+    free. MARS-seq and icSHAPE's pre-RT interface are direct test cases.
+P1. Check support type against the actual modality: what the drawing depicts,
+    what registered prose reports, and what is an interpretation. CEL-Seq tests
+    this boundary; simply adding both citations does not solve it.
+P2. At the current endpoint, check the meaningful selector/carrier relationship:
+    what molecular handle mediates capture, and what observation retrieves a
+    retained identifier. NET-seq and sci-RNA-seq expose complementary omissions.
+    Require relevance to the scoped architecture, not every reagent/read setting.
+P2. Keep the exact shared-source differences as regression cases, but do not use
+    five model preferences as a new scientific gold standard. Current evidence
+    supports reviewing these mechanisms; it does not show their causes, estimate
+    a population error rate, or justify changing all accepted graphs automatically.
+
+Limitations
+No author/reviewer trajectories or original native attachment-delivery logs were
+copied with these packets. Text assertions and exact cited passages were checked;
+the two decisive CEL-Seq/icSHAPE strip images were independently inspected, but
+this does not establish what image versions the original authors actually viewed.
+No new model calls, web retrieval or experimental validation were performed.
+
+Follow-up decisions implemented before the next runtime freeze
+src/genomics_discovery/illumina/prompts.py:
+- Both roles are told to inspect the exact image region before calling a feature
+  depicted, and to separate depiction, text-supported clarification/correction
+  and inference using existing fields.
+- The reviewer checks whether consequential facts within the assignment's
+  coverage are actually asserted in States/Operations/Flows, not merely quoted.
+  Relevant substrate, identity, capture, readout and interface distinctions can
+  remain inside composite operations. This is not a requirement to extract every
+  paper fact or increase node count.
+- The reviewer distinguishes an in-boundary clarification from substituting an
+  implementation or adding a different endpoint. Unshown controls/downstream
+  stages are not mandatory just because the paper describes them; author-chosen
+  exclusions cannot override an explicitly required branch/endpoint. Evidence
+  tiers remain explicit instead of upgrading catalogue support or demanding an
+  entire execution protocol.
+
+experiments/pilot50_20261104/evaluation.py:
+- The A/B prompt now requires common starting preparation, endpoint and branch
+  coverage in existing scope_rationale before scoring omissions. Same named
+  implementation alone is insufficient. Comparisons separate the common route
+  from extensions, use undetermined when a common boundary cannot be established,
+  and do not penalize excluded controls/downstream work outside that boundary.
+- The prompt checks assertions outside citations and distinguishes source-backed
+  within-boundary clarification, source/implementation substitution, and visual
+  versus textual support.
+
+No schema/classes, acceptance statuses or deterministic scientific truth checks
+were added. Existing final completion acknowledgements were preserved. These
+changes make the requested behavior explicit; their scientific effect requires
+new source-matched model comparisons, not substring tests of prompt wording.
+Existing staged delivery, evidence binding and evaluation tests were run:
+  .venv/bin/python -m pytest experiments/pilot50_20261104 tests/illumina -q
+  471 passed in 5.68 seconds.
+  git diff --check: clean for the changed prompt/evaluator/audit files.
+No new native calls were launched in this follow-up; frozen results are unchanged.

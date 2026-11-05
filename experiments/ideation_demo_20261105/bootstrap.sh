@@ -42,4 +42,8 @@ for name,pin in combined['files'].items():
 print(json.dumps({'runtime':str(runtime),'files':combined['file_count'],
                   'base_commit':original['git_commit'],'ideation_commit':overlay['commit']}))
 PY
-exec bash "$runtime/experiments/ideation_demo_20261105/launch.sbatch"
+case "${ATLAS_VALIDATION_TASK:-ideation}" in
+    ideation) exec bash "$runtime/experiments/ideation_demo_20261105/launch.sbatch" ;;
+    correction) exec bash "$runtime/experiments/pilot50_20261104/correction.sbatch" ;;
+    *) printf 'Unknown bounded validation task: %s\n' "$ATLAS_VALIDATION_TASK" >&2; exit 2 ;;
+esac

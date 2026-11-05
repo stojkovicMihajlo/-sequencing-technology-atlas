@@ -6,7 +6,7 @@ from pathlib import Path
 from urllib.parse import quote, unquote
 
 from genomics_discovery.illumina.models import digest
-from .models import CandidateIdea, IdeaReview, validate_review_binding
+from .models import IdeaReview, parse_candidate, validate_review_binding
 
 
 def proposal_overlay(candidates, reviews, atlas_sha256):
@@ -15,7 +15,7 @@ def proposal_overlay(candidates, reviews, atlas_sha256):
     Flow changes have explicit edge anchors in change_records. They are not
     silently turned into whole-workflow edits or additional material routes.
     """
-    parsed = [CandidateIdea.model_validate(c) for c in candidates]
+    parsed = [parse_candidate(c) for c in candidates]
     if not parsed or len({c.id for c in parsed}) != len(parsed):
         raise ValueError('Provide distinct candidate IDs')
     parsed_reviews = [IdeaReview.model_validate(r) for r in reviews['reviews']]
@@ -24,7 +24,7 @@ def proposal_overlay(candidates, reviews, atlas_sha256):
     for review in parsed_reviews:
         validate_review_binding(review, next(c for c in parsed if c.id == review.candidate_id))
     candidates = [c.model_dump(mode='json') for c in parsed]
-    nodes, edges, changes, external = [], [], [], {}
+    nodes, edges, changes, external, flow_references = [], [], [], {}, set()
     for idea in candidates:
         prefix = 'proposal:' + quote(idea['id'], safe='')
         graph_id = lambda local: prefix + ':' + quote(local, safe='')
@@ -33,7 +33,8 @@ def proposal_overlay(candidates, reviews, atlas_sha256):
                       'admission': 'proposal_only', 'candidate_id': idea['id'],
                       'candidate_sha256': digest(idea), 'measurement': idea['measurement'],
                       'biological_question': idea['biological_question'],
-                      'expected_benefit': idea['expected_benefit']})
+                      'expected_benefit': idea['expected_benefit'],
+                      **({'research': idea['research']} if 'research' in idea else {})})
         for kind, records in [('state', idea['workflow']['states']), ('operation', idea['workflow']['operations'])]:
             for record in records:
                 nodes.append({'id': graph_id(record['id']), 'node_type': kind,
@@ -57,23 +58,37 @@ def proposal_overlay(candidates, reviews, atlas_sha256):
             change_id = prefix + ':change:' + quote(change['id'], safe='')
             changes.append({'id': change_id, 'candidate_id': idea['id'], 'original': change,
                             'target_anchors': anchors, 'admission': 'proposal_only'})
+            nodes.append({'id': change_id, 'node_type': 'proposed_change',
+                'label': change['changed'], 'candidate_id': idea['id'], 'workflow_id': prefix,
+                'change_record_id': change_id, 'admission': 'proposal_only'})
             for prior in change['earlier_refs']:
                 previous = external.get(prior['node_id'])
                 if previous and previous['atlas_binding'] != prior:
                     raise ValueError('Conflicting atlas versions for the same referenced node')
                 external[prior['node_id']] = {'id': prior['node_id'], 'node_type': 'atlas_reference',
                     'atlas_binding': prior, 'boundary': 'Reference only; original atlas record is not copied or modified.'}
-                for anchor in anchors:
-                    if anchor['kind'] == 'flow':
-                        continue
-                    signature = {'change_id': change_id, 'prior': prior, 'target': anchor['target']}
-                    edges.append({'id': prefix + ':change_link:' + digest(signature),
-                        'source': prior['node_id'], 'target': anchor['graph_element_id'],
-                        'kind': 'proposes_change_to', 'proposed_target': anchor['target'],
-                        'atlas_binding': prior, 'change_id': change_id, 'admission': 'proposal_only'})
+                edges.append({'id': change_id + ':basis:' + digest(prior),
+                    'source': prior['node_id'], 'target': change_id, 'kind': 'earlier_basis',
+                    'atlas_binding': prior, 'change_id': change_id, 'admission': 'proposal_only'})
+            # A grouped change does not assert a Cartesian product of pairwise
+            # correspondences. Both sides connect through the one claimed change.
+            for anchor in anchors:
+                target = anchor['graph_element_id']
+                if anchor['kind'] == 'flow':
+                    target = prefix + ':flow_ref:' + quote(anchor['target'], safe='')
+                    if target not in flow_references:
+                        nodes.append({'id': target, 'node_type': 'flow_reference',
+                            'label': anchor['target'], 'flow_id': anchor['graph_element_id'],
+                            'candidate_id': idea['id'], 'workflow_id': prefix,
+                            'admission': 'proposal_only'})
+                        flow_references.add(target)
+                edges.append({'id': change_id + ':effect:' + digest(anchor),
+                    'source': change_id, 'target': target, 'kind': 'proposed_effect',
+                    'proposed_target': anchor['target'], 'change_id': change_id,
+                    'admission': 'proposal_only'})
     if len({e['id'] for e in edges}) != len(edges):
         raise ValueError('Duplicate proposal edge or repeated prior/target anchor')
-    return {'format_version': 'assay_ideation_overlay/1', 'atlas_sha256': atlas_sha256,
+    return {'format_version': 'assay_ideation_overlay/2', 'atlas_sha256': atlas_sha256,
             'nodes': nodes, 'edges': edges, 'external_atlas_nodes': list(external.values()),
             'change_records': changes, 'candidates': candidates, 'reviews': reviews,
             'boundary': 'Proposal-only overlay. No historical, equivalence or experimentally supported assay edges are admitted.'}
@@ -93,7 +108,7 @@ const w=current.workflow;const nodes=[...w.states.map(n=>({...n,type:'state'})),
 const width=310+Math.max(...Object.values(levels))*275,height=Math.max(480,Math.max(...Object.values(used))*160+60);graph.setAttribute('width',width);graph.setAttribute('height',height);
 for(const f of w.flows){const a=positions[f.source],b=positions[f.target];const x=a.x+215,y=a.y+45;const path=el('path',{d:`M ${x} ${y} C ${x+35} ${y}, ${b.x-35} ${b.y+45}, ${b.x} ${b.y+45}`,fill:'none',stroke:'#71869d','stroke-width':2,'marker-end':'url(#arrow)'});path.style.cursor='pointer';path.addEventListener('click',()=>inspect('flow',f));graph.append(path);const label=el('text',{x:x+6,y:(y+b.y+45)/2-8,'font-size':9},f.kind.replaceAll('_',' '));label.setAttribute('style','font-size:9px;fill:#9fb0c3');graph.append(label)}
 for(const n of nodes){const p=positions[n.id],group=el('g',{class:'node',transform:`translate(${p.x},${p.y})`});group.append(el('rect',{width:215,height:100,rx:n.type==='state'?20:4,fill:n.type==='state'?'#1b354a':'#283047',stroke:n.type==='state'?'#4c8eb4':'#8d8cb8'}));const a=current.assessments.find(x=>x.target===n.type+':'+n.id);group.append(el('text',{x:12,y:18,style:'font-size:10px;fill:#aabed4'},n.type.toUpperCase()+' · '+a.status));const words=n.label.split(' ');let lines=[''];for(const word of words){if((lines.at(-1)+' '+word).length>27)lines.push(word);else lines[lines.length-1]+=(lines.at(-1)?' ':'')+word}lines.slice(0,4).forEach((s,j)=>group.append(el('text',{x:12,y:39+j*16},s)));const title=el('title',{},n.label);group.append(title);group.addEventListener('click',()=>inspect(n.type,n));graph.append(group)}
-const review=D.review.reviews.find(r=>r.candidate_id===current.id),summary=document.querySelector('#summary');summary.replaceChildren();textblock(summary,current.title,current.measurement);textblock(summary,'Predicted benefit',current.expected_benefit);textblock(summary,'Review',review.disposition+' · '+review.novelty_status+' — '+review.summary);for(const c of current.changes){textblock(summary,'Proposed change: '+c.id,'Before: '+c.earlier_arrangement+'\nChange: '+c.changed+'\nRetained: '+c.retained+'\nPredicted gain: '+c.expected_gain)}for(const issue of review.issues)textblock(summary,issue.severity+' · '+issue.target,issue.reason+'\nNext test: '+issue.next_test);textblock(summary,'Comparison across proposals',D.review.comparison_summary);inspect('operation',w.operations[0]);document.querySelector('#diagram').scrollTo(0,0)}
+const review=D.review.reviews.find(r=>r.candidate_id===current.id),summary=document.querySelector('#summary');summary.replaceChildren();textblock(summary,current.title,current.measurement);textblock(summary,'Predicted benefit',current.expected_benefit);textblock(summary,'Review',review.disposition+' · '+review.novelty_status+' — '+review.summary);for(const [area,f] of Object.entries(current.research||{})){textblock(summary,'Research: '+area+' · '+f.status,f.question+'\n'+f.conclusion+'\nAffected: '+f.targets.join(', ')+(f.remaining_uncertainty?'\nUnresolved: '+f.remaining_uncertainty:''))}for(const c of current.changes){textblock(summary,'Proposed change: '+c.id,'Before: '+c.earlier_arrangement+'\nChange: '+c.changed+'\nRetained: '+c.retained+'\nPredicted gain: '+c.expected_gain)}for(const issue of review.issues)textblock(summary,issue.severity+' · '+issue.target,issue.reason+'\nNext test: '+issue.next_test);textblock(summary,'Comparison across proposals',D.review.comparison_summary);inspect('operation',w.operations[0]);document.querySelector('#diagram').scrollTo(0,0)}
 function showLiterature(parent){if(!D.literature)return;textblock(parent,'Independent literature investigation',D.literature.search_status);for(const limit of D.literature.limitations||[])textblock(parent,'Search limitation',limit);const finding=(D.literature.candidate_findings||[]).find(x=>x.candidate_id===current.id);if(!finding){textblock(parent,'Literature scope','No candidate-specific findings recorded.');return}const sameVersion=finding.candidate_sha256===D.candidate_sha256[current.id];textblock(parent,'Candidate version checked',sameVersion?'These findings address this exact candidate.':'These findings address an earlier candidate. Changes require fresh checks; this report does not certify the displayed revision.');for(const prior of finding.closest_priors||[])textblock(parent,'Closest prior found: '+prior.title,'Overlap: '+prior.overlap+'\nRemaining distinction: '+prior.residual_difference);for(const check of finding.checks||[])textblock(parent,'Literature check: '+check.target+' · '+check.verdict,check.claim+'\n'+check.reason);for(const limit of finding.coverage_limitations||[])textblock(parent,'Unresolved coverage',limit);const coverage=(D.literature_coverage?.candidates||[]).find(x=>x.candidate_id===current.id&&x.candidate_sha256===finding.candidate_sha256);if(coverage)textblock(parent,'Graph coverage at the checked version',coverage.checked_targets.length+' targets checked; '+coverage.unchecked_graph_targets.length+' graph targets not checked. Target coverage is not scientific correctness.')}
 const showWithoutLiterature=show;show=function(i){showWithoutLiterature(i);showLiterature(document.querySelector('#summary'))};
 document.querySelector('#request').textContent=D.request.prompt;D.candidates.forEach((c,i)=>{const b=document.createElement('button');b.textContent=c.title;b.onclick=()=>show(i);document.querySelector('#tabs').append(b)});if(D.literature){const links=document.createElement('p');const a=document.createElement('a');a.href='literature_report.json';a.textContent='Independent literature report';links.append(a);if(D.literature_coverage){links.append(document.createTextNode(' · '));const b=document.createElement('a');b.href='literature_coverage.json';b.textContent='Literature coverage';links.append(b)}document.querySelector('header').append(links)}show(0);
@@ -107,7 +122,7 @@ def export_report(directory, config, candidate_files, review):
     graph = proposal_overlay(candidates, review, config['atlas_sha256'])
     (directory/'proposal_graph.json').write_text(json.dumps(graph, indent=2, ensure_ascii=False)+'\n')
     display = {'request': request, 'candidates': candidates, 'review': review,
-               'candidate_sha256': {c['id']: digest(CandidateIdea.model_validate(c)) for c in candidates}}
+               'candidate_sha256': {c['id']: digest(parse_candidate(c)) for c in candidates}}
     for name in ('literature_report', 'literature_coverage'):
         path = directory / (name + '.json')
         if path.exists():
@@ -120,6 +135,11 @@ def export_report(directory, config, candidate_files, review):
         r = next(r for r in review['reviews'] if r['candidate_id'] == idea['id'])
         lines += [idea['title'], 'Measurement: '+idea['measurement'], 'Predicted benefit: '+idea['expected_benefit'],
                   'Review: '+r['disposition']+' / '+r['novelty_status'], r['summary']]
+        for area, finding in idea.get('research', {}).items():
+            lines += [f"Research {area} [{finding['status']}]: {finding['question']}",
+                      finding['conclusion'], 'Affected targets: '+', '.join(finding['targets'])]
+            if finding.get('remaining_uncertainty'):
+                lines.append('Unresolved: '+finding['remaining_uncertainty'])
         for change in idea['changes']:
             lines += ['Change: '+change['changed'], 'Earlier arrangement: '+change['earlier_arrangement'],
                       'Retained: '+change['retained'], 'Predicted gain: '+change['expected_gain']]

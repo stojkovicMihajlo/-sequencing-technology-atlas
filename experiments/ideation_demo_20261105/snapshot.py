@@ -1,7 +1,8 @@
-"""Read completed pilot artifacts into an immutable ideation input snapshot.
+"""Freeze completed pilot inputs or prepare a run with exact reference-run inputs.
 
 This never waits for, changes, or reruns extraction/history jobs. Incomplete and
-held comparisons remain absent, with that limitation recorded in the receipt.
+held comparisons remain absent from pilot snapshots. Reference preparation uses
+only the prior config's pinned inputs, without refreshing that pilot or memory.
 """
 import argparse
 import json
@@ -60,9 +61,93 @@ def snapshot(pilot, output):
     return receipt
 
 
-if __name__ == '__main__':
+def prepare_from_reference(reference_run, output):
+    """Prepare current harness against the prior run's exact recorded inputs.
+
+    This does not refresh the pilot, resume a model conversation, or carry over
+    previous proposals, reviews, retrieved literature or tool memory.
+    """
+    from genomics_discovery.ideation.context import AtlasContext
+    from genomics_discovery.ideation import run as ideation_run
+
+    reference_run, output = Path(reference_run).resolve(), Path(output).resolve()
+    if output == reference_run or output.is_relative_to(reference_run):
+        raise ValueError('Matched preparation must not write inside the reference run')
+    if output.exists():
+        raise FileExistsError('Matched preparation requires a fresh output directory')
+    config_path = reference_run/'config.json'
+    config_pin = sha(config_path)
+    previous = read(config_path)
+    ideation_run.schemas_for(previous)  # Reject an unknown run contract.
+
+    def pinned_path(file_key, hash_key):
+        if not previous.get(file_key) or not previous.get(hash_key):
+            raise ValueError('Reference config lacks input path/hash: ' + file_key)
+        path = Path(previous[file_key])
+        if not path.is_absolute():
+            path = reference_run/path
+        path = path.resolve()
+        if sha(path) != previous[hash_key]:
+            raise ValueError('Reference input changed: ' + file_key)
+        return path
+
+    atlas = pinned_path('atlas_file', 'atlas_sha256')
+    request = pinned_path('request_file', 'request_sha256')
+    if bool(previous.get('history_manifest')) != bool(previous.get('history_sha256')):
+        raise ValueError('Reference history path/hash must both be present or absent')
+    history = pinned_path('history_manifest', 'history_sha256') if previous.get('history_manifest') else None
+    context = AtlasContext(atlas, expected_sha256=previous['atlas_sha256'],
+        history_manifest=history, history_sha256=previous.get('history_sha256'))
+    preflight = context.validate_history_inputs()
+    # The reader above verifies every linked overlay and source registry. Check
+    # input pins again before prepare, which computes its own fresh hashes.
+    for file_key, hash_key in (('atlas_file', 'atlas_sha256'), ('request_file', 'request_sha256')):
+        pinned_path(file_key, hash_key)
+    if history:
+        pinned_path('history_manifest', 'history_sha256')
+    if sha(config_path) != config_pin:
+        raise ValueError('Reference config changed during preparation')
+
+    current = ideation_run.prepare(request, atlas, output, history_manifest=history)
+    if current['atlas_sha256'] != previous['atlas_sha256'] or current.get('history_sha256') != previous.get('history_sha256'):
+        raise ValueError('Prepared inputs differ from reference pins')
+    # prepare validates the current Request schema and serializes it. Preserve
+    # the original valid request bytes too, so formatting/default serialization
+    # cannot masquerade as a change in the experimental input.
+    if sha(request) != previous['request_sha256']:
+        raise ValueError('Reference request changed during preparation')
+    shutil.copyfile(request, current['request_file'])
+    if sha(current['request_file']) != previous['request_sha256']:
+        raise ValueError('Copied request differs from reference pin')
+    current['request_sha256'] = previous['request_sha256']
+    write(output/'config.json', current)
+
+    code_root = Path(ideation_run.__file__).resolve().parent
+    receipt = {'format_version': 'ideation_matched_inputs/1',
+        'reference_run': str(reference_run), 'reference_config_sha256': config_pin,
+        'reference_run_format': previous.get('format_version', 'ideation_run/1'),
+        'prepared_run_format': current['format_version'],
+        'atlas_sha256': current['atlas_sha256'], 'request_sha256': current['request_sha256'],
+        'history_manifest': current.get('history_manifest'), 'history_sha256': current.get('history_sha256'),
+        'history_preflight': preflight, 'input_match': 'exact atlas, request and history-manifest bytes',
+        'current_harness_sources': {path.name: sha(path) for path in sorted(code_root.glob('*.py'))},
+        'prior_run_memory': 'none; no candidates, reviews, retrieved literature, tool logs or model sessions copied',
+        'boundary': 'Current harness with fixed prior atlas/request/history inputs; the pilot was not refreshed. '
+                    'Baseline harness code hashes are not inferred from run format. Future web results and model-service behavior are not frozen; this alone is not a causal harness comparison.'}
+    write(output/'matched_inputs.json', receipt)
+    return receipt
+
+
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--pilot', required=True, type=Path)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument('--pilot', type=Path)
+    source.add_argument('--reference-run', type=Path)
     parser.add_argument('--output', required=True, type=Path)
-    args = parser.parse_args()
-    print(json.dumps(snapshot(args.pilot, args.output), indent=2))
+    args = parser.parse_args(argv)
+    result = prepare_from_reference(args.reference_run, args.output) if args.reference_run else snapshot(args.pilot, args.output)
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == '__main__':
+    main()

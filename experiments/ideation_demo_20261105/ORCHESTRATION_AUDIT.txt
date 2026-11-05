@@ -1,0 +1,159 @@
+IDEATION ORCHESTRATION AUDIT — 5 November 2026
+
+Contract and material ambiguity
+Inputs are the original measurement request, immutable reported-method atlas,
+retrieved sources and exact previous proposal/review artifacts. Output is a
+portfolio of conditional assay graphs and evidence-bound critiques. A completed
+run does not identify experimental feasibility, exhaustive novelty or the best
+number of experts. The software must preserve request scope, scientific claim
+versions, unresolved blocking issues and the distinction between search execution
+and sufficient evidence.
+
+The consequential decision is whether an initial literature investigation can
+authorize a novelty verdict on a later revised graph. It can support unchanged
+claims; it cannot automatically certify a different measurement/design claim.
+No additional agent/stage is needed: the existing final reviewer can investigate
+the change, or explicitly leave novelty unresolved.
+
+Observed baseline, not hypothetical failure claims
+observation_02/REVIEW.txt and observation_04/initial_review.json record two expert
+graphs with distinct RNA-age readout mechanisms but shared early reporter routing.
+The shared reviewer noticed this convergence and raised blocking interface issues.
+Both authors were asked to revise. This is evidence that shared critique is doing
+useful work; it does not establish independence or biochemical validity.
+The baseline did not use historical-edge conditioning successfully because of the
+previously recorded source-registry bug. Do not credit history traversal for its
+proposals. The current frozen run is preserved.
+
+Reference implementations inspected
+ROBIN: Nature s41586-026-10652-y, sections Therapeutic hypothesis generation and
+Methods. Official Future-House/robin pinned at
+4a5cce310f3bc7663a67117db88af43b84733ffe; robin/assays.py:
+experimental_assay -> general literature queries -> assay ideas -> one detailed
+literature query per proposed assay -> pairwise selection. Local pinned file
+receipt: external/harness_references/evidence_gap_audit_20261012/manifest.json.
+ADAPT candidate-specific investigation before selection. Its public orchestrator
+delegates to hosted Edison agents; Crow/Falcon internals are not reproduced here.
+REJECT copying drug rankings or mandatory winner selection to assay architecture.
+The paper's wet-lab protocols were human-generated; its model reviews do not prove
+the reliability of an autonomous protocol-design graph.
+
+Virtual Lab: official zou-group/virtual-lab pinned at
+8a3a4fd9ccc0cd297bd523751e03bc9527c91832; src/virtual_lab/run_meeting.py:
+bounded rounds, role-specific system messages, shared discussion/tool messages,
+final synthesis; src/virtual_lab/prompts.py reintroduces the agenda/questions/rules.
+ADAPT explicit agenda, scoped expertise, critic feedback and preserved discussion.
+Our exact graph/review files supply the discussion context. Preserve independent
+initial designs and permit cross-candidate refinement during revision; do not add
+an unrestricted chat loop merely because a reference implements one.
+
+PaperQA2: arXiv 2409.13740v1, Methods 8.1.1; official paper-qa pinned at
+57e89f7223b0960d5ee5ea048c69e3c47e088572, src/paperqa/agents/tools.py,
+PaperSearch.paper_search and GatherEvidence.gather_evidence. The code keeps
+question-specific evidence in session context and exposes only top contexts for
+the current question. Its temporary session-question mutation explicitly forbids
+concurrent calls to gather_evidence itself; it is not a drop-in shared-memory
+implementation for our parallel independent author sessions. The paper describes
+adaptive search, evidence gathering and citation traversal, including re-gathering
+after new evidence. ADAPT question-specific retrieval and returning to sources
+when a claim changes. Do not copy its evidence-count stopping rule into genomics
+design or treat summaries as complete primary experimental support.
+
+Implementation decisions
+1. Bind inherited novelty-search eligibility to an actually searched literature
+   report and the scientific content it inspected. Exclude only top-level id/title
+   from the comparison; other edits conservatively require a fresh observed search
+   or search_incomplete. This is a content-change guard, not semantic equivalence.
+2. Preserve an unresolved blocking issue's blocking severity. If a revised design
+   removes the dependency, the reviewer can resolve the original issue with an
+   explicit reason; merely relabeling an unresolved blocker cannot permit retain.
+3. Pin all review/response/previous-candidate artifacts read by a native stage,
+   not just the current proposal and top-level report.
+4. Keep two experts, existing literature agent and technical reviewer. Research
+   agenda fields guide biological need, mechanism, interfaces and challenge while
+   permitting expert-selected queries and architecture changes. Their value needs
+   matched evaluation; four headings and two experts are practical choices.
+5. Clarify retain_for_testing as a recommendation for further assessment, not a
+   requirement for completed wet-lab validation. AGE-001 and SEL-003 in the actual
+   initial review describe specified, testable transfers of established physical
+   principles. Their lack of completed experiments alone does not require a block.
+   SEL-004 instead identifies an unspecified essential hybrid-to-library handoff;
+   AGE-002 identifies incorrect attachment topology. Those need substantive repair.
+   This is an assessment of reviewer criteria, not a retroactive override of either
+   candidate verdict. A future reviewer must still establish whether the design
+   is sufficiently specified, experimentally precedented at the required primitive
+   level, and meaningfully testable. Demonstrated incompatibility, an unsupported
+   new required primitive behavior, or an essential undefined mechanism blocks.
+6. Keep author findings concise and linked to graph targets. A proposed graph does
+   not make every established constituent property hypothetical; neither does a
+   constituent precedent establish a whole transfer. The actual 130/139 assessment
+   entries and mostly hypothesis labels cannot be interpreted as 130/139 invented
+   chemical mechanisms. No current matched run establishes how much of the long
+   review latency comes from the ledger rather than browsing, tool failures or
+   scientific difficulty. No unsupported latency or novelty improvement is claimed.
+7. Add the sibling tool's change-context navigation to the actual agent prompt.
+   It points to a single exact historical claim and version-bound before/after
+   operation groups; it does not load an entire neighborhood or assert that the
+   demonstrated historical transition transfers to a new assay.
+
+Verification obligations
+Reject stale inherited searches for changed scientific content, absence of an
+actual searched report, renamed unresolved blockers and modified review inputs.
+Accept title-only edits without forcing a redundant whole-literature search.
+Preserve the baseline's exact artifacts and the new 1.1 research schema. Test
+initial and final handoffs, including partial author failure and unresolved claims.
+
+Remaining limits
+An observed search event cannot prove query relevance, adequate coverage, correct
+interpretation or novelty. Bibliographic identity, provenance and entailment remain
+separate. Natural-language edits are treated conservatively; harmless wording
+changes may trigger re-search. Criticality remains a scientific review judgment.
+No new third-party source code is copied. Pinned implementations are references,
+not imported dependencies or evidence that this genomics system is validated.
+
+Test results: local offline suite tests/ideation: 141 passed. Native-stage input
+tampering fixtures reject modified contract, earlier candidates and author issue
+responses. A full orchestrator fixture rejects a changed candidate's inherited
+search while retaining eligibility for its unchanged peer; fresh review search
+allows the scoped verdict. These are software controls, not live scientific or
+wet-lab validation. Existing frozen native run and artifacts are unchanged.
+
+Completion-contract follow-up
+The integration audit identified a distinct transport mismatch: three pilot A/B
+assessment attempts reportedly exited 0 with artifact.json and a terminal
+turn.completed, but no final-message text. CodexWorker.run and
+assess_archived_attempt deliberately require a nonempty final.txt; the author,
+review and ideation file-artifact instructions did not explicitly request that
+final response. These failed statuses remain unchanged; artifact presence alone
+must not be promoted into accepted scientific results.
+
+The current Illumina and ideation prompts now request one truthful nonempty final
+sentence containing the output path and actual self-check result, or a truthful
+failure statement. They prohibit writing final.txt directly. This fixes the
+instruction/transport mismatch prospectively without weakening any runtime gate.
+The A/B evaluator has its own COMPARISON_PROMPT and needs the same explicit finish
+contract; changing the extraction prompt does not change that separate experiment.
+
+Official OpenAI documentation inspected:
+https://learn.chatgpt.com/docs/non-interactive-mode
+The JSON event stream includes turn.completed/turn.failed; --output-last-message
+captures the final message. The docs distinguish these outputs but do not establish
+why a particular completed event had empty final text. The official repair-loop
+cookbook uses a structured final response as its artifact, a different output
+contract from our files written during a native turn:
+https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex
+
+Possible future opt-in, NOT IMPLEMENTED: declare file_artifact completion in the
+new run plan, keeping final_message completion the default. Require a valid fresh
+native terminal completion, successful process exit, no unresolved/failed/unfinished
+turn, matching event/result identity and usage, intact pinned inputs, and a declared
+output artifact that passes the caller's exact structural/source/review validation.
+Record the completion mode and artifact hash in a host-generated receipt. File
+existence or the model's acknowledgement alone is never acceptance. Do not silently
+reclassify old failures or let a model-generated receipt override native events.
+
+Targeted verification: tests/ideation/test_prompts.py,
+tests/illumina/test_revision_handoff.py and
+tests/execution/test_curation_codex_worker.py: 104 passed. Native worker and archived
+completion gates were not edited. Prompt tests cover both Illumina roles and every
+ideation role; existing failure/unfinished-turn controls remain exercised.

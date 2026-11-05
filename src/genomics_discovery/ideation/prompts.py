@@ -90,20 +90,59 @@ literal quote. Register/read external source content through those tools before
 citing it in the candidate. A URL, search snippet or remembered paper is not a
 substitute for a registered supporting passage. Do not fabricate digests or IDs.
 
+GENOMICS RESEARCH BIAS
+Research should follow the required measurement and its physical constraints, not
+just search the proposed assay name. Use four responsibilities to guide inquiry:
+1. capability: investigate the native specimen, biological unit, quantity or
+relation to resolve, direct instrument observation versus inference, closest
+existing capability and useful improvement. Search the goal and its synonyms,
+including methods with other readouts. A capability may exist yet be improvable.
+2. mechanism: identify the exact property needed to distinguish the target from
+a competing molecular/biological state. Search for experimental demonstrations
+of that property, including other fields. Inspect the demonstrated substrate,
+context and selectivity; a reagent name is not an experimentally proven interface.
+3. interfaces: trace material form and information carriers across the proposed
+operations. Search the uncertain handoffs: what exits an operation, what the next
+one requires, what happens to cell/molecule/location attribution during preparation,
+copying, branching or pooling. Use conditions only when relevant to that question.
+4. challenge: actively seek an existing assay that already achieves the proposed
+gain, incompatible conditions, signal confounds, recovery bias and tradeoffs.
+Describe a matched comparison/control and an observation that would defeat the
+central benefit, not just a favorable experiment that might support it.
+
+These are research responsibilities, not an exhaustive ontology or a fixed query
+sequence. The coordinator poses questions specific to the request and expertise;
+experts choose search terms, sources and follow-up questions. Let retrieved evidence
+change the design. Go deeper into biology, chemistry or engineering when it could
+change a design decision, and record a question reframing rather than silently
+narrowing the goal. Do not exhaust every topic before sketching a graph: use the
+developing graph to locate unresolved interfaces and return to evidence as needed.
+Do not treat recombination of existing methods as the only source of novelty.
+
 WORKING PROCEDURE
 Read schema_file to learn the exact output fields. Context below contains artifact
 paths, not the artifacts themselves. Use tool_command with --help to discover the
 available atlas/source queries, then request bounded relevant records or passages.
 Append commands to that supplied base: list; search '<terms>'; workflow <record_id>;
 node <node_id>; group <record_id> <operation_ids...>; history <record_id>;
-claim <claim_id>; or atlas-source <record_id> to inspect the pinned extraction
+claim <claim_id>; change-context <claim_id>; or atlas-source <record_id> to inspect the pinned extraction
 source registry (use --source-id, --query or offset windows when needed).
+Use change-context with an exact global history edge ID for bounded navigation to
+its before/after workflow versions, affected Operations and boundary States. Then
+read the claim and the returned group commands for scientific evidence, limits and
+material interfaces. Missing exact workflow versions stay unavailable; do not join
+a newer version by name. Historical change is an example, not proof of transfer
+compatibility in your proposed assay.
 Inspect command --help for options. If a response is too large,
 follow its result-read continuation or request a smaller node/group; do not silently
 ignore missing parts. History not loaded is not evidence that no precursor exists.
 For a reachable primary source, prefer source-fetch <url> --title <title> when
 available: it captures original bytes and a reading rendition with a retrieval
-receipt. Acquisition proves origin, not scientific support or complete coverage.
+receipt. PDFs use host PDF-to-text conversion when available, preserving the
+original PDF, conversion identity and text hash. PDF text can lose figures,
+chemical diagrams, table structure or reading order; inspect the original for
+claims depending on those elements. Acquisition proves origin, not scientific
+support or complete coverage.
 For other retrieved literature, save the actual text you inspected in your attempt
 directory, then source-add <path> --url <url> --title <title> --content-level
 <excerpt|abstract|fulltext>, and source-read <source_id> --query '<terms>' or use
@@ -123,11 +162,16 @@ issue fields rather than manufacturing support to pass a check. Work only in you
 assigned output directory, do not alter inputs/code/other runs, and do not spawn
 additional agents or jobs. The runner owns stage order, agent sessions, revision
 count and final export. Follow actual tool permissions and Sherlock instructions.
+After saving the artifact and running the required check, send one nonempty final
+response sentence stating the output path and the actual check result. If unable
+to finish, state that truthfully instead of claiming completion. The acknowledgement
+does not establish scientific acceptance. Do not write final.txt yourself; the CLI
+captures your final response separately from the JSON artifact.
 """
 
 
 DESIGN_OUTPUT = """AUTHOR OUTPUT CONTRACT
-The candidate uses proposed_assay/1.0. workflow contains states, operations and
+The candidate uses proposed_assay/1.1. workflow contains states, operations and
 flows; changes identifies the specific before/after design moves. assessments is
 a separate ledger covering every State, State property, Operation and Flow once.
 Its targets use state:<id>, operation:<id>, flow:<id>, and
@@ -144,6 +188,21 @@ requires a compatibility_assumption and decisive_test; status=hypothesis means
 the necessary behavior lacks support and requires unsupported_property and
 decisive_test. A source showing an individual component does not demonstrate its
 proposed interface. Assign the status that applies to this exact scoped claim.
+The fact that this is a proposed graph does not itself make every required_property
+unsupported. Assess the specified behavior in its cited setting: preserve actual
+component precedent, mark contextual transfers, and identify unsupported behavior.
+Do not promote a whole operation/interface because one constituent has precedent.
+
+research contains capability, mechanism, interfaces and challenge findings. For
+each, record the question, concise conclusion, exact affected targets, references
+or remaining_uncertainty. status=evidence_found means a reference was located,
+not that the whole design is established; status=unresolved names what still needs
+investigation. Copy the assigned question, or explain a change in reframing_reason.
+These are findings and design consequences, not a transcript of private reasoning.
+Keep supporting quotes in their registered references. Do not put all research
+inside expected_benefit or use a general paragraph as support for every graph node.
+Keep each finding to a few informative sentences and refer to the affected graph
+records; do not repeat the workflow or assessment ledger as four long essays.
 
 """
 
@@ -170,6 +229,12 @@ ResearchPlan.original_request must copy request.prompt verbatim. ResearchPlan.co
 must copy request.constraints exactly, in order. Put your interpretations in
 interpreted_goal and assumptions; do not promote preferences into hard constraints.
 Each experts entry records id, expertise, question, approach and why_distinct.
+It also contains research_questions: capability, mechanism, interfaces, challenge.
+Write concrete questions appropriate to that expert's mandate under each heading,
+not four copies of a generic checklist. This is a proposed investigation, not a
+claim that those searches have already been performed. Do not prescribe a list of
+approved papers, a fixed query quota or a predetermined assay. The schema fixes
+the research responsibilities; the experts retain freedom to follow the evidence.
 Finish planning when the request is preserved and the two mandates pose distinct,
 actionable design questions. Pass unresolved mechanisms, competing priors and
 interface questions to the experts rather than trying to complete both designs
@@ -183,8 +248,10 @@ specific candidate independently; initial candidates from the other expert are
 not available at this stage. You may refine your scientific approach when evidence
 warrants it, while preserving the original measurement need and explicit constraints.
 
-First identify the assay idea and why it could matter, then express it as the
-proposed workflow graph. Include the path from relevant starting material through
+Investigate your assigned questions using the atlas and external literature,
+develop an assay idea, and express it as a proposed workflow graph. Iterate between
+evidence and the graph when an interface or prior-art finding changes the design.
+Include the path from relevant starting material through
 the distinguishing transformation(s) to sequenced product/data and interpretation.
 For a real branch or merge, name the material/data that takes each route. Proposed
 States and Operations are expected outcomes and actions, not observed results.
@@ -209,6 +276,10 @@ Read the original request, research_plan_file and both candidate_files. Investig
 the evidence behind the proposals; do not rewrite either candidate or choose an
 assay design on its behalf. Proposal experts can research independently, but their
 citations and novelty descriptions are inputs to check, not conclusions to trust.
+Check all four research findings, their conclusions and missing evidence, as well
+as the central design changes. Include a check targeting research:<area> for each
+of capability, mechanism, interfaces and challenge. A finding that no adequate
+source was found stays a coverage limitation, not a supported impossibility claim.
 
 Separate three questions: (1) does the cited publication/captured passage actually
 exist with the stated identity, (2) what exact property does it demonstrate in its
@@ -243,8 +314,8 @@ Capture verification evidence through the tools and cite it as a LiteratureRefer
 do not use a generated paraphrase as the verification quotation. Use source-fetch
 for the publication that supplies verification_evidence. Its source ID/content hash
 and verification_url must match a successful host retrieval receipt; source-add alone
-does not establish where text came from. If host retrieval is unavailable (including
-PDF-only or browser-only content), use unverifiable and describe what you could
+does not establish where text came from. If host retrieval or rendition is unavailable
+(for example, browser-only access or an image-only PDF), use unverifiable and describe what you could
 inspect, even when native web browsing let you read it. This limitation concerns
 auditable origin; it does not mean that the publication or claim is false.
 
@@ -304,9 +375,17 @@ Create actionable issues with stable IDs, affected candidate/graph records, reas
 evidence and what would resolve the issue. Distinguish repairable description or
 graph errors from missing evidence, substantive incompatibility and prior-art
 overlap. The existence of uncertainty is not itself a fatal flaw; its significance
-depends on whether the central measurement claim relies on it. A critical unsupported
-property or unresolved incompatibility prevents a readiness recommendation. Preserve
-useful conditional ideas without presenting them as validated designs.
+depends on the missing behavior and whether it can be tested meaningfully. Block
+retention for testing when there is demonstrated incompatibility, an unspecified
+essential mechanism or identity path, an unsupported required NEW primitive
+property, or a critical dependency so undefined that a decisive test cannot be
+specified. A fully specified transfer of an established property into a new context
+may remain a conditional candidate with explicit interface assumptions and a
+decisive falsification test. Lack of a completed wet-lab test alone does not block
+retain_for_testing; that disposition recommends further assessment, not successful
+execution. Do not confuse a new arrangement with a newly invented primitive property.
+Do not retain an architecture with an unexplained essential handoff just because
+the author proposes to test it. Preserve all material risks and access limitations.
 
 If review_file refers to an earlier review, inspect it and the revised candidates.
 Read previous_candidate_files and issue_response_files when supplied.
@@ -321,8 +400,17 @@ and previous_issue_resolutions. Leave the latter empty on initial review; on fin
 review account for each prior candidate_id/issue_id exactly once with the allowed
 resolved/unresolved status and a reason. Keep unresolved issues in that candidate's
 current issues as well. An author's response does not itself resolve the issue.
+An unresolved blocking issue must remain blocking. If its original blocking
+rationale was mistaken or a narrower design removes that dependency, explicitly
+resolve that rationale with evidence/reason and retain any remaining testable risk
+as a separate scoped issue; never silently lower severity to make a candidate pass.
 Produce one IdeaReview for each exact candidate, bound to its candidate_id and
 candidate_sha256; copy the supplied candidate_bindings, never guess a hash.
+For version 1.1, include research:capability, research:mechanism,
+research:interfaces and research:challenge in reviewed_targets. Challenge whether
+the questions were actually investigated and whether conclusions follow; filling
+all four boxes does not establish sufficient research. Use issues on these targets
+to request specific missing evidence or a revised design claim.
 reviewed_targets must include every candidate, change, State,
 property, Operation and Flow target required by the schema; actually inspect each,
 do not use this as a checkbox without review. Put the evidence reasoning in the
@@ -337,6 +425,11 @@ as such, and never list them as searches you performed. Search again for uncover
 questions or changed design claims; an inherited search receipt alone does not
 justify a conclusion about them. If relevant coverage is unavailable or insufficient,
 use search_incomplete and state the limit. Atlas lookup alone is not external search.
+The contract's inherited_search_coverage gives eligibility for each candidate.
+If eligible=false, use search_incomplete unless this review performs external search
+for the current claims. The runtime conservatively treats changes beyond the
+top-level title/id as requiring fresh search; eligibility only means the earlier
+searched candidate content was preserved, never that its search was exhaustive.
 A disposition of retain_for_testing means a candidate for further expert/experimental assessment,
 not experimental validation or a ready-to-execute protocol.
 """

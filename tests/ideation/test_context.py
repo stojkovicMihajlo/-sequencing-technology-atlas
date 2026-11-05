@@ -112,12 +112,20 @@ def test_source_import_read_and_reference_validate_exact_bytes(context, tmp_path
     assert source["provenance_status"].startswith("agent_imported_text")
     assert context.read_source(source["source_id"], query="Recovery")["data"]["text"]
     assert context.read_source(source["source_id"], query="absent")["data"]["text"] == ""
+    assert "does not establish absence" in context.read_source(source["source_id"], query="absent")["data"]["boundary"]
     assert context.validate_literature_ref(source["source_id"], source["content_sha256"], "Recovery varied by condition.")
     for digest, quote in [("0" * 64, "Recovery"), (source["content_sha256"], "An invented claim")]:
         with pytest.raises(ValueError):
             context.validate_literature_ref(source["source_id"], digest, quote)
-    with pytest.raises(ValueError, match="relabel"):
-        context.add_source(path, url=source["url"], title=source["title"], content_level="fulltext")
+    registration = json.loads(context.sources_path.read_text())
+    revised = context.add_source(path, url=source["url"], title=source["title"], content_level="fulltext")["data"]
+    assert revised["content_level"] == "excerpt"
+    assert revised["source_id"] == source["source_id"]
+    assert revised["capture_declarations"][-1]["content_level"] == "fulltext"
+    assert json.loads(context.sources_path.read_text()) == registration
+    assert context.read_source(source["source_id"])["data"]["metadata_status"]
+    repeated = context.add_source(path, url=source["url"], title=source["title"], content_level="fulltext")["data"]
+    assert repeated["capture_declarations"] == revised["capture_declarations"]
     from pathlib import Path
     Path(source["path"]).write_text("Changed")
     with pytest.raises(ValueError, match="bytes changed"):
@@ -216,3 +224,100 @@ def test_host_fetch_adds_custody_without_rewriting_inherited_registration(contex
     assert json.loads((context.sources_path.parent/'origin_receipts.json').read_text())[imported['source_id']] == [receipt]
     fresh = context.fetch_source('https://example.org/another', title='Other')['data']
     assert fresh['provenance_status'].startswith('host_fetched_text')
+
+
+def test_host_fetch_metadata_variation_does_not_block_origin_receipt(context, tmp_path, monkeypatch):
+    path = tmp_path/'remote.txt'; path.write_text('Acquired methods text, with scientific content.')
+    url = 'https://example.org/paper'
+    receipt = {'request_url': url, 'text_sha256': sha(path.read_bytes()), 'origin_status': 'host_fetched'}
+    monkeypatch.setattr('genomics_discovery.ideation.evidence.fetch_source', lambda url, directory:
+        {'text_path': str(path), 'content_level': 'excerpt', 'receipt': receipt})
+    source = context.add_source(path, url=url, title='Short title', content_level='abstract')['data']
+    original = context.sources_path.read_bytes()
+    result = context.fetch_source(url, title='Full publisher title')['data']
+    assert context.sources_path.read_bytes() == original
+    assert result['source_id'] == source['source_id']
+    assert result['title'] == 'Short title'
+    assert result['content_level'] == 'abstract'
+    assert result['origin_receipt'] == receipt
+    assert [row['title'] for row in result['capture_declarations']] == ['Short title', 'Full publisher title']
+    assert context.validate_literature_ref(source['source_id'], source['content_sha256'], 'Acquired methods text')
+    assert len(json.loads(context.sources_path.read_text())['sources']) == 1
+
+
+def test_source_identity_does_not_merge_different_urls_or_different_bytes(context, tmp_path):
+    path = tmp_path/'capture.txt'; path.write_text('The template was copied.')
+    first = context.add_source(path, url='https://example.org/a', title='A', content_level='excerpt')['data']
+    second = context.add_source(path, url='https://example.org/b', title='B', content_level='excerpt')['data']
+    path.write_text('The template was copied. Recovery was measured.')
+    third = context.add_source(path, url='https://example.org/a', title='A', content_level='excerpt')['data']
+    assert len({first['source_id'], second['source_id'], third['source_id']}) == 3
+    assert context.read_source(first['source_id'])['data']['text'] == 'The template was copied.'
+
+
+def historical_context(context, *, pair=False):
+    """Index fixtures test tool joins; history ingestion has its own pin/review tests."""
+    bound = {'id': 'bound', 'kind': 'bound_workflow', 'record_id': 'method', 'extraction_sha256': 'e' * 64}
+    external = {'id': 'external', 'kind': 'cited_contribution', 'name': 'Precedent',
+                'catalogue_candidates': [{'record_id': 'method'}]}
+    claim = {'id': 'c1', 'seed_operation_ids': ['copy'], 'unresolved': ['Transfer yield unknown'],
+             'seed_evidence': [{'source_id': 'paper', 'quote': 'Exact change passage.'}]}
+    edge = {'id': 'a' * 64 + ':c1', 'source': 'external', 'target': 'bound', 'relation': 'component_adoption',
+            'claim': claim, 'review': {'decision': 'accept', 'qualification': 'Does not establish new-context compatibility'},
+            'artifact': {'format_version': 'citation_lineage_pilot/3', 'sha256': 'a' * 64}}
+    if pair:
+        other = json.loads(json.dumps(context.graph).replace('method', 'earlier'))
+        context.graph['cards']['earlier'] = other['cards']['earlier']
+        context.cards['earlier'] = context.graph['cards']['earlier']
+        context.graph['nodes'] += [node for node in other['nodes'] if node['record_id'] == 'earlier']
+        context.graph['edges'] += other['edges']
+        context.nodes.update({node['id']: node for node in other['nodes'] if node['record_id'] == 'earlier'})
+        external = {'id': 'external', 'kind': 'bound_workflow', 'record_id': 'earlier', 'extraction_sha256': 'e' * 64}
+        edge['artifact']['format_version'] = 'illumina_method_pair/1'
+        claim.update(direction='right_to_left', left_operation_ids=['illumina:method:operation:copy'],
+                     right_operation_ids=['illumina:earlier:operation:copy'])
+    context.history_index = {'nodes': {'bound': bound, 'external': external}, 'edges': [edge]}
+    return edge
+
+
+def test_change_context_keeps_external_precedent_and_exact_seed_boundary(context):
+    edge = historical_context(context)
+    result = context.change_context(edge['id'])
+    data = result['data']
+    assert data['before']['status'] == 'external_contribution'
+    assert data['after']['binding']['extraction_sha256'] == 'e' * 64
+    assert data['after']['operation_ids'] == ['illumina:method:operation:copy']
+    assert data['after']['input_state_ids'] == ['illumina:method:state:in']
+    assert data['after']['output_state_ids'] == ['illumina:method:state:out']
+    assert data['after']['read_commands'] == [['group', 'method', 'illumina:method:operation:copy']]
+    assert data['view'] == 'navigation'
+    assert data['read_commands'] == [['claim', edge['id']]]
+    full = context.claim(edge['id'])
+    assert full['data']['claim']['unresolved'] == ['Transfer yield unknown']
+    assert full['data']['review'] == edge['review']
+    assert list(full['evidence_index'].values())[0]['quote'] == 'Exact change passage.'
+    assert data['after']['unknowns']
+
+
+def test_change_context_pair_direction_and_no_stale_version_join(context):
+    edge = historical_context(context, pair=True)
+    data = context.change_context(edge['id'])['data']
+    assert data['before']['operation_ids'] == ['illumina:earlier:operation:copy']
+    assert data['after']['operation_ids'] == ['illumina:method:operation:copy']
+    context.history_index['nodes']['external']['extraction_sha256'] = '0' * 64
+    stale = context.change_context(edge['id'])['data']['before']
+    assert stale['status'] == 'workflow_version_unavailable'
+    assert 'operation_ids' not in stale
+
+
+def test_change_context_rejects_similarity_ambiguous_ids_and_wrong_operation(context):
+    edge = historical_context(context)
+    with pytest.raises(ValueError, match='globally qualified'):
+        context.change_context('c1')
+    edge['relation'] = 'shared_mechanism'
+    with pytest.raises(ValueError, match='not a similarity'):
+        context.change_context(edge['id'])
+    edge['relation'] = 'component_adoption'
+    edge['claim']['seed_operation_ids'] = ['invented']
+    with pytest.raises(ValueError, match='absent local Operations'):
+        context.change_context(edge['id'])

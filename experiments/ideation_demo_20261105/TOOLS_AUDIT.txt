@@ -1,0 +1,109 @@
+IDEATION EVIDENCE AND GRAPH TOOLS — IMPLEMENTATION AUDIT
+Date: 2026-11-05
+
+Problem and local contract
+The citation reviewer must be able to investigate a particular proposal using
+exact source captures and reviewed atlas occurrences. Retrieval success,
+document origin, bibliographic identity and claim entailment are separate facts.
+The tools must preserve source bytes and qualifications, keep shared records
+immutable, and return bounded context with lossless continuation.
+
+Observed defect
+source-add identifies a capture using URL plus text bytes, but previously rejected
+the same capture when another agent gave a different title or content-level
+description. source-fetch called source-add, so this metadata disagreement could
+prevent an origin receipt from being recorded. This is an orchestration defect,
+not evidence that the paper is unavailable or the proposal unsupported.
+
+Decision before implementation
+1. Keep the original source registration unchanged. Store alternative title and
+   content-level declarations in capture_declarations.json, under the same lock.
+   Return them explicitly without silently promoting excerpt to full text.
+   Repeat captures with unchanged metadata remain idempotent. The sidecar records
+   declarations, not an adjudication of which metadata is scientifically right.
+2. Add change-context for one exact globally qualified historical claim. Join
+   affected operation selections only when record ID and extraction hash match
+   the loaded atlas. Return navigation: boundary IDs and explicit claim/group/node
+   commands, not entire before/after workflows. The unchanged scientific claim,
+   review, evidence and limits remain accessible through claim. External
+   contributions and unavailable workflow versions stay explicit.
+3. Do not add a vector store, an additional agent, or an equivalence classifier.
+   Lexical search remains a shortlist; absence from it cannot establish novelty.
+
+Primary references and inspected implementation
+PaperQA2 paper: https://arxiv.org/html/2409.13740v1
+Official code: Future-House/paper-qa, commit
+57e89f7223b0960d5ee5ea048c69e3c47e088572,
+src/paperqa/agents/tools.py, GatherEvidence.gather_evidence and GenerateAnswer.
+License: Apache-2.0. No source code copied.
+Observed: evidence gathering is question-specific, ranks contextual summaries,
+and retains them in session state; paper search and citation traversal can gather
+additional sources. Its local question swapping also makes this particular tool
+unsafe to parallelize against the same mutable session without coordination.
+ADAPT: bounded, question-directed evidence access with retained provenance.
+REJECT as a domain rule: its fixed evidence-count guidance. It does not establish
+how many sources demonstrate a novel genomics assay or a compatible interface.
+
+OpenScholar paper: https://arxiv.org/html/2411.14199v1
+Official code: AkariAsai/OpenScholar, commit
+0e9b8fb912273d3dae39e593da86e4f6d3bf8de1,
+src/open_scholar.py, edit_with_feedback_retrieval and
+insert_attributions_posthoc_paragraph. License: Apache-2.0. No code copied.
+Observed: feedback can trigger further retrieval; revision receives selected
+passages, previous output and feedback. Citation insertion is a model task.
+ADAPT: targeted retrieval to answer a specific missing-evidence question.
+REJECT: treating citation insertion or an exact quote match as scientific support.
+
+Our additional requirement
+An assay change must refer to the exact affected workflow version and retain its
+input/output boundaries and unresolved qualifications. A paper-level retrieval
+system does not supply that contract. change-context is a deterministic join over
+already reviewed records, not a new scientific relationship or compatibility
+judgment. Discovery outside the atlas still requires external literature search.
+
+Implementation and validation
+Changed ideation/context.py and tests/ideation/test_context.py. The existing PDF
+conversion implementation in ideation/evidence.py was preserved. Made the real
+PDF conversion fixture in tests/ideation/test_evidence.py self-contained so a
+native test overlay need not carry tests/sources/test_pdf_registration.py and
+all that module's imports.
+
+Command (repository root):
+  .venv/bin/python -m pytest tests/ideation/test_context.py \
+    tests/ideation/test_evidence.py tests/illumina/test_illumina_history.py -q
+Result: 66 passed. Cases include unchanged inherited registrations, title and
+content-level disagreements, repeat-import idempotence, valid origin receipts
+after a title disagreement, distinct URL/content identities, exact operation
+anchors, reversed pair direction, unavailable versions, no automatic binding of
+catalogue candidates, similarity rejection, missing local operations, source
+tampering, bounded result continuation and real Poppler conversion.
+
+Offline real-artifact replay
+Used the frozen Quartz-Seq/Quartz-Seq2 graph at:
+provenance/experiments/ideation_demo_20261105/history_replay/
+0349406d2bdf1daf7696a5f9/graph.json
+SHA256 f6425631f3d4edd9c59c6c69e05e9866e1b7f5303682f7ba6e640563f1dc5dbd
+Used its embedded source_graph as a temporary atlas, and the adjacent pinned
+history manifest. No frozen artifact was edited. Queried exact historical claim
+f6425631f3d4edd9c59c6c69e05e9866e1b7f5303682f7ba6e640563f1dc5dbd:C1.
+Both endpoints joined their exact extraction versions. Before: six Operations,
+RNA -> amplified cDNA. After: five Operations, wells -> library. Returned group
+commands both resolve. They retain full records through lossless continuation.
+
+The first implementation eagerly included the entire reviewed claim and exceeded
+the default 24,000-character window (38,534 characters). This replay motivated
+returning a navigation packet instead: 4,469 characters. These figures are serialized
+characters, not tokens or a measured reduction in native reasoning time. The full
+groups and claim can still be large; agents must request relevant records or use
+result-read windows. No scientific qualification was rewritten to reduce size.
+
+Limits and next observation
+This is deterministic retrieval/join validation, not a new native ideation run,
+scientific re-review, novelty benchmark or experimental assay validation. Capture
+declarations are stage-local audit sidecars; original source records remain the
+authoritative immutable identity. Cross-agent merge already preserves divergent
+capture declarations, but does not infer that different URLs identify one paper.
+No-match now explicitly means failure of literal retrieval within a potentially
+incomplete capture, not a negative finding about the literature. Native runs
+must still demonstrate that reviewers use the evidence, distinguish inaccessible
+from unsupported claims and reformulate queries when needed.

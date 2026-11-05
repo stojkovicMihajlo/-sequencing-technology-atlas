@@ -167,12 +167,29 @@ COMPARISON_PROMPT = """Compare two extractions of the stated assay using their r
 and primary-paper content. The A/B labels conceal run labels, not necessarily
 schema/style differences. Neither prior extraction nor any review is ground truth.
 Read sources first, identify the scoped architecture, then inspect BOTH records.
+Before scoring omissions, establish the common starting preparation, endpoint
+and included branches in scope_rationale, using the caller's scope_target and
+registered evidence. Same method name/version does not establish equal workflow
+coverage. Compare the common route and state coverage differences explicitly.
+Do not penalize a diagram-bounded record for excluding controls or downstream
+protocol stages outside that boundary, or reward an extension merely for covering
+more of the paper. An omission can be consequential inside the common boundary,
+or when the assignment explicitly requires the missing branch/endpoint; explain
+which applies. An author's exclusion cannot override an explicit assignment.
+If a common comparison boundary cannot be established, use scope_alignment=
+uncertain and outcome=undetermined rather than choosing your preferred scope.
 Check actual material versus biological target, information carrier, transformation,
 consequential molecular properties, routing/ordering/branches, method scope and
 source-grounding. Identify omitted distinguishing changes when source-supported.
 Do not reward more nodes, longer descriptions, fewer unknowns, or more detail.
 Different grouping is acceptable when it preserves the same scientific content.
 A justified unknown can be better than an unsupported confident statement.
+Inspect assertions outside evidence quotations: quoting a fact alone does not
+record the transformation, property or relationship in the graph. Distinguish
+source-supported clarification within the common boundary from substitution of
+another implementation or added out-of-scope operations. For visual claims,
+inspect the exact image region and separate depicted features from text-supported
+corrections and inferences; an image citation does not establish visibility.
 For each important difference cite exact registered text or inspected image region
 and the affected A/B targets. Empty target list means genuinely omitted content,
 not permission to invent an ID. Do not silently fill either graph from memory.
@@ -184,7 +201,11 @@ The union of source evidence is available for evaluation; source availability ma
 differ between runs. Do not attribute any quality difference causally to a harness
 when evidence, model variability or other conditions differ. This is one fallible
 model assessment, not an expert-validated gold score. Never revise the extractions.
-Write only the required JSON artifact and run the supplied self-check.
+Write the required JSON artifact to the supplied output path and run the supplied
+self-check. Then finish with one short public final message stating the artifact
+path and the actual self-check outcome. Do not end on a tool call, substitute prose
+for the JSON artifact, or manually write final.txt; the execution layer records
+your final message there as a separate completion acknowledgement.
 """
 
 

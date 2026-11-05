@@ -1,0 +1,79 @@
+RESEARCH AND GRAPH CONTRACT — 5 November 2026
+
+Purpose
+Make the genomics inductive bias affect investigation before proposal selection,
+not merely the format of a final paragraph. Preserve open assay architectures.
+This is a development change; job 51200765 keeps its frozen prompts and schemas.
+
+Decision
+Keep the existing coordinator, two independent design experts, literature
+investigator, technical reviewer and bounded revision. No extra agent is needed
+for this failure mode. Each expert receives four request-specific research
+questions: capability, mechanism, interfaces/identity, and alternatives/failure.
+These are research responsibilities, not a list of allowed chemistries or methods.
+An expert may reframe a question with a recorded reason and investigate beyond it.
+Queries and sources remain open, including biology and other engineering fields.
+
+The existing local question bank informs this compression:
+  capability: G01/G02/G03/G06 (specimen, direct observation, inference, useful gain)
+  mechanism: G04/G12 (required physical property and experimental precedent)
+  interfaces: G05/G10/G11/G12 (material state and information carriers across steps)
+  challenge: G07/G08/G09 (confounds, alternatives, tradeoffs, discriminating tests)
+Source: genomics-discovery/src/genomics_discovery/knowledge/opportunity_questions.json
+Four is our practical grouping, not an exhaustive ontology or a proven optimum.
+The bank does not prove that all 100+ papers were reviewed for this change.
+
+Each proposal records concise research findings under those four headings,
+with exact graph/change targets and supporting references or unresolved questions.
+Graph States, Operations, Flows, DesignChanges and their assessment ledger retain
+their existing meanings. The reviewer must address the research findings as well
+as the graph. Schema completeness cannot establish sufficient research or entailment.
+
+Versioning
+New author outputs use proposed_assay/1.1 and new run configurations use
+ideation_run/2. Legacy proposed_assay/1.0 remains readable without injecting new
+default fields or changing its canonical digest. Native output bytes and old
+review bindings remain preserved. Archived contracts use their original schema.
+
+Connection correction
+One DesignChange can describe several prior and proposed elements. It does not
+assert that every prior element independently maps to every proposed element.
+Export a proposed_change node with earlier_basis and proposed_effect edges.
+Flow targets remain edge anchors in the change record, with an explicit flow
+reference node for node-edge traversal. Never assert historical development,
+biochemical equivalence or tested compatibility from this proposal overlay.
+
+Reference audit
+ROBIN, Nature 2026, DOI page https://www.nature.com/articles/s41586-026-10652-y
+and Future-House/robin at 4a5cce310f3bc7663a67117db88af43b84733ffe,
+robin/assays.py: questions -> literature -> proposals -> proposal-specific
+investigation -> ranking. Adapt explicit questions and candidate-specific research;
+reject copying drug-ranking criteria or forcing a winner for genomics architectures.
+The public code calls hosted literature agents, not exposed Crow/Falcon internals.
+Virtual Lab explicit expertise/mandates and bounded critique, and PaperQA2
+question-specific evidence retrieval, were audited in docs/IDEATION.txt. Their
+principles motivate role separation and scoped source retrieval, not our four
+genomics research fields. No source code is copied.
+
+Verification before deployment
+Reject missing research areas, unsupported evidence_found labels, unknown graph
+targets, unacknowledged changes to coordinator questions, skipped review findings,
+and Cartesian predecessor/target links. Preserve legacy candidate hashes. Run the
+offline multi-agent handoff with current schemas and a legacy read/export check.
+Then compare native outputs against the frozen baseline; passing software checks
+alone does not establish improved novelty, feasibility or research coverage.
+
+Release integration check
+The combined offline suite passed 880 tests:
+  .venv/bin/python -m pytest --import-mode=importlib tests/ideation \
+    tests/illumina tests/execution experiments/pilot50_20261104 -q
+Use importlib mode for this combined invocation because experiment and package
+test directories contain different test_run.py files. An initial invocation
+without it failed collection; that was not a scientific or model-stage failure.
+Shell syntax and git diff checks passed. Reference implementations, graph-tool
+changes, source-regression findings and remaining limits have separate audit
+records linked from docs/IDEATION.txt and docs/STATUS.md.
+Native checks will run only in fresh Qiu Slurm directories. The ideation check
+uses baseline atlas/request/history bytes without carrying old candidate/review
+memory. The correction check uses one pinned old SPLiT candidate/review and the
+same sources. Neither job is allowed to rewrite its reference run.

@@ -101,9 +101,13 @@ class FakeWorker:
         if role == "author":
             authors = sum(x["role"] == "author" for x in self.calls)
             if authors > 1 and self.request_correction:
-                assert "PREVIOUS CANDIDATE" in prompt and "PREVIOUS REVIEW" in prompt
-                assert "Initial capture description" in prompt
-                assert "Source-backed repair requested" in prompt
+                assert "revision_feedback" in prompt and "artifact_helper" in prompt
+                prior = batch.read(attempt / "previous_candidate.json")
+                feedback = batch.read(attempt / "previous_review.json")
+                assert prior["operations"][0]["description"] == "Initial capture description"
+                assert any(c["rationale"] == "Source-backed repair requested" for c in feedback["checks"])
+                assert "Initial capture description" not in prompt
+                assert "Source-backed repair requested" not in prompt
             document = candidate(sources, revised=authors > 1)
         else:
             current = DiagramExtraction.model_validate_json((attempt / "candidate.json").read_bytes())
@@ -172,6 +176,12 @@ def test_one_correction_preserves_prior_candidate_and_reviews_fresh(acquired, tm
     final = batch.read(tmp_path / "method" / "extraction.json")
     assert first["operations"][0]["description"] == "Initial capture description"
     assert final["operations"][0]["description"] == "Corrected capture description"
+    correction = tmp_path / "method" / "attempts" / "003_author"
+    fresh_review = tmp_path / "method" / "attempts" / "004_reviewer"
+    assert batch.read(correction / "previous_candidate.json") == first
+    assert batch.read(fresh_review / "previous_candidate.json") == first
+    assert batch.read(fresh_review / "candidate.json") == final
+    assert batch.read(fresh_review / "previous_review.json") == batch.read(correction / "previous_review.json")
 
 
 @pytest.mark.parametrize("fault", ["mutate_original", "forged_prompt", "altered_review_input", "missing_native_image"])

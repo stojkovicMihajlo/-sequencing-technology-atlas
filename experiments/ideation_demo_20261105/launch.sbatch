@@ -53,12 +53,17 @@ PY
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p pytest_asyncio.plugin -q \
     tests/ideation tests/illumina/test_illumina_history.py tests/execution/test_curation_codex_worker.py \
     --junitxml="$ATLAS_IDEATION_ROOT/software_${SLURM_JOB_ID}.xml"
-"$ATLAS_ENV_DIR/bin/python" -m experiments.ideation_demo_20261105.snapshot \
-    --pilot "$ATLAS_IDEATION_PILOT" --output "$ATLAS_IDEATION_ROOT/snapshot_01"
-"$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.ideation.run prepare \
-    --request "$ATLAS_REPOSITORY/experiments/ideation_demo_20261105/request.json" \
-    --atlas "$ATLAS_IDEATION_ROOT/snapshot_01/atlas.json" \
-    --history-manifest "$ATLAS_IDEATION_ROOT/snapshot_01/history_inputs.json" \
-    --output "$ATLAS_IDEATION_ROOT/run_01"
+if [[ -n "${ATLAS_IDEATION_REFERENCE_RUN:-}" ]]; then
+    "$ATLAS_ENV_DIR/bin/python" -m experiments.ideation_demo_20261105.snapshot \
+        --reference-run "$ATLAS_IDEATION_REFERENCE_RUN" --output "$ATLAS_IDEATION_ROOT/run_01"
+else
+    "$ATLAS_ENV_DIR/bin/python" -m experiments.ideation_demo_20261105.snapshot \
+        --pilot "$ATLAS_IDEATION_PILOT" --output "$ATLAS_IDEATION_ROOT/snapshot_01"
+    "$ATLAS_ENV_DIR/bin/python" -m genomics_discovery.ideation.run prepare \
+        --request "$ATLAS_REPOSITORY/experiments/ideation_demo_20261105/request.json" \
+        --atlas "$ATLAS_IDEATION_ROOT/snapshot_01/atlas.json" \
+        --history-manifest "$ATLAS_IDEATION_ROOT/snapshot_01/history_inputs.json" \
+        --output "$ATLAS_IDEATION_ROOT/run_01"
+fi
 "$ATLAS_ENV_DIR/bin/python" -u -m genomics_discovery.ideation.run run \
     --directory "$ATLAS_IDEATION_ROOT/run_01"

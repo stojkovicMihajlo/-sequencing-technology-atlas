@@ -18,6 +18,7 @@ from urllib.parse import urlparse
 
 from genomics_discovery.illumina.graph import get_record, operation_group, workflow
 from genomics_discovery.illumina.history import build_history_index, technology_history
+from genomics_discovery.illumina.relationships import HISTORICAL_RELATIONS
 
 
 def _sha(raw):
@@ -208,6 +209,72 @@ class AtlasContext:
             raise ValueError("Choose an exact globally qualified history edge ID")
         return self._result("claim", {"claim_id": claim_id}, matches[0])
 
+    def change_context(self, claim_id):
+        """Join one reviewed historical change to exact available workflow versions.
+
+        This is a navigation packet, not a summary of scientific support. Exact
+        claim/group commands retain access to qualifications and source evidence.
+        """
+        index = self._history() or {}
+        matches = [edge for edge in index.get("edges", []) if edge["id"] == claim_id]
+        if len(matches) != 1:
+            raise ValueError("Choose an exact globally qualified history edge ID")
+        edge = matches[0]
+        if edge["relation"] not in HISTORICAL_RELATIONS:
+            raise ValueError("Before/after context requires a historical relation, not a similarity")
+        claim = edge["claim"]
+        is_pair = edge["artifact"]["format_version"] == "illumina_method_pair/1"
+        if is_pair:
+            direction = claim["direction"]
+            if direction not in {"left_to_right", "right_to_left"}:
+                raise ValueError("Historical pair lacks an explicit direction")
+            before, after = (("left", "right") if direction == "left_to_right" else ("right", "left"))
+            selections = {"before": claim[before + "_operation_ids"], "after": claim[after + "_operation_ids"]}
+        else:
+            selections = {"before": [], "after": claim["seed_operation_ids"]}
+
+        def endpoint(side, node_id):
+            node = index["nodes"][node_id]
+            if node["kind"] != "bound_workflow":
+                return {"status": "external_contribution", "historical_endpoint": node,
+                        "boundary": "A cited contribution, not an extracted workflow. Catalogue candidates do not establish an exact join."}
+            record_id = node["record_id"]
+            card = self.cards.get(record_id)
+            if card is None or card.get("artifact_pins", {}).get("extraction.json") != node["extraction_sha256"]:
+                return {"status": "workflow_version_unavailable", "historical_endpoint": node,
+                        "boundary": "This exact extraction version is absent from the loaded atlas; no substitute version was joined."}
+            operations = selections[side]
+            if not is_pair:
+                lookup = {n["original"]["id"]: n["id"] for n in self.nodes.values()
+                          if n["record_id"] == record_id and n["node_type"] == "operation"}
+                if set(operations) - lookup.keys():
+                    raise ValueError("Historical claim references absent local Operations")
+                operations = [lookup[ident] for ident in operations]
+            binding = self._pin(record_id)
+            try:
+                group = operation_group(self.graph, record_id, operations)
+            except ValueError as exc:
+                if str(exc) != "Operations must form one connected source group":
+                    raise
+                return {"status": "separate_operation_groups", "binding": binding,
+                        "operation_ids": operations, "read_commands": [["node", ident] for ident in operations],
+                        "boundary": "Affected Operations are disconnected in the recorded workflow; this claim does not imply a connecting route."}
+            return {"status": "exact_workflow_join", "binding": binding,
+                    "operation_ids": operations, "selection_sha256": group["selection_sha256"],
+                    "input_state_ids": group["input_state_ids"], "output_state_ids": group["output_state_ids"],
+                    "internal_state_ids": group["internal_state_ids"],
+                    "boundary_flows": [{k: flow[k] for k in ("id", "source", "target", "kind")} for flow in group["boundary_flows"]],
+                    "unknowns": group["unknowns"], "routing_ambiguities": group["routing_ambiguities"],
+                    "read_commands": [["group", record_id, *operations]],
+                    "boundary": "Read the exact group for material properties, operation descriptions and evidence before proposing a transfer."}
+
+        return self._result("change-context", {"claim_id": claim_id},
+            {"format_version": "ideation_change_context/1", "view": "navigation",
+             "relationship": {key: edge[key] for key in ("id", "source", "target", "relation")},
+             "read_commands": [["claim", claim_id]],
+             "before": endpoint("before", edge["source"]), "after": endpoint("after", edge["target"]),
+             "boundary": "Navigation over one reviewed historical change. Read claim for the full statement, review, evidence and qualifications; read group for material/operation details. These joins do not establish compatibility with a new assay."})
+
     def atlas_source(self, record_id, *, source_id=None, start=0, limit=6000, query=None):
         """Reopen the extraction's exact source registry; never return whole papers."""
         card = self._card(record_id)
@@ -279,13 +346,33 @@ class AtlasContext:
             existing = registry["sources"].get(ident)
             if existing:
                 if existing["content_level"] != content_level or existing["title"] != title:
-                    raise ValueError("Existing source metadata differs; do not silently relabel evidence")
+                    # Stage inputs remain immutable. Different descriptions of
+                    # identical bytes are declarations, not new evidence or an
+                    # automatic upgrade from an excerpt to full text.
+                    declarations_path = root / "capture_declarations.json"
+                    declarations = json.loads(declarations_path.read_text()) if declarations_path.exists() else {}
+                    captures = declarations.setdefault(ident, [])
+                    fields = ("title", "content_level", "captured_at", "provenance_status")
+                    if not captures:
+                        captures.append({key: existing[key] for key in fields})
+                    if not any(row["title"] == title and row["content_level"] == content_level for row in captures):
+                        captures.append({key: entry[key] for key in fields})
+                    temporary = declarations_path.with_suffix(f".{os.getpid()}.tmp")
+                    temporary.write_text(_json(declarations)); temporary.replace(declarations_path)
                 entry = existing
             registry["sources"][ident] = entry
             temporary = self.sources_path.with_suffix(f".{os.getpid()}.tmp")
             temporary.write_text(_json(registry))
             temporary.replace(self.sources_path)
-        return self._result("source-add", {"url": url, "content_level": content_level}, entry)
+        return self._result("source-add", {"url": url, "content_level": content_level}, self._capture_metadata(entry))
+
+    def _capture_metadata(self, entry):
+        path = self.sources_path.parent / "capture_declarations.json"
+        declarations = json.loads(path.read_text()).get(entry["source_id"], []) if path.exists() else []
+        if not declarations:
+            return entry
+        return {**entry, "capture_declarations": declarations,
+                "metadata_status": "differing_capture_declarations; original registration retained; alternatives are not verified bibliographic facts or an upgrade in evidence level"}
 
     def _source_text(self, source_id):
         entry = self._sources()["sources"].get(source_id)
@@ -324,12 +411,13 @@ class AtlasContext:
                 temporary.write_text(_json(registry)); temporary.replace(self.sources_path)
             entry = registry['sources'][ident]
         return self._result('source-fetch', {'url': url, 'title': title},
-                            {**entry, 'origin_receipt': fetched['receipt']})
+                            {**self._capture_metadata(entry), 'origin_receipt': fetched['receipt']})
 
     def read_source(self, source_id, *, start=0, limit=6000, query=None):
         entry, text = self._source_text(source_id)
         return self._result("source-read", {"source_id": source_id, "start": start, "limit": limit, "query": query},
-                            {**entry, **self._window(text, start, limit, query)})
+                            {**self._capture_metadata(entry), **self._window(text, start, limit, query),
+                             "boundary": "Bounded literal access to this exact capture. No match does not establish absence of evidence in the paper or wider literature; captured text may be incomplete."})
 
     @staticmethod
     def _window(text, start, limit, query=None):
@@ -374,7 +462,7 @@ def main(argv=None):
     s = p.add_subparsers(dest="command", required=True)
     listing = s.add_parser("list"); listing.add_argument("--offset", type=int, default=0); listing.add_argument("--limit", type=int, default=20)
     search = s.add_parser("search"); search.add_argument("query"); search.add_argument("--limit", type=int, default=10)
-    for command, field in (("workflow", "record_id"), ("node", "node_id"), ("claim", "claim_id")):
+    for command, field in (("workflow", "record_id"), ("node", "node_id"), ("claim", "claim_id"), ("change-context", "claim_id")):
         s.add_parser(command).add_argument(field)
     group = s.add_parser("group"); group.add_argument("record_id"); group.add_argument("operation_ids", nargs="+")
     history = s.add_parser("history"); history.add_argument("record_id"); history.add_argument("--depth", type=int, default=2)
@@ -391,7 +479,7 @@ def main(argv=None):
     context = AtlasContext(args.pop("atlas"), expected_sha256=args.pop("atlas_sha256"),
         history_manifest=args.pop("history_manifest"), history_sha256=args.pop("history_sha256"),
         sources_path=args.pop("sources"), audit_log=args.pop("audit_log"))
-    action = {"list": "list_methods", "atlas-source": "atlas_source", "source-add": "add_source", "source-fetch": "fetch_source", "source-read": "read_source", "result-read": "read_result"}.get(command, command)
+    action = {"list": "list_methods", "change-context": "change_context", "atlas-source": "atlas_source", "source-add": "add_source", "source-fetch": "fetch_source", "source-read": "read_source", "result-read": "read_result"}.get(command, command)
     try:
         result = getattr(context, action)(**args)
     except (ValueError, KeyError, OSError, StopIteration, UnicodeError) as exc:

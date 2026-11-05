@@ -347,6 +347,81 @@ def verify_stage_inputs(attempt, delivery, pins):
         raise ValueError("Native command did not attach the requested images")
 
 
+def revision_handoff(attempt, candidate, review):
+    """Preserve complete feedback in pinned files, without expanding the prompt."""
+    if review.candidate_sha256 != digest(candidate):
+        raise ValueError("Revision feedback is not bound to the prior candidate")
+    artifacts = {}
+    for name, value in (("previous_candidate", candidate.model_dump(mode="json")),
+                        ("previous_review", review.model_dump(mode="json"))):
+        path = attempt / (name + ".json")
+        write(path, value)
+        artifacts[name] = {"path": str(path), "sha256": sha(path)}
+    # Every check is indexed, including accepted interfaces needed during repair.
+    # Only addresses and categorical decisions belong here; full reasons/quotes
+    # remain available at each JSON pointer in previous_review.json.
+    index = {"format_version": "illumina_revision_handoff/1", "artifacts": artifacts,
+        "candidate_sha256": digest(candidate),
+        "checks": [{"target": check.target, "action": check.action,
+                    "verdict": check.verdict, "pointer": "/checks/" + str(i)}
+                   for i, check in enumerate(review.checks)],
+        "blocking_unknowns": [{"target": "unknown:" + item.id, "pointer": "/unknowns/" + str(i)}
+                              for i, item in enumerate(candidate.unknowns) if item.blocking],
+        "unresolved_corrections": [{"target": "correction:" + item.id, "pointer": "/corrections/" + str(i)}
+                                   for i, item in enumerate(candidate.corrections)
+                                   if item.disposition == "keep_unresolved"]}
+    path = attempt / "feedback_index.json"
+    write(path, index)
+    artifacts["feedback_index"] = {"path": str(path), "sha256": sha(path)}
+    return artifacts
+
+
+def artifact_excerpt(path, expected_sha256, *, pointer="", start=0, limit=8000):
+    """Read an exact JSON value by pointer, with explicit character continuation."""
+    path = Path(path)
+    actual = sha(path)
+    if actual != expected_sha256:
+        raise ValueError("Artifact bytes differ from the supplied SHA256")
+    if start < 0:
+        raise ValueError("Artifact start must be nonnegative")
+    value = read(path)
+    if pointer:
+        if not pointer.startswith("/"):
+            raise ValueError("JSON pointer must be empty or begin with /")
+        for component in pointer[1:].split("/"):
+            key = component.replace("~1", "/").replace("~0", "~")
+            if isinstance(value, list):
+                if not re.fullmatch(r"0|[1-9][0-9]*", key):
+                    raise ValueError("JSON pointer array index must be a nonnegative integer")
+                value = value[int(key)]
+            else:
+                value = value[key]
+    text = json.dumps(value, indent=2, ensure_ascii=False)
+    stop = min(start + min(max(limit, 1), 16000), len(text))
+    return {"path": str(path), "sha256": actual, "pointer": pointer,
+            "start": start, "text": text[start:stop], "total_characters": len(text),
+            "next_start": stop if stop < len(text) else None,
+            "boundary": "Exact artifact text, not source evidence or a new scientific assessment."}
+
+
+def registered_text_groups(registry):
+    """Group identical text renditions; preserve source IDs and their associations.
+
+    This only saves repeated retrieval output. It does not merge method identity,
+    evidence levels, or conflicting bibliographic records.
+    """
+    groups = {}
+    for sid, row in registry.items():
+        if row.get("kind") != "text":
+            continue
+        identity = tuple(row.get(k) for k in ("pmid", "doi", "url", "title", "content_level"))
+        identified = row.get("pmid") or row.get("doi") or (row.get("url") and row.get("title"))
+        text_pin = hashlib.sha256(row.get("text", "").encode()).hexdigest()
+        key = (identity, text_pin) if identified and row.get("text") else (sid,)
+        groups.setdefault(key, []).append(sid)
+    return list(groups.values())
+
+
 async def extract_card(card, acquired, source_base, directory, worker, max_revisions=1,
                        representation="illumina_diagram/1.0"):
     registry, images = card_sources(card, acquired, source_base)
@@ -354,8 +429,31 @@ async def extract_card(card, acquired, source_base, directory, worker, max_revis
         max_revisions=max_revisions, representation=representation)
 
 
+def load_revision_seed(seed, card, registry, representation):
+    """Verify one explicit prior candidate/review, without granting it admission."""
+    names = {"card.json", "source_registry.json", "extraction.json", "review.json"}
+    if set(seed) != {"directory", "pins"} or set(seed["pins"]) != names:
+        raise ValueError("Revision seed requires a directory and exact pins for card, registry, extraction and review")
+    directory = Path(seed["directory"])
+    if any(sha(directory / name) != expected for name, expected in seed["pins"].items()):
+        raise ValueError("Revision seed bytes differ from supplied pins")
+    if read(directory / "card.json") != card or read(directory / "source_registry.json") != registry:
+        raise ValueError("Revision seed must use the exact same assigned card and source registry")
+    candidate = parse_extraction((directory / "extraction.json").read_bytes())
+    review = parse_review((directory / "review.json").read_bytes())
+    if candidate.format_version != representation:
+        raise ValueError("Revision seed cannot change extraction representation")
+    errors = validate_assigned_extraction(candidate, registry, card, record_id=card["record_id"])
+    errors.extend(validate_review(review, candidate, registry))
+    if errors:
+        raise ValueError("Invalid revision seed: " + "; ".join(errors))
+    if review_outcome(review, candidate, registry) != "needs_revision":
+        raise ValueError("Revision seed must have an actual needs_revision outcome")
+    return candidate, review
+
+
 async def extract_registered_workflow(card, registry, images, directory, worker, max_revisions=1,
-                                      representation="illumina_diagram/1.1"):
+                                      representation="illumina_diagram/1.1", revision_seed=None):
     """One scoped work unit, with its registered source bundle and independent review.
 
     Method identity/scope planning is a separate gate. This function neither
@@ -373,13 +471,21 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
     for sid, image_path in images:
         if registry.get(sid, {}).get("kind") != "image" or sha(image_path) != registry[sid].get("sha256"):
             raise ValueError("Workflow image must match its registered source: " + sid)
+    candidate, review = None, None
+    if revision_seed is not None:
+        if max_revisions != 1:
+            raise ValueError("An explicit revision seed permits exactly one correction and fresh review")
+        candidate, review = load_revision_seed(revision_seed, card, registry, representation)
     directory.mkdir(parents=True, exist_ok=False)
+    if revision_seed is not None:
+        write(directory / "revision_seed.json", revision_seed)
     write(directory / "card.json", card)
     card_pin = sha(directory / "card.json")
     source_path = directory / "source_registry.json"
     write(source_path, registry)
     source_pin = sha(source_path)
-    stages, candidate, review = [], None, None
+    stages = []
+    prior_candidate, prior_review = None, None
 
     async def stage(role, revision):
         attempt = directory / "attempts" / f"{len(stages) + 1:03d}_{role}"
@@ -403,6 +509,7 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
             "source_helper": shlex.join([sys.executable, "-m", "genomics_discovery.illumina.extraction", "source", "--registry", str(source_path)]),
             "self_check": shlex.join([sys.executable, "-m", "genomics_discovery.illumina.extraction", "check", str(attempt / 'artifact.json'), "--registry", str(source_path), "--record-id", card['record_id'], "--card", str(directory / "card.json")]),
             "source_requirement": paper_instructions(card)}
+        context["duplicate_text_registrations"] = [ids for ids in registered_text_groups(registry) if len(ids) > 1]
         if role == "reviewer":
             candidate_path = attempt / "candidate.json"
             write(candidate_path, candidate.model_dump(mode="json"))
@@ -412,13 +519,20 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
             context["self_check"] += " --candidate " + shlex.quote(str(candidate_path)) + " --review-format " + review_version
         else:
             context["self_check"] += " --extraction-format " + representation
-        prompt = build_prompt(role, context, schema,
-            previous_candidate=candidate.model_dump(mode="json") if role == "author" and candidate else None,
-            previous_review=review.model_dump(mode="json") if role == "author" and review else None)
+        feedback_files = {}
+        if prior_candidate is not None and prior_review is not None:
+            feedback_files = revision_handoff(attempt, prior_candidate, prior_review)
+            context["revision_feedback"] = feedback_files
+            context["artifact_helper"] = shlex.join([sys.executable, "-m",
+                "genomics_discovery.illumina.extraction", "artifact"])
+        prompt = build_prompt(role, context, schema)
         (attempt / "stage_prompt.txt").write_text(prompt)
         fixed_inputs = [attempt / "schema.json", attempt / "stage_prompt.txt", attempt / "image_delivery.json"]
+        if revision_seed is not None:
+            fixed_inputs.append(directory / "revision_seed.json")
         if role == "reviewer":
             fixed_inputs.append(candidate_path)
+        fixed_inputs.extend(Path(value["path"]) for value in feedback_files.values())
         input_pins = {str(path): sha(path) for path in fixed_inputs}
         entry = {"role": role, "revision": revision, "path": str(attempt),
                  "started_at": now(), "status": "running", "prompt_sha256": sha(attempt / "stage_prompt.txt"),
@@ -427,6 +541,10 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
         write(directory / "stages.json", stages)
         started = time.monotonic()
         try:
+            # A transport guard, not an optimal scientific context budget. Large
+            # artifacts belong in the addressable input files above.
+            if len(prompt) > 100_000:
+                raise StageFailure("prompt_preflight", "Stage prompt exceeds 100,000 characters; inspect caller context before native execution")
             result = await worker.run(prompt, attempt, image_paths=paths)
             assessment = assess_archived_attempt(attempt)
             if not assessment.complete or result.exit_code != 0 or result.error:
@@ -465,7 +583,8 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
             entry.update(finished_at=now(), elapsed_seconds=time.monotonic() - started)
             write(directory / "stages.json", stages)
 
-    for revision in range(max_revisions + 1):
+    for revision in range(1 if revision_seed is not None else 0, max_revisions + 1):
+        prior_candidate, prior_review = candidate, review
         candidate = await stage("author", revision)
         review = await stage("reviewer", revision)
         outcome = review_outcome(review, candidate, registry)
@@ -481,7 +600,8 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
         "paper_support": dict(Counter(x.assessment for x in candidate.paper_matches)),
         "candidate_sha256": digest(candidate), "review_sha256": digest(review),
         "artifact_pins": {name: sha(directory / name) for name in
-            ("card.json", "source_registry.json", "extraction.json", "review.json", "graph.json", "stages.json")},
+            ("card.json", "source_registry.json", "extraction.json", "review.json", "graph.json", "stages.json")
+            + (("revision_seed.json",) if revision_seed is not None else ())},
         "research_questions": questions,
         "reason": "; ".join(q["target"] + ": " + q["question"] for q in questions)[:3000]}
 
@@ -621,6 +741,12 @@ def main(argv=None):
     source.add_argument("--query")
     source.add_argument("--start", type=int, default=0)
     source.add_argument("--limit", type=int, default=8000)
+    artifact = sub.add_parser("artifact", help="Read a pinned prior artifact or feedback index by JSON pointer")
+    artifact.add_argument("--path", type=Path, required=True)
+    artifact.add_argument("--sha256", required=True)
+    artifact.add_argument("--pointer", default="")
+    artifact.add_argument("--start", type=int, default=0)
+    artifact.add_argument("--limit", type=int, default=8000)
     check = sub.add_parser("check")
     check.add_argument("artifact", type=Path)
     check.add_argument("--registry", type=Path, required=True)
@@ -630,6 +756,10 @@ def main(argv=None):
     check.add_argument("--extraction-format", choices=("illumina_diagram/1.0", "illumina_diagram/1.1"))
     check.add_argument("--card", type=Path, help="Read-only assigned card for the same scope/reference checks as admission")
     args = parser.parse_args(argv)
+    if args.command == "artifact":
+        print(json.dumps(artifact_excerpt(args.path, args.sha256, pointer=args.pointer,
+            start=args.start, limit=args.limit), indent=2, ensure_ascii=False))
+        return 0
     if args.command == "run":
         if not 1 <= args.workers <= 32 or not 0 <= args.max_revisions <= 2:
             parser.error("Use 1-32 workers and 0-2 scientific corrections")
@@ -641,13 +771,19 @@ def main(argv=None):
     registry = read(args.registry)
     if args.command == "source":
         if not args.id and args.query:
-            matches = [source_excerpt(registry, key, query=args.query,
-                        limit=min(max(args.limit, 1), 16000) // 8)
-                       for key, row in registry.items() if row.get("kind") == "text"]
-            matches = [m for m in matches if m["found"]]
-            value = {"query": args.query, "found": bool(matches), "source_match_count": len(matches),
+            matches = []
+            for ids in registered_text_groups(registry):
+                match = source_excerpt(registry, ids[0], query=args.query,
+                    limit=min(max(args.limit, 1), 16000) // 8)
+                if match["found"]:
+                    match["registrations"] = [{"source_id": sid,
+                        "association_status": registry[sid].get("association_status")} for sid in ids]
+                    matches.append(match)
+            value = {"query": args.query, "found": bool(matches),
+                     "source_match_count": sum(len(m["registrations"]) for m in matches),
+                     "distinct_text_rendition_match_count": len(matches),
                      "results": matches[:8], "truncated": len(matches) > 8,
-                     "retrieval_basis": "literal text search over registered sources; no new evidence acquired"}
+                     "retrieval_basis": "literal search; identical text with matching bibliographic fields is shown once with all source registrations; no independent replication or new evidence implied"}
         elif not args.id:
             value = [{"source_id": key, **{k: v for k, v in row.items()
                 if k in {"kind", "content_level", "title", "pmid", "url", "association_status"}},

@@ -24,7 +24,8 @@ What to read, in order
    instructions. Context supplies file paths and tool commands, not the whole
    atlas or repeated paper text. Each actual stage_prompt.txt is archived.
 3. src/genomics_discovery/ideation/models.py
-   CandidateIdea contains the proposed graph, design changes and assessment ledger.
+   ProposedAssay contains research findings, the graph, design changes and assessment
+   ledger. CandidateIdea is the preserved 1.0 format for reading earlier runs.
    IdeaReview records the closest prior work, issues and a bounded disposition.
 4. src/genomics_discovery/ideation/context.py
    AtlasContext provides version-bound atlas lookup, bounded source reads and an
@@ -51,6 +52,23 @@ The literature investigator has its own session and can research both drafts; th
 design experts retain independent literature access. This role targets a concrete
 failure mode: author-supplied citations may exist but fail to support the required
 property, or may already describe the supposed advance.
+
+The research bias is explicit before idea generation. The coordinator writes four
+questions for EACH expert, tailored to the request and that expert's direction:
+  capability: what useful measurement or improvement is missing in the closest
+              existing assays, in which specimen and biological unit?
+  mechanism: what experimentally demonstrated property could create the required
+             distinction, including mechanisms from outside sequencing?
+  interfaces: what material state must pass between operations, and what physical
+              carrier preserves cell/molecule/location attribution?
+  challenge: what competing method, confound or tradeoff could defeat the benefit,
+             and what comparison would discriminate it?
+These group the earlier project question bank's G01–G12 responsibilities; they are
+our practical synthesis, not four laws established by the cited agent papers.
+Experts choose queries, follow citations and can reframe a question with a reason.
+They can explore biology or another engineering field when it changes a design
+decision. Neither atlas membership nor combining named methods limits creativity.
+Finding a paper and finding support for a precise property are separate tasks.
 
 Interaction happens through concrete artifacts: the reviewer compares both designs,
 and revision authors can inspect the other proposal and the critique. This is not
@@ -80,12 +98,28 @@ and its review; an unrequested equipment restriction should not be invented.
 
 What a candidate contains
 -------------------------
-CandidateIdea (format_version proposed_assay/1.0):
+ProposedAssay (format_version proposed_assay/1.1):
   id, title, biological_question, measurement, expected_benefit
+  research: capability, mechanism, interfaces, challenge
   workflow: states, operations, flows
   changes: earlier references, retained arrangement, changed arrangement,
            affected proposal records and expected gain
   assessments: evidence status and assumptions for every graph record/property
+
+Each research finding has question, optional reframing_reason, conclusion, status,
+affected targets, atlas/literature references and remaining_uncertainty. Status
+evidence_found requires a located reference; it does not mean that the conclusion
+is correct. Unresolved requires the missing evidence/question to be stated. The
+software binds findings to the assigned questions and actual graph/change IDs.
+Both literature and technical reviews must address these four findings. The graph
+assessment ledger still addresses the scientific claims about individual records.
+Concise findings should point to those records instead of repeating their text.
+
+Version 1.0 candidates remain readable without inserting new fields or changing
+their canonical hashes. New runs require 1.1 author outputs and ideation_run/2;
+legacy plans execute only with their original frozen runtime. Archived contracts
+can still be checked against their original schema. No old output is silently
+upgraded or described as having followed the new research instructions.
 
 State: the material preparation or dataset at a particular workflow boundary.
 Operation: an action or inspection of particular input States with particular
@@ -116,6 +150,15 @@ record_id, extraction_sha256 and node_id. A new architecture can have no whole-
 method predecessor while still citing component precedents. Changes may affect
 several States, Operations and Flows; no single-operation novelty rule is imposed.
 
+The exported overlay (assay_ideation_overlay/2) represents each DesignChange as
+one proposed_change node. earlier_basis edges connect exact atlas references to
+that change; proposed_effect edges connect it to its affected proposal records.
+This preserves a grouped before/after claim without inventing a separate mapping
+between every earlier and later component. State-property targets retain their
+property address. Flow targets retain their edge address through a flow_reference
+node; that node is a pointer, not a new material State or assay Operation.
+The original DesignChange and targets remain available in change_records.
+
 How agents use the atlas and papers
 ----------------------------------
 Each stage receives a tool_command with the pinned atlas, stage source registry
@@ -128,6 +171,7 @@ and audit log already specified. The agent appends a command:
   group <record_id> <operation_ids> inspect a connected group and its boundaries
   history <record_id>               inspect reviewed historical claims, if loaded
   claim <claim_id>                  retrieve one exact historical claim
+  change-context <claim_id>         locate the exact before/after operation groups
   atlas-source <record_id> ...      inspect byte-pinned extraction sources/passages
   source-fetch <url> --title ...    fetch public source bytes and a reading rendition
   source-add <path> --url ... --title ... --content-level ...
@@ -140,15 +184,32 @@ roles and effects. It is not semantic equivalence or a biochemical compatibility
 algorithm. Agents inspect the selected records and can use external web search;
 the atlas is not the boundary of permissible scientific knowledge.
 
+change-context returns a navigation packet for a historical relationship, with
+version-matched workflow bindings, affected Operations, boundary State IDs and
+commands to read the full claim and groups. It does not summarize away scientific
+qualifications. Similarity is not accepted as history; missing workflow versions
+and external cited contributions remain explicit. This lets an expert investigate
+what changed in an existing assay before proposing a different use of that change.
+
 Large responses are stored with a continuation handle. Repeated evidence objects
 are indexed once. This limits prompt growth while keeping exact records accessible;
 it does not pretend a short summary contains every scientific detail. The source
 registry preserves captured text and hashes; a literal quote match proves only
 that the quote appears in the captured text. Agent-imported text still needs review
 for source authenticity and whether it supports the scientific claim.
+Repeated captures of identical URL/text bytes retain the original registration.
+Different title or content-level declarations are recorded in a stage-local
+capture_declarations.json sidecar; they do not create independent evidence or
+silently promote an excerpt to full text. source-read and source-fetch expose
+these declarations. No literal text match is a retrieval limitation, not proof
+that the scientific evidence does not exist.
 source-fetch preserves requested/final URLs, HTTP status, raw bytes and hash, text
-rendition and hash. It accepts public HTTPS HTML, JATS article XML and plain text;
-PDF rendition is explicitly unavailable in this first helper. It reuses jats_text
+rendition and hash. It accepts public HTTPS HTML, JATS article XML and plain text,
+and PDFs when host pdftotext is available. PDF receipts retain the converter path
+and version, original bytes and derived text. Empty/image-only PDFs and conversion
+failures remain explicit acquisition limitations. Figures, chemistry diagrams,
+tables and reading order still require inspection of the original when relevant.
+It reuses jats_text
 from the existing source pipeline. Its small HTTP downloader validates redirects
 before following them; the older fetch helper did not expose that interception.
 Address checks are not a substitute for managed network policy. HTML rendition can
@@ -178,8 +239,8 @@ The latter is a search result, not proof of impossibility. A verified_agent_revi
 citation status means an agent checked identity/capture, not that the assay works.
 It additionally requires a matching source-fetch receipt with intact original and
 extracted text bytes. The stage self-check enforces this origin requirement before
-submission. Agent-imported text, including browser-only/PDF excerpts that the host
-fetch tool cannot retrieve, remains unverifiable for citation origin; this is an
+submission. Agent-imported text, including browser-only or image-only excerpts that
+the host fetch tool cannot retrieve/render, remains unverifiable for citation origin; this is an
 access/provenance limitation, not a finding that the paper is false. Reopening a
 known URL and conducting a broader novelty search are checked separately.
 Coverage limits and inaccessible sources remain visible. New claims/references
@@ -188,8 +249,14 @@ introduced in revision require fresh review; the old report cannot certify new b
 ReviewPanel records one IdeaReview per candidate, a comparison of the designs,
 actual searches performed and access limitations. On a later review it records
 previous_issue_resolutions. Unresolved issues must remain visible. The runner checks
-that a non-incomplete novelty assessment has an observed external search execution;
-that check does not prove the search was sufficient or the result was interpreted well.
+that a non-incomplete novelty assessment has an observed external search execution.
+Inherited searches only cover unchanged scientific candidate content; title/ID
+cosmetics are excluded. Changed scientific content requires a fresh review search
+or search_incomplete. This conservative comparison is not semantic equivalence.
+An unresolved blocking issue cannot silently become minor; the reviewer must
+explicitly resolve the original dependency before changing readiness. All previous
+candidate, review, issue-response and stage-contract inputs are pinned. These
+checks do not prove search relevance, coverage or correct scientific interpretation.
 
 Novelty status is direct_overlap, possible_distinction or search_incomplete.
 The review names the nearest prior work, the overlap and the residual difference.
@@ -198,6 +265,12 @@ revise, retain_for_testing, hold or drop. retain_for_testing means retain for fu
 expert/experimental assessment, not an experimentally established technology or a
 ready-to-execute protocol. Critical unsupported primitive properties and incompatible
 interfaces must remain blocking issues until resolved or the claim is narrowed.
+A specified, testable transfer of an experimentally established property can remain
+conditional and be retained for testing. Lack of a completed experiment alone is
+not a reason to reject every new architecture. A missing essential mechanism,
+known incompatibility, unsupported required primitive behavior or uninterpretable
+identity path instead requires repair or a hold. This distinction remains a
+scientific review judgment, not a conclusion the graph validator can establish.
 
 The distinction matters for our use case: the useful output is a proposed physical
 measurement with inspectable interfaces, not only a biological explanation or a

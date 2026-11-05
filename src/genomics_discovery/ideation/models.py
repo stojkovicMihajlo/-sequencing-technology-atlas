@@ -335,6 +335,78 @@ class CandidateIdea(StrictModel):
         return self
 
 
+class ResearchAgenda(StrictModel):
+    """Request-specific questions, not prescribed search strings or assay answers."""
+    capability: Text = Field(description="Question about a useful measurement/improvement: native specimen, biological unit, direct observation versus inference, and closest existing capability.")
+    mechanism: Text = Field(description="Question about the exact experimentally demonstrated property needed to create a distinguishing signal; permit mechanisms outside the atlas.")
+    interfaces: Text = Field(description="Question about material compatibility and the physical carrier of identity through transformations, branching or pooling.")
+    challenge: Text = Field(description="Question seeking competing assays/readouts, a confound or tradeoff that could defeat the benefit, and a comparison that would discriminate it.")
+
+
+RESEARCH_AREAS = tuple(ResearchAgenda.model_fields)
+
+
+class ResearchFinding(StrictModel):
+    question: Text = Field(description="The assigned research question, or a justified reframing. Do not invent a search history.")
+    reframing_reason: Text | None = None
+    conclusion: Text = Field(description="Concise evidence-based finding and its consequence for this design, including the tested setting. Proposed gains remain conditional.")
+    status: Literal["evidence_found", "unresolved"] = Field(description="Retrieval status, not a scientific acceptance or novelty certificate.")
+    targets: Annotated[tuple[Text, ...], Field(min_length=1)] = Field(description="Exact candidate, change:<id>, State, property, Operation or Flow targets affected by the finding.")
+    atlas_refs: tuple[AtlasReference, ...] = ()
+    literature_refs: tuple[LiteratureReference, ...] = ()
+    remaining_uncertainty: Text | None = Field(default=None, description="Missing evidence, access limits, untested transfer or next decision-changing investigation. A no-hit search is not proof of absence.")
+
+    @model_validator(mode="after")
+    def evidence_boundary(self):
+        if self.status == "evidence_found" and not (self.atlas_refs or self.literature_refs):
+            raise ValueError("Research evidence_found requires a located reference")
+        if self.status == "unresolved" and not self.remaining_uncertainty:
+            raise ValueError("Unresolved research must name the remaining uncertainty")
+        if len(self.targets) != len(set(self.targets)):
+            raise ValueError("Research finding targets must be distinct")
+        return self
+
+
+class ResearchFindings(StrictModel):
+    capability: ResearchFinding
+    mechanism: ResearchFinding
+    interfaces: ResearchFinding
+    challenge: ResearchFinding
+
+
+class ProposedAssay(CandidateIdea):
+    """Current author contract; the legacy class/digests remain unchanged."""
+    format_version: Literal["proposed_assay/1.1"] = "proposed_assay/1.1"
+    research: ResearchFindings
+
+    @model_validator(mode="after")
+    def research_targets_exist(self):
+        allowed = candidate_targets(self) | {"candidate"} | {"change:" + c.id for c in self.changes}
+        for area in RESEARCH_AREAS:
+            if set(getattr(self.research, area).targets) - allowed:
+                raise ValueError("Research finding references an unknown graph/change target")
+        return self
+
+
+def parse_candidate(value) -> CandidateIdea:
+    """Read old artifacts without adding fields and invalidating their reviews."""
+    if isinstance(value, CandidateIdea):
+        value = value.model_dump(mode="json")
+    version = value.get("format_version", "proposed_assay/1.0")
+    if version == "proposed_assay/1.0":
+        return CandidateIdea.model_validate(value)
+    if version == "proposed_assay/1.1":
+        return ProposedAssay.model_validate(value)
+    raise ValueError(f"Unknown candidate format: {version}")
+
+
+def review_targets(idea: CandidateIdea) -> set[str]:
+    targets = candidate_targets(idea) | {"candidate"} | {"change:" + c.id for c in idea.changes}
+    if isinstance(idea, ProposedAssay):
+        targets |= {"research:" + area for area in RESEARCH_AREAS}
+    return targets
+
+
 class NearestPrior(StrictModel):
     """A located comparator, not proof that all relevant prior art was searched."""
     title: Text
@@ -361,7 +433,7 @@ class ReviewIssue(StrictModel):
 class IdeaReview(StrictModel):
     candidate_id: Text
     candidate_sha256: Hash
-    reviewed_targets: Annotated[tuple[Text, ...], Field(min_length=1)] = Field(description="Exactly all State, property, Operation, Flow, change:<id>, and candidate targets. This coverage declaration does not replace substantive scientific review.")
+    reviewed_targets: Annotated[tuple[Text, ...], Field(min_length=1)] = Field(description="Exactly all State, property, Operation, Flow, change:<id>, candidate and (for 1.1) research:<area> targets. This coverage declaration does not replace substantive scientific review.")
     novelty_status: Literal["direct_overlap", "possible_distinction", "search_incomplete"]
     nearest_prior: tuple[NearestPrior, ...]
     issues: tuple[ReviewIssue, ...]
@@ -384,7 +456,7 @@ class IdeaReview(StrictModel):
 def validate_review_binding(review: IdeaReview, idea: CandidateIdea) -> None:
     if review.candidate_id != idea.id or review.candidate_sha256 != digest(idea):
         raise ValueError("Review is not bound to these exact candidate bytes")
-    targets = candidate_targets(idea) | {"candidate"} | {"change:" + c.id for c in idea.changes}
+    targets = review_targets(idea)
     if len(review.reviewed_targets) != len(set(review.reviewed_targets)) or set(review.reviewed_targets) != targets:
         raise ValueError("Reviewer must account for every graph, change and candidate target exactly once")
     if any(issue.target not in targets for issue in review.issues):

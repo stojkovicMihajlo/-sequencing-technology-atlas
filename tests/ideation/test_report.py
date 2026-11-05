@@ -6,10 +6,11 @@ import re
 
 import pytest
 
-from genomics_discovery.ideation.models import CandidateIdea, IdeaReview, candidate_targets
+from genomics_discovery.ideation.models import CandidateIdea, IdeaReview, candidate_targets, parse_candidate
 from genomics_discovery.ideation.report import export_report, proposal_overlay
 from genomics_discovery.illumina.models import digest, property_target
 from tests.ideation.test_models import atlas_ref, candidate_data, review_data
+from tests.ideation.test_research import research_candidate_data
 
 
 def bundle(*, parent=True, injected=False):
@@ -41,14 +42,16 @@ def test_overlay_preserves_all_proposal_content_and_property_assessments():
     assert not {'method_development', 'component_adoption', 'shared_mechanism'} & {e['kind'] for e in graph['edges']}
 
 
-def test_prior_connection_points_to_exact_changed_operation_not_whole_workflow():
+def test_prior_connection_passes_through_scoped_change_event():
     idea, panel = bundle()
     graph = proposal_overlay([idea.model_dump(mode='json')], panel, 'f' * 64)
-    link, = [e for e in graph['edges'] if e['kind'] == 'proposes_change_to']
-    assert link['source'] == atlas_ref()['node_id']
+    basis, = [e for e in graph['edges'] if e['kind'] == 'earlier_basis']
+    link, = [e for e in graph['edges'] if e['kind'] == 'proposed_effect']
+    assert basis['source'] == atlas_ref()['node_id']
+    assert basis['target'] == link['source'] == graph['change_records'][0]['id']
     assert link['target'] == 'proposal:idea1:prepare'
     assert link['proposed_target'] == 'operation:prepare'
-    assert link['atlas_binding'] == atlas_ref()
+    assert basis['atlas_binding'] == atlas_ref()
     endpoints = {n['id'] for n in graph['nodes'] + graph['external_atlas_nodes']}
     assert all(e['source'] in endpoints and e['target'] in endpoints for e in graph['edges'])
     assert len({e['id'] for e in graph['edges']}) == len(graph['edges'])
@@ -60,7 +63,8 @@ def test_new_architecture_without_atlas_parent_keeps_its_design_change():
     assert len(graph['change_records']) == 1
     assert graph['change_records'][0]['original'] == idea.changes[0].model_dump(mode='json')
     assert not graph['external_atlas_nodes']
-    assert not any(e['kind'] == 'proposes_change_to' for e in graph['edges'])
+    assert not any(e['kind'] == 'earlier_basis' for e in graph['edges'])
+    assert any(e['kind'] == 'proposed_effect' for e in graph['edges'])
 
 
 def test_property_and_flow_changes_retain_exact_addresses_without_inventing_nodes():
@@ -76,11 +80,33 @@ def test_property_and_flow_changes_retain_exact_addresses_without_inventing_node
          'graph_element_id': 'proposal:idea1:reads', 'property_id': 'type'},
         {'target': 'flow:f2', 'kind': 'flow', 'graph_element_id': 'proposal:idea1:f2'},
     ]
-    link, = [e for e in graph['edges'] if e['kind'] == 'proposes_change_to']
+    link, = [e for e in graph['edges'] if e['kind'] == 'proposed_effect' and e['proposed_target'].startswith('state_property:')]
     assert link['target'] == 'proposal:idea1:reads'
     assert link['proposed_target'] == property_target('reads', 'type')
     assert 'proposal:idea1:f2' in {e['id'] for e in graph['edges']}
     assert 'proposal:idea1:f2' not in {n['id'] for n in graph['nodes']}
+    ref, = [n for n in graph['nodes'] if n['node_type'] == 'flow_reference']
+    assert ref['flow_id'] == 'proposal:idea1:f2'
+    flow_link, = [e for e in graph['edges'] if e['kind'] == 'proposed_effect' and e['proposed_target'] == 'flow:f2']
+    assert flow_link['target'] == ref['id']
+
+
+def test_grouped_change_does_not_invent_pairwise_component_correspondences():
+    idea, _ = bundle()
+    data = idea.model_dump(mode='json')
+    second = {**atlas_ref(), 'node_id': 'illumina:example:state:library'}
+    data['changes'][0]['earlier_refs'].append(second)
+    data['changes'][0]['proposed_target_ids'].append('state:cdna')
+    idea = CandidateIdea.model_validate(data)
+    graph = proposal_overlay([data], {'reviews': [review_data(idea)]}, 'f'*64)
+    assert graph['format_version'] == 'assay_ideation_overlay/2'
+    earlier = {atlas_ref()['node_id'], second['node_id']}
+    later = {'proposal:idea1:prepare', 'proposal:idea1:cdna'}
+    assert not any(e['source'] in earlier and e['target'] in later for e in graph['edges'])
+    basis = [e for e in graph['edges'] if e['kind'] == 'earlier_basis']
+    effects = [e for e in graph['edges'] if e['kind'] == 'proposed_effect']
+    assert len(basis) == len(effects) == 2
+    assert {e['target'] for e in basis} == {e['source'] for e in effects}
 
 
 @pytest.mark.parametrize('failure', ['stale_review', 'missing_review', 'duplicate_candidate', 'invalid_route'])
@@ -174,3 +200,23 @@ def test_existing_literature_findings_and_coverage_are_displayed_with_version_bi
     assert "a.href='literature_report.json'" in page
     assert "b.href='literature_coverage.json'" in page
     assert page.count('</script>') == 1
+
+
+def test_current_research_findings_survive_export_with_exact_review_binding(tmp_path):
+    idea = parse_candidate(research_candidate_data())
+    candidate = tmp_path/'candidate.json'; candidate.write_text(idea.model_dump_json())
+    request = tmp_path/'request.json'; request.write_text('{"prompt":"Software fixture"}')
+    panel = {'reviews': [review_data(idea)], 'comparison_summary': 'No scientific result in this fixture.'}
+    export_report(tmp_path, {'request_file': str(request), 'atlas_sha256': 'f'*64}, [str(candidate)], panel)
+    graph = json.loads((tmp_path/'proposal_graph.json').read_text())
+    exported = parse_candidate(graph['candidates'][0])
+    assert digest(exported) == digest(idea)
+    node, = [n for n in graph['nodes'] if n['node_type'] == 'workflow']
+    assert node['research'] == idea.research.model_dump(mode='json')
+    text = (tmp_path/'report.txt').read_text()
+    assert idea.research.interfaces.question in text
+    assert idea.research.interfaces.remaining_uncertainty in text
+    assert 'Affected targets: operation:prepare, change:change1' in text
+    page = (tmp_path/'index.html').read_text()
+    decoded = json.loads(page.split('const D=', 1)[1].split(';const NS=', 1)[0])
+    assert decoded['candidates'][0]['research'] == idea.research.model_dump(mode='json')

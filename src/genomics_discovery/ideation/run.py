@@ -24,7 +24,8 @@ from genomics_discovery.core.artifacts import StrictModel
 from genomics_discovery.execution.codex_worker import CodexWorker, assess_archived_attempt
 from genomics_discovery.illumina.models import Text, digest
 from .models import (AtlasReference, CandidateIdea, Hash, IdeaReview, LiteratureReference,
-                     NearestPrior, candidate_targets, validate_review_binding)
+                     NearestPrior, ProposedAssay, ResearchAgenda, RESEARCH_AREAS,
+                     candidate_targets, parse_candidate, review_targets, validate_review_binding)
 from .prompts import build_prompt
 
 
@@ -73,6 +74,14 @@ class ResearchPlan(StrictModel):
         return self
 
 
+class ResearchExpertMandate(ExpertMandate):
+    research_questions: ResearchAgenda
+
+
+class AssayResearchPlan(ResearchPlan):
+    experts: Annotated[tuple[ResearchExpertMandate, ...], Field(min_length=2, max_length=2)]
+
+
 class ReviewPanel(StrictModel):
     reviews: Annotated[tuple[IdeaReview, ...], Field(min_length=1)]
     comparison_summary: Text = Field(description='Reviewer comparison of the separate designs; do not fabricate a conversation or force a merged design.')
@@ -96,6 +105,10 @@ class IssueResponse(StrictModel):
 class Revision(StrictModel):
     candidate: CandidateIdea
     responses: tuple[IssueResponse, ...]
+
+
+class AssayRevision(Revision):
+    candidate: ProposedAssay
 
 
 class LiteratureCheck(StrictModel):
@@ -159,8 +172,18 @@ class LiteratureReport(StrictModel):
         return self
 
 
-SCHEMAS = {'plan': ResearchPlan, 'propose': CandidateIdea, 'literature': LiteratureReport,
-           'review': ReviewPanel, 'revise': Revision}
+LEGACY_SCHEMAS = {'plan': ResearchPlan, 'propose': CandidateIdea, 'literature': LiteratureReport,
+                  'review': ReviewPanel, 'revise': Revision}
+SCHEMAS = {**LEGACY_SCHEMAS, 'plan': AssayResearchPlan, 'propose': ProposedAssay, 'revise': AssayRevision}
+
+
+def schemas_for(contract):
+    version = contract.get('format_version', 'ideation_run/1')
+    if version == 'ideation_run/1':
+        return LEGACY_SCHEMAS
+    if version == 'ideation_run/2':
+        return SCHEMAS
+    raise ValueError(f'Unknown ideation run format: {version}')
 
 
 def context_for(contract):
@@ -207,9 +230,12 @@ def validate_literature_report(document, candidates, sources):
         if finding.candidate_sha256 != digest(idea):
             raise ValueError('Literature findings are not bound to the exact candidate')
         changes = {'change:' + change.id for change in idea.changes}
-        allowed = candidate_targets(idea) | changes | {'candidate'}
+        allowed = review_targets(idea)
+        required = changes | {'candidate'}
+        if isinstance(idea, ProposedAssay):
+            required |= {'research:' + area for area in RESEARCH_AREAS}
         targets = {check.target for check in finding.checks}
-        if targets - allowed or not changes | {'candidate'} <= targets:
+        if targets - allowed or not required <= targets:
             raise ValueError('Literature checks must cover the central candidate and every proposed change, with exact graph targets')
         if len({check.id for check in finding.checks}) != len(finding.checks):
             raise ValueError('Literature check IDs must be unique within a candidate')
@@ -257,47 +283,117 @@ def validate_literature_execution(report, receipt, sources_path):
     validate_citation_origins(report, sources_path)
 
 
+def research_content_digest(idea):
+    """Conservative claim comparison; only the top-level name/ID are cosmetic.
+
+    A changed natural-language sentence may or may not change the science. We do
+    not ask another model to certify equivalence just to avoid a fresh search.
+    """
+    value = idea.model_dump(mode='json')
+    value.pop('id', None)
+    value.pop('title', None)
+    return digest(value)
+
+
+def inherited_search_coverage(contract):
+    """Report which current candidates are covered by the searched input report."""
+    ideas = [parse_candidate(read(p)) for p in contract['candidate_files']]
+    coverage = {idea.id: {'eligible': False, 'reason': 'No observed searched literature report.'}
+                for idea in ideas}
+    if not contract.get('literature_search_observed') or not contract.get('literature_report_file'):
+        return coverage
+    report = LiteratureReport.model_validate(read(contract['literature_report_file']))
+    if report.search_status != 'searched':
+        return coverage
+    checked = {idea.id: idea for idea in (
+        parse_candidate(read(p)) for p in contract.get('literature_candidate_files', []))}
+    findings = {finding.candidate_id: finding for finding in report.candidate_findings}
+    for idea in ideas:
+        previous, finding = checked.get(idea.id), findings.get(idea.id)
+        if previous is None or finding is None:
+            coverage[idea.id]['reason'] = 'No checked candidate version in the inherited report.'
+            continue
+        if finding.candidate_sha256 != digest(previous):
+            raise ValueError('Inherited literature report does not bind its supplied candidate')
+        unchanged = research_content_digest(idea) == research_content_digest(previous)
+        coverage[idea.id] = {
+            'eligible': unchanged,
+            'checked_candidate_sha256': finding.candidate_sha256,
+            'current_candidate_sha256': digest(idea),
+            'reason': ('Scientific fields match the searched candidate; only id/title may differ.'
+                       if unchanged else 'Scientific content changed; fresh search or search_incomplete required.'),
+        }
+    return coverage
+
+
+def validate_review_search(document, contract, receipt):
+    coverage = inherited_search_coverage(contract)
+    for review in document.reviews:
+        if (review.novelty_status != 'search_incomplete'
+                and not receipt.get('web_search_event_observed')
+                and not coverage[review.candidate_id]['eligible']):
+            raise ValueError('Novelty comparison requires observed search for these scientific claims; use search_incomplete or search again')
+    return coverage
+
+
 def validate_artifact(contract, path):
     role = contract['stage']
-    document = SCHEMAS[role].model_validate(read(path))
+    schemas = schemas_for(contract)
+    document = schemas[role].model_validate(read(path))
     request = Request.model_validate(read(contract['request_file']))
     if role == 'plan':
         if document.original_request != request.prompt or tuple(document.constraints) != request.constraints:
             raise ValueError('Coordinator must preserve original request and explicit constraints verbatim')
     if role == 'literature':
         validate_literature_report(document,
-            [CandidateIdea.model_validate(read(p)) for p in contract['candidate_files']],
+            [parse_candidate(read(p)) for p in contract['candidate_files']],
             read(contract['sources_file'])['sources'])
         validate_citation_origins(document, contract['sources_file'])
     if role in {'propose', 'revise'}:
         idea = document.candidate if role == 'revise' else document
         if idea.id != contract['expert_id']:
             raise ValueError('Candidate ID must match its assigned independent expert')
+        if isinstance(idea, ProposedAssay):
+            plan = AssayResearchPlan.model_validate(read(contract['research_plan_file']))
+            mandate = next((e for e in plan.experts if e.id == idea.id), None)
+            if mandate is None:
+                raise ValueError('Candidate has no assigned expert mandate')
+            for area in RESEARCH_AREAS:
+                finding = getattr(idea.research, area)
+                if finding.question != getattr(mandate.research_questions, area) and not finding.reframing_reason:
+                    raise ValueError('Reframing an assigned research question requires a reason')
         if role == 'revise':
             panel = ReviewPanel.model_validate(read(contract['review_file']))
             review = next(x for x in panel.reviews if x.candidate_id == idea.id)
-            previous = CandidateIdea.model_validate(read(contract['previous_candidate_file']))
+            previous = parse_candidate(read(contract['previous_candidate_file']))
             validate_review_binding(review, previous)
             actual = [r.issue_id for r in document.responses]
             if len(actual) != len(set(actual)) or set(actual) != {i.id for i in review.issues}:
                 raise ValueError('Revision must answer every exact prior review issue once')
     if role == 'review':
-        ideas = [CandidateIdea.model_validate(read(p)) for p in contract['candidate_files']]
+        ideas = [parse_candidate(read(p)) for p in contract['candidate_files']]
         if len(document.reviews) != len(ideas) or {r.candidate_id for r in document.reviews} != {i.id for i in ideas}:
             raise ValueError('Panel must review every candidate exactly once')
         for review in document.reviews:
             validate_review_binding(review, next(i for i in ideas if i.id == review.candidate_id))
         expected = set()
+        previous_issues = {}
         if contract.get('review_file'):
             previous = ReviewPanel.model_validate(read(contract['review_file']))
             expected = {(r.candidate_id, i.id) for r in previous.reviews for i in r.issues}
+            previous_issues = {(r.candidate_id, i.id): i for r in previous.reviews for i in r.issues}
         actual = [(r.candidate_id, r.issue_id) for r in document.previous_issue_resolutions]
         if len(actual) != len(set(actual)) or set(actual) != expected:
             raise ValueError('Final panel must account for every previous issue exactly once')
         for resolution in document.previous_issue_resolutions:
             current = next(r for r in document.reviews if r.candidate_id == resolution.candidate_id)
-            if resolution.status == 'unresolved' and not any(i.id == resolution.issue_id for i in current.issues):
-                raise ValueError('Unresolved previous issue must remain visible in current issues')
+            if resolution.status == 'unresolved':
+                issue = next((i for i in current.issues if i.id == resolution.issue_id), None)
+                if issue is None:
+                    raise ValueError('Unresolved previous issue must remain visible in current issues')
+                if (previous_issues[(resolution.candidate_id, resolution.issue_id)].severity == 'blocking'
+                        and issue.severity != 'blocking'):
+                    raise ValueError('An unresolved blocking issue must remain blocking; resolve the original dependency explicitly before changing readiness')
     validate_references(document, context_for(contract))
     return document
 
@@ -354,7 +450,7 @@ def prepare(request_path, atlas_path, output, *, history_manifest=None):
     shutil.copyfile(atlas_path, inputs / 'atlas.json')
     write(inputs / 'request.json', request.model_dump(mode='json'))
     write(inputs / 'inventory.json', inventory)
-    config = {'format_version': 'ideation_run/1', 'atlas_file': str(inputs/'atlas.json'),
+    config = {'format_version': 'ideation_run/2', 'atlas_file': str(inputs/'atlas.json'),
         'atlas_sha256': sha(inputs/'atlas.json'), 'request_file': str(inputs/'request.json'),
         'request_sha256': sha(inputs/'request.json'), 'model': 'gpt-6.1-sol', 'effort': 'xhigh',
         'expert_count': 2, 'max_revision_rounds': 1, 'history_manifest': None, 'history_sha256': None,
@@ -369,6 +465,16 @@ def prepare(request_path, atlas_path, output, *, history_manifest=None):
     return config
 
 
+def stage_input_paths(contract):
+    paths = [contract['request_file'], contract['atlas_file'], contract['schema_file']]
+    for key in ('candidate_files', 'literature_candidate_files', 'previous_candidate_files',
+                'issue_response_files'):
+        paths.extend(contract.get(key, []))
+    for key in ('research_plan_file', 'review_file', 'previous_candidate_file', 'literature_report_file'):
+        if contract.get(key): paths.append(contract[key])
+    return set(paths)
+
+
 class NativeStages:
     def __init__(self):
         self.worker = CodexWorker(model='gpt-6.1-sol', effort='xhigh', timeout_seconds=None,
@@ -380,11 +486,8 @@ class NativeStages:
         if len(prompt) > 100_000:
             raise ValueError('Stage prompt unexpectedly large: use file/tool references')
         (attempt/'stage_prompt.txt').write_text(prompt)
-        paths = [contract['request_file'], contract['atlas_file'], contract['schema_file'],
-                 *contract['candidate_files']]
-        for key in ('research_plan_file', 'review_file', 'previous_candidate_file', 'literature_report_file'):
-            if contract.get(key): paths.append(contract[key])
-        pins = {p: sha(p) for p in paths}
+        pins = {p: sha(p) for p in stage_input_paths(contract)}
+        pins[str(attempt/'contract.json')] = sha(attempt/'contract.json')
         existing_sources = read(contract['sources_file'])
         pins.update({entry['path']: entry['content_sha256'] for entry in existing_sources['sources'].values()})
         implementation = {str(p): sha(p) for p in Path(__file__).parent.glob('*.py')}
@@ -421,6 +524,8 @@ async def pipeline(directory, execute_stage):
     config, state = read(directory/'config.json'), read(directory/'state.json')
     if state['status'] != 'prepared':
         raise ValueError('Run already started; preserve it and prepare a new experiment instead of silently replaying')
+    if config.get('format_version') != 'ideation_run/2':
+        raise ValueError('Execute legacy plans with their frozen runtime; prepare a new run for the current research contract')
     if sha(config['atlas_file']) != config['atlas_sha256'] or sha(config['request_file']) != config['request_sha256']:
         raise ValueError('Prepared input changed')
     # A source file can change after preparation even if the manifest is unchanged.
@@ -431,7 +536,7 @@ async def pipeline(directory, execute_stage):
     async def stage(role, name, *, source_inputs=(), **extra):
         attempt = directory/'attempts'/name
         attempt.mkdir(parents=True, exist_ok=False)
-        write(attempt/'schema.json', SCHEMAS[role].model_json_schema())
+        write(attempt/'schema.json', schemas_for(config)[role].model_json_schema())
         write(attempt/'sources.json', merge_sources(source_inputs))
         tool = [sys.executable, '-m', 'genomics_discovery.ideation.context',
                 '--atlas', config['atlas_file'], '--atlas-sha256', config['atlas_sha256'],
@@ -445,7 +550,9 @@ async def pipeline(directory, execute_stage):
             'self_check_command': shlex.join([sys.executable, '-m', 'genomics_discovery.ideation.run',
                                              'check', '--stage-directory', str(attempt)])}
         contract['candidate_bindings'] = [{'candidate_id': read(p)['id'], 'path': p,
-            'candidate_sha256': digest(CandidateIdea.model_validate(read(p)))} for p in contract['candidate_files']]
+            'candidate_sha256': digest(parse_candidate(read(p)))} for p in contract['candidate_files']]
+        if role == 'review':
+            contract['inherited_search_coverage'] = inherited_search_coverage(contract)
         write(attempt/'contract.json', contract)
         row = {'role': role, 'path': str(attempt), 'status': 'running'}
         state['stages'].append(row); state['status'] = role
@@ -455,9 +562,8 @@ async def pipeline(directory, execute_stage):
             result = validate_artifact(contract, attempt/'artifact.json')
             if role == 'literature':
                 validate_literature_execution(result, receipt, attempt/'sources.json')
-            if role == 'review' and not (receipt.get('web_search_event_observed') or contract.get('literature_search_observed')) and any(
-                    r.novelty_status != 'search_incomplete' for r in result.reviews):
-                raise ValueError('A novelty conclusion requires observed external search; otherwise use search_incomplete')
+            if role == 'review':
+                row['inherited_search_coverage'] = validate_review_search(result, contract, receipt)
             row.update(status='validated', artifact_sha256=sha(attempt/'artifact.json'), **receipt)
             source_registries.append(attempt/'sources.json')
             return result, attempt/'artifact.json', attempt/'sources.json'
@@ -495,7 +601,7 @@ async def pipeline(directory, execute_stage):
             'literature_scope': 'This report is bound to the original candidates. Changed claims or new references require fresh checks in final review; the report does not automatically certify revisions.'}
         coverage = []
         for finding in literature.candidate_findings:
-            idea = CandidateIdea.model_validate(read(next(p for p in candidate_files if read(p)['id'] == finding.candidate_id)))
+            idea = parse_candidate(read(next(p for p in candidate_files if read(p)['id'] == finding.candidate_id)))
             coverage.append({'candidate_id': idea.id, 'candidate_sha256': digest(idea),
                 'checked_targets': sorted({c.target for c in finding.checks}),
                 'unchecked_graph_targets': sorted(candidate_targets(idea) - {c.target for c in finding.checks})})

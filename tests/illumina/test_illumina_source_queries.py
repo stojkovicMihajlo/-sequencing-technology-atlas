@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from genomics_discovery.illumina.extraction import main, source_excerpt
+from genomics_discovery.illumina.extraction import main, source_excerpt, registered_text_groups
 
 
 def test_query_miss_never_returns_unrelated_intro():
@@ -33,3 +33,30 @@ def test_search_all_registered_sources_is_bounded_and_keeps_source_ids(tmp_path,
     assert result['truncated'] is True and len(result['results']) == 8
     assert sum(len(r['text']) for r in result['results']) <= 800
     assert all(r['source_id'].startswith('paper:') for r in result['results'])
+
+
+def test_identical_paper_text_is_returned_once_without_erasing_associations(tmp_path, capsys):
+    base = {'kind': 'text', 'pmid': '123', 'title': 'An assay',
+        'content_level': 'fulltext', 'text': 'RNA capture is described.'}
+    sources = {'poster:paper': {**base, 'association_status': 'candidate_for_poster'},
+        'primary:paper': {**base, 'association_status': 'primary_candidate'}}
+    path = tmp_path/'registry.json'
+    path.write_text(json.dumps(sources))
+    main(['source', '--registry', str(path), '--query', 'capture'])
+    result = json.loads(capsys.readouterr().out)
+    assert result['source_match_count'] == 2
+    assert result['distinct_text_rendition_match_count'] == 1
+    assert result['results'][0]['registrations'] == [
+        {'source_id': 'poster:paper', 'association_status': 'candidate_for_poster'},
+        {'source_id': 'primary:paper', 'association_status': 'primary_candidate'}]
+    assert not result['truncated']
+    assert registered_text_groups(sources) == [['poster:paper', 'primary:paper']]
+
+
+@pytest.mark.parametrize('changed', [
+    {'pmid': '456'}, {'title': 'Different publication'}, {'content_level': 'abstract'},
+    {'text': 'RNA capture is described differently.'}])
+def test_distinct_evidence_is_never_collapsed_due_to_a_matching_title_or_text(changed):
+    base = {'kind': 'text', 'pmid': '123', 'title': 'An assay',
+        'content_level': 'fulltext', 'text': 'RNA capture is described.'}
+    assert registered_text_groups({'a': base, 'b': {**base, **changed}}) == [['a'], ['b']]
