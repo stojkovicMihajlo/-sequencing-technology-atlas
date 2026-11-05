@@ -154,8 +154,10 @@ class DiagramExtraction(StrictModel):
     title: Text
     method_names: Annotated[tuple[Text, ...], Field(min_length=1)]
     scope: Text = Field(description=
-        "Exact assay implementation, component illustration or grouped family described; not "
-        "a claim that all protocols follow the same sequence or that this is an execution recipe.")
+        "Begin by explaining what the method measures, from what input/unit, and its "
+        "source-supported operating principle. Then specify the implementation/component/family "
+        "boundary and exclusions. A procedure list or exclusions alone is insufficient. "
+        "This is not a complete execution recipe or a claim about all variants.")
     inspected_sources: Annotated[tuple[Text, ...], Field(min_length=1)]
     states: Annotated[tuple[State, ...], Field(min_length=1)]
     operations: Annotated[tuple[Operation, ...], Field(min_length=1)]

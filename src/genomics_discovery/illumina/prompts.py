@@ -12,8 +12,8 @@ from pathlib import Path
 
 
 SHARED_INSTRUCTIONS = """SCIENTIFIC TASK
-Describe the explanatory assay architecture shown in the supplied Illumina
-diagram, in the declared method/version scope. The result should explain what
+Describe the explanatory assay architecture in the supplied Illumina method
+description and diagram(s), in the declared method/version scope. The result should explain what
 materials undergo which transformations, how the resulting library represents
 the biological target, and how the depicted operations connect. This is an
 architecture extraction, not reconstruction of every experiment or an executable
@@ -22,14 +22,33 @@ merely because a paper supplies them. Include a detail when it distinguishes the
 scoped method, determines a depicted transformation, or is needed to interpret an
 important material, readout or interface.
 
-The extraction unit is the assigned Illumina schematic, not every assay mentioned
-in its surrounding catalogue text or bibliography. Set method_names to the
-method(s) identified as the targets of that schematic by the assigned card title,
-figure title/caption and explicitly depicted alternatives. Use descriptions and
-papers to clarify those targets, not to add unshown adaptations, related methods
-or background assays. An embedded named subprotocol remains an Operation/component
-unless the source identifies it as an alternative target workflow. Do not omit a
-genuinely grouped target because its applicability is hard to establish.
+The extraction unit is the assigned method/version. A reviewed work unit may
+combine a website card, matching poster rows and matching collection pages.
+Follow expected_method_names and the caller's implementation scope when supplied;
+otherwise identify the assigned schematic's targets from its title/caption and
+depicted alternatives. Multiple depictions of the same implementation are sources
+for one workflow, not extra methods or duplicate operations. Separate versions
+must not be silently assembled into a composite assay.
+
+Read the method's explanatory catalogue text as well as its diagram. The text's
+description of what the assay measures and how it works is core evidence, not
+merely neighboring context. Begin scope with a positive explanation of what is
+measured, from what input or biological unit, and how the reported assay makes it
+measurable. Then qualify the implementation boundary. A list of procedures or
+excluded neighbors alone does not explain the assay. Do not invent an unstated
+benefit or force an exact specimen when the source describes a general input.
+Retain source-reported selectivity limits and qualifications that change how this
+measurement is interpreted. Reported advantages are scoped claims, not independent
+validation or automatically established evolutionary relationships.
+
+The diagram guides granularity, not an image-only inclusion rule. A preparation,
+transformation or readout explicitly described for this same implementation in
+the card/collection prose may be included even when its pictorial block is
+compressed or absent. Cite it as reported in text, never depicted in an image.
+Do not import a separate application, adaptation or every paper's execution detail.
+An embedded named subprotocol remains an Operation/component unless explicitly
+assigned as a separate target. Grouped headings need member applicability review;
+they are not automatically aliases or identical workflows.
 
 SOURCE AND IMAGE CONTRACT
 The caller attaches the actual diagram PNGs. Inspect those images, including
@@ -96,7 +115,7 @@ found evidence is absent from the registry, record the precise acquisition need
 and retain the affected claim as unresolved until a new registered-source attempt.
 
 REPRESENTATION RULES
-1. Read the complete diagram before deciding its decomposition. Represent its
+1. Read the complete diagram and matching method description before deciding its decomposition. Represent its
    transformations and retained branches at the level shown. A broad library-prep
    block can remain broad; do not invent its internal sequence from memory.
 2. Record the material each operation acts on and produces. The biological target,
@@ -159,6 +178,9 @@ REPRESENTATION RULES
    memory. Do not use unsupported facts to make a graph appear complete.
 
 FIELD OWNERSHIP AND LABELS
+scope explains the assay's measurement and principle before implementation limits.
+method_scopes provides evidence and Operation applicability for each assigned
+method. It is not a substitute for explaining what the method does.
 State.label names what is actually present at that boundary; State.kind says
 whether it is material or data. State.features records supported distinctions
 such as molecular form, attachment, compartment and information-bearing features.
@@ -214,16 +236,18 @@ record the source-backed scope uncertainty rather than silently renaming it.
 Run the supplied self_check with its --card argument before finishing; correct
 identity/format errors in this attempt and rerun that check. A valid check does
 not replace independent scientific review.
-First inventory what the diagram actually depicts: labels, materials, major
-transformations, branches and final product. Build the compact architecture and
-its source anchors from that inventory. Read the supplied method description and
-relevant paper evidence to establish scope and resolve consequential ambiguity.
+First read the matching method description to establish what the assay measures
+and its operating principle. Inventory what the diagram actually depicts: labels,
+materials, major transformations, branches and final product. Combine those sources
+at the source's explanatory level, preserving whether each fact comes from text
+or the image. Use relevant primary evidence to resolve consequential ambiguity.
 Do not spend the task reconstructing routine unshown execution details.
 
 For each asserted transformation, state what happens to the input and what is
 different about the output. Identify what information the readout can establish,
-at the level supported by the figure and paper. Account for all in-scope depicted
-operations and branches, while treating descriptive icons and catalysts according
+at the level supported by the registered sources. Account for all in-scope
+operations and branches described by the diagram and matching catalogue prose,
+while treating descriptive icons and catalysts according
 to their role rather than automatically turning each drawing into an operation.
 Check that every graph endpoint exists and every paper/figure citation refers to
 available evidence. Keep unsupported expansions out of the factual architecture.
@@ -257,7 +281,8 @@ connection, method applicability assertion and consequential correction required
 by the schema. Do not infer positive checks from the author's overall narrative.
 
 Check both directions: whether each asserted fact/connection is supported, and
-whether each in-scope diagram transformation or branch is represented. Inspect
+whether each consequential in-scope transformation or branch described in the
+diagram or matching catalogue prose is represented. Inspect
 joint interfaces: an operation's output state must agree with its outgoing route
 and the receiving operation's input and scope. Check compartment persistence,
 carrier identity, end-group changes, branch association and alternatives together.
@@ -303,6 +328,13 @@ experimental recipe.
 When a use_primary correction changes operation order, trace the actual affected
 States and Flows and check that they implement that order. Correct chronology in
 the Correction's prose does not fix contradictory graph topology.
+
+For each method scope judgment, also check the positive explanation of the assay
+against the catalogue description: what is measured, its input/unit, and the
+principle linking the workflow to that measurement. Request correction if this
+is replaced by procedural jargon or exclusions, if an application is generalized
+to an unsupported capability, or if text-only steps are called directly depicted.
+Do not demand a paper-only execution recipe to accept a clear catalogue account.
 
 For each supplied state_label:<id> target, independently judge whether the label
 names the actual material/data at that boundary, agrees with kind and features,

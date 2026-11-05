@@ -7,8 +7,22 @@ import pytest
 
 from genomics_discovery.illumina import extraction as batch
 from genomics_discovery.illumina.models import extraction_model, parse_extraction
+from genomics_discovery.illumina.prompts import build_prompt
 from tests.illumina import test_illumina_batch_controls as transport
 from tests.illumina.test_illumina_batch_controls import acquired
+
+
+@pytest.mark.parametrize("role", ["author", "reviewer"])
+def test_method_bundle_instructions_include_catalogue_description(role):
+    prompt = build_prompt(role, {"representation_version": "illumina_diagram/1.1",
+        "expected_method_names": ["Assigned method"],
+        "source_bindings": [{"record_id": "card"}, {"record_id": "poster"}]}, "schema.json")
+    assert "The extraction unit is the assigned method/version" in prompt
+    assert "not extra methods or duplicate operations" in prompt
+    assert "Begin scope with a positive explanation" in prompt
+    assert "Cite it as reported in text, never depicted in an image" in prompt
+    assert "The extraction unit is the assigned Illumina schematic" not in prompt
+    assert "State.properties" in prompt
 
 
 def with_names(document, names):

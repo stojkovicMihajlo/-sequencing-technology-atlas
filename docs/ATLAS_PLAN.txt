@@ -1,574 +1,209 @@
-Atlas representation and delivery plan — 4 November 2026
-Status: minimal State/Operation contract implemented in development (extraction
-1.1, review 1.2); native pilot submitted as Qiu job51060690. The larger vocabulary/profile design below
-remains proposed. This is not a newly extracted atlas or scientific validation.
-This is the current reading entry point for the representation decision.
-
-ACTIVE SCOPE — latest user steering, 4 November: transcriptomics first.
-The user subsequently authorized implementation/review followed by a larger
-transcriptomics re-extraction and citation-grounded graph construction. Execute
-the bounded pilot before scale. Current work is recorded in
-experiments/transcriptomics_revision_20261104/README.txt.
-Use experiments/representation_review_20261104/transcriptomics_scope.json and
-transcriptomics_checklist.csv. Start implementation/native checks with Smart-seq2
-and Drop-seq; CEL-seq and RASL-seq are contrasting checks. This replaces the
-earlier cross-domain fresh-test selection below, not the retained audit evidence.
-Preserve Illumina's RNA categories and joint RNA/non-RNA assays. Source occurrences
-are not canonical methods or independent jobs. Native pilot job51060690 is submitted;
-no new scientific results are claimed before its review.
-Card references support baseline diagram extraction; primary sources are used
-for consequential clarification/correction and separate historical change claims.
-Do not require full-paper evidence for every fact directly depicted on a card.
-
-IMPLEMENTED MINIMUM (4 November, before native validation)
-- representation.py defines individually evidenced State properties, exact local
-  subjects, optional constituents, material/data distinctions, operation-local
-  roles (including constituent roles), effects and source-level grouping.
-- The author first identifies depicted action blocks and their actual boundary
-  preparations, preserves routes and avoids manufacturing fractions from species.
-- Review 1.2 requires decomposition, State property/omission and Operation
-  interpretation judgments; host checks references, types and source custody.
-- Queries/readable views preserve the typed assertions and review qualifications.
-- Legacy extraction/review objects keep their original formats and digests.
-This is NOT a complete ontology: action labels and many scientific property values
-remain source-specific. They cannot serve as semantic identity hashes. No shared
-operation concept or historical relationship follows from property equality.
-Method-level planning must consolidate duplicate depictions using source review
-before dispatch; archived outputs are comparison baselines, not author evidence.
-
-DECISION
-
-Build a catalogue of measurement methods with source-qualified workflow graphs.
-Use Illumina's existing level of detail. Add paper-supported historical change
-claims and narrowly scoped refinements. Do not build a universal executable
-protocol language or infer ancestry from workflow similarity.
-
-The main defect is semantic organization, not missing prose. Existing records
-already have State, Operation, Flow and evidence fields, but their contents are
-not consistently classified or named. Adding another miscellaneous description
-field would not resolve this. The implemented minimum above addresses assertion placement and node construction;
-the larger profile/shared-vocabulary proposal below remains future work.
-
-WHAT WAS ACTUALLY EXAMINED
-
-- 50 archived method depictions in 10 structural groups, with an individual
-  engineering finding for each in experiments/representation_review_20261104/.
-  This is NOT a new full-paper scientific review of all 50 methods.
-- The RNA collection (122 PDF pages), DNA collection (146), and the downloaded
-  Methods Guide (148; 2020 version 6): contents, relevant explanatory sections,
-  method comparisons and selected page images. The reading ledger records pages
-  and scope; it does not claim every page or reference was read in full.
-- The requested sequencing and kit pages, plus their library-preparation and
-  NGS-workflow pages. These describe different levels, not one common ontology.
-- Reactome's data model and three official Java model classes; LabOP's paper
-  and typed Behavior parameters in official code; EXACT2 and OBI assay-pattern
-  publications. These supply representation precedents, not an evaluated atlas
-  extractor. No external code was copied or installed.
-
-SOURCE LESSONS THAT CHANGE THE DESIGN
-
-1. The collections' introduction says diagrams omit details, group some methods,
-   and are arranged by similarity. References emphasize recent literature. Thus
-   source order, adjacency and first-listed references cannot define ancestry.
-2. The Methods Guide separates application, library preparation, instrument and
-   informatics. Its 2020 products/specifications are historical, not a current
-   purchasing list. It also includes arrays: not everything in it is a sequencing
-   method. Product, instrument, assay and operation must not be interchangeable.
-3. In the RNA collection, G&T-seq (p118) and scM&T-seq (p119) share separation and
-   RNA processing, while the DNA branch changes. These are useful explicit change
-   leads before any graph-matching algorithm. They still need primary-source
-   verification for historical publication.
-4. The ChIP-family page (DNA p104) groups names and depicts exonuclease digestion.
-   Do not assign every depicted operation and performance claim to every member.
-5. Drop-seq's endpoint caption (RNA p110) names the biological target where our
-   graph needs the actual readout. Literal captions must remain recoverable but
-   cannot be the sole scientific label authority.
-6. cP-RNA-seq (RNA p14) depicts several end-chemistry classes coexisting in a
-   mixture; they are not automatically isolated fractions. Molecular properties
-   and physical routing must be represented separately.
-7. Smart-seq/Smart-seq2 (RNA p97) describes changes in reagents and conditions
-   despite a largely shared schematic. A condition belongs in the atlas when it
-   defines the comparison or interface; there is no blanket exclusion of buffers.
-8. A catalogue's associated kits are leads, not proof of the exact kit used in
-   every implementation or of compatibility with every listed assay variant.
-
-ONE VOCABULARY FOR THE OBJECTS
-
-Method: a named assay approach, with aliases and multiple classifications.
-Workflow: one explicitly scoped implementation/variant of that Method. It states
-  the source and version being described and contains Operations, States, Flows.
-Operation: a source-supported action or explicitly grouped procedure acting on
-  declared inputs. An enzyme, molecule, purpose or instrument is not an Operation.
-State: the material or data at a particular workflow boundary. It describes what
-  is there, in what consequential form and organization. It is not an action.
-Flow: an evidenced directed connection within that Workflow.
-Resource: a reagent, kit, device or software used by an Operation. A reagent's
-  molecular content may also be a material input; its role is local to the action.
-Module: an optional named view over a connected group of Operations. It is not
-  a compulsory level, universal stage or automatic reusable scientific component.
-Change claim: a separately reviewed relationship between implementations, with
-  exact affected operation groups and evidence. It is not an internal Flow.
-
-Different depictions of one method remain separate evidence records. Different
-variants remain separate Workflows. Similar Operations remain local occurrences
-even when linked to a shared operation concept. IDs identify records; they do not
-prove scientific identity. A hash detects changed bytes, not semantic sameness.
-
-METHOD STRATIFICATION — MULTIPLE AXES, NOT ONE EXCLUSIVE TREE
-
-Keep the original Illumina paths verbatim, including multiple paths. Add these
-fixed fields to a method profile; do not replace the source categories:
-
-illumina_categories: original category paths and their source locations.
-measurements: list of {target_entities, property_or_relationship, biological_unit,
-  physical_reporter, observed_signal, inference, evidence}. These distinguish what
-  is being studied from what the instrument observes. Each measurement has an ID.
-specimen: native specimen and the actual input boundary shown by the Workflow.
-joint_measurements: measurement IDs linked at a stated unit, with the mechanism
-  or experimental association and evidence. Same cell, same fraction, same
-  molecule, same tissue region and separate matched samples are different claims.
-workflow_ids: the method's scoped implementations, not source-file duplicates.
-resource_requirements: only evidenced requirements, with implementation scope.
-
-Examples of scientific classification to verify against the cited implementation:
-- ChIP-seq: protein-associated genomic regions; selected DNA is sequenced. This
-  does not mean protein sequence or protein abundance is directly measured.
-- BisChIP-seq family: methylation in DNA selected by a chromatin feature; do not
-  call it a general paired proteome-and-methylome assay (DNA collection p101).
-- G&T-seq: genome and transcriptome associated with the same cell (RNA p118).
-- scM&T-seq: methylome and transcriptome associated with the same cell (RNA p119).
-- TRIBE: RNA-binding association inferred through RNA editing (RNA p65).
-
-These profiles allow a method to appear in several catalogue views without
-duplicating it. A query can retrieve RNA-protein assays by biological relation,
-DNA reporters by carrier, or methylation-plus-RNA assays by linked measurements.
-Category membership creates retrieval candidates, not ancestry or compatibility.
-
-The property_or_relationship field must reference a definition, not an unchecked
-new string. Initial measurement concepts to test include sequence/variation,
-abundance, chemical modification, accessibility, physical association, molecular
-structure, synthesis during an interval, decay/turnover inference and replication.
-They are not interchangeable: RNA abundance is not RNA synthesis, and methylation
-is a property of DNA rather than a second molecule called 'methylation'. The
-biological unit and inference fields prevent same-cell and same-molecule claims
-from collapsing. New concepts use the same reviewed proposal path as Operations.
-
-STATE CONTRACT — FIXED SLOTS, OPEN SCIENTIFIC VALUES
-
-4 November follow-up: the five broad facets below are NOT sufficient extraction
-instructions or an exhaustive state ontology. In particular, components=[DNA,
-RNA, protein] is a coarse composition filter, not a scientifically useful
-description of an assay intermediate. The additional source review covers 24
-Illumina method descriptions (21 new description pages and 3 purposeful revisits)
-and six spatial/multiomic/temporal methods. Reading scopes and limitations are in
-experiments/representation_review_20261104/*material_review.json and source_review.json.
-These are source/design audits, not 30 new full-paper-verified extractions.
-
-The subject of a State is the actual preparation at the stated boundary: for
-example, immunoselected crosslinked chromatin on resin, cap-selected cDNA, or
-biotin-tagged RNA-derived cDNA. A substance name alone does not encode origin,
-selection, attachment, or library structure. A broad source boundary such as
-total RNA remains legitimate when the source supplies no narrower preparation;
-do not invent specificity to satisfy a template.
-
-State label = readable scientific name supported by the structured facts and
-producing/consuming Operations. It is not the semantic comparison key. Keep
-source wording separately. This label/source-caption separation is implemented in contract1.1; scientific
-consistency still requires the current live pilot and review.
-
-Keep THREE distinctions explicit in the existing graph:
-- What the material IS: preparation identity, relevant constituents, molecular
-  structure and physical context. Named parts are introduced only to identify a
-  transformation, meaningful association, routing distinction or information carrier.
-- What it DOES HERE: template, primer, catalyst, probe, support, processed sample
-  or product in a particular Operation. This role belongs to participation in
-  that Operation, not a permanent label on the material. DNA can occupy several
-  of these roles in the same workflow.
-- What it TELLS US: the biological quantity/relationship and its reporter in the
-  method/readout record, anchored to the actual States, Operations and data.
-  A synthetic antibody-tag DNA readout is not a protein sequence or an RNA count.
-
-Selection and origin are recoverable through producing Operations when those
-Operations are in scope, not silently stored as present chemistry. A prepared
-input may carry a directly cited origin/selection assertion or an external
-preparation reference; do not invent a producer outside the extracted boundary.
-Cap-selected cDNA does not retain an RNA cap.
-Experimentally introduced methylation and endogenous methylation can have the
-same chemistry but different meaning. Summaries of provenance must reference
-the supporting route; do not create an independent, contradictory history field.
-
-Keep kind=material|data, but stop placing every property in features:[prose].
-Use a tagged payload: material fields cannot be used as data fields or vice versa.
-Every assertion retains evidence. The display label is rendered from these facts
-and checked against them; source_label is preserved separately when available.
-
-Material payload (facets used where relevant, not five compulsory substance bins):
-  components: optional addressable constituents of the named preparation, not
-    the preparation's sole description. Each has a local ID, specific identity,
-    a defined material concept and optional verified external identifier. DNA,
-    RNA and protein are coarse ancestor classes; they do not replace chromatin,
-    RNA-derived cDNA, a synthetic capture primer or a selected fragment population.
-    Do not flatten a cell into its constituent molecules. Do not turn every
-    preparation-plus-property combination into a new global concept. Normalize
-    concepts through definitions/aliases; retain typed properties and local roles.
-  molecular_features: subject, property, value and evidence. The subject may be
-    the preparation itself when unambiguous; use named components/strands or
-    subpopulations when needed to localize a claim. Initial
-    properties: strandedness, topology, terminal_group, modification,
-    sequence_segment. Chemical site/end is explicit when relevant. cDNA is DNA
-    with a provenance/identity description, not a new fundamental substance type.
-  associations: relations among named constituents/supports/compartments, using
-    explicit relations such as hybridized_to, covalently_linked_to, bound_to,
-    contained_in or co_present_with. Co-presence does not assert binding.
-  partition: identifies independent handling and intact compartment membership
-    when supported. Distinguish where material is located from which fractions
-    are independently routed. Pooling is an Operation; the resulting collection
-    is a State. Multiple molecular classes alone do not establish fractions.
-    Do not infer literal well/cell counts from icons.
-  attribution: what is associated with what (molecule, cell, sample, location,
-    time window, contact), and the physical or experimental carrier of the link.
-    Attribution may depend on data, such as a measured barcode-to-coordinate map.
-    Link that Data State to the decoding Operation; a physical barcode alone is
-    not proof that its coordinate/cell/molecule association can be recovered.
-
-Data payload:
-  data_type: sequence_reads, alignment, instrument_signal, measurement_table,
-    derived_result or other (with a definition).
-  content: recorded observations/identifiers and the entities they represent.
-  attribution: associations actually recoverable in that dataset and their basis.
-
-Field completeness is assessed explicitly as recorded, not_reported,
-not_applicable (with a reason), or unresolved. 'Not reported' is not evidence that
-a property is absent. False/absent and unchanged are scientific claims requiring
-support. A missing material description must not become an invented DNA library.
-
-A State can contain an RNA-DNA complex or a mixed population. It can also be the
-prepared input to a procedure whose earlier preparation is outside scope. It
-cannot replace an action that is necessary to explain an in-scope transition.
-
-Example, abbreviated design specification rather than a new extraction:
-  kind: material
-  components: [{id: c1, entity_type: DNA, name: first-strand cDNA}]
-  molecular_features:
-    - {component: c1, property: strandedness, value: single_stranded}
-    - {component: c1, property: terminal_group, site: 3_prime, value: azide}
-  source: RNA collection p12; primary verification pending for atlas admission
-This permits a query for 3-prime azide-ended cDNA without guessing from its name.
-
-OPERATION CONTRACT — TYPE PLUS ARGUMENTS, NOT ENDLESS METHOD-SPECIFIC NAMES
-
-Required fields:
-  action: a registered operation concept or a pending definition proposal.
-  inputs: State IDs with local roles, distinguishing processed sample/template,
-    reagent, catalyst, capture support, data and reference data when supported.
-  outputs: State IDs, with independent outputs distinguished from classes in one
-    mixture. A common caption does not join independently processed branches.
-  effect: the source-supported change, selection or observation, anchored to
-    the affected input/output components and relevant property names.
-  mechanism: source-supported mechanism and participating resource references.
-  purpose: what this action contributes to this assay, when supported.
-  resolution: source_block, coupled_action, composite or unresolved_transition.
-    A composite is legitimate; it does not require invented internal steps.
-  evidence and unresolved questions.
-
-Operation concepts have a preferred verb phrase, definition, aliases, argument
-roles, discriminating properties and explicit near-matches/exclusions. Seed from
-observed source terminology; map to existing ontology terms only when meanings
-agree. Examples: reverse transcription, template switching, restriction digestion,
-affinity capture, bisulfite conversion, tagmentation, PCR amplification, pooling,
-sequencing and alignment. This is an initial vocabulary, not a claim of completeness.
-
-Do not create 'DNA ligation on beads after ChIP' as a separate fundamental action
-type. Represent a join action with DNA substrate, ligation mechanism, end features,
-attachment and local workflow role. Conversely, an azide-alkyne click coupling is
-not equivalent to an enzyme-mediated ligation merely because both join an adaptor.
-An entity such as T4-beta-glucosyltransferase belongs in resources; its supported
-action is named separately. Name normalization cannot invent that action.
-
-Registry policy: workers use a versioned vocabulary snapshot, retrieve definitions
-and propose additions when needed. They do not directly create accepted global
-concepts. Batch admission compares definitions in context, retains unresolved
-proposals and commits accepted terms with version checks. Exact duplicate keys can
-be locked/uniqued mechanically; semantic duplicates require review. No global lock
-around every extraction and no automatic union of similarity-linked definitions.
-
-Conditional requirements make the vocabulary operational:
-- Nucleic-acid copying: identify the actual template and product for each branch;
-  record a priming/handle detail when supported and relevant to attribution or
-  comparison. RNA-to-DNA copying is reverse transcription. A source block using
-  reverse transcriptase may ALSO copy DNA templates, as in original CITE-seq;
-  preserve the grouped block but distinguish its effects and template origins.
-- Ligation/coupling: identify the joined partners, linkage mechanism and relevant
-  end groups. An enzyme name alone does not establish the compatible substrate.
-- Capture: identify the selected material, recognition basis, support when used,
-  and retained output. Do not invent what happened to an unshown residual fraction.
-- Chemical conversion: identify which substrate property changes and the readout
-  consequence, including controls when part of the source's discrimination logic.
-- Pooling: identify what units are combined and whether their contents remain
-  compartmentalized. A pooling label cannot resolve this question by itself.
-- Sequencing/readout: distinguish the assayed molecule from the emitted data;
-  specify the observable used for the biological inference.
-These are interpretation obligations. An unreported value becomes an addressed
-unknown, not a fabricated required value. Source-limited composite blocks may
-defer internal requirements until the specific comparison needs refinement.
-
-SCIENTIFIC REQUIREMENTS FOR EXTRACTION AND COMPARISON
-
-The practical unit of standardization is a defined property or relation with a
-subject and evidence, not a free-form bag of labels. For each registered property,
-specify its meaning, applicable material/Operation, permitted value form, required
-site or partner, and distinctions it must not collapse. For example, terminal
-blocking needs a named strand/end and effect; exonuclease protection does not
-establish extension blocking. A claim about all molecules versus a subpopulation
-must retain that scope. Missing properties cannot be automatically carried forward.
-
-Conditional requirements apply to the Operation and the exact comparison:
-
-Context                      Must remain explicitly answerable
-Nucleic-acid copying          Template versus primer; origin of product; copied
-                             segment/handle or informative endpoint when relevant.
-Joining/construct assembly   Exact partners and relevant strands/ends; covalent
-                             joining versus hybridization; retained handle topology.
-Selection/capture            Selected population, recognition target, binding
-                             reagent/handle, support and actual retained route.
-Chromatin/RNP processing     Native versus fixed context when stated; selected
-                             complex; protein/peptide association at that boundary.
-Modification/readout         Native mark versus introduced reporter; derivative,
-                             observed signal and necessary comparison/control.
-Spatial/cell assignment      Location of encoding; carrier and required map;
-                             physical sampling unit versus inferred biological unit.
-
-This is a starting set of obligations, not all possible operations. Each obligation
-gets a supported answer, an evidence-limited unknown or a justified out-of-scope
-status. A missing distinguishing fact blocks THAT comparison/compatibility claim;
-it need not erase an otherwise supported schematic. New operations may propose
-additional requirements, reviewed against contrasting examples before admission.
-
-Concrete checks are in comparison_requirements.json in the review directory.
-They test scientific answers rather than identical prose, operation count or an
-exact module decomposition. No automated biological pass rate has been measured.
-
-Scientist-facing comparison example: conventional CLIP versus iCLIP should show
-that residual peptide can truncate RT and that iCLIP recovers the truncated cDNA
-population through circularization. A summary saying both have RNA -> DNA, or
-merely tagging one as circular DNA, fails to explain the design change. Source:
-https://pmc.ncbi.nlm.nih.gov/articles/PMC3000544/ (selected original Methods/Fig1).
-The contribution is encoded as an evidence-bearing change claim with exact
-affected Operations, retained backbone, changed product recovery and consequence.
-Shared materials or even a shared mechanism do not by themselves prove ancestry.
-
-GRANULARITY RULE AND THE ROLE OF MODULES
-
-Start with source-supported transformation blocks, not one node per caption/icon.
-Keep a source block intact unless it hides independent routing, a consequential
-interface, attribution, or the particular difference under investigation.
-Use the collection prose alongside the image before requesting a full paper.
-When a paper resolves a hidden distinction, add a scoped refinement linked to the
-original block and reconcile its boundary inputs/outputs. Do not silently rewrite
-all historical versions. A refined child subgraph must preserve the parent's
-declared scope and explain any boundary correction.
-
-Retain coupled chemistry as one Operation when that is what the source supports;
-record multiple effects. A module name or number of Operations is never a unit of
-scientific equivalence. Compare connected operation groups with boundary states.
-Do not require every assay to pass through a universal sample-prep/chemistry chain.
-Optional stage tags describe location/purpose in an assay, not chemical mechanism.
-
-EDGE TYPES — THREE SEPARATE QUESTIONS
-
-Within a Workflow, retain the existing five Flow kinds:
-  material_input: State -> Operation (role attached; not automatic consumption)
-  material_output: Operation -> State
-  data_input: State -> Operation
-  data_output: Operation -> State
-  precedes: Operation -> Operation (ordering only, not proof of material transfer)
-An instrument is a resource, not a sample State flowing into a reaction. If its
-surface is an assay substrate, that material can separately be represented.
-No State-to-State shortcut asserts an unexplained transformation. Connections
-among components within a State are structural associations, not workflow Flows.
-
-Between Methods/Workflows, retain the definitions already in relationships.py:
-  method_development: documented development of the earlier assay architecture.
-  component_adoption: documented reuse/adaptation of a specified component.
-  mechanistic_precedent: relevant earlier demonstration without proven adoption.
-  shared_mechanism: evidenced correspondence, not historical influence.
-  shared_purpose: comparable function without requiring a common mechanism.
-  comparison: an explicit experimental comparison with its conditions.
-Only the first two belong in the historical layer. The catalogue classification
-layer is separate from all six. No new historical edge names are needed now.
-
-Each scientific edge is a claim record with: exact implementation endpoints;
-relation; component anchors on both sides; before/after change; retained features;
-limitation; capability/gain with comparator and context; trade-offs; evidence and
-review status. Allow multiple changes, contributors and operation anchors.
-An absent predecessor remains an external method/component to research. The
-historical graph can be disconnected and have multiple parents; it is not a
-phylogenetic tree with a universal distance metric.
-
-MECHANISM AND CHEMICAL NOMENCLATURE
-
-Use ChEBI/PubChem identifiers, molecular structures and qualified end/modification
-terms when identity is verified. Formula alone does not specify position,
-connectivity, attachment, specificity or compartment. A workflow containing
-capture, partitioning or data integration cannot be a balanced reaction equation.
-Do not infer an exact oligonucleotide, enzyme formulation, reaction mechanism or
-stoichiometry from a commercial reagent name. Missing discriminating chemistry
-blocks that mechanistic connection, not every schematic fact in the method.
-
-PIPELINE TO IMPLEMENT USING THE EXISTING CODE
-
-1. Identity and source plan. One scoped method work item with all relevant source
-   depictions/text. Reuse the earlier planning work; do not dispatch by source ID.
-   Preserve grouped applicability, collisions and source disagreements. Counts of
-   source rows and papers are not counts of distinct technologies. A DOI is not a
-   unique method key. Do not lowercase away distinctions such as CapSeq/CAP-seq.
-2. Extract architecture and method profile. Author uses the typed contract and
-   source bundle. Missing evidence creates a targeted acquisition request; it does
-   not initiate an unchanged author/reviewer rerun.
-3. Validate and independently review. Host validates references, types, vocabulary
-   membership, graph incidence, evidence custody and required fields. Reviewer
-   checks interpretation, omissions, applicability and consequential routing.
-   The reviewer gets property/effect targets, not just a whole-node approval.
-4. Publish the scoped architecture with its review level. Preserve original source
-   labels and source conflicts. A source-supported sketch is not executable-ready.
-5. Trace change. Read the method paper's methodological citation contexts, inspect
-   predecessor evidence and locate that method/component in the catalogue. Extract
-   author-described differences first; graph alignment checks and localizes them.
-   Dates/preprints constrain direction; they do not prove a contribution. Similarity
-   retrieval remains unrestricted by date when it is not a historical claim.
-6. Retrieve comparison candidates by measurements, operation concepts, substrate
-   properties and citations. Align connected groups with boundary constraints and
-   permit one-to-many matches. Embeddings/graph matching nominate correspondences;
-   independent evidence review admits them. Do not do every possible method pair.
-
-Agent tools required for these phases:
-- lookup_method: names, source identity, variants and classification evidence.
-- get_workflow / get_operation_group: exact graph, boundaries, provenance, unknowns.
-- lookup_operation_concept: definition, arguments, aliases and exclusions.
-- request_source: explicit missing claim, source or citation; returns acquisition
-  status and a new registered source snapshot rather than an ungrounded answer.
-- compare_groups: similarities AND consequential differences; candidate only.
-- trace_history: supported contributors and changes with source passages.
-Existing graph.py supplies much of graph lookup/group traversal. The shared
-concept/method resolver and acquisition handoff are incomplete; tools are not all
-available merely because they are listed here.
-
-WHAT TO REUSE, ADAPT AND NOT CLAIM
-
-Reactome: adapt reference identity vs contextual physical entity, explicit
-modifications/compartments, reactions vs catalysts and composite events. Do not
-inherit its default that an unspecified sequence entity is unmodified, its
-physiological scope, or assumed stoichiometry. Our materials include assay mixtures,
-synthetic reporters, beads, droplets and data. A contextual State is not a global
-chemical identifier. Docs: https://reactome.org/documentation/data-model
-Code pin: reactome/graph-core 62aef35d7a89403b8a8800dc004d8de62f847aee,
-src/main/java/org/reactome/server/graph/domain/model/{ReactionLikeEvent,
-PhysicalEntity,EntityWithAccessionedSequence}.java. Read and compared to docs.
-
-LabOP: adapt typed input/output parameters and separation of object/control flow.
-Do not import an execution engine, require pipetting detail, or claim our incidence
-graph has LabOP execution semantics. Paper: https://doi.org/10.1145/3604568
-Code pin: Bioprotocols/labop 2e2bd88150c71a440771fd369f40295dfd622324,
-uml/behavior.py:add_parameter/add_input/add_output/is_well_formed. Read in full.
-
-EXACT2: adapt an action with descriptors rather than invent a class for every
-action-substrate-context combination. It separates workflow control from action
-semantics. Its execution-detail requirements are more granular than this atlas.
-https://doi.org/10.1186/1471-2105-15-S14-S5
-
-OBI assay standardization: distinguish materials/roles, measured target and data
-output; check that a type's constraints hold across its intended instances. Do
-not assume using an ontology proves annotation consistency.
-https://doi.org/10.1093/database/baab040
-
-ISA: adapt material/process/data graph separation and material characteristics
-represented as defined category/value/unit; keep parameters on the process.
-Docs: https://isa-specs.readthedocs.io/en/latest/isamodel.html
-Official code pin: ISA-tools/isa-api 50c01e87be1c86dd918bd2ccd8ef9f476a2b1414,
-isatools/model/material.py and characteristic.py (read), process.py (selected
-input/output and serialization implementation). No code copied or executed.
-Its generic characteristics and Extract/LabeledExtract types do not supply the
-genomics-specific interpretation rules above. Do not import execution metadata
-or claim that string/ontology types guarantee correct scientific descriptions.
-
-DELIVERY ORDER AND ACCEPTANCE TESTS
-
-A. Freeze this small semantic contract and exact examples before further native
-   tests. Version terminology; no automatic migration or re-signing old results.
-B. Integrate the representation, profile and reviewer targets in the EXISTING
-   models/prompts/extraction/graph path. Connect typed retrieval and readable views
-   at the same time so structured values cannot disappear in the website.
-C. Fresh extraction on Drop-seq, G&T-seq and ClickSeq, on Sherlock Qiu only,
-   gpt-6.1-sol/xhigh. Old candidates are comparison baselines, not author inputs.
-   These test readout attribution, independent branches and end chemistry.
-D. Freeze changes and test held-out PAL-seq and oxBS-seq for mixed readout and
-   matched-control structure. They were inspected during the broad audit, so this
-   is held out from prompt tuning/native development, NOT an unseen-data claim.
-E. Complete a first connected product slice: G&T-seq, scM&T-seq, scBS-seq,
-   Smart-seq2, MDA; plus the above three development examples. Primary-reviewed
-   links must attach to the retained or changed branch, not just method names.
-   Example query: find methylation+RNA at the same cell, trace its DNA-branch
-   change, and return the preserved RNA branch and unresolved implementation needs.
-F. Only then schedule the full identity-resolved catalogue, incrementally. A new
-   method does not require re-extracting all predecessors or comparing all pairs.
-
-Predeclared checks (report denominators, not a single 'accuracy' number):
-- Critical fact recovery: supported target, carrier, boundary, branch, chemistry
-  and attribution requirements recovered / reference requirements, by category.
-- Unsupported assertion rate: unsupported extracted claims / reviewed claims;
-  critical unsupported claims block publication for the affected scope.
-- Annotation consistency: reference questions answerable from the intended typed
-  field, without parsing unrelated prose; evaluate duplicate source depictions.
-- Routing correctness: no false pooling of independent libraries, no false
-  physical fractions from coexisting species, no action disguised as a State.
-- Identity/scheduling: duplicate depictions consolidate; distinct variants and
-  same-name collisions remain distinct; unchanged completed work is not relaunched.
-- Relation precision and coverage: correct contribution scope on positive cases;
-  rejected same-reagent, citation-only, same-purpose and date-only negative cases.
-- Usability: graph -> concise method explanation preserves the required facts;
-  queries return the same scientific answer under acceptable source grouping.
-- Cost: elapsed time, native calls and tokens per unique scoped method and edge.
-
-Software checks can guarantee shape, references and version consistency. They
-cannot guarantee entailment, chemistry, novelty or wet-lab success. Automated
-scientific review is a gate to evaluate, not an infallible oracle. Unknowns remain
-targeted evidence tasks when they matter; routine omitted settings remain outside
-the architecture scope. There is no claim that today's draft has passed this plan.
-
-CHEMISTRY REPRESENTATION — 4 November follow-up (recommendation, not implemented)
-User questions whether material/data and Operation are descriptive enough for
-chemical comparison. They are graph roles, not a complete molecular ontology.
-Contract1.1 can address relevant constituents, end groups, modifications,
-associations and local input roles. It cannot yet mechanically map every changed
-input property to an output property or establish biochemical compatibility.
-
-Primary representation precedents inspected:
-- Reactome data model: distinguishes molecular identities, modified/localized
-  forms and complexes; supports explicitly grouped reaction-like events. A
-  Reactome EntitySet denotes contextual alternatives, NOT an experimental mixture.
-  https://reactome.org/documentation/data-model
-- Rhea reaction participants: represents reactive macromolecular parts through
-  ChEBI while naming the remaining macromolecule; formulas/charge and SMILES
-  support different checks. Its pH7.3 normalization is NOT an assay-condition
-  rule to copy into this extraction.
-  https://www.rhea-db.org/help/reaction-participant
-- ChEBI structure/role distinction and identifiers can normalize known chemical
-  identities. An identifier/valid structure does not prove a reaction works in
-  the assay context.
-  https://www.ebi.ac.uk/training/online/courses/chebi-the-online-chemical-dictionary-for-small-molecules/chebi-ontology/
-
-Proposed next bounded check, without mutating the active pilot:
-Use existing assertions to distinguish co-presence, hybridization and covalent
-linkage; distinguish relevant terminal/base states; trace whether an Operation
-chemically changes, copies, selects or merely relocates its subjects. For a
-chemical comparison, explicitly anchor the before/after property and reactive
-site to their constituent subjects. Add normalized external chemical references
-only when an exact match/scope has been verified. Atom-level encodings are optional
-for defined compounds/oligos, not mandatory for cells, lysates or arbitrary RNA
-mixtures. Formula-only similarity cannot define assay equivalence.
-
-Judge sufficiency by source-backed queries, not how many fields we add: can the
-graph distinguish the required chemical forms, distinguish chemical change from
-selection, and identify the needed interface evidence or its absence? Current
-software checks do not establish these scientific competencies. Larger dispatch
-remains gated on native interpretation and this review.
+Atlas delivery contract — 5 November 2026
+Current reading entry point. Earlier proposals remain in Git history.
+
+GOAL AND ORDER
+Build a source-grounded atlas of sequencing measurement technologies. Use
+Illumina's descriptions AND diagrams for explanatory workflows. Use primary
+papers to establish documented development/adoption and the precise changes.
+Then let the ideation system query those records and propose new, explicitly
+hypothetical assay graphs. Existing evidence and proposed designs stay separate.
+
+1. Reconcile the source inventory and review method/implementation identity.
+2. Extract each scoped implementation once from its complementary sources.
+3. Follow primary-paper citations; verify and localize the historical changes.
+4. Expose workflow and change queries to the separate ideation team.
+Do not replace this order with another full batch per image, or use the old atlas
+as the denominator for a supposedly new Illumina inventory.
+
+WHAT THE COUNTS MEAN
+The archived source-occurrence run contains:
+  website cards               154
+  RNA poster main rows        102
+  DNA poster main rows        105
+  single-cell poster rows      78
+  footer panels                39 (13 on each poster)
+  total                       478 source occurrences, NOT distinct technologies.
+Thus DNA + RNA posters alone have 207 main rows; 285 includes the third poster.
+25 website headings contain slash-separated names. Those names may be aliases,
+related methods or variants: their relationship needs review, not automatic split
+or merge. Repeated depictions, grouped headings and genuine extra methods all
+contribute to the apparent disagreement in counts.
+The two methods-collection guides are separate sources: the prior figure audit
+records 101 DNA and 99 RNA captioned panels plus five auxiliary panels. That
+report says their drawings are represented in the card/poster union. It does not
+establish that every useful prose detail has been integrated into our workflows.
+
+The old on-disk atlas currently has 200 entries (190 catalogue-derived and 10
+outside-catalogue entries). Earlier reports said 201 from another snapshot; that
+one-entry discrepancy is not reconciled. The new inspection site's 210 display
+entries inherited those 200 and added ten pilot targets. It is NOT a newly
+established number of unique methods. Keep it for comparison and inspection.
+
+Reproducible source comparison, WITHOUT model output deciding its own inventory:
+  PYTHONPATH=src .venv/bin/python -m scripts.illumina.source_inventory \
+    --archive provenance/experiments/illumina_extraction_20261102/audit_01/records.jsonl.gz \
+    --legacy ../technology_atlas/v2/output/technology_graph.json \
+    --output <unused-output-directory>
+Actual result: provenance/experiments/atlas_library_20261105/source_reconciliation_01/
+Read REPORT.txt, then source_occurrences.csv and label_review_queue.csv.
+The queue is heading correspondence, not a reviewed method worklist. No dispatch
+may infer method identity from a heading key, shared PMID or old atlas ID.
+
+INVENTORY DECISIONS
+Use the UNION of website, posters and guides. A missing website card does not
+exclude a method. Attach each source to the method/version it actually describes.
+Retain original category labels, and allow joint measurements in multiple views.
+Commercial preparations and instrument/readout explanations remain searchable
+supporting resources, separately classified from named research assays.
+Every occurrence needs an explicit disposition and source-supported method/variant
+binding; a grouped panel can support more than one unit with exact applicability.
+Distinct variants are not duplicates; repeated pictures are not distinct methods.
+47 website records lack category metadata in the archived bundle. This is an
+indexing gap, not evidence of absent Illumina categories. Do not scope solely by
+that field; check the original heading, description and measurement.
+
+First coherent extraction release: transcriptomics plus joint RNA/non-RNA assays,
+including relevant single-cell poster entries. Retain DNA-only entries in the
+full inventory for later extraction and as possible documented contributors.
+Planning implementation: experiments/transcriptomics_revision_20261104/planning.py
+and native_planning.py. The current full-union identity review is NOT finished.
+The source inventory command does not run that review or launch extraction.
+
+EXTRACTION CONTRACT — WHAT A SCIENTIST SHOULD READ
+Each record starts by explaining:
+  What the assay measures, from what input or biological unit;
+  how its experimental strategy makes that quantity/association observable;
+  which implementation is represented and what limitations qualify it.
+For now these sentences live in the EXISTING scope field, with source support in
+method_scopes. They precede scope exclusions. This is a prompt/schema-description
+improvement, not a new machine-validated measurement ontology. If later retrieval
+needs separate measurement/principle fields, introduce a reviewed version change;
+do not silently reinterpret old JSON or manufacture those fields from memory.
+
+Example explanatory opening, not a newly model-reviewed extraction:
+G&T-seq obtains genomic DNA and transcript measurements from the same individual
+cell by physically separating its RNA and DNA and processing them independently.
+The depicted implementation uses Smart-seq2 for RNA and MDA for DNA.
+Source: https://www.illumina.com/science/sequencing-method-explorer/kits-and-arrays/g-t-seq.html
+
+The agent writes structured JSON with natural-language values. Python generates
+the readable workflow.txt and graph from those SAME records. There are not two
+independently authored protocols that can silently disagree.
+
+State: what preparation, retained fraction or data exists at an interface.
+  label: actual material/data, not the biological target if it is a surrogate.
+  kind: material or data.
+  properties: supported facts with exact subject, property/value and evidence.
+    Existing types cover identity, ends, modification, sequence segments,
+    association, physical context, attribution and data content, among others.
+    Use only consequential supported properties, not every possible slot.
+  components: optional addressable constituents within one preparation.
+    Multiple molecular species do not automatically mean separate fractions.
+Operation: the action or grouped procedure on exact input/output State IDs.
+  label/description: action and what changes; mechanism when supported.
+  input_roles/effects: local substrate/primer/reporter roles and supported changes
+    to material, location or information; preserve subjects and source support.
+  resolution/output_grouping: source block versus supported decomposition and
+    whether outputs are separate routes. Shared action names do not prove pooling.
+Flow: an explicit directed connection, with evidence:
+  State -> Operation = material_input or data_input
+  Operation -> State = material_output or data_output
+  Operation -> Operation = precedes (ordering, not asserted material transfer)
+
+Card prose and matching guide prose can supply an Operation absent from a
+compressed drawing. Record it as text-supported, not depicted. Do not import a
+separate variant or full laboratory recipe merely because a paper mentions it.
+
+WHEN TO LOOK DEEPER
+A detail is needed when resolving it can change at least one of:
+  the actual measurement/readout interpretation;
+  the transformation or compatibility of adjacent States/Operations;
+  the routing or cell/molecule/location/time association;
+  the particular historical difference being claimed.
+Routine quantities, buffers or washes are not automatically required. A buffer
+becomes relevant if evidence makes it decisive for one of these questions.
+Use registered primary evidence to clarify or correct that exact issue. Record
+original depiction and correction separately. Missing required evidence triggers
+specific acquisition/review; rewriting against the same bundle cannot supply it.
+No full-paper requirement for a plainly supported catalogue-level statement.
+
+HISTORICAL CONNECTION CONTRACT
+Start from the later implementation's paper and its attribution contexts. Identify
+what a reference contributes; verify that contribution in the earlier work. Look
+up the referenced method in the reviewed method inventory before creating a node.
+Missing methods can become explicitly unextracted contributor entries; never
+invent a full workflow from a citation. Publication dates constrain direction but
+do not establish influence. Citation presence and resemblance alone are insufficient.
+
+Two historical types, already defined in illumina/relationships.py:
+  method_development: an earlier assay arrangement is a documented starting point
+    and the later work revises that arrangement.
+  component_adoption: an identifiable contribution is demonstrably used/adapted;
+    inheritance is limited to that contribution, not the whole prior assay.
+Comparison, mechanistic precedent and shared mechanism/purpose are separate layers.
+Technical change categories can be clustered later from reviewed descriptions.
+
+Every change account must make this understandable in natural language:
+  compared feature; earlier arrangement; later arrangement; retained parts;
+  limitation/rationale; demonstrated consequence with comparator/context when
+  available; trade-offs or transfer unknowns; evidence from both works.
+No demonstrated gain is required to record real adoption. Do not invent a benefit.
+The paired workflow overlay locates the change on exact records/interfaces.
+The current citation nomination contract still anchors affected Operations;
+State/interface distinctions must survive paired localization. This is not a
+claim that the current system supports arbitrary unanchored State-only ancestry.
+A fresh reviewer must be able to follow the described before-to-after transition.
+Only refine a coarse block when the proposed connection actually requires it.
+
+IDEATION CONTRACT
+Coordinator: turn the requested capability into distinct research/design mandates
+and identify the comparator/improvement question. It does not declare novelty.
+Designers: query atlas workflows/changes, search beyond the atlas, propose graphs
+using the same material/action/flow meanings and explain the proposed difference.
+Literature investigator: search closest implementations, primitive properties and
+contrary evidence. Chemistry/interface and measurement/benefit reviewers challenge
+physical feasibility and whether the proposed gain survives losses/confounding.
+Independent final review accounts for objections after the bounded revision.
+Chemistry is a major place to investigate, not a rule that all innovation must be
+new chemistry. Routing, capture, attribution, readout and combinations of changes
+can matter. A new node or new name is not evidence of an advance. A proposed
+transfer stays a hypothesis even when the required primitive property has precedent.
+Nothing in this contract establishes experimental success or exhaustive novelty.
+
+IMPLEMENTATION AND RELEASE BOUNDARY
+Development changes now: source reconciliation command; multi-source extraction
+unit clarified; card prose made core evidence; scope explanation required before
+exclusions; coordinator's innovation criterion clarified. Existing schemas remain
+1.1/1.2 and original artifacts/frozen running jobs are unchanged.
+731 offline software checks passed. They test software contracts, not whether a
+fresh model follows the revised instructions. No new bulk extraction was launched
+for this steering. Native pilot verification is still required before scale.
+
+Next acceptance checks, in order:
+[done] Reproduce per-resource counts from all 478 archived source occurrences.
+[done] Compare headings without using the old atlas as the population seed.
+[open] Review alias/variant/grouped-target decisions and guide coverage; make one
+       worklist with every occurrence accounted for, including poster-only methods.
+[open] Run the revised instructions on reviewed complementary-source examples:
+       a chemical selection, a branched joint assay, a poster-only assay and a
+       grouped-card case. Compare with prior outputs; change one contract at a time.
+[open] Require correct explanatory purpose, state/action distinctions, routing and
+       source-supported coverage; no scope prose substituted for assay meaning.
+[open] Trace a documented connection between already-extracted examples, review
+       the before/after account and localize any needed refinement.
+[open] Freeze code, prompts, source bundles and reviewed worklist, then dispatch.
+
+REFERENCE IMPLEMENTATIONS — SPECIFIC BORROWING, NOT IMPLIED CODE REUSE
+ROBIN: proposal-specific literature investigation before selection. Official
+robin/assays.py, commit 4a5cce310f3bc7663a67117db88af43b84733ffe. Its platform call
+is not a locally available implementation of all Crow/Falcon internals.
+PantheonOS: explicit delegation/returned results and isolated task context.
+AgentAsToolTeam at 8e83521f22526c643111c45a3d4b59d27886f258. Our current coordinator
+returns a validated plan that Python dispatches; it is not a Pantheon runtime.
+Intern-Atlas: method identity and evidence-bearing relationship retrieval are
+useful, but its inspected public builder does not provide a validated alias
+resolver or source-grounded assay-operation extractor for this task.
+Exact inspections and limits: experiments/ideation_team_20261105/REFERENCE_AUDIT.txt
+and experiments/reference_audits/intern_atlas_20261103/REPORT.txt.
+Do not introduce a new runtime or a large chemistry ontology to solve the current
+source-accounting and explanatory-coverage defects.

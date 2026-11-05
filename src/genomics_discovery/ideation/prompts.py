@@ -118,6 +118,14 @@ change a design decision, and record a question reframing rather than silently
 narrowing the goal. Do not exhaust every topic before sketching a graph: use the
 developing graph to locate unresolved interfaces and return to evidence as needed.
 Do not treat recombination of existing methods as the only source of novelty.
+The coordinator must connect each design mandate to a measurement capability or
+specific improvement over an identified comparator. Do not equate innovation with
+adding a new graph node, inventing a name, or joining two existing assay labels.
+Chemistry can supply the decisive change, but routing, capture, attribution,
+readout and coordinated changes across operations are also legitimate. Research
+the required experimental properties and interfaces in each case; there is no
+requirement to claim a new chemical reaction. A newly proposed State or Operation
+is a design hypothesis, not an established fact merely because it fits the schema.
 
 WORKING PROCEDURE
 Read schema_file to learn the exact output fields. Context below contains artifact
