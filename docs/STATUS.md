@@ -1,11 +1,19 @@
 # Deployment status
 
-## Active pilot and recorded source-recovery limitation — 4 November 2026
+## Active pilot and recorded source-recovery limitation — 5 November 2026
 
-Pilot job **51127481** was running on Qiu with 50 scoped method/version targets
-at **4 November, 5:26 PM Pacific** (5 November 01:26 UTC): **23 supported by model
-review, 2 held for research, 1 failed, 4 running and 20 pending**. Historical-link
-review and baseline comparison had not started. SPLiT-seq's correction prompt
+Pilot job **51127481** was running on Qiu at **5 November, 3:55 AM Pacific**,
+elapsed **12h26m**. The 3:57 AM output snapshot shows extraction finished:
+**47 supported by model review, 2 held for research (MARS-Seq and HITS-CLIP),
+and 1 failed (SPLiT-seq)**. Supported workflow graphs were exported with no
+publication errors. Historical investigation has **42 completed citation tasks
+and 1 failed (SHAPE-MaP)**, followed by **12 of 32 pair reviews complete,
+4 running and 16 not started**. The final combined historical graph and the
+old/new baseline comparison are not complete; the latter has not started.
+Four otherwise supported methods lack the registered primary-paper rendition
+required by this history stage (Smart-seq2, CLASH, SHAPE-Seq, NET-Seq).
+SHAPE-MaP's nomination stage failed the fresh-session completion check;
+the underlying native failure still needs diagnosis. SPLiT-seq's correction prompt
 exceeded the CLI input limit (1,674,497 characters versus 1,048,576); its author
 and first reviewer completed, but the correction could not start. This is
 **CORRECTION_CONTEXT-001**, diagnosed but not fixed, in the pilot HARNESS.txt.
