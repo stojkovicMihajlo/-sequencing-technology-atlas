@@ -1,0 +1,44 @@
+ROLE SCOPE REVIEW — 5 November 2026
+
+Scope: read-only review of ideation/prompts.py and run.py while Slurm job
+51200765 runs. No scientific prompt, code or frozen runtime was changed.
+
+Observed versus inferred
+The parent monitor reports a coordinator still researching at approximately
+15 minutes, using atlas/web retrieval and converting a primary PDF. Those actions
+are allowed and can help choose informed expert mandates. They do not establish
+that the coordinator misunderstood its role or that the following mismatch caused
+the latency. No completed coordinator artifact was inspected in this audit.
+
+Concrete mismatch
+build_prompt concatenates the whole COMMON block before every role (prompts.py:365).
+COMMON says "You are proposing an assay architecture" (18–19), requires a physical
+design change (21–22), and instructs candidate id = expert_id plus an assessment
+ledger over every graph record (58–74). These are proposal-author instructions.
+PLAN instead forbids writing experts' final proposals and asks for ResearchPlan
+(157–164). run.py maps plan to ResearchPlan and supplies no expert_id in that stage.
+Literature and review stages receive the same author instructions despite producing
+LiteratureReport and ReviewPanel. Their later role instructions counteract the
+conflict, but do not remove it. Strict output schemas can reject the wrong final
+artifact; they cannot prevent unnecessary design research before that artifact.
+
+Smallest next-release correction
+1. Describe the pipeline goal in COMMON, then explicitly say that the current
+   role/schema determines what this agent produces. Keep shared evidence rules,
+   uncertainty handling, exact references, graph meanings and tool usage.
+2. Put candidate-authoring instructions (new workflow, expert_id, complete
+   assessment ledger, sequencing readout) in a shared design-output block included
+   only for propose/revise. Reviewing roles should inspect those properties in
+   existing candidates, not produce a replacement graph.
+3. Clarify PLAN's completion condition: a faithful measurement objective and two
+   scientifically distinct, actionable expert mandates, with assumptions/questions
+   carried forward. Research when needed to distinguish those mandates; resolution
+   of every primitive/interface and full candidate prior-art adjudication belong
+   to later roles. This is a responsibility boundary, not a paper/time cap.
+
+Keep the present run as evidence
+Do not rewrite its prompt mid-run. Inspect its completed plan, actual retrieved
+sources and stage timing before attributing latency to this conflict. A later
+same-request/same-snapshot comparison can test the narrower wording. Add prompt
+assembly checks that non-author stages omit the design-output block and every
+stage retains source/provenance rules; such tests verify wiring, not model behavior.
