@@ -119,6 +119,7 @@ def build(archive, source_root, decisions):
     row_for_record = {'poster_' + hashlib.sha256(r['row_id'].encode()).hexdigest()[:24]: r['row_id']
                       for r in overlay['rows']}
     aliases = {key(r['alias']): r for r in decisions['name_bindings']}
+    scoped_names = {(r['record_id'], key(r['source_name'])): r for r in decisions.get('scoped_names', [])}
     methods, occurrences = {}, {}
     for record in records:
         rid, card = record['record_id'], record['card']
@@ -139,7 +140,7 @@ def build(archive, source_root, decisions):
             cats.append({'path': card.get('source_category_path', []),
                 'source': card.get('source_page_url'), 'basis': 'resource_category; section_unresolved'})
         for name in members:
-            decision = aliases.get(key(name))
+            decision = scoped_names.get((rid, key(name))) or aliases.get(key(name))
             canonical = decision['name'] if decision else name
             ident = slug(canonical)
             if not ident:
