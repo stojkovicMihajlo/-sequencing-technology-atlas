@@ -112,3 +112,31 @@ review, and ideation with EXACT baseline atlas/request/history input bytes.
 prepare_from_reference verifies inputs and carries no previous model conversations,
 candidate graphs, reviews or literature memory. Live web results and model-service
 behavior remain variable; one rerun is not a causal or novelty benchmark.
+
+SUBMISSION — 5 November 2026
+Code committed as 74e84dcd13f2f48fa2902558b027153f2b2923b9. Final combined offline
+tests: 880 passed in 42.13s using pytest --import-mode=importlib. The 39-file
+overlay SHA is 7e56ca99622f84d38b1f04b42c777aae73d9e0bee8453eac02f4118d73d7f324.
+Fresh ideation job 51210465: work/ideation_iteration_20261105, runtime_01/run_01,
+four-hour CPU allocation, gpt-6.1-sol xhigh. It prepares from the exact config
+inputs of baseline ideation_demo_20261105/run_01; no old candidate/review memory.
+Fresh correction job 51210466: work/correction_validation_20261105, runtime_01,
+correction_01, two-hour CPU allocation, same model/effort. One correction and fresh
+review only, pinned original SPLiT sources/candidate/critique. No historical graph
+publication occurs merely because correction completes.
+Both use Qiu scratch and dedicated existing Codex login; no GPU. Submissions were
+accepted; execution not yet observed at this checkpoint. See iteration_20261105/
+submission.json and code_01_manifest.json. Do not duplicate pending jobs.
+Original 51200765 remains frozen. Latest status: RNA-age revision validated;
+physical-selection revision still running. The orchestrator writes revised.json
+only after the parallel revision group completes; inspect the validated attempt
+artifact while the peer is still running, not a nonexistent candidates/revised path.
+
+DEPLOYMENT OBSERVATION — 5 November 2026
+51210465 failed after 40 seconds before native ideation: 265 checks passed and one
+PDF evidence test imported a fixture module omitted from the deployment package.
+The self-contained helper fix now covers BOTH PDF tests; 14 tests also pass in an
+isolated directory outside the repository test tree. No scientific prompt/runtime
+logic changed for this fix. New frozen ideation runtime required; do not modify
+runtime_01 or duplicate the active correction job. 51210466 passed 486 checks on
+Sherlock and began its correction author at 2026-11-05T15:57:11Z.

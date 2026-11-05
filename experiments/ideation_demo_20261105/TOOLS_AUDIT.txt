@@ -107,3 +107,13 @@ No-match now explicitly means failure of literal retrieval within a potentially
 incomplete capture, not a negative finding about the literature. Native runs
 must still demonstrate that reviewers use the evidence, distinguish inaccessible
 from unsupported claims and reformulate queries when needed.
+
+Deployment correction
+Job 51210465 failed its pre-model software checks: one of the two PDF tests still
+imported tests.sources.test_pdf_registration, which is absent from the bounded
+runtime. The earlier self-contained-fixture change covered only the other test.
+Both now use a local minimal PDF helper. All 14 evidence tests pass, including
+an isolated invocation outside the repository test tree. Scientific code and
+model prompts are unchanged by this packaging correction. The failed runtime
+is preserved; no model calls occurred in that job. SPLiT validation 51210466
+passed its separate 486 checks and started its correction worker unchanged.

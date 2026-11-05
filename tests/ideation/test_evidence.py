@@ -85,10 +85,7 @@ def test_invalid_pdf_keeps_original_and_failure_receipt(tmp_path, monkeypatch, p
     assert "text_sha256" not in receipt
 
 
-@pytest.mark.skipif(not shutil.which('pdftotext'), reason='Real Poppler required')
-def test_pdf_capture_records_original_text_conversion_and_page_boundaries(tmp_path, monkeypatch, public_dns):
-    original = tmp_path/'fixture.pdf'
-    passage = 'The primer carries a cell barcode.\nThis is synthetic test text, not scientific evidence.'
+def make_pdf(original, passage):
     # Minimal real PDF keeps the native deployment test bundle self-contained.
     stream = ('BT /F1 12 Tf 72 720 Td ' + ' 0 -18 Td '.join('(' + line + ') Tj' for line in passage.splitlines()) + ' ET').encode()
     objects = [b'<< /Type /Catalog /Pages 2 0 R >>', b'<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
@@ -103,6 +100,13 @@ def test_pdf_capture_records_original_text_conversion_and_page_boundaries(tmp_pa
     raw += b''.join(f'{offset:010d} 00000 n \n'.encode() for offset in offsets)
     raw += b'trailer << /Size 6 /Root 1 0 R >>\nstartxref\n' + str(xref).encode() + b'\n%%EOF\n'
     original.write_bytes(raw)
+
+
+@pytest.mark.skipif(not shutil.which('pdftotext'), reason='Real Poppler required')
+def test_pdf_capture_records_original_text_conversion_and_page_boundaries(tmp_path, monkeypatch, public_dns):
+    original = tmp_path/'fixture.pdf'
+    passage = 'The primer carries a cell barcode.\nThis is synthetic test text, not scientific evidence.'
+    make_pdf(original, passage)
     raw = original.read_bytes()
     mocked_network(monkeypatch, raw, 'application/pdf')
     result = evidence.fetch_source('https://example.org/article', tmp_path/'fetched')
@@ -141,7 +145,6 @@ def test_pdf_conversion_failures_keep_captured_bytes_without_registering_text(tm
 
 @pytest.mark.skipif(not shutil.which('pdftotext'), reason='Real Poppler required')
 def test_pdf_origin_is_usable_by_citation_check_but_mutated_original_is_not(tmp_path, monkeypatch, public_dns):
-    from tests.sources.test_pdf_registration import make_pdf
     from genomics_discovery.ideation.run import CitationCheck, citation_has_host_capture
 
     original = tmp_path/'fixture.pdf'; make_pdf(original, 'Exact source words in a test PDF.')
