@@ -107,6 +107,62 @@ resolve the issue without a download; different assay versions cannot substitute
 for the requested source; no original bundle, extraction or review is overwritten.
 No active runtime/input was modified to record this limitation.
 
+Reference audit for SOURCE_RECOVERY-001 (4 November 2026)
+Scope: how to read/retrieve evidence and resume after a missing-evidence review.
+The target remains a source-supported workflow or before-to-after relationship,
+not a general literature report. Summaries can help find evidence; they cannot
+replace the original passage supporting an admitted scientific assertion.
+
+Existing local implementation inspected:
+- sources/packets.py:_passages and read_passage preserve identifiable passages
+  from registered originals. Reuse these documents after verifying identity,
+  version and custody; previous model extractions are not source evidence.
+- illumina/sources.py:jats_text preserves ordered blocks with XML locators;
+  acquire_pmc_fulltext stores XML, extracted text and blocks.json with hashes.
+- illumina/extraction.py:source_excerpt provides bounded literal-text search and
+  offset paging. It is not semantic passage retrieval. The pilot's selected cache
+  does not automatically search every historical source packet.
+
+PaperQA2: https://arxiv.org/html/2409.13740v1 (Methods 8.1 and 8.1.1).
+Paper: search papers, retrieve chunks, summarize/rank evidence for the question,
+then answer; citation traversal can acquire more sources. The paper explicitly
+says the public package did not include all hosted search/parsing/traversal
+infrastructure used in its experiments. Do not equate package and hosted service.
+Official code inspected at Future-House/paper-qa commit
+c692d0dfeac4a0296599f7fe21a253a58b7ac12a:
+src/paperqa/agents/tools.py:PaperSearch, GatherEvidence, GenerateAnswer;
+src/paperqa/docs.py:retrieve_texts, aget_evidence.
+This later public version separates document search from evidence gathering and
+uses vector retrieval followed by optional question-conditioned summarization.
+
+ROBIN public orchestration inspected at Future-House/robin commit
+4a5cce310f3bc7663a67117db88af43b84733ffe:
+robin/assays.py:experimental_assay; robin/utils.py:call_platform.
+Generated literature queries are submitted to a hosted Edison service and the
+returned reports feed assay proposals. This is not an exposed implementation of
+Crow/Falcon's entire internal paper/supplement retrieval loop.
+
+OpenScholar: https://www.nature.com/articles/s41586-025-10072-4 (Methods).
+Paper: feedback identifying missing content can specify a new retrieval query;
+new passages are appended before revision, followed by citation checking.
+Official code inspected at AkariAsai/OpenScholar commit
+0e9b8fb912273d3dae39e593da86e4f6d3bf8de1:
+src/open_scholar.py:run, get_feedback, edit_with_feedback_retrieval.
+Important implementation boundary: in run's feedback-retrieval branch the peS2o
+call is commented out; optional Semantic Scholar retrieval supplies abstracts.
+This public path therefore does not supply our required supplement recovery.
+
+Decision: adapt separation of document acquisition, passage retrieval and
+evidence-based revision; reuse our registered originals and require fresh review
+of affected claims. Keep Illumina diagram detail as the baseline. Deeper evidence
+is needed where a specific extraction ambiguity or historical claim depends on
+it, not to reconstruct every laboratory execution detail. Do not adopt an
+abstract/report as sufficient proof of a missing protocol detail, citation-count
+ranking as scientific support, or OpenScholar's per-paper passage cap as our
+coverage rule. No external code was copied and no runtime behavior changed.
+The acquisition/resumption acceptance checks above remain outstanding; the
+literature supports this design direction, not a reliability guarantee.
+
 Success will be reported as coverage, source/support holds, exact-version paired
 edges, rejected/withheld claims, refinement requests, baseline comparison findings,
 and latency/token usage. Completion of software execution alone is not success.
