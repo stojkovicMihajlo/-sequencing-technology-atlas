@@ -577,3 +577,28 @@ async def test_native_review_detects_changes_to_auxiliary_inputs(tmp_path, monke
         complete=True, thread_id='fixture', usage={}))
     with pytest.raises(ValueError, match='registered stage input changed'):
         await native(contract, attempt)
+
+
+@pytest.mark.asyncio
+async def test_native_provider_block_is_visible_and_not_retried(tmp_path, monkeypatch):
+    import genomics_discovery.ideation.run as runner
+    attempt = tmp_path/'attempt'; attempt.mkdir()
+    contract = {'stage': 'review'}
+    for key in ('request_file', 'atlas_file', 'schema_file', 'sources_file'):
+        path = tmp_path/(key+'.json'); write(path, {'sources': {}})
+        contract[key] = str(path)
+    write(attempt/'contract.json', contract)
+    calls = []
+
+    async def fake_run(prompt, directory):
+        calls.append(prompt)
+        (directory/'events.jsonl').write_text(json.dumps({'type': 'turn.failed',
+            'error': {'message': 'This content was flagged for possible biological risk.'}})+'\n')
+        return SimpleNamespace(error='Codex exited with code 1', exit_code=1)
+
+    native = NativeStages.__new__(NativeStages)
+    native.worker = SimpleNamespace(run=fake_run); native.threads = set()
+    monkeypatch.setattr(runner, 'assess_archived_attempt', lambda _: SimpleNamespace(complete=False))
+    with pytest.raises(ValueError, match='flagged for possible biological risk'):
+        await native(contract, attempt)
+    assert len(calls) == 1

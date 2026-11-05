@@ -61,7 +61,7 @@ def snapshot(pilot, output):
     return receipt
 
 
-def prepare_from_reference(reference_run, output):
+def prepare_from_reference(reference_run, output, *, team=False, expert_count=4, max_parallel=4):
     """Prepare current harness against the prior run's exact recorded inputs.
 
     This does not refresh the pilot, resume a model conversation, or carry over
@@ -108,7 +108,8 @@ def prepare_from_reference(reference_run, output):
     if sha(config_path) != config_pin:
         raise ValueError('Reference config changed during preparation')
 
-    current = ideation_run.prepare(request, atlas, output, history_manifest=history)
+    current = ideation_run.prepare(request, atlas, output, history_manifest=history,
+        team=team, expert_count=expert_count, max_parallel=max_parallel)
     if current['atlas_sha256'] != previous['atlas_sha256'] or current.get('history_sha256') != previous.get('history_sha256'):
         raise ValueError('Prepared inputs differ from reference pins')
     # prepare validates the current Request schema and serializes it. Preserve
@@ -144,8 +145,14 @@ def main(argv=None):
     source.add_argument('--pilot', type=Path)
     source.add_argument('--reference-run', type=Path)
     parser.add_argument('--output', required=True, type=Path)
+    parser.add_argument('--team', action='store_true')
+    parser.add_argument('--designers', type=int, default=4)
+    parser.add_argument('--max-parallel', type=int, default=4)
     args = parser.parse_args(argv)
-    result = prepare_from_reference(args.reference_run, args.output) if args.reference_run else snapshot(args.pilot, args.output)
+    if args.team and not args.reference_run:
+        parser.error('--team requires --reference-run; a pilot snapshot is input preparation, not a team run')
+    result = prepare_from_reference(args.reference_run, args.output, team=args.team,
+        expert_count=args.designers, max_parallel=args.max_parallel) if args.reference_run else snapshot(args.pilot, args.output)
     print(json.dumps(result, indent=2))
 
 

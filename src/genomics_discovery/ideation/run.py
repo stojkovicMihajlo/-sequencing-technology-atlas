@@ -27,6 +27,9 @@ from .models import (AtlasReference, CandidateIdea, Hash, IdeaReview, Literature
                      NearestPrior, ProposedAssay, ResearchAgenda, RESEARCH_AREAS,
                      candidate_targets, parse_candidate, review_targets, validate_review_binding)
 from .prompts import build_prompt
+from .sources import merge_sources
+from .review import SpecialistPanel, SpecialistResolution, validate_specialist_panel, validate_specialist_resolutions
+from .team import PeerReport, PeerResponse, validate_peer_report, validate_peer_responses
 
 
 def read(path):
@@ -82,6 +85,10 @@ class AssayResearchPlan(ResearchPlan):
     experts: Annotated[tuple[ResearchExpertMandate, ...], Field(min_length=2, max_length=2)]
 
 
+class TeamResearchPlan(ResearchPlan):
+    experts: Annotated[tuple[ResearchExpertMandate, ...], Field(min_length=2)]
+
+
 class ReviewPanel(StrictModel):
     reviews: Annotated[tuple[IdeaReview, ...], Field(min_length=1)]
     comparison_summary: Text = Field(description='Reviewer comparison of the separate designs; do not fabricate a conversation or force a merged design.')
@@ -94,6 +101,20 @@ class IssueResolution(StrictModel):
     issue_id: Text
     status: Literal['resolved', 'unresolved']
     reason: Text
+
+
+class TeamIssueResolution(IssueResolution):
+    resolution_targets: tuple[Text, ...] = ()
+    atlas_refs: tuple[AtlasReference, ...] = ()
+    literature_refs: tuple[LiteratureReference, ...] = ()
+
+    @model_validator(mode='after')
+    def located_rebuttal(self):
+        if len(set(self.resolution_targets)) != len(self.resolution_targets):
+            raise ValueError('Resolution targets must be unique')
+        if self.status == 'resolved' and not (self.resolution_targets or self.atlas_refs or self.literature_refs):
+            raise ValueError('Resolving a prior issue requires evidence or exact current candidate targets')
+        return self
 
 
 class IssueResponse(StrictModel):
@@ -109,6 +130,15 @@ class Revision(StrictModel):
 
 class AssayRevision(Revision):
     candidate: ProposedAssay
+
+
+class TeamReviewPanel(ReviewPanel):
+    specialist_issue_resolutions: tuple[SpecialistResolution, ...] = ()
+    previous_issue_resolutions: tuple[TeamIssueResolution, ...] = ()
+
+
+class TeamRevision(AssayRevision):
+    peer_responses: tuple[PeerResponse, ...] = ()
 
 
 class LiteratureCheck(StrictModel):
@@ -175,6 +205,8 @@ class LiteratureReport(StrictModel):
 LEGACY_SCHEMAS = {'plan': ResearchPlan, 'propose': CandidateIdea, 'literature': LiteratureReport,
                   'review': ReviewPanel, 'revise': Revision}
 SCHEMAS = {**LEGACY_SCHEMAS, 'plan': AssayResearchPlan, 'propose': ProposedAssay, 'revise': AssayRevision}
+TEAM_SCHEMAS = {**SCHEMAS, 'plan': TeamResearchPlan, 'peer': PeerReport,
+                'specialist': SpecialistPanel, 'review': TeamReviewPanel, 'revise': TeamRevision}
 
 
 def schemas_for(contract):
@@ -183,6 +215,8 @@ def schemas_for(contract):
         return LEGACY_SCHEMAS
     if version == 'ideation_run/2':
         return SCHEMAS
+    if version == 'ideation_run/3':
+        return TEAM_SCHEMAS
     raise ValueError(f'Unknown ideation run format: {version}')
 
 
@@ -341,9 +375,20 @@ def validate_artifact(contract, path):
     schemas = schemas_for(contract)
     document = schemas[role].model_validate(read(path))
     request = Request.model_validate(read(contract['request_file']))
+    if contract.get('peer_report_files'):
+        initial = [parse_candidate(read(p)) for p in contract.get('literature_candidate_files', contract['candidate_files'])]
+        for peer_path in contract['peer_report_files']:
+            peer = PeerReport.model_validate(read(peer_path))
+            validate_peer_report(peer, initial, peer.author_id)
     if role == 'plan':
         if document.original_request != request.prompt or tuple(document.constraints) != request.constraints:
             raise ValueError('Coordinator must preserve original request and explicit constraints verbatim')
+        if len(document.experts) != contract.get('expert_count', 2):
+            raise ValueError('Coordinator must assign the configured number of designers')
+    if role == 'peer':
+        validate_peer_report(document, [parse_candidate(read(p)) for p in contract['candidate_files']], contract['expert_id'])
+    if role == 'specialist':
+        validate_specialist_panel(document, [parse_candidate(read(p)) for p in contract['candidate_files']], contract['specialism'])
     if role == 'literature':
         validate_literature_report(document,
             [parse_candidate(read(p)) for p in contract['candidate_files']],
@@ -354,7 +399,7 @@ def validate_artifact(contract, path):
         if idea.id != contract['expert_id']:
             raise ValueError('Candidate ID must match its assigned independent expert')
         if isinstance(idea, ProposedAssay):
-            plan = AssayResearchPlan.model_validate(read(contract['research_plan_file']))
+            plan = schemas['plan'].model_validate(read(contract['research_plan_file']))
             mandate = next((e for e in plan.experts if e.id == idea.id), None)
             if mandate is None:
                 raise ValueError('Candidate has no assigned expert mandate')
@@ -363,13 +408,16 @@ def validate_artifact(contract, path):
                 if finding.question != getattr(mandate.research_questions, area) and not finding.reframing_reason:
                     raise ValueError('Reframing an assigned research question requires a reason')
         if role == 'revise':
-            panel = ReviewPanel.model_validate(read(contract['review_file']))
+            panel = schemas['review'].model_validate(read(contract['review_file']))
             review = next(x for x in panel.reviews if x.candidate_id == idea.id)
             previous = parse_candidate(read(contract['previous_candidate_file']))
             validate_review_binding(review, previous)
             actual = [r.issue_id for r in document.responses]
             if len(actual) != len(set(actual)) or set(actual) != {i.id for i in review.issues}:
                 raise ValueError('Revision must answer every exact prior review issue once')
+            if isinstance(document, TeamRevision):
+                validate_peer_responses(document.peer_responses,
+                    [PeerReport.model_validate(read(p)) for p in contract.get('peer_report_files', [])], idea.id)
     if role == 'review':
         ideas = [parse_candidate(read(p)) for p in contract['candidate_files']]
         if len(document.reviews) != len(ideas) or {r.candidate_id for r in document.reviews} != {i.id for i in ideas}:
@@ -379,7 +427,7 @@ def validate_artifact(contract, path):
         expected = set()
         previous_issues = {}
         if contract.get('review_file'):
-            previous = ReviewPanel.model_validate(read(contract['review_file']))
+            previous = schemas['review'].model_validate(read(contract['review_file']))
             expected = {(r.candidate_id, i.id) for r in previous.reviews for i in r.issues}
             previous_issues = {(r.candidate_id, i.id): i for r in previous.reviews for i in r.issues}
         actual = [(r.candidate_id, r.issue_id) for r in document.previous_issue_resolutions]
@@ -387,6 +435,12 @@ def validate_artifact(contract, path):
             raise ValueError('Final panel must account for every previous issue exactly once')
         for resolution in document.previous_issue_resolutions:
             current = next(r for r in document.reviews if r.candidate_id == resolution.candidate_id)
+            if isinstance(resolution, TeamIssueResolution):
+                idea = next(i for i in ideas if i.id == resolution.candidate_id)
+                if set(resolution.resolution_targets) - review_targets(idea):
+                    raise ValueError('Prior-issue resolution must identify valid current candidate targets')
+                if resolution.status == 'resolved' and any(i.id == resolution.issue_id for i in current.issues):
+                    raise ValueError('A resolved previous issue cannot also remain open in the final review')
             if resolution.status == 'unresolved':
                 issue = next((i for i in current.issues if i.id == resolution.issue_id), None)
                 if issue is None:
@@ -394,51 +448,26 @@ def validate_artifact(contract, path):
                 if (previous_issues[(resolution.candidate_id, resolution.issue_id)].severity == 'blocking'
                         and issue.severity != 'blocking'):
                     raise ValueError('An unresolved blocking issue must remain blocking; resolve the original dependency explicitly before changing readiness')
+                if isinstance(document, TeamReviewPanel):
+                    old = previous_issues[(resolution.candidate_id, resolution.issue_id)]
+                    if any(getattr(issue, key) != getattr(old, key) for key in ('target', 'severity', 'reason', 'next_test')):
+                        raise ValueError('An unresolved team-review objection must remain unchanged; resolve it explicitly before replacing it')
+        if isinstance(document, TeamReviewPanel):
+            if contract.get('revision_round', 0) == 0:
+                validate_specialist_resolutions(document,
+                    [SpecialistPanel.model_validate(read(p)) for p in contract.get('specialist_report_files', [])], ideas)
+            elif document.specialist_issue_resolutions:
+                raise ValueError('Final review uses previous_issue_resolutions; old specialist reports are not fresh reviews of revised candidates')
     validate_references(document, context_for(contract))
     return document
 
 
-def merge_sources(paths):
-    """Join exact URL/content identities, retaining model-declared metadata variants.
 
-The first declaration stays addressable at the familiar top-level fields; it is
-not preferred scientifically. Different titles/content levels are capture
-declarations to inspect, not different scientific sources or a fatal collision.
-"""
-    merged = {}
-    for path in paths:
-        if Path(path).exists():
-            for ident, entry in read(path)['sources'].items():
-                if sha(entry['path']) != entry['content_sha256']:
-                    raise ValueError('Captured source changed before handoff: ' + ident)
-                if ident in merged and merged[ident] != entry:
-                    existing = merged[ident]
-                    if any(existing.get(k) != entry.get(k) for k in ('url', 'content_sha256')):
-                        raise ValueError('Conflicting source registration: ' + ident)
-                    declaration_fields = ('path', 'captured_at', 'title', 'content_level', 'provenance_status')
-                    declarations = existing.setdefault('capture_declarations', [
-                        {k: existing[k] for k in declaration_fields if k in existing}])
-                    for declaration in [
-                            {k: entry[k] for k in declaration_fields if k in entry},
-                            *entry.get('capture_declarations', [])]:
-                        if declaration not in declarations: declarations.append(declaration)
-                    if any(existing.get(k) != entry.get(k) for k in ('title', 'content_level')):
-                        existing['metadata_status'] = 'differing_capture_declarations; first declaration retained without scientific preference'
-                    captures = existing.setdefault('additional_captures', [])
-                    capture = {k: entry[k] for k in ('path', 'captured_at') if k in entry}
-                    if capture not in captures and capture.get('path') != existing['path']:
-                        captures.append(capture)
-                    for capture in entry.get('additional_captures', []):
-                        if capture not in captures: captures.append(capture)
-                    receipts = existing.setdefault('origin_receipts', [])
-                    for receipt in entry.get('origin_receipts', []):
-                        if receipt not in receipts: receipts.append(receipt)
-                else:
-                    merged[ident] = entry
-    return {'format_version': 'ideation_sources/1', 'sources': merged}
-
-
-def prepare(request_path, atlas_path, output, *, history_manifest=None):
+def prepare(request_path, atlas_path, output, *, history_manifest=None, team=False, expert_count=4, max_parallel=4):
+    if team and (isinstance(expert_count, bool) or not isinstance(expert_count, int) or expert_count < 2):
+        raise ValueError('A design team requires at least two designers')
+    if isinstance(max_parallel, bool) or not isinstance(max_parallel, int) or max_parallel < 1:
+        raise ValueError('max_parallel must be a positive integer')
     request = Request.model_validate(read(request_path))
     atlas_path, output = Path(atlas_path).resolve(), Path(output).resolve()
     from .context import AtlasContext
@@ -455,6 +484,10 @@ def prepare(request_path, atlas_path, output, *, history_manifest=None):
         'request_sha256': sha(inputs/'request.json'), 'model': 'gpt-6.1-sol', 'effort': 'xhigh',
         'expert_count': 2, 'max_revision_rounds': 1, 'history_manifest': None, 'history_sha256': None,
         'boundary': 'Untested proposal overlay; no canonical atlas writes or scientific novelty guarantee.'}
+    if team:
+        config.update(format_version='ideation_run/3', expert_count=expert_count,
+                      max_parallel=max_parallel, peer_rounds=1,
+                      specialist_lenses=['chemistry_interfaces', 'measurement_benefit'])
     if history_manifest:
         # Refer to an exact manifest; the history reader verifies every linked artifact.
         config.update(history_manifest=str(Path(history_manifest).resolve()), history_sha256=sha(history_manifest))
@@ -468,7 +501,7 @@ def prepare(request_path, atlas_path, output, *, history_manifest=None):
 def stage_input_paths(contract):
     paths = [contract['request_file'], contract['atlas_file'], contract['schema_file']]
     for key in ('candidate_files', 'literature_candidate_files', 'previous_candidate_files',
-                'issue_response_files'):
+                'issue_response_files', 'peer_report_files', 'peer_response_files', 'specialist_report_files'):
         paths.extend(contract.get(key, []))
     for key in ('research_plan_file', 'review_file', 'previous_candidate_file', 'literature_report_file'):
         if contract.get(key): paths.append(contract[key])
@@ -498,7 +531,21 @@ class NativeStages:
         if (result.error or result.exit_code != 0 or not archived.complete or not archived.thread_id
                 or result.thread_id != archived.thread_id or result.usage != archived.usage
                 or archived.thread_id in self.threads):
-            raise ValueError('Native stage failed or did not finish in a fresh verified session: ' + str(result.error))
+            messages = []
+            events = attempt/'events.jsonl'
+            if events.exists():
+                for line in events.read_text().splitlines():
+                    try:
+                        event = json.loads(line)
+                    except ValueError:
+                        continue
+                    if event.get('type') == 'error':
+                        messages.append(str(event.get('message', ''))[:1200])
+                    elif event.get('type') == 'turn.failed':
+                        messages.append(str(event.get('error', {}).get('message', ''))[:1200])
+            reason = '; '.join(dict.fromkeys(messages[-2:]))
+            raise ValueError('Native stage failed or did not finish in a fresh verified session: '
+                             + str(result.error) + ('; provider: '+reason if reason else ''))
         self.threads.add(archived.thread_id)
         if any(sha(path) != pin for path, pin in pins.items()):
             raise ValueError('A registered stage input changed during execution')
@@ -524,7 +571,7 @@ async def pipeline(directory, execute_stage):
     config, state = read(directory/'config.json'), read(directory/'state.json')
     if state['status'] != 'prepared':
         raise ValueError('Run already started; preserve it and prepare a new experiment instead of silently replaying')
-    if config.get('format_version') != 'ideation_run/2':
+    if config.get('format_version') not in {'ideation_run/2', 'ideation_run/3'}:
         raise ValueError('Execute legacy plans with their frozen runtime; prepare a new run for the current research contract')
     if sha(config['atlas_file']) != config['atlas_sha256'] or sha(config['request_file']) != config['request_sha256']:
         raise ValueError('Prepared input changed')
@@ -532,11 +579,15 @@ async def pipeline(directory, execute_stage):
     # Fail before spending a model call, using the same reader as the agent tool.
     context_for({**config, 'sources_file': str(directory/'unused_sources.json')}).validate_history_inputs()
     source_registries = []
+    semaphore = asyncio.Semaphore(config.get('max_parallel', config.get('expert_count', 2)))
 
-    async def stage(role, name, *, source_inputs=(), **extra):
+    async def stage_impl(role, name, *, source_inputs=(), **extra):
         attempt = directory/'attempts'/name
         attempt.mkdir(parents=True, exist_ok=False)
-        write(attempt/'schema.json', schemas_for(config)[role].model_json_schema())
+        schema = schemas_for(config)[role].model_json_schema()
+        if role == 'plan':
+            schema['properties']['experts'].update(minItems=config['expert_count'], maxItems=config['expert_count'])
+        write(attempt/'schema.json', schema)
         write(attempt/'sources.json', merge_sources(source_inputs))
         tool = [sys.executable, '-m', 'genomics_discovery.ideation.context',
                 '--atlas', config['atlas_file'], '--atlas-sha256', config['atlas_sha256'],
@@ -554,11 +605,14 @@ async def pipeline(directory, execute_stage):
         if role == 'review':
             contract['inherited_search_coverage'] = inherited_search_coverage(contract)
         write(attempt/'contract.json', contract)
-        row = {'role': role, 'path': str(attempt), 'status': 'running'}
+        row = {'role': role, 'path': str(attempt), 'status': 'queued'}
         state['stages'].append(row); state['status'] = role
         write(directory/'state.json', state)
         try:
-            receipt = await execute_stage(contract, attempt)
+            async with semaphore:
+                row['status'] = 'running'
+                write(directory/'state.json', state)
+                receipt = await execute_stage(contract, attempt)
             result = validate_artifact(contract, attempt/'artifact.json')
             if role == 'literature':
                 validate_literature_execution(result, receipt, attempt/'sources.json')
@@ -574,8 +628,28 @@ async def pipeline(directory, execute_stage):
         finally:
             write(directory/'state.json', state)
 
+    async def stage(role, name, **extra):
+        try:
+            return await stage_impl(role, name, **extra)
+        except Exception as exc:
+            # Preparation errors occur before the worker's try/finally. They
+            # must remain visible when independent branches use gather().
+            path = str(directory/'attempts'/name)
+            if not any(row['path'] == path for row in state['stages']):
+                state['stages'].append({'role': role, 'path': path,
+                    'status': 'failed', 'failure_phase': 'stage_preparation', 'error': str(exc)})
+                state['failures'].append({'stage': name, 'error': str(exc)})
+                write(directory/'state.json', state)
+            raise
+
     start = time.monotonic()
     try:
+        if config['format_version'] == 'ideation_run/3':
+            from .team_workflow import run_team_workflow
+            result = await run_team_workflow(directory, config, stage)
+            state.update(**result, status='completed_with_stage_failures' if state['failures'] else 'completed',
+                         elapsed_seconds=time.monotonic()-start)
+            return state
         plan, plan_file, plan_sources = await stage('plan', '01_plan')
         write(directory/'plan.json', plan.model_dump(mode='json'))
         drafts = await asyncio.gather(*(stage('propose', '02_'+e.id,
@@ -648,6 +722,11 @@ async def pipeline(directory, execute_stage):
         state.update(status='failed', error=str(exc), elapsed_seconds=time.monotonic()-start)
         raise
     finally:
+        from .usage import build_usage_receipt
+        try:
+            write(directory/'atlas_usage.json', build_usage_receipt(directory, candidate_paths=state.get('candidate_files', ())))
+        except Exception as exc:
+            state['usage_receipt_error'] = str(exc)
         write(directory/'state.json', state)
     return state
 
@@ -658,11 +737,15 @@ def main():
     p = sub.add_parser('prepare'); p.add_argument('--request', type=Path, required=True)
     p.add_argument('--atlas', type=Path, required=True); p.add_argument('--output', type=Path, required=True)
     p.add_argument('--history-manifest', type=Path)
+    p.add_argument('--team', action='store_true', help='Use the bounded design team (run/3)')
+    p.add_argument('--designers', type=int, default=4)
+    p.add_argument('--max-parallel', type=int, default=4)
     p = sub.add_parser('run'); p.add_argument('--directory', type=Path, required=True)
     p = sub.add_parser('check'); p.add_argument('--stage-directory', type=Path, required=True)
     args = parser.parse_args()
     if args.command == 'prepare':
-        print(json.dumps(prepare(args.request, args.atlas, args.output, history_manifest=args.history_manifest), indent=2))
+        print(json.dumps(prepare(args.request, args.atlas, args.output, history_manifest=args.history_manifest,
+            team=args.team, expert_count=args.designers, max_parallel=args.max_parallel), indent=2))
     elif args.command == 'check':
         contract = read(args.stage_directory/'contract.json')
         document = validate_artifact(contract, contract['output_file'])

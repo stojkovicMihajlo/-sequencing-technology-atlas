@@ -1,0 +1,233 @@
+IDEATION TEAM: PRIMARY PAPER AND EXECUTABLE REFERENCE AUDIT
+Date: 2026-11-05
+Status: design recommendation; no runtime edits or native model execution in this audit.
+
+DECISION AND LOCAL CONTRACT
+
+Use a small team with independent design drafts followed by explicit, recorded
+critique and author response. Adapt PantheonOS delegation and Virtual Lab meeting
+semantics; retain the existing source-bound assay graph and Codex-worker transport.
+Use ROBIN's candidate-specific literature investigation before selection. None of
+these references establishes that more agents, conversation, or agreement makes an
+unexecuted assay correct or novel.
+
+The consequential ambiguity is what information each designer sees and when.
+Sharing all drafts before independent generation changes the search distribution
+and can converge the team on one architecture. A final aggregator can also hide
+incompatible assumptions by combining persuasive prose. Those are scientific
+changes, not merely alternative Python layouts.
+
+Our input remains a measurement goal, constraints, the versioned reported-method
+atlas, and retrievable literature. The output remains multiple proposed
+State–Operation–Flow graphs with exact change claims, evidence, transfer
+assumptions, and decisive experiments. A candidate is not a reported atlas method.
+Untested transfer of an established property can remain a testable hypothesis;
+inventing an essential property without precedent is a different, blocking issue.
+Consensus, schema validation, and literature retrieval cannot establish assay
+performance or exhaustive novelty.
+
+REFERENCES, PINS, AND ACCESS
+
+1. PantheonOS primary preprint
+   https://doi.org/10.64898/2026.02.26.707870
+   https://www.pantheon-os.com/pantheon-paper.pdf
+   Inspected indexed primary Methods excerpts covering the agent loop, handoff,
+   delegation, and context management. Full PDF acquisition via the web reader was
+   rejected for file size; bioRxiv HTML access was blocked. This is not a claim to
+   have read the full paper. Its delegation description separates a child's task
+   context from the parent's conversation and returns a result; handoff transfers
+   control with history. The current executable implementation below is later than
+   the February preprint, so current code must not be described as the exact paper
+   evaluation configuration.
+
+   Official code, retrieved 2026-11-05:
+   https://github.com/aristoteleo/PantheonOS/tree/8e83521f22526c643111c45a3d4b59d27886f258
+   Commit message: fix: guard context budgets before fallback routing.
+   LICENSE at this pin is BSD-2-Clause, while pyproject.toml declares MIT. This
+   discrepancy is recorded; no implementation source was copied during the audit.
+   Before vendoring, preserve the actual license notice and clarify metadata with
+   upstream. The recommendation below can be implemented without source copying.
+
+2. ROBIN primary paper
+   https://www.nature.com/articles/s41586-026-10652-y
+   Read relevant hypothesis-generation and Methods sections. The published study
+   includes human assessment and experimental work; it does not establish autonomous
+   verification of arbitrary newly invented sequencing protocols.
+   Official executable code:
+   https://github.com/Future-House/robin/blob/4a5cce310f3bc7663a67117db88af43b84733ffe/robin/assays.py
+   Apache-2.0 LICENSE inspected. The literature platform is called as a service;
+   this repository does not expose the complete internal Crow/Falcon harness.
+
+3. Virtual Lab primary paper
+   https://www.nature.com/articles/s41586-025-09442-9
+   Already covered in docs/IDEATION.txt; fresh article access redirected to a
+   failing endpoint in this audit. The new conclusions here rely on the pinned
+   executable meeting and prompt code, not an unobserved full-paper rereading.
+   https://github.com/zou-group/virtual-lab/tree/8a3a4fd9ccc0cd297bd523751e03bc9527c91832
+   Inspected src/virtual_lab/run_meeting.py and src/virtual_lab/prompts.py and MIT
+   LICENSE.
+   This current pin is not asserted to be the original published experiment pin.
+
+PANTHEONOS: ACTUAL CODE PATHS AND TRANSFER DECISIONS
+
+All paths below are relative to the pinned PantheonOS repository.
+
+pantheon/team/pantheon.py
+  PantheonTeam, add_unified_call_agent_tool, get_target_agent,
+  _build_child_context_metadata, _build_execution_context_id,
+  _resolve_child_delegation_delivery, create_delegation_task_message, run.
+
+  A delegated call validates target and instruction, rejects self/ancestor calls,
+  makes a separate execution ID and child Memory, runs the child, and returns its
+  response to the caller. Maximum delegation depth is configurable (default 5).
+  This is an available mechanism, not an argument that our assay task needs depth 5.
+  The unified delegation path currently accepts local Agent instances and rejects
+  RemoteAgent with NotImplementedError; do not assume it directly schedules our
+  separate native Codex processes on Sherlock.
+
+  Critical detail: use_summary=True in the team constructor does NOT mean every
+  specialist receives a parent summary. _resolve_child_delegation_delivery checks
+  delegation.fork_context; when false it delivers the explicit instruction only.
+  When true it attempts a cache-compatible parent prefix or optimized structured
+  history; summary is a fallback. We should choose context deliberately instead of
+  assuming a generic framework automatically supplies the relevant evidence.
+
+  ADAPT: delegate exact questions with candidate ID, graph hash, target IDs, source
+  references and read commands; separate execution IDs; return results to the
+  author/coordinator; prohibit recursive hiring and unbounded peer calls initially.
+  REJECT for this release: transferring the entire design process to a specialist
+  or giving every specialist the entire accumulated transcript by default.
+
+pantheon/team/aat.py: AgentAsToolTeam, call_sub_agent
+  Supplies a simpler leader/worker delegation pattern and records instructions and
+  results. Its fully_connected option enables peer invocation. Adapt the explicit
+  task/return structure, but preserve our attempt IDs, hashes, artifact validation,
+  and scheduling rather than importing the implementation as a replacement runner.
+
+pantheon/team/moa.py: MoATeam
+  Parallel proposers are collected, optionally shown aggregated responses in later
+  layers, and finally synthesized by an aggregator. ADAPT the fan-out/barrier.
+  REJECT single-answer prose synthesis as the canonical assay product: it can erase
+  which draft supplied an assumption and combine chemically incompatible choices.
+
+pantheon/team/swarm.py: SwarmTeam
+  Uses control transfers with shared conversational memory. This is a different
+  coordination choice from return-to-caller delegation. Not required to solve the
+  observed lack of peer critique; keep it out of the first bounded implementation.
+
+pantheon/internal/memory/memory.py: Memory, get_messages, MemoryManager
+pantheon/internal/memory/storage.py
+pantheon/chatroom/routed_memory.py
+  Stored conversation and model-facing projections are distinct. Exact execution
+  context filtering and compression checkpoints shape what the model receives.
+  Storage uses local locking and persistent files; this is not evidence of a
+  distributed transactional shared scientific database across Slurm processes.
+  ADAPT context isolation and a persistent audit trail. Scientific evidence should
+  remain in our immutable source registry; a compressed conversation is navigation,
+  not a substitute for the original passage.
+
+pantheon/toolset.py: tool, ToolSet, to_mcp, run_as_mcp
+  Provides typed function registration, context injection and MCP exposure. This
+  is the most useful later code integration boundary: expose our existing read-only
+  atlas, exact-change, source-passage and validation functions as an Atlas ToolSet.
+  Keep reported/proposed namespaces, evidence hashes and existing authorization.
+  Integration needs a small adapter test; adding Pantheon does not itself validate
+  a scientific claim or resolve native Codex login/provider compatibility.
+
+pantheon/team/plugin.py
+pantheon/internal/compression/plugin.py
+pantheon/internal/learning_system/{plugin,extractor,store}.py
+  Plugins give lifecycle hooks; compression budgets account for pending inputs and
+  tools. Learning can extract/update skills from session traces in the background.
+  ADAPT bounded context and durable original records. DEFER autonomous harness/skill
+  rewriting: an untested agent conclusion must not become authoritative chemistry
+  for future candidates, and moving prompts would invalidate a fixed comparison.
+
+Tests inspected, not executed:
+  tests/test_team_transfer_and_call_agent.py
+  tests/test_context_isolation.py
+  They exercise self/ancestor rejection, peer access, raw delegation input,
+  transfer/call distinction, separated context and duplicate-message behavior.
+  Passing these upstream tests would not establish scientific suitability for us.
+
+ROBIN AND VIRTUAL LAB: WHAT SPECIFICALLY TRANSFERS
+
+ROBIN robin/assays.py::experimental_assay makes initial literature calls, generates
+candidate assays, makes candidate-specific detailed literature calls, performs
+pairwise comparisons and uses choice-model ranking to select a candidate. ADOPT
+investigating a concrete proposal before ranking it. ADAPT searches to exact assay
+claims, prior implementations, alternative readouts and contradictory results.
+REJECT its ranking dimensions/single winner as a drop-in measure of genomic assay
+novelty or compatibility. A score cannot resolve an unspecified essential interface.
+
+Virtual Lab src/virtual_lab/run_meeting.py::run_meeting makes expertise/goal/role
+explicit, runs a
+bounded number of meeting rounds, includes a scientific critic for individual
+meetings, and prompts the author to answer that critique. Named contributions and
+conversation history are recorded. ADOPT an actual critique-and-response exchange;
+ADAPT its target to exact proposed graph records and a short unresolved issue list.
+REJECT replaying the entire literature corpus and all meetings into every context.
+These references support the mechanisms; they do not prove our choice of four
+designers or one discussion round is optimal.
+
+MINIMAL PROPOSED LOCAL WORKFLOW
+
+1. Coordinator formulates four distinct architectural mandates from the actual
+   goal and prior research. Distinction is a different causal design assumption or
+   information-carrying arrangement, not merely four expert job titles. Do not
+   prescribe a specific chemistry or force all candidates to branch early.
+2. Four designers independently investigate and create valid proposed assay graphs.
+   They share read-only atlas/source tools, not each other's unpublished drafts.
+3. After drafts exist, each designer critiques another assigned draft in one round.
+   A critique identifies graph version and target, evidence, concern and the
+   response needed. A reciprocal pairing or deterministic rotation is sufficient;
+   all-pairs discussion is not needed. The author answers and revises its own draft.
+4. A literature specialist and a technical specialist review the resulting
+   candidates. Scientific objections are attached to exact records. Reuse the
+   existing literature and review machinery rather than creating another committee.
+5. Authors make bounded revisions; the final reviewer explicitly disposes of every
+   earlier blocking issue. Changed scientific claims require fresh targeted
+   literature investigation. The coordinator reports a portfolio and what would
+   falsify each candidate, without turning agreement into experimental success.
+
+The count of four designers and one peer round is a practical initial configuration
+meeting the user's request for more than two designers, not a literature-derived
+optimum. Retain a no-peer-discussion configuration for comparison. A later specialist
+request should name an exact unresolved question and required expertise; do not add
+unrestricted recursive recruitment before an observed failure justifies it.
+
+Current integration points are ideation/run.py (ResearchPlan, AssayResearchPlan,
+pipeline, NativeStages), ideation/prompts.py (build_prompt), ideation/models.py
+(ProposedAssay and graph/review contracts), and the existing evidence/context query
+modules. At inspection, both research-plan schemas require exactly two experts;
+raising a CLI count alone cannot create a four-designer system. Root owns runtime
+changes; this report does not assert that the proposed team is already implemented.
+
+FALSIFIABLE CHECKS BEFORE A LIVE TEAM RUN
+
+- Four unique mandates produce four separately preserved initial artifacts; no
+  designer reads peer drafts before the collaboration checkpoint.
+- Every critique resolves to the exact candidate hash and valid target IDs.
+- Every author response maps to an actual critique; an unknown issue cannot be
+  declared resolved by a coordinator summary.
+- Scientific revisions invalidate stale claim-specific novelty coverage; cosmetic
+  changes do not imply a new literature discovery.
+- A specialist cannot mutate another author's or the reported atlas's artifact.
+- Repeated/self/ancestor requests and exhausted round limits fail explicitly.
+- One failed branch remains visible and does not silently count as a completed
+  diverse design; other independent branches can still be inspected.
+- Deliberately incompatible interfaces remain blocking; merely unexecuted but
+  specified transfers with precedent and a decisive test are not automatically
+  rejected solely for being new.
+- Compare peer discussion against no discussion with matched candidate count and
+  record model calls, latency, mechanism diversity and resolved/new issues. A more
+  polished rationale alone is not an improvement metric.
+
+BOUNDARY
+
+The defensible adaptation is evidence-bound graph revision through explicit expert
+exchange. The general multi-agent team, delegation, retrieval, and review patterns
+are prior art. No official runtime was installed, no source was vendored, no external
+model job was launched, and no upstream tests were represented as locally passing.
+The next release needs local contract tests and an observed complete team run before
+claiming an improvement over the existing two-designer baseline.

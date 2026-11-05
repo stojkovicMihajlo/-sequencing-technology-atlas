@@ -1,0 +1,104 @@
+INDEPENDENT TEAM IMPLEMENTATION REVIEW
+Date: 2026-11-05
+Scope: ideation/run.py, team_workflow.py, team.py and review.py; source handoffs
+also traced through context.py. Read-only audit followed by an explicitly assigned
+source-handoff correction in sources.py and tests/ideation/test_sources.py.
+
+CONCRETE FINDINGS REPORTED TO ROOT
+
+1. Lost custody records across stages (corrected in a new source helper).
+   context.fetch_source preserves inherited registrations and writes their fresh
+   retrieval receipts to origin_receipts.json. Alternative metadata similarly
+   lives in capture_declarations.json. The old merge_sources read only the registry,
+   so a literature stage could verify an inherited source while later stages and
+   final export lost the corresponding receipt or metadata qualification. Text and
+   its hash survived, but the complete verification provenance did not.
+
+   New ideation/sources.py merges registries and adjacent sidecars into the next
+   registry without mutating any predecessor. It verifies captured text bytes,
+   rejects sidecar receipts for different text hashes/URLs and unregistered IDs,
+   preserves alternative declarations, and retains the original title/content
+   level/provenance declaration without promoting it. Missing explicitly supplied
+   registries fail rather than silently becoming empty evidence. Legacy incomplete
+   embedded receipts remain visible but gain no verification status. Root owns the
+   run.py import replacement.
+
+2. Final specialist-objection resolution was weaker than initial synthesis.
+   SpecialistResolution requires located evidence or exact current graph targets
+   when marking an objection resolved. After revision, the same objection passed
+   into generic IssueResolution, whose only basis was a natural-language reason.
+   The final validator could therefore accept a previously blocking issue as
+   resolved with neither evidence nor a current target. Reported to root for a
+   team-specific final-resolution contract; no edits to those owned files here.
+   This is a structural accountability gap, not evidence that any actual model
+   knowingly bypassed review. An exact target still cannot prove the rebuttal true.
+
+3. Stage setup failures occurred outside the recorded stage try/except.
+   Directory/schema/source preparation preceded the row's failure handler. If
+   merge_sources raised before execution, a gather(return_exceptions=True) caller
+   could skip that result without recording it in state.failures. Reported to root
+   to include setup in the explicit failed-stage lifecycle. Partial results should
+   remain available, but a missing branch must never look like a successful stage.
+
+WHAT THE CURRENT CONTRACTS DO WELL
+
+- Peer authors and comment recipients bind to exact initial candidate hashes;
+  comments must target a real candidate record. Own-candidate critiques and unknown
+  targets fail. Local comment IDs are scoped by peer author.
+- Author responses account for every received comment exactly once. Disagreement
+  and unresolved status are allowed; an author response is not peer acceptance.
+- Specialist reviews bind to exact candidate versions, cover every candidate and
+  each proposed change, and inspect their assigned scientific research areas.
+- Initial synthesis accounts for every specialist objection. An unresolved
+  objection preserves target, severity, reason and next test exactly; an unresolved
+  blocker cannot become retain_for_testing.
+- Draft stages have separate source registries and do not receive candidate_files
+  from peers. All successful drafts remain available rather than being merged by
+  a prose aggregator. Required specialist failure halts synthesis explicitly.
+- Initial literature is version-bound. Changed scientific content invalidates
+  inherited search coverage. A revised graph cannot inherit an old novelty verdict
+  merely because its candidate ID is unchanged.
+- Peer and specialist source registries reach synthesis, then authors, then final
+  review. The source-helper correction above makes that inheritance include the
+  inherited-source sidecar qualifications as well.
+
+REMAINING BOUNDARIES / TEST REQUIREMENTS
+
+The native worker uses ephemeral sessions, writes in an attempt directory and
+pins supplied inputs. This establishes separate sessions and explicit context
+delivery, not complete filesystem read isolation: workspace-write does not itself
+prevent reading sibling drafts. Prompt-level independence should prohibit sibling
+attempt inspection before the peer checkpoint, and native tool traces should be
+checked. Do not claim a blinded diversity experiment without stronger isolation.
+
+Observed web search is stage-level evidence. One search event cannot prove that
+every changed claim was substantively searched, even when the report lists them.
+Target-specific reports and source inspections remain a scientific-review task.
+Do not describe the host gate as automatic novelty verification.
+
+The reviewed tests covered peer/specialist contracts and existing orchestration,
+but no complete run/3 mock test existed at the initial inspection. Root was asked
+to add a full team test: failed designer, failed peer, all feedback to the correct
+author, mandatory specialist failure, final issue coverage and stale versions.
+The new team has more serial stages than the baseline; latency should be measured
+on an actual run before calling discussion efficient or scientifically beneficial.
+
+VALIDATION PERFORMED IN THIS AUDIT
+
+Before the source-helper correction:
+  python -m pytest tests/ideation/test_team.py
+                   tests/ideation/test_specialist_review.py
+                   tests/ideation/test_run.py -q
+  Result: 89 passed in 1.46 seconds.
+
+New helper:
+  python -m pytest tests/ideation/test_sources.py -q
+  Result: 9 passed in 1.36 seconds.
+  Includes downstream citation_has_host_capture after handoff; no source/sidecar
+  mutation; no content-level upgrade; receipt deduplication; conflicting hash/URL;
+  unknown sidecar source; malformed receipt records; missing registry; changed
+  text; and preservation of legacy unverified receipt metadata.
+
+These are software-contract checks using fixtures, not a native model run, expert
+assessment of assay proposals or experimental evidence. Root is integrating the
+remaining corrections; this record does not assert they were already verified.

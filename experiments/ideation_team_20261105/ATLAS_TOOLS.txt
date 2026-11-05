@@ -1,0 +1,134 @@
+ATLAS TOOLS AND OBSERVED USE — 2026-11-05
+
+Aim
+Make exact atlas workflows and reviewed historical changes usable during ideation,
+and distinguish tool availability from content actually returned. Do not require a
+candidate to have an atlas parent or meet a quota of history calls. These are tool
+and observation repairs, not evidence that graph conditioning improves inventions.
+
+Observed baseline
+Verified SHA256 of the exact JSONL texts embedded in:
+provenance/experiments/ideation_demo_20261105/observation_02/outputs.json
+
+RNA-age author: 49 logged calls, 2 errors. Its CITE history call failed on the
+source-registry namespace error. A CITE Operation result was 57,282 characters;
+requested result-read windows eventually covered its whole character range.
+Physical-selection author: 28 logged calls, 7 errors. Its history call failed the
+same way; a group lookup also used nonexistent Operation IDs. CITE node pagination
+requested [0,18000), and Bru-seq node pagination requested [0,2500) of 122,641 chars.
+The RNA-age initial candidate declares seven atlas references across two CITE nodes;
+physical initial declares 27 references across CITE and Bru-seq nodes. Repetition
+of a citation is not independent evidence or a diversity measurement.
+
+Legacy logs mark results complete before returning either content or an oversized
+result pointer, and omit literal no-match status. Therefore these old logs establish
+calls, failures and requested windows, not certified delivery of every character or
+scientific reading. In particular, no successful historical claim read is recorded.
+The newer RNA-age revision and all unseen remote traces are outside this baseline
+receipt's scope. Do not present its two-author log sample as a full-run accounting.
+
+Changes implemented
+
+1. history-list navigation
+With the existing context-tool prefix, use:
+  history-list <record_id> --depth 2 --offset 0 --limit 10
+Limit is 1–20, explicit depth follows the existing history reader. Result data:
+  view: navigation
+  binding: exact atlas/extraction pins
+  relationships: [{claim_id, relation, before: {id,name,kind},
+                   after: {id,name,kind},
+                   read_commands: [[claim,claim_id],[change-context,claim_id]]}]
+  total, next_offset, other_direct_relationship_count, withheld_count
+  read_history_command, boundary
+This is a paginated list of already admitted historical claims, not a scientific
+summary. claim returns statement, review, evidence and limits; change-context
+returns version-bound before/after Operation groups and boundary State IDs.
+Similarity is not silently promoted into ancestry. Unloaded history, missing
+versions and an empty loaded neighborhood do not establish no predecessor.
+
+2. Node/group provenance size repair
+An actual Quartz-Seq add_rt_primer node was 96,210 serialized characters. Its
+workflow's full provenance registry occupied 85,342 of them and included 72
+sources. The selected scientific Operation itself occupied 1,615 characters.
+Returning this entire registry with every node made a narrow lookup unnecessarily
+expensive and pushed scientific information behind paging.
+
+node and group now keep every scientific field, quotation, qualification and
+full_source_registry_artifact unchanged. Their provenance view contains only the
+sources cited in the selected returned content, with bibliographic, identity,
+association/access-status and path/hash fields. A source_metadata_access record
+names missing registry entries rather than inventing them, states the view's scope,
+and provides atlas-source/workflow commands for the complete provenance.
+No frozen graph or source registry is rewritten. This is deterministic projection,
+not model summarization or dropping difficult scientific details.
+
+On the unchanged real fixture, the same node becomes 12,858 characters with three
+cited source metadata entries. Every non-provenance field and evidence-index entry
+is identical. This is a character-size reduction, not a measured token-latency or
+scientific-quality improvement. Large scientific records can still require paging.
+
+3. Additive tool-delivery metadata
+Successful context audit rows now record:
+  delivery: inline | stored_pointer
+  usage.kind: workflow_content | historical_claim_content | navigation |
+              source_excerpt | source_metadata | result_window | other
+  result_state, exact relevant record/node/claim IDs, and selected binding pins
+  source excerpts: returned text length and source/version fields
+  result windows: exact start/end/total characters
+Failed calls retain their error rows. Literal no_match and history not_loaded are
+not counted as successful evidence delivery. An oversized result is stored before
+logging success, so a storage failure cannot look like a completed content return.
+This does not instrument arbitrary native shell reads outside these tools.
+
+4. Deterministic usage receipt
+New src/genomics_discovery/ideation/usage.py:
+  build_usage_receipt(run_dir, candidate_paths=()) -> dict
+  usage_from_logs({log_name: exact_jsonl_text}, candidates={name: json_object})
+Neither writes files. The pipeline caller may persist the returned receipt and
+must not let an audit error hide a primary run failure.
+
+CLI, with the repository on Python's module path:
+  python -m genomics_discovery.ideation.usage RUN --candidate CANDIDATE.json
+
+Receipt format ideation_atlas_usage/1 includes per-attempt action counts/errors,
+navigation delivered, content delivered, no-match/unavailable findings, legacy
+uncertainty, and pagination coverage. Complete pagination requires the union of
+inline-delivered windows to cover the whole original result within that same log.
+Repeated windows are not counted twice; different sessions cannot jointly receive
+credit for reading a complete result. Partial content remains partial.
+Candidate citations retain their exact location, record/node/extraction identity,
+and whether that precise node delivery was observed in any supplied team session.
+That is an access cross-check, not entailment or causal attribution. No exact-node
+match can reflect broader workflow access, another channel or incomplete logging.
+Historical navigation IDs remain separate from historical claim content IDs.
+Candidates currently declare State/Operation references, not typed historical-edge
+citations; the receipt does not manufacture a downstream historical citation.
+
+Reference basis
+The earlier implementation audit remains at
+experiments/ideation_demo_20261105/TOOLS_AUDIT.txt.
+PaperQA2 official code pin 57e89f7223b0960d5ee5ea048c69e3c47e088572,
+src/paperqa/agents/tools.py: question-specific bounded evidence access is relevant.
+OpenScholar pin 0e9b8fb912273d3dae39e593da86e4f6d3bf8de1,
+src/open_scholar.py: targeted retrieval after critique is relevant.
+Both Apache-2.0; no source copied or dependencies imported. Neither reference
+supplies exact assay-version joins or proves scientific support from a tool call.
+Our delivery receipt and cited-source metadata projection solve observed local
+failures; they are not claimed as a new scientific novelty objective.
+
+Verification
+  .venv/bin/python -m pytest tests/ideation/test_context.py \
+    tests/ideation/test_usage.py tests/illumina/test_illumina_history.py -q
+64 passed. Includes actual archived author logs and the unchanged offending
+Quartz-Seq/Quartz-Seq2 pair. The current history reader indexes its five reviewed
+relationships, with one historical Quartz-Seq2 contribution and four other direct
+relationships. Its history-list packet is 1,740 characters; change-context resolves
+both exact workflow versions. Node projection keeps all scientific fields and
+evidence and drops no qualification. Additional fixtures cover failed lookups,
+not-loaded/no-match, overlapping windows, partial windows, separate sessions,
+legacy logs, mismatched candidate hashes and malformed audit records.
+
+No native model run, SSH call, or frozen artifact modification was performed for
+this work. The next native run must show whether experts use the functioning
+historical tools to make defensible decisions; tests only establish these software
+contracts. A receipt of access cannot establish that the atlas improved the idea.

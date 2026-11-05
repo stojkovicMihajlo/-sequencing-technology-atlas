@@ -61,3 +61,19 @@ def test_research_findings_point_to_graph_without_repeating_the_graph():
 def test_unknown_role_is_rejected():
     with pytest.raises(ValueError, match="Unknown ideation role"):
         build_prompt("invented_role", {})
+
+
+@pytest.mark.parametrize('role', ['plan', 'propose', 'peer', 'literature', 'specialist', 'review', 'revise'])
+def test_team_roles_have_versioned_responsibilities_and_bounded_tool_navigation(role):
+    context = {'format_version': 'ideation_run/3', 'expert_count': 4}
+    prompt = build_prompt(role, context)
+    assert 'history-list <record_id>' in prompt
+    assert ('AUTHOR OUTPUT CONTRACT' in prompt) == (role in {'propose', 'revise'})
+    assert 'Assign exactly two' not in prompt
+    assert 'both candidate_files' not in prompt
+    assert json.loads(prompt.split('\nCONTEXT\n', 1)[1]) == context
+    if role == 'review':
+        assert 'specialist_issue_resolutions' in prompt
+        assert 'resolution_targets' in prompt
+    if role == 'revise':
+        assert 'peer_responses' in prompt

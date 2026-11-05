@@ -169,6 +169,18 @@ def test_reference_preparation_freezes_inputs_not_previous_run_memory(reference_
     assert 'model-service behavior are not frozen' in receipt['boundary']
 
 
+def test_matched_team_preparation_preserves_inputs_and_configures_four_designers(reference_run, tmp_path):
+    root, previous, _, _ = reference_run
+    output = tmp_path/'team'
+    receipt = prepare_from_reference(root, output, team=True, expert_count=4, max_parallel=3)
+    config = json.loads((output/'config.json').read_text())
+    assert config['format_version'] == receipt['prepared_run_format'] == 'ideation_run/3'
+    assert config['expert_count'] == 4 and config['max_parallel'] == 3
+    assert config['peer_rounds'] == config['max_revision_rounds'] == 1
+    assert all(config[key] == previous[key] for key in ('atlas_sha256', 'request_sha256', 'history_sha256'))
+    assert not (output/'sources.json').exists() and not (output/'old_candidate.json').exists()
+
+
 @pytest.mark.parametrize('field', ['atlas_file', 'request_file', 'history_manifest'])
 def test_reference_preparation_rejects_stale_top_level_pins_before_output(reference_run, tmp_path, field):
     root, previous, _, _ = reference_run

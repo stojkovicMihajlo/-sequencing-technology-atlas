@@ -15,43 +15,82 @@ new connection must never silently become evidence about an existing technology.
 
 What to read, in order
 ---------------------
-1. src/genomics_discovery/ideation/run.py
-   Request, ResearchPlan and pipeline define the stage order and saved artifacts.
-   The runner owns the number of experts/revisions and checks outputs after every
-   stage. It reuses execution/codex_worker.py for native model execution.
+1. src/genomics_discovery/ideation/team_workflow.py
+   The current team order and artifact handoffs. Four designers are the first
+   experiment setting, not a fixed scientific optimum.
 2. src/genomics_discovery/ideation/prompts.py
-   build_prompt(role, context) supplies the exact plan/propose/literature/review/revise
-   instructions. Context supplies file paths and tool commands, not the whole
-   atlas or repeated paper text. Each actual stage_prompt.txt is archived.
+   build_prompt supplies each role's exact instructions and file/tool manifest.
+   Every live attempt archives stage_prompt.txt. Papers and graphs are read through
+   tools or explicit paths instead of copied wholesale into every prompt.
 3. src/genomics_discovery/ideation/models.py
-   ProposedAssay contains research findings, the graph, design changes and assessment
-   ledger. CandidateIdea is the preserved 1.0 format for reading earlier runs.
-   IdeaReview records the closest prior work, issues and a bounded disposition.
-4. src/genomics_discovery/ideation/context.py
-   AtlasContext provides version-bound atlas lookup, bounded source reads and an
-   audit log. This is the interface through which an agent conditions on the atlas.
+   ProposedAssay/1.1: research findings, State–Operation–Flow graph, design changes
+   and evidence/transfer/hypothesis assessments. Graph meaning is unchanged.
+4. src/genomics_discovery/ideation/team.py and review.py
+   Exact-version peer comments/replies; the two specialist lenses and objection
+   accounting. A claimed resolution is still a scientific judgment to assess.
+5. src/genomics_discovery/ideation/run.py
+   Request/plan schemas, isolated native sessions, pinned inputs, stage validation,
+   configurable concurrency, execution records and CLI. The old two-designer run/2
+   remains available; the new --team mode uses ideation_run/3.
+6. src/genomics_discovery/ideation/context.py, sources.py and usage.py
+   Read-only atlas/history tools; captured-source custody across handoffs; records
+   of what was delivered and cited. Delivered content does not prove comprehension
+   or causal influence on an idea.
 
-One run
--------
-Original request
-  -> coordinator defines an agenda and two distinct expert mandates
-  -> the two experts independently produce candidate assay graphs
-  -> a separate literature investigator checks cited sources and searches closest priors
-  -> a fresh reviewer sees both graphs and checks mechanisms, interfaces and prior art
-  -> candidates marked revise receive the review and the other candidate
-  -> each requested revision runs once, with a response to every review issue
-  -> a fresh review checks revised graphs and tracks previous issues
-  -> export the separate candidate graphs, reviews and evidence records
+Current bounded team run (--team)
+--------------------------------
+Request -> coordinator chooses four distinct design mandates
+  -> four independently instructed designers research and produce separate graphs
+  -> one peer-critique round and proposal-specific literature investigation
+  -> chemistry/interfaces and measurement/benefit specialists review in parallel
+  -> synthesis reviews the graphs and explicitly disposes of each specialist issue
+  -> authors of surviving proposals with feedback answer and can revise once
+  -> fresh final review checks changes, source support and previous objections
+  -> export separate proposed graphs, reviews, conversation and usage receipts
 
-Two initial experts and one revision are prototype resource choices, not an
-experimentally established optimum. The coordinator selects expertise appropriate
-to the question; it does not assign the same fixed scientific specialties to every
-request. Review has a distinct role and session. Calling two copies of a model
-experts does not establish independent knowledge or substitute for expert validation.
-The literature investigator has its own session and can research both drafts; the
-design experts retain independent literature access. This role targets a concrete
-failure mode: author-supplied citations may exist but fail to support the required
-property, or may already describe the supposed advance.
+Authors answer both peer comments and synthesis issues. A retained concept with
+issues still gets one response/revision opportunity; 'retain for testing' never
+means a corrected executable protocol. Dropped candidates remain recorded with
+reviewer reasons. Failed stages remain visible; missing required specialist or
+literature review stops completion. No forced graph merging, recursive hiring,
+automatic repetition of provider-blocked tasks, or canonical atlas publication.
+
+Four designers, one peer round and one revision are bounded development settings,
+not literature-established optima. The coordinator selects design expertise for
+this request. Specialists review all candidates through two defined lenses.
+Fresh model sessions and separate input manifests are used; the filesystem is not
+claimed to blind designers. Initial prompts prohibit reading sibling drafts, and
+native tool traces remain available to audit that instruction.
+
+Why these additions
+-------------------
+The earlier history reader failed; the corrected reader is exercised before any
+model call. History-list now exposes bounded claim IDs, followed by claim and
+change-context reads. A real node response shrank from 96,210 to 12,858 characters
+by removing unrelated workflow provenance, retaining all scientific fields and
+linked evidence. Full source metadata is still available on request.
+
+Peer comments bind candidate versions and exact graph targets. Every received
+comment needs an author response or explicit dropped-candidate closure. Synthesis
+cannot silently erase specialist objections. Final resolution needs a reason and
+supporting evidence or current graph targets; unresolved issues remain visible.
+These checks enforce bookkeeping and reference integrity, not chemical truth.
+
+Source handoffs now retain retrieval receipts and alternative metadata declarations,
+including sidecars from re-fetching inherited publications. Tool usage distinguishes
+navigation, pointer-only responses, partial page reads, failures and declared
+citations. Neither a citation count nor a successful software test proves atlas benefit.
+
+Reference audit and current experiment
+--------------------------------------
+See experiments/ideation_team_20261105/REFERENCE_AUDIT.txt for pinned PantheonOS,
+ROBIN and Virtual Lab code, licensing, adoption limits and source-access limits.
+We adapted delegation/context and critique patterns; we did not import Pantheon's
+entire runtime or claim to reproduce Crow/Falcon internals. Native execution keeps
+the existing gpt-6.1-sol/xhigh Codex worker, account and managed sandbox.
+DECISION.txt records the scope; IMPLEMENTATION_REVIEW.txt records concrete defects;
+ATLAS_TOOLS.txt records real retrieval checks. This multi-change experiment is not
+an ablation proving that larger teams or discussion improve scientific quality.
 
 The research bias is explicit before idea generation. The coordinator writes four
 questions for EACH expert, tailored to the request and that expert's direction:
@@ -69,13 +108,6 @@ Experts choose queries, follow citations and can reframe a question with a reaso
 They can explore biology or another engineering field when it changes a design
 decision. Neither atlas membership nor combining named methods limits creativity.
 Finding a paper and finding support for a precise property are separate tasks.
-
-Interaction happens through concrete artifacts: the reviewer compares both designs,
-and revision authors can inspect the other proposal and the critique. This is not
-an unrestricted chat room or an assertion that multiple agents are always better.
-Different useful architectures remain separate; there is no forced final merger.
-If a stage fails, the run records that failure rather than pretending all experts
-contributed. A failed or held proposal is not upgraded merely to fill the quota.
 
 Request format
 --------------
@@ -228,7 +260,7 @@ captured quotations, review binding and issue-response coverage. A fresh reviewe
 must inspect the scientific meaning as well. Neither check proves a new assay works.
 
 LiteratureReport separates citation identity from scientific entailment. It binds
-findings to both exact candidate versions, checks each central measurement and design
+findings to all exact candidate versions, checks each central measurement and design
 change, and names other graph records inspected. Every distinct external source
 used in the drafts receives a citation check. The investigator reopens the original
 publication, compares bibliographic identity and actual wording/context, and stores
@@ -284,7 +316,7 @@ Prepare/check can run locally. Native model execution belongs in a Qiu Sherlock
 Slurm allocation under the existing project deployment instructions. Use the
 selected frozen runtime and its environment; do not start local model jobs.
 
-  PYTHONPATH=src python -m genomics_discovery.ideation.run prepare \
+  PYTHONPATH=src python -m genomics_discovery.ideation.run prepare --team --designers 4 \
     --request REQUEST.json --atlas REVIEWED_ATLAS.json --output NEW_RUN_DIRECTORY
 
   PYTHONPATH=src python -m genomics_discovery.ideation.run run \
@@ -296,10 +328,12 @@ catalogue entry to be present, but the run must report what context was availabl
 
 The run directory retains inputs/, config.json, state.json, plan.json, attempts/,
 candidates/<expert_id>/initial.json and any revised.json/issue_responses.json,
-literature_report.json, initial_review.json, final_review.json and sources.json. Each attempt keeps its
+literature_report.json, initial_review.json, final_review.json, sources.json,
+conversation.json and atlas_usage.json. Specialist and peer reports live under
+attempts/ with their contracts and input pins. Each attempt keeps its
 contract, exact prompt, schema, output, native trace and tool-call log. The input
 atlas remains unchanged. For demonstration, show the request, selected precedents,
-two candidate graphs, a concrete critique and the corresponding revision or hold.
+the separate candidate graphs, a concrete critique, peer responses and the corresponding revision or hold.
 
 Reference-implementation decision record
 ---------------------------------------
@@ -439,7 +473,7 @@ Remaining uncertainty
 ---------------------
 This prototype's graph format makes proposals inspectable; whether it improves
 scientific ideas remains an empirical question. Lexical retrieval may miss analogies.
-Two experts may converge on the same idea, reviewers may share model blind spots,
+Multiple experts may converge on the same idea, reviewers may share model blind spots,
 and imported text can have provenance/interpretation errors. A single revision
 cannot close every scientific gap. Keep those outcomes in the demonstration rather
 than replacing them with an unsupported success claim. Native run status and test
@@ -461,5 +495,6 @@ structures keep their own source registries. The history reader checks the forme
 against the pair registry rather than recursively confusing those two scopes.
 The exact live failure/replay and native observations are recorded in
 provenance/experiments/ideation_demo_20261105/observation_02/REVIEW.txt and
-history_replay/RESULT.json. Current live drafts did not obtain history context and
-must not be presented as a successful test of historical-edge conditioning.
+history_replay/RESULT.json. The initial demo drafts did not obtain history context and must not be presented
+as a successful test of historical-edge conditioning. See the new team experiment
+for later usage receipts; a tool request or self-report alone does not prove delivery.

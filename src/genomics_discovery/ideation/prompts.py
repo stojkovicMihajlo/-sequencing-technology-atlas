@@ -124,7 +124,8 @@ Read schema_file to learn the exact output fields. Context below contains artifa
 paths, not the artifacts themselves. Use tool_command with --help to discover the
 available atlas/source queries, then request bounded relevant records or passages.
 Append commands to that supplied base: list; search '<terms>'; workflow <record_id>;
-node <node_id>; group <record_id> <operation_ids...>; history <record_id>;
+node <node_id>; group <record_id> <operation_ids...>;
+history-list <record_id> --depth 2 --offset 0 --limit 10;
 claim <claim_id>; change-context <claim_id>; or atlas-source <record_id> to inspect the pinned extraction
 source registry (use --source-id, --query or offset windows when needed).
 Use change-context with an exact global history edge ID for bounded navigation to
@@ -244,8 +245,10 @@ in planning. Use literature to establish useful directions, not to certify novel
 
 PROPOSE = """ROLE: INDEPENDENT ASSAY DESIGN EXPERT
 Read research_plan_file and your assignment identified by expert_id. Develop one
-specific candidate independently; initial candidates from the other expert are
-not available at this stage. You may refine your scientific approach when evidence
+specific candidate independently; initial candidates from other experts are
+not provided at this stage. Do not inspect sibling attempts or other candidate
+outputs before the peer-review stage. This instruction is not a claim of filesystem
+read isolation. You may refine your scientific approach when evidence
 warrants it, while preserving the original measurement need and explicit constraints.
 
 Investigate your assigned questions using the atlas and external literature,
@@ -459,6 +462,60 @@ The next stage is a fresh review, not automatic acceptance of your revision.
 """
 
 
+TEAM_PLAN = """ROLE: RESEARCH COORDINATOR FOR A BOUNDED DESIGN TEAM
+Read the request, atlas inventory and relevant literature to define useful,
+distinct investigations. Assign exactly expert_count designers from CONTEXT.
+Each needs expertise, a concrete question, approach, why_distinct and the four
+research_questions in the schema. Each is responsible for a complete proposed
+assay graph, not just their specialty. Distinguish physical mechanisms, interfaces
+or bottlenecks; cosmetic wording or different biological applications alone do not
+create distinct architectures. Do not prescribe four variations of one preferred
+solution. Existing capabilities can be improved; new architectures are allowed.
+
+Preserve original_request and constraints verbatim. Put assumptions and interpretations
+in their own fields; do not add equipment or chemistry bans beyond the request.
+This is planning, not a novelty certification or a full design exercise. Stop once
+the configured mandates are actionable; pass open questions to their investigators.
+The designers begin independently, then read peers' graphs and send targeted
+comments. A literature investigator and two specialist reviewers challenge the
+drafts; synthesis routes revision and records objections. Each author can reply
+and revise once. Keep alternatives separate; do not manufacture a consensus graph.
+"""
+
+TEAM_REVIEW = """TEAM REVIEW ACCOUNTABILITY
+Read peer_report_files and both specialist_report_files, with their source evidence.
+Initial review (revision_round=0): specialist_issue_resolutions must account for
+every specialist issue once using specialism, candidate_id and the original issue_id.
+For status=unresolved, copy its target, severity, reason and next_test unchanged
+into that candidate's issues under id specialist:<specialism>:<original-issue-id>.
+For resolved, give the scientific rebuttal and its exact candidate targets or
+supporting source references. Do not remove an objection just because other agents
+agree or because a plausible component has precedent. Review peer comments too;
+promote decision-critical concerns into issues and consider disagreements explicitly.
+
+Final review (revision_round=1): old specialist reports address initial drafts, not
+the revised graphs. Leave specialist_issue_resolutions empty; instead account for
+every previous review issue in previous_issue_resolutions. Read author issue and
+peer replies. An author's 'addressed' is a claim to verify, not proof of resolution.
+For status=resolved supply resolution_targets naming the exact current graph records
+or atlas/literature references supporting the rebuttal, with your reason. For
+unresolved, retain its target, severity, reason and next_test unchanged; resolving
+an old issue is required before replacing it with a different dependency.
+Check new interfaces created by revisions. Retain unresolved blockers. Inspect
+whether a claimed resolution actually repairs the molecular path, measurement
+identifiability or benefit comparison; textual confidence is not experimental support.
+"""
+
+TEAM_REVISE = """TEAM AUTHOR REPLY
+Read the peer_report_files as well as the synthesis and specialist reports. In
+peer_responses answer every comment directed to your candidate exactly once, using
+the peer's author_id and comment's id. State addressed, unresolved or disputed and
+explain the basis. You can reject an unsupported suggestion; do not force consensus.
+If no graph change is justified, preserve the graph and explain your response.
+responses separately answers every synthesis-review issue for your candidate.
+Your reply and any revised graph go together in the schema, not in a chat transcript.
+"""
+
 _ROLES = {"plan": PLAN, "propose": PROPOSE, "literature": LITERATURE,
           "review": REVIEW, "revise": REVISE}
 
@@ -470,9 +527,18 @@ def build_prompt(role: str, context: Mapping[str, Any]) -> str:
     execution controls, not expanded paper, atlas, candidate or review contents.
     The resulting string is archived by the runner as the actual agent prompt.
     """
-    if role not in _ROLES:
+    roles = dict(_ROLES)
+    if context.get('format_version') == 'ideation_run/3':
+        from .team import PEER_PROMPT
+        from .review import SPECIALIST_PROMPT
+        roles.update(plan=TEAM_PLAN, peer=PEER_PROMPT, specialist=SPECIALIST_PROMPT,
+                     review=REVIEW.replace('the two candidates', 'the candidates')+'\n'+TEAM_REVIEW,
+                     propose=PROPOSE.replace('the other expert', 'the other experts'),
+                     revise=REVISE.replace("the other expert's graph", "other experts' graphs")+'\n'+TEAM_REVISE,
+                     literature=LITERATURE.replace('both candidate_files', 'all candidate_files').replace('either candidate', 'a candidate'))
+    if role not in roles:
         raise ValueError(f"Unknown ideation role: {role!r}")
     author_contract = "\n" + DESIGN_OUTPUT if role in {"propose", "revise"} else ""
-    return COMMON + "\n" + _ROLES[role] + author_contract + "\nCONTEXT\n" + json.dumps(
+    return COMMON + "\n" + roles[role] + author_contract + "\nCONTEXT\n" + json.dumps(
         dict(context), indent=2, ensure_ascii=False
     )

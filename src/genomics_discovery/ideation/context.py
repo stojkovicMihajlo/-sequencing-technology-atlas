@@ -70,6 +70,75 @@ def _compact(value):
             "reading_note": "Resolve evidence_id in evidence_index. Scientific records and caveats are unchanged; full document bodies are not included."}
 
 
+def _usage(action, arguments, value):
+    """Delivery metadata only; never a claim that the model understood a result."""
+    metadata = {"kind": "other", "record_ids": [], "node_ids": [], "historical_claim_ids": [],
+                "result_state": value.get("status", "available")}
+    if action in {"workflow", "node", "group"}:
+        binding = value["binding"]
+        metadata.update(kind="workflow_content", record_ids=[binding["record_id"]], binding=binding)
+        if action == "node":
+            metadata["node_ids"] = [arguments["node_id"]]
+        elif action == "group":
+            metadata["node_ids"] = arguments["operation_ids"]
+    elif action in {"history", "claim"}:
+        metadata["kind"] = "historical_claim_content"
+        edges = value.get("historical_contributions", []) if action == "history" else [value]
+        metadata["historical_claim_ids"] = [edge["id"] for edge in edges if edge.get("relation") in HISTORICAL_RELATIONS]
+        if action == "history":
+            metadata["record_ids"] = [arguments["record_id"]]
+    elif action in {"search", "list", "history-list", "change-context"}:
+        metadata["kind"] = "navigation"
+        if action == "search":
+            metadata["node_ids"] = [row["node_id"] for row in value.get("matches", [])]
+            metadata["record_ids"] = sorted({row["record_id"] for row in value.get("matches", [])})
+        elif action == "list":
+            metadata["record_ids"] = [row["record_id"] for row in value["methods"]]
+        elif action == "history-list":
+            metadata["navigated_claim_ids"] = [row["claim_id"] for row in value.get("relationships", [])]
+        else:
+            metadata["navigated_claim_ids"] = [value["relationship"]["id"]]
+    elif action in {"source-read", "atlas-source"}:
+        metadata["kind"] = "source_excerpt" if "text" in value else "source_metadata"
+        metadata["returned_text_characters"] = len(value.get("text", ""))
+        metadata.update({key: value[key] for key in ("source_id", "content_sha256", "source_registry_sha256", "start", "end") if key in value})
+    elif action == "result-read":
+        metadata.update(kind="result_window", result_id=value["result_id"],
+                        start=value["start"], end=value["end"], total_characters=value["total_characters"])
+    return metadata
+
+
+def _focus_sources(value, record_id):
+    """Keep scientific content exact; do not repeat a whole paper bibliography."""
+    referenced = set()
+
+    def collect(item):
+        if isinstance(item, dict):
+            if "source_id" in item:
+                referenced.add(item["source_id"])
+            for key, child in item.items():
+                if key not in {"provenance", "source_registry"}:
+                    collect(child)
+        elif isinstance(item, list):
+            for child in item:
+                collect(child)
+
+    collect(value)
+    registry = value.get("provenance", {})
+    fields = {"title", "url", "pmid", "kind", "content_level", "path", "sha256",
+              "identity_status", "association_status", "fulltext_status"}
+    return {**value,
+        "provenance": {key: {field: copy.deepcopy(item) for field, item in row.items() if field in fields}
+                       for key, row in registry.items() if key in referenced},
+        "source_metadata_access": {"view": "cited_source_metadata",
+            "referenced_source_ids": sorted(referenced),
+            "missing_from_this_registry": sorted(referenced - registry.keys()),
+            "full_registry_source_count": len(registry),
+            "read_commands": [["atlas-source", record_id], ["workflow", record_id]],
+            "boundary": "Scientific records, quotations and qualifications are unchanged. Only cited-source metadata is shown; "
+                        "full workflow provenance and its pinned registry remain available through the listed tools and full_source_registry_artifact."}}
+
+
 class AtlasContext:
     def __init__(self, atlas_path, *, expected_sha256, history_manifest=None,
                  history_sha256=None, sources_path=None, audit_log=None,
@@ -125,23 +194,27 @@ class AtlasContext:
     def _result(self, action, arguments, value):
         result = {"atlas_sha256": self.sha256, **_compact(value)}
         raw = _json(result).encode()
+        oversized = len(raw.decode()) > self.max_result_chars
+        root = self.audit_log.parent if self.audit_log else self.sources_path.parent if self.sources_path else None
+        if oversized:
+            if root is None:
+                raise ValueError("Oversized context requires --audit-log or --sources for bounded continuation")
+            path = root / "tool_results" / (_sha(raw) + ".json")
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if path.exists() and path.read_bytes() != raw:
+                raise ValueError("Stored tool result changed")
+            path.write_bytes(raw)
         if self.audit_log:
             self.audit_log.parent.mkdir(parents=True, exist_ok=True)
             with self.audit_log.open("a") as handle:
                 fcntl.flock(handle, fcntl.LOCK_EX)
                 handle.write(_json({"at": datetime.now(timezone.utc).isoformat(), "action": action,
                     "arguments": arguments, "atlas_sha256": self.sha256,
-                    "status": "complete", "result_sha256": _sha(raw), "characters": len(raw.decode())}) + "\n")
-        if len(raw.decode()) <= self.max_result_chars:
+                    "status": "complete", "result_sha256": _sha(raw), "characters": len(raw.decode()),
+                    "delivery": "stored_pointer" if oversized else "inline",
+                    "usage": _usage(action, arguments, value)}) + "\n")
+        if not oversized:
             return result
-        root = self.audit_log.parent if self.audit_log else self.sources_path.parent if self.sources_path else None
-        if root is None:
-            raise ValueError("Oversized context requires --audit-log or --sources for bounded continuation")
-        path = root / "tool_results" / (_sha(raw) + ".json")
-        path.parent.mkdir(parents=True, exist_ok=True)
-        if path.exists() and path.read_bytes() != raw:
-            raise ValueError("Stored tool result changed")
-        path.write_bytes(raw)
         return {"status": "result_too_large", "result_id": _sha(raw), "characters": len(raw.decode()),
                 "next_action": "result-read <result_id> --start 0 --limit 6000; continue from next_start. Prefer node/group for a smaller scientific selection.",
                 "atlas_sha256": self.sha256}
@@ -185,12 +258,12 @@ class AtlasContext:
         if not node or node["node_type"] not in {"operation", "state"}:
             raise ValueError("Choose an exact supported State or Operation ID")
         return self._result("node", {"node_id": node_id}, {"binding": self._pin(node["record_id"]),
-            **get_record(self.graph, node["node_type"], node_id)})
+            **_focus_sources(get_record(self.graph, node["node_type"], node_id), node["record_id"])})
 
     def group(self, record_id, operation_ids):
         self._card(record_id)
         return self._result("group", {"record_id": record_id, "operation_ids": operation_ids},
-            {"binding": self._pin(record_id), **operation_group(self.graph, record_id, operation_ids)})
+            {"binding": self._pin(record_id), **_focus_sources(operation_group(self.graph, record_id, operation_ids), record_id)})
 
     def history(self, record_id, *, depth=2):
         binding = self._pin(record_id)
@@ -208,6 +281,34 @@ class AtlasContext:
         if len(matches) != 1:
             raise ValueError("Choose an exact globally qualified history edge ID")
         return self._result("claim", {"claim_id": claim_id}, matches[0])
+
+    def history_list(self, record_id, *, depth=2, offset=0, limit=10):
+        """Page exact historical IDs before loading potentially large claims."""
+        if offset < 0 or not 1 <= limit <= 20:
+            raise ValueError("Use nonnegative offset and limit 1–20")
+        binding = self._pin(record_id)
+        arguments = {"record_id": record_id, "depth": depth, "offset": offset, "limit": limit}
+        index = self._history()
+        if index is None:
+            return self._result("history-list", arguments, {"status": "not_loaded",
+                "boundary": "History is unavailable here; no claim about absence of predecessors."})
+        if not binding["extraction_sha256"]:
+            raise ValueError("Workflow lacks its raw extraction hash for a history join")
+        history = technology_history(index, record_id, extraction_sha256=binding["extraction_sha256"], max_depth=depth)
+        edges = sorted(history["historical_contributions"], key=lambda edge: edge["id"])
+        rows = [{"claim_id": edge["id"], "relation": edge["relation"],
+                 "before": {key: index["nodes"][edge["source"]][key] for key in ("id", "name", "kind")},
+                 "after": {key: index["nodes"][edge["target"]][key] for key in ("id", "name", "kind")},
+                 "read_commands": [["claim", edge["id"]], ["change-context", edge["id"]]]}
+                for edge in edges[offset:offset + limit]]
+        return self._result("history-list", arguments, {"view": "navigation", "binding": binding,
+            "relationships": rows, "total": len(edges),
+            "next_offset": offset + limit if offset + limit < len(edges) else None,
+            "other_direct_relationship_count": len(history["other_direct_relationships"]),
+            "withheld_count": len(history["direct_withheld_claims"]),
+            "read_history_command": ["history", record_id, "--depth", str(depth)],
+            "boundary": "Navigation only: statements, review, evidence and limits require claim; exact workflow boundaries require change-context. "
+                        "Only loaded reviewed historical relations within requested depth are listed. Empty results do not establish no predecessors or novelty."})
 
     def change_context(self, claim_id):
         """Join one reviewed historical change to exact available workflow versions.
@@ -466,6 +567,8 @@ def main(argv=None):
         s.add_parser(command).add_argument(field)
     group = s.add_parser("group"); group.add_argument("record_id"); group.add_argument("operation_ids", nargs="+")
     history = s.add_parser("history"); history.add_argument("record_id"); history.add_argument("--depth", type=int, default=2)
+    listing = s.add_parser("history-list"); listing.add_argument("record_id"); listing.add_argument("--depth", type=int, default=2)
+    listing.add_argument("--offset", type=int, default=0); listing.add_argument("--limit", type=int, default=10)
     source = s.add_parser("atlas-source"); source.add_argument("record_id"); source.add_argument("--source-id")
     source.add_argument("--query"); source.add_argument("--start", type=int, default=0); source.add_argument("--limit", type=int, default=6000)
     add = s.add_parser("source-add"); add.add_argument("path", type=Path)
@@ -479,7 +582,7 @@ def main(argv=None):
     context = AtlasContext(args.pop("atlas"), expected_sha256=args.pop("atlas_sha256"),
         history_manifest=args.pop("history_manifest"), history_sha256=args.pop("history_sha256"),
         sources_path=args.pop("sources"), audit_log=args.pop("audit_log"))
-    action = {"list": "list_methods", "change-context": "change_context", "atlas-source": "atlas_source", "source-add": "add_source", "source-fetch": "fetch_source", "source-read": "read_source", "result-read": "read_result"}.get(command, command)
+    action = {"list": "list_methods", "history-list": "history_list", "change-context": "change_context", "atlas-source": "atlas_source", "source-add": "add_source", "source-fetch": "fetch_source", "source-read": "read_source", "result-read": "read_result"}.get(command, command)
     try:
         result = getattr(context, action)(**args)
     except (ValueError, KeyError, OSError, StopIteration, UnicodeError) as exc:
