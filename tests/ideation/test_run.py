@@ -10,7 +10,8 @@ import pytest
 from genomics_discovery.ideation.models import CandidateIdea
 from genomics_discovery.ideation.run import (
     CitationCheck, LiteratureReport, context_for, literature_reference_keys,
-    merge_sources, pipeline, prepare, read, validate_artifact, validate_literature_report, write,
+    merge_sources, pipeline, prepare, read, validate_artifact, validate_literature_report,
+    validate_literature_execution, write,
 )
 from genomics_discovery.illumina.models import digest
 from tests.ideation.test_context import context
@@ -260,6 +261,33 @@ def test_source_merge_accepts_same_capture_with_distinct_custody_locations(tmp_p
         merge_sources(paths)
 
 
+def test_identical_source_bytes_preserve_different_metadata_and_origin_receipts(tmp_path):
+    import hashlib
+    source = tmp_path/'text.txt'; source.write_text('Same exact scientific passage.')
+    pin = hashlib.sha256(source.read_bytes()).hexdigest()
+    first = {'source_id': 'lit', 'url': 'https://example.org/paper', 'title': 'Full publication title',
+        'content_level': 'fulltext', 'content_sha256': pin, 'path': str(source), 'captured_at': 'first',
+        'origin_receipts': [{'original_sha256': 'a'*64, 'original_path': 'first'}]}
+    second = {**copy.deepcopy(first), 'title': 'Abbreviated title', 'content_level': 'excerpt', 'captured_at': 'second',
+              'origin_receipts': [{'original_sha256': 'b'*64, 'original_path': 'second'}]}
+    paths = [tmp_path/'first.json', tmp_path/'second.json']
+    for path, entry in zip(paths, [first, second]):
+        write(path, {'format_version': 'ideation_sources/1', 'sources': {'lit': entry}})
+    original_files = [p.read_bytes() for p in paths]
+    merged = merge_sources(paths)['sources']['lit']
+    assert merged['title'] == first['title']  # Existing address retained, not canonicalized from model preference.
+    assert {d['title'] for d in merged['capture_declarations']} == {first['title'], second['title']}
+    assert {d['content_level'] for d in merged['capture_declarations']} == {'excerpt', 'fulltext'}
+    assert merged['origin_receipts'] == first['origin_receipts'] + second['origin_receipts']
+    assert merged['metadata_status'].startswith('differing_capture_declarations')
+    assert [p.read_bytes() for p in paths] == original_files
+    inherited = tmp_path/'inherited.json'
+    write(inherited, {'format_version': 'ideation_sources/1', 'sources': {'lit': merged}})
+    again = merge_sources([inherited, paths[1]])['sources']['lit']
+    assert len(again['capture_declarations']) == 2
+    assert len(again['origin_receipts']) == 2
+
+
 def test_coordinator_cannot_rewrite_explicit_user_constraints(prepared):
     config = read(prepared / "config.json")
     output = prepared / "bad_plan.json"
@@ -312,3 +340,61 @@ def test_citation_verified_label_cannot_use_metadata_or_no_captured_verification
     check['access_status'] = 'fulltext'
     with pytest.raises(ValueError, match='captured verification passage'):
         CitationCheck.model_validate(check)
+
+
+def test_citation_reopening_and_external_search_are_independent(tmp_path):
+    import hashlib
+    source = tmp_path/'paper.txt'; source.write_text('A captured publication passage.')
+    pin = hashlib.sha256(source.read_bytes()).hexdigest()
+    receipt = {'request_url': 'https://example.org/paper', 'final_url': 'https://example.org/paper',
+        'http_status': 200, 'origin_status': 'host_fetched_public_url; scientific identity unverified',
+        'original_path': str(source), 'original_sha256': pin, 'text_path': str(source), 'text_sha256': pin}
+    sources = tmp_path/'sources.json'
+    write(sources, {'format_version': 'ideation_sources/1', 'sources': {'lit': {
+        'source_id': 'lit', 'content_sha256': pin, 'path': str(source), 'origin_receipts': [receipt]}}})
+    check = {'source_id': 'lit', 'content_sha256': pin, 'declared_url': receipt['request_url'],
+        'declared_title': 'Paper', 'checked_identity': 'Paper by Author', 'verification_url': receipt['final_url'],
+        'access_status': 'fulltext', 'status': 'verified_agent_review', 'reason': 'Reopened publication.',
+        'verification_evidence': [{'source_id': 'lit', 'content_sha256': pin, 'locator': 'Methods', 'quote': source.read_text()}]}
+    idea = CandidateIdea.model_validate(candidate_data())
+    report = LiteratureReport.model_validate({'candidate_findings': [{'candidate_id': idea.id,
+        'candidate_sha256': digest(idea), 'checks': [{'id': 'c', 'target': 'candidate', 'claim': 'Proposal',
+            'verdict': 'not_found', 'reason': 'No search.'}], 'closest_priors': [], 'coverage_limitations': ['No search.']}],
+        'citation_checks': [check], 'search_status': 'not_performed', 'searches_performed': [],
+        'limitations': ['Known citation reopened directly; no broader novelty search.']})
+    validate_literature_execution(report, {'web_search_event_observed': False}, sources)
+    imported = read(sources); imported['sources']['lit'].pop('origin_receipts'); write(sources, imported)
+    with pytest.raises(ValueError, match='imported excerpts alone'):
+        validate_literature_execution(report, {'web_search_event_observed': True}, sources)
+    write(tmp_path/'origin_receipts.json', {'lit': [receipt]})
+    validate_literature_execution(report, {'web_search_event_observed': False}, sources)
+    source.write_text('Modified source')
+    with pytest.raises(ValueError, match='matching host-captured'):
+        validate_literature_execution(report, {'web_search_event_observed': False}, sources)
+
+
+@pytest.mark.asyncio
+async def test_literature_self_check_enforces_origin_before_submission(prepared):
+    stages = FakeStages(use_citation=True)
+    await pipeline(prepared, stages)
+    contract = next(c for c in stages.contracts if c['stage'] == 'literature')
+    artifact = Path(contract['output_file'])
+    report = read(artifact)
+    check = report['citation_checks'][0]
+    registry = read(contract['sources_file'])
+    source = registry['sources'][check['source_id']]
+    check.update(status='verified_agent_review', access_status='abstract',
+        checked_identity='Original assay', verification_url=source['url'],
+        verification_evidence=[{'source_id': source['source_id'],
+            'content_sha256': source['content_sha256'], 'locator': 'Captured passage',
+            'quote': Path(source['path']).read_text()}])
+    write(artifact, report)
+    with pytest.raises(ValueError, match='matching host-captured'):
+        validate_artifact(contract, artifact)
+    # Offline fixture for the receipt contract; this performs no network request.
+    source['origin_receipts'] = [{'request_url': source['url'], 'final_url': source['url'],
+        'http_status': 200, 'origin_status': 'host_fetched_public_url; identity unverified',
+        'original_path': source['path'], 'original_sha256': source['content_sha256'],
+        'text_path': source['path'], 'text_sha256': source['content_sha256']}]
+    write(contract['sources_file'], registry)
+    assert validate_artifact(contract, artifact).citation_checks[0].status == 'verified_agent_review'

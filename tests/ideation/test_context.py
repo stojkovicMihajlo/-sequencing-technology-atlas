@@ -177,6 +177,10 @@ def test_atlas_source_reopens_exact_registry_with_bounded_text(context, tmp_path
     assert result['text'] == 'Recorded'
     assert result['next_start'] == 8
     assert context.atlas_source('method', source_id='paper', query='absent')['data']['text'] == ''
+    first = context.atlas_source('method', source_id='paper', query='passage', limit=10)['data']
+    assert 'passage' in first['text']
+    second = context.atlas_source('method', source_id='paper', query='passage', start=first['next_start'], limit=10)['data']
+    assert second['status'] == 'no_match'  # Continuing cannot replay the first query window.
     registry.write_text(registry.read_text()+' ')
     with pytest.raises(ValueError, match='Pinned input changed'):
         context.atlas_source('method', source_id='paper')

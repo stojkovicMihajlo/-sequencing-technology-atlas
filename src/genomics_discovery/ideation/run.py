@@ -224,6 +224,39 @@ def validate_literature_report(document, candidates, sources):
             raise ValueError('Citation check misstates its captured source identity')
 
 
+def citation_has_host_capture(check, sources_path):
+    """Check captured bytes/address, not bibliography or scientific entailment."""
+    entries = read(sources_path)['sources']
+    receipts_path = Path(sources_path).parent/'origin_receipts.json'
+    receipts = read(receipts_path) if receipts_path.exists() else {}
+    for ref in check.verification_evidence:
+        entry = entries.get(ref.source_id, {})
+        for receipt in [*entry.get('origin_receipts', []), *receipts.get(ref.source_id, [])]:
+            if (receipt.get('origin_status', '').startswith('host_fetched_public_url')
+                    and check.verification_url in {receipt.get('request_url'), receipt.get('final_url')}
+                    and receipt.get('text_sha256') == ref.content_sha256
+                    and 200 <= receipt.get('http_status', 0) < 300):
+                try:
+                    if (sha(receipt['original_path']) == receipt['original_sha256']
+                            and sha(receipt['text_path']) == ref.content_sha256):
+                        return True
+                except (OSError, KeyError):
+                    continue
+    return False
+
+
+def validate_citation_origins(report, sources_path):
+    for check in report.citation_checks:
+        if check.status == 'verified_agent_review' and not citation_has_host_capture(check, sources_path):
+            raise ValueError('Citation verification needs matching host-captured publication bytes; imported excerpts alone remain unverifiable')
+
+
+def validate_literature_execution(report, receipt, sources_path):
+    if report.search_status == 'searched' and not receipt.get('web_search_event_observed'):
+        raise ValueError('No external search was observed; report search unavailable/not performed')
+    validate_citation_origins(report, sources_path)
+
+
 def validate_artifact(contract, path):
     role = contract['stage']
     document = SCHEMAS[role].model_validate(read(path))
@@ -235,6 +268,7 @@ def validate_artifact(contract, path):
         validate_literature_report(document,
             [CandidateIdea.model_validate(read(p)) for p in contract['candidate_files']],
             read(contract['sources_file'])['sources'])
+        validate_citation_origins(document, contract['sources_file'])
     if role in {'propose', 'revise'}:
         idea = document.candidate if role == 'revise' else document
         if idea.id != contract['expert_id']:
@@ -269,6 +303,12 @@ def validate_artifact(contract, path):
 
 
 def merge_sources(paths):
+    """Join exact URL/content identities, retaining model-declared metadata variants.
+
+The first declaration stays addressable at the familiar top-level fields; it is
+not preferred scientifically. Different titles/content levels are capture
+declarations to inspect, not different scientific sources or a fatal collision.
+"""
     merged = {}
     for path in paths:
         if Path(path).exists():
@@ -277,14 +317,26 @@ def merge_sources(paths):
                     raise ValueError('Captured source changed before handoff: ' + ident)
                 if ident in merged and merged[ident] != entry:
                     existing = merged[ident]
-                    if any(existing.get(k) != entry.get(k) for k in ('url', 'content_sha256', 'title', 'content_level')):
+                    if any(existing.get(k) != entry.get(k) for k in ('url', 'content_sha256')):
                         raise ValueError('Conflicting source registration: ' + ident)
+                    declaration_fields = ('path', 'captured_at', 'title', 'content_level', 'provenance_status')
+                    declarations = existing.setdefault('capture_declarations', [
+                        {k: existing[k] for k in declaration_fields if k in existing}])
+                    for declaration in [
+                            {k: entry[k] for k in declaration_fields if k in entry},
+                            *entry.get('capture_declarations', [])]:
+                        if declaration not in declarations: declarations.append(declaration)
+                    if any(existing.get(k) != entry.get(k) for k in ('title', 'content_level')):
+                        existing['metadata_status'] = 'differing_capture_declarations; first declaration retained without scientific preference'
                     captures = existing.setdefault('additional_captures', [])
                     capture = {k: entry[k] for k in ('path', 'captured_at') if k in entry}
                     if capture not in captures and capture.get('path') != existing['path']:
                         captures.append(capture)
                     for capture in entry.get('additional_captures', []):
                         if capture not in captures: captures.append(capture)
+                    receipts = existing.setdefault('origin_receipts', [])
+                    for receipt in entry.get('origin_receipts', []):
+                        if receipt not in receipts: receipts.append(receipt)
                 else:
                     merged[ident] = entry
     return {'format_version': 'ideation_sources/1', 'sources': merged}
@@ -397,9 +449,8 @@ async def pipeline(directory, execute_stage):
         try:
             receipt = await execute_stage(contract, attempt)
             result = validate_artifact(contract, attempt/'artifact.json')
-            if role == 'literature' and not receipt.get('web_search_event_observed'):
-                if result.search_status == 'searched' or any(c.status == 'verified_agent_review' for c in result.citation_checks):
-                    raise ValueError('No external search was observed; report search unavailable/not performed and citations unverifiable')
+            if role == 'literature':
+                validate_literature_execution(result, receipt, attempt/'sources.json')
             if role == 'review' and not (receipt.get('web_search_event_observed') or contract.get('literature_search_observed')) and any(
                     r.novelty_status != 'search_incomplete' for r in result.reviews):
                 raise ValueError('A novelty conclusion requires observed external search; otherwise use search_incomplete')

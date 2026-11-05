@@ -228,12 +228,20 @@ identity AND captured wording/context; re-reading the same imported file is not
 independent origin verification. Copy declared_url/declared_title from the registry.
 Record checked_identity, the actual verification_url, access_status and a reason.
 Capture verification evidence through the tools and cite it as a LiteratureReference;
-do not use a generated paraphrase as the verification quotation. Prefer source-fetch
-where available, otherwise honestly retain the agent-imported origin limitation.
+do not use a generated paraphrase as the verification quotation. Use source-fetch
+for the publication that supplies verification_evidence. Its source ID/content hash
+and verification_url must match a successful host retrieval receipt; source-add alone
+does not establish where text came from. If host retrieval is unavailable (including
+PDF-only or browser-only content), use unverifiable and describe what you could
+inspect, even when native web browsing let you read it. This limitation concerns
+auditable origin; it does not mean that the publication or claim is false.
 
 The citation status verified_agent_review requires accessible abstract/fulltext,
 matching identity and text, and captured verification_evidence. It does not certify
-that a scientific claim follows. Use identity_mismatch for the wrong publication,
+that a scientific claim follows. Self-check verifies the host retrieval bytes/address,
+not your bibliographic or scientific interpretation. Reopening a known publication
+directly can verify its citation without a broader search; do not call that a novelty
+search. Use identity_mismatch for the wrong publication,
 capture_mismatch when the registered wording is not supported by the reopened source,
 or unverifiable for unresolved access/origin. Metadata_only can identify a publication
 but cannot establish the quoted scientific passage; abstract access verifies only

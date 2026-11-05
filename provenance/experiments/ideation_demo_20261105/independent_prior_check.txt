@@ -1,0 +1,194 @@
+INDEPENDENT PRIOR-ART AND COMPATIBILITY CHECK — 5 November 2026
+
+Evaluation-only memo. Do not put this file in the native agents' prompts, source
+registries, request, or runtime context. Prepared before inspecting their output.
+This is a bounded prior check, not a systematic review or novelty certificate.
+
+Approved question as communicated to the evaluator
+------------------------------------------------
+Propose a sequencing technology measuring newly synthesized RNA and cell-surface
+protein identity in the same cell, using existing sequencing equipment.
+
+Interpretation to check against the actual request
+------------------------------------------------
+The RNA measurement should identify transcripts made during a labeling window,
+not merely overall RNA abundance, inferred splicing velocity, or a single global
+RNA-synthesis scalar. The protein channel can measure a defined antibody panel;
+it must not quietly claim an unbiased complete surface proteome. Same-cell linkage
+must be experimentally encoded, not assigned solely through computational matching
+of different cells. Existing sequencer compatibility does not imply that every
+sample-preparation device, reagent or chemistry is already in the laboratory.
+
+What the search establishes so far
+---------------------------------
+CITE-seq establishes RNA plus surface-protein readout; scNT-seq establishes new/old
+RNA readout per cell. Neither cited foundational paper, by itself, demonstrates
+the full requested combination. SOM3B already combines biosynthesis measurements
+with immunophenotype at single-cell resolution using mass cytometry, and its
+discussion explicitly suggests a future CITE-seq combination. Therefore the broad
+idea of coupling biosynthesis and protein phenotype is not a new conceptual gap.
+The precise sequencing implementation, its molecular linkage and its useful gain
+still require comparison with the actual candidate and a wider prior-art search.
+
+No full same-cell transcript-resolved nascent-RNA plus surface-protein sequencing
+implementation was established in this bounded search. That is a search limitation,
+not evidence that none exists. Do not score the native system as novel just because
+it proposes combining two familiar assay names.
+
+Six primary references and their actual scope
+--------------------------------------------
+
+1. Stoeckius et al. CITE-seq (2017).
+   Large-scale simultaneous measurement of epitopes and transcriptomes in single cells.
+   DOI: 10.1038/nmeth.4380
+   https://pmc.ncbi.nlm.nih.gov/articles/PMC5669064/
+   https://www.nature.com/articles/nmeth.4380
+   Locator: main method description; Figure 1; Online Methods, antibody conjugation
+   and antibody-oligo sequences.
+
+   Demonstrated: antibody-derived DNA tags and cellular mRNA captured through an
+   existing single-cell library workflow, sharing a cell barcode; ADT and cDNA
+   libraries can be separated and sequenced. Drop-seq and 10x implementations are
+   reported. The original conjugation uses a reducible disulfide-containing link.
+   Not demonstrated here: metabolic RNA age measurement, compatibility of ADTs with
+   any added conversion chemistry, or universal compatibility of every antibody/tag
+   formulation. Reductive tag release is therefore a routing question to inspect,
+   not automatically a failure: release inside a correctly indexed compartment can
+   be intended. Releasing tags before cell attribution would require a different
+   justification. Protein reads identify antibody-defined targets; they are not
+   direct protein sequencing or a complete proteome.
+
+2. Qiu et al. scNT-seq (2020).
+   Massively parallel and time-resolved RNA sequencing in single cells with scNT-seq.
+   DOI: 10.1038/s41592-020-0935-4
+   https://pmc.ncbi.nlm.nih.gov/articles/PMC8103797/
+   https://www.nature.com/articles/s41592-020-0935-4
+   Locator: method overview and Discussion; Methods, chemical conversion on beads
+   and SLAM-Seq reaction on barcoded beads.
+
+   Demonstrated: metabolic labeling, droplet capture and conversion on pooled
+   barcoded beads support new/pre-existing RNA measurements within the same cell.
+   The Methods also report difficulty amplifying cDNA under the tested standard
+   on-bead IAA condition, motivating a modified condition in that comparison.
+   Not demonstrated here: joint ADT recovery or a generally interchangeable choice
+   of conversion reactions. Evaluate when the cell association becomes secure,
+   whether it is initially hybridization or a copied barcode, and what happens
+   before reverse transcription. Do not infer that pooling is intrinsically wrong:
+   the reported bead workflow provides a precedent, while newly added tag behavior
+   still needs support. Counts carrying conversion evidence are observations;
+   unlabeled/new fractions and kinetic rates require inference and controls.
+
+3. Kimmey et al. SOM3B (2019).
+   Parallel analysis of tri-molecular biosynthesis with cell identity and function
+   in single cells. DOI: 10.1038/s41467-019-09128-7
+   https://www.nature.com/articles/s41467-019-09128-7
+   Locator: Discussion, final paragraphs; Methods, Antibody staining and data acquisition.
+
+   Demonstrated: single-cell biosynthesis activity for DNA, RNA and protein together
+   with antibody-based cellular phenotype, using mass cytometry; experiments include
+   cell lines and primary human samples. The authors explicitly discuss CITE-seq
+   integration as a possible extension rather than an experiment completed there.
+   Not demonstrated: gene-resolved nascent RNA sequencing plus ADTs in that paper.
+   Evaluation significance: reject a blanket claim that connecting biosynthesis
+   and phenotype was previously unimaginable; equally, do not label a sequencing
+   design directly duplicated by this paper unless its stated measurement is only
+   global biosynthesis. Distinguish an earlier conceptual suggestion, a component
+   precedent, and a demonstrated complete implementation.
+
+4. Zhang et al. metabolic-labeling benchmark (2025).
+   Benchmarking metabolic RNA labeling techniques for high-throughput single-cell
+   RNA sequencing. DOI: 10.1038/s41467-025-61375-z
+   https://www.nature.com/articles/s41467-025-61375-z
+   Locator: Figure 1; Results, Experimental design and computational quality control;
+   comparison of ten conversion conditions and Discussion.
+
+   Demonstrated: direct comparison of conversion conditions in a common Drop-seq
+   setting, initially using ZF4 cells. Conversion timing and chemistry affect
+   substitution rate, cDNA integrity and recovered complexity. This is evidence
+   that naming a known conversion does not establish interface equivalence.
+   Not demonstrated: those conditions preserve every antibody, linker, ADT capture
+   sequence or added library channel. A candidate should identify what is exposed
+   to conversion, what is separated beforehand, and what still requires testing.
+   Do not extrapolate the reported condition ranking universally to another cell
+   type or platform. It supports comparing conversion yield AND RNA recovery, not
+   declaring success from a high conversion fraction alone.
+
+5. Mule, Martins and Tsang. dsb (2022).
+   Normalizing and denoising protein expression data from droplet-based single
+   cell profiling. DOI: 10.1038/s41467-022-29356-8
+   https://www.nature.com/articles/s41467-022-29356-8
+   https://pmc.ncbi.nlm.nih.gov/articles/PMC9018908/
+   Locator: Abstract, experimental analysis of ambient antibody background, Methods.
+
+   Demonstrated: substantial ADT noise from unbound antibodies and cell/droplet
+   technical variation; empty droplets and isotype/background signals provide
+   useful controls in the studied multimodal datasets.
+   Not demonstrated: a correction can rescue arbitrary physical tag exchange,
+   chemically destroyed tags or all new chemistry-related artifacts. Evaluate
+   whether the proposed readout retains background observations and whether its
+   claim is calibrated protein-marker evidence rather than exact molecule counts.
+   Lack of an explicit choice of dsb is not a failure; lack of any treatment of
+   background and misattribution can be a material scientific omission.
+
+6. Burger et al. 4sU perturbation (2013).
+   4-thiouridine inhibits rRNA synthesis and causes a nucleolar stress response.
+   DOI: 10.4161/rna.26214
+   https://pmc.ncbi.nlm.nih.gov/articles/PMC3866244/
+   https://pubmed.ncbi.nlm.nih.gov/24025460/
+   Locator: Abstract; Results on rRNA production/processing, NPM1, p53 and proliferation.
+
+   Demonstrated: dose-dependent interference with rRNA biology and stress responses
+   under the tested cellular exposure conditions. This refutes an unconditional
+   assertion that metabolic labeling leaves cell state unchanged.
+   Not demonstrated: every short pulse, every dose or every cell type is unusable.
+   Evaluate whether a candidate recognizes labeling as a possible perturbation and
+   proposes an appropriate matched control/calibration. Do not turn this paper into
+   a universal numerical exclusion rule or assume it proves a specific surface
+   epitope is damaged. That would exceed the demonstrated scope.
+
+Independent assessment questions for the eventual output
+-------------------------------------------------------
+These are evaluator questions, not additional hidden generation requirements.
+
+A. Does it satisfy the requested measurement? Identify both sequence channels,
+   their actual information carriers and the exact point that assigns common cell
+   identity. Does it distinguish gene-resolved new RNA from global synthesis?
+B. Is the proposed advance concrete? Compare it with the nearest implementations,
+   not a straw-man baseline. Record a residual difference and expected gain; an
+   untested combination may be useful but is not thereby demonstrated novel.
+C. Can a reader follow material/data routes? Check retention of RNA, antibody tags,
+   bead association, any separated libraries, and the connection to cell barcodes.
+D. Which precise required properties have precedent? For a transfer, determine
+   substrate, chemical exposure, capture and amplification assumptions. A familiar
+   component name does not close the interface claim.
+E. What is inferred? Absence of a conversion does not automatically prove old RNA.
+   Calibration/background, incomplete labeling and sequence coverage should be
+   addressed at the level needed for the claim, without demanding every recipe detail.
+F. Are uncertainty and evidence honest? An inaccessible supplement is not a negative
+   experiment; a future-work paragraph is not an achieved result. Test proposals are
+   not measured outcomes. Existing sequencer use is not evidence that the whole assay
+   is inexpensive or requires no other instrumentation.
+
+Do not require the model to reproduce a preferred architecture. Record whether its
+different architecture meets the same measurement/attribution requirements, what
+its unsupported assumptions are, and what experiment would discriminate success
+from its stated failure mode. These judgments remain independent of graph syntax.
+
+Search and access record
+------------------------
+Web searches used combinations of: newly synthesized RNA + CITE-seq; 4sU + CITE-seq;
+metabolic labeling + surface proteins/antibody-derived tags; nascent RNA + epitopes;
+scNT-seq/scNT-seq2 + proteins; TimeLapse + CITE; and exact primary-paper titles.
+Follow-up searches located original CITE-seq/scNT-seq Methods, the 2025 comparative
+study, SOM3B's CITE-seq discussion, dsb and the 4sU perturbation study. Reviews were
+used for discovery only, not as experimental proof in the six entries above.
+
+Access was mixed: the SOM3B publisher HTML was directly readable. For several PMC
+and Nature pages, direct open returned a browser challenge/login redirect while
+search-indexed primary-article text exposed relevant method/results sections.
+Bibliographic identity and scoped statements were checked against those primary
+records, but this memo does not claim complete independent downloads of all full
+texts or inspection of every supplement. No numerical optimum, exhaustive prior-art
+clearance, or empirical success of a proposed combined assay is established here.
+
+Prepared before the native candidate outputs; no edits to run inputs or prompts.

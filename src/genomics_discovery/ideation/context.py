@@ -203,7 +203,6 @@ class AtlasContext:
 
     def atlas_source(self, record_id, *, source_id=None, start=0, limit=6000, query=None):
         """Reopen the extraction's exact source registry; never return whole papers."""
-        from genomics_discovery.illumina.extraction import source_excerpt
         card = self._card(record_id)
         pin = card.get('artifact_pins', {}).get('source_registry.json')
         if not pin or not card.get('attempt_directory'):
@@ -219,10 +218,9 @@ class AtlasContext:
             if source_id not in registry or start < 0 or not 1 <= limit <= 12000:
                 raise ValueError('Unknown source or invalid bounded read')
             result = {**{k: v for k, v in registry[source_id].items() if k in fields},
-                      **source_excerpt(registry, source_id, start=start, limit=limit, query=query)}
-            at = result['start']
-            end = at + len(result['text']) if at is not None else None
-            result['next_start'] = end if end is not None and end < result['total_characters'] else None
+                      'source_id': source_id,
+                      **self._window(registry[source_id].get('text', ''), start, limit, query),
+                      'retrieval_basis': 'literal text match starting at requested offset; inspect passage for scientific support'}
         return self._result('atlas-source', {'record_id': record_id, 'source_id': source_id,
             'start': start, 'limit': limit, 'query': query}, {**binding, **result,
             'boundary': 'Exact registered rendition and provenance; quotation availability does not establish claim entailment or support a proposed transfer.'})
