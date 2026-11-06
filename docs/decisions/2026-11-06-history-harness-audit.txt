@@ -1,0 +1,65 @@
+HISTORY HARNESS: INPUT AND RELATION CONTRACT
+Decision under audit6November2026; no extraction prompt/runtime changes.
+
+Observable inputs: accepted exact-version workflow artifacts, original registered
+papers, citation contexts, curated method/publication assignments and the existing
+relation glossary. A paper citation nominates investigation; it does not establish
+method identity, adoption, improved performance or a valid interface transfer.
+
+Target: a directed, scoped contribution from an evidenced earlier implementation
+to a later one, separately reviewed against both source papers and located in the
+workflow. Multiple contributors/changes are allowed. Unconnected methods remain.
+Similarity and comparisons are separate layers; they are not ancestry edges.
+No earliest-invention claim or proven interchangeability follows from this data.
+
+Permitted history types remain method_development and component_adoption, with
+existing definitions in illumina/relationships.py. Before/after descriptions,
+retained arrangement, consequences and qualifications stay source-grounded prose.
+Do not multiply edge types simply to label each reagent/stage or silently encode
+improvement into a historical relation. Finer change categories can be analyzed
+later without changing the source claims. Do not force a parent for main novelty.
+
+Live alternatives:
+1. Classify citations directly as graph edges, versus use citations as candidates
+   then independently inspect the cited demonstration and workflow endpoints.
+   Choose the latter because our edge must explain an experimental transition.
+2. Read the moving extraction batch, versus freeze accepted rows and original
+   artifact bindings in an immutable snapshot. Choose snapshot; the full job must
+   keep running and its newly accepted workflows can enter later snapshots.
+3. Require a legacy source.original field, versus recover the declared article
+   from hash-pinned curated source-package records. Adapt input handling; never
+   locate an original by title resemblance, file basename or guessed paths.
+
+Reference audit in progress, pinned code:
+Intern-Atlas paper https://arxiv.org/html/2604.28158v2 sections3.2,A.1-A.3.
+Public repo OpenRaiser/Intern-Atlas commit1185dc36555c547b5b6e9553779cb498a15ce587
+is MIT. Inspected builder.py,llm.py,models.py,test_build_no_llm.py.
+Its released local builder is not demonstrably the production pipeline described
+in the paper: builder.select_candidate_pairs uses shared methods/title tokens;
+llm_relation consumes paper_brief summaries; heuristic_relation can assert extends
+from shared terminology after absent/failed model calls. Confidence gates retained
+edges, without the paper's two-phase full-text/verbatim validation path in the
+inspected builder. Reject that fallback for scientific ancestry. Adopt only the
+separation of method identities, relation typing and evidence records as a design
+principle; no code copied. Neither claim equivalent production behavior nor
+attributable guarantees from its smoke tests.
+
+Independent comparison: SciCite NAACL2019 https://aclanthology.org/N19-1361.pdf
+and allenai/scicite commitb33a8cd0df5743c9d483b1d0fdce8ec62bc8f135 (Apache2).
+Inspected citation_data_reader_scicite.py and paper model/task descriptions.
+It classifies citation intent from local text/structure; that classification is
+useful candidate context, not independent verification of an earlier procedure.
+Do not import an old trained classifier or its labels as our admission gate.
+
+Test obligations: reject source-byte changes, incorrect article identity, ambiguous
+originals and unrelated pinned files; distinguish classification duplicates from
+method versions; snapshot only admitted workflows and never mutate active batch;
+reopen all source/native/admission pins. Bibliographic matching only creates a
+candidate; comparisons/background never become ancestry. Scope an adoption to the
+adopted contribution, retain interface qualifications, and allow no established
+relation. Native pilot must show actual source access, reviewer decisions and
+before-to-after reconstructability, not only valid JSON or a connected graph.
+
+Remaining: PDF/HTML citation-location support, explicitly requested source recovery,
+date/version qualifications, pair-review latency and source coverage. Keep failures
+per method. Existing relation policy is task-specific, not a universal ontology.
