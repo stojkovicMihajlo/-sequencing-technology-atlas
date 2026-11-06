@@ -20,10 +20,15 @@ from genomics_discovery.illumina.extraction import read, sha, source_excerpt, st
 from genomics_discovery.illumina import relationships as relationship_policy
 from genomics_discovery.illumina.graph import _load_card, operation_group
 from genomics_discovery.illumina.history_inputs import resolve_article
+from genomics_discovery.illumina.history_bindings import (
+    WorkflowBinding, WorkflowBindingReview, MAPPING_INSTRUCTIONS,
+    validate_binding, validate_binding_review, mapped_claim,
+)
+from genomics_discovery.illumina.paper_reads import record_read, check_full_reads
 from models import Review
 from pair_models import PairAnalysis, export_pair, validate_pair, validate_pair_review
 from pair_prompts import build_prompt
-from run import bibliography, review_cycle
+from run import bibliography, review_cycle, validate_completed_citation
 
 
 def prepare_primary(source, source_id, side, inputs):
@@ -116,15 +121,76 @@ def prepare(plan_path, output):
     write(inputs / "images.json", images)
     write(inputs / "bibliography.json", references)
     write(inputs / "plan.json", plan)
+    if plan.get('citation'):
+        prepare_citation_constraint(plan['citation'], inputs, sides, references, sources)
     return inputs
 
 
+def prepare_citation_constraint(spec, inputs, sides, primaries, sources):
+    previous = Path(spec['run']).resolve()
+    validate_completed_citation(previous)
+    overlay_path = previous / 'graph.json'
+    overlay = read(overlay_path)
+    if overlay['format_version'] != 'citation_lineage_pilot/4':
+        raise ValueError('Workflow mapping requires the explicit change-record citation format')
+    matches = [item for item in overlay['links'] if item['claim']['id'] == spec['claim_id']]
+    if len(matches) != 1 or matches[0]['relationship_layer'] != 'history':
+        raise ValueError('Only one accepted historical claim may constrain a workflow mapping')
+    item = matches[0]; original_sources = read(previous / 'inputs/sources.json')
+    claim = item['claim']
+    binding = read(previous / 'inputs/seed_binding.json')
+    if (binding['record_id'] != sides['right']['record_id'] or
+            binding['parent_artifact_pins']['extraction.json'] != sides['right']['extraction_sha256']):
+        raise ValueError('Later workflow differs from the exact citation seed version')
+    for side, sid in (('left', claim['reference_id']), ('right', 'seed')):
+        source = original_sources[sid]
+        original = source.get('original') or source.get('provenance', {}).get('original')
+        if not original:
+            raise ValueError('Citation paper has no original-article binding')
+        primary = primaries[side]
+        actual = sources[sides[side]['paper_source_ids'][0]]
+        if (original['sha256'] != primary['original_sha256'] or source['text'] != actual['text']):
+            raise ValueError('Nominated workflow paper is not the exact cited article and text rendition')
+    for name in ('graph.json', 'sources.json'):
+        origin = previous / ('inputs' if name == 'sources.json' else '') / name
+        (inputs / ('citation_' + name)).write_bytes(origin.read_bytes())
+    write(inputs / 'citation.json', {'overlay_sha256': sha(overlay_path), 'item': item,
+        'original_run': str(previous), 'source_state_sha256': sha(previous / 'state.json')})
+    write(inputs / 'citation_manifest.json', {'format_version': 'illumina_history_inputs/1', 'overlays': [{
+        'path': 'citation_graph.json', 'sha256': sha(inputs / 'citation_graph.json'),
+        'seed_extraction': 'right_extraction.json', 'source_registry': {
+            'path': 'citation_sources.json', 'sha256': sha(inputs / 'citation_sources.json')}}]})
+    # Original scientific references stay unchanged; mapping evidence uses the
+    # additional left:/right: primary namespaces. Neither source is overwritten.
+    if set(sources) & set(original_sources):
+        raise ValueError('Citation and pair source namespaces collide')
+    write(inputs / 'sources.json', {**sources, **original_sources})
+
+
 def load_inputs(path):
-    return {k: read(path / (k + ".json")) for k in ("graph", "sources", "sides")}
+    data = {k: read(path / (k + ".json")) for k in ("graph", "sources", "sides")}
+    if (path / 'citation.json').exists():
+        data['citation'] = read(path / 'citation.json')
+        for side in ('left', 'right'):
+            data[side + '_extraction'] = read(path / (side + '_extraction.json'))
+    return data
 
 
-def validate(role, artifact, inputs, analysis_path=None):
+def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
     context = load_inputs(inputs)
+    if 'citation' in context:
+        if role == 'author':
+            result = WorkflowBinding.model_validate_json(artifact.read_bytes())
+            validate_binding(result, context)
+        else:
+            result = WorkflowBindingReview.model_validate_json(artifact.read_bytes())
+            document = WorkflowBinding.model_validate_json(analysis_path.read_bytes())
+            validate_binding_review(result, document, context, sha(analysis_path))
+        if paper_read_log is not None:
+            coverage = check_full_reads(paper_read_log, inputs / 'sources.json', context['sources'],
+                [sid for binding in context['sides'].values() for sid in binding['paper_source_ids']])
+            write(artifact.parent / 'paper_read_coverage.json', coverage)
+        return result
     if role == "author":
         result = PairAnalysis.model_validate_json(artifact.read_bytes())
         validate_pair(result, context)
@@ -134,6 +200,37 @@ def validate(role, artifact, inputs, analysis_path=None):
         validate_pair(analysis, context)
         validate_pair_review(result, analysis, context, sha(analysis_path))
     return result
+
+
+def export_binding(root, analysis, review, analysis_path):
+    inputs = root / 'inputs'; data = load_inputs(inputs)
+    validate_binding_review(review, analysis, data, sha(analysis_path))
+    last_review = [s for s in read(root / 'state.json')['stages'] if s['role'] == 'review'][-1]
+    review_path = Path(last_review['path']) / 'artifact.json'
+    if read(review_path) != review.model_dump(mode='json'):
+        raise ValueError('Binding review handoff differs from its native artifact')
+    artifacts = {name: {'path': str(path.relative_to(root)), 'sha256': sha(path)} for name,path in {
+        'graph': inputs / 'graph.json', 'sources': inputs / 'sources.json', 'sides': inputs / 'sides.json',
+        'left_extraction': inputs / 'left_extraction.json', 'right_extraction': inputs / 'right_extraction.json',
+        'citation': inputs / 'citation.json', 'citation_manifest': inputs / 'citation_manifest.json',
+        'bibliography': inputs / 'bibliography.json',
+        'left_primary': Path(read(inputs / 'bibliography.json')['left']['local_path']),
+        'right_primary': Path(read(inputs / 'bibliography.json')['right']['local_path']),
+        'analysis': analysis_path, 'review': review_path}.items()}
+    accepted = not review.omitted_candidates and all(f.decision == 'accept' for f in review.findings)
+    citation = data['citation']; original = citation['item']
+    links, withheld = [], []
+    if accepted:
+        links.append({'kind': original['kind'], 'claim': mapped_claim(analysis, data),
+            'review': original['review'], 'mapping': analysis.model_dump(mode='json'),
+            'mapping_review': review.model_dump(mode='json'), 'status': 'model_reviewed_workflow_binding'})
+    else:
+        withheld.append({'claim': original['claim'], 'mapping': analysis.model_dump(mode='json'),
+            'mapping_review': review.model_dump(mode='json'), 'reason': 'workflow_mapping_not_accepted'})
+    return {'format_version': 'illumina_citation_binding/1', 'bindings': data['sides'],
+        'artifacts': artifacts, 'links': links, 'withheld': withheld,
+        'source_citation': {'overlay_sha256': citation['overlay_sha256'], 'claim_id': original['claim']['id']},
+        'boundary': 'Reviewed location of an unchanged citation contribution in two exact extracted workflows. Not whole-assay inheritance, interchangeability or canonical admission.'}
 
 
 async def execute(args):
@@ -150,11 +247,14 @@ async def execute(args):
     implementation = {str(p.resolve()): sha(p) for p in Path(__file__).parent.glob("*.py")}
     policy_path = Path(relationship_policy.__file__).resolve()
     implementation[str(policy_path)] = sha(policy_path)
+    mapping_mode = (inputs / 'citation.json').exists()
+    for path in (Path(validate_binding.__code__.co_filename), Path(record_read.__code__.co_filename)):
+        implementation[str(path.resolve())] = sha(path)
 
     async def stage(role, analysis_path=None, feedback=None, previous_analysis_path=None):
         attempt = root / "attempts" / f"{len(state['stages'])+1:03d}_{role}"
         attempt.mkdir(parents=True)
-        schema = PairAnalysis if role == "author" else Review
+        schema = (WorkflowBinding if role == 'author' else WorkflowBindingReview) if mapping_mode else (PairAnalysis if role == "author" else Review)
         write(attempt / "schema.json", schema.model_json_schema())
         attached, delivery = stage_images([(x["source_id"], Path(x["path"])) for x in read(inputs / "images.json")], attempt)
         command = [sys.executable, str(Path(__file__).resolve())]
@@ -162,6 +262,8 @@ async def execute(args):
                  "--artifact", str(attempt / "artifact.json")]
         if analysis_path:
             check += ["--analysis", str(analysis_path)]
+        if mapping_mode:
+            check += ['--paper-read-log', str(attempt / 'source_reads.jsonl')]
         data = load_inputs(inputs)
         context = {"inputs": str(inputs), "sides": data["sides"],
             "operations": [{"id": n["id"], "label": n["original"]["label"], "method": n["record_id"]}
@@ -178,13 +280,19 @@ async def execute(args):
             "group_tool": shlex.join([*command, "group", "--inputs", str(inputs)]) + " --side left|right --operations GLOBAL_OPERATION_ID ...",
             "schema": str(attempt / "schema.json"), "output": str(attempt / "artifact.json"),
             "self_check": shlex.join(check)}
+        if mapping_mode:
+            context.update(citation_file=str(inputs / 'citation.json'),
+                earlier_extraction=str(inputs / 'left_extraction.json'),
+                later_extraction=str(inputs / 'right_extraction.json'),
+                primary_source_ids={side: binding['paper_source_ids'] for side,binding in data['sides'].items()})
+            context['source_tool'] += ' --coverage-file ' + shlex.quote(str(attempt / 'source_reads.jsonl'))
         if analysis_path:
             context.update(analysis=str(analysis_path), analysis_sha256=sha(analysis_path))
         if feedback:
             context["previous_review"] = str(feedback)
         if previous_analysis_path:
             context["previous_analysis"] = str(previous_analysis_path)
-        prompt = build_prompt(role, context)
+        prompt = (MAPPING_INSTRUCTIONS + '\nROLE: ' + role + '\nCONTEXT\n' + json.dumps(context, indent=2)) if mapping_mode else build_prompt(role, context)
         (attempt / "stage_prompt.txt").write_text(prompt)
         pins = {str(p): sha(p) for p in inputs.iterdir() if p.is_file()}
         pins.update(implementation)
@@ -206,7 +314,8 @@ async def execute(args):
         if (attempt / "prompt.txt").read_text() != prompt:
             raise ValueError("Executed prompt changed")
         verify_stage_inputs(attempt, delivery, pins)
-        document = validate(role, attempt / "artifact.json", inputs, analysis_path)
+        document = validate(role, attempt / "artifact.json", inputs, analysis_path,
+            attempt / 'source_reads.jsonl' if mapping_mode else None)
         row.update(status="validated", thread_id=assessment.thread_id, usage=assessment.usage,
                    elapsed_seconds=time.monotonic()-began, artifact_sha256=sha(attempt / "artifact.json"))
         write(root / "state.json", state)
@@ -214,7 +323,7 @@ async def execute(args):
 
     try:
         analysis, analysis_path, review = await review_cycle(stage, 'author')
-        graph = export_pair(analysis, review, load_inputs(inputs), sha(analysis_path))
+        graph = export_binding(root, analysis, review, analysis_path) if mapping_mode else export_pair(analysis, review, load_inputs(inputs), sha(analysis_path))
         write(root / "analysis.json", analysis.model_dump())
         write(root / "review.json", review.model_dump())
         write(root / "graph.json", graph)
@@ -225,10 +334,10 @@ async def execute(args):
             parent = Path(binding["parent_attempt"])
             _load_card({"status": "supported", "attempt_directory": str(parent),
                 "artifact_pins": binding["artifact_pins"],
-                "candidate_sha256": graph["source_graph"]["cards"][binding["record_id"]]["candidate_sha256"],
-                "review_sha256": graph["source_graph"]["cards"][binding["record_id"]]["review_sha256"]}, read(parent / "card.json"))
-        state.update(status="completed", correspondences=len(graph["correspondences"]),
-                     historical_links=len(graph["historical_links"]), withheld=len(graph["withheld"]),
+                "candidate_sha256": read(inputs/'graph.json')["cards"][binding["record_id"]]["candidate_sha256"],
+                "review_sha256": read(inputs/'graph.json')["cards"][binding["record_id"]]["review_sha256"]}, read(parent / "card.json"))
+        state.update(status="completed", correspondences=len(graph.get("correspondences", [])),
+                     historical_links=len(graph.get("historical_links", graph.get('links', []))), withheld=len(graph["withheld"]),
                      extraction_bytes_unchanged=True, final_analysis_sha256=sha(analysis_path))
     except BaseException as exc:
         state.update(status="failed", error=f"{type(exc).__name__}: {exc}")
@@ -252,6 +361,7 @@ def main():
     check.add_argument("--artifact", type=Path, required=True)
     check.add_argument("--analysis", type=Path)
     check.add_argument("--role", choices=["author", "review"], required=True)
+    check.add_argument('--paper-read-log', type=Path)
     group = sub.add_parser("group")
     group.add_argument("--inputs", type=Path, required=True)
     group.add_argument("--side", choices=["left", "right"], required=True)
@@ -262,11 +372,12 @@ def main():
     inspect.add_argument("--query")
     inspect.add_argument("--start", type=int, default=0)
     inspect.add_argument("--limit", type=int, default=10000)
+    inspect.add_argument('--coverage-file', type=Path)
     args = parser.parse_args()
     if args.command == "run":
         asyncio.run(execute(args))
     elif args.command == "check":
-        validate(args.role, args.artifact, args.inputs, args.analysis)
+        validate(args.role, args.artifact, args.inputs, args.analysis, args.paper_read_log)
         print("structural_and_quote_checks_passed; scientific_review_still_required")
     elif args.command == "group":
         data = load_inputs(args.inputs)
@@ -278,6 +389,8 @@ def main():
         registry = read(args.inputs / "sources.json")
         result = source_excerpt(registry, args.id, query=args.query, start=args.start, limit=args.limit)
         result.update(query_found=result["found"], level=registry[args.id].get("content_level"))
+        if args.coverage_file:
+            record_read(args.coverage_file, args.inputs / 'sources.json', registry, result)
         print(json.dumps(result, ensure_ascii=False))
 
 

@@ -64,3 +64,16 @@ before/after sufficient to understand the change; exact correct workflow locatio
 no invented chemical identity or gain; meaningful retained features and limits;
 fresh reviewer capable of withholding; source/access failure distinguished from
 false claims. Software success alone does not establish these properties.
+
+6 NOVEMBER WORKFLOW CONNECTION CORRECTION
+New runs now execute connect.py after completed citation research, unless
+--citation-only is selected. Existing frozen runtime01 keeps its original behavior.
+connect.sbatch runs only the mapping continuation of an existing completed pilot;
+it does not repeat extraction/citation calls. Exact article/text identity nominates
+a unique existing workflow; a fresh author/reviewer locates the contribution.
+The author cannot rewrite the original scientific assertions. A separately pinned
+connection upgrades the earlier endpoint only after every location passes review.
+Original paper contributions remain immutable and are not counted twice in queries.
+See docs/decisions/2026-11-06-history-workflow-connections.txt and
+src/genomics_discovery/illumina/history_bindings.py. This is an implemented,
+software-tested correction; inspect the new live result before claiming success.

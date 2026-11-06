@@ -6,6 +6,7 @@ Operations, or concern a State property or a Flow inside a broader operation.
 from __future__ import annotations
 
 from typing import Literal
+import re
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -120,9 +121,16 @@ def resolve_pointer(document, pointer):
         raise ValueError('Field anchor must be a JSON Pointer')
     value = document
     for token in pointer[1:].split('/'):
+        if re.search(r'~(?![01])', token):
+            raise ValueError('Invalid JSON Pointer escape')
         token = token.replace('~1', '/').replace('~0', '~')
         try:
-            value = value[int(token)] if isinstance(value, list) else value[token]
+            if isinstance(value, list):
+                if not re.fullmatch(r'0|[1-9][0-9]*', token):
+                    raise ValueError('Invalid JSON Pointer array index')
+                value = value[int(token)]
+            else:
+                value = value[token]
         except (KeyError, IndexError, TypeError, ValueError) as exc:
             raise ValueError('Field anchor does not exist in the supplied record') from exc
     return value

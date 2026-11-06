@@ -135,6 +135,17 @@ async def execute(args):
                  for r in state['citation_runs'].values()) else 'completed', completed_citation_runs=len(completed))
     write(output / 'state.json', state)
     write(output / 'RESULT.json', state)
+    if completed and not getattr(args, 'citation_only', False):
+        from types import SimpleNamespace
+        from experiments.history_changes_20261106.connect import execute as connect_workflows
+        connections = await connect_workflows(SimpleNamespace(history_run=output,
+            output=output / 'connections', runtime=args.runtime, workers=args.workers))
+        state['connections'] = {'path': str(output / 'connections'),
+            'status': connections['status'], 'reviewed_workflow_connections': connections['reviewed_workflow_connections'],
+            'unbound_contributions': connections['unbound_contributions']}
+        if connections['status'] != 'completed':
+            state['status'] = 'completed_with_issues'
+        write(output / 'state.json', state); write(output / 'RESULT.json', state)
     return state
 
 
@@ -144,6 +155,7 @@ if __name__ == '__main__':
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--seed', action='append', required=True)
     parser.add_argument('--workers', type=int, default=2)
+    parser.add_argument('--citation-only', action='store_true', help='Stop after paper-contribution publication; do not execute exact workflow mappings.')
     args = parser.parse_args()
     if len(set(args.seed)) != len(args.seed) or not 1 <= args.workers <= 4:
         parser.error('Distinct explicit seeds and one to four history workers required')

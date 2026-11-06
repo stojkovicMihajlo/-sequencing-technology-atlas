@@ -134,7 +134,22 @@ def build_history_index(manifest_path):
         graph = _read(path, pin)
         source = {"path": str(path), "sha256": pin, "format_version": graph["format_version"],
                   "source_registry": _source_registry_context(entry, manifest_path, graph)}
-        if graph["format_version"] == "illumina_method_pair/1":
+        if graph['format_version'] == 'illumina_citation_binding/1':
+            from .history_bindings import load_reviewed_binding
+            graph = load_reviewed_binding(path, pin)
+            sides = {side: workflow(b['record_id'], b['extraction_sha256'], b['title'])
+                     for side,b in graph['bindings'].items()}
+            for item in graph['links']:
+                claim = item['claim']
+                edges.append({'id': pin + ':' + claim['id'], 'source': sides['left'], 'target': sides['right'],
+                    'relation': item['kind'], 'claim': copy.deepcopy(claim), 'review': copy.deepcopy(item['review']),
+                    'mapping_review': copy.deepcopy(item['mapping_review']), 'mapping': copy.deepcopy(item['mapping']),
+                    'source_citation': copy.deepcopy(graph['source_citation']), 'artifact': source,
+                    'claim_id': claim['id'], 'status': item['status']})
+            for finding in graph['withheld']:
+                withheld.append({'target': sides['right'], 'artifact': copy.deepcopy(source),
+                    'finding': copy.deepcopy(finding), 'status': 'withheld_not_a_graph_edge'})
+        elif graph["format_version"] == "illumina_method_pair/1":
             # Reuse the pair reader's direction, anchor, evidence and review checks.
             graph = load_reviewed_pair(path, pin)
             sides = {s: workflow(b["record_id"], b["extraction_sha256"], b["title"])
@@ -212,6 +227,17 @@ def build_history_index(manifest_path):
                               "artifact": source, "claim_id": c["id"], "status": item["status"]})
         else:
             raise ValueError("Unsupported relationship overlay format")
+    # Replace only the exact paper-only assertion that a fresh workflow mapping
+    # resolves. Similar names or different versions never merge contributions.
+    bound = [(edge['source_citation']['overlay_sha256'], edge['source_citation']['claim_id'])
+             for edge in edges if 'source_citation' in edge]
+    if len(bound) != len(set(bound)):
+        raise ValueError('Conflicting workflow mappings of one citation contribution require review')
+    superseded = set(bound)
+    edges = [edge for edge in edges if 'source_citation' in edge or
+             (edge['artifact']['sha256'], edge['claim_id']) not in superseded]
+    used = {edge[endpoint] for edge in edges for endpoint in ('source', 'target')}
+    nodes = {key:value for key,value in nodes.items() if value['kind'] == 'bound_workflow' or key in used}
     if len({e["id"] for e in edges}) != len(edges):
         raise ValueError("Duplicate relationship claim")
     # Detect contradictions rather than silently looping or choosing an arbitrary parent.

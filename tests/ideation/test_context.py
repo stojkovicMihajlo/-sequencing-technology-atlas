@@ -321,3 +321,36 @@ def test_change_context_rejects_similarity_ambiguous_ids_and_wrong_operation(con
     edge['claim']['seed_operation_ids'] = ['invented']
     with pytest.raises(ValueError, match='absent local Operations'):
         context.change_context(edge['id'])
+
+
+def test_change_context_preserves_reviewed_state_property_and_flow_without_whole_operation_adoption(context):
+    edge = historical_context(context, pair=True)
+    edge['artifact']['format_version'] = 'illumina_citation_binding/1'
+    edge['claim']['change_records'] = [{'id': 'change', 'workflow_locations': {
+        'earlier_scope': 'bound_workflow', 'earlier': [
+            {'kind': 'state', 'record_id': 'in', 'field': '/properties/0/value'}],
+        'later': [{'kind': 'flow', 'record_id': 'output', 'field': None}]}}]
+    data = context.change_context(edge['id'])['data']
+    assert data['format_version'] == 'ideation_change_context/2'
+    before, after = data['before'], data['after']
+    assert before['workflow_locations'][0]['graph_record_id'] == 'illumina:earlier:state:in'
+    assert before['workflow_locations'][0]['field'] == '/properties/0/value'
+    assert before['read_commands'] == [['node', 'illumina:earlier:state:in']]
+    assert after['workflow_locations'][0]['kind'] == 'flow'
+    assert after['read_commands'] == [['workflow', 'method']]
+    assert 'operation_ids' not in before and 'operation_ids' not in after
+    edge['claim']['change_records'][0]['workflow_locations']['earlier'][0]['field'] = '/invented'
+    with pytest.raises(ValueError):
+        context.change_context(edge['id'])
+
+
+def test_change_context_new_locations_cannot_join_another_extraction_version(context):
+    edge = historical_context(context, pair=True)
+    edge['claim']['change_records'] = [{'id': 'change', 'workflow_locations': {
+        'earlier_scope': 'bound_workflow', 'earlier': [],
+        'later': [{'kind': 'operation', 'record_id': 'copy', 'field': '/description'}]}}]
+    context.history_index['nodes']['external']['extraction_sha256'] = '0' * 64
+    data = context.change_context(edge['id'])['data']
+    assert data['before']['status'] == 'workflow_version_unavailable'
+    assert 'workflow_locations' not in data['before']
+    assert data['after']['workflow_locations'][0]['record_id'] == 'copy'

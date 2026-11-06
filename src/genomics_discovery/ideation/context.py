@@ -17,6 +17,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from genomics_discovery.illumina.graph import get_record, operation_group, workflow
+from genomics_discovery.illumina.change_records import resolve_pointer
 from genomics_discovery.illumina.history import build_history_index, technology_history
 from genomics_discovery.illumina.relationships import HISTORICAL_RELATIONS
 
@@ -344,6 +345,32 @@ class AtlasContext:
             if card is None or card.get("artifact_pins", {}).get("extraction.json") != node["extraction_sha256"]:
                 return {"status": "workflow_version_unavailable", "historical_endpoint": node,
                         "boundary": "This exact extraction version is absent from the loaded atlas; no substitute version was joined."}
+            if claim.get('change_records'):
+                locations, commands = [], []
+                for change in claim['change_records']:
+                    direction = 'earlier' if side == 'before' else 'later'
+                    scoped = change['workflow_locations']
+                    if side == 'before' and scoped['earlier_scope'] != 'bound_workflow':
+                        raise ValueError('A bound earlier endpoint needs reviewed earlier workflow locations')
+                    for anchor in scoped[direction]:
+                        pool = self.graph['edges'] if anchor['kind'] == 'flow' else self.nodes.values()
+                        records = [record for record in pool if record.get('record_id') == record_id
+                            and record.get('original', {}).get('id') == anchor['record_id']
+                            and (anchor['kind'] == 'flow' or record.get('node_type') == anchor['kind'])]
+                        if len(records) != 1:
+                            raise ValueError('Historical change references an absent or ambiguous workflow location')
+                        record = records[0]
+                        resolve_pointer(record['original'], anchor['field'])
+                        locations.append({'change_id': change['id'], **anchor, 'graph_record_id': record['id']})
+                        command = (['workflow', record_id] if anchor['kind'] == 'flow'
+                                   else ['node', record['id']])
+                        if command not in commands:
+                            commands.append(command)
+                return {'status': 'exact_workflow_join', 'binding': self._pin(record_id),
+                        'workflow_locations': locations, 'read_commands': commands,
+                        'boundary': 'Exact reviewed State, Operation, Flow or property locations only. '
+                            'A property-level contribution does not imply adoption of its whole Operation. '
+                            'Read claim for evidence and limits; use these commands for the surrounding workflow.'}
             operations = selections[side]
             if not is_pair:
                 lookup = {n["original"]["id"]: n["id"] for n in self.nodes.values()
@@ -370,7 +397,7 @@ class AtlasContext:
                     "boundary": "Read the exact group for material properties, operation descriptions and evidence before proposing a transfer."}
 
         return self._result("change-context", {"claim_id": claim_id},
-            {"format_version": "ideation_change_context/1", "view": "navigation",
+            {"format_version": "ideation_change_context/2" if claim.get('change_records') else "ideation_change_context/1", "view": "navigation",
              "relationship": {key: edge[key] for key in ("id", "source", "target", "relation")},
              "read_commands": [["claim", claim_id]],
              "before": endpoint("before", edge["source"]), "after": endpoint("after", edge["target"]),

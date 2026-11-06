@@ -248,12 +248,8 @@ def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
     return document
 
 
-def prepare_review_reuse(previous, output):
-    """Re-review exact completed research after a contract change, without re-extracting.
-
-    This cannot resume a failed/provider-blocked run. Both source custody and the
-    completed native author archive must reopen successfully before reuse.
-    """
+def validate_completed_citation(previous):
+    """Reopen a completed native citation result before reuse or workflow mapping."""
     previous = previous.resolve()
     prior = read(previous / 'state.json')
     if prior['status'] != 'completed':
@@ -275,6 +271,23 @@ def prepare_review_reuse(previous, output):
     if read(previous / 'analysis.json') != read(original):
         raise ValueError('Previous analysis handoff differs from its native artifact')
     validate('analyse', original, previous / 'inputs')
+    reviewer = [x for x in prior['stages'] if x['role'] == 'review'][-1]
+    review_path = Path(reviewer['path']) / 'artifact.json'
+    if read(previous / 'review.json') != read(review_path):
+        raise ValueError('Previous review handoff differs from its native artifact')
+    judged = validate('review', review_path, previous / 'inputs', original)
+    analysis = parse_analysis(read(original))
+    expected = graph_overlay(analysis, judged, read(previous / 'inputs/sources.json'),
+                             sha(original), read(previous / 'inputs/seed_binding.json'))
+    if read(previous / 'graph.json') != expected:
+        raise ValueError('Previous graph differs from its reviewed citation export')
+    return prior, original
+
+
+def prepare_review_reuse(previous, output):
+    """Re-review completed research; failed/provider-blocked work is never resumed."""
+    previous = previous.resolve()
+    prior, original = validate_completed_citation(previous)
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     inputs = output / 'inputs'
