@@ -1,52 +1,31 @@
-PAPER AND TECHNOLOGY CURATION — START HERE
+ILLUMINA METHOD FOLDERS — START HERE
 
-Purpose
-Resolve what each technology folder denotes and which papers actually support
-that method before starting another extraction batch. This is source curation.
-It does not approve a protocol, prove a historical edge, or start model runs.
+LATEST USER CORRECTION — 5 NOVEMBER 2026
+ACTIVE TASK: deduplicate Illumina METHODS and publish one folder per distinct
+method, containing its original classification, workflow/diagram if available,
+and correctly associated paper(s). Repeated depictions and aliases are sources
+of one method, not additional methods. Distinct implementations stay distinct.
 
-What was checked, and where to look
-1. progress/ALL_PAPERS.csv: one row per paper, its title, assigned methods,
-   acquisition status, sections actually inspected, finding and remaining review.
-   Filter review_status=not_yet_reviewed to see untouched papers.
-2. paper_content_review.json: exact abstracts/section locators and hashes supporting
-   those inspection notes. A PubMed abstract check is not a full-paper review.
-3. decisions.json: every old folder's disposition, source bindings and explanation.
-   A duplicate source depiction is not a duplicate assay. Same-paper methods can
-   remain separate; the same printed name can denote different methods.
-4. reference_bindings.json: selected method-to-paper assignments, source reference
-   identifiers, roles and reasons for excluding wrong associations. These are
-   candidate curation decisions; scientific inspection can require revisions.
-   The original 51265366 mapping is preserved in completed_51265366/. The current
-   mapping removes the incorrect MIRA-to-SINE-paper assignment. The published
-   candidate folder snapshot and running job still retain their frozen mapping;
-   use this current mapping for the next publication, not those older snapshots.
-5. progress/AUDIT_PROGRESS.json: reproducible counts from the ledger. Availability,
-   abstract checking, full-paper checking and extraction approval stay separate.
+STOP the broad every-paper content review and bibliography expansion. The user
+explicitly corrected that scope. Full-paper scientific review is NOT a prerequisite
+for method-folder organization. Only inspect a paper when needed to resolve method
+identity or its source association. No new extraction/model jobs are requested.
+Keep the old audit records; do not mistake their unfinished counts for this task.
 
-Sherlock locations
-Project: /scratch/groups/xiaojie/mstojkov/agents_snRNA
-Current audit: technology_atlas/v2/work/technology_sources_20261105/identity_review_02
-Original source collection: technology_sources/illumina_20261105
-Candidate organized folders: technology_sources/illumina_curated_20261105
-All-paper recovery bundle: technology_sources/illumina_all_paper_review_20261105
-Latest manual inspections within the current audit: manual_review_current/
-The running job's progress/ uses its earlier snapshot; never overwrite later
-manual notes with that automatic export.
+Source-identity review already accounts for all 318 provisional folders and 478
+source occurrences. Use identity_review/decisions.json and reference_bindings.json;
+check remaining identity conflicts, apply the MIRA reference correction, and keep
+the known wrong DamID cached article visibly separate from the correct citation.
+The existing candidate view is technology_sources/illumina_curated_20261105 on
+Qiu scratch. Its file integrity checks completed; source identity is separate from
+full-paper protocol validation. Broader audit job51268416 has completed; do not
+restart it. Its outputs are retained as historical source-recovery work only.
 
-The candidate folders are NOT ready for bulk extraction. Known paper-content
-identity conflicts and unresolved associations must remain visible. No original
-paper or historical extraction is overwritten by this audit.
+READING ORDER
+1. decisions.json: one disposition for every old folder, with source IDs and reason.
+2. reference_bindings.json: the selected papers for each method; not the entire bibliography.
+3. Published FOLDER_DECISIONS.csv and CHECKLIST.csv: folder mapping and source availability.
+4. progress/SOURCE_HOLDS.json: known wrong-content files that must not appear as the method paper.
 
-Job 51268416 checks cached article identity across the complete bibliography and
-attempts missing-source recovery. It makes zero model calls. Its output is a
-bibliographic audit, not a completed scientific reading of every paper. The job's
-frozen inspection snapshot must not overwrite newer manual inspection records.
-
-Reproducible commands and code
-scripts/illumina/technology_sources/README.txt explains the small source-curation
-pipeline. deployment_02/run.sh is the exact job script. Its runtime archive is
-frozen separately from development code. Preserve job receipts and source hashes.
-
-Completion requires individual paper findings and explicit handling of unavailable
-or inconsistent sources. A clean automated run is insufficient.
+The paper-content audit remains available in paper_content_review.json and progress/,
+but its unfinished bibliography is outside the active folder-curation task.
