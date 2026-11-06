@@ -1,0 +1,44 @@
+DIAGRAM DECOMPOSITION + PAPER CONFIRMATION — TEN DISTINCT METHODS
+
+Read selected.json for the exact methods, focal papers and rerun reason.
+run.py is only an adapter from the already curated method library to the existing
+genomics_discovery.illumina.extraction.extract_registered_workflow engine.
+It does not re-plan method identity or turn each source occurrence into a job.
+
+Scientific instructions are in src/genomics_discovery/illumina/prompts.py,
+especially PAPER CONFIRMATION AT DIAGRAM GRANULARITY. The schema remains
+illumina_diagram/1.1; its typed States are in representation.py.
+The diagram guides decomposition. The complete card prose explains the assay.
+Assigned article/protocol text confirms consequential inputs/outputs, changes,
+mechanisms, selection/routing, information carriers and interfaces. Primary
+evidence is attached to the assertion it supports, not just a method-paper match.
+Routine execution settings are included only when scientifically consequential.
+Existing grouped-card member identities are preserved. No unsupported details
+are supplied as an answer key in selected.json or the per-method scope.
+
+launch.sbatch freezes the model/effort at gpt-6.1-sol/xhigh and uses the existing
+dedicated Codex login on Qiu Sherlock. Four method workers by default, configurable
+with ATLAS_PILOT_WORKERS. Each has a fresh author, fresh independent reviewer and
+at most one correction followed by another fresh review. No old output is reused.
+All ten source bundles are hash-checked before the first model call.
+Sources are accessed through the existing bounded source tool; complete papers
+are available in registered files rather than pasted into each prompt. Network
+retrieval is disabled for this controlled pilot. Missing sources become recorded
+evidence needs; a correction cannot recover a missing supplement by rewriting.
+
+Outputs per method: card.json, source_registry.json, exact stage prompts/schemas,
+native command/events/usage, extraction.json, review.json and (if admitted)
+graph.json plus a deterministic workflow.txt projection. The run root contains
+selection.json, source_preflight.json, inventory.json, state.json, CHECKLIST.csv,
+RESULT.json and atlas.json. State and native stage records remain inspectable
+while running. Failures distinguish source preflight, native execution, artifact
+validation, scientific review/research and graph admission. Historical edges are
+a separate stage and are not asserted by this extraction pilot.
+
+Evaluation: inspect unsupported assertions, missing consequential facts, member
+applicability, paper confirmation at assertion level, branch/interface consistency,
+correction behavior, source-read traces, latency and token usage. Compare earlier
+results only with their source/scope differences explicit: changed source bundles
+and single-member extraction preclude attributing all gains to the prompt alone.
+Passing software checks and independent LLM review do not establish zero scientific
+errors, expert ground truth or experimentally executable protocols.

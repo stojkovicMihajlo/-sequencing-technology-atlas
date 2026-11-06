@@ -50,6 +50,36 @@ An embedded named subprotocol remains an Operation/component unless explicitly
 assigned as a separate target. Grouped headings need member applicability review;
 they are not automatically aliases or identical workflows.
 
+PAPER CONFIRMATION AT DIAGRAM GRANULARITY
+When a method paper is supplied, inspect its relevant methods, workflow figures
+and explanatory passages for each retained Operation; do not consult it only
+when the diagram is ambiguous. Confirm the following consequential details at
+the diagram's level of decomposition, using existing State/Operation/Flow fields:
+- Input and output: the actual preparation and molecular features that matter
+  to the depicted transformation or its next interface.
+- Transformation and mechanism: what changes, and the reported mechanism that
+  makes that change or selection work. Name a reagent, enzyme, chemical group
+  or condition when that property explains the action or compatibility.
+- Selection and routing: which population/fraction is retained or excluded,
+  and how separate branches, compartments and supported transfers proceed.
+- Measurement and attribution: what the final signal represents, what physically
+  carries that association, and which associations survive or are introduced.
+- Interface and distinguishing detail: what the next Operation requires of this
+  product, and any supported detail that differentiates the assigned member or
+  version from the shared schematic's other members.
+These are questions to account for when applicable, not mandatory new nodes or
+permission to invent facts. Keep a composite Operation composite when these facts
+can be recorded within it. Split only to expose an otherwise hidden consequential
+branch, interface, attribution or method-specific change; explain and source it.
+Routine volumes, durations, washes, equipment models and execution-specific
+settings are not required unless they determine one of the distinctions above.
+Attach primary evidence to the factual assertion it supports; a PaperMatch alone
+does not confirm all operations. Distinguish diagram/prose support from primary
+confirmation. If the paper does not confirm a retained catalogue-level fact,
+do not claim that it does. Record a targeted Unknown when the missing confirmation
+leaves a consequential mechanism, applicability, interface or route unsettled.
+Preserve resolvable source discrepancies as Corrections, not silent rewrites.
+
 SOURCE AND IMAGE CONTRACT
 The caller attaches the actual diagram PNGs. Inspect those images, including
 captions, end-group symbols, arrows, branches and legends. An image filename or a
@@ -252,7 +282,8 @@ First read the matching method description to establish what the assay measures
 and its operating principle. Inventory what the diagram actually depicts: labels,
 materials, major transformations, branches and final product. Combine those sources
 at the source's explanatory level, preserving whether each fact comes from text
-or the image. Use relevant primary evidence to resolve consequential ambiguity.
+or the image. Then confirm retained operations against the supplied method paper
+using PAPER CONFIRMATION AT DIAGRAM GRANULARITY, not just ambiguity resolution.
 Do not spend the task reconstructing routine unshown execution details.
 
 For each asserted transformation, state what happens to the input and what is
@@ -295,6 +326,10 @@ by the schema. Do not infer positive checks from the author's overall narrative.
 Check both directions: whether each asserted fact/connection is supported, and
 whether each consequential in-scope transformation or branch described in the
 diagram or matching catalogue prose is represented. Inspect
+primary confirmation using PAPER CONFIRMATION AT DIAGRAM GRANULARITY. Check that
+primary evidence supports the actual affected assertion, rather than accepting
+a method-level PaperMatch as confirmation of the whole workflow. Do not demand
+routine execution detail or a separate node for every confirmation question. Inspect
 joint interfaces: an operation's output state must agree with its outgoing route
 and the receiving operation's input and scope. Check compartment persistence,
 carrier identity, end-group changes, branch association and alternatives together.
