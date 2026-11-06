@@ -1,9 +1,12 @@
 import json
+import asyncio
+import copy
 from pathlib import Path
 
 import pytest
 
 from experiments.diagram_paper_pilot_20261106 import run
+from tests.illumina.test_illumina_batch_controls import acquired
 
 
 def put(path, value):
@@ -99,3 +102,80 @@ def test_curated_content_addressed_links_keep_exact_original_hash(source):
 def test_selection_is_exactly_ten_distinct_curated_methods():
     selection = run.read(Path(__file__).with_name('selected.json'))
     assert len(run.validate_selection(selection)) == 10
+
+
+def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(acquired, tmp_path, monkeypatch):
+    from tests.illumina import test_illumina_batch_controls as transport
+    from genomics_discovery.illumina import extraction as batch
+    from genomics_discovery.illumina.models import parse_extraction
+    from genomics_discovery.illumina.representation import StructuredDiagramExtraction, StructuredDiagramReview
+
+    source_root, card, acquired_sources, _ = acquired
+    registry, images = batch.card_sources(card, acquired_sources, source_root)
+    card['curation_binding'] = {'primary_paper_id': 'pmid-1'}
+    legacy = transport.candidate(registry).model_dump(mode='json')
+
+    def typed_factory(sources, *, revised=False):
+        raw = copy.deepcopy(legacy)
+        raw['format_version'] = 'illumina_diagram/1.1'
+        for state in raw['states']:
+            state['properties'] = [dict(id='identity', subject='self', property='identity',
+                value=state['label'], evidence=state['evidence'])]
+        for op in raw['operations']:
+            op.update(resolution='single_event', output_grouping='one_output',
+                input_roles=[dict(state_id=s, roles=['sample'], explanation='Synthetic input.',
+                                 evidence=op['evidence']) for s in op['inputs']],
+                effects=[dict(aspect='selection', input_state_ids=op['inputs'], output_state_ids=op['outputs'],
+                              statement=op['description'], evidence=op['evidence'])])
+        return parse_extraction(raw)
+
+    monkeypatch.setattr(transport, 'candidate', typed_factory)
+    monkeypatch.setattr(transport, 'DiagramExtraction', StructuredDiagramExtraction)
+    monkeypatch.setattr(transport, 'CurrentDiagramReview', StructuredDiagramReview)
+    worker = transport.FakeWorker()
+    monkeypatch.setattr(run, 'CodexWorker', lambda **_: worker)
+    # Source-adapter admission has separate negative tests above. This test uses
+    # a synthetic registered bundle and exercises the real remaining pipeline.
+    monkeypatch.setattr(run, 'prepare', lambda *_: [(card, registry, images)])
+    monkeypatch.setenv('SLURM_JOB_ID', 'fake-runner-publication-test')
+    selection = tmp_path / 'selection.json'
+    put(selection, {'methods': [{'method_id': 'example', 'primary_paper_id': 'pmid-1'}],
+                    'reason_for_fresh_extraction': 'Synthetic software integration test'})
+    output = tmp_path / 'pilot'
+    asyncio.run(run.execute(source_root, source_root, selection, output, 1))
+    assert [c['role'] for c in worker.calls] == ['author', 'reviewer']
+    assert run.read(output / 'RESULT.json')['all_supported'] is True
+    graph = run.read(output / 'atlas.json')
+    assert graph['cards']['example']['admission'] == 'supported'
+    assert (output / 'cards/example/attempt_001/workflow.txt').is_file()
+
+
+def test_first_failure_cancels_other_methods_and_preserves_the_reason(acquired, tmp_path, monkeypatch):
+    source_root, card, acquired_sources, _ = acquired
+    from genomics_discovery.illumina import extraction as batch
+    registry, images = batch.card_sources(card, acquired_sources, source_root)
+    card['curation_binding'] = {'primary_paper_id': 'pmid-1'}
+    other = {**card, 'record_id': 'other'}
+    monkeypatch.setattr(run, 'prepare', lambda *_: [(card, registry, images), (other, registry, images)])
+    monkeypatch.setenv('SLURM_JOB_ID', 'fake-stop-test')
+    calls = []
+
+    async def exercise():
+        ready = asyncio.Event()
+        async def registered(card, *_args, **_kwargs):
+            calls.append(card['record_id'])
+            if card['record_id'] == 'example':
+                await ready.wait()
+                raise batch.StageFailure('artifact_validation', 'Synthetic bad artifact')
+            ready.set()
+            await asyncio.Event().wait()
+        monkeypatch.setattr(run, 'extract_registered_workflow', registered)
+        selection = tmp_path / 'selection.json'
+        put(selection, {'methods': [], 'reason_for_fresh_extraction': 'Synthetic orchestration test'})
+        return await run.execute(source_root, source_root, selection, tmp_path / 'stopped', 2)
+
+    result = asyncio.run(exercise())
+    assert set(calls) == {'example', 'other'}
+    assert result['all_supported'] is False
+    assert result['counts'] == {'failed': 1, 'interrupted': 1}
+    assert 'Synthetic bad artifact' in run.read(tmp_path / 'stopped/STOP_REASON.json')['reason']

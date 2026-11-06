@@ -459,8 +459,53 @@ def load_revision_seed(seed, card, registry, representation):
     return candidate, review
 
 
+def load_author_seed(seed, card, registry, representation):
+    """Reuse a completed native author only under identical sources and instructions.
+
+    This preserves its original directory, model call and usage. It grants no
+    scientific admission: a new independent review is still required.
+    """
+    names = {"card.json", "source_registry.json", "stages.json"}
+    if set(seed) != {"directory", "pins"} or set(seed['pins']) != names:
+        raise ValueError('Author seed requires exact card, registry and stage-list pins')
+    original = Path(seed['directory'])
+    if any(sha(original / n) != pin for n, pin in seed['pins'].items()):
+        raise ValueError('Author seed bytes changed')
+    if read(original / 'card.json') != card or read(original / 'source_registry.json') != registry:
+        raise ValueError('Author reuse requires the exact same assigned card and sources')
+    stages = read(original / 'stages.json')
+    authors = [s for s in stages if s['role'] == 'author' and s.get('revision') == 0
+               and s.get('status') == 'validated']
+    if len(authors) != 1:
+        raise ValueError('Author reuse requires one validated first author')
+    stage = dict(authors[0]); attempt = Path(stage['path'])
+    assessment = assess_archived_attempt(attempt)
+    if (not assessment.complete or assessment.thread_id != stage.get('thread_id')
+            or sha(attempt / 'artifact.json') != stage['artifact_sha256']):
+        raise ValueError('Author seed native completion/custody failed')
+    verify_stage_inputs(attempt, read(attempt / 'image_delivery.json'), stage['input_pins'])
+    prompt = (attempt / 'stage_prompt.txt').read_text()
+    if (sha(attempt / 'stage_prompt.txt') != stage['prompt_sha256']
+            or prompt != (attempt / 'prompt.txt').read_text()):
+        raise ValueError('Author seed prompt changed')
+    context, _ = json.JSONDecoder().raw_decode(prompt.split('CALLER CONTEXT\n', 1)[1])
+    schema = attempt / 'schema.json'
+    if (read(schema) != author_schema(extraction_model(representation), card)
+            or build_prompt('author', context, schema) != prompt
+            or context.get('representation_version') != representation):
+        raise ValueError('Author reuse cannot change schema or scientific instructions')
+    candidate = parse_extraction((attempt / 'artifact.json').read_bytes())
+    errors = validate_assigned_extraction(candidate, registry, card, record_id=card['record_id'])
+    verify_registry_files(registry)
+    if errors:
+        raise ValueError('Author seed assertions failed validation: ' + '; '.join(errors))
+    stage['reused_from_directory'] = str(original)
+    return candidate, stage
+
+
 async def extract_registered_workflow(card, registry, images, directory, worker, max_revisions=1,
-                                      representation="illumina_diagram/1.1", revision_seed=None):
+                                      representation="illumina_diagram/1.1", revision_seed=None,
+                                      author_seed=None):
     """One scoped work unit, with its registered source bundle and independent review.
 
     Method identity/scope planning is a separate gate. This function neither
@@ -479,11 +524,18 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
         if registry.get(sid, {}).get("kind") != "image" or sha(image_path) != registry[sid].get("sha256"):
             raise ValueError("Workflow image must match its registered source: " + sid)
     candidate, review = None, None
+    if author_seed is not None and revision_seed is not None:
+        raise ValueError('Choose an author seed or a revision seed, not both')
     if revision_seed is not None:
         if max_revisions != 1:
             raise ValueError("An explicit revision seed permits exactly one correction and fresh review")
         candidate, review = load_revision_seed(revision_seed, card, registry, representation)
+    reused_author = None
+    if author_seed is not None:
+        candidate, reused_author = load_author_seed(author_seed, card, registry, representation)
     directory.mkdir(parents=True, exist_ok=False)
+    if author_seed is not None:
+        write(directory / 'author_seed.json', author_seed)
     if revision_seed is not None:
         write(directory / "revision_seed.json", revision_seed)
     write(directory / "card.json", card)
@@ -491,7 +543,7 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
     source_path = directory / "source_registry.json"
     write(source_path, registry)
     source_pin = sha(source_path)
-    stages = []
+    stages = [] if reused_author is None else [reused_author]
     prior_candidate, prior_review = None, None
 
     async def stage(role, revision):
@@ -537,6 +589,8 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
         fixed_inputs = [attempt / "schema.json", attempt / "stage_prompt.txt", attempt / "image_delivery.json"]
         if revision_seed is not None:
             fixed_inputs.append(directory / "revision_seed.json")
+        if author_seed is not None:
+            fixed_inputs.append(directory / 'author_seed.json')
         if role == "reviewer":
             fixed_inputs.append(candidate_path)
         fixed_inputs.extend(Path(value["path"]) for value in feedback_files.values())
@@ -592,7 +646,8 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
 
     for revision in range(1 if revision_seed is not None else 0, max_revisions + 1):
         prior_candidate, prior_review = candidate, review
-        candidate = await stage("author", revision)
+        if not (author_seed is not None and revision == 0):
+            candidate = await stage("author", revision)
         review = await stage("reviewer", revision)
         outcome = review_outcome(review, candidate, registry)
         write(directory / "extraction.json", candidate.model_dump(mode="json"))
@@ -608,7 +663,8 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
         "candidate_sha256": digest(candidate), "review_sha256": digest(review),
         "artifact_pins": {name: sha(directory / name) for name in
             ("card.json", "source_registry.json", "extraction.json", "review.json", "graph.json", "stages.json")
-            + (("revision_seed.json",) if revision_seed is not None else ())},
+            + (("revision_seed.json",) if revision_seed is not None else ())
+            + (("author_seed.json",) if author_seed is not None else ())},
         "research_questions": questions,
         "reason": "; ".join(q["target"] + ": " + q["question"] for q in questions)[:3000]}
 

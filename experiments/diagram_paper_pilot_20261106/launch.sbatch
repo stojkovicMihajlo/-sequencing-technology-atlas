@@ -26,7 +26,9 @@ backup_results() {
     trap - EXIT
     backup_root="$GROUP_HOME/mstojkov/atlas-results/diagram_paper_pilot_20261106"
     items=("$ATLAS_PILOT_RUNTIME.tar.gz" "${ATLAS_PILOT_RUNTIME}_manifest.json")
-    for item in "$ATLAS_PILOT_OUTPUT" "software_${SLURM_JOB_ID}.xml"; do
+    for item in "$ATLAS_PILOT_OUTPUT" "${ATLAS_PILOT_RESUME_OUTPUT:-}" \
+        "${ATLAS_PILOT_DEPENDENCY_OUTPUT:-}" "software_${SLURM_JOB_ID}.xml"; do
+        [[ -n "$item" ]] || continue
         [[ ! -e "$ATLAS_PILOT_ROOT/$item" ]] || items+=("$item")
     done
     mkdir -p "$backup_root"
@@ -62,10 +64,24 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p asynci
     tests/illumina/test_representation_contract.py tests/illumina/test_representation_pipeline.py \
     tests/illumina/test_representation_semantic_controls.py tests/illumina/test_illumina_graph.py \
     tests/illumina/test_illumina_batch_controls.py tests/illumina/test_illumina_operation_groups.py \
+    tests/illumina/test_illumina_author_resume.py \
     experiments/diagram_paper_pilot_20261106/test_sources.py \
+    experiments/diagram_paper_pilot_20261106/test_dependencies.py \
     --junitxml="$ATLAS_PILOT_ROOT/software_${SLURM_JOB_ID}.xml"
+extra_args=()
+if [[ -n "${ATLAS_PILOT_RESUME_OUTPUT:-}" ]]; then
+    extra_args+=(--resume-authors "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_RESUME_OUTPUT")
+fi
+if [[ -n "${ATLAS_PILOT_DEPENDENCY_OUTPUT:-}" ]]; then
+    : "${ATLAS_PILOT_RESUME_OUTPUT:?Dependency recovery requires the evidence-request parent run}"
+    "$ATLAS_ENV_DIR/bin/python" -m experiments.diagram_paper_pilot_20261106.recover_dependencies \
+        --requests "$ATLAS_REPOSITORY/experiments/diagram_paper_pilot_20261106/dependency_requests.json" \
+        --previous-run "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_RESUME_OUTPUT" \
+        --output "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_DEPENDENCY_OUTPUT"
+    extra_args+=(--additions "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_DEPENDENCY_OUTPUT/registered_additions.json")
+fi
 "$ATLAS_ENV_DIR/bin/python" -m experiments.diagram_paper_pilot_20261106.run \
     --library "$ATLAS_PROJECT_ROOT/technology_sources/illumina_library_20261105_07" \
     --vault "$ATLAS_PROJECT_ROOT/technology_sources/illumina_task2_sources_20261105_08" \
     --selection "$ATLAS_REPOSITORY/experiments/diagram_paper_pilot_20261106/selected.json" \
-    --output "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_OUTPUT" --workers "${ATLAS_PILOT_WORKERS:-4}"
+    --output "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_OUTPUT" --workers "${ATLAS_PILOT_WORKERS:-4}" "${extra_args[@]}"

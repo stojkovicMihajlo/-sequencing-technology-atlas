@@ -19,7 +19,8 @@ are supplied as an answer key in selected.json or the per-method scope.
 launch.sbatch freezes the model/effort at gpt-6.1-sol/xhigh and uses the existing
 dedicated Codex login on Qiu Sherlock. Four method workers by default, configurable
 with ATLAS_PILOT_WORKERS. Each has a fresh author, fresh independent reviewer and
-at most one correction followed by another fresh review. No old output is reused.
+no automatic correction inside this diagnostic pilot: the first nonaccepted
+review or failed stage stops the other tasks for inspection and a new submission. No old output is reused.
 All ten source bundles are hash-checked before the first model call.
 Sources are accessed through the existing bounded source tool; complete papers
 are available in registered files rather than pasted into each prompt. Network
@@ -42,3 +43,32 @@ results only with their source/scope differences explicit: changed source bundle
 and single-member extraction preclude attributing all gains to the prompt alone.
 Passing software checks and independent LLM review do not establish zero scientific
 errors, expert ground truth or experimentally executable protocols.
+
+6 NOVEMBER RESTART CONTROLS
+Job51312819 was cancelled at the user request after10m32s. Eight first authors
+had validated; no scientific reviews had completed. Those drafts are not admitted
+graphs. The first source limitation was a ChIP-exo application paper delegating
+method details to Rhee/Pugh2011. dependency_requests.json records the actual
+parent passage and requested publication identity, not a workflow answer.
+recover_dependencies.py fetches that explicit request through the existing official
+PMC OAI acquirer, verifies the original article own PMID/DOI and nonempty body,
+and registers new pinned evidence in a separate directory before model calls.
+It does not autonomously decide which arbitrary citations or Unknowns to follow.
+
+The new pilot adapter also fixes a publisher handoff omission: inventory_sha256
+and record_ids are now in the batch policy, with an integration test through
+actual graph export/reopening. Software tests previously covered source admission
+but did not exercise this new adapter final handoff; the old job was stopped
+before it reached that bug.
+
+--resume-authors preserves completed native authors only under identical cards,
+registered evidence, output schema and scientific instructions. Their original
+threads, files, timestamps and usage remain attributed to the old run. A new
+independent reviewer is required. Changed evidence forces a new author. Incomplete
+authors are not reused. source_preflight.json and author_reuse.json record the
+actual decisions; no claim of newly generating a reused draft is made.
+
+The first failed call/validation or nonaccepted scientific review stops other
+method tasks and writes STOP_REASON.json. A source qualification that is honestly
+outside an asserted claim is not automatically a failure. No source or frozen
+runtime is edited while model tasks are running.

@@ -14,6 +14,7 @@ from pathlib import Path
 from genomics_discovery.execution.codex_worker import CodexWorker
 from genomics_discovery.illumina.extraction import (
     checkpoint, extract_registered_workflow, now, read, sha, verify_registry_files, write,
+    load_author_seed,
 )
 from genomics_discovery.illumina.graph import build_graph, protocol_text
 
@@ -152,7 +153,11 @@ def prepare(library, vault, selection):
     return [prepare_method(paths[r['method_id']], vault, r) for r in rows]
 
 
-async def execute(library, vault, selection_path, output, workers):
+class PilotIssue(RuntimeError):
+    """Stop other method tasks at the first nonaccepted extraction/review result."""
+
+
+async def execute(library, vault, selection_path, output, workers, *, additions_path=None, resume_authors=None):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Native extraction requires a Sherlock Slurm allocation')
     if not 1 <= workers <= 10:
@@ -162,6 +167,34 @@ async def execute(library, vault, selection_path, output, workers):
     write(output / 'selection.json', selection)
     try:
         bundles = prepare(library.resolve(), vault.resolve(), selection)
+        additions = read(additions_path) if additions_path else {}
+        if set(additions) - {c['record_id'] for c, _, _ in bundles}:
+            raise ValueError('Dependency additions name an unselected method')
+        seeds, reuse_decisions = {}, {}
+        for card, registry, _ in bundles:
+            ident = card['record_id']
+            for sid, source in additions.get(ident, {}).items():
+                if sid in registry or source.get('kind') != 'text' or source.get('content_level') != 'fulltext':
+                    raise ValueError('Dependency must be a distinct registered full-text source')
+                registry[sid] = source
+                card['references'].append({'reference_id': ident + ':dependency:' + source['pmid'],
+                                          'role': 'recovered', 'pmid': source['pmid']})
+            verify_registry_files(registry)
+            if resume_authors is None:
+                continue
+            old = resume_authors / 'cards' / ident / 'attempt_001'
+            stages = read(old / 'stages.json') if (old / 'stages.json').exists() else []
+            if not any(s['role'] == 'author' and s.get('revision') == 0 and s.get('status') == 'validated' for s in stages):
+                reuse_decisions[ident] = 'fresh author: earlier native author did not finish validation'
+            elif read(old / 'card.json') != card or read(old / 'source_registry.json') != registry:
+                reuse_decisions[ident] = 'fresh author: assigned scope or registered evidence changed'
+            else:
+                seed = {'directory': str(old), 'pins': {n: sha(old / n)
+                        for n in ('card.json', 'source_registry.json', 'stages.json')}}
+                load_author_seed(seed, card, registry, 'illumina_diagram/1.1')
+                seeds[ident] = seed
+                reuse_decisions[ident] = 'reuse validated author; require a fresh independent review'
+        write(output / 'author_reuse.json', reuse_decisions)
     except Exception as exc:
         write(output / 'source_preflight.json', {'status': 'failed', 'native_calls': 0,
             'error': f'{type(exc).__name__}: {exc}', 'time': now()})
@@ -175,7 +208,8 @@ async def execute(library, vault, selection_path, output, workers):
     inventory = output / 'inventory.json'
     write(inventory, {'cards': cards})
     policy = {'model': 'gpt-6.1-sol', 'effort': 'xhigh', 'workers': workers,
-              'max_revisions': 1, 'representation_version': 'illumina_diagram/1.1',
+              'max_revisions': 0, 'stop_on_first_issue': True, 'representation_version': 'illumina_diagram/1.1',
+              'inventory_sha256': sha(inventory), 'record_ids': [c['record_id'] for c in cards],
               'library': str(library.resolve()), 'vault': str(vault.resolve()),
               'selection_sha256': sha(selection_path), 'prior_extractions_used_as_evidence': False}
     state = {'started_at': now(), 'slurm_job_id': os.environ['SLURM_JOB_ID'], 'policy': policy,
@@ -195,13 +229,31 @@ async def execute(library, vault, selection_path, output, workers):
             checkpoint(output, state, cards)
             try:
                 row.update(await extract_registered_workflow(card, registry, images, directory, worker,
-                    max_revisions=1, representation='illumina_diagram/1.1'))
+                    max_revisions=0, representation='illumina_diagram/1.1', author_seed=seeds.get(ident)))
+            except asyncio.CancelledError:
+                row.update(status='interrupted', reason='Pilot stopped after another method exposed an issue',
+                           finished_at=now())
+                checkpoint(output, state, cards)
+                raise
             except Exception as exc:
                 row.update(status='failed', reason=f'{type(exc).__name__}: {exc}',
                            failure_category=getattr(exc, 'category', 'unclassified_stage_error'))
             row['finished_at'] = now()
             checkpoint(output, state, cards)
-    await asyncio.gather(*(one(*bundle) for bundle in bundles))
+            if row['status'] != 'supported':
+                raise PilotIssue(ident + ': ' + row.get('reason', row['status']))
+    tasks = [asyncio.create_task(one(*bundle)) for bundle in bundles]
+    stop_reason = None
+    try:
+        await asyncio.gather(*tasks)
+    except PilotIssue as exc:
+        stop_reason = str(exc)
+        for task in tasks:
+            if not task.done():
+                task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+        write(output / 'STOP_REASON.json', {'reason': stop_reason, 'time': now(),
+            'policy': 'Stop on a failed call/validation or nonaccepted review; nonblocking source qualifications alone do not trigger restart.'})
     state['finished_at'] = now()
     checkpoint(output, state, cards)
     graph = build_graph(output, inventory)
@@ -212,9 +264,11 @@ async def execute(library, vault, selection_path, output, workers):
             (graph_path.parent / 'workflow.txt').write_text(protocol_text(read(graph_path)))
     errors = [key for key, row in state['cards'].items() if row['status'] == 'supported'
               and graph['cards'][key].get('admission') != 'supported']
-    write(output / 'RESULT.json', {'counts': state['counts'], 'publication_errors': errors,
+    report = {'counts': state['counts'], 'publication_errors': errors, 'stop_reason': stop_reason,
         'all_supported': not errors and all(r['status'] == 'supported' for r in state['cards'].values()),
-        'boundary': 'Independent model review, not expert ground truth, executable validation or historical-edge confirmation.'})
+        'boundary': 'Independent model review, not expert ground truth, executable validation or historical-edge confirmation.'}
+    write(output / 'RESULT.json', report)
+    return report
 
 
 if __name__ == '__main__':
@@ -222,5 +276,9 @@ if __name__ == '__main__':
     for name in ('library', 'vault', 'selection', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--workers', type=int, default=4)
+    parser.add_argument('--additions', type=Path)
+    parser.add_argument('--resume-authors', type=Path)
     args = parser.parse_args()
-    asyncio.run(execute(args.library, args.vault, args.selection, args.output, args.workers))
+    report = asyncio.run(execute(args.library, args.vault, args.selection, args.output, args.workers,
+        additions_path=args.additions, resume_authors=args.resume_authors))
+    raise SystemExit(0 if report['all_supported'] else 2)
