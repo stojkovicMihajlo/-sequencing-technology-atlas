@@ -117,6 +117,27 @@ def test_poster_row_windows_preserve_group_labels_without_neighbor_names(records
     assert any(overlap(target['row']['prior_tight_region_proposal'], box) for box in previous['row']['exact_label_bboxes'])
     assert not any(overlap(target['pdf_point_box'], box) for box in previous['row']['exact_label_bboxes'])
     assert all(r['own_method_labels_contained'] and not r['neighbor_method_labels_intersect'] for r in rows)
+    assert all(r['workflow_extent_review'] == 'pending_visual_review' for r in rows)
+
+
+def test_diagram_rejections_require_exact_image_and_cannot_approve_workflows():
+    from scripts.illumina.technology_sources.publish_curated import apply_diagram_rejections
+    state = {'sources': {'s': {'diagrams': [{'sha256': 'original', 'quality': 'pending'}]}}}
+    finding = {'source_id': 's', 'image_sha256': 'original',
+        'status': 'rejected_as_complete_workflow_view', 'reviewer': 'Visual inspection',
+        'finding': 'The reaction input label is clipped.'}
+    review = {'poster_previews': {'reviewed_examples': [finding]}}
+    bad = copy.deepcopy(review)
+    bad['poster_previews']['reviewed_examples'].append({**finding, 'image_sha256': 'changed'})
+    with pytest.raises(ValueError, match='does not match source and bytes'):
+        apply_diagram_rejections(state, bad)
+    assert state['sources']['s']['diagrams'][0]['quality'] == 'pending'
+    bad = {'poster_previews': {'reviewed_examples': [{**finding, 'status': 'approved'}]}}
+    with pytest.raises(ValueError, match='cannot approve a workflow'):
+        apply_diagram_rejections(state, bad)
+    apply_diagram_rejections(state, review)
+    assert state['sources']['s']['diagrams'][0]['visual_review'] == finding
+    assert state['sources']['s']['diagrams'][0]['quality'] == finding['status']
 
 
 def test_category_layout_preserves_subclassifications_and_rejects_unplaced_methods(records):
@@ -265,9 +286,13 @@ def test_published_folders_only_link_assigned_papers_and_original_bytes(tmp_path
     from scripts.illumina.technology_sources.materialize import materialize
     from scripts.illumina.technology_sources.publish_curated import publish
     from scripts.illumina.technology_sources.review_papers import prepare
+    image = tmp_path / 'shared-diagram.png'
+    image.write_bytes(b'Original unmodified diagram bytes')
+    image_hash = hashlib.sha256(image.read_bytes()).hexdigest()
     registry = tmp_path / 'registry.json'
     registry.write_text(json.dumps({
         'card:shared': {'content_level': 'catalogue', 'text': 'A and B share a cartoon.', 'title': 'A / B'},
+        'diagram:shared': {'kind': 'image', 'path': str(image), 'sha256': image_hash},
         'paper:1': {'pmid': '1', 'title': 'Paper A', 'content_level': 'abstract'},
         'paper:2': {'pmid': '2', 'title': 'Paper B', 'content_level': 'abstract'},
         'paper:3': {'pmid': '3', 'title': 'Related paper C', 'content_level': 'abstract'}}))
@@ -297,6 +322,25 @@ def test_published_folders_only_link_assigned_papers_and_original_bytes(tmp_path
     assert related['bibliographic_association'] == 'unassigned_source_bibliography'
     result = publish(bundle, tmp_path / 'curated', d, b)
     assert result['validation']['passed']
+    finding = {'source_id': 'shared', 'image_sha256': image_hash,
+        'status': 'rejected_as_complete_workflow_view', 'reviewer': 'Visual inspection',
+        'finding': 'Input label is clipped.'}
+    rejected = publish(bundle, tmp_path / 'quality_view', d, b,
+                       source_quality_review={'poster_previews': {'reviewed_examples': [finding]}})
+    for mid in ('a', 'b'):
+        method = rejected['methods'][mid]
+        directory = tmp_path / 'quality_view' / method['directory']
+        assert method['diagram_quality_holds'] == [finding]
+        assert not method['extraction_authorized']
+        assert method['workflow_validation']['paper_confirmation_required']
+        comparison = json.loads((directory / 'source_comparison.json').read_text())
+        assert comparison['depictions'][0]['diagrams'][0]['visual_review'] == finding
+        html = (directory / 'index.html').read_text()
+        assert '<summary>Rejected preview: Input label is clipped.</summary>' in html
+        assert 'paper or published protocol must confirm operations' in html
+    # Publication overlays cannot silently rewrite the preserved source record.
+    preserved = json.loads((bundle / 'collection.json').read_text())
+    assert 'visual_review' not in preserved['sources']['shared']['diagrams'][0]
     a = tmp_path / 'curated' / result['methods']['a']['directory']
     assert (a / 'papers/pmid-1/paper.json').is_file()
     assert not (a / 'papers/pmid-2').exists()

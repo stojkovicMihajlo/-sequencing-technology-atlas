@@ -26,9 +26,41 @@ def table_file(path, rows):
         writer.writerows(rows)
 
 
-def publish(source_root, output, decisions, bindings, source_holds=None, category_assignments=None):
+def apply_diagram_rejections(state, review):
+    """Bind negative visual findings to exact images, without editing source bytes.
+
+    This does not approve any image or workflow. A method-title geometry check
+    and successful file acquisition are not scientific workflow verification.
+    """
+    matched = []
+    seen = set()
+    for finding in review.get('poster_previews', {}).get('reviewed_examples', []):
+        rid, digest = finding['source_id'], finding['image_sha256']
+        if (rid, digest) in seen:
+            raise ValueError('Duplicate image-quality finding: ' + rid)
+        seen.add((rid, digest))
+        if finding['status'] != 'rejected_as_complete_workflow_view':
+            raise ValueError('Source-quality holds cannot approve a workflow: ' + rid)
+        if not finding.get('finding') or not finding.get('reviewer'):
+            raise ValueError('Image-quality rejection requires a finding and reviewer: ' + rid)
+        images = [item for item in state['sources'].get(rid, {}).get('diagrams', [])
+                  if item['sha256'] == digest]
+        if not images:
+            raise ValueError('Image-quality finding does not match source and bytes: ' + rid)
+        matched.extend((item, finding) for item in images)
+    # Validate the whole review before changing the in-memory publication view.
+    for item, finding in matched:
+        item['quality_before_review'] = item.get('quality')
+        item['quality'] = finding['status']
+        item['visual_review'] = finding
+
+
+def publish(source_root, output, decisions, bindings, source_holds=None, category_assignments=None,
+            source_quality_review=None):
     source_root, output = Path(source_root).resolve(), Path(output).resolve()
     state = read(source_root / 'collection.json')
+    source_quality_review = source_quality_review or {}
+    apply_diagram_rejections(state, source_quality_review)
     result = compile_inventory(state['inventory'], decisions, bindings, state['papers'])
     source_holds = source_holds or {'holds': []}
     category_assignments = category_assignments or {}
@@ -50,9 +82,17 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
     write(output / 'EXCLUDED_REFERENCES.json', result['excluded_references'])
     write(output / 'SOURCE_HOLDS.json', source_holds)
     write(output / 'CATEGORY_ASSIGNMENTS.json', category_assignments)
+    write(output / 'SOURCE_QUALITY_REVIEW.json', source_quality_review)
+    workflow_validation = {'status': 'not_performed', 'paper_confirmation_required': True,
+                          'poster_crop_geometry_is_insufficient': True}
     rows = []
     for mid, m in sorted(result['methods'].items()):
         m['category_assignments'] = category_assignments.get(mid, [])
+        m['extraction_authorized'] = False
+        m['workflow_validation'] = dict(workflow_validation)
+        m['diagram_quality_holds'] = [finding
+            for finding in source_quality_review.get('poster_previews', {}).get('reviewed_examples', [])
+            if finding['source_id'] in m['source_records']]
         m['placements'] = placements(m, m['category_assignments'])
         directory = output / method_directory(m, m['placements'])
         directory.mkdir(parents=True)
@@ -64,6 +104,7 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
         index_path = os.path.relpath(output / 'index.html', directory)
         body = '<h1>' + escape(m['name']) + '</h1><p><a href="' + escape(index_path) + '">Index</a> · <a href="method.json">Method record</a> · <a href="references.json">Selected references</a></p>'
         body += '<p>' + escape(m['entry_type']) + ' · ' + escape(m['identity_status']) + '</p>'
+        body += '<p><b>Source collection, not a verified workflow.</b> The method paper or published protocol must confirm operations, order and material routing. Diagrams guide scope and level of detail.</p>'
         description = describe(state, m)
         m['description'] = description
         write(directory / 'description.json', description)
@@ -91,8 +132,14 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
                 label = ('Row view from original poster: label geometry checked; visual review pending'
                          if item.get('source_kind') == 'poster_row_view' else 'Original source image')
                 img = '<p><a href="' + escape(rel) + '">' + label + '</a></p><img loading="lazy" src="' + escape(rel) + '">'
-                body += ('<details><summary>Original broad context crop; neighboring rows may appear</summary>' + img + '</details>'
-                         if item.get('source_kind') == 'legacy_broad_context_crop' else img)
+                if item.get('visual_review'):
+                    body += '<details><summary>Rejected preview: ' + escape(item['visual_review']['finding']) + '</summary>' + img + '</details>'
+                elif item.get('source_kind') == 'poster_row_view':
+                    body += '<details><summary>Unreviewed poster preview; complete workflow capture has not been checked</summary>' + img + '</details>'
+                elif item.get('source_kind') == 'legacy_broad_context_crop':
+                    body += '<details><summary>Original broad context crop; neighboring rows may appear</summary>' + img + '</details>'
+                else:
+                    body += img
                 diagrams.add(item['sha256'])
             for item in src.get('documents', []):
                 folder = 'posters' if 'for-all-you-seq' in item['path'] else 'guides'
@@ -215,7 +262,8 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
     report = publish_report(output, state['inventory'], result, state['sources'])
     result['counts'] = report['counts']
     write(output / 'canonical_inventory.json', result)
-    write(output / 'SUMMARY.json', {'counts': result['counts'], 'validation': result['validation'], 'extraction_authorized': False})
+    write(output / 'SUMMARY.json', {'counts': result['counts'], 'validation': result['validation'],
+                                  'extraction_authorized': False, 'workflow_validation': workflow_validation})
     table = ''.join('<tr><td><a href="' + escape(r['directory']) + '/index.html">' + escape(r['name']) + '</a></td><td>' + escape(r['entry_type']) + '</td><td>' + str(r['depictions']) + '</td><td>' + str(r['method_fulltexts']) + '/' + str(r['method_papers']) + '</td></tr>' for r in rows)
     (output / 'index.html').write_text(page('Curated Illumina sources', '<h1>Curated Illumina source inventory</h1><p>One entry per reviewed catalogue method or scoped lineage. Resources and unresolved labels are explicitly separated. This does not count independent inventions or approve protocol extraction.</p><p><a href="FOLDER_DECISIONS.csv">Every original folder and its disposition</a> · <a href="CHECKLIST.csv">Coverage and availability</a></p><input id="q" placeholder="Find a method"><table><thead><tr><th>Entry</th><th>Type</th><th>Depictions</th><th>Method fulltexts / papers</th></tr></thead><tbody>' + table + '</tbody></table><script>document.getElementById("q").oninput=function(){for(const r of document.querySelectorAll("tbody tr")){r.hidden=!r.innerText.toLowerCase().includes(this.value.toLowerCase())}}</script>'))
     (output / 'README.txt').write_text('CURATED SOURCES — NOT EXTRACTED GRAPHS\n\nOpen index.html; FOLDER_DECISIONS.csv accounts for every original folder.\n'
@@ -238,10 +286,13 @@ def main():
     p.add_argument('--bindings', required=True, type=Path)
     p.add_argument('--source-holds', type=Path)
     p.add_argument('--category-assignments', type=Path)
+    p.add_argument('--source-quality-review', type=Path,
+                   help='Recorded visual rejections, matched to exact source IDs and image hashes')
     args = p.parse_args()
     result = publish(args.source_root, args.output, read(args.decisions), read(args.bindings),
         read(args.source_holds) if args.source_holds else None,
-        read(args.category_assignments) if args.category_assignments else None)
+        read(args.category_assignments) if args.category_assignments else None,
+        read(args.source_quality_review) if args.source_quality_review else None)
     print(json.dumps({'counts': result['counts'], 'validation': result['validation']}, indent=2))
 
 
