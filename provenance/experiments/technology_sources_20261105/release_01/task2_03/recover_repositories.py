@@ -23,12 +23,16 @@ def main():
     p.add_argument('--targets', type=Path, required=True)
     p.add_argument('--holds', type=Path, required=True)
     p.add_argument('--additional-urls', type=Path, required=True)
+    p.add_argument('--attempt-name', default='acquisition_repositories',
+                   help='New acquisition subdirectory; use a fresh name when the source vault retains older attempts.')
     a = p.parse_args()
+    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]*', a.attempt_name):
+        p.error('--attempt-name must be one safe directory name')
     state = read(a.root/'collection.json')
     held = {h['paper_id'] for h in read(a.holds)['holds']}
     additions = read(a.additional_urls)
     targets = read(a.targets)
-    directory = a.root/'acquisition_repositories'
+    directory = a.root/a.attempt_name
     directory.mkdir(exist_ok=False)
     receipts = {}
     for n, pid in enumerate(targets, 1):
