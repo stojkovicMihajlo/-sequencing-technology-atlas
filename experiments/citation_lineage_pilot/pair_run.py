@@ -19,6 +19,7 @@ from genomics_discovery.execution.codex_worker import CodexWorker, assess_archiv
 from genomics_discovery.illumina.extraction import read, sha, source_excerpt, stage_images, verify_stage_inputs, write
 from genomics_discovery.illumina import relationships as relationship_policy
 from genomics_discovery.illumina.graph import _load_card, operation_group
+from genomics_discovery.illumina.history_inputs import resolve_article
 from models import Review
 from pair_models import PairAnalysis, export_pair, validate_pair, validate_pair_review
 from pair_prompts import build_prompt
@@ -27,7 +28,7 @@ from run import bibliography, review_cycle
 
 def prepare_primary(source, source_id, side, inputs):
     """Copy the registered original; do not mistake unparsed PDF references for none."""
-    original = source["original"]
+    original = resolve_article(source)
     article = Path(original["path"])
     raw = article.read_bytes()
     if hashlib.sha256(raw).hexdigest() != original.get("sha256"):

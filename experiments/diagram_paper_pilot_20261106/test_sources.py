@@ -203,6 +203,16 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
     graph = run.read(output / 'atlas.json')
     assert graph['cards']['example']['admission'] == 'supported'
     assert (output / 'cards/example/attempt_001/workflow.txt').is_file()
+    from genomics_discovery.illumina.history_inputs import snapshot_accepted
+    prior_state = (output / 'state.json').read_bytes()
+    snapshot = tmp_path / 'history-snapshot'
+    assert snapshot_accepted(output, snapshot)['accepted_methods'] == ['example']
+    assert (output / 'state.json').read_bytes() == prior_state
+    frozen_pin = run.sha(snapshot / 'state.json')
+    active = run.read(output / 'state.json'); active['updated_at'] = 'A later active-batch update'
+    put(output / 'state.json', active)
+    assert run.sha(snapshot / 'state.json') == frozen_pin
+    assert run.build_graph(snapshot, snapshot / 'inventory.json')['cards']['example']['admission'] == 'supported'
     calls = len(worker.calls)
     resumed = tmp_path / 'resumed-pilot'
     asyncio.run(run.execute(source_root, source_root, selection, resumed, 1, resume_authors=output))

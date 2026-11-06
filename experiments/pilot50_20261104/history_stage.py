@@ -20,6 +20,7 @@ from genomics_discovery.illumina.extraction import read, sha, write
 from genomics_discovery.illumina.graph import _load_card, build_graph
 from genomics_discovery.illumina.relationships import load_reviewed_pair, RELATIONS
 from genomics_discovery.illumina.sources import jats_text
+from genomics_discovery.illumina.history_inputs import resolve_article
 
 
 def key(value):
@@ -33,9 +34,13 @@ def _paper(source_id, source):
             "article": None, "article_sha256": None,
             "text_sha256": hashlib.sha256(source.get("text", "").encode()).hexdigest(), "format": None,
             "seed_eligible": False, "pair_eligible": False}
-    original = source.get("original", {})
-    if source.get("content_level") != "fulltext" or not original.get("path"):
+    if source.get("content_level") != "fulltext":
         item["hold_reason"] = "registered_fulltext_original_unavailable"
+        return item
+    try:
+        original = resolve_article(source)
+    except (OSError, ValueError) as exc:
+        item.update(hold_reason="registered_original_missing_or_changed", source_error=str(exc))
         return item
     path = Path(original["path"])
     if not path.is_file() or sha(path) != original.get("sha256"):

@@ -24,6 +24,7 @@ from genomics_discovery.illumina.extraction import (
 )
 from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jats_text, parse_pubmed
 from genomics_discovery.illumina.citations import bibliography
+from genomics_discovery.illumina.history_inputs import resolve_article
 from models import (
     Analysis, CurrentAnalysis, CurrentNominations, Nominations, Review, graph_overlay, parse_analysis, validate_analysis,
     validate_nominations, validate_review,
@@ -49,7 +50,7 @@ def validate_reference_cache(cache):
 def validate_cached_reference(pmid, source):
     """Bind reused text to registered bytes, not only to a self-declared PMID."""
     verify_registry_files({pmid: source})
-    original = source.get('original', {})
+    original = resolve_article(source)
     path = Path(original.get('path', ''))
     if not path.is_file() or sha(path) != original.get('sha256'):
         raise ValueError('Cached primary original is absent or changed')
@@ -97,7 +98,8 @@ def prepare(args):
     paper = registry[args.paper]
     if paper["content_level"] != "fulltext":
         raise ValueError("Seed citation tracing requires the actual full paper")
-    if sha(args.article) != paper["original"]["sha256"]:
+    original = resolve_article(paper)
+    if sha(args.article) != original["sha256"]:
         raise ValueError("Seed bibliography XML is not the registered article")
     raw = args.article.read_bytes()
     text, _ = jats_text(raw)
@@ -120,7 +122,7 @@ def prepare(args):
                  "text": text, "url": paper.get("url"), "pmid": paper.get("pmid"),
                  "provenance": {"source_registry": str(parent / 'source_registry.json'),
                                 "sha256": row['artifact_pins']['source_registry.json'],
-                                "source_id": args.paper, "original": paper["original"]}},
+                                "source_id": args.paper, "original": original}},
         "catalogue": {"content_level": "catalogue", "text": json.dumps(cards, ensure_ascii=False, indent=2)},
         "bibliography": {"content_level": "seed_reference_contexts", "text": json.dumps(refs, ensure_ascii=False, indent=2)},
     }
