@@ -141,6 +141,10 @@ def overview():
 
 
 def build(project, output, *, render_png=False):
+    if __package__:
+        from .workflow_views import build as build_workflow_views
+    else:
+        from workflow_views import build as build_workflow_views
     experiment = project / "experiments/history_changes_20261106"
     batch = experiment / "completed_batch_51341499/batch_10_01"
     index_path = batch / "connections/history_index.json"
@@ -273,6 +277,7 @@ def build(project, output, *, render_png=False):
 *{box-sizing:border-box}body{font:17px/1.6 Arial,Helvetica,sans-serif;background:#f3f6f8;color:#172a38;margin:0}main{max-width:1180px;margin:auto;padding:40px 28px}h1{font-size:34px;line-height:1.2}h2{font-size:26px}h3{font-size:18px;color:#20546a;margin-bottom:8px}h4{margin-bottom:6px}.lead{max-width:950px}.stats{display:flex;gap:12px;flex-wrap:wrap;margin:25px 0}.stats div{background:white;border:1px solid #cedbe3;border-radius:10px;padding:14px 20px}.stats b{font-size:27px;display:block}.figure,article{background:white;border:1px solid #cad8e1;border-radius:12px;padding:24px;margin:24px 0}.figure svg{width:100%;height:auto;min-width:700px}.figure{overflow-x:auto}.pair{display:grid;grid-template-columns:1fr 1fr;gap:24px}.pair>div,.effect{background:#f5f8fa;padding:8px 18px;border-radius:8px}.effect{margin:12px 0}.badge{font-size:13px;border:1px solid #a9bbc7;border-radius:5px;display:inline-block;padding:4px 8px;margin:2px 6px 2px 0}.mapped{background:#e9f5ee}.paper{background:#fff6e5}.path{font-size:21px;font-weight:bold}.muted,small{color:#576e7c}a{color:#145a7b}details{border-top:1px solid #dae3e9;margin-top:15px;padding-top:12px}summary{cursor:pointer;font-weight:bold}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;background:#f3f6f8;padding:12px}blockquote{margin:10px 0 22px;border-left:3px solid #8aa7b7;padding:4px 16px}.citation small{display:block}dl{display:grid;grid-template-columns:160px 1fr;font-size:15px}dt{font-weight:bold}dd{margin-left:0}.relationship{background:white;padding:16px;border:1px solid #cad8e1;border-radius:8px}.relationship article{border:none;padding:0}.notice{border-left:4px solid #ad8437;padding:4px 18px;background:#fff9ee}@media(max-width:760px){.pair{grid-template-columns:1fr}main{padding:20px 14px}}@media print{body{background:white}.figure,article{break-inside:avoid}details{display:block}main{padding:0}}
 </style><main><p class='muted'>Sequencing technology atlas · completed pilot · 6 November 2026</p>
 <h1>What changed between technologies?</h1>
+<p><a href="workflow_connections/index.html"><strong>Follow an edge between two extracted workflows →</strong></a></p>
 <p class='lead'>Read a directed edge as a specific, evidenced contribution to the later assay. The before/after record identifies what changed or was retained. A credited reuse does not automatically imply a new capability or an improvement.</p>
 <div class='stats'><div><b>13</b>Documented reuse</div><div><b>15</b>Mechanistic precedents</div><div><b>29</b>Comparisons</div><div><b>2</b>Exact workflow connections</div></div>
 <p>These are 57 scoped relationships across seven method neighborhoods, including analysis software and reference-data use. Only the 13 documented-reuse relationships assert actual use; the other types remain separate.</p>
@@ -281,6 +286,8 @@ def build(project, output, *, render_png=False):
 <div class='notice'><strong>Current boundary.</strong> This is a reviewed pilot, not the full evolutionary atlas. Six histories completed in this batch and the existing ChIPmentation neighborhood was reused. Capture-C and G&amp;T-seq were held at primary-paper assignment; ClickSeq failed its native analysis stage. Eleven of the 13 reuse relationships still have paper-level earlier endpoints. Independent model review is recorded; this is not wet-lab or human expert validation.</div>
 """ + "".join(sections) + "<h2>Remaining reviewed relationships</h2><p>Expand a relationship to inspect its full change record. Comparisons and mechanistic precedents are not displayed as ancestral arrows above.</p>" + rest + """<p><a href='history_index.json'>Complete relationship index · JSON</a> · <a href='STATUS.json'>Batch outcomes and counts</a> · <a href='CHECKS.json'>Local integrity checks</a> · <a href='evolution_examples.svg'>Standalone graph · SVG</a></p></main></html>"""
     (output / "index.html").write_text(html)
+    connection_checks = build_workflow_views(project, index, output / 'workflow_connections')
+    write(output / 'workflow_connections/CHECKS.json', connection_checks)
     if render_png:
         import fitz
         document = fitz.open(stream=overview_svg.encode(), filetype='svg')

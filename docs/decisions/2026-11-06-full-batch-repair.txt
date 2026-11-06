@@ -73,3 +73,73 @@ the irCLIP label concern as though the whole extraction were incorrect. Keep
 physical preparation distinct from biological generality. The shared typed
 representation instructions now state this for both diagram- and paper-mode
 authors/reviewers. Existing fields suffice; no per-method wording override.
+
+ADDITIONAL FINDINGS TO RETAIN FOR HARNESS DEVELOPMENT — 6 NOVEMBER
+
+1. Physical State versus domain or purpose.
+   Observation: the irCLIP and mNET examples above retained source facts in
+   adjacent Operations/quotes while their State labels were less specific.
+   Required behavior: identify what preparation actually exists at this boundary;
+   keep cell-line/specimen context and the next action separate. Do not invent
+   cellular starting material when the selected workflow starts with purified RNA.
+   Status: shared prompt/schema-description clarification implemented; broad new
+   native validation remains outstanding. Existing accepted outputs not rewritten.
+
+2. Consequential properties must be consistently retrievable.
+   Observation: equivalent information appeared in an Operation description,
+   a State property or a Correction in different extractions. Merely listing
+   property families does not ensure consistent annotation. A collapsed display
+   also concealed State properties already present in the stored record.
+   Required behavior: use the existing typed State properties for supported
+   identity, physical context, association, terminal chemistry and attribution
+   when consequential; name the actual subject. Operations describe the change.
+   Unknown and Correction objects qualify facts, rather than replace their normal
+   location. Cross-record agreement is a review obligation; avoid duplicating the
+   full scientific explanation in every field. Display fixes are not model fixes.
+   Status: field families and State clarification exist. Conditional completeness
+   enforcement and systematic semantic consistency are NOT established by them.
+
+3. Target-specific versus general method scope.
+   Observation: the H3K27me3 immunoprecipitation example retains its target in the
+   Operation title, product State and mechanism; its generic description does
+   not mean that target was lost. A demonstration target must not silently become
+   the universal assay definition, nor disappear from the selected implementation.
+   Required behavior: make the selected implementation's scope explicit and check
+   target agreement across Operation, resulting State and evidence. Extractors
+   should not broaden or narrow the method by inconsistent naming.
+   Status: observed content checked; no broad target-consistency guarantee claimed.
+
+4. Fractions, aliquots and apparent disposal.
+   Observation: a prior ATAC review found an unsupported fate for a qPCR aliquot.
+   Required behavior: accounting for a sampled fraction does not establish its
+   disposal, pooling or later consumption. Record a route only with support;
+   distinguish an unknown fate from an absent fraction. Review implied claims
+   in labels and explanatory prose as well as explicit Flow objects.
+   Status: prior review detected this case; no claim that prompting prevents all
+   unsupported routing assertions. Preserve it as a regression challenge.
+
+5. Earlier paper versus exact workflow implementation.
+   Observation: the completed history pilot has no matched earlier PCR-based
+   Adey workflow in its loaded inventory. An older supported Tn5 extraction does
+   exist at extraction_reference/atlas/viewer/data/workflows/tagmentation.json,
+   but covers the PCR-free Illumina route. Same method name or PMID does not make
+   that variant interchangeable with the before-side PCR-based contribution.
+   Required behavior: record variant, workflow boundaries and consequential branch
+   choices during extraction; match a history contribution at that scope before
+   locating States/Operations/Flows. Never reclassify the old PCR-free record as
+   the PCR-based route merely to make a directed connection.
+   Status: two exact-workflow mappings already passed independent review. The
+   Tn5->ATAC contribution remains paper-scoped; its missing mapping is not repaired
+   by a new label, display arrow, or the existence of a different Tn5 variant.
+
+6. Consequential missing evidence versus an annotation omission.
+   Observation: reviewer requests cannot be answered by rewriting from the same
+   source bundle if the relevant supplement or incorporated protocol is absent.
+   Required behavior: classify unavailable source, present-but-unread source,
+   available-but-omitted fact and unsupported proposed inference separately. Recover
+   and register new evidence when needed; then correct and independently review.
+   Status: existing audit/source adapter fixes are tested. The automatic recovery
+   prototype remains isolated in source_recovery_draft; it is not an active fix.
+
+These are development requirements and recorded observations, not a claim of
+all-method scientific validation or permission to modify frozen results/runtimes.
