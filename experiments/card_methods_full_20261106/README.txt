@@ -61,3 +61,9 @@ requests are recorded; automatic new-document retrieval is not implemented here.
 Submission51323900 uses16GB: service QOS limits a user to16GB total. The initial
 24GB request created no job. runtime01 is unchanged; sbatch--mem=16G overrides
 its preserved header. The working launcher now uses16GB for future freezes.
+
+First full attempt51323900 stopped before native calls: a classification symlink
+was counted as a second folder. runtime02 uses the canonical directory already
+recorded in card_scope.csv and source-checks the package identity. Older selections
+without that field deduplicate only identical resolved paths, not matching names.
+No scientific instructions or identity decisions changed.522software tests pass.

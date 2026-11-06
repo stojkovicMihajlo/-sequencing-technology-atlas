@@ -164,12 +164,23 @@ def prepare_independently(library, vault, selection):
     rows = validate_selection(selection)
     selected = {r['method_id'] for r in rows}
     paths = {}
-    for path in library.glob('methods/*/*/*/source_package.json'):
-        ident = path.parent.name
-        if ident in selected:
-            if ident in paths:
-                raise ValueError('Duplicate curated method folder: ' + ident)
+    explicit = {r['method_id']: r['canonical_directory'] for r in rows if r.get('canonical_directory')}
+    for ident, directory in explicit.items():
+        relative = Path(directory)
+        if relative.is_absolute() or '..' in relative.parts or relative.parts[0] != 'methods':
+            raise ValueError('Unsafe canonical method directory: ' + ident)
+        path = library / relative / 'source_package.json'
+        if path.exists():
             paths[ident] = path
+    # Older pilot selections have no canonical-directory field. Repeated category
+    # links to the same source package are placements, not duplicate identities.
+    if selected - explicit.keys():
+        for path in library.glob('methods/*/*/*/source_package.json'):
+            ident = path.parent.name
+            if ident in selected and ident not in explicit:
+                if ident in paths and paths[ident].resolve() != path.resolve():
+                    raise ValueError('Duplicate distinct curated method folders: ' + ident)
+                paths[ident] = path
     bundles, held, cards = [], {}, []
     for row in rows:
         ident = row['method_id']

@@ -1,3 +1,11 @@
+FIRST FULL ATTEMPT51323900 stopped in source preflight before any model calls.
+Cause: Genome scTrio classification placement is a symlink to the same canonical
+Transcriptome directory. Generic glob treated placements as identities. Fixed
+full dispatch to use already-curated canonical_directory; fallback compares
+resolved paths. No source folders or method identities changed.522local software
+tests pass, including classification-link dispatch. Preparing runtime02/run_02.
+Use16GB service-QOS limit.10concurrent workflows, fresh per-workflow reviewers.
+
 SUBMITTED: job51323900; runtime01; outputrun_01.10concurrent method tasks,
 each author followed by fresh reviewer. Modelgpt-6.1-sol,xhigh,4CPU,16GB,noGPU,
 12h. The24GB header in immutable runtime01 was overridden with sbatch--mem=16G

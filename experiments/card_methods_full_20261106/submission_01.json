@@ -1,7 +1,7 @@
 {
   "job_id": "51323900",
   "submission_acknowledged_utc": "2026-11-06T12:33:34.329493+00:00",
-  "status": "submitted; verify live stages",
+  "status": "failed in source preflight before native model calls",
   "runtime": "runtime_01",
   "output": "run_01",
   "archive_sha256": "d04ed664ca84a76333512c8aa945ce3b18982db9083af5a9df11fa1b24f8f586",
@@ -35,5 +35,9 @@
     "remedy": "sbatch --mem=16G override; frozen runtime remains unchanged",
     "initial_job_created": false
   },
-  "remaining_boundary": "No historical-edge extraction or automatic missing-document recovery in this batch."
+  "remaining_boundary": "No historical-edge extraction or automatic missing-document recovery in this batch.",
+  "native_calls": 0,
+  "remote_tests_passed": 202,
+  "failure": "A classification symlink to scTrio-seq canonical folder was treated as a second distinct folder.",
+  "resolution": "Use existing canonical_directory for full selection; only count genuinely distinct resolved packages for older selections."
 }

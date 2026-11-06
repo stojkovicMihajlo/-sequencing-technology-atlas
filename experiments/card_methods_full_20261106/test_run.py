@@ -59,6 +59,20 @@ def test_missing_primary_is_local_and_changed_source_is_not_called_missing(sourc
     assert 'source bytes differ' in held['a']['reason'].lower()
 
 
+def test_classification_links_do_not_create_duplicate_dispatch(source):
+    path, vault, _, selected = source
+    library = path.parents[4]
+    alias = library / 'methods/Other/category/a'
+    alias.parent.mkdir(parents=True)
+    alias.symlink_to(path.parent, target_is_directory=True)
+    selection = {'methods': [selected], 'reason_for_fresh_extraction': 'Classification-link check'}
+    bundles, held, _ = run.engine.prepare_independently(library, vault, selection)
+    assert len(bundles) == 1 and not held
+    selected['canonical_directory'] = str(path.parent.relative_to(library))
+    bundles, held, _ = run.engine.prepare_independently(library, vault, selection)
+    assert len(bundles) == 1 and not held
+
+
 def test_prior_index_preserves_original_attempt_paths_and_latest_outcomes(tmp_path):
     one, two = tmp_path / 'one', tmp_path / 'two'
     put(one / 'state.json', {'cards': {'a': {'status': 'supported', 'attempt_directory': '/old/a'},
