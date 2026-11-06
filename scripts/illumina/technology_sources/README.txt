@@ -1,9 +1,9 @@
 TECHNOLOGY SOURCE COLLECTION
 
 Purpose
-Put the original material in one navigable folder per source-named technology
-before scheduling scientific extraction. This is source preparation, not a new
-extraction harness or an automatic decision that names denote identical assays.
+Collect original sources, review method identity, and then publish one navigable
+folder per reviewed named method or scoped lineage. This is source preparation,
+not graph extraction or an automatic decision that similar names denote an assay.
 
 Files, in reading order
 1. inventory.py reads original card metadata, the saved Illumina category tree,
@@ -15,10 +15,22 @@ Files, in reading order
 3. recover.py uses the existing source acquisition implementation for unavailable
    listed papers. Public access failure remains a recorded failure. It does not
    treat abstracts as full papers or retrieve unverified search hits as protocols.
-4. render.py writes index.html, each method's index.html/README.txt, and CHECKLIST.csv.
-5. __main__.py runs these stages, then checks every link for portability.
+4. __main__.py runs source acquisition. The provisional name-folder renderer
+   (render.py) now requires --provisional-name-folders and is not the curated view.
+5. curation.py checks explicit folder decisions and per-method reference bindings.
+   It rejects missing/stale decisions and references absent from the source.
+6. review_papers.py creates a new linked paper bundle and review checklist. Use
+   --include-source-bibliography to include every related/search paper as well.
+   Acquisition leaves all content-review statuses pending.
+7. article_identity.py checks each original article's own title and identifiers
+   against the citation. A discrepancy is held for inspection, not auto-corrected.
+8. audit_progress.py renders individual inspection records into ALL_PAPERS.csv
+   and ALL_PAPERS.json. It cannot mark unread papers as reviewed by downloading.
+9. publish_curated.py renders the reviewed identity/reference decisions into a
+   fresh folder view, preserving original sources and verifying links/hashes.
+   Publication is not full-paper approval and does not authorize extraction.
 
-What a technology folder contains
+What the original provisional source-name folder contains
 method.json: name, original classifications, depictions, literal references,
 paper status and exact source bindings.
 catalogue/: descriptions, saved CMS records when available, source registries.
@@ -30,6 +42,23 @@ papers/: explicitly listed references, not automatically original assay papers.
 paper_candidates/: retrieved leads whose method association is not established.
 related_papers/: the website's separately labelled background/related literature.
 index.html: locally openable human view of the same data, without a server.
+
+What the replacement curated folder contains
+method.json: publication-scoped identity, original categories, alias/split decisions.
+references.json: selected method-specific paper associations and explicit roles.
+source_references.json: intact source bibliography, including sibling-method papers.
+catalogue/, diagrams/, posters/, guides/: links to preserved source material.
+papers/: only selected papers, not every paper from a grouped source bibliography.
+The root methods/ contains named methods; resources/ separates kits, families,
+components and unresolved labels. Neither count measures independent inventions.
+
+Current decisions and review ledger
+provenance/experiments/technology_sources_20261105/identity_review/READ_FIRST.txt
+is the entry point. decisions.json and reference_bindings.json are explicit
+review artifacts consumed by the compiler; they are not model-generated aliases
+accepted just because strings look similar. paper_content_review.json records
+actual inspections and their limits; progress/ALL_PAPERS.csv shows what remains.
+The all-paper job's frozen manual-review snapshot must not replace later notes.
 
 Curation comes before extraction
 This command has no model calls, extraction stage or automatic dispatch. It does

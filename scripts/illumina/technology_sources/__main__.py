@@ -13,13 +13,21 @@ def main():
     p.add_argument('--manifest', type=Path, action='append', required=True)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--recover', action='store_true', help='Try public fulltext endpoints for missing explicitly listed papers')
+    p.add_argument('--provisional-name-folders', action='store_true',
+                   help='Legacy inspection only: publish unresolved source-name folders. Never use as a distinct-method inventory.')
     args = p.parse_args()
     state = materialize(read(args.inventory), args.output, args.manifest)
     if args.recover:
         from .recover import recover
         recover(args.output, state)
-    publish(args.output, state)
-    result = render(args.output, state)
+    if args.provisional_name_folders:
+        publish(args.output, state)
+        result = render(args.output, state)
+    else:
+        result = {'source_registries_collected': len(state['sources']),
+                  'method_identity_review': 'required_before_publishing_method_folders',
+                  'next_command': 'scripts.illumina.technology_sources.publish_curated'}
+        write(args.output / 'SUMMARY.json', result)
     # Integrity is checked after links and public views are made.
     failures = []
     for path in args.output.rglob('*'):

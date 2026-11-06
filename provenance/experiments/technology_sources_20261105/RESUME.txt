@@ -1,5 +1,39 @@
 5 NOVEMBER 2026 — ORGANIZE ORIGINAL SOURCES BY TECHNOLOGY
 
+LATEST CHECKPOINT — 6 November 01:24 UTC / 5 November local
+User requires EVERY PAPER checked and exact records of what was inspected.
+Start with identity_review/READ_FIRST.txt and progress/ALL_PAPERS.csv.
+Job51265366 COMPLETED the candidate folder publication and2535file-reference
+integrity checks. This is NOT full-paper review. Candidate folders are at
+technology_sources/illumina_curated_20261105; originals remain preserved.
+Initial305selected papers +578unassigned related/search papers were registered.
+Subsequent correction removes the wrong MIRA PMID25798578 assignment: current
+304selected +579unassigned. The correct PMID20304072 was already present. Original
+reference mapping remains in identity_review/completed_51265366/REFERENCE_BINDINGS.json.
+Three identical external-record aliases are consolidated;883paper rows total.
+These are publication counts, not technology counts. Full-paper reviews remain
+incomplete. Individual abstract/selected-passage inspections are explicitly typed.
+Current ledger:348PubMedabstractchecks,5cachedarticleabstractchecks,2selected
+textpassagechecks;528papersstillawaitcontentinspection. Full-paper reviews are
+not complete. Of30automatedidentityflags,28are manually reviewed titlevariants,
+1is the DamIDwrongarticle and1is a DOI discrepancy. See identity_resolutions.json.
+New manual notes must not be overwritten by an older job snapshot.
+
+Found a real cached-content identity conflict: PMID17545983 (2007 DamID) contains
+the title/body of the later2016Targeted DamID protocol, despite matching embedded
+PMID/DOI. The live PMC record also has this inconsistency. The file remains
+preserved but must not be used as the2007paper. Exact hashes/sections/external
+checks are in paper_content_review.json. Identity checks now compare article
+title as well as own identifiers; passing checks still do not verify science.
+
+Job51268416 submitted for all-paper identity audit and missing-source recovery.
+Last observed state: RUNNING on sh04-05n13,241/616recovery targets processed.
+No model calls or protocol extraction.
+Frozen stage: technology_atlas/v2/work/technology_sources_20261105/identity_review_02
+New output: technology_sources/illumina_all_paper_review_20261105
+Do not submit a duplicate. Inspect actual state/logs and record new findings.
+The old narrative below is retained as history; this checkpoint takes precedence.
+
 User asks for one source directory per named technology, preserving Illumina
 classification and including diagrams, shared full posters, prose and papers.
 No new graph extraction or scientific verification is implied by this collection.
@@ -43,3 +77,38 @@ Important newly observed issue: some poster source registries contain unrelated
 paper candidates from catalogue contexts. Candidate status is preserved, distinct
 from explicitly listed references and related-publication lists. Do not label
 all retrieved papers original protocols or blindly merge implementation variants.
+
+IDENTITY REBUILD — current 5 November continuation
+The previous name-folder view is superseded as an extraction inventory. Read
+identity_review/REVIEW_RULES.txt, decisions.json and reference_bindings.json.
+All 318 old folders have explicit dispositions (293 method names +25 resources).
+The review records21consolidations and1split into publication-scoped identities.
+The compiled candidate has298entries:273named method entries and25resources,
+family/overview/component/kit/unresolved entries. This is NOT a count of independent
+inventions, unique reaction architectures, or fully verified protocols.
+All478source occurrences remain assigned. Nuc-seq RNA sources now distinguish
+Habib from the Grindberg/Krishnaswami/Lacar lineage; DNA Wang remains separate.
+3-Seq (extra ambiguous poster label) is retained outside named-method counting.
+Source-label-matched references have explicit per-method bindings, corrections,
+roles, and cached bibliographic resolutions. Shared-card bibliographies stay raw.
+
+User's new requirement: CHECK EVERY PAPER and leave exact records of what was
+inspected. There are305distinct assigned papers across all reviewed entry types.
+Initial availability:208fulltext,91metadata-only,3reading-text-only,3not cached.
+These are acquisition statuses, NOT completed full-paper reviews. Track each
+paper's inspected sections, findings, method association and unresolved access.
+The additional, unassigned source/search-candidate bibliography is preserved but
+must not be silently promoted into method papers. No new model extraction yet.
+
+Code: curation.py compiles frozen reviewed decisions; review_papers.py prepares
+and recovers the individually assigned papers; publish_curated.py writes the
+replacement folder view and checks every original file hash and generated link.
+16targeted tests passed, including complete coverage, alias/homonym separation,
+wrong reference exclusion, stale-review rejection and end-to-end folder publishing.
+Default source-acquisition CLI no longer publishes provisional name folders;
+legacy name-folder output requires an explicit --provisional-name-folders flag.
+New remote work: technology_atlas/v2/work/technology_sources_20261105/identity_review_01
+Intended sources: technology_sources/illumina_paper_review_20261105
+Intended view: technology_sources/illumina_curated_20261105
+Original illumina_20261105 remains preserved. Read actual job receipt and
+PAPER_CHECKLIST.csv/PAPER_CHECKS.json before claiming publication/review complete.
