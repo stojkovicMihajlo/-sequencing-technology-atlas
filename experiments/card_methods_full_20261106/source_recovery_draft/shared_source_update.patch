@@ -1,0 +1,219 @@
+diff --git a/experiments/diagram_paper_pilot_20261106/recover_dependencies.py b/experiments/diagram_paper_pilot_20261106/recover_dependencies.py
+index bcdacd5..2dfc5c3 100644
+--- a/experiments/diagram_paper_pilot_20261106/recover_dependencies.py
++++ b/experiments/diagram_paper_pilot_20261106/recover_dependencies.py
+@@ -15,6 +15,7 @@ from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch
+ from genomics_discovery.sources.document_manifest import inspect_jats
+ from genomics_discovery.sources.cached_documents import supplements
+ from genomics_discovery.sources.acquisition.supplement_archive import selected_pdf
++from genomics_discovery.sources.acquisition.legacy_word import OLE, word_rendition
+ 
+ 
+ def recover_supplement(request, source, folder):
+@@ -38,8 +39,9 @@ def recover_supplement(request, source, folder):
+         raise ValueError('Attachment must resolve to one exact cited object')
+     href = matches[0]['hrefs'][0]
+     name = unquote(urlsplit(href).path).rsplit('/', 1)[-1]
+-    if not name.lower().endswith('.pdf') or not name or name in {'.', '..'}:
+-        raise ValueError('This registered supplement converter requires a PDF attachment')
++    suffix = Path(name).suffix.lower()
++    if suffix not in {'.pdf', '.doc', '.docx'} or not name or name in {'.', '..'}:
++        raise ValueError('This registered supplement converter requires a PDF or Word attachment')
+     ids = structure['identity']['identifiers']
+     pmcids = {v.removeprefix('PMC') for key in ('pmcid', 'pmc') for v in ids.get(key, [])}
+     if len(pmcids) != 1:
+@@ -57,8 +59,8 @@ def recover_supplement(request, source, folder):
+         attempts.append(receipt); intermediates.append(folder / 'direct_response')
+         record_attempts()
+         content = (folder / 'direct_response').read_bytes()
+-        if not content.startswith(b'%PDF-'):
+-            raise ValueError('Direct attachment response is not PDF bytes')
++        if not (content.startswith(b'%PDF-') if suffix == '.pdf' else content.startswith((OLE, b'PK\x03\x04'))):
++            raise ValueError('Direct attachment response does not match its PDF/Word format')
+         provenance_url = direct
+     except (RuntimeError, ValueError) as exc:
+         attempts.append({'url': direct, 'registration': 'not accepted', 'error': str(exc)})
+@@ -78,7 +80,16 @@ def recover_supplement(request, source, folder):
+                 names = [n for n in archive.namelist() if n.rsplit('/', 1)[-1] == name]
+             if len(names) != 1:
+                 raise ValueError('Publication-bound archive lacks one exact cited PDF member')
+-            content, _ = selected_pdf((folder / 'attachments.zip').read_bytes(), names[0])
++            if suffix == '.pdf':
++                content, _ = selected_pdf((folder / 'attachments.zip').read_bytes(), names[0])
++            else:
++                with ZipFile(folder / 'attachments.zip') as archive:
++                    info = archive.getinfo(names[0])
++                    if info.file_size > 32_000_000 or info.file_size > max(1,info.compress_size)*1000:
++                        raise ValueError('Supplement archive member exceeds extraction limits')
++                    content = archive.read(info)
++                if not content.startswith((OLE,b'PK\x03\x04')):
++                    raise ValueError('Selected supplement archive member is not Word bytes')
+             provenance_url = endpoint
+         except (RuntimeError, ValueError, BadZipFile) as error:
+             attempts.append({'url': endpoint, 'registration': 'not accepted', 'error': str(error)})
+@@ -91,14 +102,19 @@ def recover_supplement(request, source, folder):
+             attempts.append(receipt); intermediates.append(folder / 'public_copy_response')
+             record_attempts()
+             content = (folder / 'public_copy_response').read_bytes()
+-            if not content.startswith(b'%PDF-'):
+-                raise ValueError('Public-copy response is not a PDF')
++            if not (content.startswith(b'%PDF-') if suffix == '.pdf' else content.startswith((OLE,b'PK\x03\x04'))):
++                raise ValueError('Public-copy response does not match the PDF/Word attachment')
+             used_public_copy = True
+     destination.write_bytes(content)
+     write(folder / 'retrieval.json', {'attempts': attempts, 'parent_attachment': matches[0]})
+     write(folder / 'supplements/acquisition.json', {'pmid': source['pmid'], 'files': [{
+         'status': 'cached', 'path': str(destination), 'sha256': sha(destination), 'url': provenance_url}]})
+-    texts, receipts, leads = supplements(folder, source['pmid'], folder / 'renditions')
++    if suffix == '.pdf':
++        texts, receipts, leads = supplements(folder, source['pmid'], folder / 'renditions')
++    else:
++        text = folder / 'renditions/supplement_001.txt'
++        receipt = word_rendition(destination,text,suffix.removeprefix('.'))
++        texts, receipts, leads = [{'path':str(text)}],[receipt],[]
+     if len(texts) != 1 or len(receipts) != 1 or leads:
+         raise ValueError('Supplement conversion incomplete: ' + str(leads))
+     write(folder / 'conversion.json', receipts[0])
+@@ -113,6 +129,8 @@ def recover_supplement(request, source, folder):
+             raise ValueError('Public supplement copy cover does not establish parent DOI/title and document role')
+     paths = [*intermediates, destination, text, folder / 'retrieval.json', folder / 'conversion.json',
+              folder / 'supplements/acquisition.json']
++    if suffix != '.pdf':
++        paths += [Path(p['path']) for p in receipts[0].get('intermediates',[])]
+     return {'kind': 'text', 'content_level': 'fulltext', 'document_role': 'supplement',
+         'pmid': source['pmid'], 'parent_source_id': request['parent_source_id'],
+         'title': 'Supplement to ' + source['title'], 'url': provenance_url,
+diff --git a/src/genomics_discovery/illumina/extraction.py b/src/genomics_discovery/illumina/extraction.py
+index 4b2a2b9..56aa2c0 100644
+--- a/src/genomics_discovery/illumina/extraction.py
++++ b/src/genomics_discovery/illumina/extraction.py
+@@ -506,9 +506,33 @@ def load_author_seed(seed, card, registry, representation):
+     return candidate, stage
+ 
+ 
++def load_source_revision_seed(row, card, registry, representation):
++    """Reopen old feedback under old inputs, then permit an additive source update."""
++    from genomics_discovery.illumina.graph import load_reviewed_workflow
++    directory = Path(row['attempt_directory'])
++    old_card, old_registry = read(directory/'card.json'), read(directory/'source_registry.json')
++    if row['status'] not in {'research_needed','needs_revision'}:
++        raise ValueError('Source revision requires a reviewed unfinished candidate')
++    load_reviewed_workflow(row,old_card)
++    if any(registry.get(sid) != value for sid,value in old_registry.items()):
++        raise ValueError('Source revision must preserve every old source byte and registration')
++    if not set(registry)-set(old_registry):
++        raise ValueError('Source revision requires actual newly registered evidence')
++    if ({k:v for k,v in card.items() if k!='references'} !=
++            {k:v for k,v in old_card.items() if k!='references'}):
++        raise ValueError('Source revision cannot change the assigned method scope')
++    if any(ref not in card.get('references',[]) for ref in old_card.get('references',[])):
++        raise ValueError('Source revision cannot delete old reference obligations')
++    verify_registry_files(registry)
++    candidate=parse_extraction((directory/'extraction.json').read_bytes())
++    if candidate.format_version != representation:
++        raise ValueError('Source revision cannot change extraction representation')
++    return candidate,parse_review((directory/'review.json').read_bytes())
++
++
+ async def extract_registered_workflow(card, registry, images, directory, worker, max_revisions=1,
+                                       representation="illumina_diagram/1.1", revision_seed=None,
+-                                      author_seed=None, author_examples=()):
++                                      author_seed=None, author_examples=(), source_revision_seed=None):
+     """One scoped work unit, with its registered source bundle and independent review.
+ 
+     Method identity/scope planning is a separate gate. This function neither
+@@ -535,12 +559,16 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
+         if registry.get(sid, {}).get("kind") != "image" or sha(image_path) != registry[sid].get("sha256"):
+             raise ValueError("Workflow image must match its registered source: " + sid)
+     candidate, review = None, None
+-    if author_seed is not None and revision_seed is not None:
+-        raise ValueError('Choose an author seed or a revision seed, not both')
++    if sum(x is not None for x in (author_seed,revision_seed,source_revision_seed)) > 1:
++        raise ValueError('Choose one author, exact-source revision, or source-update seed')
+     if revision_seed is not None:
+         if max_revisions != 1:
+             raise ValueError("An explicit revision seed permits exactly one correction and fresh review")
+         candidate, review = load_revision_seed(revision_seed, card, registry, representation)
++    if source_revision_seed is not None:
++        if max_revisions != 1:
++            raise ValueError('A source-update seed permits exactly one correction and fresh review')
++        candidate,review=load_source_revision_seed(source_revision_seed,card,registry,representation)
+     reused_author = None
+     if author_seed is not None:
+         candidate, reused_author = load_author_seed(author_seed, card, registry, representation)
+@@ -549,6 +577,8 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
+         write(directory / 'author_seed.json', author_seed)
+     if revision_seed is not None:
+         write(directory / "revision_seed.json", revision_seed)
++    if source_revision_seed is not None:
++        write(directory/'source_revision_seed.json',source_revision_seed)
+     write(directory / "card.json", card)
+     card_pin = sha(directory / "card.json")
+     source_path = directory / "source_registry.json"
+@@ -581,6 +611,10 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
+             "self_check": shlex.join([sys.executable, "-m", "genomics_discovery.illumina.extraction", "check", str(attempt / 'artifact.json'), "--registry", str(source_path), "--record-id", card['record_id'], "--card", str(directory / "card.json")]),
+             "source_requirement": paper_instructions(card)}
+         context["duplicate_text_registrations"] = [ids for ids in registered_text_groups(registry) if len(ids) > 1]
++        if source_revision_seed is not None:
++            prior=read(Path(source_revision_seed['attempt_directory'])/'source_registry.json')
++            context['source_update']={'added_source_ids':sorted(set(registry)-set(prior)),
++                'rule':'All older sources remain unchanged. Inspect new contents; acquisition does not itself resolve a finding.'}
+         if role == "reviewer":
+             candidate_path = attempt / "candidate.json"
+             write(candidate_path, candidate.model_dump(mode="json"))
+@@ -601,6 +635,8 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
+         fixed_inputs = [attempt / "schema.json", attempt / "stage_prompt.txt", attempt / "image_delivery.json"]
+         if revision_seed is not None:
+             fixed_inputs.append(directory / "revision_seed.json")
++        if source_revision_seed is not None:
++            fixed_inputs.append(directory/'source_revision_seed.json')
+         if author_seed is not None:
+             fixed_inputs.append(directory / 'author_seed.json')
+         if role == "reviewer":
+@@ -657,7 +693,7 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
+             entry.update(finished_at=now(), elapsed_seconds=time.monotonic() - started)
+             write(directory / "stages.json", stages)
+ 
+-    for revision in range(1 if revision_seed is not None else 0, max_revisions + 1):
++    for revision in range(1 if revision_seed is not None or source_revision_seed is not None else 0, max_revisions + 1):
+         prior_candidate, prior_review = candidate, review
+         if not (author_seed is not None and revision == 0):
+             candidate = await stage("author", revision)
+@@ -677,6 +713,7 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
+         "artifact_pins": {name: sha(directory / name) for name in
+             ("card.json", "source_registry.json", "extraction.json", "review.json", "graph.json", "stages.json")
+             + (("revision_seed.json",) if revision_seed is not None else ())
++            + (("source_revision_seed.json",) if source_revision_seed is not None else ())
+             + (("author_seed.json",) if author_seed is not None else ())},
+         "research_questions": questions,
+         "reason": "; ".join(q["target"] + ": " + q["question"] for q in questions)[:3000]}
+diff --git a/src/genomics_discovery/illumina/prompts.py b/src/genomics_discovery/illumina/prompts.py
+index 94234f3..08e826e 100644
+--- a/src/genomics_discovery/illumina/prompts.py
++++ b/src/genomics_discovery/illumina/prompts.py
+@@ -310,9 +310,11 @@ example /checks/0 selects one review check and /operations/0 one candidate
+ operation. next_start gives continuation for long values; no finding is silently
+ omitted from the index. Reopen affected interfaces and sources as needed, without
+ dumping the whole candidate and all repeated quotations into the context.
+-A request for a missing supplement is an evidence-recovery need. This correction
+-stage has the same registered sources; it must retain that unresolved dependency
+-unless an existing inspected source actually supplies the requested evidence.
++A request for a missing supplement is an evidence-recovery need. Unless the
++caller explicitly declares source_update with new source IDs, this correction
++has the same registered sources and must retain the unresolved dependency unless
++existing evidence supplies it. If source_update is present, inspect the new
++contents; a download alone does not establish that it resolves this method's gap.
+ """
+ 
+ 
+@@ -415,7 +417,9 @@ separate candidate file in context. artifact_helper accepts --path, --sha256,
+ --pointer (for example /checks/0), --start and --limit, and reports next_start
+ for long values. Check whether each prior issue was resolved by actual source
+ support, narrowed out of the claim with a justified scope change, or remains
+-unresolved. The unchanged source bundle does not itself supply a missing supplement.
++unresolved. An unchanged source bundle does not itself supply a missing supplement.
++If the caller declares source_update, inspect the added evidence against the
++exact previous request; do not accept merely because acquisition succeeded.
+ """
+ 
+ 
