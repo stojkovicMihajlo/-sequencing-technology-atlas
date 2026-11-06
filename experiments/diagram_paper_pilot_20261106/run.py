@@ -9,6 +9,7 @@ import argparse
 import asyncio
 import copy
 import os
+import json
 from pathlib import Path
 
 from genomics_discovery.execution.codex_worker import CodexWorker
@@ -16,7 +17,9 @@ from genomics_discovery.illumina.extraction import (
     checkpoint, extract_registered_workflow, now, read, sha, verify_registry_files, write,
     load_author_seed,
 )
-from genomics_discovery.illumina.graph import build_graph, protocol_text
+from genomics_discovery.illumina.graph import build_graph, protocol_text, load_reviewed_workflow
+from genomics_discovery.illumina.models import review_model
+from genomics_discovery.illumina.prompts import build_prompt
 
 
 def inside(root, relative):
@@ -170,19 +173,22 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
         additions = read(additions_path) if additions_path else {}
         if set(additions) - {c['record_id'] for c, _, _ in bundles}:
             raise ValueError('Dependency additions name an unselected method')
-        seeds, reuse_decisions = {}, {}
+        seeds, completed, reuse_decisions = {}, {}, {}
+        old_state = read(resume_authors / 'state.json') if resume_authors else {}
         for card, registry, _ in bundles:
             ident = card['record_id']
             for sid, source in additions.get(ident, {}).items():
                 if sid in registry or source.get('kind') != 'text' or source.get('content_level') != 'fulltext':
                     raise ValueError('Dependency must be a distinct registered full-text source')
                 registry[sid] = source
-                card['references'].append({'reference_id': ident + ':dependency:' + source['pmid'],
-                                          'role': 'recovered', 'pmid': source['pmid']})
+                if source.get('document_role') != 'supplement':
+                    card['references'].append({'reference_id': ident + ':dependency:' + source['pmid'],
+                                              'role': 'recovered', 'pmid': source['pmid']})
             verify_registry_files(registry)
             if resume_authors is None:
                 continue
-            old = resume_authors / 'cards' / ident / 'attempt_001'
+            prior_row = old_state.get('cards', {}).get(ident, {})
+            old = Path(prior_row.get('attempt_directory', resume_authors / 'cards' / ident / 'attempt_001'))
             stages = read(old / 'stages.json') if (old / 'stages.json').exists() else []
             if not any(s['role'] == 'author' and s.get('revision') == 0 and s.get('status') == 'validated' for s in stages):
                 reuse_decisions[ident] = 'fresh author: earlier native author did not finish validation'
@@ -192,8 +198,20 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
                 seed = {'directory': str(old), 'pins': {n: sha(old / n)
                         for n in ('card.json', 'source_registry.json', 'stages.json')}}
                 load_author_seed(seed, card, registry, 'illumina_diagram/1.1')
-                seeds[ident] = seed
-                reuse_decisions[ident] = 'reuse validated author; require a fresh independent review'
+                old_row = old_state.get('cards', {}).get(ident, {})
+                if old_row.get('status') == 'supported':
+                    load_reviewed_workflow(old_row, card)
+                    last = Path(stages[-1]['path'])
+                    prompt = (last / 'stage_prompt.txt').read_text()
+                    context, _ = json.JSONDecoder().raw_decode(prompt.split('CALLER CONTEXT\n', 1)[1])
+                    if (read(last / 'schema.json') != review_model('illumina_diagram_review/1.2').model_json_schema()
+                            or build_prompt('reviewer', context, last / 'schema.json') != prompt):
+                        raise ValueError('Completed reuse cannot change scientific review instructions/schema')
+                    completed[ident] = {**old_row, 'reused_completed_from': str(resume_authors)}
+                    reuse_decisions[ident] = 'reuse accepted workflow after reopening all gates; no new model calls'
+                else:
+                    seeds[ident] = seed
+                    reuse_decisions[ident] = 'reuse validated author; require a fresh independent review'
         write(output / 'author_reuse.json', reuse_decisions)
     except Exception as exc:
         write(output / 'source_preflight.json', {'status': 'failed', 'native_calls': 0,
@@ -215,6 +233,7 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
     state = {'started_at': now(), 'slurm_job_id': os.environ['SLURM_JOB_ID'], 'policy': policy,
              'cards': {c['record_id']: {'record_id': c['record_id'], 'title': c['source_title'],
                                       'status': 'pending'} for c in cards}}
+    state['cards'].update(completed)
     checkpoint(output, state, cards)
     worker = CodexWorker(model=policy['model'], effort=policy['effort'], timeout_seconds=None,
                          web_search=False, network_access=False, pin_shell_environment=True)
@@ -242,7 +261,7 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
             checkpoint(output, state, cards)
             if row['status'] != 'supported':
                 raise PilotIssue(ident + ': ' + row.get('reason', row['status']))
-    tasks = [asyncio.create_task(one(*bundle)) for bundle in bundles]
+    tasks = [asyncio.create_task(one(*bundle)) for bundle in bundles if bundle[0]['record_id'] not in completed]
     stop_reason = None
     try:
         await asyncio.gather(*tasks)
@@ -260,11 +279,12 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
     write(output / 'atlas.json', graph)
     for row in state['cards'].values():
         graph_path = Path(row['attempt_directory']) / 'graph.json'
-        if graph_path.exists():
+        if graph_path.exists() and not row.get('reused_completed_from'):
             (graph_path.parent / 'workflow.txt').write_text(protocol_text(read(graph_path)))
     errors = [key for key, row in state['cards'].items() if row['status'] == 'supported'
               and graph['cards'][key].get('admission') != 'supported']
     report = {'counts': state['counts'], 'publication_errors': errors, 'stop_reason': stop_reason,
+        'reused_completed_ids': sorted(completed), 'reused_author_ids': sorted(seeds),
         'all_supported': not errors and all(r['status'] == 'supported' for r in state['cards'].values()),
         'boundary': 'Independent model review, not expert ground truth, executable validation or historical-edge confirmation.'}
     write(output / 'RESULT.json', report)

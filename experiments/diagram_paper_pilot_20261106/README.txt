@@ -72,3 +72,22 @@ The first failed call/validation or nonaccepted scientific review stops other
 method tasks and writes STOP_REASON.json. A source qualification that is honestly
 outside an asserted claim is not automatically a failure. No source or frozen
 runtime is edited while model tasks are running.
+
+NEXT RELEASE: generic evidence requests now support a cited publication or an exact
+parent-JATS supplement attachment. Supplement PDF acquisition uses existing
+source parsers, publication-bound archive member validation and PDF conversion;
+it retains a supplement as part of its parent paper, never as another publication.
+Previously registered additions can be reused unchanged. Recovered documents
+remain unreviewed evidence until source-first extraction/review. Failed retrieval
+or registration stops before native model calls. Source-request interpretation
+is still manual; no automatic literature agent is claimed.
+
+Completed supported workflows can now be reused without new model calls, only
+after exact source/scope/schema/instruction and full graph-admission gates reopen.
+Original artifacts, native sessions and usage remain attributed to their old run.
+This also works across successive restarts; old workflows are not overwritten.
+
+Pilot02 results:4supported (ChIP-Seq,FAIRE-Seq,Sono-Seq,cP-RNA-Seq),
+1research_needed(GRO),5interrupted. Graph publication errors0. Stop-on-first-issue
+and durable backup succeeded. Current working release passes511local software
+tests, including the new complete-workflow reuse and supplemental-identity tests.

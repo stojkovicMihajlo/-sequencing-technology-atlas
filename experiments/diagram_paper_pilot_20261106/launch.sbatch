@@ -74,10 +74,14 @@ if [[ -n "${ATLAS_PILOT_RESUME_OUTPUT:-}" ]]; then
 fi
 if [[ -n "${ATLAS_PILOT_DEPENDENCY_OUTPUT:-}" ]]; then
     : "${ATLAS_PILOT_RESUME_OUTPUT:?Dependency recovery requires the evidence-request parent run}"
+    recovery_args=()
+    if [[ -n "${ATLAS_PILOT_EXISTING_ADDITIONS:-}" ]]; then
+        recovery_args+=(--existing-additions "$ATLAS_PILOT_EXISTING_ADDITIONS")
+    fi
     "$ATLAS_ENV_DIR/bin/python" -m experiments.diagram_paper_pilot_20261106.recover_dependencies \
         --requests "$ATLAS_REPOSITORY/experiments/diagram_paper_pilot_20261106/dependency_requests.json" \
         --previous-run "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_RESUME_OUTPUT" \
-        --output "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_DEPENDENCY_OUTPUT"
+        --output "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_DEPENDENCY_OUTPUT" "${recovery_args[@]}"
     extra_args+=(--additions "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_DEPENDENCY_OUTPUT/registered_additions.json")
 fi
 "$ATLAS_ENV_DIR/bin/python" -m experiments.diagram_paper_pilot_20261106.run \

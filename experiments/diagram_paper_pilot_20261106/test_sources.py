@@ -148,6 +148,12 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(acq
     graph = run.read(output / 'atlas.json')
     assert graph['cards']['example']['admission'] == 'supported'
     assert (output / 'cards/example/attempt_001/workflow.txt').is_file()
+    calls = len(worker.calls)
+    resumed = tmp_path / 'resumed-pilot'
+    asyncio.run(run.execute(source_root, source_root, selection, resumed, 1, resume_authors=output))
+    assert len(worker.calls) == calls
+    assert run.read(resumed / 'atlas.json')['cards']['example']['admission'] == 'supported'
+    assert run.read(resumed / 'state.json')['cards']['example']['reused_completed_from'] == str(output)
 
 
 def test_first_failure_cancels_other_methods_and_preserves_the_reason(acquired, tmp_path, monkeypatch):

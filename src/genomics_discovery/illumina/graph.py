@@ -61,6 +61,7 @@ def _source_scope(card):
 
 
 def _load_card(row, card):
+    """Reopen source, native-stage and scientific-admission gates for one workflow."""
     directory = Path(row["attempt_directory"])
     required = {"card.json", "source_registry.json", "extraction.json", "review.json",
                 "graph.json", "stages.json"}
@@ -115,6 +116,11 @@ def _load_card(row, card):
     return export_graph(candidate, review, sources), sources
 
 
+def load_reviewed_workflow(row, card):
+    """Public gate; preserve the private entry used by older frozen tools."""
+    return _load_card(row, card)
+
+
 def build_graph(batch_directory: Path, inventory_path: Path) -> dict:
     """Retain every inventory card; publish records only after reopening their gates."""
     batch_directory, inventory_path = Path(batch_directory), Path(inventory_path)
@@ -144,7 +150,7 @@ def build_graph(batch_directory: Path, inventory_path: Path) -> dict:
         if row["status"] not in {"supported", "needs_revision", "research_needed"}:
             continue
         try:
-            graph, sources = _load_card(row, card)
+            graph, sources = load_reviewed_workflow(row, card)
         except Exception as exc:
             entry.update(status="integrity_error", reported_status=row["status"], reason=str(exc))
             continue
