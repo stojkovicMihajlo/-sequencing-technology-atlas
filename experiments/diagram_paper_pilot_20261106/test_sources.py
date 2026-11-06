@@ -109,7 +109,7 @@ def test_selection_is_exactly_ten_distinct_curated_methods():
     assert len(run.validate_selection(selection)) == 10
 
 
-@pytest.mark.parametrize('independent_hold', [False, True])
+@pytest.mark.parametrize('independent_hold', [False, True, 'source_hold'])
 def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
         acquired, tmp_path, monkeypatch, independent_hold):
     from tests.illumina import test_illumina_batch_controls as transport
@@ -146,7 +146,7 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
             ident = run.read(attempt.parent.parent / 'card.json')['record_id']
             artifact = run.read(attempt / 'artifact.json')
             artifact['record_id'] = ident
-            if independent_hold and ident == 'example' and attempt.name.endswith('reviewer'):
+            if independent_hold is True and ident == 'example' and attempt.name.endswith('reviewer'):
                 check = next(c for c in artifact['checks'] if c['target'] == 'operation:capture')
                 check.update(verdict='unresolved', action='research',
                              rationale='Synthetic missing supplemental evidence; keep this method on hold.')
@@ -158,16 +158,29 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
     # Source-adapter admission has separate negative tests above. This test uses
     # a synthetic registered bundle and exercises the real remaining pipeline.
     bundles = [(card, registry, images)]
-    if independent_hold:
+    if independent_hold is True:
         bundles.append(({**card, 'record_id': 'other'}, registry, images))
     monkeypatch.setattr(run, 'prepare', lambda *_: bundles)
+    if independent_hold == 'source_hold':
+        held_card = {**card, 'record_id': 'missing'}
+        held = {'missing': {'record_id': 'missing', 'status': 'source_recovery_needed',
+                            'reason': 'Synthetic missing primary paper'}}
+        monkeypatch.setattr(run, 'prepare_independently', lambda *_: (bundles, held, [card, held_card]))
     monkeypatch.setenv('SLURM_JOB_ID', 'fake-runner-publication-test')
     selection = tmp_path / 'selection.json'
     put(selection, {'methods': [{'method_id': 'example', 'primary_paper_id': 'pmid-1'}],
                     'reason_for_fresh_extraction': 'Synthetic software integration test'})
     output = tmp_path / 'pilot'
-    asyncio.run(run.execute(source_root, source_root, selection, output, 1))
-    if independent_hold:
+    asyncio.run(run.execute(source_root, source_root, selection, output, 1,
+                           isolate_source_failures=independent_hold == 'source_hold'))
+    if independent_hold == 'source_hold':
+        report = run.read(output / 'RESULT.json')
+        assert report['counts'] == {'supported': 1, 'source_recovery_needed': 1}
+        assert report['publication_errors'] == [] and run.completion_exit_code(report) == 0
+        assert run.read(output / 'atlas.json')['cards']['example']['admission'] == 'supported'
+        assert [c['role'] for c in worker.calls] == ['author', 'reviewer']
+        return
+    if independent_hold is True:
         report = run.read(output / 'RESULT.json')
         assert report['counts'] == {'research_needed': 1, 'supported': 1}
         assert report['stop_reason'] is None and report['publication_errors'] == []
@@ -177,6 +190,13 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
         assert graph['cards']['other']['admission'] == 'supported'
         assert [c['role'] for c in worker.calls] == ['author', 'reviewer', 'author', 'reviewer']
         assert run.read(output / 'state.json')['policy']['stop_on_first_issue'] is False
+        calls = len(worker.calls)
+        resumed = tmp_path / 'resumed-with-hold'
+        result = asyncio.run(run.execute(source_root, source_root, selection, resumed, 1,
+                                        resume_authors=output, reuse_reviewed_holds=True))
+        assert len(worker.calls) == calls
+        assert result['counts'] == report['counts'] and run.completion_exit_code(result) == 0
+        assert run.read(resumed / 'atlas.json')['cards']['example']['admission'] == 'diagnostic'
         return
     assert [c['role'] for c in worker.calls] == ['author', 'reviewer']
     assert run.read(output / 'RESULT.json')['all_supported'] is True

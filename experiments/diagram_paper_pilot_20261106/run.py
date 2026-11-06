@@ -53,6 +53,10 @@ def validate_selection(selection):
     return rows
 
 
+class SourceUnavailable(ValueError):
+    """A required source is unavailable; preserve the method for source recovery."""
+
+
 def prepare_method(package_path, vault, selected):
     package, method = read(package_path), read(package_path.parent / 'method.json')
     ident = selected['method_id']
@@ -61,10 +65,10 @@ def prepare_method(package_path, vault, selected):
         raise ValueError('Require an existing curated named-method identity: ' + ident)
     primary = [p for p in package['method_papers'] if p['paper_id'] == selected['primary_paper_id']]
     if len(primary) != 1 or primary[0]['availability'] != 'fulltext_acquired':
-        raise ValueError('Assigned primary paper must have acquired full text: ' + ident)
+        raise SourceUnavailable('Assigned primary paper must have acquired full text: ' + ident)
     depictions = [d for d in package['source_depictions'] if d['kind'] == 'website_card']
     if not depictions:
-        raise ValueError('This pilot requires a curated website-card depiction: ' + ident)
+        raise SourceUnavailable('Require a curated website-card depiction: ' + ident)
     registry, images, references, bindings = {}, [], [], []
     custody = [{'path': str(p.resolve()), 'sha256': sha(p)}
                for p in (package_path, package_path.parent / 'method.json')]
@@ -77,7 +81,7 @@ def prepare_method(package_path, vault, selected):
                           if row.get('kind') == 'text' and row.get('content_level') == 'catalogue'
                           and sid == 'card:' + source_id]
         if len(catalogue_rows) != 1 or not catalogue_rows[0][1].get('text', '').strip():
-            raise ValueError('Missing complete catalogue prose: ' + source_id)
+            raise SourceUnavailable('Missing complete catalogue prose: ' + source_id)
         sid, row = catalogue_rows[0]
         row = copy.deepcopy(row)
         raw_files = [original_registry_path, catalogue / 'source.json', catalogue / 'original_cms.json']
@@ -87,7 +91,7 @@ def prepare_method(package_path, vault, selected):
         registry[sid] = row
         for image in depiction['diagrams']:
             if 'rejected' in image.get('quality', '').lower():
-                raise ValueError('Rejected diagram cannot be a pilot image: ' + source_id)
+                raise SourceUnavailable('Rejected diagram cannot be an extraction image: ' + source_id)
             pins = checked_files(vault, [image])
             image_id = image['source_id']
             image_path = Path(pins[0]['path'])
@@ -107,7 +111,7 @@ def prepare_method(package_path, vault, selected):
         texts = [f for f in paper['files'] if f['kind'] == 'reading-text']
         originals = [f for f in paper['files'] if f['kind'] == 'article']
         if len(texts) != 1 or not originals or paper.get('held_files'):
-            raise ValueError('Need unheld original article and one reading text: ' + paper['paper_id'])
+            raise SourceUnavailable('Need unheld original article and one reading text: ' + paper['paper_id'])
         pins = checked_files(vault, paper['files'])
         text = texts[0]
         text_path = inside(vault, text['path'])
@@ -155,12 +159,45 @@ def prepare(library, vault, selection):
     return [prepare_method(paths[r['method_id']], vault, r) for r in rows]
 
 
+def prepare_independently(library, vault, selection):
+    """Keep every selected identity; isolate unavailable or invalid source bundles."""
+    rows = validate_selection(selection)
+    selected = {r['method_id'] for r in rows}
+    paths = {}
+    for path in library.glob('methods/*/*/*/source_package.json'):
+        ident = path.parent.name
+        if ident in selected:
+            if ident in paths:
+                raise ValueError('Duplicate curated method folder: ' + ident)
+            paths[ident] = path
+    bundles, held, cards = [], {}, []
+    for row in rows:
+        ident = row['method_id']
+        card = {'record_id': ident, 'source_title': row.get('name', ident),
+                'verified_method_names': [row.get('name', ident)], 'references': []}
+        try:
+            if ident not in paths:
+                raise SourceUnavailable('Missing curated source package: ' + ident)
+            bundle = prepare_method(paths[ident], vault, row)
+            card = bundle[0]
+            bundles.append(bundle)
+        except Exception as exc:
+            unavailable = isinstance(exc, (SourceUnavailable, FileNotFoundError))
+            held[ident] = {'record_id': ident, 'title': card['source_title'],
+                'status': 'source_recovery_needed' if unavailable else 'failed',
+                'failure_category': 'source_unavailable' if unavailable else 'source_preflight_error',
+                'reason': f'{type(exc).__name__}: {exc}', 'finished_at': now()}
+        cards.append(card)
+    return bundles, held, cards
+
+
 class PilotIssue(RuntimeError):
     """Optional development-mode stop after a nonaccepted method result."""
 
 
 async def execute(library, vault, selection_path, output, workers, *, additions_path=None,
-                  resume_authors=None, stop_on_first_issue=False):
+                  resume_authors=None, stop_on_first_issue=False,
+                  isolate_source_failures=False, reuse_reviewed_holds=False):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Native extraction requires a Sherlock Slurm allocation')
     if not 1 <= workers <= 10:
@@ -169,7 +206,11 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
     selection = read(selection_path)
     write(output / 'selection.json', selection)
     try:
-        bundles = prepare(library.resolve(), vault.resolve(), selection)
+        if isolate_source_failures:
+            bundles, source_holds, cards = prepare_independently(library.resolve(), vault.resolve(), selection)
+        else:
+            bundles = prepare(library.resolve(), vault.resolve(), selection)
+            source_holds, cards = {}, [c for c, _, _ in bundles]
         additions = read(additions_path) if additions_path else {}
         if set(additions) - {c['record_id'] for c, _, _ in bundles}:
             raise ValueError('Dependency additions name an unselected method')
@@ -199,7 +240,8 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
                         for n in ('card.json', 'source_registry.json', 'stages.json')}}
                 load_author_seed(seed, card, registry, 'illumina_diagram/1.1')
                 old_row = old_state.get('cards', {}).get(ident, {})
-                if old_row.get('status') == 'supported':
+                if (old_row.get('status') == 'supported' or
+                        reuse_reviewed_holds and old_row.get('status') == 'research_needed'):
                     load_reviewed_workflow(old_row, card)
                     last = Path(stages[-1]['path'])
                     prompt = (last / 'stage_prompt.txt').read_text()
@@ -208,7 +250,7 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
                             or build_prompt('reviewer', context, last / 'schema.json') != prompt):
                         raise ValueError('Completed reuse cannot change scientific review instructions/schema')
                     completed[ident] = {**old_row, 'reused_completed_from': str(resume_authors)}
-                    reuse_decisions[ident] = 'reuse accepted workflow after reopening all gates; no new model calls'
+                    reuse_decisions[ident] = 'reuse reviewed ' + old_row['status'] + ' workflow after reopening all gates; no new model calls'
                 else:
                     seeds[ident] = seed
                     reuse_decisions[ident] = 'reuse validated author; require a fresh independent review'
@@ -218,11 +260,11 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
             'error': f'{type(exc).__name__}: {exc}', 'time': now()})
         raise
     write(output / 'source_preflight.json', {'status': 'passed', 'time': now(),
+        'selected_methods': len(cards), 'held_methods': source_holds,
         'methods': [{'method_id': c['record_id'], 'sources': len(r),
                      'images': len(i), 'primary_paper_id': c['curation_binding']['primary_paper_id']}
                     for c, r, i in bundles]})
     print('Source preflight passed for ' + str(len(bundles)) + ' distinct methods.', flush=True)
-    cards = [c for c, _, _ in bundles]
     inventory = output / 'inventory.json'
     write(inventory, {'cards': cards})
     policy = {'model': 'gpt-6.1-sol', 'effort': 'xhigh', 'workers': workers,
@@ -230,10 +272,12 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
               'inventory_sha256': sha(inventory), 'record_ids': [c['record_id'] for c in cards],
               'library': str(library.resolve()), 'vault': str(vault.resolve()),
               'selection_sha256': sha(selection_path), 'prior_extractions_used_as_evidence': False}
+    policy.update(isolate_source_failures=isolate_source_failures, reuse_reviewed_holds=reuse_reviewed_holds)
     state = {'started_at': now(), 'slurm_job_id': os.environ['SLURM_JOB_ID'], 'policy': policy,
              'cards': {c['record_id']: {'record_id': c['record_id'], 'title': c['source_title'],
                                       'status': 'pending'} for c in cards}}
     state['cards'].update(completed)
+    state['cards'].update(source_holds)
     checkpoint(output, state, cards)
     worker = CodexWorker(model=policy['model'], effort=policy['effort'], timeout_seconds=None,
                          web_search=False, network_access=False, pin_shell_environment=True)
@@ -278,17 +322,27 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
     graph = build_graph(output, inventory)
     write(output / 'atlas.json', graph)
     for row in state['cards'].values():
+        if not row.get('attempt_directory'):
+            continue
         graph_path = Path(row['attempt_directory']) / 'graph.json'
         if graph_path.exists() and not row.get('reused_completed_from'):
             (graph_path.parent / 'workflow.txt').write_text(protocol_text(read(graph_path)))
     errors = [key for key, row in state['cards'].items() if row['status'] == 'supported'
               and graph['cards'][key].get('admission') != 'supported']
     report = {'counts': state['counts'], 'publication_errors': errors, 'stop_reason': stop_reason,
+        'execution_complete': all(r['status'] not in {'pending', 'running', 'interrupted'}
+                                  for r in state['cards'].values()) and stop_reason is None,
+        'has_execution_errors': bool(errors) or any(r['status'] == 'failed' for r in state['cards'].values()),
         'reused_completed_ids': sorted(completed), 'reused_author_ids': sorted(seeds),
         'all_supported': not errors and all(r['status'] == 'supported' for r in state['cards'].values()),
         'boundary': 'Independent model review, not expert ground truth, executable validation or historical-edge confirmation.'}
     write(output / 'RESULT.json', report)
     return report
+
+
+def completion_exit_code(report):
+    """Scientific holds are completed outcomes; stage/publication failures are not."""
+    return 0 if report.get('execution_complete') and not report.get('has_execution_errors') else 2
 
 
 if __name__ == '__main__':
@@ -300,8 +354,11 @@ if __name__ == '__main__':
     parser.add_argument('--resume-authors', type=Path)
     parser.add_argument('--stop-on-first-issue', action='store_true',
         help='Development-only fail-fast mode; by default each method completes independently.')
+    parser.add_argument('--isolate-source-failures', action='store_true')
+    parser.add_argument('--reuse-reviewed-holds', action='store_true')
     args = parser.parse_args()
     report = asyncio.run(execute(args.library, args.vault, args.selection, args.output, args.workers,
         additions_path=args.additions, resume_authors=args.resume_authors,
-        stop_on_first_issue=args.stop_on_first_issue))
-    raise SystemExit(0 if report['all_supported'] else 2)
+        stop_on_first_issue=args.stop_on_first_issue,
+        isolate_source_failures=args.isolate_source_failures, reuse_reviewed_holds=args.reuse_reviewed_holds))
+    raise SystemExit(completion_exit_code(report))
