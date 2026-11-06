@@ -178,6 +178,8 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
             seen.add(key)
             title = b.get('resolved_title') or b.get('citation') or b['reference_id']
             body += '<p><b>' + escape(b.get('publication_role') or b['role']) + '</b>: ' + escape(title) + '<br>' + escape(b['availability'])
+            if b.get('scope_note'):
+                body += '<br><b>What this publication supports:</b> ' + escape(b['scope_note'])
             if pid in state['papers']:
                 paper_directory = directory / 'papers' / pid
                 paper_directory.mkdir(parents=True, exist_ok=True)

@@ -24,6 +24,7 @@ def main():
     a=p.parse_args()
     reviews=read(a.visual_review)
     inventory=read(a.root/'canonical_inventory.json')
+    collection=read(a.source_root/'collection.json')
     paper_receipts=read(a.source_root/'REPOSITORY_RECOVERY_RECEIPTS.json')
     before={}
     def save(path,value):
@@ -51,7 +52,7 @@ def main():
     save(a.root/'VISUAL_CONTEXT_REVIEW.json',reviews)
     access={}
     for pid,attempts in paper_receipts.items():
-        if any(r.get('admitted') for r in attempts):continue
+        if collection['papers'].get(pid,{}).get('status')=='fulltext_acquired' or any(r.get('admitted') for r in attempts):continue
         access[pid]={'failed_attempts':[r for r in attempts if r.get('error')],
             'candidate_article_urls':[r['url'] for r in attempts if r.get('stage')=='article_pdf'],
             'meaning':'Acquisition failed through the recorded routes; not evidence that no public copy exists or that the method is scientifically unspecified.'}

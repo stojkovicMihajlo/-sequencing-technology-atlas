@@ -30,6 +30,33 @@ def store_asset(root, state, source, relative, kind, origin):
     return item
 
 
+def reuse_project_papers(root, state, paper_cache, project_root):
+    """Index only missing assigned papers in the declared project HTML cache.
+
+    A historical registration list can omit valid cached files. Build a fresh
+    byte-pinned candidate index from exact assigned PMIDs, then use the existing
+    own-identity/body checks. No recursive discovery or unrelated bibliography.
+    """
+    root, paper_cache, project_root = map(Path, (root, paper_cache, project_root))
+    if not paper_cache.resolve().is_relative_to(project_root.resolve()):
+        raise ValueError('Paper cache must be inside the declared project')
+    files = {}
+    for paper in state['papers'].values():
+        pmid = str(paper.get('pmid') or '')
+        if paper['status'] == 'fulltext_acquired' or not re.fullmatch(r'\d+', pmid):
+            continue
+        source = paper_cache / pmid / 'article.html'
+        if not source.exists():
+            continue
+        if not source.resolve().is_relative_to(project_root.resolve()):
+            raise ValueError('Cached article leaves the declared project')
+        files[str(source)] = sha(source)
+    index = root / 'PROJECT_CACHE_CANDIDATES.json'
+    write(index, {'files': files, 'paper_cache': str(paper_cache),
+                  'scope': 'Existing original HTML for missing assigned publication IDs only; candidates are not admitted sources.'})
+    return reuse_registered_html(root, state, index, project_root)
+
+
 def reuse_registered_html(root, state, cache_index, project_root):
     index_path = Path(cache_index)
     registered = read(index_path)['files']

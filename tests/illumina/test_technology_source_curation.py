@@ -259,6 +259,27 @@ def test_cached_html_reuse_requires_own_identity_and_substantive_body(tmp_path):
     assert 'Scientific article body' in text.read_text() and 'Navigation' not in text.read_text()
 
 
+def test_project_cache_discovery_checks_assigned_papers_without_promoting_others(tmp_path):
+    from scripts.illumina.technology_sources.assemble_sources import reuse_project_papers
+    project = tmp_path / 'project'; cache = project / 'papers'
+    for pmid in ['1', '999']:
+        folder = cache / pmid; folder.mkdir(parents=True)
+        (folder / 'article.html').write_text('<meta name="citation_pmid" content="'+pmid+'">'
+            '<meta name="citation_title" content="Target '+pmid+'">'
+            '<section class="main-article-body"><p>'+('Original article text. '*100)+'</p></section>')
+    state = {'files': {}, 'papers': {'pmid-1': {'pmid':'1','status':'metadata_only',
+             'files':[],'metadata':{'title':'Target 1'}}}}
+    output = tmp_path / 'new_vault'; output.mkdir()
+    rows = reuse_project_papers(output, state, cache, project)
+    assert [r['paper_id'] for r in rows] == ['pmid-1']
+    assert state['papers']['pmid-1']['status'] == 'fulltext_acquired'
+    index = json.loads((output/'PROJECT_CACHE_CANDIDATES.json').read_text())
+    assert len(index['files']) == 1
+    assert 'pmid-999' not in state['papers']
+    with pytest.raises(ValueError, match='inside the declared project'):
+        reuse_project_papers(output, state, cache, tmp_path/'another_project')
+
+
 def test_aliases_combine_but_neighboring_assays_do_not(records):
     m = compile_records(records)['methods']
     assert {'art-seq', 'artseq', 'ribo-seq'} == set(m['ribo-seq']['previous_ids'])
@@ -369,6 +390,8 @@ def test_published_folders_only_link_assigned_papers_and_original_bytes(tmp_path
          'pmid': str(i), 'role': 'method_reference', 'identity_check': 'checked', 'citation': 'Paper '+k,
          'association_basis': 'Own labelled citation.'} for i, k in enumerate(('a', 'b'), 1)],
          'excluded_from_method_references': []}
+    b['bindings'][0].update(publication_role='Foundational assay; microarray readout',
+                            scope_note='Supports enrichment, not the sequencing readout.')
     vault = tmp_path / 'original'
     materialize(inv, vault, [])
     bundle = tmp_path / 'review_bundle'
@@ -382,6 +405,8 @@ def test_published_folders_only_link_assigned_papers_and_original_bytes(tmp_path
     assert related['bibliographic_association'] == 'unassigned_source_bibliography'
     result = publish(bundle, tmp_path / 'curated', d, b)
     assert result['validation']['passed']
+    view = tmp_path / 'curated' / result['methods']['a']['directory'] / 'index.html'
+    assert 'Supports enrichment, not the sequencing readout.' in view.read_text()
     finding = {'source_id': 'shared', 'image_sha256': image_hash,
         'status': 'rejected_as_complete_workflow_view', 'reviewer': 'Visual inspection',
         'finding': 'Input label is clipped.'}

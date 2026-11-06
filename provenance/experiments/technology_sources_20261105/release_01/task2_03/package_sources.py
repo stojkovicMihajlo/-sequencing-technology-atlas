@@ -41,6 +41,10 @@ def main():
             item={'paper_id':pid,'title':ref.get('resolved_title') or ref.get('citation'),
                   'association_basis':ref['association_basis'],'availability':ref['availability'],
                   'url':ref.get('url') or p.get('url'),'doi':p.get('metadata',{}).get('identifiers',{}).get('doi',[]),
+                  'publication_type':ref.get('publication_type') or p.get('publication_type'),
+                  'publication_role':ref.get('publication_role') or p.get('publication_role'),
+                  'scope_note':ref.get('scope_note') or p.get('scope_note'),
+                  'paper_scope_review':ref.get('paper_scope_review') or p.get('paper_scope_review'),
                   'files':ref['cached_files'],'held_files':ref['held_files']}
             papers.append(item)
             if pid and item['availability']!='fulltext_acquired':
