@@ -140,6 +140,44 @@ def test_title_entities_do_not_create_false_publication_mismatches():
     assert normalized_title('G&amp;T-seq') != normalized_title('DR-seq')
 
 
+def test_image_only_cms_block_is_not_an_assay_description():
+    from scripts.illumina.technology_sources.descriptions import describe
+    prose = 'This assay records RNA molecules and their cellular origins using molecular barcodes before pooling the captured material.'
+    occurrence = {'card': {'source_page_url': 'https://example.org/assay'}, 'original_cms': {'content': {
+        'image': {'text': '<p class="seq-method-image"><img src="/a-very-long-path-to-the-original-source-image-to-exceed-the-length-threshold.png"></p>'},
+        'description': {'text': '<p>' + prose + '</p>'}}}}
+    state = {'inventory': {'occurrences': {'s': occurrence}}, 'papers': {}}
+    m = {'id': 'assay', 'source_records': ['s'], 'method_references': []}
+    result = describe(state, m)
+    assert result['text'] == prose and result['locator'] == '/description/text'
+    occurrence['original_cms']['content'].pop('description')
+    assert describe(state, m)['status'] == 'description_unavailable_in_collected_sources'
+
+
+def test_cached_html_reuse_requires_own_identity_and_substantive_body(tmp_path):
+    from scripts.illumina.technology_sources.assemble_sources import reuse_registered_html
+    project = tmp_path / 'project'
+    files = {}
+    for pmid, own in [('1', '1'), ('2', '1')]:
+        path = project / 'papers' / pmid / 'article.html'
+        path.parent.mkdir(parents=True)
+        path.write_text('<meta name="citation_pmid" content="' + own + '">'
+            '<meta name="citation_title" content="Target ' + own + '">'
+            '<nav>Navigation must not be the paper body</nav><section class="main-article-body"><p>' +
+            ('Scientific article body. ' * 100) + '</p></section>')
+        files[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
+    index = project / 'receipts.json'; index.write_text(json.dumps({'files': files}))
+    state = {'files': {}, 'papers': {'pmid-'+p: {'pmid': p, 'title': 'Target '+p,
+        'metadata': {'title': 'Target '+p}, 'status': 'metadata_only', 'files': []} for p in ['1', '2']}}
+    output = tmp_path / 'vault'
+    rows = reuse_registered_html(output, state, index, project)
+    assert [r['status'] for r in rows] == ['reused', 'not_admitted']
+    assert state['papers']['pmid-1']['status'] == 'fulltext_acquired'
+    assert state['papers']['pmid-2']['status'] == 'metadata_only'
+    text = output / 'new_assets/cached_papers/1/reading-text.txt'
+    assert 'Scientific article body' in text.read_text() and 'Navigation' not in text.read_text()
+
+
 def test_aliases_combine_but_neighboring_assays_do_not(records):
     m = compile_records(records)['methods']
     assert {'art-seq', 'artseq', 'ribo-seq'} == set(m['ribo-seq']['previous_ids'])

@@ -1,5 +1,4 @@
 """Expose positive assay descriptions as attributed source excerpts."""
-from html import unescape
 from html.parser import HTMLParser
 
 
@@ -34,7 +33,9 @@ def describe(state, method):
         for locator, html in text_fields((occurrence.get('original_cms') or {}).get('content', {})):
             parser = Paragraphs()
             parser.feed(html)
-            paragraphs = parser.paragraphs or [' '.join(unescape(html).split())]
+            # An image-only CMS block has no visible prose. Returning its HTML
+            # markup would falsely label a diagram tag as an assay description.
+            paragraphs = parser.paragraphs or [' '.join(''.join(parser.buffer).split())]
             text = next((p for p in paragraphs if len(p) > 80), None)
             if text:
                 return {'text': text, 'source_kind': 'illumina_card_excerpt',
@@ -42,6 +43,8 @@ def describe(state, method):
                     'url': occurrence['card'].get('source_page_url'),
                     'shared_description': occurrence.get('shared_source', False),
                     'status': 'verbatim_source_excerpt; not_a_new_protocol_summary'}
+    if method['id'] in state.get('method_descriptions', {}):
+        return state['method_descriptions'][method['id']]
     for reference in method['method_references']:
         if reference['role'] != 'method_reference':
             continue

@@ -88,13 +88,28 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
                 dest = directory / 'diagrams' / rid / Path(item['path']).name
                 link(source_root / item['path'], dest)
                 rel = dest.relative_to(directory).as_posix()
-                body += '<p><a href="' + escape(rel) + '">Open source image</a></p><img loading="lazy" src="' + escape(rel) + '">'
+                label = ('Row view from original poster: label geometry checked; visual review pending'
+                         if item.get('source_kind') == 'poster_row_view' else 'Original source image')
+                img = '<p><a href="' + escape(rel) + '">' + label + '</a></p><img loading="lazy" src="' + escape(rel) + '">'
+                body += ('<details><summary>Original broad context crop; neighboring rows may appear</summary>' + img + '</details>'
+                         if item.get('source_kind') == 'legacy_broad_context_crop' else img)
                 diagrams.add(item['sha256'])
             for item in src.get('documents', []):
                 folder = 'posters' if 'for-all-you-seq' in item['path'] else 'guides'
                 dest = directory / folder / Path(item['path']).name
                 link(source_root / item['path'], dest)
                 body += '<p><a href="' + escape(dest.relative_to(directory).as_posix()) + '">Complete PDF: ' + escape(dest.name) + '</a></p>'
+        m['guide_sources'] = state.get('method_guide_sources', {}).get(mid, [])
+        if m['guide_sources']:
+            write(directory / 'guide_source_matches.json', m['guide_sources'])
+            body += '<h2>Illumina methods-guide pages</h2><p>Literal name matches are source leads; the page may describe a broader or related implementation.</p>'
+            for guide in m['guide_sources']:
+                target = directory / 'guides' / guide['guide']
+                link(source_root / guide['pdf_path'], target)
+                text_item = guide['text_file']
+                text_target = directory / 'guides' / Path(text_item['path']).name
+                link(source_root / text_item['path'], text_target)
+                body += '<p><a href="' + escape(target.relative_to(directory).as_posix()) + '#page=' + str(guide['pdf_page']) + '">' + escape(guide['guide']) + ', PDF page ' + str(guide['pdf_page']) + '</a> · <a href="' + escape(text_target.relative_to(directory).as_posix()) + '">Page text</a></p>'
         body += '<h2>Method-specific references</h2><p>Roles below distinguish method descriptions, foundations, reviews and other supporting work. Related references from shared sources are kept in source_references.json.</p>'
         seen = set()
         paper_rows = []
@@ -105,7 +120,7 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
                 continue
             seen.add(key)
             title = b.get('resolved_title') or b.get('citation') or b['reference_id']
-            body += '<p><b>' + escape(b['role']) + '</b>: ' + escape(title) + '<br>' + escape(b['availability'])
+            body += '<p><b>' + escape(b.get('publication_role') or b['role']) + '</b>: ' + escape(title) + '<br>' + escape(b['availability'])
             if pid in state['papers']:
                 paper_directory = directory / 'papers' / pid
                 paper_directory.mkdir(parents=True, exist_ok=True)
