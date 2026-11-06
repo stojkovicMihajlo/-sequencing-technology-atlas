@@ -106,8 +106,9 @@ def test_both_native_source_tools_return_empty_passage_on_query_miss(tmp_path, s
     assert result["text"] == "" and result["found"] is False and result["query_found"] is False
 
 
-def test_policy_has_only_two_historical_types():
-    assert {k for k, v in RELATIONS.items() if v["layer"] == "history"} == {"method_development", "component_adoption"}
+def test_new_scoped_history_type_preserves_archived_labels():
+    assert {k for k, v in RELATIONS.items() if v["layer"] == "history"} == {
+        'method_development', 'component_adoption', 'documented_reuse'}
 
 
 def test_history_criteria_reach_both_native_authors_and_reviewers():

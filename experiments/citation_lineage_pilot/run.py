@@ -25,6 +25,8 @@ from genomics_discovery.illumina.extraction import (
 from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jats_text, parse_pubmed
 from genomics_discovery.illumina.citations import bibliography
 from genomics_discovery.illumina.history_inputs import resolve_article
+from genomics_discovery.illumina.paper_reads import record_read, check_full_reads
+from change_models import ChangeAnalysis, ChangeReview
 from models import (
     Analysis, CurrentAnalysis, CurrentNominations, Nominations, Review, graph_overlay, parse_analysis, validate_analysis,
     validate_nominations, validate_review,
@@ -126,6 +128,12 @@ def prepare(args):
         "catalogue": {"content_level": "catalogue", "text": json.dumps(cards, ensure_ascii=False, indent=2)},
         "bibliography": {"content_level": "seed_reference_contexts", "text": json.dumps(refs, ensure_ascii=False, indent=2)},
     }
+    for sid, source in registry.items():
+        if (source.get('document_role') == 'supplement' and source.get('content_level') == 'fulltext'
+                and str(source.get('pmid') or '') == str(paper.get('pmid') or '')):
+            sources['seed_supplement:' + sid] = {**source, 'role': 'seed_supplement',
+                'provenance': {'source_registry': str(parent / 'source_registry.json'),
+                               'sha256': row['artifact_pins']['source_registry.json'], 'source_id': sid}}
     write(inputs / "sources_initial.json", sources)
     if getattr(args, 'source_cache', None):
         validate_reference_cache(read(args.source_cache))
@@ -206,12 +214,14 @@ def acquire(inputs, nominations):
     return sources
 
 
-SCHEMAS = {"nominate": CurrentNominations, "analyse": CurrentAnalysis, "review": Review}
+SCHEMAS = {"nominate": CurrentNominations, "analyse": ChangeAnalysis, "review": ChangeReview}
 
 
-def validate(role, artifact, inputs, analysis_path=None):
-    document = (parse_analysis(read(Path(artifact))) if role == "analyse" else
-                SCHEMAS[role].model_validate_json(Path(artifact).read_bytes()))
+def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
+    raw = read(Path(artifact))
+    document = (parse_analysis(raw) if role == 'analyse' else
+                (ChangeReview if raw.get('format_version') == 'citation_change_review/1' else Review).model_validate(raw)
+                if role == 'review' else SCHEMAS[role].model_validate(raw))
     sources = read(inputs / ("sources_initial.json" if role == "nominate" else "sources.json"))
     if role == "nominate":
         validate_nominations(document, sources, read(inputs / "bibliography.json"))
@@ -219,10 +229,22 @@ def validate(role, artifact, inputs, analysis_path=None):
         refs = [x["reference_id"] for x in read(inputs.parent / "nominations.json")["references"]]
         validate_analysis(document, sources, refs,
             [x["id"] for x in read(inputs / "seed_extraction.json")["operations"]],
-            [x["record_id"] for x in read(inputs / "catalogue.json")])
+            [x["record_id"] for x in read(inputs / "catalogue.json")],
+            seed_extraction=read(inputs / 'seed_extraction.json'))
     else:
         analysis = parse_analysis(read(analysis_path))
         validate_review(document, analysis, sha(analysis_path), sources)
+    if paper_read_log is not None:
+        required = ['seed']
+        if role == 'analyse':
+            required += [sid for sid, value in sources.items() if sid != 'seed'
+                         and value.get('content_level') == 'fulltext' and value.get('role') != 'seed_supplement']
+        elif role == 'review':
+            required += sorted({c.reference_id for c in analysis.claims
+                                if sources[c.reference_id].get('content_level') == 'fulltext'})
+        source_file = inputs / ('sources_initial.json' if role == 'nominate' else 'sources.json')
+        coverage = check_full_reads(paper_read_log, source_file, sources, required)
+        write(Path(artifact).parent / 'paper_read_coverage.json', coverage)
     return document
 
 
@@ -309,6 +331,10 @@ async def execute(args):
         prior_threads = state['review_reuse']['prior_threads']
     write(root / "state.json", state)
     implementation = {str(p): sha(p) for p in Path(__file__).parent.glob('*.py')}
+    from genomics_discovery.illumina import change_records as change_policy
+    for path in (Path(change_policy.__file__), Path(record_read.__code__.co_filename),
+                 Path(resolve_article.__code__.co_filename)):
+        implementation[str(path.resolve())] = sha(path)
     policy_path = Path(relationship_policy.__file__).resolve()
     implementation[str(policy_path)] = sha(policy_path)
     worker = CodexWorker(model=state["model"], effort=state["effort"], timeout_seconds=None,
@@ -323,12 +349,15 @@ async def execute(args):
             [(x["source_id"], Path(x["path"])) for x in registered_images], attempt)
         source_file = inputs / ("sources_initial.json" if role == "nominate" else "sources.json")
         command = [sys.executable, str(Path(__file__).resolve())]
-        read_command = shlex.join([*command, "read", "--sources", str(source_file)])
+        receipt_path = attempt / 'source_reads.jsonl'
+        read_command = shlex.join([*command, "read", "--sources", str(source_file),
+                                  '--coverage-file', str(receipt_path)])
         check_command = [*command, "check", "--inputs", str(inputs), "--role", role,
-                         "--artifact", str(attempt / "artifact.json")]
+                         "--artifact", str(attempt / "artifact.json"), '--paper-read-log', str(receipt_path)]
         if analysis_path:
             check_command += ["--analysis", str(analysis_path)]
         context = {"inputs": str(inputs), "seed_extraction": str(inputs / 'seed_extraction.json'),
+            'analysis_format': 'citation_analysis/4',
             "bibliography": str(inputs / 'bibliography.json'),
             "schema": str(attempt / 'schema.json'), "output": str(attempt / 'artifact.json'),
             "source_tool": read_command + " [--id SOURCE_ID] [--query TEXT] [--start N] [--limit N]",
@@ -368,11 +397,13 @@ async def execute(args):
         if (attempt / 'prompt.txt').read_text() != prompt:
             raise ValueError("Native prompt differs from planned prompt")
         verify_stage_inputs(attempt, delivery, pins)
-        doc = validate(role, attempt / 'artifact.json', inputs, analysis_path)
-        if role == 'analyse' and not isinstance(doc, CurrentAnalysis):
-            raise ValueError("Fresh analysis must follow citation_analysis/3, not the archived contract")
+        doc = validate(role, attempt / 'artifact.json', inputs, analysis_path, receipt_path)
+        if role == 'analyse' and not isinstance(doc, ChangeAnalysis):
+            raise ValueError('Fresh analysis must follow citation_analysis/4 explicit change records')
         row.update(status="validated", thread_id=assessment.thread_id, usage=assessment.usage,
-                   elapsed_seconds=time.monotonic()-stage_start, artifact_sha256=sha(attempt / 'artifact.json'))
+                   elapsed_seconds=time.monotonic()-stage_start, artifact_sha256=sha(attempt / 'artifact.json'),
+                   paper_read_coverage_sha256=sha(attempt / 'paper_read_coverage.json'),
+                   source_read_log_sha256=sha(receipt_path))
         write(root / "state.json", state)
         return doc, attempt / 'artifact.json'
 
@@ -426,16 +457,18 @@ def main():
     inspect.add_argument('--query')
     inspect.add_argument('--start', type=int, default=0)
     inspect.add_argument('--limit', type=int, default=10000)
+    inspect.add_argument('--coverage-file', type=Path)
     check = sub.add_parser('check')
     check.add_argument('--inputs', type=Path, required=True)
     check.add_argument('--role', choices=SCHEMAS, required=True)
     check.add_argument('--artifact', type=Path, required=True)
     check.add_argument('--analysis', type=Path)
+    check.add_argument('--paper-read-log', type=Path)
     args = parser.parse_args()
     if args.command in {'run', 'review-existing'}:
         asyncio.run(execute(args))
     elif args.command == 'check':
-        validate(args.role,args.artifact,args.inputs,args.analysis)
+        validate(args.role,args.artifact,args.inputs,args.analysis,args.paper_read_log)
         print('structural_and_quote_checks_passed; semantic_review_still_required')
     else:
         sources = read(args.sources)
@@ -444,6 +477,8 @@ def main():
         else:
             result = source_excerpt(sources, args.id, query=args.query, start=args.start, limit=args.limit)
             result.update(query_found=result['found'], level=sources[args.id].get('content_level'))
+            if args.coverage_file:
+                record_read(args.coverage_file, args.sources, sources, result)
             print(json.dumps(result, ensure_ascii=False))
 
 

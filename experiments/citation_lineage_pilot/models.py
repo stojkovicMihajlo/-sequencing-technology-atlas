@@ -77,8 +77,20 @@ class CurrentAnalysis(Analysis):
 
 def parse_analysis(data):
     """Read archived contracts as archived; never relabel them as new checks."""
+    if data.get('format_version') == 'citation_analysis/4':
+        from change_models import ChangeAnalysis
+        return ChangeAnalysis.model_validate(data)
     schema = CurrentAnalysis if data.get("format_version") == "citation_analysis/3" else Analysis
     return schema.model_validate(data)
+
+
+def is_current_claim(claim):
+    from change_models import ChangeClaim
+    return isinstance(claim, (CurrentClaim, ChangeClaim))
+
+
+def claim_record(claim):
+    return claim.query_record() if hasattr(claim, 'query_record') else claim.model_dump()
 
 
 class UncertaintyAssessment(Record):
@@ -132,7 +144,7 @@ def validate_nominations(document, sources, bibliography):
             raise ValueError("Excluded reference needs a context-specific reason")
 
 
-def validate_analysis(document, sources, nominated, operation_ids, catalogue_ids):
+def validate_analysis(document, sources, nominated, operation_ids, catalogue_ids, seed_extraction=None):
     ids = [x.id for x in document.claims]
     if len(ids) != len(set(ids)):
         raise ValueError("Duplicate claim ID")
@@ -145,10 +157,20 @@ def validate_analysis(document, sources, nominated, operation_ids, catalogue_ids
             raise ValueError("Claim invents a seed operation")
         if set(claim.catalogue_candidates) - set(catalogue_ids):
             raise ValueError("Claim invents an Illumina entry")
-        check_evidence(claim.seed_evidence, sources, allowed={"seed"})
+        later_ids = ({sid for sid, source in sources.items() if sid == 'seed' or source.get('role') == 'seed_supplement'}
+                     if hasattr(claim, 'change_records') else {'seed'})
+        check_evidence(claim.seed_evidence, sources, allowed=later_ids)
         check_evidence(claim.predecessor_evidence, sources, allowed={claim.reference_id})
-        if isinstance(claim, CurrentClaim):
+        if is_current_claim(claim):
             check_citation_binding(claim, sources)
+        if hasattr(claim, 'change_records'):
+            from genomics_discovery.illumina.change_records import validate_changes, workflow_records
+            if seed_extraction is None:
+                raise ValueError('Explicit changes require the actual seed workflow records')
+            validate_changes(claim.change_records, sources=sources,
+                later_records=workflow_records(seed_extraction),
+                later_source_ids={sid for sid, s in sources.items() if sid == 'seed' or s.get('role') == 'seed_supplement'},
+                earlier_source_ids={claim.reference_id}, require_later_anchor=claim.claim_scope == 'seed_workflow')
 
 
 def check_citation_binding(claim, sources):
@@ -182,7 +204,7 @@ def validate_review(document, analysis, analysis_sha256, sources):
     for finding in document.findings:
         check_evidence(finding.evidence, sources)
         claim = claims[finding.claim_id]
-        if (isinstance(claim, CurrentClaim) and finding.decision == "accept"
+        if (is_current_claim(claim) and finding.decision == "accept"
                 and claim.relation not in {"background", "no_established_relation"}):
             cited = {x.source_id for x in finding.evidence}
             if not {"seed", claim.reference_id} <= cited:
@@ -193,6 +215,27 @@ def validate_review(document, analysis, analysis_sha256, sources):
             raise ValueError("Review must assess every unresolved issue exactly once")
         if finding.decision == "accept" and any(x.blocks_relation for x in finding.unresolved_assessments):
             raise ValueError("Accepted relationship cannot have a blocking unresolved issue")
+        if hasattr(claim, 'change_records'):
+            changes = {c.id: c for c in claim.change_records}
+            checks = getattr(finding, 'change_checks', [])
+            if len(checks) != len(changes) or {c.change_id for c in checks} != set(changes):
+                raise ValueError('Review must assess every explicit change exactly once')
+            for check in checks:
+                check_evidence(check.evidence, sources)
+                if finding.decision == 'accept' and check.decision != 'accept':
+                    raise ValueError('An accepted relationship cannot contain a nonaccepted change')
+                if check.decision == 'accept':
+                    change = changes[check.change_id]
+                    if not change.before or not change.evidence.before:
+                        raise ValueError('Accepted before/after change needs the earlier demonstration')
+                    required = {claim.reference_id, 'seed'}
+                    if not required <= {e.source_id for e in check.evidence}:
+                        raise ValueError('Accepted change review needs both paper sides')
+                    for e in [*change.evidence.before, *change.evidence.after, *change.evidence.inheritance]:
+                        if sources[e.source_id].get('content_level') != 'fulltext':
+                            raise ValueError('New accepted changes require full papers, not abstract-only support')
+                    if claim.relation == 'documented_reuse' and not change.evidence.inheritance:
+                        raise ValueError('Documented reuse requires actual later-paper attribution')
 
 
 def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
@@ -205,7 +248,7 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
     for claim in analysis.claims:
         finding = decisions[claim.id]
         reason = None
-        if isinstance(claim, CurrentClaim):
+        if is_current_claim(claim):
             check_citation_binding(claim, sources)
         if finding.decision != "accept":
             reason = finding.decision
@@ -217,16 +260,18 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
             reason = "no_independent_predecessor_evidence"
         elif claim.relation in {"background", "no_established_relation"}:
             reason = "no_methodological_link"
-        elif isinstance(claim, CurrentClaim) and not claim.citation_context:
+        elif is_current_claim(claim) and not claim.citation_context:
             reason = "no_located_citation_context"
-        elif (isinstance(claim, CurrentClaim) and
+        elif (is_current_claim(claim) and
               RELATIONS[claim.relation]["layer"] == "history" and claim.claim_scope != "seed_workflow"):
             reason = "not_part_of_seed_workflow"
         if reason:
-            withheld.append({"claim": claim.model_dump(), "reason": reason,
+            withheld.append({"claim": claim_record(claim), "reason": reason,
                              "review": finding.model_dump()})
             continue
-        check_evidence(claim.seed_evidence, sources, allowed={"seed"}, scientific=True)
+        later_ids = ({sid for sid, source in sources.items() if sid == 'seed' or source.get('role') == 'seed_supplement'}
+                     if hasattr(claim, 'change_records') else {'seed'})
+        check_evidence(claim.seed_evidence, sources, allowed=later_ids, scientific=True)
         check_evidence(claim.predecessor_evidence, sources, allowed={claim.reference_id}, scientific=True)
         contributor_id = "contributor:" + claim.id
         nodes.append({"id": contributor_id, "kind": claim.contributor_kind,
@@ -238,8 +283,10 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
                       "historical_development_edge": claim.relation == "method_development",
                       "relationship_layer": RELATIONS[claim.relation]["layer"],
                       "status": "model_reviewed_pilot_overlay",
-                      "claim": claim.model_dump(), "review": finding.model_dump()})
-    return {"format_version": "citation_lineage_pilot/3" if isinstance(analysis, CurrentAnalysis) else "citation_lineage_pilot/2", "nodes": nodes, "links": links,
+                      "claim": claim_record(claim), "review": finding.model_dump()})
+    version = ('citation_lineage_pilot/4' if getattr(analysis, 'format_version', None) == 'citation_analysis/4' else
+               'citation_lineage_pilot/3' if isinstance(analysis, CurrentAnalysis) else 'citation_lineage_pilot/2')
+    return {"format_version": version, "nodes": nodes, "links": links,
             "withheld": withheld, "analysis_sha256": analysis_sha256,
             "boundary": "One-hop source-guided pilot, not a complete lineage or canonical atlas admission."
                         " Shared evidence, comparisons and mechanistic precedents are not descent."

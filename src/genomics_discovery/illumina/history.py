@@ -148,7 +148,7 @@ def build_history_index(manifest_path):
                               "relation": c["relation"], "claim": copy.deepcopy(c),
                               "review": copy.deepcopy(item["review"]), "artifact": source,
                               "claim_id": c["id"], "status": item["status"]})
-        elif graph["format_version"] in {"citation_lineage_pilot/2", "citation_lineage_pilot/3"}:
+        elif graph["format_version"] in {"citation_lineage_pilot/2", "citation_lineage_pilot/3", "citation_lineage_pilot/4"}:
             original_nodes = {n["id"]: n for n in graph["nodes"]}
             if len(original_nodes) != len(graph["nodes"]):
                 raise ValueError("Duplicate citation node")
@@ -170,11 +170,31 @@ def build_history_index(manifest_path):
                         or item["target"] != "seed" or item["source"] == "seed"
                         or item["status"] != "model_reviewed_pilot_overlay"):
                     raise ValueError("Invalid published citation relation")
-                if graph["format_version"] == "citation_lineage_pilot/3":
+                if graph["format_version"] in {"citation_lineage_pilot/3", "citation_lineage_pilot/4"}:
                     _check_current_citation(item)
+                if graph['format_version'] == 'citation_lineage_pilot/4':
+                    from .change_records import ExperimentalChange, validate_changes, workflow_records
+                    specification = entry.get('source_registry')
+                    if specification is None:
+                        raise ValueError('Explicit change overlay requires its pinned primary-source registry')
+                    registry = _read((manifest_path.parent / specification['path']).resolve(), specification['sha256'])
+                    changes = [ExperimentalChange.model_validate(row) for row in c.get('change_records', [])]
+                    if not changes:
+                        raise ValueError('Explicit change overlay omitted its change records')
+                    validate_changes(changes, sources=registry, later_records=workflow_records(extraction),
+                        later_source_ids={sid for sid, value in registry.items()
+                                          if sid == 'seed' or value.get('role') == 'seed_supplement'},
+                        earlier_source_ids={c['reference_id']}, require_later_anchor=c['claim_scope'] == 'seed_workflow')
+                    checks = review.get('change_checks', [])
+                    if (len(checks) != len(changes) or {r['change_id'] for r in checks} != {r.id for r in changes}
+                            or any(r['decision'] != 'accept' for r in checks)):
+                        raise ValueError('Explicit change overlay lacks complete accepted change review')
+                    if kind == 'documented_reuse' and any(not change.evidence.inheritance for change in changes):
+                        raise ValueError('Explicit reuse omitted its attribution evidence')
                 if not c["seed_evidence"] or not c["predecessor_evidence"]:
                     raise ValueError("Missing two-sided citation support")
-                if (any(e["source_id"] != "seed" for e in c["seed_evidence"]) or
+                allowed_seed = lambda sid: sid == 'seed' or (graph['format_version'] == 'citation_lineage_pilot/4' and sid.startswith('seed_supplement:'))
+                if (any(not allowed_seed(e["source_id"]) for e in c["seed_evidence"]) or
                         any(e["source_id"] != c["reference_id"] for e in c["predecessor_evidence"])):
                     raise ValueError("Wrong citation-evidence side")
                 if set(c["seed_operation_ids"]) - op_ids:

@@ -16,6 +16,18 @@ from genomics_discovery.illumina.graph import operation_group
 
 
 RELATIONS = {
+    "documented_reuse": {
+        "layer": "history",
+        "meaning": "The later work attributes actual use or adaptation of a specified experimental contribution to the earlier work, which demonstrates it at the claimed scope. The contribution may cover one property or several Operations. Structured before/after records, not component size or a whole-assay label, explain the transfer and changes.",
+        "required": (
+            "Read the full later paper to identify its contributions and attribution, then inspect the relevant earlier full paper. Cite the actual use/adaptation and earlier demonstration separately.",
+            "Record the compared feature, before, after, retained features, exact workflow locations, evidence, and reported consequences/limits. Unchanged reuse is valid; no gain or chemical invention is required.",
+        ),
+        "exclusions": (
+            "A citation, comparison, earlier publication date, shared word or measured improvement alone does not establish reuse.",
+            "No fixed number of Operations defines a component. A new architecture can have no established predecessor; do not force an edge to explain its novelty.",
+        ),
+    },
     "method_development": {
         "layer": "history",
         "meaning": "The later work identifies a particular earlier assay implementation as a starting point and documents its revision into the later assay. The claimed inheritance is an assay strategy or arrangement, not merely use of an isolated contribution.",
@@ -104,8 +116,13 @@ def relation_instructions(kinds):
         lines.append(f"{kind} [{rule['layer']}]: {rule['meaning']}")
         lines.extend("Required: " + text for text in rule.get("required", ()))
         lines.extend("Does not establish: " + text for text in rule.get("exclusions", ()))
-    if HISTORICAL_RELATIONS.intersection(kinds):
+    if (HISTORICAL_RELATIONS - {'documented_reuse'}).intersection(kinds):
         lines.append(HISTORY_DECISION_RULES)
+    elif 'documented_reuse' in kinds:
+        lines.append('Direction is earlier contribution -> later implementation. '
+                     'Attribution plus the earlier demonstration establishes a scoped transfer; '
+                     'dates, similarity, comparison and improvement alone do not. '
+                     'Missing evidence stays unresolved. A graph may have multiple contributors or none.')
     return "\n".join(lines)
 
 
