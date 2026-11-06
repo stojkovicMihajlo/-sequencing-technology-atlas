@@ -122,7 +122,7 @@ def main():
     keys = ['paper_id', 'title', 'scope', 'methods', 'availability', 'review_status',
             'sections_inspected', 'finding', 'bibliographic_review', 'fulltext_content_review', 'extraction_authorized']
     with (a.output / 'ALL_PAPERS.csv').open('w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=keys)
+        writer = csv.DictWriter(f, fieldnames=keys, lineterminator='\n')
         writer.writeheader()
         for r in rows:
             writer.writerow({k: '; '.join(r[k]) if isinstance(r[k], list) else r[k] for k in keys})

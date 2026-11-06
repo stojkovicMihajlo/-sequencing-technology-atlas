@@ -19,7 +19,7 @@ from .render import page
 
 def table_file(path, rows):
     with path.open('w') as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator='\n')
         writer.writeheader()
         writer.writerows(rows)
 

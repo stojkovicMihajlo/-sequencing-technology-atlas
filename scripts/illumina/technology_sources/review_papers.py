@@ -90,7 +90,7 @@ def prepare(source_root, output, decisions, bindings, recover_missing=False, inc
         'content_reviews_completed': 0, 'extraction_authorized': False})
     with (output / 'PAPER_CHECKLIST.csv').open('w') as f:
         keys = ['paper_id', 'title', 'methods', 'availability', 'bibliographic_association', 'paper_content_review', 'sections_inspected']
-        writer = csv.DictWriter(f, fieldnames=keys)
+        writer = csv.DictWriter(f, fieldnames=keys, lineterminator='\n')
         writer.writeheader()
         for r in checks:
             writer.writerow({k: '; '.join(r[k]) if isinstance(r[k], list) else r[k] for k in keys})
