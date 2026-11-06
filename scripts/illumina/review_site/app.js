@@ -19,9 +19,16 @@ function assertions(parent,title,items,record) {
 function evidence(parent, items, record) {
   for (const e of items || []) {
     const box = el('div',null,'evidence'), s = record.sources[e.source_id] || {};
-    box.append(link(s.title || e.source_id,s.url),el('p',`${e.support} · ${s.content_level || e.basis} · ${e.locator}`,'muted'));
+    const imageSource = s.kind === 'image';
+    box.append(link(s.title || (imageSource ? 'Full original Illumina diagram' : e.source_id),s.url),el('p',`${e.support} · ${s.content_level || e.basis} · ${e.locator}`,'muted'));
     if (e.quote) box.append(el('blockquote',e.quote));
-    if (e.bbox) box.append(el('p','Image region [left, top, right, bottom]: '+e.bbox.join(', '),'muted'));
+    if (e.bbox) box.append(el('p','Supporting region in the full image [left, top, right, bottom]: '+e.bbox.join(', ')+'. These coordinates locate evidence; they do not crop the linked source file.','muted'));
+    if (imageSource && /^https?:\/\//.test(s.url || '')) {
+      const full = section(box,'Show the full original diagram');
+      const img = el('img'); img.src = s.url; img.alt = 'Complete source diagram; no evidence-region crop applied';
+      img.style.cssText = 'display:block;max-width:100%;height:auto;background:white;margin-top:12px';
+      full.append(img,el('p','Original source asset. Enlargement cannot restore detail missing from the source.','muted'));
+    }
     if (e.rationale) box.append(el('p',e.rationale));
     parent.append(box);
   }
@@ -56,7 +63,7 @@ function inspect(parent, item, kind, record) {
   const names = ids => (ids || []).map(id => (states.get(id)?.label || id)+' ['+id+']');
   if (kind === 'Operation') fields(parent,[['Description',item.description],['Input States',names(item.inputs)],['Output States',names(item.outputs)],['Mechanism',item.mechanism || 'Not specified'],['Information effect',item.information_effect || 'Not specified']]);
   if (kind === 'State') fields(parent,[['Kind',item.kind],['Features',item.features]]);
-  if (kind === 'State') { assertions(parent,'State properties',item.properties,record); if(item.constituents?.length)raw(parent,'Named constituents',item.constituents); }
+  if (kind === 'State') { assertions(parent,'Named constituents / subpopulations',item.components,record); assertions(parent,'State properties',item.properties,record); if(item.constituents?.length)raw(parent,'Legacy named constituents',item.constituents); }
   if (kind === 'Operation') { assertions(parent,'Input roles',item.input_roles,record); assertions(parent,'Effects on input/output States',item.effects,record); }
   if (kind === 'Flow') {
     const nodes = [...c.states,...c.operations], name = id => nodes.find(n => n.id === id)?.label || id;
