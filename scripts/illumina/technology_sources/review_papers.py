@@ -35,6 +35,12 @@ def prepare(source_root, output, decisions, bindings, recover_missing=False, inc
         if (source_root / 'shared' / name).exists():
             link(source_root / 'shared' / name, output / 'shared' / name)
     paper_ids = set(uses) | (set(state['papers']) if include_source_bibliography else set())
+    # A selected-only bundle must not retain file claims for unrelated paper
+    # directories that it does not materialize. Raw source bibliographies stay
+    # in inventory/sources; they do not become acquisition targets.
+    state['papers'] = {pid: p for pid, p in state['papers'].items() if pid in paper_ids}
+    state['files'] = {key: f for key, f in state['files'].items()
+        if not f['path'].startswith('shared/papers/') or f['path'].split('/')[2] in paper_ids}
     for pid in sorted(paper_ids):
         associations = uses.get(pid, [])
         first = associations[0] if associations else {}

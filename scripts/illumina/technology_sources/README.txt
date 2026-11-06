@@ -1,5 +1,31 @@
 TECHNOLOGY SOURCE COLLECTION
 
+ACTIVE DELIVERABLE (5 November 2026)
+The source library is organized as methods/<Category>/<Subclassification>/<method>/.
+Each method has one physical folder. Other category/subclassification placements
+are relative directory links to it. Count canonical records, not directory links.
+resources/<type>/ holds kits, families, components and unresolved names separately.
+The task order and completion evidence are in
+provenance/experiments/technology_sources_20261105/TASKS.csv.
+
+In each method folder:
+description.txt / description.json: a positive, attributed source description.
+method.json: identity, original classifications, curator placements and sources.
+papers.json: unique assigned papers with availability and original reference IDs.
+references.json: every paper-to-source association, including repeated citations.
+source_comparison.json: card/poster names, grouped drawings and recorded differences.
+diagrams/, posters/, guides/, catalogue/, papers/: actual sources or links to them.
+index.html: a readable view of these same records.
+
+The root CHECKLIST.csv is one row per canonical entry. COUNTS.txt explains the
+counting unit. ALIASES_AND_SPLITS.csv and SOURCE_OCCURRENCES.csv account for old
+names and every source occurrence. MISSING_METHOD_PAPER_FILES.csv records files
+that have not been acquired. An API failure is not proof that a paper is globally
+unavailable. A crop passing label-geometry checks is not a completed visual review.
+
+Newer literature remains in a discovery/screening queue until a primary experimental
+method and its identity are curated. Raw search hits do not create method folders.
+
 Purpose
 Collect original sources, review method identity, and then publish one navigable
 folder per reviewed named method or scoped lineage. This is source preparation,

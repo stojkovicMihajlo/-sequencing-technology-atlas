@@ -91,6 +91,55 @@ def test_every_old_folder_and_source_survives(records):
     assert not r['extraction_authorized']
 
 
+def test_source_report_accounts_for_shared_and_repeated_depictions(records):
+    from scripts.illumina.technology_sources.source_report import build_report
+    inventory, _, _ = records
+    curated = compile_records(records)
+    report = build_report(inventory, curated)
+    counts = report['counts']
+    assert counts['source_occurrences_by_kind'] == {'website_card': 154, 'poster_row': 285, 'footer_panel': 39}
+    assert sum(counts['named_method_source_coverage'].values()) == counts['entries_by_type']['named_method']
+    drop = report['methods']['drop-seq']
+    assert len(drop['website_card_ids']) == 1 and len(drop['poster_row_ids']) == 2
+    gt = report['methods']['g-and-t-seq']
+    assert len(gt['website_card_ids']) == 1 and len(gt['poster_row_ids']) == 3
+    assert any(d['shared_with_method_ids'] for d in report['methods']['chip-seq']['depictions'])
+    assert not any('historical' in s for s in drop['recorded_source_differences'])
+
+
+def test_poster_row_windows_preserve_group_labels_without_neighbor_names(records):
+    from scripts.illumina.technology_sources.poster_check import row_windows, overlap
+    inventory, _, _ = records
+    rows = row_windows(inventory)
+    assert len(rows) == 285
+    target = next(r for r in rows if r['row']['source_row_caption'] == 'cP-RNA-Seq')
+    previous = next(r for r in rows if r['row']['source_row_caption'].startswith('3Seq /'))
+    assert any(overlap(target['row']['prior_tight_region_proposal'], box) for box in previous['row']['exact_label_bboxes'])
+    assert not any(overlap(target['pdf_point_box'], box) for box in previous['row']['exact_label_bboxes'])
+    assert all(r['own_method_labels_contained'] and not r['neighbor_method_labels_intersect'] for r in rows)
+
+
+def test_category_layout_preserves_subclassifications_and_rejects_unplaced_methods(records):
+    from scripts.illumina.technology_sources.classification import placements, method_directory
+    compiled = compile_records(records)
+    assignments = json.loads((REVIEW / 'category_assignments.json').read_text())
+    for m in compiled['methods'].values():
+        p = placements(m, assignments.get(m['id'], []))
+        if m['entry_type'] == 'named_method':
+            assert p and len(method_directory(m, p).parts) == 4
+    drop = compiled['methods']['drop-seq']
+    assert str(method_directory(drop, placements(drop, []))) == 'methods/Transcriptome/RNA Low-Level Detection/drop-seq'
+    unplaced = {'id': 'x', 'classifications': [], 'entry_type': 'named_method'}
+    with pytest.raises(ValueError, match='subclassification'):
+        placements(unplaced, [])
+
+
+def test_title_entities_do_not_create_false_publication_mismatches():
+    from scripts.illumina.technology_sources.article_identity import normalized_title
+    assert normalized_title('G&amp;T-seq') == normalized_title('G&T-seq')
+    assert normalized_title('G&amp;T-seq') != normalized_title('DR-seq')
+
+
 def test_aliases_combine_but_neighboring_assays_do_not(records):
     m = compile_records(records)['methods']
     assert {'art-seq', 'artseq', 'ribo-seq'} == set(m['ribo-seq']['previous_ids'])
@@ -186,8 +235,8 @@ def test_published_folders_only_link_assigned_papers_and_original_bytes(tmp_path
         'paper:3': {'pmid': '3', 'title': 'Related paper C', 'content_level': 'abstract'}}))
     inv = {'methods': {k: {'name': k, 'kind': 'technology', 'source_names': [k],
                            'source_records': ['shared']} for k in ('a', 'b')},
-           'occurrences': {'shared': {'title': 'A / B', 'registry': str(registry), 'shared_source': True,
-                'classifications': [], 'card': {'references': [
+           'occurrences': {'shared': {'title': 'A / B', 'registry': str(registry), 'shared_source': True, 'batch': 'catalogue',
+                'classifications': [{'path': ['Genome', 'DNA Low-Level Detection']}], 'card': {'references': [
                     {'pmid': str(i), 'reference_id': 'ref'+str(i), 'role': 'references'} for i in (1, 2)]}}}}
     d = {'source_identity_fingerprint': source_identity_fingerprint(inv), 'decisions': [
         {'previous_id': k, 'canonical_id': k, 'action': 'retain', 'entry_type': 'named_method',
@@ -210,11 +259,34 @@ def test_published_folders_only_link_assigned_papers_and_original_bytes(tmp_path
     assert related['bibliographic_association'] == 'unassigned_source_bibliography'
     result = publish(bundle, tmp_path / 'curated', d, b)
     assert result['validation']['passed']
-    a = tmp_path / 'curated/methods/a'
+    a = tmp_path / 'curated' / result['methods']['a']['directory']
     assert (a / 'papers/pmid-1/paper.json').is_file()
     assert not (a / 'papers/pmid-2').exists()
     assert len(json.loads((a / 'source_references.json').read_text())) == 2
     assert len(json.loads((a / 'references.json').read_text())) == 1
     assert (tmp_path / 'curated/CHECKLIST.csv').is_file()
+    nested = tmp_path / 'nested_selected'
+    prepare(tmp_path / 'all_paper_bundle', nested, d, b)
+    nested_state = json.loads((nested / 'collection.json').read_text())
+    assert set(nested_state['papers']) == {'pmid-1', 'pmid-2'}
+    assert publish(nested, tmp_path / 'nested_view', d, b)['validation']['passed']
     with pytest.raises(FileExistsError):
         publish(bundle, tmp_path / 'curated', d, b)
+    # A paper with matching recorded hashes can still be the wrong article.
+    # The method view must not expose quarantined originals through a directory link.
+    state = json.loads((bundle / 'collection.json').read_text())
+    article = bundle / 'shared/papers/pmid-1/wrong.xml'
+    article.write_text('<article><body>Wrong paper</body></article>')
+    f = {'path': str(article.relative_to(bundle)), 'sha256': hashlib.sha256(article.read_bytes()).hexdigest(), 'kind': 'article'}
+    state['papers']['pmid-1'].update(files=[f], status='fulltext_acquired')
+    state['files'][f['path']] = f
+    (bundle / 'collection.json').write_text(json.dumps(state))
+    held_view = tmp_path / 'held_view'
+    result = publish(bundle, held_view, d, b, {'holds': [{'paper_id': 'pmid-1', 'files': [f], 'reason': 'Wrong article'}]},
+                     {'a': [{'category': 'Transcriptome', 'subclassification': 'RNA Low-Level Detection', 'basis': 'Inspected source category'}]})
+    paper = held_view / result['methods']['a']['directory'] / 'papers/pmid-1'
+    assert not (paper / 'wrong.xml').exists()
+    assert json.loads((paper / 'paper.json').read_text())['status'] == 'source_identity_hold'
+    assert (held_view / 'methods/Transcriptome/RNA Low-Level Detection/a').resolve() == held_view / result['methods']['a']['directory']
+    assert not (held_view / result['methods']['b']['directory'] / 'papers/pmid-1').exists()
+    assert result['validation']['passed']

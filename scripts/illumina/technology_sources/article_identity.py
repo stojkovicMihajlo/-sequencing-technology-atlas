@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+from html import unescape
 import json
 from pathlib import Path
 import re
@@ -20,7 +21,7 @@ from .materialize import write
 
 
 def normalized_title(value):
-    return ''.join(c for c in unicodedata.normalize('NFKD', value or '').casefold() if c.isalnum())
+    return ''.join(c for c in unicodedata.normalize('NFKD', unescape(value or '')).casefold() if c.isalnum())
 
 
 def xml_identity(raw, expected):
