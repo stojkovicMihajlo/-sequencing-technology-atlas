@@ -77,3 +77,14 @@ Original paper contributions remain immutable and are not counted twice in queri
 See docs/decisions/2026-11-06-history-workflow-connections.txt and
 src/genomics_discovery/illumina/history_bindings.py. This is an implemented,
 software-tested correction; inspect the new live result before claiming success.
+
+EXPANDED BATCH / REVIEW COVERAGE
+New launch.sbatch takes ATLAS_HISTORY_SELECTION (versioned JSON), instead of
+hardcoded seed names. selection_10.json selects8new accepted methods, a fresh
+review of unchanged ATAC research, and reuse of the completed ChIPmentation
+neighborhood through a pinned prior manifest. Four concurrent research/review
+workers; mapping follows publication. A failed method stays isolated.
+Review citation_change_review/2 distinguishes supported omissions from research
+leads and explicitly names any claims they block. Missing sources never become
+positive edges. Legacy review1 and immutable results keep their original behavior.
+See docs/decisions/2026-11-06-history-review-coverage.txt.

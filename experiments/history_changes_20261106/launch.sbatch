@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=atlas-history-changes
 #SBATCH --partition=normal,xiaojie
-#SBATCH --cpus-per-task=2
-#SBATCH --mem=8G
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=12G
 #SBATCH --time=06:00:00
 set -euo pipefail
 hostname
@@ -12,14 +12,16 @@ source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
 : "${ATLAS_HISTORY_RUNTIME:?Frozen runtime name}"
 : "${ATLAS_HISTORY_OUTPUT:?Unused output name}"
 : "${ATLAS_HISTORY_BATCH:?Existing full extraction batch}"
+: "${ATLAS_HISTORY_SELECTION:?Pinned JSON method/review selection}"
 export ATLAS_REPOSITORY="$ATLAS_HISTORY_ROOT/$ATLAS_HISTORY_RUNTIME"
 export ATLAS_CODEX_BIN_DIR="$GROUP_HOME/mstojkov/software/codex/0.163.0/bin"
 source "$ATLAS_REPOSITORY/scripts/sherlock/environment.sh"
 source "$ATLAS_REPOSITORY/scripts/sherlock/atlas-account.sh"
 export PYTHONPATH="$ATLAS_REPOSITORY:$ATLAS_REPOSITORY/src:$GROUP_HOME/mstojkov/software/atlas/illumina-20261031/python"
-export CODEX_SQLITE_HOME="$SCRATCH/atlas-codex-secondary-20261102/sqlite"
+export CODEX_SQLITE_HOME="$L_SCRATCH_JOB/atlas-history-sqlite"
 export XDG_CACHE_HOME="$L_SCRATCH_JOB/atlas-cache"
 export OMP_NUM_THREADS=1
+export ATLAS_REFERENCE_LOCK_FILE="$L_SCRATCH_JOB/atlas-reference-api.lock"
 mkdir -p "$CODEX_SQLITE_HOME" "$XDG_CACHE_HOME"
 cd "$ATLAS_REPOSITORY"
 backup_results() {
@@ -61,6 +63,9 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p asynci
     experiments/citation_lineage_pilot/test_contract.py \
     experiments/citation_lineage_pilot/test_pair.py \
     experiments/citation_lineage_pilot/test_change_records.py \
+    experiments/citation_lineage_pilot/test_review_coverage.py \
+    experiments/citation_lineage_pilot/test_binding_run.py \
+    tests/illumina/test_history_bindings.py tests/illumina/test_illumina_history.py \
     experiments/pilot50_20261104/test_history_stage.py \
     experiments/history_changes_20261106/test_history_changes.py \
     --junitxml="$ATLAS_HISTORY_ROOT/software_${SLURM_JOB_ID}.xml"
@@ -69,4 +74,4 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p asynci
     --library "$ATLAS_PROJECT_ROOT/technology_sources/illumina_library_20261105_07" \
     --vault "$ATLAS_PROJECT_ROOT/technology_sources/illumina_task2_sources_20261105_08" \
     --runtime "$ATLAS_REPOSITORY" --output "$ATLAS_HISTORY_ROOT/$ATLAS_HISTORY_OUTPUT" \
-    --seed atac-seq --seed chipmentation --workers 2
+    --selection "$ATLAS_HISTORY_SELECTION" --workers "${ATLAS_HISTORY_WORKERS:-4}"

@@ -108,6 +108,21 @@ async def execute(args):
         root = Path(row['path']); load_reviewed_binding(root / 'graph.json', sha(root / 'graph.json'))
         overlays.append({'path': str(root / 'graph.json'), 'sha256': sha(root / 'graph.json'),
             'source_registry': {'path': str(root / 'inputs/sources.json'), 'sha256': sha(root / 'inputs/sources.json')}})
+    # Include already reviewed neighborhoods without scheduling them again.
+    # Reopen their pins; paths in old records themselves remain unchanged.
+    loaded = {entry['sha256'] for entry in overlays}
+    for previous in getattr(args, 'prior_manifests', []):
+        previous = Path(previous).resolve()
+        build_history_index(previous)
+        for entry in read(previous)['overlays']:
+            if entry['sha256'] in loaded: continue
+            registered = dict(entry)
+            for key in ('path', 'seed_extraction'):
+                if key in registered: registered[key] = str((previous.parent / registered[key]).resolve())
+            if 'source_registry' in registered:
+                spec = registered['source_registry']
+                registered['source_registry'] = {**spec, 'path': str((previous.parent / spec['path']).resolve())}
+            overlays.append(registered); loaded.add(entry['sha256'])
     manifest = output / 'history_inputs.json'
     write(manifest, {'format_version': 'illumina_history_inputs/1', 'overlays': overlays})
     graph = build_history_index(manifest)
@@ -128,5 +143,6 @@ if __name__ == '__main__':
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--runtime', type=Path, required=True)
     p.add_argument('--workers', type=int, choices=range(1, 5), default=2)
+    p.add_argument('--prior-manifest', dest='prior_manifests', type=Path, action='append', default=[])
     result = asyncio.run(execute(p.parse_args()))
     raise SystemExit(2 if result['status'] == 'completed_with_issues' else 0)

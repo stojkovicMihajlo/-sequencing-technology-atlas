@@ -82,15 +82,22 @@ async def execute(args):
     output = args.output.resolve(); output.mkdir(parents=True, exist_ok=False)
     snapshot = output / 'accepted_snapshot'
     snapshot_result = snapshot_accepted(args.batch, snapshot)
+    review_runs = {}
+    for previous in getattr(args, 'review_existing', []):
+        mid = read(previous / 'inputs/seed_binding.json')['record_id']
+        if mid in review_runs or mid in args.seed:
+            raise ValueError('One history work unit per method; a review must not repeat its original research')
+        review_runs[mid] = previous.resolve()
+    methods_requested = [*args.seed, *review_runs]
     cards = {c['record_id']: c for c in read(snapshot / 'inventory.json')['cards']}
     selection = {mid: 'paper:' + cards[mid]['curation_binding']['primary_paper_id'].removeprefix('pmid-')
-                 for mid in args.seed if mid in cards}
+                 for mid in methods_requested if mid in cards}
     write(output / 'primary_selection.json', selection)
     index = prepare_index(snapshot, output / 'primary_selection.json')
     write(output / 'methods.json', index)
     cache = reference_cache(snapshot, args.library, args.vault, output / 'reference_cache.json')
     state = {'status': 'citation_research', 'job_id': os.environ['SLURM_JOB_ID'],
-        'seeds': args.seed, 'citation_runs': {}, 'snapshot': snapshot_result, 'workers': args.workers,
+        'seeds': methods_requested, 'citation_runs': {}, 'snapshot': snapshot_result, 'workers': args.workers,
         'analysis_format': 'citation_analysis/4', 'model': 'gpt-6.1-sol', 'effort': 'xhigh'}
     write(output / 'state.json', state)
     semaphore = asyncio.Semaphore(args.workers)
@@ -103,11 +110,21 @@ async def execute(args):
                 write(output / 'state.json', state); return
             destination = output / 'citations' / mid
             paper = method['selected_primary']
-            command = [sys.executable, str(args.runtime / 'experiments/citation_lineage_pilot/run.py'), 'run',
-                '--batch', str(snapshot), '--inventory', str(args.batch / 'inventory.json'), '--record', mid,
-                '--paper', paper['source_id'], '--article', paper['article'], '--source-cache', str(cache),
-                '--output', str(destination)]
-            row = {'status': 'running', 'path': str(destination), 'command': command}
+            runner = str(args.runtime / 'experiments/citation_lineage_pilot/run.py')
+            if mid in review_runs:
+                old = read(review_runs[mid] / 'inputs/seed_binding.json')
+                if old['parent_artifact_pins']['extraction.json'] != method['extraction_sha256']:
+                    state['citation_runs'][mid] = {'status': 'source_hold',
+                        'reason': 'Existing research review would join a different extracted workflow version'}
+                    write(output / 'state.json', state); return
+                command = [sys.executable, runner, 'review-existing', '--previous', str(review_runs[mid]), '--output', str(destination)]
+            else:
+                command = [sys.executable, runner, 'run',
+                    '--batch', str(snapshot), '--inventory', str(args.batch / 'inventory.json'), '--record', mid,
+                    '--paper', paper['source_id'], '--article', paper['article'], '--source-cache', str(cache),
+                    '--output', str(destination)]
+            row = {'status': 'running', 'path': str(destination), 'command': command,
+                   'mode': 'fresh_review_of_unchanged_research' if mid in review_runs else 'new_full_paper_research'}
             state['citation_runs'][mid] = row; write(output / 'state.json', state)
             log = output / (mid + '.log')
             try:
@@ -121,7 +138,7 @@ async def execute(args):
                 row.update(status='failed', reason=f'{type(exc).__name__}: {exc}', log=str(log))
             write(output / 'state.json', state)
 
-    await asyncio.gather(*(one(mid) for mid in args.seed))
+    await asyncio.gather(*(one(mid) for mid in methods_requested))
     completed = {mid: row['path'] for mid, row in state['citation_runs'].items() if row['status'] == 'completed'}
     write(output / 'pair_candidates.json', pair_candidates(index, completed))
     overlays = []
@@ -139,7 +156,8 @@ async def execute(args):
         from types import SimpleNamespace
         from experiments.history_changes_20261106.connect import execute as connect_workflows
         connections = await connect_workflows(SimpleNamespace(history_run=output,
-            output=output / 'connections', runtime=args.runtime, workers=args.workers))
+            output=output / 'connections', runtime=args.runtime, workers=args.workers,
+            prior_manifests=getattr(args, 'prior_manifest', [])))
         state['connections'] = {'path': str(output / 'connections'),
             'status': connections['status'], 'reviewed_workflow_connections': connections['reviewed_workflow_connections'],
             'unbound_contributions': connections['unbound_contributions']}
@@ -153,10 +171,22 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('batch', 'library', 'vault', 'runtime', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
-    parser.add_argument('--seed', action='append', required=True)
+    parser.add_argument('--seed', action='append', default=[])
+    parser.add_argument('--selection', type=Path)
     parser.add_argument('--workers', type=int, default=2)
     parser.add_argument('--citation-only', action='store_true', help='Stop after paper-contribution publication; do not execute exact workflow mappings.')
+    parser.add_argument('--review-existing', type=Path, action='append', default=[])
+    parser.add_argument('--prior-manifest', type=Path, action='append', default=[])
     args = parser.parse_args()
+    if args.selection:
+        plan = read(args.selection)
+        if plan.get('format_version') != 'citation_history_selection/1':
+            parser.error('Unknown history selection format')
+        args.seed.extend(plan['seed_methods'])
+        args.review_existing.extend(Path(p) for p in plan.get('review_existing', []))
+        args.prior_manifest.extend(Path(p) for p in plan.get('prior_manifests', []))
+    if not args.seed and not args.review_existing:
+        parser.error('Select at least one new method or completed research review')
     if len(set(args.seed)) != len(args.seed) or not 1 <= args.workers <= 4:
         parser.error('Distinct explicit seeds and one to four history workers required')
     result = asyncio.run(execute(args))

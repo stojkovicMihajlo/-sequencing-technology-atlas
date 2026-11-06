@@ -5,6 +5,7 @@ from pydantic import Field
 
 from models import Record, Finding, Review
 from genomics_discovery.illumina.change_records import ExperimentalChange, Evidence
+from genomics_discovery.illumina.history_coverage import CoverageFinding
 
 
 def evidence_union(items):
@@ -81,3 +82,22 @@ class ChangeFinding(Finding):
 class ChangeReview(Review):
     format_version: Literal['citation_change_review/1'] = 'citation_change_review/1'
     findings: list[ChangeFinding]
+
+
+class CoverageChangeReview(Record):
+    format_version: Literal['citation_change_review/2'] = 'citation_change_review/2'
+    analysis_sha256: str
+    findings: list[ChangeFinding]
+    coverage_findings: list[CoverageFinding]
+    summary: str
+
+    @property
+    def omitted_candidates(self):
+        """Schedule bounded correction only for established missing contributions."""
+        return [f.description for f in self.coverage_findings if f.kind == 'omitted_supported_contribution']
+
+
+def parse_review(document):
+    model = (CoverageChangeReview if document.get('format_version') == 'citation_change_review/2'
+             else ChangeReview if document.get('format_version') == 'citation_change_review/1' else Review)
+    return model.model_validate(document)

@@ -38,6 +38,34 @@ def test_reference_acquisition_reuses_verified_full_text_without_network(tmp_pat
     assert result['R1']['bibliographic_title_agreement'] == 'review_required_against_seed_citation'
 
 
+def test_newly_acquired_full_paper_has_reusable_original_and_reading_artifact_bindings(tmp_path, monkeypatch):
+    import run as runner
+    inputs = tmp_path / 'inputs'; inputs.mkdir()
+    runner.write(inputs / 'sources_initial.json', {'seed': SOURCES['seed']})
+    runner.write(inputs / 'bibliography.json', {'R1': {'identifiers': {'pmid': '123'}, 'citation': 'Earlier paper'}})
+
+    def fetch_metadata(url, path):
+        path.write_text('<PubmedArticleSet/>')
+        return {'path': str(path), 'sha256': runner.sha(path)}
+
+    def acquire(publication, output):
+        article = output / 'article.xml'
+        article.write_text('<article><front><article-meta><article-id pub-id-type="pmid">123</article-id>'
+            '</article-meta></front><body><p>Original experimental contribution.</p></body></article>')
+        text = output / 'article.txt'; text.write_text(runner.jats_text(article.read_bytes())[0])
+        return {'status': 'fulltext_acquired', 'path': article.name, 'sha256': runner.sha(article),
+                'text_path': text.name, 'text_sha256': runner.sha(text)}
+
+    monkeypatch.setattr(runner, 'fetch', fetch_metadata)
+    monkeypatch.setattr(runner, 'parse_pubmed', lambda raw: {'123': {'pmid': '123', 'title': 'Earlier paper',
+        'abstract': [], 'identifiers': {'pmc': ['PMC123']}}})
+    monkeypatch.setattr(runner, 'acquire_pmc_fulltext', acquire)
+    result = runner.acquire(inputs, SimpleNamespace(references=[SimpleNamespace(reference_id='R1')]))['R1']
+    assert Path(result['original']['path']).is_file() and Path(result['path']).is_file()
+    assert result['text'] == Path(result['path']).read_text()
+    runner.validate_cached_reference('123', result)
+
+
 def test_cache_embedded_text_cannot_differ_from_pinned_rendition(tmp_path):
     import run as runner
     original = tmp_path / 'article.xml'; original.write_text('<article><body><p>Actual source.</p></body></article>')

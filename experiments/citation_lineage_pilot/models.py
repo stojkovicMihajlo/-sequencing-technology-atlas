@@ -201,6 +201,11 @@ def validate_review(document, analysis, analysis_sha256, sources):
     if len(actual) != len(set(actual)) or set(actual) != expected:
         raise ValueError("Review must cover every claim exactly once")
     claims = {x.id: x for x in analysis.claims}
+    if hasattr(document, 'coverage_findings'):
+        from genomics_discovery.illumina.history_coverage import validate_coverage
+        blocked = validate_coverage(document.coverage_findings, sources, claims)
+        if any(f.decision == 'accept' and f.claim_id in blocked for f in document.findings):
+            raise ValueError('An accepted claim cannot have a blocking coverage finding')
     for finding in document.findings:
         check_evidence(finding.evidence, sources)
         claim = claims[finding.claim_id]
@@ -252,7 +257,7 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
             check_citation_binding(claim, sources)
         if finding.decision != "accept":
             reason = finding.decision
-        elif review.omitted_candidates:
+        elif review.omitted_candidates and not hasattr(review, 'coverage_findings'):
             reason = "review_found_omissions"
         elif any(x.blocks_relation for x in finding.unresolved_assessments):
             reason = "blocking_unresolved_issue"
@@ -286,8 +291,12 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
                       "claim": claim_record(claim), "review": finding.model_dump()})
     version = ('citation_lineage_pilot/4' if getattr(analysis, 'format_version', None) == 'citation_analysis/4' else
                'citation_lineage_pilot/3' if isinstance(analysis, CurrentAnalysis) else 'citation_lineage_pilot/2')
-    return {"format_version": version, "nodes": nodes, "links": links,
+    result = {"format_version": version, "nodes": nodes, "links": links,
             "withheld": withheld, "analysis_sha256": analysis_sha256,
             "boundary": "One-hop source-guided pilot, not a complete lineage or canonical atlas admission."
                         " Shared evidence, comparisons and mechanistic precedents are not descent."
                         " Referenced methods have not received full workflow extraction."}
+    if hasattr(review, 'coverage_findings'):
+        from genomics_discovery.illumina.history_coverage import coverage_record
+        result['coverage_review'] = coverage_record(review.coverage_findings)
+    return result

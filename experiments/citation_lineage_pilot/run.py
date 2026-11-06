@@ -6,6 +6,7 @@ Native stages run only in Slurm. No source graph or canonical registry is edited
 
 import argparse
 import asyncio
+import fcntl
 import hashlib
 import json
 import os
@@ -26,7 +27,8 @@ from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jat
 from genomics_discovery.illumina.citations import bibliography
 from genomics_discovery.illumina.history_inputs import resolve_article
 from genomics_discovery.illumina.paper_reads import record_read, check_full_reads
-from change_models import ChangeAnalysis, ChangeReview
+from change_models import ChangeAnalysis, ChangeReview, CoverageChangeReview, parse_review
+from genomics_discovery.illumina.history_coverage import validate_coverage
 from models import (
     Analysis, CurrentAnalysis, CurrentNominations, Nominations, Review, graph_overlay, parse_analysis, validate_analysis,
     validate_nominations, validate_review,
@@ -158,6 +160,18 @@ def prepare(args):
 
 
 def acquire(inputs, nominations):
+    lock_path = os.environ.get('ATLAS_REFERENCE_LOCK_FILE')
+    if not lock_path:
+        return acquire_registered(inputs, nominations)
+    # Batch workers are separate processes. A threading lock in one worker
+    # cannot satisfy PMC's prohibition on concurrent OAI requests across them.
+    with Path(lock_path).open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        time.sleep(0.35)  # also separate the last request of the previous worker
+        return acquire_registered(inputs, nominations)
+
+
+def acquire_registered(inputs, nominations):
     sources = read(inputs / "sources_initial.json")
     refs = read(inputs / "bibliography.json")
     output = inputs / "retrieval"
@@ -210,17 +224,25 @@ def acquire(inputs, nominations):
             "url": "https://pubmed.ncbi.nlm.nih.gov/" + pmid + "/",
             "bibliographic_title_agreement": "review_required_against_seed_citation",
             "metadata_receipt": receipt, "fulltext_acquisition": full}
+        if level == 'fulltext':
+            # A successful acquisition must be reusable by the same original-
+            # article contract as a curated cache entry. Preserve its rendition
+            # receipt; do not leave the article stranded behind a relative path.
+            source = sources[nomination.reference_id]
+            source.update(path=str((output / full['text_path']).resolve()), sha256=full['text_sha256'],
+                original={'path': str((output / full['path']).resolve()), 'sha256': full['sha256']})
+            validate_cached_reference(pmid, source)
     write(inputs / "sources.json", sources)
     return sources
 
 
-SCHEMAS = {"nominate": CurrentNominations, "analyse": ChangeAnalysis, "review": ChangeReview}
+SCHEMAS = {"nominate": CurrentNominations, "analyse": ChangeAnalysis, "review": CoverageChangeReview}
 
 
 def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
     raw = read(Path(artifact))
     document = (parse_analysis(raw) if role == 'analyse' else
-                (ChangeReview if raw.get('format_version') == 'citation_change_review/1' else Review).model_validate(raw)
+                parse_review(raw)
                 if role == 'review' else SCHEMAS[role].model_validate(raw))
     sources = read(inputs / ("sources_initial.json" if role == "nominate" else "sources.json"))
     if role == "nominate":
@@ -345,7 +367,7 @@ async def execute(args):
     write(root / "state.json", state)
     implementation = {str(p): sha(p) for p in Path(__file__).parent.glob('*.py')}
     from genomics_discovery.illumina import change_records as change_policy
-    for path in (Path(change_policy.__file__), Path(record_read.__code__.co_filename),
+    for path in (Path(change_policy.__file__), Path(validate_coverage.__code__.co_filename), Path(record_read.__code__.co_filename),
                  Path(resolve_article.__code__.co_filename)):
         implementation[str(path.resolve())] = sha(path)
     policy_path = Path(relationship_policy.__file__).resolve()

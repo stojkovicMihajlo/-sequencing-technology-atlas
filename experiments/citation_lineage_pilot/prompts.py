@@ -157,6 +157,12 @@ The existing extraction is read-only and supplies workflow locations; the papers
 establish what changed. A component may span several Operations. A distinguishing
 new approach need not have an established historical donor; explain it in summary
 with source support rather than forcing an ancestry edge.
+Make the before/after comparison understandable without a label such as "earlier
+use". Identify the relevant material/data, action, product and workflow placement
+when those are what changed. State what was retained. If the paper only credits
+reuse, explicitly say that no change to the reused feature or isolated benefit
+is established. Attribution alone does not independently verify molecular identity.
+Do not manufacture a difference to make every historical edge an innovation.
 
 Use the registered source_tool to traverse the complete seed paper from start0
 through total_characters with bounded pages, following start + returned-text
@@ -218,5 +224,18 @@ errors, needs_evidence for unavailable decisive support, reject for a false link
 Do not rewrite and then approve your own replacement. A whole-assay or joint gain
 must not become a causal benefit of one isolated change. Unchanged reuse and no
 reported gain are valid. A new approach can remain without an ancestry edge.
+Return citation_change_review/2. coverage_findings separates two cases:
+- omitted_supported_contribution: a consequential in-scope contribution absent
+  from the analysis but already established by BOTH registered full papers. Cite
+  both; a missing earlier paper cannot support this category. This requests a
+  bounded author correction and marks coverage incomplete until resolved.
+- research_lead: an unanswered source/property question, including an unavailable
+  original, supplement or provenance. State requested_evidence. An already held
+  claim or a withdrawn unsupported claim is not a missing established edge.
+For each finding explicitly name affected existing claim IDs and whether it blocks
+them. Blocking affected claims cannot be accepted. Use an empty affected list for
+independent future work. Do not suppress unrelated accepted claims to preserve a
+research lead, and do not claim exhaustive coverage when a supported omission
+remains. Claims still require all existing two-sided source/change checks.
 """,
 }

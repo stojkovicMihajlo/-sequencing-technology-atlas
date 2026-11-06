@@ -86,6 +86,7 @@ def _source_registry_context(entry, manifest_path, graph):
                 collect(item.get("review", {}))
             else:
                 collect(item)
+    collect(graph.get('coverage_review', {}))
     missing = referenced - registry.keys()
     if missing:
         raise ValueError("Evidence source IDs absent from supplied registry: " + ", ".join(sorted(missing)))
@@ -115,7 +116,7 @@ def build_history_index(manifest_path):
     manifest = json.loads(manifest_path.read_text())
     if manifest["format_version"] != "illumina_history_inputs/1":
         raise ValueError("Unknown history manifest")
-    nodes, edges, loaded, withheld = {}, [], set(), []
+    nodes, edges, loaded, withheld, coverage_reports = {}, [], set(), [], []
 
     def workflow(record_id, extraction_sha, title):
         if len(extraction_sha) != 64:
@@ -174,6 +175,15 @@ def build_history_index(manifest_path):
                 raise ValueError("Seed extraction identity mismatch")
             op_ids = {o["id"] for o in extraction["operations"]}
             target = workflow(binding["record_id"], pin_extraction, seed["name"])
+            if 'coverage_review' in graph:
+                from .history_coverage import check_published_coverage
+                specification = entry.get('source_registry')
+                if specification is None:
+                    raise ValueError('Historical coverage requires its pinned source registry')
+                registry = _read((manifest_path.parent / specification['path']).resolve(), specification['sha256'])
+                check_published_coverage(graph['coverage_review'], registry, graph['links'], graph.get('withheld', []))
+                coverage_reports.append({'target': target, 'artifact': copy.deepcopy(source),
+                                         'coverage': copy.deepcopy(graph['coverage_review'])})
             for finding in graph.get("withheld", []):
                 withheld.append({"target": target, "artifact": copy.deepcopy(source),
                                  "finding": copy.deepcopy(finding),
@@ -250,7 +260,7 @@ def build_history_index(manifest_path):
         if not ready:
             raise ValueError("Historical contribution cycle needs review")
         pending = {n: predecessors - ready for n, predecessors in pending.items() if n not in ready}
-    return {"nodes": nodes, "edges": edges, "withheld": withheld, "overlay_sha256": sorted(loaded),
+    return {"nodes": nodes, "edges": edges, "withheld": withheld, "coverage_reports": coverage_reports, "overlay_sha256": sorted(loaded),
             "boundary": "Explicitly loaded, previously model-reviewed pilot overlays; no new scientific validation, "
                         "date/priority verification, or canonical method identity resolution."}
 
@@ -290,6 +300,8 @@ def technology_history(index, record_id, *, extraction_sha256=None, max_depth=2)
         "other_relationship_nodes": [copy.deepcopy(index["nodes"][n]) for n in sorted(related_ids)],
         "direct_withheld_claims": [copy.deepcopy(item) for item in index.get("withheld", [])
                                    if item["target"] == target["id"]],
+        "coverage_reports": [copy.deepcopy(item) for item in index.get('coverage_reports', [])
+                             if item['target'] == target['id']],
         "frontier": stops, "overlay_sha256": index["overlay_sha256"],
         "boundary": index["boundary"] + " Paths join distinct scoped claims; they do not establish transitive "
                     "inheritance of a component or whole assay. A traversal endpoint is not proof of first invention. "

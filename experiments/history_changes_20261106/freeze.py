@@ -17,7 +17,8 @@ import tempfile
 TESTS = ['tests/illumina/test_history_bindings.py', 'tests/illumina/test_illumina_history.py',
     'tests/ideation/test_context.py', 'experiments/citation_lineage_pilot/test_contract.py',
     'experiments/citation_lineage_pilot/test_pair.py', 'experiments/citation_lineage_pilot/test_change_records.py',
-    'experiments/citation_lineage_pilot/test_binding_run.py', 'experiments/history_changes_20261106/test_connections.py']
+    'experiments/citation_lineage_pilot/test_binding_run.py', 'experiments/citation_lineage_pilot/test_review_coverage.py',
+    'experiments/history_changes_20261106/test_connections.py']
 
 
 def fixture_files(repository, manifest):
@@ -42,6 +43,10 @@ def main(args):
     files = set(base['files']) | fixture_files(repository,
         repository / 'experiments/evolution_review_20261103/history_inputs.json')
     files.add(str(Path(__file__).relative_to(repository)))
+    files.update(('src/genomics_discovery/illumina/history_coverage.py',
+        'experiments/citation_lineage_pilot/test_review_coverage.py',
+        'experiments/history_changes_20261106/selection_10.json',
+        'docs/decisions/2026-11-06-history-review-coverage.txt'))
     args.output.mkdir(parents=True, exist_ok=False)
     pins = {name: hashlib.sha256((repository / name).read_bytes()).hexdigest() for name in sorted(files)}
     archive = args.output / (args.name + '.tar.gz')
@@ -62,7 +67,7 @@ def main(args):
     manifest = {'base_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repository, text=True).strip(),
         'files': pins, 'archive_sha256': hashlib.sha256(archive.read_bytes()).hexdigest(),
         'relocated_software_tests': 'passed; see relocated_tests.txt',
-        'reason': 'Include the complete pinned fixture closure; no scientific input or model prompt changed.'}
+        'reason': 'Typed coverage review, explicit reuse-versus-change instructions, generic batch selection, and complete pinned test fixtures. Existing scientific outputs stay unchanged.'}
     (args.output / (args.name + '_manifest.json')).write_text(json.dumps(manifest, indent=2) + '\n')
     print(json.dumps({'archive': str(archive), 'files': len(pins), 'sha256': manifest['archive_sha256']}))
 
