@@ -5,6 +5,7 @@ Archived scientific files are copied unchanged; only deployment packaging change
 """
 import argparse
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -48,12 +49,24 @@ def main(args):
         'experiments/history_changes_20261106/selection_10.json',
         'docs/decisions/2026-11-06-history-review-coverage.txt'))
     files.update(args.extra_file)
+    committed = {}
+    for spec in args.committed_file:
+        commit, name = spec.split(':', 1)
+        if Path(name).is_absolute() or '..' in Path(name).parts:
+            raise ValueError('Committed file must be repository-relative')
+        committed[name] = commit
+        files.add(name)
     tests = args.test or TESTS
     args.output.mkdir(parents=True, exist_ok=False)
-    pins = {name: hashlib.sha256((repository / name).read_bytes()).hexdigest() for name in sorted(files)}
+    contents = {name: subprocess.check_output(['git','show',committed[name]+':'+name],cwd=repository)
+        if name in committed else (repository/name).read_bytes() for name in sorted(files)}
+    pins = {name: hashlib.sha256(raw).hexdigest() for name,raw in contents.items()}
     archive = args.output / (args.name + '.tar.gz')
     with tarfile.open(archive, 'w:gz') as tar:
-        for name in pins: tar.add(repository / name, arcname=name, recursive=False)
+        for name,raw in contents.items():
+            info = tarfile.TarInfo(name); info.size=len(raw)
+            info.mode = 0o755 if os.access(repository/name,os.X_OK) else 0o644
+            tar.addfile(info,io.BytesIO(raw))
     # A relocated checkout exposes missing fixtures that tests in the original
     # repository silently obtain from unbundled local directories.
     with tempfile.TemporaryDirectory(prefix='atlas-history-release-') as temp:
@@ -70,6 +83,7 @@ def main(args):
         'files': pins, 'archive_sha256': hashlib.sha256(archive.read_bytes()).hexdigest(),
         'relocated_software_tests': 'passed; see relocated_tests.txt',
         'test_selection': tests,
+        'committed_file_overrides': committed,
         'reason': args.reason}
     (args.output / (args.name + '_manifest.json')).write_text(json.dumps(manifest, indent=2) + '\n')
     print(json.dumps({'archive': str(archive), 'files': len(pins), 'sha256': manifest['archive_sha256']}))
@@ -83,4 +97,5 @@ if __name__ == '__main__':
     parser.add_argument('--extra-file', action='append', default=[], help='Additional repository-relative pinned file')
     parser.add_argument('--test', action='append', default=[], help='Override relocated test selection; may repeat')
     parser.add_argument('--reason', default='Typed coverage review, explicit reuse-versus-change instructions, generic batch selection, and complete pinned test fixtures. Existing scientific outputs stay unchanged.')
+    parser.add_argument('--committed-file', action='append', default=[], help='Use exact COMMIT:relative-file bytes, leaving unrelated working changes out of the release')
     main(parser.parse_args())

@@ -28,7 +28,7 @@ class PropertyAssertion(StrictModel):
 
 class IdentityProperty(PropertyAssertion):
     property: Literal["identity"]
-    value: Text = Field(description="Actual named preparation/dataset at this boundary, e.g. cap-selected cDNA. Not the biological target unless that target is physically present.")
+    value: Text = Field(description="What actually exists at this boundary: a concrete sample, molecular material/mixture, construct or dataset, e.g. cells before lysis, bead-bound RNA, cap-selected cDNA, or aligned reads. Include the relevant experimental form; broad domain, intended next action or biological measurement target alone is insufficient. Keep demonstrated specimen versus broader assay applicability explicit without inventing unsupported specificity.")
 
 
 class StrandednessProperty(PropertyAssertion):
@@ -67,7 +67,7 @@ class AssociationProperty(PropertyAssertion):
 
 class PhysicalContextProperty(PropertyAssertion):
     property: Literal["physical_context"]
-    value: Text = Field(description="Supported location/organization of this preparation, such as intact droplets or pooled beads. Does not itself establish independent fractions or a pooling operation.")
+    value: Text = Field(description="Supported physical form/location/organization: cells before lysis versus lysate, isolated nuclei, a tissue section, solution, bead-associated material, intact droplets or pooled beads, when consequential. Do not infer viability, fixation, free/bound status or mixing from generic names. Does not itself establish independent fractions or a pooling operation.")
 
 
 class AttributionValue(StrictModel):
@@ -95,7 +95,7 @@ class DataTypeProperty(PropertyAssertion):
 
 class DataContentProperty(PropertyAssertion):
     property: Literal["data_content"]
-    value: Text = Field(description="Observed fields/identifiers and what they represent. Describe a dataset, not physical molecule chemistry.")
+    value: Text = Field(description="What observations/fields/identifiers actually exist at this processing stage and what they represent; distinguish observed signals from inferred quantities. Raw reads do not already have coordinates supplied by a later alignment. Describe a dataset, not physical molecule chemistry.")
 
 
 class OtherProperty(PropertyAssertion):
@@ -130,7 +130,7 @@ class StructuredState(State):
         "Legacy field: empty in this contract. Record scientific facts as typed properties.")
     components: tuple[StateComponent, ...] = Field(default=(), description=
         "Optional addressable constituents/subpopulations. Several components in one State are not separate fractions. Do not decompose every cell or reagent.")
-    properties: Annotated[tuple[StateProperty, ...], Field(min_length=1)]
+    properties: Annotated[tuple[StateProperty, ...], Field(min_length=1, description="Source-supported identity of the whole material/dataset plus consequential properties. Record physical form, molecular features, associations or attribution when omitting them would hide the retained transformation, interface, measurement meaning or method distinction. Missing properties mean not recorded, not absent or not applicable.")]
 
     @model_validator(mode="after")
     def property_contract(self):
@@ -314,6 +314,16 @@ CONSTRUCT THE WORKFLOW IN THIS ORDER
 
 STATE ASSERTIONS
 State.label is a readable scientific name, not a semantic identity key.
+Name the actual material/data preparation, rather than its intended use. Keep
+the purpose of the next action in the Operation. Broad biological applicability
+does not justify erasing physical preparation: cells before lysis, nuclei,
+tissue sections, lysate, extracted nucleic acid and libraries are distinct inputs.
+Use existing identity/physical_context properties when that distinction matters.
+Keep a demonstrated specimen and the method's broader reported scope explicit;
+neither force every application to one cell line nor broaden a demonstrated
+preparation into an unspecified material. A quoted fact alone is not a recorded
+State property. Review State labels/properties for this distinction as well as
+for unsupported specificity; retrieve adjacent Operations to assess its meaning.
 Operation labels likewise remain local source-supported action descriptions;
 this version does not normalize operation concepts or establish shared mechanisms.
 source_label preserves the literal caption; neither a disclaimer nor quotation

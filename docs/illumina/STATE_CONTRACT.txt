@@ -1,0 +1,113 @@
+STATE DEFINITION AND REQUIRED SCIENTIFIC CONTENT
+Development clarification6November2026. Existing scientific records and frozen
+runtimes are unchanged. Operations and Flows retain their current definitions.
+
+A State records WHAT EXISTS at a particular point in the scoped workflow:
+an actual sample, fraction, molecular mixture/construct, or dataset. It does not
+record the action being performed, the assay's broad application domain, or only
+the biological quantity researchers hope to measure.
+
+"Preparation" is ambiguous English: preparing material is an Operation; a
+prepared sample is material. Prefer concrete sample/constituent names in State
+labels. "Adapter-tagged genomic DNA fragments in a chromatin sample" describes
+material; "Tagment chromatin with adapter-loaded Tn5" describes an action.
+
+LEVELS OF DESCRIPTION
+1. kind=material|data is only the broad family.
+2. Identify the actual object at this boundary: cells, isolated nuclei, lysate,
+   a chromatin fraction, extracted RNA, a DNA-probe mixture, bead-bound RNA,
+   a sequencing library, sequence reads, alignments, or a named derived result.
+   These are examples, not a closed universal list or automatic equivalences.
+3. Add source-supported properties needed to understand this object, the next
+   transformation, and the measurement it ultimately supports.
+
+MATERIAL STATE QUESTIONS AND EXISTING FIELDS
+- What is the actual material/sample? identity at subject=self. Name physical
+  material and its supported preparation form; purpose alone is insufficient.
+- What consequential constituents/subpopulations are present? components,
+  with local subjects for properties. A mixture is not several isolated fractions.
+  Do not enumerate every constituent of a cell, buffer or commercial kit.
+- How is it organized? physical_context. Distinguish cells/nuclei from lysate,
+  solution from immobilized material, intact compartments from mixed contents,
+  and separately processed preparations from actual pools, when consequential.
+- What molecular features matter? strandedness, topology, terminal_group,
+  modification, sequence_segment. Put each on its actual molecular subject.
+  Do not copy a template's chemical mark onto its DNA reporter or require a
+  full molecular structure/formula for every intermediate.
+- What is attached/associated with what? association plus local partner. Binding,
+  hybridization, covalent attachment, containment and co-presence are different.
+- What identity/measurement association is retained? attribution: unit, actual
+  carrier and supported association. Record barcode linkage, sample provenance,
+  origin-selected sequence or another relevant carrier without inventing maps.
+- How was it obtained and where does it go? Follow the existing producer/input/
+  output Flows and Operations. Do not duplicate that graph as another free-text
+  history or infer all-to-all molecular derivation from multi-input connectivity.
+- What supports these facts and what remains unresolved? evidence and the
+  existing exact-target Unknown/Correction records.
+
+DATA STATE QUESTIONS AND EXISTING FIELDS
+- What dataset is it? identity and required data_type.
+- What observations/fields does it actually contain? data_content.
+- What processing has already occurred? Name the actual stage in identity and
+  data_type; its producing Operation supplies the process. Raw reads must not
+  already assert aligned genomic coordinates introduced by a later mapper.
+- How are observations linked to molecules/cells/samples/locations? attribution.
+- Which quantities are directly observed and which are inferred? data_content,
+  attribution and the source-qualified measurement explanation.
+- What supports those claims? evidence and exact-target qualifications.
+
+WHAT IS REQUIRED, AND WHEN
+Every State needs a specific identity, source support and correct graph position.
+Material identity must distinguish the physical preparation relevant to its use.
+Data additionally needs its actual dataset type. Other properties are required
+when their omission prevents interpretation of a retained transformation, an
+input/output interface, attribution, or a distinguishing method feature. They
+are not a demand for every possible chemical or execution detail.
+
+The source scope controls the starting boundary. A method that begins with
+purified RNA need not acquire a fictitious cellular starting State. A cell line
+used in a demonstrated implementation is context, not automatic evidence of
+all-cell applicability. Conversely, keeping general method scope must not erase
+the concrete distinction between cells, nuclei, lysate and extracted material.
+
+Missing property means NOT RECORDED. It does not mean absent, not applicable or
+unreported by the authors. Available but omitted consequential facts require
+correction. Truly missing consequential evidence requires source recovery. An
+unnecessary recipe detail does not justify inventing a fact or blocking a sound
+schematic. A schema can enforce fields/subjects/references; scientific review
+must assess sufficiency and support.
+
+EXAMPLES FROM THE CURRENT EXTRACTIONS
+- Drop-seq pooled_beads: RNA hybridized to bead-bound primers, outside broken
+  droplets. Barcode/UMI-bearing primers carry the attribution; intact-droplet
+  pooling and pooled bead material are different physical contexts.
+- ClickSeq s_purified: single-stranded cDNA with a 3-prime azido terminus.
+  That feature explains the following click-joining interface. It is not RNA
+  merely because the assay measures RNA, and it is not yet a PCR library.
+- cP-RNA-seq s1: one gel-purified RNA mixture with different terminal-group
+  subpopulations. Their separate chemistry does not establish separate tubes.
+- mNET-seq s0_cells: the author mixed general mammalian scope, material identity
+  and the purpose of chromatin isolation in the label. The paper explicitly
+  reports HeLa cells. Keep the starting material and documented specimen clear.
+- irCLIP s0: the author recorded cells-before-lysis in the adjacent Operation
+  and quotes while leaving the State identity as generic cellular material.
+  The full workflow is coherent; the State is underdescribed in isolation.
+
+SURVEY BASIS
+The local inspection export contains108accepted workflows and1193States:
+980material,213data.132States have only identity properties. That count is
+descriptive, not an error rate: Total RNA may be an adequate starting identity,
+whereas cellular material may hide a consequential preparation distinction.
+The schema already offered the property families above. The gap is consistent
+content, conditional completeness and review, not absence of any such fields.
+Representative scientific readings covered cellular, chromatin, RNA-selection,
+DNA-probe, chemical-joining, droplet/barcode and readout examples. This is not a
+fresh full-paper verification of all108workflows.
+
+REFERENCE IMPLEMENTATION INSPIRATION
+ISA defines material nodes with material type/characteristics, distinct data
+nodes, and processes joining inputs to outputs:
+https://isa-specs.readthedocs.io/en/latest/isamodel.html
+Its separation supports our representation, not a guarantee of scientific
+completeness. The molecular-carrier, end-chemistry and interface requirements
+above are adaptations for sequencing-assay explanation and future design review.
