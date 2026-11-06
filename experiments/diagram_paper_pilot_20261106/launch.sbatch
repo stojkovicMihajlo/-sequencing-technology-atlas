@@ -72,6 +72,16 @@ extra_args=()
 if [[ -n "${ATLAS_PILOT_RESUME_OUTPUT:-}" ]]; then
     extra_args+=(--resume-authors "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_RESUME_OUTPUT")
 fi
+if [[ "${ATLAS_PILOT_STOP_ON_FIRST_ISSUE:-0}" == 1 ]]; then
+    extra_args+=(--stop-on-first-issue)
+fi
+if [[ -n "${ATLAS_PILOT_ADDITIONS_PATH:-}" ]]; then
+    if [[ -n "${ATLAS_PILOT_DEPENDENCY_OUTPUT:-}" ]]; then
+        printf 'Choose existing additions or new dependency recovery, not both.\n' >&2
+        exit 1
+    fi
+    extra_args+=(--additions "$ATLAS_PILOT_ADDITIONS_PATH")
+fi
 if [[ -n "${ATLAS_PILOT_DEPENDENCY_OUTPUT:-}" ]]; then
     : "${ATLAS_PILOT_RESUME_OUTPUT:?Dependency recovery requires the evidence-request parent run}"
     recovery_args=()
@@ -87,5 +97,5 @@ fi
 "$ATLAS_ENV_DIR/bin/python" -m experiments.diagram_paper_pilot_20261106.run \
     --library "$ATLAS_PROJECT_ROOT/technology_sources/illumina_library_20261105_07" \
     --vault "$ATLAS_PROJECT_ROOT/technology_sources/illumina_task2_sources_20261105_08" \
-    --selection "$ATLAS_REPOSITORY/experiments/diagram_paper_pilot_20261106/selected.json" \
+    --selection "$ATLAS_REPOSITORY/experiments/diagram_paper_pilot_20261106/${ATLAS_PILOT_SELECTION:-selected.json}" \
     --output "$ATLAS_PILOT_ROOT/$ATLAS_PILOT_OUTPUT" --workers "${ATLAS_PILOT_WORKERS:-4}" "${extra_args[@]}"

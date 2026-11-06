@@ -75,13 +75,18 @@ def test_bad_primary_or_image_stops_before_native_execution(source, defect):
         run.prepare_method(path, vault, selected)
 
 
-@pytest.mark.parametrize('key', ['method_id', 'primary_paper_id'])
-def test_duplicate_dispatch_rejected(key):
+def test_duplicate_method_dispatch_rejected():
     rows = [{'method_id': 'a', 'primary_paper_id': 'pmid-1'},
             {'method_id': 'b', 'primary_paper_id': 'pmid-2'}]
-    rows[1][key] = rows[0][key]
+    rows[1]['method_id'] = rows[0]['method_id']
     with pytest.raises(ValueError, match='distinct'):
         run.validate_selection({'methods': rows, 'reason_for_fresh_extraction': 'New pilot'})
+
+
+def test_distinct_methods_can_share_a_primary_publication():
+    rows = [{'method_id': 'a', 'primary_paper_id': 'pmid-1'},
+            {'method_id': 'b', 'primary_paper_id': 'pmid-1'}]
+    assert run.validate_selection({'methods': rows, 'reason_for_fresh_extraction': 'New pilot'}) == rows
 
 
 def test_curated_content_addressed_links_keep_exact_original_hash(source):
@@ -104,7 +109,9 @@ def test_selection_is_exactly_ten_distinct_curated_methods():
     assert len(run.validate_selection(selection)) == 10
 
 
-def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(acquired, tmp_path, monkeypatch):
+@pytest.mark.parametrize('independent_hold', [False, True])
+def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
+        acquired, tmp_path, monkeypatch, independent_hold):
     from tests.illumina import test_illumina_batch_controls as transport
     from genomics_discovery.illumina import extraction as batch
     from genomics_discovery.illumina.models import parse_extraction
@@ -132,17 +139,45 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(acq
     monkeypatch.setattr(transport, 'candidate', typed_factory)
     monkeypatch.setattr(transport, 'DiagramExtraction', StructuredDiagramExtraction)
     monkeypatch.setattr(transport, 'CurrentDiagramReview', StructuredDiagramReview)
-    worker = transport.FakeWorker()
+    class Worker(transport.FakeWorker):
+        async def run(self, prompt, attempt_dir, *, image_paths=()):
+            result = await super().run(prompt, attempt_dir, image_paths=image_paths)
+            attempt = Path(attempt_dir)
+            ident = run.read(attempt.parent.parent / 'card.json')['record_id']
+            artifact = run.read(attempt / 'artifact.json')
+            artifact['record_id'] = ident
+            if independent_hold and ident == 'example' and attempt.name.endswith('reviewer'):
+                check = next(c for c in artifact['checks'] if c['target'] == 'operation:capture')
+                check.update(verdict='unresolved', action='research',
+                             rationale='Synthetic missing supplemental evidence; keep this method on hold.')
+            put(attempt / 'artifact.json', artifact)
+            return result
+
+    worker = Worker()
     monkeypatch.setattr(run, 'CodexWorker', lambda **_: worker)
     # Source-adapter admission has separate negative tests above. This test uses
     # a synthetic registered bundle and exercises the real remaining pipeline.
-    monkeypatch.setattr(run, 'prepare', lambda *_: [(card, registry, images)])
+    bundles = [(card, registry, images)]
+    if independent_hold:
+        bundles.append(({**card, 'record_id': 'other'}, registry, images))
+    monkeypatch.setattr(run, 'prepare', lambda *_: bundles)
     monkeypatch.setenv('SLURM_JOB_ID', 'fake-runner-publication-test')
     selection = tmp_path / 'selection.json'
     put(selection, {'methods': [{'method_id': 'example', 'primary_paper_id': 'pmid-1'}],
                     'reason_for_fresh_extraction': 'Synthetic software integration test'})
     output = tmp_path / 'pilot'
     asyncio.run(run.execute(source_root, source_root, selection, output, 1))
+    if independent_hold:
+        report = run.read(output / 'RESULT.json')
+        assert report['counts'] == {'research_needed': 1, 'supported': 1}
+        assert report['stop_reason'] is None and report['publication_errors'] == []
+        assert not (output / 'STOP_REASON.json').exists()
+        graph = run.read(output / 'atlas.json')
+        assert graph['cards']['example']['admission'] == 'diagnostic'
+        assert graph['cards']['other']['admission'] == 'supported'
+        assert [c['role'] for c in worker.calls] == ['author', 'reviewer', 'author', 'reviewer']
+        assert run.read(output / 'state.json')['policy']['stop_on_first_issue'] is False
+        return
     assert [c['role'] for c in worker.calls] == ['author', 'reviewer']
     assert run.read(output / 'RESULT.json')['all_supported'] is True
     graph = run.read(output / 'atlas.json')
@@ -178,7 +213,8 @@ def test_first_failure_cancels_other_methods_and_preserves_the_reason(acquired, 
         monkeypatch.setattr(run, 'extract_registered_workflow', registered)
         selection = tmp_path / 'selection.json'
         put(selection, {'methods': [], 'reason_for_fresh_extraction': 'Synthetic orchestration test'})
-        return await run.execute(source_root, source_root, selection, tmp_path / 'stopped', 2)
+        return await run.execute(source_root, source_root, selection, tmp_path / 'stopped', 2,
+                                 stop_on_first_issue=True)
 
     result = asyncio.run(exercise())
     assert set(calls) == {'example', 'other'}

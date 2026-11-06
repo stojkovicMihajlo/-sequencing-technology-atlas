@@ -18,10 +18,12 @@ are supplied as an answer key in selected.json or the per-method scope.
 
 launch.sbatch freezes the model/effort at gpt-6.1-sol/xhigh and uses the existing
 dedicated Codex login on Qiu Sherlock. Four method workers by default, configurable
-with ATLAS_PILOT_WORKERS. Each has a fresh author, fresh independent reviewer and
-no automatic correction inside this diagnostic pilot: the first nonaccepted
-review or failed stage stops the other tasks for inspection and a new submission. No old output is reused.
-All ten source bundles are hash-checked before the first model call.
+with ATLAS_PILOT_WORKERS. Each method gets an author and a fresh independent reviewer; a validated unchanged
+author may be resumed using --resume-authors and strict custody checks. This
+diagnostic pilot has max_revisions=0. A nonaccepted method is recorded separately
+while other methods continue. Optional --stop-on-first-issue retains the previous
+fail-fast development mode, which was used by pilot_01 through pilot_04.
+All selected source bundles are hash-checked before the first model call.
 Sources are accessed through the existing bounded source tool; complete papers
 are available in registered files rather than pasted into each prompt. Network
 retrieval is disabled for this controlled pilot. Missing sources become recorded
@@ -91,3 +93,18 @@ Pilot02 results:4supported (ChIP-Seq,FAIRE-Seq,Sono-Seq,cP-RNA-Seq),
 1research_needed(GRO),5interrupted. Graph publication errors0. Stop-on-first-issue
 and durable backup succeeded. Current working release passes511local software
 tests, including the new complete-workflow reuse and supplemental-identity tests.
+
+FOUR-METHOD CONTINUATION — job51320451
+remaining_four.json selects only3c-seq,chip-exo,gro-seq,bric-seq interrupted in
+pilot_04. runtime05/pilot_05 resumes pilot_04; ATLAS_PILOT_SELECTION chooses that
+manifest. ATLAS_PILOT_ADDITIONS_PATH reuses dependencies_04/registered_additions.json
+without another download. Five supported workflows remain in their original
+attempts; Hi-C stays separately held for original SOM evidence. Distinct methods
+may share a publication; method IDs, rather than paper IDs, prevent duplicate
+scheduling. These are scheduling changes, not a relaxation of scientific review.
+
+Remaining scaling limits: website-card adapter only; ordinary missing-primary
+source preflight is currently global. Source-request interpretation is manually
+reviewed. Native access is to registered files, not unrestricted web retrieval.
+A per-method evidence hold does not mean a complete or experimentally validated
+protocol. Do not claim full-atlas readiness from software checks alone.

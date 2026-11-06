@@ -46,9 +46,8 @@ def checked_files(vault, records):
 def validate_selection(selection):
     rows = selection['methods']
     ids = [r['method_id'] for r in rows]
-    papers = [r['primary_paper_id'] for r in rows]
-    if not rows or len(ids) != len(set(ids)) or len(papers) != len(set(papers)):
-        raise ValueError('Select distinct method IDs and distinct primary paper IDs')
+    if not rows or len(ids) != len(set(ids)):
+        raise ValueError('Select distinct method IDs; different methods may share a paper')
     if not selection.get('reason_for_fresh_extraction'):
         raise ValueError('Record why completed unchanged entries are being revisited')
     return rows
@@ -157,10 +156,11 @@ def prepare(library, vault, selection):
 
 
 class PilotIssue(RuntimeError):
-    """Stop other method tasks at the first nonaccepted extraction/review result."""
+    """Optional development-mode stop after a nonaccepted method result."""
 
 
-async def execute(library, vault, selection_path, output, workers, *, additions_path=None, resume_authors=None):
+async def execute(library, vault, selection_path, output, workers, *, additions_path=None,
+                  resume_authors=None, stop_on_first_issue=False):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Native extraction requires a Sherlock Slurm allocation')
     if not 1 <= workers <= 10:
@@ -226,7 +226,7 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
     inventory = output / 'inventory.json'
     write(inventory, {'cards': cards})
     policy = {'model': 'gpt-6.1-sol', 'effort': 'xhigh', 'workers': workers,
-              'max_revisions': 0, 'stop_on_first_issue': True, 'representation_version': 'illumina_diagram/1.1',
+              'max_revisions': 0, 'stop_on_first_issue': stop_on_first_issue, 'representation_version': 'illumina_diagram/1.1',
               'inventory_sha256': sha(inventory), 'record_ids': [c['record_id'] for c in cards],
               'library': str(library.resolve()), 'vault': str(vault.resolve()),
               'selection_sha256': sha(selection_path), 'prior_extractions_used_as_evidence': False}
@@ -259,7 +259,7 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
                            failure_category=getattr(exc, 'category', 'unclassified_stage_error'))
             row['finished_at'] = now()
             checkpoint(output, state, cards)
-            if row['status'] != 'supported':
+            if stop_on_first_issue and row['status'] != 'supported':
                 raise PilotIssue(ident + ': ' + row.get('reason', row['status']))
     tasks = [asyncio.create_task(one(*bundle)) for bundle in bundles if bundle[0]['record_id'] not in completed]
     stop_reason = None
@@ -298,7 +298,10 @@ if __name__ == '__main__':
     parser.add_argument('--workers', type=int, default=4)
     parser.add_argument('--additions', type=Path)
     parser.add_argument('--resume-authors', type=Path)
+    parser.add_argument('--stop-on-first-issue', action='store_true',
+        help='Development-only fail-fast mode; by default each method completes independently.')
     args = parser.parse_args()
     report = asyncio.run(execute(args.library, args.vault, args.selection, args.output, args.workers,
-        additions_path=args.additions, resume_authors=args.resume_authors))
+        additions_path=args.additions, resume_authors=args.resume_authors,
+        stop_on_first_issue=args.stop_on_first_issue))
     raise SystemExit(0 if report['all_supported'] else 2)
