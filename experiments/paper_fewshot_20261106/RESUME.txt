@@ -1,0 +1,47 @@
+PAUSED6NOVEMBER: User prioritized auditing all unfinished full-card outcomes,
+fixing harness bugs, resubmitting eligible methods, and delivering an inspection
+app. Do not launch this few-shot pilot until that immediate follow-up is handled.
+Paper-mode/few-shot and existing extraction checks:560local tests passed. No
+native model call or target-paper acquisition has run for this pilot yet.
+
+PLANNED REQUEST: paper-only few-shot extraction demonstration,6November2026.
+User wants existing atlas extractions in context for a newer technology without
+an Illumina diagram. Two matched conditions: no examples versus two complete
+accepted output examples (ATAC-seq and ClickSeq). Same target paper/supplements,
+scope,schema,model gpt-6.1-sol/xhigh and independent reviewer instructions.
+Reviewers are not provided examples or condition. No model weights change.
+
+Target: Spatial NT-seq. Final published paper DOI10.1038/s41593-026-02420-y,
+PMID42675226,published31August2026. Public Nature PDF header check from Sherlock
+returned200 application/pdf. Fetch final paper and exact linked supplements in
+the new Slurm job; do not silently mix January preprint PMC12874000 with final.
+Use text only (PDF-derived text and captions),no workflow-image attachment.
+This is a transfer pilot,not novelty benchmarking or proof of general improvement.
+
+Implementation IN PROGRESS,not launched:
+- models.py now has explicit source_mode=diagram(default)|paper. Diagram mode
+  still requires a registered image; paper mode requires full primary text.
+- extraction.py accepts explicit paper mode and author_examples. Only the author
+  receives literal complete example JSON in its prompt. Two examples are ~214k
+  compact characters; intentional author-only prompt guard400k,default100k.
+- paper_prompts.py adds paper-first source/granularity/evidence instructions.
+- prompts.build_prompt selects that contract and inserts examples only for author.
+- graph.py supports reopening/export of explicit paper-mode outputs.
+- CLI source_mode outcome path was patched. These edits are NOT yet tested.
+Need finish source collector,paired-run driver,tests,frozen runtime and Slurm
+submission. Do not fabricate an image to evade the diagram gate. Same unchanged
+State/Operation/Flow schema1.1 has a legacy Illumina name; provenance must say
+paper-derived and must not add this method to the273-entry Illumina inventory.
+
+Evolutionary work remains running:
+Job51341499,runtime05,batch_10_01:8new histories,ATAC fresh review,ChIP prior
+neighborhood reuse;4workers.184remote tests passed. At16:17UTC first4methods
+(irCLIP,iCLIP,PAR-CLIP,ClickSeq) reached native nomination; no model failure.
+Completed mapping51339109:1independently accepted ATAC->ChIPmentation primer-use
+connection; no exact sequence identity or isolated benefit claimed. Durable local
+archive job_51339109.tar.gz, completed_mapping_51339109 local revalidation passed.
+Current committed GitHubHEAD c906900. New paper-mode edits are uncommitted.
+Full extraction51324067:103supported,23research,11revision,28source holds,2failed,
+7running,0pending at16:17UTC. Don't interrupt that job or mutate frozen runtimes.
+All new model runs on Qiu Sherlock Slurm;read actual /etc/agents policies after
+compaction. No local model calls. Keep user informed at most60seconds apart.

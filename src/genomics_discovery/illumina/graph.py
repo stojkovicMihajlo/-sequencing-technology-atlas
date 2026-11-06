@@ -75,14 +75,15 @@ def _load_card(row, card):
     sources = read(directory / "source_registry.json")
     candidate = parse_extraction((directory / "extraction.json").read_bytes())
     review = parse_review((directory / "review.json").read_bytes())
+    mode = card.get('source_mode', 'diagram')
     errors = validate_extraction(candidate, sources, expected_record_id=card["record_id"],
         expected_title=card_title(card),
         expected_method_names=tuple(card["verified_method_names"]) if card.get("verified_method_names") else None,
-        require_paper_matches=requires_paper_matches(card))
+        require_paper_matches=requires_paper_matches(card), source_mode=mode)
     errors += paper_coverage(candidate, card)
     if errors:
         raise ValueError("; ".join(errors))
-    outcome = review_outcome(review, candidate, sources)
+    outcome = review_outcome(review, candidate, sources, source_mode=mode)
     if row["status"] != outcome or row.get("candidate_sha256") != digest(candidate) or row.get(
             "review_sha256") != digest(review):
         raise ValueError("Batch status/digests disagree with reopened current review gates")
@@ -101,7 +102,7 @@ def _load_card(row, card):
                 sha(attempt / "artifact.json") != stage["artifact_sha256"]):
             raise ValueError("Native prompt or stage output changed")
         delivery = read(attempt / "image_delivery.json")
-        if not delivery or any(sha(x["original"]) != x["original_sha256"] or
+        if (not delivery and mode == 'diagram') or any(sha(x["original"]) != x["original_sha256"] or
                                sha(x["attachment"]) != x["attachment_sha256"] for x in delivery):
             raise ValueError("Missing or changed original/delivered image")
         if "input_pins" in stage:
@@ -113,7 +114,7 @@ def _load_card(row, card):
     verify_registry_files(sources)
     if any(sha(directory / name) != expected for name, expected in pins.items()):
         raise ValueError("Completed artifacts changed while being reopened")
-    return export_graph(candidate, review, sources), sources
+    return export_graph(candidate, review, sources, source_mode=mode), sources
 
 
 def load_reviewed_workflow(row, card):
@@ -560,7 +561,7 @@ def search_operations(graph: dict, *, input_text="", transformation="", output_t
 
 
 def protocol_text(candidate: DiagramExtraction | dict, review: DiagramReview | None = None,
-                  sources: dict | None = None) -> str:
+                  sources: dict | None = None, *, source_mode: str = 'diagram') -> str:
     """Deterministic reading view; no model call, invented reaction or new Flow.
 
     A per-card graph from export_graph may be passed directly. Display order is
@@ -568,9 +569,10 @@ def protocol_text(candidate: DiagramExtraction | dict, review: DiagramReview | N
     """
     if isinstance(candidate, dict):
         graph = candidate
+        source_mode = graph.get('source_mode', source_mode)
         candidate = parse_extraction(graph["workflow"])
         review = parse_review(graph["review"])
-    outcome = review_outcome(review, candidate, sources) if review else "unreviewed"
+    outcome = review_outcome(review, candidate, sources, source_mode=source_mode) if review else "unreviewed"
     lines = ["Protocol architecture: " + candidate.title, "Record: " + candidate.record_id,
              "Scope: " + candidate.scope, "Review outcome: " + outcome,
              "This is a reading view of saved records, not a fresh scientific review.", ""]

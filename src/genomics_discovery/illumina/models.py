@@ -427,7 +427,8 @@ def validate_extraction(candidate: DiagramExtraction, sources: dict, *,
                         expected_record_id: str | None = None,
                         expected_title: str | None = None,
                         expected_method_names: tuple[str, ...] | None = None,
-                        require_paper_matches: bool = False) -> list[str]:
+                        require_paper_matches: bool = False,
+                        source_mode: str = 'diagram') -> list[str]:
     errors = _source_errors(candidate, sources, candidate.inspected_sources)
     if expected_record_id is not None and candidate.record_id != expected_record_id:
         errors.append("Candidate record ID differs from assigned catalogue record")
@@ -445,8 +446,13 @@ def validate_extraction(candidate: DiagramExtraction, sources: dict, *,
             # assesses whether the question really describes the missing association.
             if not paper_gap:
                 errors.append("Named method lacks a paper-match assessment: " + method)
-    if not any(sources.get(s, {}).get("kind") == "image" for s in candidate.inspected_sources):
+    if source_mode not in {'diagram', 'paper'}:
+        errors.append('Unknown architecture source mode')
+    if source_mode == 'diagram' and not any(sources.get(s, {}).get("kind") == "image" for s in candidate.inspected_sources):
         errors.append("Diagram extraction requires an inspected registered image")
+    if source_mode == 'paper' and not any(sources.get(s, {}).get('kind') == 'text' and sources.get(s, {}).get('content_level') == 'fulltext'
+            and sources.get(s, {}).get('document_role') != 'supplement' for s in candidate.inspected_sources):
+        errors.append('Paper-derived architecture requires an inspected registered full primary paper')
     records = _target_records(candidate)
     for target, record in records.items():
         if target.startswith(("state:", "operation:", "flow:")) or (
@@ -574,11 +580,11 @@ def review_reasons(review: DiagramReview, candidate: DiagramExtraction) -> list[
 
 
 def review_outcome(review: DiagramReview, candidate: DiagramExtraction,
-                   sources: dict | None = None) -> str:
+                   sources: dict | None = None, *, source_mode: str = 'diagram') -> str:
     if candidate.format_version == "illumina_diagram/1.1" and review.format_version != "illumina_diagram_review/1.2":
         raise ValueError("Structured extraction requires property and operation-semantics review")
     if sources is not None:
-        errors = validate_extraction(candidate, sources) + validate_review(review, candidate, sources)
+        errors = validate_extraction(candidate, sources, source_mode=source_mode) + validate_review(review, candidate, sources)
         if errors:
             raise ValueError("; ".join(errors))
     elif (review.record_id != candidate.record_id or review.candidate_sha256 != digest(candidate)
@@ -596,8 +602,8 @@ def review_outcome(review: DiagramReview, candidate: DiagramExtraction,
     return "supported"
 
 
-def export_graph(candidate: DiagramExtraction, review: DiagramReview, sources: dict) -> dict:
-    outcome = review_outcome(review, candidate, sources)
+def export_graph(candidate: DiagramExtraction, review: DiagramReview, sources: dict, *, source_mode: str = 'diagram') -> dict:
+    outcome = review_outcome(review, candidate, sources, source_mode=source_mode)
     namespace = "illumina:" + quote(candidate.record_id, safe="")
     node_id = lambda kind, ident: namespace + ":" + kind + ":" + quote(ident, safe="")
     types = {x.id: kind for kind, records in (("state", candidate.states),
@@ -617,9 +623,13 @@ def export_graph(candidate: DiagramExtraction, review: DiagramReview, sources: d
                       "original": flow.model_dump(mode="json")})
     registry = {ident: {key: value for key, value in source.items() if key != "text"}
                 for ident, source in sources.items()}
-    return {"format_version": "illumina_schematic_graph/1.0", "status": outcome,
+    result = {"format_version": "illumina_schematic_graph/1.0", "status": outcome,
             "semantics": "Source-supported architecture with explicit primary-paper corrections; literal diagram observations retained, no automatic historical edges.",
             "record_id": candidate.record_id, "candidate_sha256": digest(candidate),
             "review_sha256": digest(review), "nodes": nodes, "edges": edges,
             "workflow": candidate.model_dump(mode="json"), "review": review.model_dump(mode="json"),
             "source_registry": registry, "source_registry_sha256": digest(sources)}
+    if source_mode == 'paper':
+        result['source_mode'] = 'paper'
+        result['semantics'] = 'Paper-derived assay architecture using the existing State/Operation/Flow schema. No Illumina depiction or automatic historical relationship is asserted.'
+    return result

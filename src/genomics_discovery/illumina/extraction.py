@@ -101,7 +101,8 @@ def validate_assigned_extraction(document, registry, card, *, record_id):
     errors = validate_extraction(document, registry, expected_record_id=record_id,
         expected_title=card_title(card) if card else None,
         expected_method_names=expected_method_names(card),
-        require_paper_matches=requires_paper_matches(card) if card else False)
+        require_paper_matches=requires_paper_matches(card) if card else False,
+        source_mode=card.get('source_mode', 'diagram') if card else 'diagram')
     if card:
         errors += paper_coverage(document, card)
     return errors
@@ -454,7 +455,7 @@ def load_revision_seed(seed, card, registry, representation):
     errors.extend(validate_review(review, candidate, registry))
     if errors:
         raise ValueError("Invalid revision seed: " + "; ".join(errors))
-    if review_outcome(review, candidate, registry) != "needs_revision":
+    if review_outcome(review, candidate, registry, source_mode=card.get('source_mode', 'diagram')) != "needs_revision":
         raise ValueError("Revision seed must have an actual needs_revision outcome")
     return candidate, review
 
@@ -505,7 +506,7 @@ def load_author_seed(seed, card, registry, representation):
 
 async def extract_registered_workflow(card, registry, images, directory, worker, max_revisions=1,
                                       representation="illumina_diagram/1.1", revision_seed=None,
-                                      author_seed=None):
+                                      author_seed=None, author_examples=()):
     """One scoped work unit, with its registered source bundle and independent review.
 
     Method identity/scope planning is a separate gate. This function neither
@@ -515,8 +516,16 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
     review_version = ("illumina_diagram_review/1.2" if representation == "illumina_diagram/1.1"
                       else "illumina_diagram_review/1.1")
     reviewer_model = review_model(review_version)
-    if not images:
+    source_mode = card.get('source_mode', 'diagram')
+    if source_mode not in {'diagram', 'paper'}:
+        raise ValueError('Unknown architecture source mode')
+    if author_examples and source_mode != 'paper':
+        raise ValueError('In-context example experiment requires explicit paper source mode')
+    if not images and source_mode == 'diagram':
         return {"status": "source_recovery_needed", "reason": "No acquired source diagram; retain card for recovery."}
+    if source_mode == 'paper' and not any(s.get('kind') == 'text' and s.get('content_level') == 'fulltext'
+            and s.get('document_role') != 'supplement' for s in registry.values()):
+        raise ValueError('Paper mode requires a registered full primary article')
     verify_registry_files(registry)
     if len({sid for sid, _ in images}) != len(images):
         raise ValueError("Duplicate source image ID in workflow bundle")
@@ -558,6 +567,7 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
         context = {"record_id": card["record_id"], "title": card_title(card),
             "expected_method_names": expected_method_names(card),
             "representation_version": representation,
+            "source_mode": source_mode,
             "scope": card.get("implementation_scope") or "The assigned Illumina schematic: its title/caption targets and depicted alternatives. Unshown adaptations or background references do not automatically add workflow targets.",
             "source_bindings": card.get("source_bindings", []),
             "source_registry": str(source_path), "card": str(directory / "card.json"),
@@ -584,7 +594,7 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
             context["revision_feedback"] = feedback_files
             context["artifact_helper"] = shlex.join([sys.executable, "-m",
                 "genomics_discovery.illumina.extraction", "artifact"])
-        prompt = build_prompt(role, context, schema)
+        prompt = build_prompt(role, context, schema, examples=author_examples if role == 'author' else ())
         (attempt / "stage_prompt.txt").write_text(prompt)
         fixed_inputs = [attempt / "schema.json", attempt / "stage_prompt.txt", attempt / "image_delivery.json"]
         if revision_seed is not None:
@@ -604,8 +614,9 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
         try:
             # A transport guard, not an optimal scientific context budget. Large
             # artifacts belong in the addressable input files above.
-            if len(prompt) > 100_000:
-                raise StageFailure("prompt_preflight", "Stage prompt exceeds 100,000 characters; inspect caller context before native execution")
+            limit = 400_000 if role == 'author' and author_examples else 100_000
+            if len(prompt) > limit:
+                raise StageFailure("prompt_preflight", f"Stage prompt exceeds {limit:,} characters; inspect caller context before native execution")
             result = await worker.run(prompt, attempt, image_paths=paths)
             assessment = assess_archived_attempt(attempt)
             if not assessment.complete or result.exit_code != 0 or result.error:
@@ -649,14 +660,14 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
         if not (author_seed is not None and revision == 0):
             candidate = await stage("author", revision)
         review = await stage("reviewer", revision)
-        outcome = review_outcome(review, candidate, registry)
+        outcome = review_outcome(review, candidate, registry, source_mode=source_mode)
         write(directory / "extraction.json", candidate.model_dump(mode="json"))
         write(directory / "review.json", review.model_dump(mode="json"))
         if outcome != "needs_revision" or revision == max_revisions:
             break
-    write(directory / "graph.json", export_graph(candidate, review, registry))
+    write(directory / "graph.json", export_graph(candidate, review, registry, source_mode=source_mode))
     questions = review_reasons(review, candidate)
-    return {"status": outcome, "source_status": "diagram_and_registered_literature",
+    return {"status": outcome, "source_status": "paper_only_registered_literature" if source_mode == 'paper' else "diagram_and_registered_literature",
         "operations": len(candidate.operations), "states": len(candidate.states),
         "flows": len(candidate.flows), "revision": revision,
         "paper_support": dict(Counter(x.assessment for x in candidate.paper_matches)),
@@ -680,8 +691,9 @@ def revalidate_completed(row):
     verify_registry_files(registry)
     candidate = parse_extraction((directory / "extraction.json").read_bytes())
     review = parse_review((directory / "review.json").read_bytes())
-    if (validate_extraction(candidate, registry)
-            or review_outcome(review, candidate, registry) != row["status"]):
+    mode = read(directory / 'card.json').get('source_mode', 'diagram')
+    if (validate_extraction(candidate, registry, source_mode=mode)
+            or review_outcome(review, candidate, registry, source_mode=mode) != row["status"]):
         raise ValueError("Completed extraction no longer passes recorded review")
     for stage in read(directory / "stages.json"):
         if not assess_archived_attempt(Path(stage["path"])).complete:
@@ -874,7 +886,9 @@ def main(argv=None):
     result = {"valid": not errors, "errors": errors,
               "validation_scope": "Structure, source references and required coverage; scientific acceptance is separate."}
     if args.candidate and not errors:
-        result.update(outcome=review_outcome(document, candidate, registry),
+        review_card = read(args.card) if args.card else {}
+        result.update(outcome=review_outcome(document, candidate, registry,
+                      source_mode=review_card.get('source_mode', 'diagram')),
                       research_questions=review_reasons(document, candidate))
     print(json.dumps(result, indent=2))
     return int(bool(errors))

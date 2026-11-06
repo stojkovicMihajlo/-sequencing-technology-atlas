@@ -425,6 +425,7 @@ def build_prompt(
     schema: dict | str | Path,
     previous_candidate: dict | None = None,
     previous_review: dict | None = None,
+    *, examples=(),
 ) -> str:
     """Build role text; this function does not invoke a model or read sources."""
     if role not in {"author", "reviewer"}:
@@ -439,8 +440,13 @@ def build_prompt(
         schema_text = str(schema)
     else:
         raise ValueError("schema must be a nonempty schema dictionary, text or path")
-    shared = SHARED_INSTRUCTIONS
-    role_instructions = AUTHOR_INSTRUCTIONS if role == "author" else REVIEWER_INSTRUCTIONS
+    paper = context.get('source_mode') == 'paper'
+    if paper:
+        from .paper_prompts import PAPER_INSTRUCTIONS, PAPER_ROLES
+        shared, role_instructions = PAPER_INSTRUCTIONS, PAPER_ROLES[role]
+    else:
+        shared = SHARED_INSTRUCTIONS
+        role_instructions = AUTHOR_INSTRUCTIONS if role == "author" else REVIEWER_INSTRUCTIONS
     structured = context.get("representation_version") == "illumina_diagram/1.1"
     if structured:
         shared = shared.replace(
@@ -454,6 +460,13 @@ def build_prompt(
     if structured:
         from .representation import STRUCTURED_INSTRUCTIONS
         sections.insert(2, STRUCTURED_INSTRUCTIONS)
+    if examples:
+        if not paper or role != 'author':
+            raise ValueError('Worked examples are restricted to the paper-mode author')
+        sections.append('WORKED OUTPUT EXAMPLES\nThese are independently reviewed EXTRACTIONS OF OTHER METHODS. '
+            'They demonstrate representation and granularity, not facts about the target. Their source IDs '
+            'are not registered target evidence. Do not copy their chemistry, steps or routes into the target.\n'
+            + json.dumps(examples, ensure_ascii=False, separators=(',', ':')))
     for label, value in (("PREVIOUS CANDIDATE", previous_candidate),
                          ("PREVIOUS REVIEW", previous_review)):
         if value is not None:
