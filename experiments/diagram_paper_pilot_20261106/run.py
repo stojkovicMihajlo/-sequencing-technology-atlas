@@ -57,14 +57,34 @@ class SourceUnavailable(ValueError):
     """A required source is unavailable; preserve the method for source recovery."""
 
 
-def prepare_method(package_path, vault, selected):
+def select_reading_text(paper):
+    """Select one declared rendition without confusing renditions with papers."""
+    texts = [f for f in paper['files'] if f['kind'] == 'reading-text']
+    originals = [f for f in paper['files'] if f['kind'] == 'article']
+    if not texts or not originals or paper.get('held_files'):
+        raise SourceUnavailable('Need unheld original article and reading text: ' + paper['paper_id'])
+    if len(texts) == 1:
+        return texts[0], 'only registered reading rendition'
+    # Recovered originals and their own conversion are stored together. An older
+    # exported rendition stays pinned but is not an additional publication.
+    adjacent = [t for t in texts if any(Path(t['path']).parent == Path(a['path']).parent for a in originals)]
+    if len(adjacent) == 1:
+        return adjacent[0], 'unique registered rendition adjacent to its original; other renditions retained in custody'
+    by_hash = {t['sha256'] for t in texts}
+    if len(by_hash) == 1:
+        return sorted(texts, key=lambda t: t['path'])[0], 'byte-identical registered renditions'
+    raise SourceUnavailable('Ambiguous different reading renditions need provenance resolution: ' + paper['paper_id'])
+
+
+def prepare_method(package_path, vault, selected, *, primary_overrides=None):
     package, method = read(package_path), read(package_path.parent / 'method.json')
     ident = selected['method_id']
     if (package['method_id'] != ident or method['id'] != ident
             or method['entry_type'] != 'named_method' or not method.get('identity_decisions')):
         raise ValueError('Require an existing curated named-method identity: ' + ident)
     primary = [p for p in package['method_papers'] if p['paper_id'] == selected['primary_paper_id']]
-    if len(primary) != 1 or primary[0]['availability'] != 'fulltext_acquired':
+    overrides = primary_overrides or {}
+    if len(primary) != 1 or (primary[0]['availability'] != 'fulltext_acquired' and primary[0]['paper_id'] not in overrides):
         raise SourceUnavailable('Assigned primary paper must have acquired full text: ' + ident)
     depictions = [d for d in package['source_depictions'] if d['kind'] == 'website_card']
     if not depictions:
@@ -80,8 +100,8 @@ def prepare_method(package_path, vault, selected):
         catalogue_rows = [(sid, row) for sid, row in original_registry.items()
                           if row.get('kind') == 'text' and row.get('content_level') == 'catalogue'
                           and sid == 'card:' + source_id]
-        if len(catalogue_rows) != 1 or not catalogue_rows[0][1].get('text', '').strip():
-            raise SourceUnavailable('Missing complete catalogue prose: ' + source_id)
+        if len(catalogue_rows) != 1:
+            raise SourceUnavailable('Missing unambiguous catalogue registration: ' + source_id)
         sid, row = catalogue_rows[0]
         row = copy.deepcopy(row)
         raw_files = [original_registry_path, catalogue / 'source.json', catalogue / 'original_cms.json']
@@ -102,28 +122,43 @@ def prepare_method(package_path, vault, selected):
                     'association_status': 'shared depiction; not proof of identical member workflows'}
                 images.append((image_id, image_path))
         bindings.append({'source_id': sid, 'shared_with_method_ids': depiction['shared_with_method_ids'],
-                         'original_card_id': source_id})
+                         'original_card_id': source_id,
+                         **({'description_status': 'Original archived card has no description. Do not fabricate catalogue prose; explain the assay from the assigned primary paper and label that evidence honestly.'}
+                            if not row.get('text', '').strip() else {})})
     for paper in package['method_papers']:
         # A missing secondary/background article is retained in the source package;
         # it cannot supply scientific claims. This pilot requires its chosen paper.
+        pid = paper['paper_id']
+        if pid in overrides:
+            source = copy.deepcopy(overrides[pid])
+            if (source.get('kind') != 'text' or source.get('content_level') != 'fulltext'
+                    or source.get('assigned_paper_id') != pid or source.get('title') != paper['title']):
+                raise ValueError('Primary override must retain the curated publication assignment: ' + pid)
+            verify_registry_files({'override': source})
+            sid = 'paper:' + pid.removeprefix('pmid-')
+            registry[sid] = source
+            references.append({'reference_id': ident + ':assigned:' + pid, 'role': 'recovered',
+                'pmid': source.get('pmid'), 'source_id': sid})
+            continue
         if paper['availability'] != 'fulltext_acquired':
             continue
-        texts = [f for f in paper['files'] if f['kind'] == 'reading-text']
-        originals = [f for f in paper['files'] if f['kind'] == 'article']
-        if len(texts) != 1 or not originals or paper.get('held_files'):
-            raise SourceUnavailable('Need unheld original article and one reading text: ' + paper['paper_id'])
+        text, selection_basis = select_reading_text(paper)
         pins = checked_files(vault, paper['files'])
-        text = texts[0]
         text_path = inside(vault, text['path'])
         pmid = paper['paper_id'].removeprefix('pmid-')
-        if not pmid.isdecimal():
-            raise ValueError('Pilot source requires an explicitly recorded PMID')
-        registry['paper:' + pmid] = {'kind': 'text', 'content_level': 'fulltext',
+        if not pmid.isdecimal() and not paper.get('doi'):
+            raise ValueError('Assigned paper requires a recorded PMID or DOI')
+        sid = 'paper:' + pmid
+        registry[sid] = {'kind': 'text', 'content_level': 'fulltext',
             'path': str(text_path), 'sha256': text['sha256'], 'text': text_path.read_text(),
-            'pmid': pmid, 'title': paper['title'], 'url': paper['url'],
+            'pmid': pmid if pmid.isdecimal() else None,
+            **({'doi': paper['doi']} if not pmid.isdecimal() else {}),
+            'title': paper['title'], 'url': paper['url'],
+            **({'rendition_selection': selection_basis} if sum(f['kind'] == 'reading-text' for f in paper['files']) > 1 else {}),
             'custody_files': pins, 'association_status': paper['association_basis']}
         references.append({'reference_id': ident + ':assigned:' + paper['paper_id'],
-                           'pmid': pmid, 'role': 'recovered'})
+                           'pmid': pmid if pmid.isdecimal() else None, 'role': 'recovered',
+                           **({'source_id': sid} if not pmid.isdecimal() else {})})
     # Pin the existing curation decision as well as the actual article/diagram bytes.
     for row in registry.values():
         row['custody_files'] = [*row.get('custody_files', []), *custody]

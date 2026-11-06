@@ -275,6 +275,8 @@ def paper_coverage(candidate, card):
             continue
         pmid = reference.get("pmid")
         choices = {prefix + "reference:" + reference["reference_id"]}
+        if reference.get('source_id'):
+            choices.add(prefix + reference['source_id'])
         if pmid:
             choices.update({prefix + "paper:" + pmid, prefix + "metadata:" + pmid})
         assessed_with_literal_reference = any(

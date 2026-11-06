@@ -1,7 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text != null) n.textContent = text; if (cls) n.className = cls; return n; };
-const labels = {supported:'Supported', research_needed:'Further research', failed:'Failed', integrity_error:'Rejected on revalidation'};
+const labels = {supported:'Accepted', research_needed:'Needs evidence', needs_revision:'Needs revision', source_recovery_needed:'Source hold', failed:'Failed', integrity_error:'Rejected on revalidation'};
 const batchLabel = b => ({initial_two:'Catalogue card', catalogue:'Catalogue card', posters:'Main poster row', footer_panels:'Footer / product / readout panel', scoped_method:'Scoped workflow'})[b] || b;
 let inventory = [], selected = '', request = 0;
 function link(text, url) { const a = el('a',text); if (/^https?:\/\//.test(url || '')) { a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; } return a; }
@@ -21,11 +21,12 @@ function evidence(parent, items, record) {
     const box = el('div',null,'evidence'), s = record.sources[e.source_id] || {};
     const imageSource = s.kind === 'image';
     box.append(link(s.title || (imageSource ? 'Full original Illumina diagram' : e.source_id),s.url),el('p',`${e.support} · ${s.content_level || e.basis} · ${e.locator}`,'muted'));
+    if (imageSource && s.local_asset) { const local=el('a','Open downloaded original diagram ↗'); local.href=s.local_asset;local.target='_blank';box.append(local); }
     if (e.quote) box.append(el('blockquote',e.quote));
     if (e.bbox) box.append(el('p','Supporting region in the full image [left, top, right, bottom]: '+e.bbox.join(', ')+'. These coordinates locate evidence; they do not crop the linked source file.','muted'));
     if (imageSource && /^https?:\/\//.test(s.url || '')) {
       const full = section(box,'Show the full original diagram');
-      const img = el('img'); img.src = s.url; img.alt = 'Complete source diagram; no evidence-region crop applied';
+      const img = el('img'); img.src = s.local_asset || s.url; img.alt = 'Complete source diagram; no evidence-region crop applied';
       img.style.cssText = 'display:block;max-width:100%;height:auto;background:white;margin-top:12px';
       full.append(img,el('p','Original source asset. Enlargement cannot restore detail missing from the source.','muted'));
     }
@@ -38,10 +39,10 @@ function filterRecords() {
   const found = inventory.filter(r => (status === 'all' || r.status === status) &&
     (batch === 'all' || (batch === 'catalogue' ? ['initial_two','catalogue'].includes(r.batch) : r.batch === batch)) &&
     [r.title,r.record_id,...r.method_names,...r.category].join(' ').toLowerCase().includes(q));
-  $('count').textContent = found.length+' source depictions'; $('records').replaceChildren();
+  $('count').textContent = found.length+(document.body.dataset.inventoryUnit || ' source depictions'); $('records').replaceChildren();
   for (const r of found) {
     const b = el('button',r.title,r.record_id === selected ? 'active' : '');
-    b.append(el('small',batchLabel(r.batch)+' · '+labels[r.status]));
+    b.append(el('small',(r.category?.join(' / ') || batchLabel(r.batch))+' · '+(labels[r.status] || r.status)));
     b.type = 'button';
     b.setAttribute('aria-controls', 'detail');
     b.setAttribute('aria-pressed', String(r.record_id === selected));
@@ -110,6 +111,11 @@ function renderRecord(r) {
   if(r.card.source_page_url)links.append(link('Original Illumina page',r.card.source_page_url));root.append(links);
   const c=r.candidate;if(!c){root.append(el('p','No authored candidate was recovered.'));raw(root,'Failure record',r);return;}
   root.append(el('p',c.scope),el('p',`${c.operations.length} Operations · ${c.states.length} States · ${c.flows.length} Flows · ${c.corrections.length} Corrections · ${c.unknowns.length} Unknowns`,'muted'));
+  const sourceText=section(root,'Illumina description and original diagrams');
+  for(const [sid,s] of Object.entries(r.sources)) {
+    if(s.content_level==='catalogue' && s.display_text){sourceText.append(link(s.title||sid,s.url),el('p',s.display_text));}
+    if(s.kind==='image'){const image=el('img');image.src=s.local_asset||s.url;image.alt='Complete original Illumina diagram';image.style.cssText='max-width:100%;height:auto;background:white;margin:12px 0';sourceText.append(image);}
+  }
   root.append(el('h3','Workflow'),el('p','Rounded nodes are States (material or data). Rectangular nodes are Operations (transformations). Arrows are recorded Flows. Click any node or arrow to inspect its fields and evidence.','muted'));
   const graph=el('div',null,'graph'),inspector=el('div',null,'inspector');root.append(graph,inspector);drawGraph(graph,inspector,r);
   root.append(el('p','Only recorded connections are drawn. A multi-input Operation does not imply that every input molecule becomes every output. Horizontal position displays dependency, not elapsed time.','muted'));
@@ -130,11 +136,23 @@ async function openRecord(id, {reveal = false} = {}) {
   const row=inventory.find(r=>r.record_id===id);if(!row){$('detail').replaceChildren(el('p','No source record has this ID.'));return;}
   selected=id;filterRecords();$('detail').replaceChildren(el('p','Loading '+row.title+'…'));
   if (reveal) { $('detail').focus({preventScroll:true}); $('detail').scrollIntoView({behavior:'smooth',block:'start'}); }
-  try{const response=await fetch(row.file,{cache:'no-store'});if(!response.ok)throw Error('Record could not be loaded (HTTP '+response.status+')');const r=await response.json();if(ticket===request)renderRecord(r);}catch(e){if(ticket===request)$('detail').replaceChildren(el('p','Could not display '+row.title+': '+e.message+'. Click the card to retry.','warning'));}
+  try{
+    let r;
+    if(row.script){
+      if(!window.ATLAS_RECORDS?.[id]) await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=row.script;s.onload=resolve;s.onerror=()=>reject(Error('Saved record could not be loaded'));document.head.append(s);});
+      r=window.ATLAS_RECORDS?.[id];if(!r)throw Error('Saved record has no matching method ID');
+    }else{const response=await fetch(row.file,{cache:'no-store'});if(!response.ok)throw Error('Record could not be loaded (HTTP '+response.status+')');r=await response.json();}
+    if(ticket===request)renderRecord(r);
+  }catch(e){if(ticket===request)$('detail').replaceChildren(el('p','Could not display '+row.title+': '+e.message+'. Click the card to retry.','warning'));}
 }
 async function start(){
-  const response=await fetch('index.json',{cache:'no-store'});if(!response.ok)throw Error('Inventory could not be loaded');const data=await response.json();inventory=data.records;
-  const stats=[['Source depictions',data.manifest.source_occurrences],...Object.entries(data.manifest.counts).map(([k,v])=>[labels[k],v]),['Unique methods','Not consolidated']];
+  const saved=document.getElementById('index-data');
+  let data;
+  if(saved)data=JSON.parse(saved.textContent);
+  else{const response=await fetch('index.json',{cache:'no-store'});if(!response.ok)throw Error('Inventory could not be loaded');data=await response.json();}
+  inventory=data.records;
+  const stats=[[data.manifest.inventory_unit || 'Source depictions',data.manifest.method_count || data.manifest.source_occurrences],...Object.entries(data.manifest.counts).map(([k,v])=>[labels[k] || k,v])];
+  if(!data.manifest.method_count)stats.push(['Unique methods','Not consolidated']);
   for(const[label,value]of stats){const d=el('div',null,'stat');d.append(el('strong',value),el('span',label));$('summary').append(d);}
   if(data.manifest.comparison){$('pair').href=data.manifest.comparison.url;$('pair').hidden=false;}
   for(const id of ['search','status','batch'])$(id).addEventListener('input',filterRecords);
