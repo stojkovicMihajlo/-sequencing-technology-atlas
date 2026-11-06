@@ -88,6 +88,14 @@ def prepare(source_root, output, decisions, bindings, recover_missing=False, inc
                 raise ValueError('Acquired paper hash mismatch: ' + f['path'])
             state['files'].setdefault(f['path'], {**f, 'bytes': path.stat().st_size,
                 'origins': [{'paper_id': pid, 'basis': 'identity_checked_acquisition'}]})
+    # Derived diagram and guide assets need the same custody as paper files.
+    # Linking only shared/ left new_assets/ references broken in a new vault.
+    for item in state['files'].values():
+        target = output / item['path']
+        if not target.exists():
+            if sha(source_root / item['path']) != item['sha256']:
+                raise ValueError('Upstream asset differs from recorded bytes: ' + item['path'])
+            link(source_root / item['path'], target)
     write(output / 'collection.json', state)
     write(output / 'PAPER_CHECKS.json', checks)
     write(output / 'PAPER_READING_INDEX.json', dossiers)

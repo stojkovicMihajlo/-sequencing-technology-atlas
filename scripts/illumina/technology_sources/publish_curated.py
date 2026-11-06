@@ -13,7 +13,7 @@ from pathlib import Path
 
 from .curation import compile_inventory
 from .classification import placements, method_directory
-from .descriptions import describe
+from .descriptions import describe, apply_description_reviews
 from .inventory import read, sha
 from .materialize import link, write
 from .render import page
@@ -56,12 +56,16 @@ def apply_diagram_rejections(state, review):
 
 
 def publish(source_root, output, decisions, bindings, source_holds=None, category_assignments=None,
-            source_quality_review=None):
+            source_quality_review=None, description_reviews=None, poster_only_reviews=None):
     source_root, output = Path(source_root).resolve(), Path(output).resolve()
     state = read(source_root / 'collection.json')
     source_quality_review = source_quality_review or {}
     apply_diagram_rejections(state, source_quality_review)
     result = compile_inventory(state['inventory'], decisions, bindings, state['papers'])
+    from .source_report import validate_poster_only_reviews
+    reviewed_sources = (validate_poster_only_reviews(state['inventory'], result, state['papers'], poster_only_reviews)
+                        if poster_only_reviews is not None else {})
+    apply_description_reviews(source_root, state, result['methods'], description_reviews or {})
     source_holds = source_holds or {'holds': []}
     category_assignments = category_assignments or {}
     held = {f['sha256'] for h in source_holds['holds'] for f in h['files']}
@@ -83,11 +87,15 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
     write(output / 'SOURCE_HOLDS.json', source_holds)
     write(output / 'CATEGORY_ASSIGNMENTS.json', category_assignments)
     write(output / 'SOURCE_QUALITY_REVIEW.json', source_quality_review)
+    write(output / 'DESCRIPTION_REVIEWS.json', description_reviews or {})
+    write(output / 'POSTER_ONLY_REVIEW.json', poster_only_reviews or [])
     workflow_validation = {'status': 'not_performed', 'paper_confirmation_required': True,
                           'poster_crop_geometry_is_insufficient': True}
     rows = []
     for mid, m in sorted(result['methods'].items()):
         m['category_assignments'] = category_assignments.get(mid, [])
+        if mid in reviewed_sources:
+            m['source_curation_review'] = reviewed_sources[mid]
         m['extraction_authorized'] = False
         m['workflow_validation'] = dict(workflow_validation)
         m['diagram_quality_holds'] = [finding
@@ -113,6 +121,8 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
             '\n\nSource: ' + str(description.get('url') or description['status']) + '\n')
         if description['text']:
             body += '<h2>What the method measures</h2><p>' + escape(description['text']).replace('\n', '<br>') + '</p><p>Source: ' + escape(description['source_kind']) + '</p>'
+        if mid in reviewed_sources:
+            body += '<h2>Source scope</h2><p>' + escape(reviewed_sources[mid]['scope_note']) + '</p>'
         body += '<h2>Identity and scope</h2>' + ''.join('<p>' + escape(d['reason']) + '</p>' for d in m['identity_decisions'])
         body += '<p>' + escape(m['review_limits']) + '</p>'
         body += '<p>Groups: ' + escape(', '.join(m['groups'])) + '</p><p><a href="source_comparison.json">Card/poster names, references and recorded differences</a></p>'
@@ -202,7 +212,11 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
             'papers/: only assigned papers; metadata-only records are labelled.\n'
             'index.html: readable view of these same records. No new extraction run.\n')
         method_refs = [b for b in m['method_references'] if b['role'] == 'method_reference']
+        has_card = any(state['inventory']['occurrences'][r]['batch'] in {'catalogue','initial_two'} for r in m['source_records'])
+        has_poster = any(state['inventory']['occurrences'][r]['batch'] == 'posters' for r in m['source_records'])
+        source_coverage = 'card_and_poster' if has_card and has_poster else 'card_only' if has_card else 'poster_only' if has_poster else 'footer_only'
         rows.append({'id': mid, 'name': m['name'], 'directory': m['directory'], 'entry_type': m['entry_type'],
+                     'source_coverage': source_coverage,
                      'previous_folders': '; '.join(m['previous_ids']), 'depictions': len(m['source_records']),
                      'unique_diagram_files': len(diagrams), 'identity_status': m['identity_status'],
                      'method_papers': len({b.get('paper_id') or b['reference_id'] for b in method_refs}),
@@ -237,6 +251,9 @@ def publish(source_root, output, decisions, bindings, source_holds=None, categor
     result['source_collection_sha256'] = sha(source_root / 'collection.json')
     result['validation'] = {'passed': not errors, 'errors': errors, 'original_files_checked': len(state['files'])}
     table_file(output / 'CHECKLIST.csv', rows)
+    poster_rows = [r for r in rows if r['entry_type'] == 'named_method' and r['source_coverage'] == 'poster_only']
+    if poster_rows:
+        table_file(output / 'POSTER_ONLY_CHECKLIST.csv', poster_rows)
     missing = []
     for mid, method in result['methods'].items():
         if method['entry_type'] != 'named_method':
@@ -288,11 +305,15 @@ def main():
     p.add_argument('--category-assignments', type=Path)
     p.add_argument('--source-quality-review', type=Path,
                    help='Recorded visual rejections, matched to exact source IDs and image hashes')
+    p.add_argument('--description-reviews', type=Path)
+    p.add_argument('--poster-only-reviews', type=Path)
     args = p.parse_args()
     result = publish(args.source_root, args.output, read(args.decisions), read(args.bindings),
         read(args.source_holds) if args.source_holds else None,
         read(args.category_assignments) if args.category_assignments else None,
-        read(args.source_quality_review) if args.source_quality_review else None)
+        read(args.source_quality_review) if args.source_quality_review else None,
+        read(args.description_reviews) if args.description_reviews else None,
+        read(args.poster_only_reviews) if args.poster_only_reviews else None)
     print(json.dumps({'counts': result['counts'], 'validation': result['validation']}, indent=2))
 
 

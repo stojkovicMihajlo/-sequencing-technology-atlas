@@ -7,10 +7,33 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 import csv
+import hashlib
 import json
 from pathlib import Path
 
 from .materialize import write
+
+
+def validate_poster_only_reviews(inventory, curated, papers, reviews):
+    expected = {mid for mid, m in curated['methods'].items() if m['entry_type'] == 'named_method'
+        and any(inventory['occurrences'][r]['batch'] == 'posters' for r in m['source_records'])
+        and not any(inventory['occurrences'][r]['batch'] in {'catalogue','initial_two'} for r in m['source_records'])}
+    by_id = {r['method_id']: r for r in reviews}
+    if len(by_id) != len(reviews) or set(by_id) != expected:
+        raise ValueError('Source review must cover each poster-only method exactly once')
+    for mid, review in by_id.items():
+        method = curated['methods'][mid]
+        if set(review['source_records']) != set(method['source_records']):
+            raise ValueError('Reviewed source membership changed: ' + mid)
+        assigned = {r['paper_id'] for r in method['method_references']
+                    if r['role'] == 'method_reference' and r.get('paper_id')}
+        if set(review['assigned_paper_ids']) != assigned:
+            raise ValueError('Reviewed paper assignment changed: ' + mid)
+        for pid in assigned:
+            abstract = papers.get(pid, {}).get('metadata', {}).get('abstract', [])
+            if hashlib.sha256(json.dumps(abstract, sort_keys=True).encode()).hexdigest() != review['paper_abstract_sha256'][pid]:
+                raise ValueError('Reviewed abstract changed: ' + pid)
+    return by_id
 
 
 def table(path, rows, fields):

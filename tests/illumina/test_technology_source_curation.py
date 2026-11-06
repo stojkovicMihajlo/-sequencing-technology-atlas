@@ -107,6 +107,26 @@ def test_source_report_accounts_for_shared_and_repeated_depictions(records):
     assert not any('historical' in s for s in drop['recorded_source_differences'])
 
 
+def test_poster_only_source_reviews_cover_methods_and_pin_their_papers(records):
+    from scripts.illumina.technology_sources.source_report import validate_poster_only_reviews
+    inventory, _, _ = records
+    curated = compile_records(records)
+    report_path = REVIEW.parent/'release_01/task2_03/POSTER_ONLY_REVIEW.json'
+    reviews = json.loads(report_path.read_text())
+    papers = {pid: {'metadata': {'abstract': []}} for m in curated['methods'].values()
+              for r in m['method_references'] if (pid := r.get('paper_id'))}
+    # The actual review records pin complete abstracts. A deliberately different
+    # in-memory corpus must be rejected rather than inherit their approval.
+    with pytest.raises(ValueError, match='Reviewed abstract changed'):
+        validate_poster_only_reviews(inventory, curated, papers, reviews)
+    test_reviews = copy.deepcopy(reviews)
+    for r in test_reviews:
+        r['paper_abstract_sha256'] = {pid: hashlib.sha256(b'[]').hexdigest() for pid in r['assigned_paper_ids']}
+    assert len(validate_poster_only_reviews(inventory, curated, papers, test_reviews)) == 99
+    with pytest.raises(ValueError, match='exactly once'):
+        validate_poster_only_reviews(inventory, curated, papers, test_reviews[:-1])
+
+
 def test_poster_row_windows_preserve_group_labels_without_neighbor_names(records):
     from scripts.illumina.technology_sources.poster_check import row_windows, overlap
     inventory, _, _ = records
@@ -161,6 +181,20 @@ def test_title_entities_do_not_create_false_publication_mismatches():
     assert normalized_title('G&amp;T-seq') != normalized_title('DR-seq')
 
 
+def test_cloud_recovery_rejects_wrong_own_identifiers_despite_matching_title():
+    from scripts.illumina.technology_sources.pmc_cloud import metadata_matches
+    paper = {'pmid': '12', 'title': 'The intended protocol',
+             'metadata': {'identifiers': {'doi': ['10.1/intended']}}}
+    record = {'pmid': 12, 'title': paper['title'], 'doi': '10.1/intended'}
+    metadata_matches(record, paper)
+    for changed, message in [({'pmid': 99}, 'own PMID'),
+                             ({'doi': '10.1/other'}, 'DOI'),
+                             ({'title': 'A different protocol'}, 'title'),
+                             ({'is_retracted': 'yes'}, 'Retracted')]:
+        with pytest.raises(ValueError, match=message):
+            metadata_matches({**record, **changed}, paper)
+
+
 def test_image_only_cms_block_is_not_an_assay_description():
     from scripts.illumina.technology_sources.descriptions import describe
     prose = 'This assay records RNA molecules and their cellular origins using molecular barcodes before pooling the captured material.'
@@ -173,6 +207,32 @@ def test_image_only_cms_block_is_not_an_assay_description():
     assert result['text'] == prose and result['locator'] == '/description/text'
     occurrence['original_cms']['content'].pop('description')
     assert describe(state, m)['status'] == 'description_unavailable_in_collected_sources'
+
+
+def test_guide_description_needs_scope_review_and_exact_source_support(tmp_path):
+    from scripts.illumina.technology_sources.descriptions import describe, apply_description_reviews
+    text = 'A DNA method called Nuc-seq.\n\nThe RNA method profiles individual nuclei.'
+    path = tmp_path / 'guide-page.txt'; path.write_text(text)
+    candidate = {'text': 'A DNA method called Nuc-seq.', 'source_kind': 'illumina_methods_guide_excerpt',
+                 'locator': 'PDF page 1', 'source_pdf_sha256': 'pdf'}
+    method = {'id': 'rna', 'source_records': [], 'method_references': [
+        {'role': 'method_reference', 'paper_id': 'paper', 'reference_id': 'ref'}]}
+    state = {'papers': {'paper': {'metadata': {'abstract': [{'text': 'RNA is sequenced from individual nuclei.'}]}}},
+        'method_descriptions': {'rna': candidate}, 'method_guide_sources': {'rna': [
+            {'pdf_page': 1, 'pdf_sha256': 'pdf', 'text_file': {'path': path.name,
+             'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}}]}}
+    assert describe(state, method)['source_kind'] == 'method_paper_abstract'
+    review = {'candidate_text_sha256': hashlib.sha256(candidate['text'].encode()).hexdigest(),
+              'action': 'replace_guide_excerpt', 'reviewer': 'Source review',
+              'reason': 'The matching name describes a different material.',
+              'text': 'The RNA method profiles individual nuclei.'}
+    apply_description_reviews(tmp_path, state, {'rna': method}, {'rna': review})
+    assert describe(state, method)['text'] == review['text']
+    with pytest.raises(ValueError, match='absent from its registered guide page'):
+        apply_description_reviews(tmp_path, state, {'rna': method}, {'rna': {**review, 'text': 'Invented chemistry.'}})
+    path.write_text('Changed source bytes')
+    with pytest.raises(ValueError, match='guide-page bytes changed'):
+        apply_description_reviews(tmp_path, state, {'rna': method}, {'rna': review})
 
 
 def test_cached_html_reuse_requires_own_identity_and_substantive_body(tmp_path):
@@ -341,6 +401,16 @@ def test_published_folders_only_link_assigned_papers_and_original_bytes(tmp_path
     # Publication overlays cannot silently rewrite the preserved source record.
     preserved = json.loads((bundle / 'collection.json').read_text())
     assert 'visual_review' not in preserved['sources']['shared']['diagrams'][0]
+    # Source-vault preparation must retain derived non-paper assets too.
+    asset = bundle / 'new_assets/guide_pages/figure.png'
+    asset.parent.mkdir(parents=True)
+    asset.write_bytes(b'Derived full-page source preview')
+    preserved['files']['derived'] = {'path': str(asset.relative_to(bundle)),
+        'sha256': hashlib.sha256(asset.read_bytes()).hexdigest(), 'kind': 'image'}
+    (bundle / 'collection.json').write_text(json.dumps(preserved))
+    next_bundle = tmp_path / 'with_derived_asset'
+    prepare(bundle, next_bundle, d, b)
+    assert (next_bundle / 'new_assets/guide_pages/figure.png').read_bytes() == asset.read_bytes()
     a = tmp_path / 'curated' / result['methods']['a']['directory']
     assert (a / 'papers/pmid-1/paper.json').is_file()
     assert not (a / 'papers/pmid-2').exists()
