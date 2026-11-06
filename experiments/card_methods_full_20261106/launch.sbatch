@@ -2,7 +2,7 @@
 #SBATCH --job-name=atlas-card-methods
 #SBATCH --partition=service,normal,xiaojie
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=24G
+#SBATCH --mem=16G
 #SBATCH --time=12:00:00
 set -euo pipefail
 hostname

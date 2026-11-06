@@ -35,7 +35,7 @@ without new sources. Added ChIP-exo/GRO evidence is reused from dependencies_04.
 New scientific findings remain model judgments, not expert/wet-lab validation.
 
 Deployment: launch.sbatch executes on Qiu Sherlock under the existing dedicated
-Codex login and CLI0.163.0.10concurrent method tasks,4CPU,24GB RAM,no GPU,12h limit.
+Codex login and CLI0.163.0.10concurrent method tasks,4CPU,16GB RAM,no GPU,12h limit.
 The12h allocation accommodates roughly150remaining tasks in10-worker waves;
 it is a time request, not an estimate of scientific success or a token budget.
 Frozen runtime and outputs go to Qiu scratch; EXIT backs them up to GROUP_HOME.
@@ -57,3 +57,7 @@ including changed bytes, actual extraction/review/graph publication with holds,
 exact unchanged supported/held reuse, and terminal exit statuses. Passing software
 tests does not certify the reviewer's biological judgments. Missing-document
 requests are recorded; automatic new-document retrieval is not implemented here.
+
+Submission51323900 uses16GB: service QOS limits a user to16GB total. The initial
+24GB request created no job. runtime01 is unchanged; sbatch--mem=16G overrides
+its preserved header. The working launcher now uses16GB for future freezes.
