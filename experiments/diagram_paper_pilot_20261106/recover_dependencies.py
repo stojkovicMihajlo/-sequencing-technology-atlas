@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from urllib.parse import urlsplit, unquote
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipFile
 
 from genomics_discovery.illumina.extraction import read, sha, write, verify_registry_files
 from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch
@@ -49,9 +49,13 @@ def recover_supplement(request, source, folder):
     destination = folder / 'supplements' / name
     destination.parent.mkdir(parents=True, exist_ok=False)
     attempts, intermediates = [], [original]
+    used_public_copy = False
+    def record_attempts():
+        write(folder / 'retrieval.json', {'attempts': attempts, 'parent_attachment': matches[0]})
     try:
         receipt = fetch(direct, folder / 'direct_response')
         attempts.append(receipt); intermediates.append(folder / 'direct_response')
+        record_attempts()
         content = (folder / 'direct_response').read_bytes()
         if not content.startswith(b'%PDF-'):
             raise ValueError('Direct attachment response is not PDF bytes')
@@ -59,14 +63,37 @@ def recover_supplement(request, source, folder):
     except (RuntimeError, ValueError) as exc:
         attempts.append({'url': direct, 'registration': 'not accepted', 'error': str(exc)})
         endpoint = 'https://www.ebi.ac.uk/europepmc/webservices/rest/PMC' + pmc + '/supplementaryFiles'
-        receipt = fetch(endpoint, folder / 'attachments.zip')
-        attempts.append(receipt); intermediates.append(folder / 'attachments.zip')
-        with ZipFile(folder / 'attachments.zip') as archive:
-            names = [n for n in archive.namelist() if n.rsplit('/', 1)[-1] == name]
-        if len(names) != 1:
-            raise ValueError('Publication-bound archive lacks one exact cited PDF member')
-        content, _ = selected_pdf((folder / 'attachments.zip').read_bytes(), names[0])
-        provenance_url = endpoint
+        try:
+            receipt = fetch(endpoint, folder / 'attachments.zip')
+            attempts.append(receipt); intermediates.append(folder / 'attachments.zip')
+            record_attempts()
+            if not (folder / 'attachments.zip').read_bytes().startswith(b'PK'):
+                try:
+                    response = ET.fromstring((folder / 'attachments.zip').read_bytes())
+                    message = next((e.text for e in response.iter() if e.tag.rsplit('}', 1)[-1] == 'errMsg'), None)
+                except ET.ParseError:
+                    message = None
+                raise ValueError('Supplement provider returned ' + (message or 'a non-ZIP response'))
+            with ZipFile(folder / 'attachments.zip') as archive:
+                names = [n for n in archive.namelist() if n.rsplit('/', 1)[-1] == name]
+            if len(names) != 1:
+                raise ValueError('Publication-bound archive lacks one exact cited PDF member')
+            content, _ = selected_pdf((folder / 'attachments.zip').read_bytes(), names[0])
+            provenance_url = endpoint
+        except (RuntimeError, ValueError, BadZipFile) as error:
+            attempts.append({'url': endpoint, 'registration': 'not accepted', 'error': str(error)})
+            record_attempts()
+            if not request.get('public_copy_url'):
+                raise ValueError('Supplement unavailable through attempted public routes; a separately verified public copy or user-provided file is needed') from error
+            from genomics_discovery.sources.acquisition.downloads import public_url
+            provenance_url = public_url(request['public_copy_url'])
+            receipt = fetch(provenance_url, folder / 'public_copy_response')
+            attempts.append(receipt); intermediates.append(folder / 'public_copy_response')
+            record_attempts()
+            content = (folder / 'public_copy_response').read_bytes()
+            if not content.startswith(b'%PDF-'):
+                raise ValueError('Public-copy response is not a PDF')
+            used_public_copy = True
     destination.write_bytes(content)
     write(folder / 'retrieval.json', {'attempts': attempts, 'parent_attachment': matches[0]})
     write(folder / 'supplements/acquisition.json', {'pmid': source['pmid'], 'files': [{
@@ -76,13 +103,22 @@ def recover_supplement(request, source, folder):
         raise ValueError('Supplement conversion incomplete: ' + str(leads))
     write(folder / 'conversion.json', receipts[0])
     text = Path(texts[0]['path'])
+    if used_public_copy:
+        normalize = lambda value: ''.join(c for c in value.casefold() if c.isalnum())
+        cover = text.read_text()[:10000]
+        dois = ids.get('doi', [])
+        if (len(dois) != 1 or normalize(dois[0]) not in normalize(cover)
+                or normalize(source['title']) not in normalize(cover)
+                or not any(w in cover.casefold() for w in ('supplement', 'supporting'))):
+            raise ValueError('Public supplement copy cover does not establish parent DOI/title and document role')
     paths = [*intermediates, destination, text, folder / 'retrieval.json', folder / 'conversion.json',
              folder / 'supplements/acquisition.json']
     return {'kind': 'text', 'content_level': 'fulltext', 'document_role': 'supplement',
         'pmid': source['pmid'], 'parent_source_id': request['parent_source_id'],
         'title': 'Supplement to ' + source['title'], 'url': provenance_url,
         'path': str(text), 'sha256': sha(text), 'text': text.read_text(),
-        'association_status': 'Exact parent-cited attachment; contents/version require scientific inspection, not a separate publication.',
+        'association_status': ('Public copy with parent DOI/title confirmed on cover; binary equivalence to the parent-cited attachment is not established. Inspect content/version; not a separate publication.'
+            if used_public_copy else 'Exact parent-cited attachment; contents/version require scientific inspection, not a separate publication.'),
         'custody_files': [{'path': str(p), 'sha256': sha(p)} for p in paths]}
 
 

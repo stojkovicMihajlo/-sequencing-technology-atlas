@@ -53,11 +53,12 @@ def test_dependency_registration_requires_delegation_own_identity_and_full_body(
         assert read(tmp_path / 'recovery/registered_additions.json') == result
 
 
-@pytest.mark.parametrize('defect', [None, 'wrong_parent', 'wrong_attachment'])
+@pytest.mark.parametrize('defect', [None, 'wrong_parent', 'wrong_attachment', 'public_copy', 'public_copy_badcover'])
 def test_supplement_is_bound_to_parent_identity_and_exact_attachment(tmp_path, monkeypatch, defect):
     original = tmp_path / 'parent.xml'
     original.write_text('<article xmlns:xlink="http://www.w3.org/1999/xlink"><front><article-meta>'
         '<article-id pub-id-type="pmid">2</article-id><article-id pub-id-type="pmcid">PMC2</article-id>'
+        '<article-id pub-id-type="doi">10.1/example</article-id>'
         '<title-group><article-title>Unrelated method</article-title></title-group></article-meta></front>'
         '<body><p>Reported workflow.</p><supplementary-material id="S1">'
         '<media xlink:href="methods.pdf"/></supplementary-material></body></article>')
@@ -65,21 +66,26 @@ def test_supplement_is_bound_to_parent_identity_and_exact_attachment(tmp_path, m
               'custody_files': [{'path': str(original), 'sha256': sha(original)}]}
     request = {'attachment_id': 'absent' if defect == 'wrong_attachment' else 'S1',
                'parent_source_id': 'paper:2'}
+    if defect in {'public_copy', 'public_copy_badcover'}:
+        request['public_copy_url'] = 'https://example.org/public-supplement.pdf'
     calls = []
     def fetch(url, destination):
         calls.append(url); destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes(b'%PDF-fixture')
+        destination.write_bytes(b'<error>Not a downloadable document</error>'
+            if defect in {'public_copy', 'public_copy_badcover'} and 'example.org' not in url else b'%PDF-fixture')
         return {'final_url': url, 'path': str(destination), 'sha256': sha(destination)}
     def converted(folder, pmid, output):
         output.mkdir(parents=True)
-        path = output / 'text.txt'; path.write_text('Supplemental procedure, synthetic converter output.')
+        path = output / 'text.txt'; path.write_text('Wrong publication' if defect == 'public_copy_badcover'
+            else 'Supporting information for Unrelated method. DOI 10.1/example. Synthetic converter output.')
         return [{'path': str(path)}], [{'original': str(folder / 'supplements/methods.pdf')}], []
     monkeypatch.setattr(mod, 'fetch', fetch)
     monkeypatch.setattr(mod, 'supplements', converted)
-    if defect:
+    if defect in {'wrong_parent', 'wrong_attachment', 'public_copy_badcover'}:
         with pytest.raises(ValueError):
             mod.recover_supplement(request, source, tmp_path / 'supp')
-        assert not calls
+        if defect != 'public_copy_badcover':
+            assert not calls
     else:
         result = mod.recover_supplement(request, source, tmp_path / 'supp')
         assert result['document_role'] == 'supplement'
