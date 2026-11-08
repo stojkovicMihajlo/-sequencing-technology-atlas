@@ -1,0 +1,56 @@
+{
+  "scope": "Observed internal author/reviewer attempts; not changes to the frozen run and not attributed causally to the refined definition. First author means the submitted pre-review artifact after its own self-checks, not the first JSON bytes written.",
+  "findings": [
+    {
+      "trials": [
+        "trial_02",
+        "trial_03",
+        "trial_05",
+        "trial_06"
+      ],
+      "stage": "author",
+      "finding": "Data States were initially given physical components. Existing structural validation rejected them; authors repaired the representation before submitting.",
+      "followup": "Keep the validator. Explicitly distinguish collections of data records from material components in the shared State instructions; test separately from the information-effect comparison."
+    },
+    {
+      "trials": [
+        "trial_02"
+      ],
+      "stage": "author",
+      "finding": "One self-check passed card.json as --registry, yielding misleading unknown-source/metadata errors. The author reran with source_registry.json.",
+      "followup": "Fail early with a clear registry-type error, or bind card and registry into an attempt-specific checking tool instead of asking the model to repeat paths."
+    },
+    {
+      "trials": [
+        "trial_03",
+        "trial_04",
+        "trial_05",
+        "trial_06"
+      ],
+      "stage": "reviewer",
+      "finding": "Reviewers initially confused the canonical candidate hash with a raw-file SHA256. Assertions or binding validation failed; subsequent attempts used the declared candidate identity correctly.",
+      "followup": "Explain the two hash meanings and expose a single candidate-identity helper; do not ask the model to reconstruct the hash algorithm."
+    },
+    {
+      "trials": [
+        "trial_05"
+      ],
+      "stage": "author",
+      "finding": "An optional jsonschema import failed; the author continued with the installed project checking tool.",
+      "followup": "Use the provided checker rather than optional dependencies. No evidence that Python assembly itself caused the scientific error under investigation."
+    },
+    {
+      "stage": "native tools",
+      "finding": "Sandbox namespace failures are recorded separately from extraction errors; approved command escalation then allowed execution under Sherlock policy.",
+      "followup": "Retain managed approval behavior. Do not disable the sandbox to reduce overhead."
+    },
+    {
+      "trials": [
+        "trial_06"
+      ],
+      "stage": "reviewer",
+      "finding": "A positive correction check cited only one side of a source discrepancy; validation required evidence for both the catalogue and primary-paper version. The reviewer added the missing evidence before acceptance.",
+      "followup": "Retain the existing two-source correction check."
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "assessment_scope": "First-author information_effect fields and local connected scientific fields in all six trials, checked against the registered primary text. Engineering-agent assessment; not blinded human-expert ground truth. Native acceptance is recorded separately.",
+  "trials": {
+    "trial_04": {
+      "artifact_sha256": "1ab9097a52e8ae785c4b11b1d5944aa87fc7ec1e31a5e83e0e990092920c8c1d",
+      "operations_inspected": [
+        "o01_polya",
+        "o02_fragment",
+        "o03_cmc",
+        "o03_mock",
+        "o04_endselect",
+        "o05_adapter",
+        "o06_rt",
+        "o07_truncselect",
+        "o08_circle",
+        "o09_pcr",
+        "o10_sequence",
+        "o11_call"
+      ],
+      "definite_local_condition_false_claim_found": false,
+      "original_mock_control_error_reproduced": false,
+      "concerns": [
+        {
+          "operation_id": "o06_rt",
+          "type": "local applicability unclear in information_effect",
+          "finding": "The single Operation covers +CMC and mock inputs. Its information_effect describes conversion of a chemical feature to a cDNA termination boundary without qualifying +CMC, while its description and typed attribution effect correctly restrict the chemical mechanism. Ambiguous standalone field, not evidence that the whole graph assigns CMC chemistry to mock RNA.",
+          "evidence_passages": [
+            "b00003",
+            "b00020",
+            "b00022"
+          ]
+        },
+        {
+          "operation_id": "o03_mock",
+          "type": "wording blurs present material and downstream signal",
+          "finding": "Retains the background RT-stop population is prospective shorthand at an RNA-treatment boundary. Connected State correctly contains mock-treated RNA; no cDNA exists yet. Prefer explaining that this RNA provides the later background RT-stop comparison. Not scored as a demonstrated material-state error.",
+          "evidence_passages": [
+            "b00003",
+            "b00020",
+            "b00022"
+          ]
+        }
+      ],
+      "counterevidence_to_overclaim": "Mock State/description and later selection/analysis explicitly preserve background control and comparative site inference. Do not count the familiar copied-template error as reproduced here.",
+      "limits": "Focused local-meaning assessment, not independent verification of every biochemical detail in the graph.",
+      "rt_field_standalone_applicability": "needs_neighboring_fields",
+      "native_status": "supported",
+      "native_revision_rounds": 0,
+      "null_information_effects": 0
+    },
+    "trial_03": {
+      "artifact_sha256": "8d5cefc311a6b200305a1a4f039ba6527f7aae07079568f50e6ab1165181412d",
+      "operations_inspected": [
+        "o1",
+        "o2",
+        "o3",
+        "o4",
+        "o5",
+        "o6",
+        "o7",
+        "o8",
+        "o9",
+        "o10"
+      ],
+      "definite_local_condition_false_claim_found": false,
+      "original_mock_control_error_reproduced": false,
+      "concerns": [],
+      "positive_findings": [
+        {
+          "operation_id": "o5",
+          "finding": "information_effect itself identifies +CMC versus mock endpoints, distinguishes RNA adduct from DNA reporter, and requires subsequent mapping/control comparison for site inference. Description, typed effects and State assertions agree.",
+          "evidence_passages": [
+            "b00003",
+            "b00020",
+            "b00022",
+            "b00028",
+            "b00029"
+          ]
+        }
+      ],
+      "null_information_effects": 0,
+      "limits": "Focused local-meaning assessment, not independent verification of every biochemical detail in the graph.",
+      "rt_field_standalone_applicability": "clear",
+      "native_status": "supported",
+      "native_revision_rounds": 0
+    },
+    "trial_05": {
+      "artifact_sha256": "323b5fbd6001f5cb675fca2a292c7773eea0ec18d17c3f1b99296d181cf3cab5",
+      "operations_inspected": [
+        "op_polyA",
+        "op_fragment",
+        "op_chem",
+        "op_rna_select",
+        "op_ligate",
+        "op_rt",
+        "op_cdna_select",
+        "op_circle",
+        "op_pcr",
+        "op_sequence",
+        "op_map",
+        "op_call"
+      ],
+      "definite_local_condition_false_claim_found": false,
+      "original_mock_control_error_reproduced": false,
+      "concerns": [],
+      "positive_findings": [
+        {
+          "operation_id": "op_rt",
+          "finding": "information_effect itself identifies +CMC versus mock endpoints, distinguishes RNA adduct from DNA reporter, and requires subsequent mapping/control comparison for site inference. Description, typed effects and State assertions agree.",
+          "evidence_passages": [
+            "b00003",
+            "b00020",
+            "b00022",
+            "b00028",
+            "b00029"
+          ]
+        }
+      ],
+      "null_information_effects": 0,
+      "limits": "Focused local-meaning assessment, not independent verification of every biochemical detail in the graph.",
+      "rt_field_standalone_applicability": "clear",
+      "native_status": "supported",
+      "native_revision_rounds": 0,
+      "nonblocking_unknown": "Clipped upper edge of the CMC cartoon; no atom-level adduct structure is inferred, and primary text supports the chemical distinction."
+    },
+    "trial_01": {
+      "artifact_sha256": "d72ce593eda63149b1910d275b51fc7fb51c21d1cb765549f26d83590369aaf9",
+      "operations_inspected": [
+        "poly_a_selection",
+        "fragmentation",
+        "cmc_and_alkaline_treatment",
+        "end_preparation_and_rna_selection",
+        "adapter_ligation",
+        "reverse_transcription",
+        "cdna_size_selection",
+        "cdna_circularization",
+        "pcr_and_purification",
+        "sequencing",
+        "mapping_and_peak_identification"
+      ],
+      "definite_local_condition_false_claim_found": false,
+      "original_mock_control_error_reproduced": false,
+      "concerns": [
+        {
+          "operation_id": "reverse_transcription",
+          "type": "local applicability unclear in information_effect and typed attribution",
+          "finding": "RNA modification becomes an endpoint signal is unqualified for an Operation handling both conditions. Its description and output State correctly distinguish mock background, and the information_effect mentions treatment identity and enrichment. The claim is readable with surrounding fields, but it requires combining them to recover exact applicability; not scored as the original outright mock chemical-encoding error.",
+          "evidence_passages": [
+            "b00003",
+            "b00020",
+            "b00022",
+            "b00029"
+          ]
+        }
+      ],
+      "positive_findings": [
+        {
+          "finding": "Both conditions and downstream comparative inference are present; no conversion of the RNA adduct into a DNA chemical mark is asserted."
+        }
+      ],
+      "null_information_effects": 0,
+      "limits": "Focused local-meaning assessment, not independent verification of every biochemical detail in the graph.",
+      "rt_field_standalone_applicability": "needs_neighboring_fields",
+      "native_status": "supported",
+      "native_revision_rounds": 0
+    },
+    "trial_02": {
+      "artifact_sha256": "2cd6e1da870a5aceeea9284aaa1f7a1e207b14fd5a37aaec0f2e046c96a6aa56",
+      "operations_inspected": [
+        "o01",
+        "o02",
+        "o03",
+        "o04",
+        "o05",
+        "o06",
+        "o07",
+        "o08",
+        "o09",
+        "o10"
+      ],
+      "definite_local_condition_false_claim_found": false,
+      "original_mock_control_error_reproduced": false,
+      "concerns": [],
+      "positive_findings": [
+        {
+          "finding": "Both conditions and downstream comparative inference are present; no conversion of the RNA adduct into a DNA chemical mark is asserted. In trial02 the shared RT information_effect describes a generic endpoint carrier valid for both inputs and explicitly requires mock comparison."
+        }
+      ],
+      "null_information_effects": 0,
+      "limits": "Focused local-meaning assessment, not independent verification of every biochemical detail in the graph.",
+      "rt_field_standalone_applicability": "clear",
+      "native_status": "supported",
+      "native_revision_rounds": 0
+    },
+    "trial_06": {
+      "artifact_sha256": "cbc7315f10269c6d9667f541e261cc9fc2868f5f89089106671aa037ce098b13",
+      "operations_inspected": [
+        "o_fragment",
+        "o_cmc",
+        "o_rna_prepare",
+        "o_adapter",
+        "o_rt",
+        "o_cdna_select",
+        "o_circularize",
+        "o_pcr",
+        "o_sequence",
+        "o_map",
+        "o_peaks"
+      ],
+      "definite_local_condition_false_claim_found": false,
+      "original_mock_control_error_reproduced": false,
+      "rt_field_standalone_applicability": "clear",
+      "concerns": [],
+      "positive_findings": [
+        {
+          "operation_id": "o_rt",
+          "finding": "The shared information_effect describes RNA-derived sequence plus a cDNA endpoint, which is valid for both conditions, and explicitly requires +CMC/mock comparison to assign chemical dependence. The RNA adduct remains on the template in connected State assertions.",
+          "evidence_passages": [
+            "b00003",
+            "b00020",
+            "b00022",
+            "b00028",
+            "b00029"
+          ]
+        }
+      ],
+      "null_information_effects": 0,
+      "nonblocking_unknown": "Circularization-bias warning is attributed to the catalogue; the primary paper reports circularization but does not test this bias. Unknown does not invalidate the described route.",
+      "scope_variation": "Starts at already poly(A)-selected RNA; the other drafts include a poly(A)-selection Operation. This scope difference is recorded, not penalized as an information_effect error.",
+      "native_status": "supported",
+      "limits": "Focused local-meaning assessment, not independent verification of every biochemical detail in the graph.",
+      "native_revision_rounds": 0
+    }
+  },
+  "rating_rule": "Standalone RT applicability is clear when the field either qualifies treatment-specific effects or states only a shared effect valid for both inputs. Do not count context-resolved ambiguity as a reproduced false mock-control claim."
+}

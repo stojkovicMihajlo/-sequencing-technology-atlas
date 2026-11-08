@@ -35,6 +35,8 @@ def differences(before, after, pointer=''):
 def inspect(root, output):
     output.mkdir(parents=True, exist_ok=True)
     plan = read(Path(__file__).with_name('plan.json'))
+    assessment_path = Path(__file__).with_name('scientific_assessment.json')
+    assessments = read(assessment_path) if assessment_path.exists() else {}
     summaries, packets = [], []
     for trial in plan['trials']:
         state = read(root/trial['id']/'state.json')
@@ -48,7 +50,7 @@ def inspect(root, output):
         for stage in stages:
             attempt = directory/'attempts'/Path(stage['path']).name
             result = {k: stage.get(k) for k in ('role', 'revision', 'status', 'elapsed_seconds', 'usage', 'thread_id')}
-            events, commands = Counter(), []
+            events, commands, nonzero = Counter(), [], []
             if (attempt/'events.jsonl').exists():
                 for line in (attempt/'events.jsonl').read_text().splitlines():
                     try:
@@ -60,10 +62,16 @@ def inspect(root, output):
                         events[item.get('type', 'unknown')] += 1
                         if item.get('type') == 'command_execution':
                             commands.append(item.get('command', ''))
+                            if item.get('exit_code') not in (0, None):
+                                nonzero.append({'event_id': item.get('id'),
+                                    'exit_code': item.get('exit_code'),
+                                    'command_prefix': item.get('command', '')[:350],
+                                    'output_tail': item.get('aggregated_output', '')[-1800:]})
             result.update(completed_event_types=dict(events),
                           source_helper_commands=sum('illumina.extraction source' in c for c in commands),
                           self_check_commands=sum('illumina.extraction check' in c for c in commands),
-                          python_scripts={p.name: pin(p) for p in attempt.glob('*.py')})
+                          python_scripts={p.name: pin(p) for p in attempt.glob('*.py')},
+                          nonzero_command_events=nonzero)
             if (attempt/'artifact.json').exists():
                 artifact = read(attempt/'artifact.json')
                 result['artifact_sha256'] = pin(attempt/'artifact.json')
@@ -83,11 +91,19 @@ def inspect(root, output):
                                             'nonaccepting_checks': result['nonaccepting_checks']})
             summary['stages'].append(result)
         packet['first_to_last_author_changes'] = differences(authors[0], authors[-1]) if authors else []
-        summary['scientific_assessment'] = 'Pending source-based inspection; acceptance is not ground truth.'
+        summary['scientific_assessment'] = assessments.get('trials', {}).get(
+            trial['id'], 'Pending source-based inspection; acceptance is not ground truth.')
         summaries.append(summary)
         packets.append(packet)
     (output/'measurements.json').write_text(json.dumps(summaries, indent=2)+'\n')
     (output/'operation_audit.json').write_text(json.dumps(packets, indent=2, ensure_ascii=False)+'\n')
+    if assessments:
+        (output/'scientific_assessment.json').write_text(json.dumps(assessments, indent=2, ensure_ascii=False)+'\n')
+    for name in ('definition.txt', 'RESULTS.txt', 'engineering_findings.json',
+                 'usage_summary.json', 'completion_audit.json'):
+        source = Path(__file__).with_name(name)
+        if source.exists():
+            (output/name).write_bytes(source.read_bytes())
     esc = html.escape
     sections = []
     for summary, packet in zip(summaries, packets):
@@ -103,8 +119,10 @@ def inspect(root, output):
             for check in stage.get('nonaccepting_checks', []):
                 items.append('<pre>'+esc(json.dumps(check, indent=2, ensure_ascii=False))+'</pre>')
             entries.append(f'<details><summary>{esc(stage["role"])} · revision {stage["revision"]}</summary>'+''.join(items)+'</details>')
+        assessment = '<details><summary>Separate source-based assessment</summary><pre>'+esc(
+            json.dumps(summary['scientific_assessment'], indent=2, ensure_ascii=False))+'</pre></details>'
         sections.append(f'<section><h2>{esc(packet["trial_id"])} — {esc(summary["trial"]["contract"])}</h2>'
-                        f'<p>Runtime outcome: {esc(summary["status"])}</p>'+''.join(entries)+'</section>')
+                        f'<p>Runtime outcome: {esc(summary["status"])}</p>'+assessment+''.join(entries)+'</section>')
     page = '''<!doctype html><html lang="en"><meta charset="utf-8"><title>Information-effect comparison</title>
 <style>body{font:17px/1.6 system-ui;max-width:1150px;margin:36px auto;padding:0 24px;color:#172737}
 section{border-top:1px solid #ccd7df;margin-top:25px}article{margin:22px 0}summary{cursor:pointer;padding:8px}
@@ -112,7 +130,13 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f6f8;padding:16px;
 <h1>Information-effect comparison — Pseudo-seq</h1>
 <p>Three baseline and three refined authors. Same sources and reviewer instructions. Open each native draft and review below.
 These are exact saved fields; review acceptance is not an independent accuracy measurement.</p>
-<p><a href="measurements.json">Run measurements</a> · <a href="operation_audit.json">Complete operation audit and correction differences</a></p>'''+''.join(sections)+'</html>'
+<p><a href="definition.txt">Exact definition</a> · <a href="measurements.json">Run measurements</a> ·
+<a href="operation_audit.json">Complete operation audit</a> · <a href="engineering_findings.json">Internal tool issues</a> ·
+<a href="usage_summary.json">Usage</a></p>'''
+    report = Path(__file__).with_name('RESULTS.txt')
+    if report.exists():
+        page += '<pre>'+esc(report.read_text())+'</pre>'
+    page += ''.join(sections)+'</html>'
     (output/'index.html').write_text(page)
     return summaries
 
