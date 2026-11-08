@@ -1,0 +1,131 @@
+{
+  "date": "2026-11-08",
+  "scope": "Forensic reinspection of selected documented historical errors, their source support, construction traces and review judgments. No new model call, production prompt change or atlas mutation.",
+  "not_established": [
+    "A complete census of historical scientific errors",
+    "General author or reviewer error rates",
+    "A prompt-level cause for each mistake",
+    "That six clean reruns prove the old failure is prevented"
+  ],
+  "incidents": [
+    {
+      "id": "pseudo_local_condition",
+      "classification": "contradicted local scientific claim",
+      "author_claim": "The original RNA modification is translated into the location of a cDNA termination boundary; it is not a CMC modification on the DNA reporter.",
+      "location": "mock-control reverse-transcription Operation, information_effect",
+      "established_construction": "One unconditional Python string was passed to both treated and mock Operations; descriptions and State attribution used branch-specific text.",
+      "source_available_before_generation": true,
+      "source_basis": "paper:25192136 b00003 and b00020 explicitly distinguish the untreated mock and background RT stops.",
+      "why_source_validation_passed": "The JSON references and quoted source text were real. Quote existence did not establish applicability of this assertion to the mock input.",
+      "detector": "First independent reviewer, operation:minus_rt and operation_semantics:minus_rt",
+      "admission": "needs_revision before scientific admission; two fields corrected and fresh review accepted the corrected candidate.",
+      "evidence": [
+        {
+          "path": "experiments/readability_audit_20261108/failure_diagnosis.json",
+          "sha256": "7ba954629713339493596dfcc1769a34c2acc15246f341be8e0f175eb8352aa9"
+        },
+        {
+          "path": "experiments/readability_audit_20261108/pilot_results_01/correction_trace/author_construction.py",
+          "sha256": "cf75d7a4055c64b2785c0909e538433dfe1ce7c08c5c99ecb6c12cfce924cb1e"
+        },
+        {
+          "path": "experiments/readability_audit_20261108/pilot_results_01/correction_trace/finding.json",
+          "sha256": "df54401987b9a931a83684af3b326e0da756f0831e3c3c698ccb08e91bc3c664"
+        }
+      ],
+      "regression_requirement": "Reject the actual original mock claim in its full workflow; retain the corrected claim and a shared endpoint statement that is valid for both conditions. Measure repeated independent reviewer detection, not whether new authors happen to regenerate the mistake."
+    },
+    {
+      "id": "atac_unreported_material_fate",
+      "classification": "unsupported additional claim, not experimentally disproved",
+      "author_claim": "Converts fluorescence monitoring into a cycle-count decision; no sequencing library is recovered from the monitoring branch.",
+      "source_basis": {
+        "source_id": "buenrostro2013_primary",
+        "passage_id": "p00017",
+        "text": "PCR: Following purification, we amplified library fragments using 1x NEBnext PCR master mix and 1.25 μM of custom Nextera PCR primers 1 and 2 (see table below), using the following PCR conditions: 72°C for 5 minutes, 98°C for 30 seconds, followed by thermocycling at 98°C for 10 seconds, 63°C for 30 seconds and 72°C for 1 minute. To reduce GC and size bias in our PCR we monitored the PCR reaction using qPCR in order to stop amplification prior to saturation. To do this, we amplified the full libraries for 5 cycles, after 5 cycles we took an aliquot of the PCR reaction and added 10 μl of the PCR cocktail with Sybr Green at a final concentration of 0.6x. We ran this reaction for 20 cycles, to determine the additional number of cycles needed for the remaining 45 μL reaction. The libraries were purified using a Qiagen PCR cleanup kit yielding a final library concentration of ~30 nM in 20 μL. Libraries were amplified for a total of 10–12 cycles."
+      },
+      "established_difference": "The source states a monitoring aliquot determines cycles for the remaining production reaction. It does not establish the aliquot eventual recovery or disposal. Omitting further material routing from a graph does not establish physical non-recovery.",
+      "generation_cause": "Not established from the evidence inspected in this audit; the source-to-claim overstatement is directly observable.",
+      "detector": {
+        "target_id": "operation:monitor_qpcr",
+        "verdict": "unresolved",
+        "rationale": "The 10 μL cocktail, final 0.6x Sybr Green, 20 monitoring cycles and cycle-decision output are supported; both resource records and exact I/O bindings were inspected. However, the additional information-effect assertion that no sequencing library is recovered from the monitoring branch is not established as a physical outcome in the original Methods. The source describes the aliquot’s monitoring purpose and continued amplification of the remainder, but does not report the aliquot’s eventual recovery or disposal. A data-only output is a reasonable graph abstraction; the categorical recovery assertion needs removal or an explicit inference qualifier. This uncertainty does not negate the represented qPCR feedback.",
+        "evidence": [
+          {
+            "source_id": "buenrostro2013_primary",
+            "passage_id": "p00017",
+            "quote": "To reduce GC and size bias in our PCR we monitored the PCR reaction using qPCR in order to stop amplification prior to saturation. To do this, we amplified the full libraries for 5 cycles, after 5 cycles we took an aliquot of the PCR reaction and added 10 μl of the PCR cocktail with Sybr Green at a final concentration of 0.6x. We ran this reaction for 20 cycles, to determine the additional number of cycles needed for the remaining 45 μL reaction.",
+            "support": "inferred",
+            "rationale": "The positive monitoring recipe and decision are reported; the absence of a recovered library is not explicitly established by this passage."
+          }
+        ]
+      },
+      "admission": "Benchmark workflow review returned unresolved for this Operation; the recorded case was graph_needs_revision despite covering all 28 reference obligations.",
+      "evidence": [
+        {
+          "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/pilot_inspection_local_01/reference_v1_01/work/references/cases/atac-buenrostro-2013/workflow.json",
+          "sha256": "cdf7fdfcaf4a200ac63d2d698cd424229206e9bf76919958a9bd95c8975d5bda",
+          "pointer": "/operations/14/information_effect"
+        },
+        {
+          "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/benchmark_20261020/pilot_inspection_local_01/reference_v1_01/work/references/cases/atac-buenrostro-2013/workflow_review.json",
+          "sha256": "5820656890495806680bc167a6f9f54c5ded7e7c179f016c235b8fd7f454b5d4",
+          "pointer": "/checks/88"
+        },
+        {
+          "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/expanded_evidence_run_01/source_packet.json",
+          "sha256": "c8e23ca88bb23257a6eaf73ceffcba0b7625b226b2c1648ecf2721aeb671d039"
+        }
+      ],
+      "regression_requirement": "Reject categorical non-recovery/disposal when absent from the sources; retain the reported monitoring purpose and qualified absence of a described return. Do not reject all negative claims: explicit source-supported exclusions remain valid."
+    },
+    {
+      "id": "atac_reviewer_strengthening",
+      "classification": "qualification lost in a reviewer rationale",
+      "candidate_wording": "Separately amplified analytical qPCR product after 20 cycles, with added PCR cocktail/Sybr Green. This branch terminates as analytical material; no return to production is supported.",
+      "reviewer_wording": "The qPCR-determined cycle decision governs the retained 45 μL production reaction. The attached cycle-temperature resource is supported by the stated library thermal program; 10–12 total cycles remains an observed outcome, not a fixed controller. The analytical product is not returned to production.",
+      "source_to_claim_issue": "The evidence/rationale says no material return is described; the supported-check prose states that the analytical product is not returned. This changes a statement about available reporting into a categorical physical assertion.",
+      "admission_limit": "This particular target was marked supported. The same review had four other unsupported checks. This audit does not establish that a complete erroneous graph was admitted from that review.",
+      "evidence": [
+        {
+          "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/expanded_evidence_run_01/attempts/001_reviewer/candidate.json",
+          "sha256": "f2292c80efa91e5596b6ad0c8f715bb3c8b96e18f70e6a434b092175ff74b6cd",
+          "pointer": "/states/13/description"
+        },
+        {
+          "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/expanded_evidence_run_01/attempts/001_reviewer/artifact.json",
+          "sha256": "af97f7afabddd542f02a417e5dd43c9c529964eafc20f10e62d2667ad1ee011c",
+          "pointer": "/checks/119"
+        },
+        {
+          "path": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/technology_atlas/v2/work/harness_development_20261014/three_family_validation_20261014/atac_seq/expanded_evidence_run_01/source_packet.json",
+          "sha256": "c8e23ca88bb23257a6eaf73ceffcba0b7625b226b2c1648ecf2721aeb671d039"
+        }
+      ],
+      "regression_requirement": "Judge the scientific assertions added in review rationales as well as the candidate. A reviewer may not strengthen uncertainty or turn a graph abstraction into a reported experiment."
+    }
+  ],
+  "counterexample_not_classified_as_hallucination": {
+    "method": "mNET-seq",
+    "label": "Mammalian cellular input for nuclear chromatin isolation",
+    "recorded_specimen_property": "HeLa cells in the focal paper; general mammalian scope in the catalogue and diagram.",
+    "finding": "The label is purpose-based and hard to interpret; the specimen information exists elsewhere. Its presence cannot be denied. This inspection does not independently revalidate the entire method.",
+    "evidence": {
+      "path": "deliverables/illumina_extractions_20261106/records/8e212bce9e8ea6967a8eafd4.json",
+      "sha256": "b5cee8224beb5dd6683034b3029baa71b3a9b2530ebde5316eb2d6a2350cbef8",
+      "pointer": "/candidate/states/0"
+    }
+  },
+  "existing_controls_not_to_reinvent": [
+    {
+      "path": "examples/protocol_grounding_pilot/README.md",
+      "finding": "A prior 24-case short-context grounding diagnostic retained 12 supported cases and rejected 12 unsupported/contradicted cases under both prompts. Small model-authored diagnostic with one session per prompt; not full-workflow reviewer reliability."
+    },
+    {
+      "path": "experiments/scstamp_seq_20261021/full_review_probe_result.json",
+      "finding": "One full-workflow production-review probe caught seeded disposal, reversed read assignments and an omitted partition. Deliberately changed controls are not naturally occurring hallucinations and are not a reviewer sensitivity estimate."
+    }
+  ],
+  "current_refinement_boundary": "The new author block explicitly constrains local input applicability, carrier and inference. It does not add a deterministic entailment checker or establish reviewer error detection. Three baseline and three refined generation runs did not recreate the original definite mock error.",
+  "next_test_not_launched": "Repeat current full-workflow review on preserved erroneous and corrected candidate pairs using the same sources, blind the expected outcome, record detection and false rejection separately. Include unsupported absence assertions and correct shared wording. Keep test cases frozen; do not tune on results and present the same cases as held-out validation."
+}
