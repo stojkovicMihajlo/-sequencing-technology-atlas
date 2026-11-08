@@ -305,6 +305,9 @@ CONSTRUCT THE WORKFLOW IN THIS ORDER
 2. Identify the actual preparation/dataset before and after each block. These are
    States. A broad boundary such as total RNA is legitimate; do not invent detail.
 3. Preserve independently routed preparations/products/data as distinct States.
+   Repeated equivalent processing may use collection States only when the unit
+   identities, separation and input-to-output correspondence remain explicit;
+   use distinct States for differing routes that a collection cannot express.
    A mixture can contain multiple chemical classes in one State; different colors,
    end groups or component names do not establish isolated fractions. Several
    intact droplets may be one collection State, without implying mixed contents.

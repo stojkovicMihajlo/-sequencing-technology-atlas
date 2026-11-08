@@ -168,10 +168,15 @@ REPRESENTATION RULES
    does not prove a material transfer. Distinguish consumption/production from a
    catalyst, reagent addition, inspection, alternative or merely visual proximity.
    An Operation is a local transformation or inspection instance, not a reusable
-   label. When independent branches are processed separately under a shared or
-   repeated caption, record distinct Operation instances with branch-specific
-   inputs and outputs, retaining each source caption in its evidence. A common caption
-   does not establish pooling or a joint transformation. Keep genuine mixing,
+   label. Preserve the identity and routing of independently processed units.
+   When a source groups repeated equivalent processing, prefer a compact collection
+   representation if its States and effects explicitly preserve unit/condition
+   correspondence through the outputs. This does not assert pooling, mixing or
+   molecular transfer between units. Keep distinct Operation instances when the
+   procedures differ or their branch-specific inputs, outputs and attribution
+   cannot be expressed unambiguously within that grouping. Retain the source
+   captions and explain any necessary expansion. A common caption alone does not
+   establish equivalent processing or a joint transformation. Keep genuine mixing,
    splitting and data-integration operations multi-input/output when supported;
    do not automatically split every such operation.
 4. Preserve consequential end groups, modifications, attachment and compartment.

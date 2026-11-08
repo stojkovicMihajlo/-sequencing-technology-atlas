@@ -59,5 +59,6 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p asynci
     tests/illumina/test_revision_handoff.py \
     --junitxml="$ATLAS_COMPARISON_ROOT/software_${SLURM_JOB_ID}.xml"
 "$ATLAS_ENV_DIR/bin/python" -m experiments.readability_audit_20261108.rerun \
-    --plan experiments/readability_audit_20261108/pilot_plan.json \
-    --output "$ATLAS_COMPARISON_ROOT/$ATLAS_COMPARISON_OUTPUT" --workers 2
+    --plan "${ATLAS_COMPARISON_PLAN:-experiments/readability_audit_20261108/pilot_plan.json}" \
+    --output "$ATLAS_COMPARISON_ROOT/$ATLAS_COMPARISON_OUTPUT" \
+    --workers "${ATLAS_COMPARISON_WORKERS:-2}"
