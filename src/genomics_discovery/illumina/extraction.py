@@ -510,12 +510,15 @@ def load_author_seed(seed, card, registry, representation):
 
 async def extract_registered_workflow(card, registry, images, directory, worker, max_revisions=1,
                                       representation="illumina_diagram/1.1", revision_seed=None,
-                                      author_seed=None, author_examples=()):
+                                      author_seed=None, author_examples=(),
+                                      author_information_effect_contract="current"):
     """One scoped work unit, with its registered source bundle and independent review.
 
     Method identity/scope planning is a separate gate. This function neither
     merges methods nor creates identity from coincident names or source IDs.
     """
+    if author_information_effect_contract not in {"current", "local_conditions_v1"}:
+        raise ValueError("Unknown author information_effect contract")
     author_model = extraction_model(representation)
     review_version = ("illumina_diagram_review/1.2" if representation == "illumina_diagram/1.1"
                       else "illumina_diagram_review/1.1")
@@ -598,7 +601,8 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
             context["revision_feedback"] = feedback_files
             context["artifact_helper"] = shlex.join([sys.executable, "-m",
                 "genomics_discovery.illumina.extraction", "artifact"])
-        prompt = build_prompt(role, context, schema, examples=author_examples if role == 'author' else ())
+        prompt = build_prompt(role, context, schema, examples=author_examples if role == 'author' else (),
+            information_effect_contract=author_information_effect_contract if role == 'author' else 'current')
         (attempt / "stage_prompt.txt").write_text(prompt)
         fixed_inputs = [attempt / "schema.json", attempt / "stage_prompt.txt", attempt / "image_delivery.json"]
         if revision_seed is not None:

@@ -1,0 +1,77 @@
+{
+  "comparison": "Three fresh baseline and three fresh author-definition-refined Pseudo-seq trials; identical reviewer instructions",
+  "interpretation": "Exploratory within-paper comparison; n=3 per arm. Chosen after a known error. Does not estimate general accuracy or establish causal model reasoning; no paired random seed is available.",
+  "allocation_seed": 20261108,
+  "source_plan": {
+    "reason_for_fresh_extraction": "User explicitly requests three fresh Pseudo-seq runs with the current definition and three with a refined information_effect definition to investigate the documented local-condition error. Same sources; do not reuse completed authors. This is a controlled development experiment, not re-curation.",
+    "baseline_state": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/card_methods_full_20261106/run_02/extraction/state.json",
+    "methods": [
+      {
+        "method_id": "pseudo-seq",
+        "expected_pins": {
+          "card.json": "a2d8345d679c0f0cbefcf68392e56f5c6e3ccd0091cd27f09e4b2ba3f1faf440",
+          "source_registry.json": "7fabf6722cc11872bbc88108c4a490066038217d33df51bc6b70bab50a02ea67",
+          "extraction.json": "8b40d11a7d5ccb633d80fd8bfb37b63710dbf859ef106b61d702d0a13f9bd0a5"
+        }
+      }
+    ],
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "workers": 1,
+    "max_revisions": 1,
+    "interpretation": "Targeted diagnostic repeat after a documented general instruction correction. Compare with archived baseline and run_01; one sample per condition, no blinded expert evaluation or general accuracy estimate."
+  },
+  "trials": [
+    {
+      "id": "trial_01",
+      "contract": "current"
+    },
+    {
+      "id": "trial_02",
+      "contract": "local_conditions_v1"
+    },
+    {
+      "id": "trial_03",
+      "contract": "local_conditions_v1"
+    },
+    {
+      "id": "trial_04",
+      "contract": "current"
+    },
+    {
+      "id": "trial_05",
+      "contract": "local_conditions_v1"
+    },
+    {
+      "id": "trial_06",
+      "contract": "current"
+    }
+  ],
+  "evaluation_not_given_to_models": {
+    "primary": "For each first author, source-check every information_effect and its agreement with local States, mechanism, description and typed effects; count runs with at least one unsupported or condition-inappropriate claim.",
+    "error_categories": [
+      "wrong condition or fraction",
+      "wrong information carrier or physical form",
+      "direct signal confused with downstream inference",
+      "unsupported gain or loss",
+      "contradiction with connected States or other Operation fields",
+      "missing consequential supported information"
+    ],
+    "secondary": [
+      "number and nature of affected Operations",
+      "review detection, missed issues and false-positive requests",
+      "exact correction fields and final residual errors",
+      "new omissions or unjustified nulls",
+      "source-helper and Python construction usage",
+      "elapsed time and native reported token usage"
+    ],
+    "scoring_rules": [
+      "Shared statements are valid if true for all declared conditions; identical wording alone is not an error.",
+      "Do not require particular labels, node counts or separate treatment nodes if condition correspondence remains explicit.",
+      "Missing optional information is not automatically an error.",
+      "Review acceptance is an outcome, not independent ground truth.",
+      "Do not alter the contract, sources or max-revisions mid-experiment; retain failures.",
+      "Assess treatment-specific claim, mock background stops and comparative inference separately."
+    ]
+  }
+}

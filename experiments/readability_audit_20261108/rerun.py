@@ -49,6 +49,9 @@ async def execute(plan_path, output, workers=2):
     if not 1 <= workers <= 2:
         raise ValueError('This bounded comparison permits one or two workers')
     plan = read(plan_path)
+    contract = plan.get('author_information_effect_contract', 'current')
+    if contract not in {'current', 'local_conditions_v1'}:
+        raise ValueError('Unknown author information_effect contract')
     output.mkdir(parents=True, exist_ok=False)
     write(output / 'plan.json', plan)
     prepared = prepare(plan)  # Validate every bundle before spending model calls.
@@ -65,6 +68,7 @@ async def execute(plan_path, output, workers=2):
                         'representation_version': 'illumina_diagram/1.1'},
              'cards': {c['record_id']: {'record_id': c['record_id'],
                        'title': c['source_title'], 'status': 'pending'} for c in cards}}
+    state['policy']['author_information_effect_contract'] = contract
     checkpoint(output, state, cards)
     gate = asyncio.Semaphore(workers)
 
@@ -80,7 +84,8 @@ async def execute(plan_path, output, workers=2):
             images = [(sid, Path(s['path'])) for sid, s in sources.items() if s['kind'] == 'image']
             try:
                 result = await extract_registered_workflow(
-                    card, sources, images, destination, worker, max_revisions=1)
+                    card, sources, images, destination, worker, max_revisions=1,
+                    author_information_effect_contract=contract)
                 row.update(result)
                 # These are frozen inputs, not a newly curated or enlarged bundle.
                 for name in ('card.json', 'source_registry.json'):
@@ -98,11 +103,11 @@ async def execute(plan_path, output, workers=2):
     state['finished_at'] = now()
     checkpoint(output, state, cards)
     write(output / 'RESULT.json', {
-        'counts': state['counts'], 'comparison': 'fresh revised harness versus archived extraction',
+        'counts': state['counts'], 'comparison': plan.get('comparison', 'fresh revised harness versus archived extraction'),
         'source_control': 'Same card, registry, diagrams and registered paper bytes',
         'scientific_comparison': 'Pending source-based inspection against predeclared criteria',
-        'limitation': 'Two purposively selected development examples, one fresh run each; '
-                      'not an ablation, blinded expert evaluation or estimate of general accuracy.'})
+        'limitation': plan.get('interpretation', 'Purposively selected development examples; '
+                      'not a blinded expert evaluation or estimate of general accuracy.')})
     return state
 
 

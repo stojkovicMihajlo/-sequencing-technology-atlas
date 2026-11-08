@@ -431,17 +431,47 @@ unresolved. The unchanged source bundle does not itself supply a missing supplem
 """
 
 
+INFORMATION_EFFECT_LOCAL_CONTRACT = """OPERATION INFORMATION_EFFECT — LOCAL MEANING
+information_effect states what information or attribution this Operation introduces,
+preserves, makes recoverable, obscures or loses in its declared output, under its
+actual input conditions. This is distinct from description (what is done) and
+mechanism (how the transformation works).
+State the relevant information and its supported material or data carrier: for
+example an association, sequence feature, molecular endpoint or recorded signal.
+Explain what that output supports at this stage. Separate a directly recorded
+feature from a biological interpretation that requires a later comparison,
+calibration or inference; name that dependency when consequential.
+Make the statement true for each condition, fraction or component to which it
+applies. A treatment-dependent effect must not be attributed to an untreated
+input. For compact collections, explicitly qualify differing effects by their
+condition/component; shared wording is appropriate when it is true for all of
+them. Do not create extra nodes just to repeat equivalent information effects.
+Check agreement with this Operation's description, mechanism, effects and connected
+States. Do not carry a feature from the biological analyte into a reporter unless
+the sources support that transfer. Source support must establish this local claim,
+not merely mention the assay or contain the quoted words.
+Record a supported preservation or loss without inventing a new signal. Use null
+when no distinct supported information effect can be stated; do not fill the field
+with the assay's overall goal. Flag a consequential unresolved claim using the
+existing Unknown mechanism instead of asserting it.
+"""
+
+
 def build_prompt(
     role: str,
     context: dict,
     schema: dict | str | Path,
     previous_candidate: dict | None = None,
     previous_review: dict | None = None,
-    *, examples=(),
+    *, examples=(), information_effect_contract="current",
 ) -> str:
     """Build role text; this function does not invoke a model or read sources."""
     if role not in {"author", "reviewer"}:
         raise ValueError("Illumina stage role must be author or reviewer")
+    if information_effect_contract not in {"current", "local_conditions_v1"}:
+        raise ValueError("Unknown information_effect contract")
+    if role != "author" and information_effect_contract != "current":
+        raise ValueError("The experimental information_effect contract is author-only")
     if not isinstance(context, dict):
         raise TypeError("context must be a JSON-serializable dictionary")
     if isinstance(schema, dict):
@@ -472,6 +502,8 @@ def build_prompt(
     if structured:
         from .representation import STRUCTURED_INSTRUCTIONS
         sections.insert(2, STRUCTURED_INSTRUCTIONS)
+    if information_effect_contract == "local_conditions_v1":
+        sections.insert(2, INFORMATION_EFFECT_LOCAL_CONTRACT)
     if examples:
         if not paper or role != 'author':
             raise ValueError('Worked examples are restricted to the paper-mode author')
