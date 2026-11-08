@@ -1,0 +1,114 @@
+{
+  "purpose": "Identify the observed cause and escape path of the first-author Pseudo-seq defect; no new model calls or production changes.",
+  "cause_established": "An unconditional information-effect sentence was supplied to both arm-specific RT Operations. It asserts modification-dependent recording for the mock condition, despite correct branch-specific descriptions and State attribution.",
+  "cause_location": {
+    "script": "completed_51546953/run_01/cards/pseudo-seq/attempt_001/attempts/001_author/build_artifact.py",
+    "line": 107,
+    "argument_ast_type": "Constant",
+    "unchanged_text": "The original RNA modification is translated into the location of a cDNA termination boundary; it is not a CMC modification on the DNA reporter."
+  },
+  "timeline": [
+    {
+      "event_line": 21,
+      "finding": "Source helper returned explicit mock-control distinction before script generation."
+    },
+    {
+      "event_line": 24,
+      "finding": "Source helper returned explicit mock-control distinction before script generation."
+    },
+    {
+      "event_line": 30,
+      "finding": "Source helper returned explicit mock-control distinction before script generation."
+    },
+    {
+      "event_line": 32,
+      "finding": "Source helper returned explicit mock-control distinction before script generation."
+    },
+    {
+      "event_line": 38,
+      "finding": "Author wrote and executed the record-construction script."
+    },
+    {
+      "event_line": 41,
+      "finding": "Structural/source self-check reported valid=true; returned scope explicitly excludes scientific acceptance."
+    },
+    {
+      "event_line": 43,
+      "finding": "Logged post-write artifact inspection prints Operation IDs and input/output IDs; it does not print descriptions, mechanisms or information effects together."
+    },
+    {
+      "event_line": 49,
+      "finding": "Structural/source self-check reported valid=true; returned scope explicitly excludes scientific acceptance."
+    }
+  ],
+  "source_access": "The required control passages were returned before construction; missing retrieval cannot explain this particular defect.",
+  "author_check_boundary": "The script asserts quote membership in source text. Recorded final artifact inspection exposes topology only. Other scientific edits occurred after the first self-check, but the erroneous string remained. The trace cannot establish what unlogged internal checking the model attempted.",
+  "supplied_field_definition": {
+    "anyOf": [
+      {
+        "minLength": 1,
+        "type": "string"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "default": null,
+    "description": "What association or information is introduced, retained or lost and its physical carrier, when supported. The biological analyte need not be the molecule sequenced.",
+    "title": "Information Effect"
+  },
+  "design_weaknesses_not_proven_generation_triggers": [
+    "information_effect has a broad association/carrier definition, without an explicit local-condition restriction in that field description.",
+    "Description, mechanism, information_effect and effects are independently authored prose; there is no deterministic semantic agreement constraint among them.",
+    "The author has no enforced post-assembly scientific consistency checkpoint. Independent scientific review is the first separate semantic gate.",
+    "The shared branch-granularity rule contradicted newer compact-collection guidance. Already fixed in 8a7e7b1; causal involvement in this sentence error is unproven."
+  ],
+  "frozen_runtime_replay": {
+    "runtime": "Exact archived runtime_01 Python source; offline replay, no model calls",
+    "original": {
+      "structural_source_errors": [],
+      "review_errors": [],
+      "outcome": "needs_revision"
+    },
+    "corrected": {
+      "structural_source_errors": [],
+      "review_errors": [],
+      "outcome": "supported"
+    },
+    "corrected_review_cannot_approve_original": [
+      "Review is not bound to this exact candidate"
+    ],
+    "negative_controls": {
+      "missing_state_rejected": "1 validation error for StructuredDiagramExtraction\n  Value error, Operation I/O must reference distinct existing States [type=value_error, input_value={'format_version': 'illum...n:minus_circularize']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+      "fabricated_quote_errors": [
+        "Evidence quote not present in registered source: paper:25192136"
+      ]
+    },
+    "runtime_archive_sha256": "56c0c74ad86a15cb478f12c5d186a3444f0ceb2d5df7056a14d3de36fcf0a1d4",
+    "verified_python_files": 199
+  },
+  "old_output_comparison": {
+    "shared_information_effect": "RNA sequence becomes DNA sequence; termination position is retained as a cDNA endpoint. The RNA Ψ/CMC group itself is not copied as that chemical modification into DNA.",
+    "same_text_in_both_arms": true,
+    "interpretation": "Identical wording is not itself an error: this older statement describes sequence copying and endpoint retention without assigning a CMC-dependent cause to the mock endpoint."
+  },
+  "detection": "Real first independent review requests revision; corrected record receives a fresh positive review. Corrected review is rejected if paired with the original candidate.",
+  "unidentified": [
+    "Which latent/model process caused the oversight",
+    "Whether the new instructions change its frequency",
+    "Whether the existing reviewer catches this class consistently"
+  ],
+  "smallest_targeted_response": "Clarify local, condition-specific meaning of information_effect and make post-assembly cross-field inspection explicit within the existing author/reviewer workflow. Evaluate with both correct shared wording and incorrect conditional reuse; do not ban Python, duplicate sentences or broad starting States.",
+  "scope_limit": "This diagnosis explains one observed defect and its software path. It does not estimate failure rates or identify prompt-level causal effects.",
+  "pins": {
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/attempts/001_author/build_artifact.py": "cf75d7a4055c64b2785c0909e538433dfe1ce7c08c5c99ecb6c12cfce924cb1e",
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/attempts/001_author/events.jsonl": "c5dd0395cf0b5584075547f4d9f79d89ccd63a82406c51d60c70dfad1aa39252",
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/attempts/001_author/artifact.json": "74774817e54adb8162c117db4b3cac4b4ad50554b983b64f78a2adacb884696a",
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/attempts/001_author/stage_prompt.txt": "2ebec5cb4c8b8b72d24ddcd87d93075686a7b1920b3466ffe7caffbea00869b3",
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/attempts/001_author/schema.json": "471a6c25c21fe80ba3ee0a6c8ed88b8d8d8346a8ec62f8036ccd2c1b90caf226",
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/source_registry.json": "7fabf6722cc11872bbc88108c4a490066038217d33df51bc6b70bab50a02ea67",
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/attempts/002_reviewer/artifact.json": "a49e49b248ebff55f919c540d6c511e73f2a74609a123c87d5c788a992a20d58",
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/extraction.json": "ac7ff1ff95810a0e5fc5c7440d4c70b2a244aad17ce599f363336584add3aa46",
+    "completed_51546953/run_01/cards/pseudo-seq/attempt_001/review.json": "1cf90978776be0f2c023850985fd286d9919cb013bef89c7dab61b86066023e0"
+  }
+}
