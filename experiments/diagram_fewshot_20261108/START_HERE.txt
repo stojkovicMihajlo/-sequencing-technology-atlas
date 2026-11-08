@@ -1,0 +1,57 @@
+PAPER-TO-DIAGRAM TEST FOR CLAUDE AND GEMINI
+
+QUICKEST RUN
+1. Start a new conversation in Claude or Gemini.
+2. Upload these five files:
+   upload/illumina_examples.pdf
+   upload/examples_descriptions.txt
+   target/spatial_nt_seq_paper.pdf
+   target/spatial_nt_seq_supplement_1.pdf
+   target/spatial_nt_seq_supplement_2.pdf
+3. Paste the complete contents of prompts/generate.txt and send it.
+4. Save the diagram.svg, diagram_plan.json, evidence.csv and caption the model
+   returns into a new directory under results/. If it returns SVG code instead
+   of a file, save that code as diagram.svg. An SVG opens directly in a browser.
+
+The examples PDF has ten numbered original Illumina workflow diagrams with
+matching explanations. Original PNGs are also in examples/01_... through 10_....
+Some PNGs have transparency, so diagram_on_white.png is provided for upload;
+illumina_original.png preserves the downloaded source bytes. No image was
+redrawn or cropped. Native source resolution remains a limitation; the full
+text descriptions accompany the figures.
+
+TO TEST WHETHER EXAMPLES HELP
+First do condition A in a separate NEW chat: attach only the three target PDFs
+and use exactly the same generate.txt prompt. Then do condition B above.
+Repeat A and B with the other provider, preserving the prompt and files.
+Do not reuse the baseline conversation or give it the reference examples later.
+Use the same model and available settings within each provider's A/B comparison.
+Record the exact model name and settings in results/run_log.csv.
+
+OPTIONAL: YOUR STRUCTURED WORKFLOWS
+Condition C adds upload/examples_workflows.txt and the text of
+prompts/add_workflows.txt to condition B. Each numbered entry matches the same
+numbered diagram. It includes mechanism, input/output States, properties,
+Flows, corrections and unknowns, with repeated evidence removed for compactness.
+Full source-evidenced JSON and rendered workflow PNG/SVG remain in each example
+folder. The atlas workflow renderings are optional semantic aids; the requested
+visual style comes from the Illumina diagrams.
+
+REVIEW THE OUTPUT
+Open a fresh conversation, provide the target sources plus the generated files,
+and paste prompts/review.txt. Keep the provider and A/B condition hidden from
+that reviewer. Save the original response before asking for a correction.
+Use source inspection for consequential disagreements; LLM review alone is not
+scientific or experimental validation. Details are in EXPERIMENT.txt.
+
+TARGET-PAPER FIGURES
+The target PDF itself contains assay figures. This is initially a practical
+paper-to-explanatory-diagram test, not proof of reconstruction without seeing
+an existing schematic. The prompt asks the model to state whether it used one.
+For a stricter text-only variant, replace all three target PDFs in BOTH A and B
+with the matching *_text_with_pages.txt files. They retain extracted text and
+captions with PDF page numbers; no target image is attached.
+
+OPEN LOCALLY
+Open index.html to browse the ten examples and their extracted workflows.
+PREVIOUS_EXPERIMENT.txt reports what actually happened in our earlier Codex run.

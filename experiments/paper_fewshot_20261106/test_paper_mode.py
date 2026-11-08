@@ -93,7 +93,8 @@ class PaperWorker:
         batch.write(attempt / 'artifact.json', document.model_dump(mode='json'))
         thread, usage = 'paper-fake-' + str(len(self.calls)), {'input_tokens': 10, 'output_tokens': 5}
         (attempt / 'prompt.txt').write_text(prompt)
-        batch.write(attempt / 'command.json', {'argv': ['fake-worker', 'exec', '-'], 'cwd': str(attempt), 'image_inputs': []})
+        # Match CodexWorker's actual archive: the key is omitted for no images.
+        batch.write(attempt / 'command.json', {'argv': ['fake-worker', 'exec', '-'], 'cwd': str(attempt)})
         batch.write(attempt / 'started.json', {'spawned': True, 'hostname': 'unit-test'})
         events = [{'type': 'thread.started', 'thread_id': thread}, {'type': 'turn.started'},
             {'type': 'turn.completed', 'usage': usage}]

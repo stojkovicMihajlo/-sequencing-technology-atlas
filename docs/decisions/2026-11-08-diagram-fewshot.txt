@@ -1,0 +1,57 @@
+DIAGRAM FEW-SHOT PACKET AND PAPER-ONLY TRANSPORT FIX
+
+User request: save ten diagrams with explanations/workflows, prepare prompts
+for manual Claude/Gemini paper-to-diagram experiments, and inspect the earlier
+paper-only few-shot run. New contributions must be represented credibly, not
+forced into the reference examples' components.
+
+Implementation: experiments/diagram_fewshot_20261108/prepare_packet.py copies ten
+supported named-method examples from the saved November viewer. It preserves
+original PNG bytes, full canonical scientific content and source links. A
+white-background upload rendition preserves native PNG pixel dimensions; no
+cropping, synthetic detail or redraw. A ten-page PDF and descriptions give the
+same numbered references. Compact workflows are an optional third condition.
+Output is a portable diagram plan plus editable SVG and an evidence table,
+not a replacement schema for atlas admission. Source SVG/PNG rendering remains
+separate from extraction, and none of these model outputs is automatically an
+atlas entry or historical edge.
+
+Design: A=target only; B=same target/prompt plus ten image/description examples;
+C optional adds compact workflow examples. Fresh conversations within each
+provider, exact input/model/settings log, separately reviewed science and layout.
+Examples are description-to-diagram references, not ten complete paper-reading
+demonstrations. One target and four initial conversations are a pilot, not a
+statistical claim. Newer paper does not establish absence from training.
+The target PDF includes assay figures: explicitly disclose access or use the
+provided page-indexed target text for a no-target-image variant in both arms.
+
+The prompt permits new visual glyphs and unfamiliar paper-supported mechanisms.
+It requires actual pre/post material, mechanism and next interface. It separates
+new-in-paper, retained feature, author-proposed mechanism and model-proposed
+untested extension; no primitive-library restriction or invented chemistry as fact.
+
+Primary technical documentation checked:
+https://support.claude.com/en/articles/8241126-upload-files-to-claude
+https://ai.google.dev/gemini-api/docs/document-processing
+This motivates real image/PDF inputs instead of assuming ZIP/HTML images are
+seen. The models are not invoked from this packet builder.
+
+Earlier native experiment:51348523, original14m04s failed job, both authors had
+exit0 artifacts. A=12operations/19states; B=10operations/16states. No reviewer
+ran. Source/custody/schema reassessment is in
+experiments/paper_fewshot_20261106/completed_51348523/OFFLINE_REASSESSMENT_20261108.json.
+
+General fix1: verify_stage_inputs treats a missing image_inputs archive key as
+empty, matching the real CodexWorker when no images are requested. It still
+requires exact nonempty inventories and checks actual command-line attachments.
+Fix2: accept the exact official static-content.springer.com supplement host
+already linked by the publisher. The former allowlist admitted only
+springer-cdn.com and omitted the real links. Tests reject lookalike hosts.
+Mock paper worker now matches the real omitted-key behavior.
+
+Verification:42focused software checks; both saved authors pass local paper-mode
+schema/reference/quote checks with relocated original input pins. These checks
+do not establish scientific entailment. Frozen remote runtime and original
+results are unchanged. No new paid/native model call or local extraction was run.
+The new manual target includes the two recovered supplements: comparisons to the
+old main-text-only experiment must not attribute a change solely to prompting.

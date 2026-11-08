@@ -1,0 +1,45 @@
+{
+  "original_job_id": "51348523",
+  "original_status": "completed_with_failures",
+  "assessment": "Offline structural/custody reassessment only; original states preserved; no independent scientific review or new model calls.",
+  "general_bugs": [
+    {
+      "component": "verify_stage_inputs",
+      "cause": "The real worker omits image_inputs for an empty attachment list; the verifier compared missing (None) with [].",
+      "fix": "Absent key defaults to []; a nonempty request still requires exact inventory and command-line attachments."
+    },
+    {
+      "component": "publisher supplement acquisition",
+      "cause": "Explicit publisher links used static-content.springer.com, but the collector accepted only springer-cdn.com.",
+      "fix": "Allow the exact official static-content.springer.com host; keep lookalike hosts rejected."
+    }
+  ],
+  "conditions": {
+    "condition_a": {
+      "example_count": 0,
+      "operations": 12,
+      "states": 19,
+      "flows": 35,
+      "unknowns": 2,
+      "author_exit_code": 0,
+      "elapsed_seconds": 769.8239116659388,
+      "artifact_sha256": "da833e517ba2eb3326b03ed88e4773d66dfefa92bd22db4cbd72331a9b936974",
+      "relocated_input_pins_and_empty_attachment_check": "passed",
+      "schema_and_source_quote_errors": [],
+      "independent_review_completed": false
+    },
+    "condition_b": {
+      "example_count": 2,
+      "operations": 10,
+      "states": 16,
+      "flows": 26,
+      "unknowns": 3,
+      "author_exit_code": 0,
+      "elapsed_seconds": 805.7607872700319,
+      "artifact_sha256": "431d84617b8a0d84f676fb36b2bf805f42ff60e5e38df421676a3e014a20ad29",
+      "relocated_input_pins_and_empty_attachment_check": "passed",
+      "schema_and_source_quote_errors": [],
+      "independent_review_completed": false
+    }
+  }
+}

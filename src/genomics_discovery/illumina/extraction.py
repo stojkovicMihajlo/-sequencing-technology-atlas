@@ -349,7 +349,9 @@ def verify_stage_inputs(attempt, delivery, pins):
     if any(sha(Path(row["path"])) != row["sha256"] for row in requested):
         raise ValueError("Delivered image changed during model execution")
     command = read(attempt / "command.json")
-    if command.get("image_inputs") != requested:
+    # CodexWorker omits image_inputs when no images were requested. Absence is
+    # equivalent only to an empty inventory; requested images still match exactly.
+    if command.get("image_inputs", []) != requested:
         raise ValueError("Archived native image inputs differ from requested attachments")
     argv = command.get("argv", [])
     attached = [argv[i + 1] for i, arg in enumerate(argv[:-1]) if arg == "--image"]

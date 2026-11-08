@@ -1,0 +1,77 @@
+WHAT THIS EXPERIMENT TESTS
+Whether reference diagrams improve the scientific content, explanatory level
+and presentation of a diagram generated from a new method paper. This is
+few-shot or in-context learning: examples are provided in the context; no model
+weights are trained. It is not a test of proposing a novel sequencing assay.
+
+MINIMAL DESIGN
+Two providers, with two conditions each:
+A: same target sources + generation prompt, no reference examples.
+B: same target sources + same prompt + ten diagram/description examples.
+The initial screen is four independent conversations. If useful, repeat the
+pair two or three times per provider with the same example order to check
+variation; record every attempt, including failed artifact generation.
+Use a fresh conversation for each attempt. Record interface, model/version,
+reasoning setting, available sampling settings and any automatic tool use.
+Disable web search for a fixed-source comparison when the interface allows it;
+otherwise record it. Changing sources/settings or intervening instructions
+creates a different condition. Do not silently repair one condition more often.
+
+C, OPTIONAL: B plus compact structured workflow examples. This separates the
+value of structured scientific descriptions from the benefit of pictures.
+The compact view is not our production extraction schema. The original
+source-evidenced extractions are included separately and remain unchanged.
+
+WHAT TO COMPARE
+1. Scientific support: distinct supported, contradicted, unsupported and
+   unresolved assertions, with their source evidence. Atomic assertion means
+   one independently assessable material, transformation, linkage or readout
+   fact. Count a repeated assertion once. When all asserted claims have been
+   reviewed, support precision can be reported as supported / (supported +
+   contradicted + unsupported); explicitly uncertain statements are tallied
+   separately. The numerical value depends on reliable review labels.
+2. Consequential coverage: the measurement pathway, distinguishing mechanism,
+   actual material forms, branches, identity carriers and required interfaces.
+   Use a source-grounded checklist created before inspecting condition labels
+   for a stronger evaluation. Without one, report specific omissions; do not
+   claim an automatic completeness/recall score.
+3. Interface errors: incompatible or contradicted transitions, lost or falsely
+   introduced attribution, unsupported pooling, or confusion of molecule and
+   reporter. A correct-looking neighboring action does not cure a wrong State.
+4. Visual readability: readable labels, consistent molecular glyphs/legend,
+   correct arrow endpoints, intact branches, and no clipping/overlap.
+5. Artifact usability: SVG opens; plan and picture agree; evidence locates the
+   target passages. Valid SVG/JSON is not a scientific correctness score.
+Do not reward matching a particular operation count or identical node names.
+More than one source-faithful decomposition can be correct.
+
+WHY SVG
+Use the same editable vector output format with both text/vision assistants.
+It preserves labels, colors and individual shapes and can be rendered reliably.
+A separate raster-image-generation model is a different pipeline; label that
+as another condition instead of treating it as the same comparison.
+
+TARGET AND LEAKAGE
+Spatial NT-seq is outside the legacy Illumina reference set. Its publication
+identity and exact input hashes are in target/paper_identity.json and
+manifest.json. A newer publication is not guaranteed to be absent from model
+training. The supplied PDF has existing figures, and models may already know
+the method. Report this as a transfer/reconstruction pilot, not contamination-
+free historical replay or proof of novel scientific reasoning.
+For a no-target-image variant, use the page-indexed full-text files in both
+conditions. Text/captions may still describe the workflow and are legitimate
+sources; that variant does not prove freedom from model memory either.
+
+SOURCES AND LIMITS
+Example source images: Illumina; links and hashes are retained per method.
+Examples have existing independent model reviews, not expert-certified labels.
+Their known corrections and unknowns remain in the workflow files. The prompt
+must take target facts from its own sources. Illustration style and truth are
+assessed separately. No Claude/Gemini request was made in preparing this packet.
+
+Official file-input documentation checked 8 November 2026:
+https://support.claude.com/en/articles/8241126-upload-files-to-claude
+https://ai.google.dev/gemini-api/docs/document-processing
+For Claude, use chat attachments for the full target PDF; do not assume project
+file limits match chat limits. Upload the example PDF or PNGs as visual inputs;
+a ZIP/HTML file alone is not a guarantee that their images are actually seen.

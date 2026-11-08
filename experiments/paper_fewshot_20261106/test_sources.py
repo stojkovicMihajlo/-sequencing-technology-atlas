@@ -59,3 +59,18 @@ def test_missing_supplement_inventory_is_visible(fake_publisher, tmp_path):
     receipt = read(tmp_path / 'inputs/ACQUISITION.json')
     assert set(registry) == {'paper:123'}
     assert 'No PDF supplement links' in receipt['unavailable'][0]['reason']
+
+
+def test_actual_publisher_supplement_host_is_recovered(fake_publisher, tmp_path):
+    target, document, _ = fake_publisher
+    document['html'] = document['html'].replace('static-content.springer-cdn.com', 'static-content.springer.com')
+    registry = sources.prepare(target, tmp_path / 'inputs')
+    assert registry['supplement:1']['url'].startswith('https://static-content.springer.com/')
+
+
+def test_lookalike_host_is_not_treated_as_publisher(fake_publisher, tmp_path):
+    target, document, _ = fake_publisher
+    document['html'] = document['html'].replace('static-content.springer-cdn.com', 'springer-cdn.com.evil.test')
+    registry = sources.prepare(target, tmp_path / 'inputs')
+    assert set(registry) == {'paper:123'}
+    assert 'not in publisher CDN' in read(tmp_path / 'inputs/ACQUISITION.json')['unavailable'][0]['reason']

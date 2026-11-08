@@ -1,0 +1,42 @@
+EARLIER CODEX PAPER-ONLY FEW-SHOT EXPERIMENT
+Checked 8 November 2026. Original job 51348523, gpt-6.1-sol/xhigh.
+Target: Spatial NT-seq, published paper DOI 10.1038/s41593-026-02420-y.
+
+This experiment generated State/Operation/Flow JSON from paper text. It did not
+ask the model to draw Illumina-style molecular diagrams.
+
+A, no worked examples: author wrote 12 Operations, 19 States, 35 Flows and
+2 Unknowns in approximately 12.8 minutes.
+B, two complete ATAC-seq/ClickSeq JSON examples: author wrote 10 Operations,
+16 States, 26 Flows and 3 Unknowns in approximately 13.4 minutes.
+Both native authors exited successfully and saved artifact.json. The pipeline
+then failed before independent review. Original job status is preserved as
+completed_with_failures; scheduler exit code was 2 after 14m04s total.
+
+WHY IT FAILED
+The native worker omits command.json.image_inputs when no images are attached.
+The pipeline compared the missing value (None) against the requested empty
+list ([]), incorrectly rejecting both paper-only author attempts. This was
+an integration contract mismatch, not evidence that either scientific output
+was bad. The mock worker used an explicit empty list, so the test missed the
+actual empty-archive behavior. The check and mock are now corrected, with
+negative controls keeping unexpected/missing requested attachments rejected.
+
+The source collector also rejected two explicit publisher supplement links
+because their host was static-content.springer.com, absent from its narrow
+allowlist. That exact official host is now supported; lookalikes are rejected.
+The old author runs had the main paper only. The new manual packet includes
+the main paper plus both recovered supplements, so it is a new source condition.
+
+OFFLINE REASSESSMENT
+The recovered original inputs match their recorded hashes. Both author artifacts
+pass the current schema, graph-reference and source-quote checks in paper mode.
+Neither has independent scientific review. Software corrections pass 42 focused
+checks locally; no corrected live author/reviewer run was launched here.
+
+CONCLUSION
+The authors produced inspectable workflow candidates. We cannot yet conclude
+that examples improved scientific correctness, completeness or diagram quality.
+Node counts are descriptive, not a quality metric. No original failed record
+has been silently changed to supported. The new Claude/Gemini experiment tests
+diagram generation separately, with its own prompts, sources and run log.

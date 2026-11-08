@@ -54,7 +54,8 @@ def prepare(target_path, output):
         for number, link in enumerate(sorted(parser.links), 1):
             url = urljoin(target['article_url'], link)
             host = urlsplit(url).hostname or ''
-            if not (host == 'springer-cdn.com' or host.endswith('.springer-cdn.com')):
+            if not (host == 'static-content.springer.com'
+                    or host == 'springer-cdn.com' or host.endswith('.springer-cdn.com')):
                 unavailable.append({'url': url, 'reason': 'Supplement host not in publisher CDN'}); continue
             try:
                 path = output / ('supplement_' + str(number) + '.pdf')
