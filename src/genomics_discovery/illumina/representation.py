@@ -340,46 +340,50 @@ optional components name only consequential constituents/subpopulations. A State
 requires one self identity. Data additionally requires data_type. Do not decompose
 every cell or reagent or create a new global concept for each preparation.
 
-STATE CONTENT QUESTIONS — AUTHOR AND REVIEWER
+STATE CONTENT REQUIREMENTS — AUTHOR AND REVIEWER
 For each State, inspect its producing and consuming Operations and the registered
-sources. Account for these six questions where applicable in the existing State
-properties and Operation descriptions, mechanisms, roles and effects. They are
-not six new fields, mandatory paragraphs, or a demand to enumerate all chemistry.
+sources. Write the applicable content below as explicit, source-supported factual
+statements in the existing State properties and Operation descriptions, mechanisms,
+roles and effects. Do not return questions, a Q&A checklist or intentions to inspect
+something later. These are not six new fields, mandatory paragraphs, or a demand
+to enumerate all chemistry.
 At an assigned starting/ending boundary, do not invent a preceding/following
-Operation merely to answer a question. A source-supported broad boundary is valid.
-1. What physically exists here? Identify the actual preparation: for example,
+Operation merely to fill a requirement. A source-supported broad boundary is valid.
+1. Identify the actual preparation or dataset at this boundary: for example,
    intact cells, nuclei, lysate, extracted RNA, DNA fragments, a molecular complex
    or a library. For data, identify the actual dataset and processing stage.
    A purpose such as material for sequencing does not identify the object.
-2. What molecule is processed, and what does its reporter represent? Distinguish
+2. Identify the processed molecule and what its reporter represents. Distinguish
    the original biological molecule, a copied product and a synthetic reporter.
    When consequential, distinguish genomic DNA, RNA-derived cDNA and probe-derived
    DNA. For data, identify the observations or derived quantities represented.
    Do not infer template origin merely from the enzyme or assay name.
-3. What changed in the producing Operation? Record the resulting supported
+3. Describe the result of the producing Operation. Record the supported
    property, selection, association, organization or data-processing change on
    the actual subject. Treated or processed alone does not explain a consequential
    change. A copied sequence does not transfer every chemical feature of its
    template. An unchanged property need not be redescribed as a new modification.
-4. What does the consuming Operation require? If the sources establish a relevant
-   requirement involving molecular ends, strandedness, topology, binding or
-   compartment, record whether this input satisfies it. For data, check the
-   required observations, assignments or reference information. Do not assume
+4. Specify the supported input requirements of the consuming Operation and whether
+   this State satisfies them. Include relevant molecular ends, strandedness,
+   topology, binding or compartment when established by the sources. For data,
+   record the required observations, assignments or reference information. Do not assume
    compatibility from an operation label or add unsupported molecular precision.
-5. What remains together, and what is separate? Distinguish a mixture, independently
-   processed samples, an actual pool and support-bound material. Track separate
+5. State what remains together and what is separate. Distinguish a mixture,
+   independently processed samples, an actual pool and support-bound material. Track separate
    datasets/assignments when relevant. Different colors or molecular classes do
    not establish isolated fractions; repeated icons do not establish sample count.
-6. What connects this State to the biological measurement? When that connection
+6. Explain the connection to the biological measurement. When that connection
    is introduced, changed or removed, identify the actual carrier: sequence,
    barcode, molecular association, chemical mark or sample metadata. Distinguish
    physical measurement from inference and preserve the required attribution.
    Existing Flows and producing Operations can supply unchanged history; do not
    copy the entire assay explanation into every State.
-Every asserted answer needs source support. A consequential answer absent from
+Every factual assertion needs source support. A consequential fact absent from
 the available evidence belongs in a targeted Unknown, not a guessed property.
-These questions are a minimum review guide, not an exhaustive ontology: record
-other supported distinctions when needed to explain this assigned assay.
+Keep a genuine open scientific question in Unknown, rather than phrasing an
+asserted State property as a question. These requirements are not an exhaustive
+ontology: record other supported distinctions when needed to explain this assigned
+assay.
 
 The initial property families are not exhaustive. Property meanings are defined
 in the JSON schema. End chemistry needs a subject
@@ -444,7 +448,7 @@ not require every method to exhibit these features.
   do not infer template origin from the enzyme name or poly(A) capture alone.
 - A source-supported total-RNA starting boundary can already be sufficient.
   Do not add unreported end groups or an upstream cell-isolation procedure just
-  to fill these questions. Likewise, raw reads must not assert genomic coordinates
+  to fill these requirements. Likewise, raw reads must not assert genomic coordinates
   that only a later alignment Operation establishes.
 
 REVIEW
@@ -458,10 +462,10 @@ state_property:<encoded_state_id>:<encoded_property_id> for subject, meaning, pl
 support (the runtime supplies exact target IDs; do not reconstruct them).
 Review state_properties:<state_id> for consequential omissions and overall
 consistency (a short list of true facts can still omit the distinguishing feature).
-Apply the six STATE CONTENT QUESTIONS to the actual assertions and their adjacent
+Apply the six STATE CONTENT REQUIREMENTS to the actual assertions and their adjacent
 Operations, not only to facts buried in evidence quotations. For a deficiency,
-name the unanswered question, exact affected record/field and source basis in the
-existing review rationale. Distinguish an available fact omitted from assertions
+name the unmet requirement, missing fact, exact affected record/field and source
+basis in the existing review rationale. Distinguish an available fact omitted from assertions
 (revise), consequential unavailable evidence (research), a correct fact already
 recorded but poorly displayed (presentation), and a detail outside the required
 scope (no added assertion). Use the supplied review targets and existing action

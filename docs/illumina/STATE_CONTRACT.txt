@@ -1,24 +1,26 @@
 STATE DEFINITION AND REQUIRED SCIENTIFIC CONTENT
-Development clarification6November2026; content-question guidance added8November.
+Development clarification6November2026; explicit content requirements added8November.
 Existing scientific records and frozen runtimes are unchanged. Operations and
 Flows retain their current definitions.
 
 ACTIVE PROMPT AND REVIEW GUIDANCE (8 NOVEMBER)
-The six questions are now included in STRUCTURED_INSTRUCTIONS in
-src/genomics_discovery/illumina/representation.py under STATE CONTENT QUESTIONS.
+The six requirements are included in STRUCTURED_INSTRUCTIONS in
+src/genomics_discovery/illumina/representation.py under STATE CONTENT REQUIREMENTS.
 build_prompt() includes that block once for both author and reviewer using
 representation_version=illumina_diagram/1.1, including paper-only extraction.
-They ask what exists, what molecule/reporter it is, what changed, what the next
-Operation requires, what stays together/separate, and what carries the measurement
-association. Use existing assertions; there are no new schema fields or categories.
+They require factual statements identifying what exists, the molecule/reporter,
+what changed, the next Operation's requirements, what stays together/separate,
+and what carries the measurement association. Output is not a Q&A checklist;
+genuine missing-evidence questions remain in Unknown. Use existing assertions;
+there are no new schema fields or categories.
 
 The adjacent non-exhaustive examples illustrate interpretation, not registered
 target evidence or an exhaustive collection of assay types. The separate optional
 paper-mode worked-output examples remain unchanged. No example establishes a
 fact about a new target without its own source evidence.
 
-Reviewers must identify the unanswered question and exact affected field, and
-distinguish omitted supported facts, unavailable evidence, presentation problems
+Reviewers must identify the unmet requirement, missing fact and exact affected
+field, and distinguish omitted supported facts, unavailable evidence, presentation problems
 and irrelevant detail using existing targets/actions. Diagram blocks remain the
 default abstraction; scientific precision inside a block does not automatically
 add nodes. The card reviewer instruction now distinguishes losing independent
