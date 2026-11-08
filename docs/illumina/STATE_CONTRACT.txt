@@ -1,6 +1,34 @@
 STATE DEFINITION AND REQUIRED SCIENTIFIC CONTENT
-Development clarification6November2026. Existing scientific records and frozen
-runtimes are unchanged. Operations and Flows retain their current definitions.
+Development clarification6November2026; content-question guidance added8November.
+Existing scientific records and frozen runtimes are unchanged. Operations and
+Flows retain their current definitions.
+
+ACTIVE PROMPT AND REVIEW GUIDANCE (8 NOVEMBER)
+The six questions are now included in STRUCTURED_INSTRUCTIONS in
+src/genomics_discovery/illumina/representation.py under STATE CONTENT QUESTIONS.
+build_prompt() includes that block once for both author and reviewer using
+representation_version=illumina_diagram/1.1, including paper-only extraction.
+They ask what exists, what molecule/reporter it is, what changed, what the next
+Operation requires, what stays together/separate, and what carries the measurement
+association. Use existing assertions; there are no new schema fields or categories.
+
+The adjacent non-exhaustive examples illustrate interpretation, not registered
+target evidence or an exhaustive collection of assay types. The separate optional
+paper-mode worked-output examples remain unchanged. No example establishes a
+fact about a new target without its own source evidence.
+
+Reviewers must identify the unanswered question and exact affected field, and
+distinguish omitted supported facts, unavailable evidence, presentation problems
+and irrelevant detail using existing targets/actions. Diagram blocks remain the
+default abstraction; scientific precision inside a block does not automatically
+add nodes. The card reviewer instruction now distinguishes losing independent
+processing from representing separate units compactly with explicit organization
+and correspondence. This does not authorize automatic graph merging.
+
+These development prompt changes require a fresh fixed-source model comparison
+before any claim of improved extraction quality. Local software checks can only
+establish prompt delivery and compatibility. Frozen runs must be redeployed in a
+new pinned runtime to receive the changes; historical outputs are not rewritten.
 
 A State records WHAT EXISTS at a particular point in the scoped workflow:
 an actual sample, fraction, molecular mixture/construct, or dataset. It does not

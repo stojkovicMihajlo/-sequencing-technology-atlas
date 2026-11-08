@@ -349,9 +349,16 @@ cannot remove a branch or endpoint explicitly required by the assignment.
 For every multi-input/multi-output Operation, check whether the source denotes
 one joint operation or separate processing compressed under a shared caption.
 Follow each retained branch through its correct output. Request revision if
-independent processing has been collapsed, even when prose says the fractions
-remain separate. Graph reachability alone does not establish input-to-output
-molecular attribution. For method applicability, inspect each assigned local
+independent processing is represented as mixing, or its distinct inputs, outputs
+or attribution cannot be recovered from the recorded States, effects and Flows.
+A collection of independently processed units may remain compact when its
+organization and unit/condition correspondence are explicitly preserved through
+the recorded operations; a prose disclaimer cannot fix contradictory connections.
+Do not require one node per illustrative well or repeat identical procedures
+solely to preserve independence. Keep distinct procedures and routed products
+identifiable, and retain explicit branches if the representation cannot express
+their correspondence accurately. Graph reachability alone does not establish
+input-to-output molecular attribution. For method applicability, inspect each assigned local
 operation's actual input history, including upstream operations excluded from
 that method; a prose correction does not resolve an unchanged incompatible route.
 Check scope in both directions: retain every actual diagram/title/caption target,
