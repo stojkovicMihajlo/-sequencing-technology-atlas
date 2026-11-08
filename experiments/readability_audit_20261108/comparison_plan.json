@@ -1,0 +1,64 @@
+{
+  "template_root": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/deliverables/illumina_extractions_20261106",
+  "summary": "Fresh extractions of irCLIP and Pseudo-seq using the same registered cards, papers and diagrams as archived accepted outputs. Authors received revised general instructions, not the earlier extraction or method-specific critiques.",
+  "limits": "These are selected development cases with one output per harness version, compared with archived baselines. Acceptance is an independent model review, not human validation, wet-lab validation or a general accuracy estimate. The source bytes were held fixed; stochastic variation and other prompt-version differences prevent a causal attribution of every change.",
+  "records": [
+    {
+      "name": "irclip_before",
+      "label": "irCLIP — archived baseline",
+      "directory": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/experiments/readability_audit_20261108/pilot_results_01/baseline/irclip",
+      "template": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/deliverables/illumina_extractions_20261106/records/e9301b1055e7d417bb134647.json"
+    },
+    {
+      "name": "irclip_after",
+      "label": "irCLIP — revised State instructions",
+      "directory": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/experiments/readability_audit_20261108/pilot_results_01/completed/irclip",
+      "template": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/deliverables/illumina_extractions_20261106/records/e9301b1055e7d417bb134647.json"
+    },
+    {
+      "name": "pseudo_before",
+      "label": "Pseudo-seq — archived baseline",
+      "directory": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/experiments/readability_audit_20261108/pilot_results_01/baseline/pseudo-seq",
+      "template": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/deliverables/illumina_extractions_20261106/records/9732592ed4fa476a58ee22a4.json"
+    },
+    {
+      "name": "pseudo_corrected",
+      "label": "Pseudo-seq — first run after automatic correction",
+      "directory": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/experiments/readability_audit_20261108/pilot_results_01/completed/pseudo-seq",
+      "template": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/deliverables/illumina_extractions_20261106/records/9732592ed4fa476a58ee22a4.json"
+    },
+    {
+      "name": "pseudo_compact",
+      "label": "Pseudo-seq — aligned abstraction instructions",
+      "directory": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/experiments/readability_audit_20261108/pilot_results_02/completed/pseudo-seq",
+      "template": "/Users/mihajlostojkovic/Documents/qiu_lab/agents_snRNA/sequencing-technology-atlas/deliverables/illumina_extractions_20261106/records/9732592ed4fa476a58ee22a4.json"
+    }
+  ],
+  "findings": [
+    {
+      "title": "irCLIP: the starting material is now explicit",
+      "finding": "The old State identity said “Cellular material containing RNA–protein complexes.” The new identity specifies cells before lysis containing RNA and RNA-binding proteins, and distinguishes the paper’s adherent HeLa preparation from broader catalogue scope. Both graphs have seven Operations, nine States and fifteen Flows.",
+      "basis": "Same paper:27111506, block b00019; inspect starting State s0 in both saved workflows."
+    },
+    {
+      "title": "A real scientific error was caught and corrected",
+      "finding": "The first Pseudo-seq author generated treatment and control Operations in a loop. Its control description was correct, but information_effect reused a treatment-specific explanation. The reviewer requested correction of minus_rt; the revision changed only its information_effect and matching attribution-effect statement. No source acquisition or manual artifact rewrite was involved.",
+      "basis": "paper:25192136, blocks b00003 and b00020; correction_trace retains the author script, first review and exact two-field semantic diff."
+    },
+    {
+      "title": "A conflicting instruction was found in the harness",
+      "finding": "The shared prompt required separate Operation instances for independent branches while updated reviewer guidance allowed compact independent collections. We aligned those general instructions in a second frozen runtime and repeated only Pseudo-seq. Different routes must remain explicit; equivalent repeated processing may share a block only if condition identity and corresponding products remain recoverable.",
+      "basis": "runtime_01 versus runtime_02 manifests and prompts; unchanged card and source_registry SHA-256 pins. Fewer nodes alone is not a correctness metric."
+    },
+    {
+      "title": "Pseudo-seq: compact workflow with explicit treatment correspondence",
+      "finding": "The follow-up author produced eleven Operations, twelve States and twenty-two Flows. Independent review accepted it without a correction. The paired preparations remain separate components; cDNA attribution distinguishes chemical-treatment stops from mock-control background. RNA size-selection order and the analysis description retain their source-supported corrections.",
+      "basis": "Same card and registry bytes as the baseline. Job 51547846: 143 model review targets accepted. This is a bounded observation; it does not establish that every future compact graph will preserve routing."
+    },
+    {
+      "title": "Clearer prose does not guarantee equally structured assertions",
+      "finding": "The revised irCLIP extraction describes adapter linkage in prose but no longer uses the baseline’s separate molecular components and typed association properties. Its meaning is readable, but a query that looks only for typed covalent associations would retrieve less. This remains a representation-consistency issue to examine; it is not evidence that the biological linkage disappeared.",
+      "basis": "Compare baseline States s4/s5 with new s4/s5, including components, properties and their supported prose. No canonical graph was overwritten."
+    }
+  ]
+}
