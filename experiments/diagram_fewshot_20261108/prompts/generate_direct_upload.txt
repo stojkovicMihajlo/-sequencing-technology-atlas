@@ -1,0 +1,58 @@
+You are preparing a scientifically accurate explanatory schematic of a published genomics assay. Reconstruct the reported method; this task is not assay invention.
+
+READ THE INDIVIDUALLY ATTACHED FILES
+For the ten-example condition, use these files directly:
+- illumina_examples.pdf: ten numbered visual examples. Inspect the diagrams themselves, not just extracted PDF text.
+- examples_descriptions.txt: descriptions corresponding to the same ten examples.
+- spatial_nt_seq_paper.pdf: the target primary paper.
+- spatial_nt_seq_supplement_1.pdf and spatial_nt_seq_supplement_2.pdf: the target supplements.
+
+Briefly identify the files you successfully opened, then perform the task below. All required inputs for this condition are attached individually; no archive extraction is needed. If a specific PDF or its figures cannot be read, name that exact file and limitation rather than treating raw binary bytes as evidence or inventing its contents. The structured workflow examples are not supplied in this condition. For a no-example baseline, only the three target PDFs are supplied: proceed without expecting the two reference-example files.
+TARGET
+Read the attached target paper and its attached supplements. Identify the implementation introduced by that paper, what it measures, the actual starting sample, and the final physical or data product. Keep its workflow separate from validation experiments, controls and alternative assays. If multiple implementations are reported, select the principal one and state its scope.
+
+REFERENCE EXAMPLES, WHEN ATTACHED
+The ten numbered Illumina examples and their descriptions demonstrate the intended visual language and explanatory level. Learn how they show material forms, transformations, branch structure and important molecular distinctions. Their biological facts are not evidence about the target. Do not force the target to have the same chemistry, components, operation count or linear arrangement. If no examples are attached, use the visual specification below.
+
+SCIENTIFIC CONTENT
+Use the paper's Methods, workflow explanations and the relevant supplement passages to establish the assay. Include the details necessary to understand:
+1. What actual sample or molecular material exists before and after each major operation.
+2. What changes or is selected, and the source-supported mechanism that makes it work.
+3. The consequential molecular features: for example, end groups, modifications, adapters, strand form, or attachment to a support. Include only features established for this implementation.
+4. Which material remains in cells, droplets, beads, tissue or separate fractions; where branches split, stay separate or genuinely join.
+5. What is measured, what physically carries the association with the biological target, and what the readout can directly establish versus infer.
+
+A State describes what EXISTS at a workflow boundary: a concrete sample, mixture, molecular construct or dataset. Name the actual preparation and its important physical form. 'Cellular material' or 'processed preparation' is inadequate when the sources establish cells, nuclei, lysate, purified RNA or a specific fraction. An Operation describes what is DONE to those inputs and what changes in the output. Its mechanism explains how that reported change or selection occurs. Put preparation history into the action and resulting properties into the material description.
+
+Represent mixtures as mixtures; different depicted molecular species do not automatically mean separate tubes or branches. Reagents and catalysts can be additional inputs without becoming analytes or copied products. A DNA reporter is not the original RNA or protein it measures. Preserve consequential interfaces between consecutive operations.
+
+Use major explanatory blocks. Retain a coupled/composite operation when its internal detail can be explained in the caption. Split it when a material branch, consequential interface or distinguishing design change would otherwise be hidden. Do not reproduce every wash, reagent volume, incubation or validation experiment. Include such a condition only when it explains the mechanism or compatibility.
+
+Ground target-specific assertions in the attached target sources. Do not fill missing evidence from the reference examples or general convention. If an essential source or interface is unresolved, identify the precise missing fact in the plan and use a clearly marked question in the diagram. Distinguish unsupported specification from an experimentally demonstrated incompatibility.
+
+NEW CONTRIBUTIONS AND UNFAMILIAR MECHANISMS
+The reference diagrams are a visual prior, not a closed catalogue of allowed assay parts. The target paper may introduce a new material, reagent, chemical transformation, identity carrier, readout or overall assay architecture absent from every example. Represent that contribution directly. Do not force it into a familiar ligation, barcode, bead or copying step merely to resemble the references.
+
+For each central new contribution, make the local scientific change visible: show the relevant material before it, the new operation or arrangement, and the material/information state that results. Identify the reported interacting molecules, reagent/enzyme, linkage or conversion when those facts explain how the contribution works. Show how the product enters the next operation. Use a new clearly defined visual glyph when an existing one would misrepresent the mechanism; its legend must explain the entity and the meaning of its connections. A novel step needs an explanatory label, not an unexplained star, generic 'innovation' box or decorative chemical structure.
+
+Use discreet annotations to distinguish 'new in this paper' from retained surrounding operations, supported by the authors' claims and source comparisons. Preserve whether a mechanism is demonstrated, proposed by the paper, or unresolved. Do not imply that every feature of a newly published method is itself novel. If an author reports a working assay without establishing an exact molecular pathway, depict the reported transformation and mark the unestablished mechanism accordingly.
+
+Visual creativity is allowed; scientific details still require evidence. Introducing a new visual symbol is not evidence for a new molecular capability. If you propose an additional scientific change beyond the supplied paper, label it 'model-proposed, untested', identify its mechanistic precedent and unresolved interface assumptions, and keep it outside the source-reconstruction panel. Such a proposal is not part of the extraction score. This paper-to-diagram task does not require you to invent an extra assay change.
+
+VISUAL SPECIFICATION
+- White background, Arial/Helvetica or a similar readable sans-serif font, flat vector drawing.
+- A left-to-right workflow, with separate lanes when the assay genuinely branches.
+- Use informative simple molecular schematics: nucleic-acid strands, colored sequence segments, beads, cells, droplets, tissue or a protein complex where relevant. Avoid turning every stage into an identical generic box.
+- Depict materials at boundaries and put concise ACTION captions beneath the connecting arrows or action regions. The main mechanism belongs in the accompanying plan/evidence table and in short figure annotations where it explains the distinctive transition.
+- Use consistent colors for the same entity or identity-bearing segment across the figure. Provide a small legend. A color alone must not assert chemistry or linkage.
+- Label consequential ends, modifications, adapters and identity carriers when supported. Do not invent an exact chemical structure to make the drawing look more technical.
+- Fit all content inside the SVG viewBox with readable labels, clear arrows and no clipped branches. Do not add an Illumina logo or imply that the new figure was produced by Illumina.
+
+RETURN
+1. diagram_plan.json: method name, measurement, implementation scope; named material/data States with their consequential properties; Operations with inputs, outputs and mechanism; directed Flows; explicit unresolved facts; and the paper's distinguishing contributions with their affected element IDs and evidence status. Use local IDs to connect the records. This is a portable diagram plan, not an assertion that you have passed our production atlas schema or review.
+2. evidence.csv: one row per substantive target-specific assertion, with assertion ID, diagram/plan element ID, assertion text, source filename, PDF page/section, a short exact supporting passage, and reported/inferred/unresolved status. Separate compound assertions when their support differs. Sources support the assertion, not merely the paper title.
+3. diagram.svg: a complete editable SVG representing that plan, including its legend. Return an actual SVG file if file creation is supported; otherwise return the complete SVG code in one code block. Do not substitute an image-search link or a description of what could be drawn. Avoid scripts, external images/fonts or remote dependencies.
+4. If supported, also render diagram.png from that SVG. Keep its content consistent with the SVG.
+5. A short caption explaining the assay and its distinctive mechanism, plus a factual note stating whether you consulted an existing workflow figure in the TARGET paper. This matters when interpreting the experiment.
+
+Before returning, check that every drawn material transition matches the plan, branch routing is correct, labels describe actual material rather than a biological goal, and every substantive assertion has evidence or an explicit unresolved status. Return the artifacts and concise scientific explanations, not private reasoning or a long account of your deliberations. Do not invent citations.

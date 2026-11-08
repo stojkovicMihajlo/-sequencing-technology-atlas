@@ -2,19 +2,22 @@ PAPER-TO-DIAGRAM TEST FOR CLAUDE AND GEMINI
 
 QUICKEST RUN
 1. Start a new conversation in Claude or Gemini.
-2. Upload diagram_fewshot_20261108.zip and paste prompts/generate.txt. The
-   prompt instructs the model to open/extract the ZIP and inspect its images.
-   A matching diagram_fewshot_prompt.txt is provided beside the Downloads ZIP.
-   If that interface cannot extract ZIPs, attach these five files individually:
+2. Attach these five files individually:
    upload/illumina_examples.pdf
    upload/examples_descriptions.txt
    target/spatial_nt_seq_paper.pdf
    target/spatial_nt_seq_supplement_1.pdf
    target/spatial_nt_seq_supplement_2.pdf
-3. Paste the complete contents of prompts/generate.txt and send it.
-4. Save the diagram.svg, diagram_plan.json, evidence.csv and caption the model
-   returns into a new directory under results/. If it returns SVG code instead
-   of a file, save that code as diagram.svg. An SVG opens directly in a browser.
+3. Paste prompts/generate_direct_upload.txt and send it. A ready-to-upload copy
+   of these five files plus PROMPT.txt is in Downloads/diagram_fewshot_upload.
+4. Save diagram.svg, diagram_plan.json, evidence.csv and the caption under results/.
+   If SVG code is returned instead of a file, save the code as diagram.svg.
+
+ZIP ALTERNATIVE
+prompts/generate.txt supports ZIP extraction when the chosen interface actually
+has archive/file tools. One tested interface returned compressed bytes instead;
+prompt instructions cannot add missing extraction capability. Individual-file
+upload is therefore the default. The ZIP remains useful for moving the packet.
 
 The examples PDF has ten numbered original Illumina workflow diagrams with
 matching explanations. Original PNGs are also in examples/01_... through 10_....
@@ -25,7 +28,7 @@ text descriptions accompany the figures.
 
 TO TEST WHETHER EXAMPLES HELP
 First do condition A in a separate NEW chat: attach only the three target PDFs
-and use exactly the same generate.txt prompt. Then do condition B above.
+and use exactly the same generate_direct_upload.txt prompt. Then do condition B above.
 Do not attach the complete ZIP for condition A: it contains the examples.
 Repeat A and B with the other provider, preserving the prompt and files.
 Do not reuse the baseline conversation or give it the reference examples later.

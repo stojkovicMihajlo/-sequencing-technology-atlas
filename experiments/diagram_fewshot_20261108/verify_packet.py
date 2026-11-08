@@ -36,7 +36,7 @@ for file in sorted((P/'target').glob('*.pdf')):
     assert file.read_bytes().startswith(b'%PDF')
     with fitz.open(file) as doc:
         assert len(doc)>0;pages[file.name]=len(doc)
-for name in ['generate.txt','review.txt','add_workflows.txt']:
+for name in [p.name for p in (Path(__file__).parent/'prompts').glob('*.txt')]:
     assert (P/'prompts'/name).read_bytes()==(Path(__file__).parent/'prompts'/name).read_bytes()
 for link in re.findall(r'(?:src|href)="([^"]+)"',(P/'index.html').read_text()):
     if not link.startswith('http'):assert (P/link).is_file(),link
