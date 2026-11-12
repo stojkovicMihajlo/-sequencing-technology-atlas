@@ -8,25 +8,28 @@ set -euo pipefail
 hostname
 printenv SLURM_JOB_ID
 source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
-export ATLAS_HISTORY_ROOT="$ATLAS_PROJECT_ROOT/technology_atlas/v2/work/history_parallel_20261112"
-prior="$ATLAS_PROJECT_ROOT/technology_atlas/v2/work/history_pilot_20261112"
+stage_name="${ATLAS_HISTORY_STAGE_NAME:-history_parallel_20261112}"
+base_stage="${ATLAS_HISTORY_BASE_STAGE:-history_pilot_20261112}"
+base_runtime="${ATLAS_HISTORY_BASE_RUNTIME:-runtime_52063823}"
+export ATLAS_HISTORY_ROOT="$ATLAS_PROJECT_ROOT/technology_atlas/v2/work/$stage_name"
+prior="$ATLAS_PROJECT_ROOT/technology_atlas/v2/work/$base_stage"
 export ATLAS_HISTORY_RUNTIME="runtime_${SLURM_JOB_ID}"
 export ATLAS_HISTORY_OUTPUT="run_${SLURM_JOB_ID}"
 export ATLAS_HISTORY_PREFLIGHT="preflight_${SLURM_JOB_ID}"
 export ATLAS_HISTORY_CITATION_ONLY=1
-export ATLAS_HISTORY_BACKUP_ROOT="$GROUP_HOME/mstojkov/atlas-results/history_parallel_20261112"
+export ATLAS_HISTORY_BACKUP_ROOT="${ATLAS_HISTORY_BACKUP_ROOT:-$GROUP_HOME/mstojkov/atlas-results/$stage_name}"
 export ATLAS_REPOSITORY="$ATLAS_HISTORY_ROOT/$ATLAS_HISTORY_RUNTIME"
 original_batch="$ATLAS_PROJECT_ROOT/technology_atlas/v2/work/card_methods_full_20261112/release_03/run_02/extraction"
 mkdir "$ATLAS_REPOSITORY"
-tar -xzf "$prior/runtime_52063823.tar.gz" -C "$ATLAS_REPOSITORY"
-python3 - "$prior/runtime_52063823_manifest.json" "$ATLAS_REPOSITORY" <<'PY'
+tar -xzf "$prior/$base_runtime.tar.gz" -C "$ATLAS_REPOSITORY"
+python3 - "$prior/${base_runtime}_manifest.json" "$ATLAS_REPOSITORY" <<'PY'
 import hashlib,json,pathlib,sys
 manifest=json.loads(pathlib.Path(sys.argv[1]).read_text());root=pathlib.Path(sys.argv[2])
 for name,expected in manifest['files'].items():
     assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected,name
 PY
 tar -xzf "$ATLAS_HISTORY_ROOT/updates.tar.gz" -C "$ATLAS_REPOSITORY"
-python3 - "$prior/runtime_52063823_manifest.json" "$ATLAS_HISTORY_ROOT/update_pins.json" "$ATLAS_REPOSITORY" <<'PY'
+python3 - "$prior/${base_runtime}_manifest.json" "$ATLAS_HISTORY_ROOT/update_pins.json" "$ATLAS_REPOSITORY" <<'PY'
 import hashlib,json,pathlib,sys,tarfile
 base=json.loads(pathlib.Path(sys.argv[1]).read_text());updates=json.loads(pathlib.Path(sys.argv[2]).read_text());root=pathlib.Path(sys.argv[3])
 pins={**base['files'],**updates}
@@ -50,10 +53,17 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p asynci
   experiments/history_changes_20261106/test_connections.py \
   tests/illumina/test_history_view.py \
   --junitxml="$ATLAS_HISTORY_ROOT/additional_software_${SLURM_JOB_ID}.xml"
+selection_options=(--count 50)
+if [[ "${ATLAS_HISTORY_ALL_READY:-0}" == "1" ]]; then
+    selection_options=(--all-ready)
+fi
+if [[ -n "${ATLAS_HISTORY_EXCLUDE_SELECTION:-}" ]]; then
+    selection_options+=(--exclude-selection "$ATLAS_HISTORY_EXCLUDE_SELECTION")
+fi
 if ! "$ATLAS_ENV_DIR/bin/python" -m experiments.history_parallel_20261112.prepare \
     --batch "$original_batch" --output "$ATLAS_HISTORY_ROOT/$ATLAS_HISTORY_PREFLIGHT" \
     --library "$ATLAS_PROJECT_ROOT/technology_sources/illumina_library_20261105_07" \
-    --count 50 --expected-source-job 52055656; then
+    --expected-source-job 52055656 "${selection_options[@]}"; then
     # A blocked source preflight must not fall through to any model command.
     mkdir -p "$ATLAS_HISTORY_BACKUP_ROOT/$ATLAS_HISTORY_PREFLIGHT"
     [[ ! -f "$ATLAS_HISTORY_ROOT/$ATLAS_HISTORY_PREFLIGHT/PREFLIGHT.json" ]] || \

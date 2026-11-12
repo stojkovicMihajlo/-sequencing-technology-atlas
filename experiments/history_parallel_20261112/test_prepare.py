@@ -65,6 +65,35 @@ def test_shared_publication_does_not_merge_distinct_canonical_methods():
     assert len(module.choose_methods(ready,cards)) == 50
 
 
+def test_remaining_ready_mode_excludes_every_prior_seed_and_does_not_wait_for_fifty(tmp_path):
+    cards,index=cohort(60)
+    prior_ids=[f'method-{i:02d}' for i in range(50)]
+    prior=tmp_path/'prior50.json'
+    prior.write_text(json.dumps({'format_version':'citation_history_selection/1','seed_methods':prior_ids,'review_existing':[]}))
+    excluded,receipts=module.excluded_selections([prior])
+    ready,reasons=module.eligible_methods(index,cards,exclude_methods=excluded)
+    selected=module.choose_methods(ready,cards,count=None)
+    assert len(selected)==10 and set(selected).isdisjoint(prior_ids)
+    assert all(reasons[mid]=='already_selected_history_batch' for mid in prior_ids)
+    assert receipts[0]['method_ids']==prior_ids and receipts[0]['sha256']
+    assert len(module.choose_methods(index['methods'],cards,count=None))==50
+    with pytest.raises(module.SelectionNotReady,match='No new source-ready'):
+        module.choose_methods({},cards,count=None)
+
+
+def test_exclusion_files_are_explicit_and_can_be_combined_without_name_matching(tmp_path):
+    paths=[]
+    for i,ids in enumerate([['method-a','method-b'],['method-b','method-c']]):
+        path=tmp_path/f'prior-{i}.json'
+        path.write_text(json.dumps({'format_version':'citation_history_selection/1','seed_methods':ids}))
+        paths.append(path)
+    ids,receipts=module.excluded_selections(paths)
+    assert ids=={'method-a','method-b','method-c'} and len(receipts)==2
+    paths[0].write_text(json.dumps({'format_version':'citation_history_selection/1','seed_methods':['method-a','method-a']}))
+    with pytest.raises(ValueError,match='unique seed-method selection'):
+        module.excluded_selections(paths)
+
+
 def test_blocked_preflight_writes_explicit_zero_model_call_receipt(monkeypatch,tmp_path):
     batch=tmp_path/'batch';batch.mkdir();(batch/'state.json').write_text(json.dumps({'slurm_job_id':'52055656'}))
     (batch/'inventory.json').write_text(json.dumps({'cards':[], 'boundary':'Fixture canonical inventory'}))

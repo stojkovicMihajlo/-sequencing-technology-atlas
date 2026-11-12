@@ -238,6 +238,8 @@ def build_history_index(manifest_path):
                                  "reference_id": contributor["reference_id"],
                                  "identity_status": contributor["identity_status"],
                                  "catalogue_candidates": contributor["catalogue_candidates"]}
+                if contributor.get('method_identity_basis'):
+                    nodes[origin]['method_identity_basis'] = copy.deepcopy(contributor['method_identity_basis'])
                 edges.append({"id": pin + ":" + c["id"], "source": origin, "target": target,
                               "relation": kind, "claim": copy.deepcopy(c), "review": copy.deepcopy(review),
                               "artifact": source, "claim_id": c["id"], "status": item["status"]})

@@ -108,11 +108,14 @@ def category(card):
     return tuple(' / '.join(x) for x in paths) or ('Unclassified metadata',)
 
 
-def eligible_methods(index, cards):
+def eligible_methods(index, cards, *, exclude_methods=()):
     ready, excluded = {}, {}
     for mid, method in sorted(index['methods'].items()):
         if mid in EXCLUSIONS:
             excluded[mid] = 'already_running_history_pilot' if mid in PILOT_METHODS else 'explicit_provider_exclusion'
+            continue
+        if mid in exclude_methods:
+            excluded[mid] = 'already_selected_history_batch'
             continue
         if mid not in cards or not cards[mid].get('curation_binding', {}).get('primary_paper_id'):
             excluded[mid] = 'no_declared_curated_primary'
@@ -127,6 +130,10 @@ def eligible_methods(index, cards):
 
 def choose_methods(ready, cards, *, count=50, citation_hints=None):
     """Deterministic leaf-category balance, with citation-ranked bucket order."""
+    if count is None:
+        count = min(50, len(ready))
+        if not count:
+            raise SelectionNotReady('No new source-ready methods remain. No model calls made.')
     if not 1 <= count <= 50:
         raise ValueError('Select between 1 and 50 methods')
     if len(ready) < count:
@@ -162,7 +169,22 @@ def citation_hints(ready):
     return hints
 
 
-def prepare(batch, output, *, library, count=50, expected_source_job='52055656'):
+def excluded_selections(paths):
+    excluded, receipts = set(), []
+    for path in paths:
+        path = Path(path).resolve()
+        selection = read(path)
+        ids = selection.get('seed_methods', [])
+        if (selection.get('format_version') != 'citation_history_selection/1'
+                or selection.get('review_existing') or not isinstance(ids, list) or not ids
+                or any(not isinstance(mid, str) or not mid for mid in ids) or len(ids) != len(set(ids))):
+            raise ValueError('Require an explicit, unique seed-method selection for exclusion: ' + str(path))
+        excluded.update(ids)
+        receipts.append({'path':str(path),'sha256':sha(path),'method_ids':ids})
+    return excluded, receipts
+
+
+def prepare(batch, output, *, library, count=50, expected_source_job='52055656', exclude_selection=()):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Source readiness preparation requires a Sherlock Slurm allocation')
     batch, output = Path(batch).resolve(), Path(output).resolve()
@@ -171,7 +193,8 @@ def prepare(batch, output, *, library, count=50, expected_source_job='52055656')
         raise ValueError('Input is not the declared current extraction job')
     output.mkdir(parents=True, exist_ok=False)
     receipt = {'status': 'checking', 'source_batch': str(batch), 'source_job': str(expected_source_job),
-               'required_methods': count, 'model_calls': 0,
+               'required_methods': count, 'selection_mode':'remaining_ready_up_to_50' if count is None else 'exact_count',
+               'model_calls': 0,
                'boundary': 'Source readiness and selection hints only; no historical claims or agent execution.'}
     write(output/'PREFLIGHT.json', receipt)
     try:
@@ -203,10 +226,15 @@ def prepare(batch, output, *, library, count=50, expected_source_job='52055656')
         write(output/'primary_selection.json', primary)
         index = prepare_index(snapshot, output/'primary_selection.json')
         write(output/'methods.json', index)
-        ready, excluded = eligible_methods(index, cards)
-        receipt.update(source_ready_methods=len(ready), excluded=excluded, selected_methods=[])
+        prior_methods, prior_receipts = excluded_selections(exclude_selection)
+        ready, excluded = eligible_methods(index, cards, exclude_methods=prior_methods)
+        target = min(50, len(ready)) if count is None else count
+        receipt.update(source_ready_methods=len(ready), excluded=excluded, selected_methods=[],
+                       excluded_history_selections=prior_receipts, target_methods=target)
         write(output/'PREFLIGHT.json', receipt)
-        if len(ready) < count:
+        if count is None and target == 0:
+            raise SelectionNotReady('No new source-ready methods remain. No model calls made.')
+        if len(ready) < target:
             raise SelectionNotReady(f'Only {len(ready)} source-ready methods; {count} required. No model calls made.')
         hints = citation_hints(ready)
         write(output/'selection_hints.json', {'meaning': 'References to other ready publications, for sampling only; not ancestry.',
@@ -214,7 +242,7 @@ def prepare(batch, output, *, library, count=50, expected_source_job='52055656')
         selected = choose_methods(ready, cards, count=count, citation_hints=hints)
         selection = {'format_version': 'citation_history_selection/1', 'seed_methods': selected,
             'review_existing': [], 'prior_manifests': [],
-            'selection_reason': 'Exactly source-ready accepted methods from job52055656, excluding the running four-method pilot and named provider-blocked methods. Round-robin curated leaf categories; references to ready publications only rank sampling candidates and do not establish history edges.'}
+            'selection_reason': 'Source-ready accepted methods from job52055656, excluding the original four-method pilot, explicitly supplied prior history selections and named provider-blocked methods. Round-robin curated leaf categories; references to ready publications only rank sampling candidates and do not establish history edges.'}
         write(output/'selection.json', selection)
         receipt.update(status='ready', selected_methods=selected, selection_sha256=sha(output/'selection.json'),
             categories=dict(Counter(' / '.join(category(cards[mid])) for mid in selected)),
@@ -233,11 +261,16 @@ if __name__ == '__main__':
     parser.add_argument('--batch', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--library', type=Path, required=True)
-    parser.add_argument('--count', type=int, choices=range(1, 51), default=50)
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument('--count', type=int, choices=range(1, 51))
+    scope.add_argument('--all-ready', action='store_true', help='Select all remaining source-ready methods, up to50; no requirement to wait for fifty.')
+    parser.add_argument('--exclude-selection', type=Path, action='append', default=[])
     parser.add_argument('--expected-source-job', default='52055656')
     args = parser.parse_args()
     try:
-        result = prepare(args.batch, args.output, library=args.library, count=args.count, expected_source_job=args.expected_source_job)
+        result = prepare(args.batch, args.output, library=args.library,
+            count=None if args.all_ready else (args.count or 50), expected_source_job=args.expected_source_job,
+            exclude_selection=args.exclude_selection)
     except Exception as exc:
         print(json.dumps({'status': 'blocked', 'error': str(exc), 'model_calls': 0}))
         raise SystemExit(2)
