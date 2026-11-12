@@ -8,12 +8,81 @@ function link(text, url) { const a = el('a',text); if (/^https?:\/\//.test(url |
 function section(parent, title) { const d = el('details',null,'section'); d.append(el('summary',title)); parent.append(d); return d; }
 function raw(parent, title, value) { const d = section(parent,title); d.append(el('pre',JSON.stringify(value,null,2))); }
 function fields(parent, rows) { const d = el('div',null,'fields'); for (const [name,value] of rows) { if (value == null || value === '' || (Array.isArray(value) && !value.length)) continue; d.append(el('b',name),el('span',Array.isArray(value) ? value.join('; ') : String(value))); } parent.append(d); }
-function assertions(parent,title,items,record) {
+function nodeName(record,id) {
+  return [...record.candidate.states,...record.candidate.operations].find(n=>n.id===id)?.label || 'Unresolved workflow reference';
+}
+function subjectName(state,id) {
+  if(id==='self')return state?.label || 'Whole preparation or dataset';
+  return state?.components?.find(c=>c.id===id)?.label || 'Unresolved constituent reference';
+}
+function targetName(record,target) {
+  const [kind,...parts]=String(target).split(':');
+  let id=parts.join(':'),propertyId;
+  if(kind==='state_property'){
+    try{[id,propertyId]=parts.map(decodeURIComponent);}catch(_){return 'Unresolved property reference';}
+  }
+  const c=record.candidate;
+  if(kind==='state'||kind==='state_label')return 'State · '+nodeName(record,id);
+  if(kind==='operation'||kind==='operation_label')return 'Operation · '+nodeName(record,id);
+  if(kind==='state_properties')return nodeName(record,id)+' · property coverage';
+  if(kind==='operation_semantics')return nodeName(record,id)+' · input roles and effects';
+  if(kind==='flow'){
+    const flow=c.flows.find(f=>f.id===id);
+    return flow ? nodeName(record,flow.source)+' → '+nodeName(record,flow.target) : 'Unresolved Flow reference';
+  }
+  if(kind==='state_property'){
+    const state=c.states.find(s=>s.id===id),property=state?.properties?.find(p=>p.id===propertyId);
+    return nodeName(record,id)+' · '+(property?readableTerm(property.property):'Unresolved property reference');
+  }
+  if(kind==='correction'){
+    const correction=c.corrections.find(x=>x.id===id);
+    return correction ? 'Correction · '+targetName(record,correction.target_id) : 'Unresolved correction reference';
+  }
+  if(kind==='scope')return 'Method scope · '+id;
+  if(kind==='paper'){
+    const match=c.paper_matches?.find(x=>x.id===id),source=record.sources[match?.source_id];
+    return source?.title || 'Paper association';
+  }
+  if(kind==='record')return 'Complete workflow';
+  if(kind==='construction')return 'Workflow structure';
+  return 'Workflow review item';
+}
+const readableTerm = value => String(value).replaceAll('_',' ');
+function assertionRows(item,record,owner) {
+  const state=item.state_id ? record.candidate.states.find(s=>s.id===item.state_id) : owner;
+  const rows=[];
+  const names=ids=>(ids||[]).map(id=>nodeName(record,id));
+  const captions={label:'Constituent',property:'Property',subject:'Applies to',partner:'Associated with',
+    state_id:'Input State',input_state_ids:'Input States',output_state_ids:'Output States',
+    roles:'Role',aspect:'Change',statement:'Explanation',explanation:'Explanation',
+    value:'Value',unit:'Identifies',carrier:'Information carrier',association:'What remains identifiable',
+    end:'Molecular end',site:'Site',location:'Location',name:'Property name',definition:'Meaning',applicable_to:'Applies to'};
+  const enumValues=new Set(['strandedness','topology','association','data_type']);
+  for(const [key,value] of Object.entries(item)) {
+    if(key==='id'||key==='evidence'||value==null)continue;
+    if(key==='value'&&value&&typeof value==='object'&&!Array.isArray(value)) {
+      for(const [part,detail] of Object.entries(value))rows.push([captions[part]||readableTerm(part),part==='unit'?readableTerm(detail):detail]);
+      continue;
+    }
+    let shown=value;
+    if(key==='state_id')shown=nodeName(record,value);
+    else if(key==='input_state_ids'||key==='output_state_ids')shown=names(value);
+    else if(key==='subject'||key==='partner')shown=subjectName(state,value);
+    else if(key==='roles')shown=value.map(readableTerm);
+    else if(key==='end')shown=({five_prime:'5′ end',three_prime:'3′ end'})[value]||readableTerm(value);
+    else if(key==='property'||key==='aspect'||key==='applicable_to'||(key==='value'&&enumValues.has(item.property)))shown=readableTerm(value);
+    rows.push([captions[key]||readableTerm(key),shown]);
+  }
+  return rows;
+}
+function assertions(parent,title,items,record,owner) {
   if(!items?.length)return;
   const box=section(parent,title);
   for(const item of items){
-    fields(box,Object.entries(item).filter(([k])=>k!=='evidence').map(([k,v])=>[k,typeof v==='object'?JSON.stringify(v):v]));
-    evidence(box,item.evidence,record);
+    const entry=el('div',null,'assertion');
+    fields(entry,assertionRows(item,record,owner));
+    if(item.evidence?.length)evidence(section(entry,'Supporting evidence'),item.evidence,record);
+    box.append(entry);
   }
 }
 function evidence(parent, items, record) {
@@ -59,18 +128,16 @@ function filterRecords() {
 function inspect(parent, item, kind, record) {
   const c = record.candidate;
   item = (kind === 'Flow' ? c.flows : kind === 'State' ? c.states : c.operations).find(x => x.id === item.id) || item;
-  parent.replaceChildren(el('span',kind,'badge'),el('h3',item.label || item.id));
-  const states = new Map(c.states.map(s => [s.id,s]));
-  const names = ids => (ids || []).map(id => (states.get(id)?.label || id)+' ['+id+']');
+  const title=kind==='Flow' ? nodeName(record,item.source)+' → '+nodeName(record,item.target) : item.label || 'Unnamed '+kind;
+  parent.replaceChildren(el('span',kind,'badge'),el('h3',title));
+  const names = ids => (ids || []).map(id => nodeName(record,id));
   if (kind === 'Operation') fields(parent,[['Description',item.description],['Input States',names(item.inputs)],['Output States',names(item.outputs)],['Mechanism',item.mechanism || 'Not specified'],['Information effect',item.information_effect || 'Not specified']]);
   if (kind === 'State') fields(parent,[['Kind',item.kind],['Features',item.features]]);
-  if (kind === 'State') { assertions(parent,'Named constituents / subpopulations',item.components,record); assertions(parent,'State properties',item.properties,record); if(item.constituents?.length)raw(parent,'Legacy named constituents',item.constituents); }
-  if (kind === 'Operation') { assertions(parent,'Input roles',item.input_roles,record); assertions(parent,'Effects on input/output States',item.effects,record); }
+  if (kind === 'State') { assertions(parent,'Named constituents / subpopulations',item.components,record,item); assertions(parent,'State properties',item.properties,record,item); if(item.constituents?.length)raw(parent,'Legacy named constituents',item.constituents); }
+  if (kind === 'Operation') { assertions(parent,'Input roles',item.input_roles,record,item); assertions(parent,'Effects on input/output States',item.effects,record,item); }
   if (kind === 'Flow') {
-    const nodes = [...c.states,...c.operations], name = id => nodes.find(n => n.id === id)?.label || id;
-    fields(parent,[['Type',item.kind],['From',name(item.source)+' ['+item.source+']'],['To',name(item.target)+' ['+item.target+']']]);
+    fields(parent,[['Type',readableTerm(item.kind)],['From',nodeName(record,item.source)],['To',nodeName(record,item.target)]]);
   }
-  fields(parent,[['Local ID',item.id]]);
   const target = kind.toLowerCase()+':'+item.id;
   const affected = c.corrections.filter(x=>x.target_id===target), unknowns = c.unknowns.filter(x=>x.affected_ids.includes(target));
   for (const x of affected) parent.append(el('p','Correction: '+x.primary_statement,'warning'));
@@ -80,7 +147,7 @@ function inspect(parent, item, kind, record) {
   const checks = record.review?.checks?.filter(x=>x.target===target || x.target===labelTarget) || [];
   if (kind !== 'Flow' && !checks.some(x=>x.target===labelTarget)) parent.append(el('p','This archived review did not separately assess the label. Corrections and features remain part of its interpretation.','muted'));
   if (checks.length) raw(parent,'Recorded review of this target',checks);
-  raw(parent,'Exact JSON record',item);
+  raw(parent,'Technical details · exact JSON record',item);
 }
 function drawGraph(parent, inspector, record) {
   const c = record.candidate, nodes = [...c.states.map(x=>({...x,type:'State'})),...c.operations.map(x=>({...x,type:'Operation'}))];
@@ -94,7 +161,7 @@ function drawGraph(parent, inspector, record) {
   for (const n of nodes) { const col=rank.get(n.id),row=lanes.get(col)||0;lanes.set(col,row+1);pos.set(n.id,{x:25+col*224,y:25+row*112}); }
   const canvas=svg('svg',{width:Math.max(680,Math.max(...rank.values())*224+240),height:Math.max(150,Math.max(...lanes.values())*112+30),role:'img','aria-label':'Directed State and Operation workflow'});
   const defs=svg('defs',{}),marker=svg('marker',{id:'arrow',viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'});marker.append(svg('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#7692ac'}));defs.append(marker);canvas.append(defs);
-  for (const f of c.flows) { const a=pos.get(f.source),b=pos.get(f.target),p=svg('path',{d:`M${a.x+180},${a.y+38} C${a.x+205},${a.y+38} ${b.x-25},${b.y+38} ${b.x},${b.y+38}`,stroke:'#7692ac','stroke-width':2,fill:'none','marker-end':'url(#arrow)',class:'flow',tabindex:0,'aria-label':f.kind+' '+f.source+' to '+f.target});p.append(svg('title',{},f.kind+' · click for evidence'));p.onclick=()=>inspect(inspector,f,'Flow',record);p.onkeydown=e=>{if(e.key==='Enter')p.onclick();};canvas.append(p); }
+  for (const f of c.flows) { const a=pos.get(f.source),b=pos.get(f.target),p=svg('path',{d:`M${a.x+180},${a.y+38} C${a.x+205},${a.y+38} ${b.x-25},${b.y+38} ${b.x},${b.y+38}`,stroke:'#7692ac','stroke-width':2,fill:'none','marker-end':'url(#arrow)',class:'flow',tabindex:0,'aria-label':readableTerm(f.kind)+': '+nodeName(record,f.source)+' to '+nodeName(record,f.target)});p.append(svg('title',{},readableTerm(f.kind)+' · click for evidence'));p.onclick=()=>inspect(inspector,f,'Flow',record);p.onkeydown=e=>{if(e.key==='Enter')p.onclick();};canvas.append(p); }
   for (const n of nodes) { const p=pos.get(n.id),g=svg('g',{class:'node',tabindex:0,role:'button','aria-label':n.type+': '+n.label});g.append(svg('rect',{x:p.x,y:p.y,width:180,height:78,rx:n.type==='State'?20:5,fill:n.type==='State'?'#203044':'#183e46',stroke:n.type==='State'?'#55799a':'#53a5ac'}));
     g.append(svg('text',{x:p.x+12,y:p.y+17,'font-size':10},n.type.toUpperCase()));
     const lines=['']; for (const word of n.label.split(/\s+/)) { let i=lines.length-1;if((lines[i]+' '+word).length>25&&lines[i])lines.push(word);else lines[i]+=(lines[i]?' ':'')+word; }
@@ -103,12 +170,33 @@ function drawGraph(parent, inspector, record) {
   }
   parent.append(canvas);
 }
+function renderComparison(parent,r) {
+  const sources=r.source_comparison||{pages:r.card.source_page_url?[r.card.source_page_url]:[],diagrams:Object.values(r.sources).filter(s=>s.kind==='image')};
+  const box=el('section',null,'comparison');box.append(el('h3','Original Illumina diagram and extracted workflow'));
+  for(const url of sources.pages)box.append(link('Open original Illumina card ↗',url));
+  for(const [i,s] of sources.diagrams.entries()){
+    box.append(el('h4','Illumina source diagram'+(sources.diagrams.length>1?' '+(i+1):'')));
+    const links=el('div',null,'links');
+    if(s.local_asset){const local=el('a','Open diagram ↗');local.href=s.local_asset;local.target='_blank';links.append(local);}
+    else if(s.url){links.append(link('Open diagram ↗',s.url));}
+    const image=el('img');image.src=s.local_asset||s.url;image.alt='Unmodified original Illumina diagram';image.className='comparison-image';
+    box.append(links,image);
+  }
+  if(r.workflow_figure){
+    box.append(el('h4',r.status==='supported'?'Our extracted workflow':'Our extracted workflow · '+(labels[r.status]||r.status)));
+    const links=el('div',null,'links');for(const [name,path]of [['Open full-resolution workflow PNG ↗',r.workflow_figure.png],['Open workflow SVG ↗',r.workflow_figure.svg]]){const a=el('a',name);a.href=path;a.target='_blank';links.append(a);}
+    const save=el('a','Download workflow PNG');save.href=r.workflow_figure.png;save.download=r.record_id+'-workflow.png';links.append(save);
+    const figure=el('a');figure.href=r.workflow_figure.png;figure.target='_blank';const image=el('img');image.src=r.workflow_figure.png;image.alt='Extracted States, Operations and recorded Flows for '+r.title;image.className='comparison-image';figure.append(image);
+    box.append(links,figure,el('p','Click the PNG to inspect every label at full resolution. The interactive graph and record evidence follow below.','muted'));
+  }else box.append(el('p','No extracted workflow PNG is available for this recorded outcome. '+(r.reason||''),'muted'));
+  parent.append(box);
+}
 function renderRecord(r) {
   const root=$('detail');root.replaceChildren(el('span',labels[r.status],'badge'),el('span',batchLabel(r.batch),'badge'),el('h2',r.title));
-  root.append(el('p',r.record_id,'muted'));
   if(r.status!=='supported') root.append(el('p','Diagnostic candidate only — excluded from supported retrieval. '+(r.reason||'Inspect the review and research questions for the unresolved outcome.'),'warning'));
   const links=el('div',null,'links'),download=el('a',r.download_label||'Download exact saved candidate + review');download.href=r.file;download.download='';links.append(download);
   if(r.card.source_page_url)links.append(link('Original Illumina page',r.card.source_page_url));root.append(links);
+  renderComparison(root,r);
   const c=r.candidate;if(!c){root.append(el('p','No authored candidate was recovered.'));raw(root,'Failure record',r);return;}
   root.append(el('p',c.scope),el('p',`${c.operations.length} Operations · ${c.states.length} States · ${c.flows.length} Flows · ${c.corrections.length} Corrections · ${c.unknowns.length} Unknowns`,'muted'));
   const sourceText=section(root,'Illumina description and original diagrams');
@@ -121,14 +209,14 @@ function renderRecord(r) {
   root.append(el('p','Only recorded connections are drawn. A multi-input Operation does not imply that every input molecule becomes every output. Horizontal position displays dependency, not elapsed time.','muted'));
   if(c.operations.length)inspect(inspector,c.operations[0],'Operation',r);
   const ops=section(root,'All Operations — select one to inspect');for(const op of c.operations){const b=el('button',op.label,'operation');b.onclick=()=>{inspect(inspector,op,'Operation',r);inspector.scrollIntoView({behavior:'smooth',block:'start'});};ops.append(b);}
-  const scope=section(root,'Which named methods or variants does this depiction cover?');for(const s of c.method_scopes){scope.append(el('h3',s.method+' · '+s.status));fields(scope,[['Applies to Operations',s.operation_ids.map(id=>c.operations.find(o=>o.id===id)?.label||id)],['Reason',s.rationale]]);evidence(scope,s.evidence,r);}
+  const scope=section(root,'Which named methods or variants does this depiction cover?');for(const s of c.method_scopes){scope.append(el('h3',s.method+' · '+readableTerm(s.status)));fields(scope,[['Applies to Operations',s.operation_ids.map(id=>nodeName(r,id))],['Reason',s.rationale]]);evidence(scope,s.evidence,r);}
   const corrections=section(root,'Corrections and unknowns');if(!c.corrections.length&&!c.unknowns.length)corrections.append(el('p','None recorded at the schematic level. This does not mean every laboratory execution detail is known.'));
-  for(const x of c.corrections){corrections.append(el('h3',x.id+' · '+x.disposition));fields(corrections,[['Target',x.target_id],['Diagram observation',x.diagram_observation],['Primary statement',x.primary_statement]]);evidence(corrections,x.evidence,r);}
-  for(const x of c.unknowns){corrections.append(el('h3',(x.blocking?'Blocking':'Nonblocking')+' unknown'));fields(corrections,[['Question',x.question],['Affected records',x.affected_ids]]);}
+  for(const x of c.corrections){corrections.append(el('h3',readableTerm(x.disposition)));fields(corrections,[['Target',targetName(r,x.target_id)],['Diagram observation',x.diagram_observation],['Primary statement',x.primary_statement]]);evidence(corrections,x.evidence,r);}
+  for(const x of c.unknowns){corrections.append(el('h3',(x.blocking?'Blocking':'Nonblocking')+' unknown'));fields(corrections,[['Question',x.question],['Affected records',x.affected_ids.map(id=>targetName(r,id))]]);}
   const papers=section(root,'Paper associations ('+c.paper_matches.length+')');for(const m of c.paper_matches){const source=r.sources[m.source_id]||{};papers.append(el('h3',m.methods.join(', ')),link(source.title||m.source_id,source.url));fields(papers,[['Assessment',m.assessment],['Relationship',m.relationship],['Source content level',source.content_level]]);evidence(papers,m.evidence,r);}
   const review=section(root,'Independent model review and later admission decision');review.append(el('p','The review below is the original model assessment. Any later rejection shown above takes precedence.'));
   if(r.revalidation_finding)raw(review,'Later rejection',r.revalidation_finding);
-  for(const check of r.review?.checks||[]){const d=section(review,check.target+' · '+check.verdict);d.append(el('p',check.rationale));evidence(d,check.evidence,r);}
+  for(const check of r.review?.checks||[]){const d=section(review,targetName(r,check.target)+' · '+readableTerm(check.verdict));d.append(el('p',check.rationale));evidence(d,check.evidence,r);}
   raw(root,'All exact State / Operation / Flow records',c);raw(root,'Audit flags and research questions',{flags:r.flags,errors:r.errors,research_questions:r.research_questions,attempt_directory:r.attempt_directory});
 }
 async function openRecord(id, {reveal = false} = {}) {

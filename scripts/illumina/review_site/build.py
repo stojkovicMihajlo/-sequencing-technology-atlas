@@ -13,6 +13,7 @@ import hashlib
 import html
 import json
 from pathlib import Path
+import re
 import shutil
 
 
@@ -49,6 +50,41 @@ def standalone(record: dict, output: Path) -> None:
 <script id="record-data" type="application/json">{data}</script><script>{script}</script></html>'''
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(page)
+
+
+def refresh_saved_view(source: Path, output: Path) -> dict:
+    """Publish current display code around an unchanged embedded scientific record."""
+    if output.exists() or source.resolve() == output.resolve():
+        raise FileExistsError("Use a new output; preserve the prior inspection page")
+    page = source.read_text()
+    pattern = r'<script id=[\'\"]record-data[\'\"][^>]*>(.*?)</script>'
+    records = re.findall(pattern, page, re.S)
+    if len(records) != 1:
+        raise ValueError("Expected exactly one embedded workflow record")
+    json.loads(records[0])
+    scripts = list(re.finditer(r'<script>(.*?)</script>', page, re.S))
+    scripts = [m for m in scripts if 'function drawGraph(' in m.group(1)]
+    if len(scripts) != 1:
+        raise ValueError("Expected exactly one known workflow viewer")
+    assets = Path(__file__).parent
+    script = (assets / 'app.js').read_text().replace('</script', '<\\/script')
+    match = scripts[0]
+    page = page[:match.start()] + '<script>' + script + '</script>' + page[match.end():]
+    page, count = re.subn(r'<style>.*?</style>', lambda _: '<style>' +
+                         (assets / 'style.css').read_text() + '</style>', page, count=1, flags=re.S)
+    if count != 1 or re.findall(pattern, page, re.S) != records:
+        raise ValueError("Display update changed or lost the embedded workflow record")
+    # Keep relative links valid: this refresh is a sibling of the existing page.
+    if output.parent.resolve() != source.parent.resolve():
+        raise ValueError("Keep refreshed view beside its source so relative links remain valid")
+    output.write_text(page)
+    receipt = {"source": str(source), "source_sha256": sha(source),
+               "output": str(output), "output_sha256": sha(output),
+               "embedded_record_sha256": hashlib.sha256(records[0].encode()).hexdigest(),
+               "embedded_record_bytes_unchanged": True,
+               "viewer_files": {n: sha(assets / n) for n in ('app.js', 'style.css')}}
+    write(output.with_suffix('.view.json'), receipt)
+    return receipt
 
 
 def build(audit: Path, output: Path, *, comparison: Path | None = None) -> dict:
@@ -143,10 +179,15 @@ def build(audit: Path, output: Path, *, comparison: Path | None = None) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--audit", type=Path, required=True)
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--audit", type=Path)
+    inputs.add_argument("--refresh-from", type=Path, help="Existing standalone HTML; its record stays byte-for-byte unchanged")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--comparison", type=Path)
     args = parser.parse_args()
+    if args.refresh_from:
+        print(json.dumps(refresh_saved_view(args.refresh_from, args.output), indent=2))
+        return
     print(json.dumps(build(args.audit, args.output, comparison=args.comparison), indent=2))
 
 

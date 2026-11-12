@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from scripts.illumina.review_site.build import build, read, sha, write
+from scripts.illumina.review_site.build import build, read, sha, write, refresh_saved_view
 
 
 def audit_fixture(tmp_path):
@@ -99,3 +99,33 @@ def test_existing_export_is_preserved(tmp_path):
     with pytest.raises(FileExistsError):
         build(audit, output)
     assert sha(output / "index.json") == before
+
+
+def test_display_refresh_preserves_embedded_record_and_prior_page(tmp_path):
+    source = tmp_path / 'old.html'
+    payload = '{ "candidate": {"states": [{"id": "s0", "label": "RNA"}]}}'
+    source.write_text('<style>body{color:red}</style><script id="record-data" '
+                      'type="application/json">' + payload + '</script>'
+                      '<script>function drawGraph(){}</script>')
+    before = source.read_bytes()
+    output = tmp_path / 'readable.html'
+    receipt = refresh_saved_view(source, output)
+    assert source.read_bytes() == before
+    assert payload in output.read_text()
+    assert 'function subjectName' in output.read_text()
+    assert receipt['embedded_record_bytes_unchanged'] is True
+    assert receipt['output_sha256'] == sha(output)
+    with pytest.raises(FileExistsError):
+        refresh_saved_view(source, output)
+
+
+def test_display_refresh_rejects_ambiguous_record_and_moved_relative_links(tmp_path):
+    source = tmp_path / 'old.html'
+    source.write_text('<style></style><script id="record-data">{}</script>'
+                      '<script id="record-data">{}</script><script>function drawGraph(){}</script>')
+    with pytest.raises(ValueError, match='exactly one embedded'):
+        refresh_saved_view(source, tmp_path / 'new.html')
+    source.write_text('<style></style><script id="record-data">{}</script>'
+                      '<script>function drawGraph(){}</script>')
+    with pytest.raises(ValueError, match='relative links'):
+        refresh_saved_view(source, tmp_path / 'subfolder' / 'new.html')

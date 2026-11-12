@@ -13,6 +13,8 @@ from pathlib import Path
 
 OPERATION_FIELD_INSTRUCTIONS = """OPERATION FIELD DEFINITIONS
 Operation.label names the action actually represented on its declared inputs.
+Use scientific names in labels and explanations, not local graph addresses such
+as s0 or o1. Exact IDs still belong in the schema's reference fields.
 Operation.description states what is done to the named input and what changes
 in the material or data. Name an available, supported change rather than hiding
 it behind processing, preparation or treatment. A broad Operation can remain
