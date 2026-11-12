@@ -313,7 +313,9 @@ def validate_completed_citation(previous):
     expected = graph_overlay(analysis, judged, read(previous / 'inputs/sources.json'),
                              sha(original), read(previous / 'inputs/seed_binding.json'),
                              catalogue=read(previous / 'inputs/catalogue.json'),
-                             classification_policy=previous_graph.get('classification_policy'))
+                             classification_policy=previous_graph.get('classification_policy'),
+                             include_method_summary=any(n.get('id') == 'seed' and
+                                 'method_contribution_summary' in n for n in previous_graph['nodes']))
     if read(previous / 'graph.json') != expected:
         raise ValueError('Previous graph differs from its reviewed citation export')
     return prior, original

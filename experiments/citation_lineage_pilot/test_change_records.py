@@ -160,6 +160,21 @@ def test_legacy_change_review_remains_parseable_without_method_match():
     assert old['links'][0]['historical_development_edge'] is False
 
 
+def test_method_summary_survives_without_forcing_a_historical_parent():
+    raw=proposal();raw['claims']=[];raw['summary']='A source-supported new assay design with no established predecessor.'
+    judged=review();judged['findings']=[]
+    sources=method_sources();sources['seed'].update(title='Later method paper',pmid='222',url='https://example.org/later')
+    graph=graph_overlay(parse_analysis(raw),parse_review(judged),sources,'test-pin',{})
+    assert not graph['links']
+    summary=graph['nodes'][0]['method_contribution_summary']
+    assert summary['text']==raw['summary']
+    assert summary['source']['pmid']=='222'
+    assert 'not new independently adjudicated' in summary['status']
+    archived=graph_overlay(parse_analysis(raw),parse_review(judged),sources,'test-pin',{},
+                           classification_policy=None,include_method_summary=False)
+    assert 'method_contribution_summary' not in archived['nodes'][0]
+
+
 def absent_method_review():
     raw=method_review()
     raw['findings'][0]['method_match'].update(status='not_in_atlas',record_id=None,

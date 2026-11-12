@@ -1,0 +1,182 @@
+{
+  "format_version": "edge_scientific_display_audit/1",
+  "pair": [
+    "iclip",
+    "eclip"
+  ],
+  "edge_id": "ac6ee03d988e97d99f54d64c4133d2141a805d5c6b4e76b1e719e2dcfd3670c0:C_R6",
+  "status": "Substantive differences already recorded; abbreviated contributor/first-feature display hides them.",
+  "seed_pmid": "27018577",
+  "earlier_pmid": "20601959",
+  "checked_source_registry_sha256": "4bd8d66e678cf8588c5ac45ee2e63fde0d6301ca733e15f09b4df50a13df286d",
+  "source_text_sha256": {
+    "seed": "fe86b9ed1e837ed9e617a72137e90dcf06feba48d706b3eb7d70b172f55d10cf",
+    "R6": "9d950ef2cb87e40f862b26b8448702e56953b03905e9ae58aefc8c3894afe1cf",
+    "R7": "d06ae7afd2615c4d2bbe93197bbec451e3f1cfd8ce04e18ae3caf972c772f9e2"
+  },
+  "existing_compared_features": [
+    {
+      "id": "R6_capture",
+      "compared_feature": "UV crosslinking, partial RNA digestion and immunopurification of RNA covalently attached to a selected RBP before library conversion",
+      "before": "Original iCLIP captured hnRNP C contacts in HeLa cells by UV-C crosslinking, RNase I fragmentation and antibody-bearing magnetic beads. Protein gel electrophoresis and nitrocellulose transfer preceded proteinase K recovery of the attached RNA.",
+      "after": "eCLIP retains this capture and purification strategy for selected RBPs in cultured cells, including the RBFOX2 HEK293T demonstration and broader K562/HepG2 profiling; the recovered RNA enters the modified library-conversion route. This record establishes unchanged reuse of the capture strategy, without asserting identical antibodies, doses or sample contexts.",
+      "consequence_and_limits": {
+        "effect_status": "not_established",
+        "reported_effects": [],
+        "limits": [],
+        "limit_evidence": [],
+        "unresolved": [
+          "The seed does not isolate a benefit or a change to this reused capture strategy. Its reported gains concern the coordinated eCLIP protocol."
+        ]
+      }
+    },
+    {
+      "id": "R6_truncated_library",
+      "compared_feature": "Making crosslink-truncated cDNA amplifiable while preserving the reverse-transcription endpoint as a contact readout",
+      "before": "iCLIP ligated an RNA 3\u2032 adapter before reverse transcription. Its RT primer carried two inverse adapter regions and a BamHI site; size-selected cDNAs, including products truncated at the residual crosslinked peptide, were circularized and then BamHI-linearized to orient the adapter regions for PCR and sequencing.",
+      "after": "eCLIP retains RNA 3\u2032 adapter priming and recovery of RT-truncated cDNA, but replaces the circularization/linearization library route with two intermolecular adapter additions: an indexed adapter on bead-bound RNA and a second ssDNA adapter ligated to the cDNA 3\u2032 end after RT. PCR and paired-end sequencing read the preserved endpoint; usable Read2 5\u2032 ends are used for contact-proximal motifs.",
+      "consequence_and_limits": {
+        "effect_status": "reported",
+        "reported_effects": [
+          {
+            "status": "measured",
+            "description": "The complete eCLIP protocol required much less amplification, interpreted by the authors as approximately 1,000-fold more adapter-ligated material before PCR.",
+            "metric": "eCT to obtain 100 fmoles of library",
+            "reported_value": "iCLIP 23.6; eCLIP replicates 13.0 and 13.3; author interpretation ~1,000-fold",
+            "comparison_basis": "comparative",
+            "comparator": "Locally generated RBFOX2 iCLIP library, not the original R6 dataset",
+            "tested_context": "20 million HEK293T cells; same RBFOX2 antibody; membrane region 50\u2013125 kDa",
+            "attribution_scope": "whole_assay",
+            "joint_change_ids": [],
+            "evidence": [
+              {
+                "source_id": "seed",
+                "quote": "We performed iCLIP and eCLIP in whole-cell extracts from 20 million HEK293T cells using a validated RBFOX2-specific antibody (A300-864A, Bethyl)9 and size-selected the 50\u2013125 kDa region on the membrane (Supplementary Fig. 3a\u2013b)."
+              },
+              {
+                "source_id": "seed",
+                "quote": "This yielded eCT values of 23.6 for iCLIP and 13.0 and 13.3 for eCLIP (Supplementary Fig. 3d), indicating a ~1,000-fold increase in adapter-ligated pre-amplification products."
+              },
+              {
+                "source_id": "seed",
+                "quote": "To simplify comparisons of library yield across experiments, we defined an Extrapolated CT (eCT) value as the number of PCR cycles (assuming 100% PCR efficiency) needed to obtain 100 fmoles (10 nM in 10 uL) of library."
+              }
+            ]
+          },
+          {
+            "status": "measured",
+            "description": "At matched uniquely mapped read depth, the complete eCLIP protocol produced a higher usable-read fraction.",
+            "metric": "Fraction of uniquely mapped reads remaining after PCR-duplicate removal",
+            "reported_value": "30.8% iCLIP versus 85.2% eCLIP at 20 million uniquely mapped reads; reported difference 54.4 percentage points",
+            "comparison_basis": "comparative",
+            "comparator": "Local RBFOX2 iCLIP experiment",
+            "tested_context": "RBFOX2 HEK293T downsampling comparison",
+            "attribution_scope": "whole_assay",
+            "joint_change_ids": [],
+            "evidence": [
+              {
+                "source_id": "seed",
+                "quote": "We performed iCLIP and eCLIP in whole-cell extracts from 20 million HEK293T cells using a validated RBFOX2-specific antibody (A300-864A, Bethyl)9 and size-selected the 50\u2013125 kDa region on the membrane (Supplementary Fig. 3a\u2013b)."
+              },
+              {
+                "source_id": "seed",
+                "quote": "At 20 million uniquely mapped reads this translates to a 54.4% increase in usable read fraction (from 30.8% to 85.2% of uniquely mapped reads)."
+              }
+            ]
+          },
+          {
+            "status": "reported_qualitative",
+            "description": "eCLIP retained the nucleotide-scale crosslink-associated read-termination pattern.",
+            "metric": null,
+            "reported_value": null,
+            "comparison_basis": "comparative",
+            "comparator": "Local iCLIP endpoint behavior and previously described RBFOX2 motif-position patterns",
+            "tested_context": "RBFOX2 UGCAUG motif; eCLIP dual-adapter library",
+            "attribution_scope": "whole_assay",
+            "joint_change_ids": [],
+            "evidence": [
+              {
+                "source_id": "seed",
+                "quote": "As reverse transcription often terminates at the RBP:RNA crosslink site, the ligation of the ssDNA adapter to the cDNA fragments at their 3\u2032 end maintains the single-nucleotide resolution of iCLIP."
+              },
+              {
+                "source_id": "seed",
+                "quote": "We also observed the same stereotypical patterns of read termination (due to reverse transcription termination at the RBP-RNA crosslink site) at two G bases in the canonical UGCAUG as previously described for RBFOX2 (Supplementary Fig. 5a)12, confirming that the dual adapter ligation strategy maintains the single-nucleotide resolution of iCLIP."
+              }
+            ]
+          }
+        ],
+        "limits": [
+          "The amplification and usable-read results compare the complete local protocols; they do not isolate circularization replacement from other library changes. The local RBFOX2 iCLIP experiment is distinct from the original HeLa hnRNP C experiment in R6.",
+          "The eCT interpretation assumes 100% PCR efficiency. The apparent residual increase in saturated iCLIP molecules can include random-mer sequencing errors."
+        ],
+        "limit_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "To simplify comparisons of library yield across experiments, we defined an Extrapolated CT (eCT) value as the number of PCR cycles (assuming 100% PCR efficiency) needed to obtain 100 fmoles (10 nM in 10 uL) of library."
+          },
+          {
+            "source_id": "seed",
+            "quote": "We observed that despite similar fractions of uniquely mapped reads, saturation of unique fragments was observed for iCLIP below 10 million uniquely mapped reads (with the remaining increase largely due to sequencing errors in the random-mer, as previously observed10), whereas no observable saturation was seen with eCLIP at 20 million reads (Fig. 1b\u2013c, Supplementary Fig. 3e)."
+          }
+        ],
+        "unresolved": [
+          "Seed Supplementary Protocol 1 and supplementary comparator figures are not separate registered sources; the exact local iCLIP variant and all reagent differences remain unresolved."
+        ]
+      }
+    },
+    {
+      "id": "R6_molecule_tags",
+      "compared_feature": "Pre-PCR random sequence tags as molecular identities paired with mapped endpoints for distinguishing original molecules from amplification copies",
+      "before": "The original iCLIP RT oligonucleotide encoded a three-base random molecular tag plus a two-base experiment barcode. Mapped cDNAs sharing the truncation nucleotide and random tag were treated as amplification artifacts rather than independent molecules.",
+      "after": "eCLIP moves the random molecular tag to rand3Tr3, the ssDNA adapter ligated to the cDNA 3\u2032 end after RT, and uses N5 or N10. After paired-end sequencing the tag is carried in the read name; duplicates share Read1 start, Read2 start and random-mer sequence. This is measurement-defining molecular encoding and decoding, not a routine aligner contribution.",
+      "consequence_and_limits": {
+        "effect_status": "not_established",
+        "reported_effects": [],
+        "limits": [
+          "Random-mer sequencing errors can inflate apparent unique molecules near saturation."
+        ],
+        "limit_evidence": [
+          {
+            "source_id": "seed",
+            "quote": "We observed that despite similar fractions of uniquely mapped reads, saturation of unique fragments was observed for iCLIP below 10 million uniquely mapped reads (with the remaining increase largely due to sequencing errors in the random-mer, as previously observed10), whereas no observable saturation was seen with eCLIP at 20 million reads (Fig. 1b\u2013c, Supplementary Fig. 3e)."
+          }
+        ],
+        "unresolved": [
+          "No isolated improvement is demonstrated for moving or lengthening the molecular tag. The whole-assay complexity result cannot be assigned to this feature alone.",
+          "No adoption of the original iCLIP barcode-error filtering rule is established; the seed main text describes matching endpoints and random-mer identity, not a transferred error-correction algorithm."
+        ]
+      }
+    }
+  ],
+  "method_wide_design_context": [
+    {
+      "feature": "Sequential RNA-end adapter, RT and cDNA-end adapter architecture",
+      "source": "seed b00007; R7 RNAtag-Seq main text",
+      "scope": "C_R6 compares the changed iCLIP library route. C_R7 identifies RNAtag-Seq as a scoped contributor; do not attribute its exact conditions solely to iCLIP."
+    },
+    {
+      "feature": "On-bead indexing and optional sample pooling; ligation conditions",
+      "source": "seed b00007",
+      "scope": "Later paper supports these roles/results. Exact two-sided chemistry transfer requires R7 Supplementary Protocol, which the recorded review correctly left as a research lead."
+    },
+    {
+      "feature": "Omitted radiolabel/autoradiography while retaining gel/nitrocellulose purification",
+      "source": "seed b00007; C_R8 comparison",
+      "scope": "Procedural comparison and removed diagnostic, not an independently demonstrated isolated yield gain."
+    },
+    {
+      "feature": "Size-matched input control and normalization",
+      "source": "seed b00014-b00015; C_R15/C_R17 context",
+      "scope": "Method-level control/readout design. Do not describe the entire SMInput preparation as inherited from the original iCLIP method or from ChIP-seq."
+    }
+  ],
+  "ui_lead_recommendation": "Show an index of all three compared features before the contributor description. Make before/after and supported consequence visible per feature. Do not use the unchanged capture feature as a summary of the entire pair.",
+  "next_release_changes": "Shared prompts first establish the later method contribution account, then scope changes across appropriate donor/precedent/comparison/own-summary records. Method summary exported as model-authored context, not independent novelty adjudication.",
+  "preserved_existing_artifacts": true,
+  "existing_method_summary": {
+    "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/history_parallel_20261112/run_52073185/citations/eclip/analysis.json",
+    "inspection": "The existing summary already covers distinguishing design, multiple contributors, controls, whole-assay gains and limits. Old publication omitted this field.",
+    "scope": "Not a new structured independently adjudicated novelty record."
+  }
+}

@@ -265,7 +265,7 @@ def validate_review(document, analysis, analysis_sha256, sources, *, catalogue=N
 
 
 def graph_overlay(analysis, review, sources, analysis_sha256, bindings, *, catalogue=None,
-                  classification_policy=ASSAY_HISTORY_POLICY):
+                  classification_policy=ASSAY_HISTORY_POLICY, include_method_summary=True):
     """Export only independently accepted, two-sided claims; never edit the atlas."""
     validate_review(review, analysis, analysis_sha256, sources, catalogue=catalogue)
     decisions = {x.claim_id: x for x in review.findings}
@@ -275,6 +275,13 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings, *, catal
                       and classification_policy == ASSAY_HISTORY_POLICY)
     nodes = [{"id": "seed", "kind": "assay", "name": analysis.seed_method,
               "bindings": bindings}]
+    if include_method_summary:
+        seed_source = sources.get('seed', {})
+        nodes[0]['method_contribution_summary'] = {
+            'text': analysis.summary,
+            'status': 'model-authored summary; not new independently adjudicated structured novelty',
+            'source': {'source_id': 'seed', **{k: seed_source.get(k) for k in
+                       ('title', 'pmid', 'url', 'content_level')}}}
     links, withheld = [], []
     for claim in analysis.claims:
         finding = decisions[claim.id]

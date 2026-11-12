@@ -153,6 +153,12 @@ paper, then investigate the relevant earlier full papers. Citation windows are
 navigation and attribution locators, not the whole scientific evidence. Do not
 compare every catalogue method against every other method. Use actual citations
 and the paper's accounts of what it uses, changes, tests or newly introduces.
+First identify the later paper's source-supported distinguishing design changes,
+their consequences and limits. Use that account to guide the citation work;
+a reference-by-reference list of inherited features is not a substitute for
+explaining the later method. Unchanged reuse can be correctly recorded while
+other changes distinguish the method. Those changes may have different donors
+or no established donor; do not assign every improvement to one predecessor.
 The existing extraction is read-only and supplies workflow locations; the papers
 establish what changed. A component may span several Operations. A distinguishing
 new approach need not have an established historical donor; explain it in summary
@@ -240,6 +246,12 @@ derived by Python from these records. Identify precise before/after facts and
 retained features, then decide whether the attribution establishes documented_reuse,
 only a precedent/comparison, or no relationship. Copy citation_context from the
 exact reference's contexts. Unavailable earlier evidence stays explicit and held.
+Within each scoped contribution, include the source-supported changes to its
+implementation, not only the retained starting strategy. Several distinct
+features may require several change_records. Use analysis.summary to explain
+the later method's distinguishing design and supported benefit/limits across
+those records, including changes without established ancestry. This summary is
+a model-authored explanation, not an independent structured novelty verdict.
 seed_operation_ids provides existing workflow context; changed State properties,
 Operations or Flows belong in change_records.workflow_locations. The earlier side
 is paper_only here: no earlier workflow has been supplied, so do not invent its IDs.
@@ -308,5 +320,12 @@ them. Blocking affected claims cannot be accepted. Use an empty affected list fo
 independent future work. Do not suppress unrelated accepted claims to preserve a
 research lead, and do not claim exhaustive coverage when a supported omission
 remains. Claims still require all existing two-sided source/change checks.
+Check the later paper's contribution account against all change_records and
+analysis.summary, not merely the first record or the cited baseline. If an
+existing historical comparison omits a supported same-feature design change,
+request a focused revision naming that change and its source. Do not require a
+new difference for unchanged reuse. Report a distinguishing later-method change
+outside those inherited contributions in review.summary; do not manufacture an
+ancestry edge or causal component benefit to fit it into a parent's comparison.
 """,
 }
