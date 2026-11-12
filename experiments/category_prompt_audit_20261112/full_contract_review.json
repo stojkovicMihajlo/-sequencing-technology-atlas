@@ -232,5 +232,336 @@
     "This preserves the local-condition principle tested on November 8; do not claim it is newly discovered or proven better than all prior refined runs.",
     "Source-attribution wording remains in some fields. Distinguish unnecessary reading/grouping commentary from consequential qualification of a reported but unverified benefit.",
     "One output per method cannot establish a prompt effect or reduced hallucination rate."
-  ]
+  ],
+  "final_check": {
+    "checked_at": "2026-11-12T12:08:49.735281+00:00",
+    "job": "52047726",
+    "job_elapsed": "00:47:34",
+    "outcome_counts": {
+      "supported": 4
+    },
+    "software_tests_passed": 75,
+    "scope": "Engineering comparison of final records, source passages and model reviews; not blind evaluation or exhaustive independent claim re-review.",
+    "method_results": [
+      {
+        "method": "irclip",
+        "status": "supported",
+        "revision_count": 1,
+        "record_directory": "completed/final_52047726/full_run_01/cards/irclip/attempt_001",
+        "artifact_pins": {
+          "card.json": "187bbb28e81a1422b3a6e0647b3fff23839a6a1307e866b6b52b8ea20f41a35a",
+          "source_registry.json": "7265ded8797e9dfe430bbf749057b308dff2b06e01f2aa38c3934178a8d47d32",
+          "extraction.json": "452e43696f503a4739980920186576be807bc117f7c3336cda65bd9350360719",
+          "review.json": "5a9e04bec08545ed87fa6bf91c532b41961422a992d3a3311a695c93df9a84c8",
+          "graph.json": "4e75987a414f92d1a4fbfe3bcce5640a8c8e0cc399410bda8e1ffa1dcc24e90d",
+          "stages.json": "45ad782677b8a20a81ba402f17700f9c0c2bcb8d276e62b7993e94861537f908"
+        },
+        "sources_equal_to_archive": true,
+        "review_bound_to_final_candidate": true,
+        "review_checks": 113,
+        "counts_before": {
+          "operations": 7,
+          "states": 9,
+          "flows": 15
+        },
+        "counts_after": {
+          "operations": 7,
+          "states": 9,
+          "flows": 15
+        },
+        "finding": "Named dephosphorylation and adapter ligation replace generic processing in the description; RNA-side adapter chemistry remains distinct from copied cDNA. Seven depicted operation blocks are retained.",
+        "remaining_issue": "Source narration remains in the reverse-transcription mechanism and circularization information effect. Any revision must preserve that the bias rationale is catalogue-reported and the artifact caution is unquantified.",
+        "classification": "Clearer description; remaining explanation/qualification issue",
+        "exact_operation_fields": [
+          {
+            "id": "o4",
+            "label": "Dephosphorylate RNA ends and ligate the 3′ adapter",
+            "description": "Dephosphorylate RNase-digested complexes with T4 PNK, then attach the preadenylated IR800–biotin DNA adapter to RNA 3′ ends using T4 RNA Ligase 1.",
+            "mechanism": "Dephosphorylation prepares the RNase-digested RNA ends for ligation. The preadenylated adapter is the ligation substrate; its infrared dye supports nonisotopic detection, its terminal biotin supplies the later streptavidin handle, and its sequence supplies the RT priming interface.",
+            "information_effect": "Covalently tagging RNA 3′ ends links infrared detection and later affinity recovery to adapter-ligated RNA rather than to all crosslinked molecules.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "o6",
+            "label": "Reverse-transcribe RNA, affinity-capture hybrids and release cDNA",
+            "description": "Anneal the cDNA synthesis primer and copy recovered RNA with TGIRT-III at 60°C. Capture RNA–cDNA hybrids on streptavidin beads via the biotinylated RNA adapter, then degrade RNA and elute cDNA before circularization.",
+            "mechanism": "The adapter supplies the RT primer-binding region. TGIRT-III makes RNA-derived cDNA at 60°C; the catalogue reports that this temperature melts secondary RNA structures to reduce reverse-transcription bias. RT can stop at the crosslinked peptide. Streptavidin binds the RNA adapter’s biotin to capture hybrids. The MnCl2-containing RNA-degradation/cDNA-elution step uses P3short oligonucleotide and releases cDNA. The cDNA primer supplies a 5′ phosphate, barcode and internal spacers; the adapter’s dye and biotin are on the RNA-side capture substrate, not modifications copied into DNA.",
+            "information_effect": "RNA sequence and, for peptide-stopped molecules, the termination endpoint become DNA-encoded surrogates for RNA identity and the contact position. Primer-encoded barcode/index information is introduced. Subsequent sequencing and mapping are required to interpret these features as binding sites.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "o7",
+            "label": "Circularize cDNA and PCR-amplify the library",
+            "description": "Circularize recovered cDNA using Circligase-II, amplify from circular templates, perform magnetic-bead library size selection, and add P3solexa/P6solexa library sequences by PCR to yield a double-stranded cDNA sequencing library.",
+            "mechanism": "The 5′-phosphorylated cDNA is circularized, bringing the template into the topology used for PCR. The cDNA synthesis primer’s internal carbon spacers support generation of linear PCR products from circular cDNA. AMPure-based recovery and size selection retain library products, and PCR supplies the library primer sequences.",
+            "information_effect": "PCR propagates the RNA-derived cDNA insert, endpoint and primer barcode/index into a physical DNA library. This stage prepares a sequence readout carrier; it does not itself produce sequence data or binding-site coordinates. The catalogue cautions that circularization may introduce artifacts without specifying their types.",
+            "input_states": null,
+            "output_states": null
+          }
+        ],
+        "checked_source_passages": [
+          {
+            "source_id": "paper:27111506",
+            "passage": "[b00026] RNA fragments were pelleted at > 13,000 r.p.m. for 45 min at 4 °C, washed once with 1 mL of ice-cold 75% ethanol, and air dried. Pellets were resuspended in 15 μL of 10 mM NaCl and heated at 37 °C for 10 min. After brief centrifugation, 1 μL of the dissolved RNA was dot blotted on nitrocellulose and scanned on an Odyssey Clx infrared imager to quantify the recovery of RNA-adaptor-ligated products. 13.75 μL of RNA was mixed with 1 μL of 1 μM cDNA synthesis primer in a 0.2-mL PCR tube and heated to 70 °C for 10 min then rapidly cooled to 4 °C. 4 μL of 5× cDNA synthesis buffer (100 mM Tris, pH 7.5; 50 mM MgCl2,250 mM NaCl; 25 mM DTT, 0.1%; Tween) and 0.2 μL of TIGRT-III reverse transcriptase (Ingex, #TGIRT50) was added to the annealed RNA and incubated at room temperature for 30 min. 1 μL of 25 mM dNTPs was added to the reaction, mixed well, and incubated in a thermocycler for 2 h at 60 °C. cDNA-RNA hybrids were captured by addition of 5 μL of MyOne Streptavidin C1 Dynabeads (Thermo Fisher Scientific, #65001) that had been rinsed and suspended in 100 μL of NT2 buffer and end-over-end rotation for 30 min at 4 °C. Beads were placed on a 96-well magnet and washed twice with 0.1 mL high-stringency buffer and twice with 0.1 mL of PBS. Beads were resuspended in 10 μL of cDNA elution/RNA degradation buffer (8.25 μL water, 1 μL of 1 μM P3short oligonucleotide, and 0.75 μL of 50 mM MnCl2) and placed in a thermocycler with the program: 5 min 95 °C, 1 min 75 °C, ramp 0.1° s−1 to 60 °C forever. After 15 min, tubes were removed and mixed with 5 μL of Circligase-II reaction buffer (3.3 μL water, 1.5 μL 10× Circligase-II buffer, and 0.2 μL of Circligase-II; Epicentre, #CL9021K). cDNA was circularized in a thermocycler for 1.5 h at 60 °C. cDNA was captured by addition of 30 μL of Ampure XP beads (Beckman Coulter, cat# A63880), 75 μL of isopropanol, and 15 min of incubation (the solution was remixed after 7.5 min). Beads were washed once with 80% ethanol, dried for 5 min, and resuspended in 14 μL of water. For maximal elution, tubes were placed in a thermocycler at 95 °C for 2 min and immediately transferred to a 96-well magnet. The 14 μL eluate was transferred to a new 0.2-mL PCR tube containing 15 μL of 2× Phusion HF-PCR Master Mix (NEB, #M0531), 0.5 μL of 30 μM P3/P6 PCR1 oligonucleotide mix, and 0.5 μL of 15× SYBR Green I (Thermo Fisher Scientific, cat# S7563). The tubes were then placed in a Stratagene MX3000P qPCR machine with the following program: 98 °C 2 min and then 15 cycles of 98 °C 15 s, 65 °C 30 s, and 72 °C 30 s, with data acquisition set to the 72 °C extension. PCR1 reactions were removed from the machine after reaching the ‘knee’ of exponential growth. PCR1 reactions were then subjected to one round of magnetic bead size selection by addition of 4.5 μL of isopropanol, 54 μL of Ampure XP beads, and incubation for 10 min. Beads were washed once with 80% ethanol, dried for 5 min and eluted in 10 μL of water. PCR1 products were subjected to a second round of size selection by addition of 1.5 μL of isopropanol, 18 μL of Ampure XP beads, and incubation for 10 min. Beads were washed once with 80% ethanol, dried for 5 min, and eluted in 10 μL 500 nM P3solexa/P6solexa oligo mix. 10 μL of 2× Phusion HF-PCR Master was added to each tube and placed in a thermocycler with the following program: 98 °C 2 min, three cycles of 98 °C 15 s, 65 °C 30 s, and 72 °C 30 s. Final libraries were purified by addition of 36 μL of Ampure XP beads and incubation for 5 min. Beads were washed twice with 70% ethanol, dried for 5 min, and eluted in 20 μL of water. 1–2 μL of libraries were quantitated by HS-DNA bioanalysis."
+          }
+        ]
+      },
+      {
+        "method": "pseudo-seq",
+        "status": "supported",
+        "revision_count": 0,
+        "record_directory": "completed/final_52047726/full_run_01/cards/pseudo-seq/attempt_001",
+        "artifact_pins": {
+          "card.json": "a2d8345d679c0f0cbefcf68392e56f5c6e3ccd0091cd27f09e4b2ba3f1faf440",
+          "source_registry.json": "7fabf6722cc11872bbc88108c4a490066038217d33df51bc6b70bab50a02ea67",
+          "extraction.json": "df2b081c0dc0bd2a5138b250245ab8d2d9ad1c9881b1153fc63c31181194e152",
+          "review.json": "9bd5918b44ca71674ec0ee24434947bb692bf3c7f3857ff6aa18ba5b2fb6c09e",
+          "graph.json": "1b75eec5aea56af6ff7a6ebd99816b46bf50d05f68c8f807686a5971d25a193a",
+          "stages.json": "a979457b760dfbeac01a41c427697887d6bb7577ff8299e0f4dc24325d422ba6"
+        },
+        "sources_equal_to_archive": true,
+        "review_bound_to_final_candidate": true,
+        "review_checks": 244,
+        "counts_before": {
+          "operations": 20,
+          "states": 22,
+          "flows": 42
+        },
+        "counts_after": {
+          "operations": 13,
+          "states": 24,
+          "flows": 45
+        },
+        "finding": "Mock treatment records background rather than a treatment-specific modification. Reverse transcription records cDNA sequence and an endpoint; later matched-control comparison and mapping support candidate Ψ inference. Shared downstream operations retain separate condition states without pooling.",
+        "remaining_issue": "Circularization qualification and reference-choice wording still narrate the sources. The control distinction was already correct in prior refined outputs; it is not a newly demonstrated hallucination fix.",
+        "classification": "Important distinction retained; remaining source narration",
+        "exact_operation_fields": [
+          {
+            "id": "mock_treat",
+            "label": "Mock-treat RNA without CMC",
+            "description": "Process the matched control fragments in the reported mock-treatment buffer without adding CMC.",
+            "mechanism": "Omitting CMC prevents introduction of the treatment-dependent RT-blocking mark; RT stops in this branch provide a background comparison.",
+            "information_effect": "The separately identified −CMC preparation supplies pseudouridine-independent RT-stop background, not a Ψ-specific endpoint signal.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "reverse_transcribe",
+            "label": "Reverse-transcribe adapter-ligated RNA",
+            "description": "Independently anneal the 5′-phosphorylated adapter-complementary RT primer and extend it with AMV-RT on each RNA-fragment preparation, producing RNA-derived cDNA products, including truncated cDNAs.",
+            "mechanism": "The adapter-complementary primer initiates RNA copying. In +CMC RNA, the retained Ψ-dependent mark can stop RT one nucleotide 3′ of Ψ; background termination also occurs and is measured by the parallel −CMC preparation.",
+            "information_effect": "cDNA sequence and its termination boundary encode RNA origin and RT-stop position. The RNA chemical modification is not copied into DNA. Only +CMC-versus−CMC comparison after mapping can attribute excess stops to candidate Ψ sites.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "circularize_cdna",
+            "label": "Circularize truncated cDNAs with circLigase",
+            "description": "Independently circularize each condition’s purified truncated cDNAs with circLigase, producing cDNA circles used as PCR templates.",
+            "mechanism": "circLigase joins the ends of the linear cDNA reporters. The RT primer supplies the reported 5′ phosphate on these substrates; circularization preserves the RNA-derived insert and library-primer sequence in a covalent circle.",
+            "information_effect": "The copied sequence and termination-defined insert boundary remain represented in the circular reporter. The catalogue cautions that this step may introduce bias; the primary preparation description does not quantify that possibility.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "infer_psi",
+            "label": "Compare treated and control read-end peaks to infer Ψ sites",
+            "description": "Compare matched +CMC and −CMC alignments after scaling control-library size. Calculate CMC-dependent read-5′-end enrichment at positions one nucleotide 3′ of U relative to local read-end background, and retain reproducible candidate Ψ peaks in sufficiently covered features.",
+            "mechanism": "The primary calculation uses treated-minus-control read-5′-end counts at a candidate peak and local-window read-5′-end background. Its positional offset links the peak to the preceding RNA U. Coverage and reproducibility requirements qualify which sites can be called.",
+            "information_effect": "The derived sites attribute treatment-dependent RT-stop accumulation to candidate RNA Ψ positions at single-nucleotide resolution. Background stops require the −CMC comparison, and downstream termination can shadow upstream sites.",
+            "input_states": null,
+            "output_states": null
+          }
+        ],
+        "checked_source_passages": [
+          {
+            "source_id": "paper:25192136",
+            "passage": "[b00003] Although more than 100 classes of RNA modifications have been characterized, primarily in tRNA and rRNA14, only three modified nucleotides have been identified within the coding sequences of mRNA – m6A, m5C, and inosine15–19. To define the global landscape of RNA pseudouridylation in vivo and determine whether mRNAs contain pseudouridine (Ψ), we developed a high-throughput method to identify Ψ in the transcriptome with single-nucleotide resolution. Ψ can be selectively modified with N-cyclohexyl-N′-(2-morpholinoethyl)carbodiimide metho-p-toluenesulfonate (CMC) to generate a block to reverse transcriptase (RT) one nucleotide 3′ to the pseudouridylated site20. We exploited this chemistry to determine the locations of Ψ using next-generation sequencing (Fig. 1a; see Methods). Mock-treated (−CMC) RNA fragments were processed in parallel to identify pseudouridine-independent RT stops."
+          },
+          {
+            "source_id": "paper:25192136",
+            "passage": "[b00020] CMC treatment of RNA fragments was as follows20. RNA was denatured in 5 mM EDTA at 80°C for 2 min, and then placed on ice. 0.5M CMC in BEU buffer (7 M urea, 4 mM EDTA, 50 mM bicine, pH 8.5) was added to a final concentration of 0.2 or 0.4 M CMC (4X RNA volume). CMC modification was carried out at 40°C for 30 min, followed by ethanol precipitation. Subsequent reversal of modification of Us and Gs was carried out in NaCO3 buffer (50 mM sodium-carbonate, pH 10.4, 2 mM EDTA) at 50°C for 2 hr, followed by precipitation. In parallel mock-treated samples were incubated in BEU buffer without CMC."
+          },
+          {
+            "source_id": "paper:25192136",
+            "passage": "[b00021] RNA fragments were dephosphorylated with CIP (NEB; M0290) and PNK (NEB; M0201), followed by size selection and elution of 80–100, 100–120, and 120–140 nt fragments on an 8% urea-TBE PAGE gel, followed by precipitation. RNA fragments were eluted from gel slices overnight at 4°C with gentle rocking in 400 μl RNA Elution Buffer (300 mM NaOAc pH 5.5, 1 mM EDTA, 100 U/mL RNasin (Promega; N2615)). Ligation of a pre-adenylated 3′ adaptor (IDT;/5Phos/TGGAATTCTCGGGTGCCAAGG/3ddC/) was carried out with T4 RNA ligase (NEB; M0204) in 1X buffer without ATP (50 mM Tris-HCl, pH 7.8, 10 mM MgCl2, 10 mM DTT) at 22°C for 2.5 hr, followed by precipitation."
+          },
+          {
+            "source_id": "paper:25192136",
+            "passage": "[b00022] Reverse transcription (RT) was carried out using AMV-RT (Promega; M5108) with the following conditions. The RT primer (IDT;/5Phos/GATCGTCGGACTGTAGAACTCTGAACCTGTCGGTGGTCGCCGTATCATT/iSp18/CACTCA/iSp18/GCCTTGGCACCCGAGAATTCCA) and RNA were denatured and annealed in RT buffer (50 mM Tris-Cl pH 8.6, 60 mM NaCl, 10 mM DTT). After annealing, dNTPs (3.3 mM each final) and MgCl2 (6mM final) were added, and RT was carried out at 42°C for 1 hr. Truncated cDNAs were size selected and purified on an 8% urea-TBE PAGE gel, followed by precipitation. cDNAs were eluted from gel slices overnight at room temperature with gentle rocking in 400 μl DNA Elution Buffer (300 mM NaCl, 10 mM Tris, pH 8.0)."
+          },
+          {
+            "source_id": "paper:25192136",
+            "passage": "[b00023] cDNAs were circularized with circLigase (Epicentre; CL4115K), and amplified by PCR with Phusion (NEB; M0530) with the forward primer (IDT; AATGATACGGCGACCACCGA), and a barcoded reverse primer (IDT; CAAGCAGAAGACGGCATACGAGATXXXXXXGTGACTGGAGTTCCTTGGCACCCGAGAATTCCA). PCR products were gel purified, precipitated, and sequenced on an Illumina HiSeq 2000."
+          }
+        ]
+      },
+      {
+        "method": "mab-seq",
+        "status": "supported",
+        "revision_count": 0,
+        "record_directory": "completed/final_52047726/full_run_01/cards/mab-seq/attempt_001",
+        "artifact_pins": {
+          "card.json": "86151c8d9e724e4714b2377d68b767084b05de0d43962a985a3cffc501b5e00c",
+          "source_registry.json": "3b02caf2177be97b62ea28faf9b96bfcc4f11e15bd054bd7c3a04de7db4bceda",
+          "extraction.json": "8f5cb7c08c00b162f080992bba4e9b95aea48bcbb68cd246cd9105770300ef70",
+          "review.json": "f780b70c436ef8ad8fa23fa2b80e83f3106aadc3ca7733c04b0448b65584b1b9",
+          "graph.json": "2a760ce902cea262fa086a828c31b824a586fc7140aa04b67af03cfffa0351f3",
+          "stages.json": "b7189a46344eb5f7edb730fcc7fa0833c7dd8e53a8a5dff14b24ae42fd77fa3c"
+        },
+        "sources_equal_to_archive": true,
+        "review_bound_to_final_candidate": true,
+        "review_checks": 57,
+        "counts_before": {
+          "operations": 3,
+          "states": 4,
+          "flows": 6
+        },
+        "counts_after": {
+          "operations": 3,
+          "states": 5,
+          "flows": 6
+        },
+        "finding": "Distinguishes M.SssI-treated and untreated comparator DNA. The C/T code measures combined original 5fC/5caC at CpGs, not separate identities of those bases. Incomplete methylation/conversion and non-CpG limits remain explicit.",
+        "remaining_issue": "The older extraction already captured these central distinctions. A new accepted output and more typed attribution properties do not establish better scientific accuracy.",
+        "classification": "Strong prior content preserved",
+        "exact_operation_fields": [
+          {
+            "id": "methylate_cpg",
+            "label": "Methylate unmodified CpG cytosines with M.SssI",
+            "description": "Treat genomic DNA with M.SssI and SAM to convert originally unmodified CpG C to 5mC before bisulfite conversion. The preparation retains the pre-existing modified cytosine classes.",
+            "mechanism": "M.SssI is a DNA CpG methyltransferase. Its methylation protects formerly unmodified CpG C as bisulfite-resistant 5mC while leaving 5fC/5caC available for bisulfite conversion. Poor non-CpG activity restricts this protection to the CpG-based interpretation, and incomplete CpG methylation causes background.",
+            "information_effect": "Introduces protective 5mC on originally unmodified CpGs. This removes their later T readout and groups them with original 5mC/5hmC as C; the distinction between original C and original 5mC is not retained in the eventual MAB-Seq C/T readout.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "bisulfite_pcr_control",
+            "label": "Bisulfite-convert and PCR-amplify comparator DNA",
+            "description": "Expose comparator genomic DNA directly to bisulfite, then PCR-amplify the converted DNA. Efficiently converted C/5fC/5caC positions are represented as T in the amplified sequence; 5mC/5hmC positions are represented as C.",
+            "mechanism": "Sodium bisulfite deaminates unmodified C and 5fC to uracil and 5caC to 5caU, which give T in the copied sequence. 5mC/5hmC resist conversion and give C. Uracil+ DNA polymerase supports PCR of bisulfite-treated templates.",
+            "information_effect": "The copied comparator DNA carries a C/T encoding of conversion susceptibility: T combines original C, 5fC and 5caC, while C combines original 5mC and 5hmC. There is no selective 5fC/5caC T signal in this untreated route.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "bisulfite_pcr_mab",
+            "label": "Bisulfite-convert and PCR-amplify M.SssI-treated DNA",
+            "description": "Expose the M.SssI-treated genomic DNA to bisulfite, then PCR-amplify the converted DNA. At protected CpGs, original 5fC/5caC positions become T while original C/5mC/5hmC positions become C in the amplified sequence.",
+            "mechanism": "Bisulfite converts 5fC to uracil and 5caC to 5caU, yielding T after PCR; newly installed and pre-existing 5mC, together with 5hmC, yield C. Uracil+ DNA polymerase supports amplification of the bisulfite-converted templates. Imperfect M.SssI methylation and unequal bisulfite conversion efficiencies qualify this idealized encoding.",
+            "information_effect": "The PCR DNA sequence encodes combined original 5fC+5caC as T at CpGs. Sequencing and genomic assignment are needed to turn this physical encoding into per-site T/(C+T) observations. The two oxidized bases remain indistinguishable, non-CpG T lacks this specificity, and quantitative interpretation requires accounting for incomplete protection and conversion.",
+            "input_states": null,
+            "output_states": null
+          }
+        ],
+        "checked_source_passages": [
+          {
+            "source_id": "paper:25362244",
+            "passage": "[b00008] Recognizing the limitation of affinity-enrichment methods and several recently developed chemical modification-assisted BS-seq methods that require subtraction of BS-seq signals to indirectly map 5fC or 5caC 19–21 (Supplementary Fig. 1a), we have explored MAB-seq, an approach that aims to achieve direct and simultaneous measurement of 5fC and 5caC at single-base resolution (Fig. 1a). In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a). In MAB-seq, genomic DNA is first treated with the bacterial DNA CpG methyltransferase M.SssI, an enzyme that is originally isolated from Spiroplasma sp. strain MQ1 and is known to efficiently methylate cytosines within CpG dinucleotides 22. Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC. Subsequent sequencing would reveal 5fC and 5caC as T, whereas C/5mC/5hmC as C (Supplementary Fig. 2a). Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context. This limitation does not affect the application of this technique for two reasons: first, 5hmC is almost exclusively found in the CpG context (>99% in CpGs), even in mouse ESCs and neurons where non-CpG methylation is prevalent 17, 23; second, recent structural and biochemical analyses indicate that TET proteins have a strong preference for oxidizing 5mC in CpG sites than in non-CpG context 24, 25. Thus, oxidative modification of 5mC by TET proteins occurs predominantly in the CpG context, and MAB-seq may provide a quantitative measurement of the abundance of 5fC/5caC within CpG dyads."
+          }
+        ]
+      },
+      {
+        "method": "rasl-seq",
+        "status": "supported",
+        "revision_count": 0,
+        "record_directory": "completed/final_52047726/full_run_01/cards/rasl-seq/attempt_001",
+        "artifact_pins": {
+          "card.json": "d33adadbd8da643251c9e850f15341fabab71950f104a50aa109710286888741",
+          "source_registry.json": "c9f05a73ac68d453ab8008ff7ad47e4a1f3b1b9c3e09f8920636b70fcbf64276",
+          "extraction.json": "15178e56a9ff9179472563563d9f8466c7af3eb82b52cac9381e5b837c825d43",
+          "review.json": "e2a812b8b6dcc99148b30e72d8ef5240582e4e44d23eed24a5fb954d64e78bb8",
+          "graph.json": "59d67af47a8004211e75a3a47a14d21298cb28ff29cef3e301186732eed70a49",
+          "stages.json": "9fbeb65c40db26de946509b70a03892cdf353538aa281a329e0b2f3d4e6f4957"
+        },
+        "sources_equal_to_archive": true,
+        "review_bound_to_final_candidate": true,
+        "review_checks": 135,
+        "counts_before": {
+          "operations": 8,
+          "states": 11,
+          "flows": 18
+        },
+        "counts_after": {
+          "operations": 8,
+          "states": 11,
+          "flows": 18
+        },
+        "finding": "Ligation creates synthetic DNA-probe reporters, not reverse-transcribed cDNA. Sample correspondence is maintained in wells, then a PCR-added sample barcode; pooling occurs after indexing. Target-probe counts are not a direct census of original RNA molecules.",
+        "remaining_issue": "These central distinctions were already present in the archive. Probe-selection and repeat-region qualifications move among fields; checking only information_effect would falsely report lost content.",
+        "classification": "Strong prior content preserved; field location varies",
+        "exact_operation_fields": [
+          {
+            "id": "ligate",
+            "label": "Ligate adjacent RNA-annealed DNA probes",
+            "description": "Join adjacent DNA probes in each selected bead-bound RNA complex to create a continuous, PCR-amplifiable DNA probe reporter with both common primer regions.",
+            "mechanism": "T4 DNA ligase joins probes aligned on their complementary RNA template at the junction between the index-bearing probe’s 5′ phosphate and the P5-bearing probe’s 3′ hydroxyl. The RNA templates adjacency; the resulting covalent product is DNA from the synthetic probes.",
+            "information_effect": "The joined target-specific probe sequence carries transcript identity. It reports intended RNA-templated ligation rather than the full transcript sequence; random and nonspecific ligation remain possible.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "elute",
+            "label": "Elute ligated DNA probes from RNA templates",
+            "description": "Release ligated DNA probes from their RNA templates and collect the soluble probe-containing supernatant into corresponding separate PCR wells.",
+            "mechanism": "Heating dissociates the ligated probe/template hybrids. Magnetic separation permits collection of released probes from the bead-associated preparation.",
+            "information_effect": "Transcript information remains in the joined DNA probe sequence after physical dissociation from RNA. Source-to-PCR well correspondence preserves sample identity before bar-coding.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "index_pcr",
+            "label": "Incorporate sample barcodes and P7 by PCR",
+            "description": "Amplify each separate probe eluate using common P5 and a sample-specific bar-coding primer, incorporating the sample barcode and P7 region into the DNA probe library.",
+            "mechanism": "The bar-coding primer has a 3′ common index-primer region for priming, a 7-nt barcode and a 5′ P7 region. Together with common P5 and DNA polymerase it amplifies the ligated probe product; P5/P7 regions support Illumina cluster generation.",
+            "information_effect": "Post-ligation PCR introduces a physical sample barcode while retaining the gene-specific probe core. The barcode labels a sample/condition, not an individual original RNA molecule.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "pool",
+            "label": "Pool and purify indexed PCR products",
+            "description": "Combine the separately indexed sample libraries and purify the PCR products away from free primers, producing one pooled sequencing library.",
+            "mechanism": "Sample products can be physically mixed after bar-coding because each intended probe product carries its originating sample barcode. Purification retains PCR library products while removing free primers.",
+            "information_effect": "Physical well separation is replaced by barcode-based sample attribution in the pooled library.",
+            "input_states": null,
+            "output_states": null
+          },
+          {
+            "id": "decode",
+            "label": "Assign intended probe products and count tags by sample",
+            "description": "Match sequence tags to intended ligation-product sequences, segregate them by sample barcode, and compile tag counts for each selected gene in each sample.",
+            "mechanism": "The designed probe-product sequence identifies the targeted gene and the barcode identifies the sample. Unrelated random ligation products are not counted as expected products. Probe-pair-dependent efficiency means the reporter counts are interpreted as targeted expression readouts, with comparative fold differences supported by probe validation.",
+            "information_effect": "Produces a selected-gene-by-sample count table. Gene identity comes from the known synthetic probe product and sample identity from the decoded barcode; this is not whole-transcriptome sequence discovery or a direct census of original RNA molecules.",
+            "input_states": null,
+            "output_states": null
+          }
+        ],
+        "checked_source_passages": [
+          {
+            "source_id": "paper:22470064",
+            "passage": "[b00005] As diagramed in Figure 1, a pair of oligonucleotides is designed to target a specific splice junction region in each transcript from a selected panel of genes (Yeakley et al., 2002). Each oligonucleotide also carries a universal primer sequence and one of the primers also contains a 5′ phosphate. A pool of such probes is annealed to total RNA, and corresponding mRNAs are captured using oligo-dT biotin beads. After washing away free oligonucleotides, the aligned pairs of probes correctly annealed to their complementary templates are ligated by T4 ligase, thus converting the pairs of single probes to single PCR amplicons. The products from each sample (conditions) are indexed by performing a limited PCR amplification using a set of bar-coded primers in conjunction with a common primer. The products are pooled, purified, quantified, and subjected to high throughput sequencing."
+          },
+          {
+            "source_id": "paper:22470064",
+            "passage": "[b00052] Transfer the plates to the magnetic stand and then pipette 5 μl of supernatant containing released probes from each well into the corresponding well in a new 384-well PCR plate."
+          },
+          {
+            "source_id": "paper:22470064",
+            "passage": "[b00063] Map the sequence tags to the sequences that correspond to intended ligation products and segregate tags for individual samples based on their bar-codes."
+          },
+          {
+            "source_id": "paper:22470064",
+            "passage": "[b00064] Compile tag numbers for each gene in each sample for further analysis."
+          },
+          {
+            "source_id": "paper:22470064",
+            "passage": "[b00090] Figure 1Overview of the RASL-seq technology. All steps, including annealing, selection, ligation and elution, can be carried out manually or on a customized Biomek FX robot. One of the targeting oligos (the upstream one) contains a 5′ phosphate. Each oligo contains a specific universal primer as indicated. After incorporating bar-codes during PCR, the products are pooled, purified, and sequenced on Illumina sequencer (GAII or HiSeq 2000). The first sequencing run reads the ligated region from the P5 primer and the second identifies the bar-coded region from the index primer."
+          }
+        ]
+      }
+    ]
+  }
 }
