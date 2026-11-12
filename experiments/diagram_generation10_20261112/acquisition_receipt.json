@@ -1,0 +1,21 @@
+{
+  "format_version": "diagram_source_preparation_receipt/1",
+  "acquisition_job_id": "52084756",
+  "scope": "Model-free acquisition and identity registration of post-2016 original assay papers; no workflow or evolutionary extraction.",
+  "source_run": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/sources_52084756",
+  "outcome": "Source job stopped at the required-ten-input preflight. Seven methods were staged, while multiple additional registered primary papers were present but staging failed on an existing supplement directory.",
+  "original_input_manifest_sha256": "716edf7ada4050c107da0cdbf2d08f9cf9756e50cf6f523683e4a39d08e39e63",
+  "original_source_log_sha256": "06983f2817b0b5906d84cf99e7c5397639898b2a988bc0ee06472e3e69a24778",
+  "root_cause": "Raw supplement registrations and copied model-input files both used methods/<method>/supplement_1. stage_source.mkdir() raised FileExistsError after successful primary registration; this was a staging defect, not missing primary evidence.",
+  "repair": "Keep raw registration folders unchanged; stage normalized inputs under methods/<method>/inputs/<label>. assemble_downloaded.py reads completed receipts, verifies original/text hashes and exact assigned identities, then writes a fresh ten-paper manifest with no network or model calls.",
+  "target_scope_correction": "scNMT-seq is present in the existing Illumina poster inventory. The new candidate pool excludes it and substitutes already-acquired Paired-Tag. catalogue_absence_audit.json records all name/alias and reference-PMID checks against the actual273-method inventory.",
+  "cancelled_content_job": {
+    "job_id": "52085725",
+    "status": "Parent reports cancellation while pending, before content model calls. Original submission artifacts are retained.",
+    "reason": "Freeze corrected target selection and catalogue-absence gate before native content execution."
+  },
+  "assembly_status": "Prepared and tested; actual assembly is to run as the first stage of the replacement content Slurm allocation.",
+  "no_target_illumina_diagrams": "No matching method ID/name/verified alias or assigned primary PMID was found for the selected ten in the pinned273-method inventory. This is scoped inventory absence, not a worldwide claim about Illumina resources.",
+  "source_originals_unchanged": true,
+  "new_model_calls_in_repair": 0
+}

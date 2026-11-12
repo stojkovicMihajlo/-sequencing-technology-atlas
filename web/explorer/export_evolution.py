@@ -67,7 +67,7 @@ def export(index_path, receipt_path, destination, snapshot, label, method_index=
         manifest = {'format_version':'atlas-evolution-explorer/1','snapshot':snapshot,'label':label,
                     'source_index_sha256':sha(raw),'source_rebuild_receipt_sha256':sha(receipt_path.read_bytes()),
                     'counts':{'experimental_relationships':main,'supporting_relationships':len(edges)-main,
-                              'nodes':len(nodes),'reviewed_overlays':receipt.get('reviewed_overlays_recompiled')},
+                              'nodes':len(nodes),'reviewed_overlays':receipt.get('reviewed_overlays_recompiled',receipt.get('reviewed_method_histories'))},
                     'identity_issue_count':len(original.get('method_identity_issues',[])),
                     'display_name_source':display_source,
                     'nodes':nodes,'edges':summaries,

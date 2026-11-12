@@ -96,8 +96,8 @@ class ConsequenceAndLimits(Record):
 class ExperimentalChange(Record):
     id: str = Field(min_length=1, description='Local address for this comparison, not a primitive class or mechanism label.')
     compared_feature: str = Field(min_length=1, description='Identify the experimental feature being compared; not a vague benefit such as better library preparation.')
-    before: str | None = Field(description='The specified earlier implementation at this feature; null if the earlier evidence is unavailable.')
-    after: str = Field(min_length=1, description='What the later implementation does at the same feature, including consequential material/mechanism/placement distinctions.')
+    before: str | None = Field(description='Answer the compared feature with the earlier material, ordered transformation and product. Lead with the mechanism relevant to the difference, not an example experiment; null if earlier evidence is unavailable.')
+    after: str = Field(min_length=1, description='Answer the same feature from the same workflow boundary. State explicitly what replaces, adds to, moves or retains the earlier implementation, naming consequential material, mechanism and placement. Keep unrelated application context out of this comparison.')
     retained: list[str] = Field(description='Features retained within the specific contribution being compared, when needed to delimit what is adopted or changed. Do not inventory everything the assays share. Shared features alone do not establish inheritance. Empty is allowed when no such feature is established.')
     workflow_locations: WorkflowLocations
     evidence: ChangeEvidence
@@ -194,6 +194,18 @@ unchanged. Do not infer inheritance from shared features. The retained list only
 delimits this contribution; it is not a checklist of similarities across assays.
 The before/after facts and technical consequence are primary. A broad relationship
 summary is not their substitute, and component size does not determine ancestry.
+Write a matched comparison, not two independent assay summaries. Lead both sides
+with the material and ordered transformation answering compared_feature. In after,
+explicitly state which earlier mechanism, substrate, position or routing is changed
+or retained. Keep application-specific cell types and demonstration experiments in
+tested_context unless changing that context is itself the compared feature.
+Do not bury the distinguishing move among a list of common surrounding steps.
+For example, a library-route comparison can say that direct DNA-adapter ligation
+to a cDNA end replaces cDNA circularization followed by restriction reopening.
+A substrate/placement comparison can distinguish tagging purified DNA after
+recovery from tagging antibody-selected chromatin on beads before recovery.
+These are writing examples, not expected changes or ancestors for every method;
+only the target sources determine which comparison and consequences are supported.
 
 Evidence.before comes from the cited earlier work; evidence.after from the later
 work. evidence.inheritance is the later source's actual attribution of use or

@@ -272,6 +272,11 @@ every change record. Judge factual before/after/retained descriptions, actual
 workflow locations and interfaces, source support versus attribution, and reported
 consequences/limits. A matching quote is not proof of entailment. A graph's accepted
 extraction does not establish a new historical interpretation or compatibility.
+Check that before and after answer the same experimental feature at the same
+workflow boundary and make the specific change or retention explicit. Request
+revise when supported facts are presented as two broad assay summaries, or when
+unrelated example specimens obscure the actual difference. Use the existing
+factual_assessment and workflow_assessment; do not invent a change to satisfy this.
 Independently check contributor_kind and explain whether the cited contribution
 is an experimental assay/design contribution or supporting software/resource
 context in the existing factual/evidence assessments. Routine mapping, annotation
