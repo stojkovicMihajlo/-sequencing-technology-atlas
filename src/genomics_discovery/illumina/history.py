@@ -261,6 +261,14 @@ def build_history_index(manifest_path):
     for edge in edges:
         edge['relationship_layer'] = contribution_layer(edge['claim'], relation=edge['relation'])
         edge['historical_development_edge'] = is_assay_history(edge)
+    identity_issues = []
+    if manifest.get('method_registry'):
+        from .history_method_identity import bind_reviewed_methods
+        spec = manifest['method_registry']
+        registry = _read((manifest_path.parent / spec['path']).resolve(), spec['sha256'])
+        identity_issues = bind_reviewed_methods(nodes, edges, registry)
+        used = {e[k] for e in edges for k in ('source','target')}
+        nodes = {k:v for k,v in nodes.items() if v.get('kind') == 'bound_workflow' or k in used}
     # Detect contradictions rather than silently looping or choosing an arbitrary parent.
     pending = {n: set() for n in nodes}
     for e in edges:
@@ -271,9 +279,9 @@ def build_history_index(manifest_path):
         if not ready:
             raise ValueError("Historical contribution cycle needs review")
         pending = {n: predecessors - ready for n, predecessors in pending.items() if n not in ready}
-    return {"nodes": nodes, "edges": edges, "withheld": withheld, "coverage_reports": coverage_reports, "overlay_sha256": sorted(loaded),
+    return {"nodes": nodes, "edges": edges, "withheld": withheld, "coverage_reports": coverage_reports, "overlay_sha256": sorted(loaded), "method_identity_issues": identity_issues,
             "boundary": "Explicitly loaded, previously model-reviewed pilot overlays; no new scientific validation, "
-                        "date/priority verification, or canonical method identity resolution."}
+                        "date/priority verification, or exact earlier-Operation mapping. Canonical endpoints require explicit reviewed identity and pinned method metadata."}
 
 
 def technology_history(index, record_id, *, extraction_sha256=None, max_depth=2):

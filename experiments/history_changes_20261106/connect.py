@@ -12,7 +12,7 @@ import sys
 from genomics_discovery.illumina.extraction import read, sha, write
 from genomics_discovery.illumina.history import build_history_index, technology_history
 from genomics_discovery.illumina.history_bindings import load_reviewed_binding
-from genomics_discovery.illumina.relationships import HISTORICAL_RELATIONS
+from genomics_discovery.illumina.relationships import HISTORICAL_RELATIONS, is_assay_history
 
 
 def binding_candidates(index, citation_runs):
@@ -31,7 +31,7 @@ def binding_candidates(index, citation_runs):
         later = index['methods'][later_id]
         for item in graph['links']:
             claim = item['claim']
-            if claim['relation'] not in HISTORICAL_RELATIONS or claim.get('claim_scope') != 'seed_workflow':
+            if not is_assay_history({'relation': claim['relation'], 'claim': claim}) or claim.get('claim_scope') != 'seed_workflow':
                 continue
             publication = sources[claim['reference_id']]
             original = publication.get('original') or publication.get('provenance', {}).get('original', {})

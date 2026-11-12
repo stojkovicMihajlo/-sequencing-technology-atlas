@@ -1,5 +1,25 @@
 FULL-PAPER EXPERIMENTAL CHANGE PILOT
 
+12 NOVEMBER — EXPLICIT CONCURRENCY AND COMPLETE QUEUE REPORTING
+New batches use --agents N (--workers remains a compatibility alias). When the
+count is omitted, it resolves after selection-file loading to one agent slot per
+selected method, up to 50; no hidden two/four-agent fallback. The launcher accepts
+ATLAS_HISTORY_AGENTS or the legacy ATLAS_HISTORY_WORKERS and rejects conflicting
+overrides. With neither environment variable set it lets the CLI derive the count.
+This is the maximum number of simultaneous method investigations; nomination, analysis,
+revision and independent review within one method retain their existing order.
+Fifty selected source-ready methods and --agents 50 can start fifty native method
+processes. Source-held methods are not counted as active agents.
+All selected methods appear from the initial state as waiting or source_hold;
+counts update on start/finish events, without a polling supervisor. Each running
+method's own state.json retains its detailed native stage. A preparation or
+subprocess-start error marks that method failed while healthy siblings continue.
+Citation-only mode publishes method/contribution relationships without requiring
+an exact earlier Operation/State binding. It does not invent missing donor identity.
+A fifty-worker barrier test proves actual orchestration concurrency using mocked
+subprocesses, not live models or scientific results. Deployment and source-ready
+selection remain separate gates; do not stop the existing four-method pilot.
+
 Question: can the history author and independent reviewer recover an exact,
 source-backed experimental contribution rather than only assign a broad label?
 
@@ -54,8 +74,8 @@ bound; pair_candidates.json is a plan, not a reviewed method-to-method edge.
 The older paired-graph stage still uses its archived schema and is not passed off
 as the new explicit-change pair contract.
 
-Launch only in Qiu Slurm using launch.sbatch, sol6.1/xhigh, two concurrent history
-workers. The full extraction job/runtime remain unchanged. Freeze and pin this
+Launch new runs only in Qiu Slurm using launch.sbatch, sol6.1/xhigh, with an
+resolved agent count recorded in state.json. The original two-seed pilot used two workers. The full extraction job/runtime remain unchanged. Freeze and pin this
 runtime before submission; output directories are never reused. Durable backups
 are written under GROUP_HOME/mstojkov/atlas-results/history_changes_20261106.
 

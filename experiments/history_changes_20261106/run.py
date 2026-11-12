@@ -7,8 +7,9 @@ import json
 import os
 from pathlib import Path
 import sys
+from collections import Counter
 
-from genomics_discovery.illumina.extraction import read, sha, write
+from genomics_discovery.illumina.extraction import now, read, sha, write
 from genomics_discovery.illumina.history_inputs import resolve_article, snapshot_accepted
 from experiments.diagram_paper_pilot_20261106.run import checked_files, inside
 from experiments.pilot50_20261104.history_stage import prepare_index, pair_candidates
@@ -76,10 +77,30 @@ def reference_cache(snapshot, library, vault, output):
     return output
 
 
+MAX_HISTORY_WORKERS = 50
+
+
+def validate_request(args):
+    if any(not isinstance(mid, str) or not mid for mid in args.seed):
+        raise ValueError('Seed methods must be nonempty canonical method IDs')
+    if len(set(args.seed)) != len(args.seed):
+        raise ValueError('One history work unit per method; duplicate seed methods are not allowed')
+    if not args.seed and not getattr(args, 'review_existing', []):
+        raise ValueError('Select at least one new method or completed research review')
+    if args.workers is None:
+        # Resolve only after --selection has added its methods/reviews. Parallel
+        # by default: one slot per selected method, up to the supported maximum.
+        args.workers = min(len(args.seed) + len(getattr(args, 'review_existing', [])), MAX_HISTORY_WORKERS)
+    if type(args.workers) is not int or not 1 <= args.workers <= MAX_HISTORY_WORKERS:
+        raise ValueError(f'Choose an explicit history agent count from 1 to {MAX_HISTORY_WORKERS}')
+
+
 async def execute(args):
+    validate_request(args)
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('History pilot requires a Sherlock Slurm allocation')
     output = args.output.resolve(); output.mkdir(parents=True, exist_ok=False)
+    method_inventory = getattr(args, 'method_inventory', None) or args.batch / 'inventory.json'
     snapshot = output / 'accepted_snapshot'
     snapshot_result = snapshot_accepted(args.batch, snapshot)
     review_runs = {}
@@ -96,38 +117,51 @@ async def execute(args):
     index = prepare_index(snapshot, output / 'primary_selection.json')
     write(output / 'methods.json', index)
     cache = reference_cache(snapshot, args.library, args.vault, output / 'reference_cache.json')
+    citation_runs = {}
+    for mid in methods_requested:
+        method = index['methods'].get(mid)
+        item = {'status': 'waiting', 'path': str(output / 'citations' / mid),
+                'mode': 'fresh_review_of_unchanged_research' if mid in review_runs else 'new_full_paper_research'}
+        if not method or method['status'] != 'ready':
+            item.update(status='source_hold', reason=method.get('hold_reason') if method else 'Extraction not yet accepted')
+        citation_runs[mid] = item
     state = {'status': 'citation_research', 'job_id': os.environ['SLURM_JOB_ID'],
-        'seeds': methods_requested, 'citation_runs': {}, 'snapshot': snapshot_result, 'workers': args.workers,
+        'seeds': methods_requested, 'citation_runs': citation_runs, 'snapshot': snapshot_result, 'workers': args.workers,
         'analysis_format': 'citation_analysis/4', 'model': 'gpt-6.1-sol', 'effort': 'xhigh'}
-    write(output / 'state.json', state)
+    def checkpoint():
+        # Event-driven progress; waiting work remains visible before a slot opens.
+        # A native stage's detailed progress is in its own saved state.json.
+        state['counts'] = dict(Counter(row['status'] for row in state['citation_runs'].values()))
+        state['updated_at'] = now()
+        write(output / 'state.json', state)
+    checkpoint()
     semaphore = asyncio.Semaphore(args.workers)
 
     async def one(mid):
+        row = state['citation_runs'][mid]
+        if row['status'] == 'source_hold':
+            return
         async with semaphore:
-            method = index['methods'].get(mid)
-            if not method or method['status'] != 'ready':
-                state['citation_runs'][mid] = {'status': 'source_hold', 'reason': method.get('hold_reason') if method else 'Extraction not yet accepted'}
-                write(output / 'state.json', state); return
-            destination = output / 'citations' / mid
-            paper = method['selected_primary']
-            runner = str(args.runtime / 'experiments/citation_lineage_pilot/run.py')
-            if mid in review_runs:
-                old = read(review_runs[mid] / 'inputs/seed_binding.json')
-                if old['parent_artifact_pins']['extraction.json'] != method['extraction_sha256']:
-                    state['citation_runs'][mid] = {'status': 'source_hold',
-                        'reason': 'Existing research review would join a different extracted workflow version'}
-                    write(output / 'state.json', state); return
-                command = [sys.executable, runner, 'review-existing', '--previous', str(review_runs[mid]), '--output', str(destination)]
-            else:
-                command = [sys.executable, runner, 'run',
-                    '--batch', str(snapshot), '--inventory', str(args.batch / 'inventory.json'), '--record', mid,
-                    '--paper', paper['source_id'], '--article', paper['article'], '--source-cache', str(cache),
-                    '--output', str(destination)]
-            row = {'status': 'running', 'path': str(destination), 'command': command,
-                   'mode': 'fresh_review_of_unchanged_research' if mid in review_runs else 'new_full_paper_research'}
-            state['citation_runs'][mid] = row; write(output / 'state.json', state)
-            log = output / (mid + '.log')
             try:
+                method = index['methods'][mid]
+                destination = Path(row['path'])
+                paper = method['selected_primary']
+                runner = str(args.runtime / 'experiments/citation_lineage_pilot/run.py')
+                if mid in review_runs:
+                    old = read(review_runs[mid] / 'inputs/seed_binding.json')
+                    if old['parent_artifact_pins']['extraction.json'] != method['extraction_sha256']:
+                        row.update(status='source_hold',
+                            reason='Existing research review would join a different extracted workflow version')
+                        checkpoint(); return
+                    command = [sys.executable, runner, 'review-existing', '--previous', str(review_runs[mid]), '--output', str(destination)]
+                else:
+                    command = [sys.executable, runner, 'run',
+                        '--batch', str(snapshot), '--inventory', str(method_inventory), '--record', mid,
+                        '--paper', paper['source_id'], '--article', paper['article'], '--source-cache', str(cache),
+                        '--output', str(destination)]
+                log = output / (mid + '.log')
+                row.update(status='running', command=command, started_at=now(), log=str(log))
+                checkpoint()
                 with log.open('wb') as stream:
                     process = await asyncio.create_subprocess_exec(*command, stdout=stream, stderr=asyncio.subprocess.STDOUT)
                     code = await process.wait()
@@ -135,8 +169,9 @@ async def execute(args):
                 row.update(status='completed' if code == 0 and native.get('status') == 'completed' else 'failed',
                            exit_code=code, native_state=native.get('status'), reason=native.get('error'), log=str(log))
             except Exception as exc:
-                row.update(status='failed', reason=f'{type(exc).__name__}: {exc}', log=str(log))
-            write(output / 'state.json', state)
+                row.update(status='failed', reason=f'{type(exc).__name__}: {exc}')
+            row['finished_at'] = now()
+            checkpoint()
 
     await asyncio.gather(*(one(mid) for mid in methods_requested))
     completed = {mid: row['path'] for mid, row in state['citation_runs'].items() if row['status'] == 'completed'}
@@ -147,17 +182,24 @@ async def execute(args):
         overlays.append({'path': str(root / 'graph.json'), 'sha256': sha(root / 'graph.json'),
             'seed_extraction': str(Path(binding['parent_attempt']) / 'extraction.json'),
             'source_registry': {'path': str(root / 'inputs/sources.json'), 'sha256': sha(root / 'inputs/sources.json')}})
-    write(output / 'history_inputs.json', {'format_version': 'illumina_history_inputs/1', 'overlays': overlays})
+    from genomics_discovery.illumina.history_method_identity import method_registry, connectivity_report
+    registry_path = output / 'method_registry.json'
+    write(registry_path, method_registry(snapshot, method_inventory))
+    write(output / 'history_inputs.json', {'format_version': 'illumina_history_inputs/1', 'overlays': overlays,
+        'method_registry': {'path': str(registry_path), 'sha256': sha(registry_path)}})
     # A reviewed method-level relationship does not require extraction or exact
     # Operation/State mapping of the cited donor. Publish the citation graph first.
     from genomics_discovery.illumina.history import build_history_index
     from genomics_discovery.illumina.history_view import build as build_history_view
     history_index = build_history_index(output / 'history_inputs.json')
     write(output / 'history_index.json', history_index)
+    connectivity = connectivity_report(history_index, methods_requested)
+    write(output / 'CONNECTIVITY.json', connectivity)
+    write(output / 'ATLAS_ADDITION_QUEUE.json', {'history_index_sha256': sha(output / 'history_index.json'), 'entries': connectivity['atlas_addition_queue']})
     state['history_view'] = build_history_view(output / 'history_index.json', output / 'view')
     state.update(status='completed_with_issues' if any(r['status'] != 'completed'
                  for r in state['citation_runs'].values()) else 'completed', completed_citation_runs=len(completed))
-    write(output / 'state.json', state)
+    checkpoint()
     write(output / 'RESULT.json', state)
     if completed and not getattr(args, 'citation_only', False):
         from types import SimpleNamespace
@@ -170,21 +212,29 @@ async def execute(args):
             'unbound_contributions': connections['unbound_contributions']}
         if connections['status'] != 'completed':
             state['status'] = 'completed_with_issues'
-        write(output / 'state.json', state); write(output / 'RESULT.json', state)
+        checkpoint(); write(output / 'RESULT.json', state)
     return state
 
 
-if __name__ == '__main__':
+def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('batch', 'library', 'vault', 'runtime', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--method-inventory', type=Path, help='Pinned complete method catalogue, including known unextracted methods; defaults to batch inventory.')
     parser.add_argument('--seed', action='append', default=[])
     parser.add_argument('--selection', type=Path)
-    parser.add_argument('--workers', type=int, default=2)
+    parser.add_argument('--agents', '--workers', dest='workers', type=int,
+                        choices=range(1, MAX_HISTORY_WORKERS + 1), default=None,
+                        help='Maximum concurrent method investigations; default is one per selected method, up to 50. --workers is a compatibility alias.')
     parser.add_argument('--citation-only', action='store_true', help='Publish the reviewed method/contribution graph and viewer; omit optional exact workflow-location mapping.')
     parser.add_argument('--review-existing', type=Path, action='append', default=[])
     parser.add_argument('--prior-manifest', type=Path, action='append', default=[])
-    args = parser.parse_args()
+    return parser
+
+
+def parse_args(argv=None):
+    parser = build_parser()
+    args = parser.parse_args(argv)
     if args.selection:
         plan = read(args.selection)
         if plan.get('format_version') != 'citation_history_selection/1':
@@ -192,9 +242,14 @@ if __name__ == '__main__':
         args.seed.extend(plan['seed_methods'])
         args.review_existing.extend(Path(p) for p in plan.get('review_existing', []))
         args.prior_manifest.extend(Path(p) for p in plan.get('prior_manifests', []))
-    if not args.seed and not args.review_existing:
-        parser.error('Select at least one new method or completed research review')
-    if len(set(args.seed)) != len(args.seed) or not 1 <= args.workers <= 4:
-        parser.error('Distinct explicit seeds and one to four history workers required')
+    try:
+        validate_request(args)
+    except ValueError as exc:
+        parser.error(str(exc))
+    return args
+
+
+if __name__ == '__main__':
+    args = parse_args()
     result = asyncio.run(execute(args))
     raise SystemExit(2 if any(r['status'] == 'failed' for r in result['citation_runs'].values()) else 0)

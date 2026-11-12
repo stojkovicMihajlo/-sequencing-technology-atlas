@@ -27,10 +27,11 @@ cd "$ATLAS_REPOSITORY"
 backup_results() {
     result_code=$?
     trap - EXIT
-    backup_root="$GROUP_HOME/mstojkov/atlas-results/history_changes_20261106"
+    backup_root="${ATLAS_HISTORY_BACKUP_ROOT:-$GROUP_HOME/mstojkov/atlas-results/history_changes_20261106}"
     items=("$ATLAS_HISTORY_RUNTIME.tar.gz" "${ATLAS_HISTORY_RUNTIME}_manifest.json")
-    for item in "$ATLAS_HISTORY_OUTPUT" "software_${SLURM_JOB_ID}.xml"; do
-        [[ ! -e "$ATLAS_HISTORY_ROOT/$item" ]] || items+=("$item")
+    for item in "$ATLAS_HISTORY_OUTPUT" "software_${SLURM_JOB_ID}.xml" \
+                "${ATLAS_HISTORY_PREFLIGHT:-}" "additional_software_${SLURM_JOB_ID}.xml"; do
+        [[ -z "$item" || ! -e "$ATLAS_HISTORY_ROOT/$item" ]] || items+=("$item")
     done
     mkdir -p "$backup_root"
     if tar -czf "$backup_root/job_${SLURM_JOB_ID}.tar.gz" -C "$ATLAS_HISTORY_ROOT" \
@@ -47,6 +48,13 @@ trap backup_results EXIT
 import hashlib,json,os
 from pathlib import Path
 root=Path(os.environ['ATLAS_REPOSITORY'])
+from experiments.history_changes_20261106.run import MAX_HISTORY_WORKERS
+agents = os.environ.get('ATLAS_HISTORY_AGENTS')
+legacy_workers = os.environ.get('ATLAS_HISTORY_WORKERS')
+assert not (agents and legacy_workers and agents != legacy_workers), 'Conflicting history agent-count overrides'
+override = agents or legacy_workers
+if override:
+    assert 1 <= int(override) <= MAX_HISTORY_WORKERS, 'History agent count is outside the supported range'
 manifest=json.loads((root.parent/(root.name+'_manifest.json')).read_text())
 for name,expected in manifest['files'].items():
     assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected,name
@@ -70,6 +78,13 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p asynci
     experiments/history_changes_20261106/test_history_changes.py \
     --junitxml="$ATLAS_HISTORY_ROOT/software_${SLURM_JOB_ID}.xml"
 history_options=()
+if [[ -n "${ATLAS_HISTORY_METHOD_INVENTORY:-}" ]]; then
+    history_options+=(--method-inventory "$ATLAS_HISTORY_METHOD_INVENTORY")
+fi
+history_agent_count="${ATLAS_HISTORY_AGENTS:-${ATLAS_HISTORY_WORKERS:-}}"
+if [[ -n "$history_agent_count" ]]; then
+    history_options+=(--agents "$history_agent_count")
+fi
 if [[ "${ATLAS_HISTORY_CITATION_ONLY:-0}" == "1" ]]; then
     history_options+=(--citation-only)
 fi
@@ -78,5 +93,5 @@ fi
     --library "$ATLAS_PROJECT_ROOT/technology_sources/illumina_library_20261105_07" \
     --vault "$ATLAS_PROJECT_ROOT/technology_sources/illumina_task2_sources_20261105_08" \
     --runtime "$ATLAS_REPOSITORY" --output "$ATLAS_HISTORY_ROOT/$ATLAS_HISTORY_OUTPUT" \
-    --selection "$ATLAS_HISTORY_SELECTION" --workers "${ATLAS_HISTORY_WORKERS:-4}" \
+    --selection "$ATLAS_HISTORY_SELECTION" \
     "${history_options[@]}"

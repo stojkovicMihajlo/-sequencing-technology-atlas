@@ -203,7 +203,7 @@ def test_absent_predecessor_requires_identified_experimental_method(defect):
 
 
 def test_new_native_review_requests_explicit_nullable_method_name():
-    from run import native_schema
+    from experiments.citation_lineage_pilot.run import native_schema
     schema=native_schema('review')['$defs']['MethodMatch']
     assert 'method_name' in schema['required']
     assert 'not_in_atlas' in schema['properties']['status']['enum']

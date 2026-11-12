@@ -18,7 +18,7 @@ def view_data(index):
         node = dict(original)
         kind = node['kind']
         node['workflow_status'] = ('extracted' if kind == 'bound_workflow' else
-            'not_extracted_or_not_matched' if kind in {'assay', 'general_method'} else
+            'not_extracted_or_not_matched' if kind in {'assay', 'general_method', 'unextracted_method'} else
             'component_or_other_contribution')
         nodes[key] = node
     edges = []
@@ -66,13 +66,14 @@ HTML = r'''<!doctype html><html lang="en"><meta charset="utf-8">
 </main><script>
 'use strict';const data=__DATA__;const $=id=>document.getElementById(id);
 const el=(tag,text)=>{const n=document.createElement(tag);if(text!=null)n.textContent=text;return n;};
-const types={documented_reuse:'Documented reuse',mechanistic_precedent:'Mechanistic precedent',comparison:'Comparison',method_development:'Method development',component_adoption:'Component adoption'};
-const historical=e=>['documented_reuse','method_development','component_adoption'].includes(e.relation);
+const types={documented_reuse:'Builds on this contribution',mechanistic_precedent:'Mechanistic precedent',comparison:'Comparison',method_development:'Method development',component_adoption:'Component adoption'};
+const historical=e=>e.relationship_layer==='history';
 const status=n=>n.workflow_status==='extracted'?'Extracted workflow':n.workflow_status==='not_extracted_or_not_matched'?'Workflow not extracted or not yet matched':'Experimental component or other contribution';
 const visible=()=>data.edges.filter(e=>$('context').checked||historical(e));
 function section(parent,title){const n=el('details');n.append(el('summary',title));parent.append(n);return n;}
 function citations(parent,values,e){for(const v of values||[]){const source=e.sources[v.source_id]||{},box=el('div'),link=el('a',source.title||'Source passage');if(/^https?:\/\//.test(source.url||'')){link.href=source.url;link.target='_blank';link.rel='noopener';}box.append(link,el('blockquote',v.quote));parent.append(box);}}
 function inspect(e){const r=$('report');r.replaceChildren(el('p',types[e.relation]||e.relation),el('h2',data.nodes[e.source].name+' → '+data.nodes[e.target].name));
+ r.append(el('p','Contribution used: '+(e.claim.contributor||e.source_contribution?.name||'See change records below')));
  const boundary=el('p',status(data.nodes[e.source])+' → '+status(data.nodes[e.target]));boundary.className='status';r.append(boundary);
  if(!historical(e)){const p=el('p','This is contextual evidence, not a demonstrated evolutionary relationship.');p.className='note';r.append(p);}
  for(const c of e.claim.change_records||[]){r.append(el('h3',c.compared_feature));const pair=el('div');pair.className='before-after';
