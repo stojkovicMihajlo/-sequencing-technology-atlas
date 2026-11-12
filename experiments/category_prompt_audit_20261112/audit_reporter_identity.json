@@ -1,0 +1,1786 @@
+{
+  "format": "category_prompt_annotation_audit/1",
+  "date": "2026-11-12",
+  "scope": {
+    "methods": [
+      "pd-seq",
+      "prop-pd",
+      "rad",
+      "bless",
+      "drop-seq",
+      "g-and-t-seq"
+    ],
+    "purpose": "Conditional category evaluation of archived assertion coverage and author-prompt simplification; no new method ontology, production changes or model calls."
+  },
+  "inspection": {
+    "level": "annotation_and_archived_review_inspection",
+    "read": "Complete extraction fields, including all State properties/components, Operation descriptions/mechanisms/information effects/roles/effects, Flows, scope, corrections, unknowns and archived reviewer rationales. Repeated evidence was deduplicated for reading; repeated PD-seq review text was grouped while retaining exact target coverage.",
+    "primary_papers_independently_reopened": false,
+    "registered_images_independently_reopened": false,
+    "limit": "Embedded quotations, image locators and historical acceptance report what earlier workers recorded. They are not independent confirmation of the original papers or image legibility. No new whole-paper scientific-validity verdict is made.",
+    "ui_limit": "No live UI inspection. Facts recorded in State properties must not be scored as absent merely because a compact view shows only the label; actual display defects remain untested.",
+    "finding_policy": "Source-reading narration is a readability/field-ownership issue, not automatically false science. Scientific qualifications and source-level caveats that affect interpretation must survive editing.",
+    "missing_assessment_limit": "No consequential missing assertion was established in this annotation audit; this is not proof of completeness against independently reopened papers."
+  },
+  "inputs": [
+    {
+      "path": "experiments/category_prompt_audit_20261112/README.txt",
+      "sha256": "5e639c5ed4420b99d14084ddd5c880a9ebe0cd4eb10c887a3e79986290572bc0"
+    },
+    {
+      "path": "experiments/category_prompt_audit_20261112/selection.json",
+      "sha256": "a50f9f07ee41a6e43a3d54365220873acd2189e5fa75ebe1cc135eb8be7ab029"
+    },
+    {
+      "path": "experiments/category_prompt_audit_20261112/baseline_records.json",
+      "sha256": "e0fffb93ccdbb7e13fb05468cd3e88b365d6d6eb3bc28110f16f5f73fde08ea8"
+    },
+    {
+      "path": "experiments/category_prompt_audit_20261112/author_contract.txt",
+      "sha256": "8247c5e485e11bbedc45de1ff1b93f63625ac0c82113617fa07ef70a421adcbb"
+    },
+    {
+      "path": "src/genomics_discovery/illumina/prompts.py",
+      "sha256": "a2b8b5d5692ea8c141b16bb7ede64ca8b0ddccd3906e9b395cb04de8c63e1026"
+    },
+    {
+      "path": "src/genomics_discovery/illumina/representation.py",
+      "sha256": "cc5e3c6d8f092ee0c0f6bfe82775e2e67a8006824d5cab6ac5d301be758b88a6"
+    }
+  ],
+  "conditional_category_requirements": [
+    {
+      "category": [
+        "Genome",
+        "Protein-Protein Interactions"
+      ],
+      "applies_to": [
+        "pd-seq",
+        "prop-pd"
+      ],
+      "requirements": [
+        {
+          "id": "binding_entities",
+          "when": "An encoded display or other surrogate is used for binding selection.",
+          "require": "Distinguish displayed peptide/protein, encoding molecule, actual bait and capture support; state the supported encoding-to-display relationship and any consequential frame or mapping restriction."
+        },
+        {
+          "id": "binding_measurement",
+          "when": "Selected sequence counts or enrichments are interpreted as candidate interactors.",
+          "require": "Identify what is sequenced/counted, selection-pool attribution and any control/comparison required for the stated conclusion. Preserve supported representation, growth/display/amplification and nonunique-mapping limits."
+        },
+        {
+          "id": "binding_routes",
+          "when": "Baits, controls, rounds or libraries are independently processed.",
+          "require": "Keep their identities and input-to-output correspondence recoverable; compact equivalent processing is acceptable without implying physical pooling."
+        }
+      ],
+      "do_not_require": [
+        "A protein bait merely because of the inherited category: scoped PD-seq uses apigenin.",
+        "A particular phage, display scaffold, control design or barcode in every method.",
+        "Physiological full-protein interaction or affinity/abundance interpretation from sequence counts alone."
+      ]
+    },
+    {
+      "category": [
+        "Genome",
+        "Rearrangements and Markers"
+      ],
+      "applies_to": [
+        "rad",
+        "bless"
+      ],
+      "requirements": [
+        {
+          "id": "genomic_entry",
+          "when": "Selection or labeling restricts which genomic positions/ends enter the readout.",
+          "require": "Identify the sampled regions/end population and the timing of restriction cleavage, original-end labeling and later fragmentation relative to labeling."
+        },
+        {
+          "id": "genomic_tag",
+          "when": "Adapters/linkers/barcodes carry attribution or make a later reaction selective.",
+          "require": "Record the tag carrier, local role and scope: sample identity, original-end recognition or amplification interface are different functions."
+        },
+        {
+          "id": "genomic_inference",
+          "when": "Reads are interpreted as genotypes or break locations.",
+          "require": "Separate raw sequence from downstream assignment; preserve restriction-site coverage, end accessibility/resection or other supported limits that change meaning."
+        }
+      ],
+      "do_not_require": [
+        "Both restriction-site sampling and direct break labeling in the same assay.",
+        "Every barcode to identify an original molecule.",
+        "Every sequenced fragment end to be an original biological break."
+      ]
+    },
+    {
+      "category": [
+        "Transcriptome",
+        "RNA Low-Level Detection"
+      ],
+      "applies_to": [
+        "drop-seq",
+        "g-and-t-seq"
+      ],
+      "requirements": [
+        {
+          "id": "rna_input_capture",
+          "when": "Native input, physical partition or captured RNA class determines representation.",
+          "require": "Record the actual prepared cells/lysate, capture population and compartment/support at the relevant boundary."
+        },
+        {
+          "id": "rna_reporter_attribution",
+          "when": "RNA is copied or a tag carries cell/molecule/sample identity.",
+          "require": "Distinguish hybridized RNA from copied cDNA, locate tags on their actual carrier, identify when the association is established, and preserve supported attribution limits."
+        },
+        {
+          "id": "rna_routes",
+          "when": "Material is pooled, physically split or data are integrated.",
+          "require": "Preserve the order and distinct material/data routes. State the carrier of same-cell correspondence without implying molecular linkage."
+        }
+      ],
+      "do_not_require": [
+        "Droplets, UMIs or one universal cell-indexing strategy for all low-input assays.",
+        "Full-length recovery from a 3-prime counting method or complete RNA coverage from poly(A) capture.",
+        "Physical DNA/RNA joining when same-cell data integration uses well/library records."
+      ]
+    }
+  ],
+  "methods": [
+    {
+      "method_id": "pd-seq",
+      "category": [
+        "Genome",
+        "Protein-Protein Interactions"
+      ],
+      "baseline_pins": {
+        "card.json": "1bac964a90b8031d92cce73e84db366feefdbfa4242942b2c8aa854e94329ea1",
+        "source_registry.json": "aa62dd1876947902076dceff1fb9ab4aeade678f9e7552765c0273cede430cfb",
+        "extraction.json": "639168f1773c17c934dcab2cbb519669f1834208bb9ee3117c5ef7d2eba0db7b",
+        "review.json": "c898763fe59f8b936aa40739ab81fe4707fa55fa2c33bda67a22d2af8793f0c2"
+      },
+      "archived_review_summary": {
+        "status": "supported",
+        "revision": 0,
+        "checks": 314,
+        "supported_accept": 314,
+        "interpretation": "Historical decisions, not new source verification."
+      },
+      "annotation_counts": {
+        "states": 33,
+        "operations": 22,
+        "properties": 81
+      },
+      "assertions": [
+        {
+          "id": "bait_and_display",
+          "status": "preserved",
+          "assertion": "Apigenin is the small-molecule bait on PEGA; mRNA-derived T7 inserts encode displayed protein sequences conditional on frame. The supplied commercial library is a prepared screening input with schematic mRNA provenance.",
+          "anchors": {
+            "state:a_beads": "/pd-seq/extraction/states/3",
+            "state_property:library:link": "/pd-seq/extraction/states/6/properties/1",
+            "operation:display_library": "/pd-seq/extraction/operations/2",
+            "correction:bait_identity": "/pd-seq/extraction/corrections/0",
+            "correction:interaction_identity": "/pd-seq/extraction/corrections/2"
+          },
+          "embedded_evidence_refs": [
+            "e1",
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "archived_review_refs": [
+            "r1",
+            "r2"
+          ]
+        },
+        {
+          "id": "controls_and_readout",
+          "status": "preserved",
+          "assertion": "Preclearing retains the suspension; independent A/C selection, phage propagation and in-frame human insert enrichment support candidate targets. This measures selected phage representation, with frame/mapping/propagation limits, rather than RNA abundance or validated native-cell interactions.",
+          "anchors": {
+            "operation:preclear/effects": "/pd-seq/extraction/operations/3/effects",
+            "operation:pan_a": "/pd-seq/extraction/operations/4",
+            "operation:pan_c": "/pd-seq/extraction/operations/5",
+            "operation:interpret": "/pd-seq/extraction/operations/21",
+            "state_property:candidates:limits": "/pd-seq/extraction/states/32/properties/3"
+          },
+          "embedded_evidence_refs": [
+            "e5",
+            "e6",
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "archived_review_refs": [
+            "r3",
+            "r4",
+            "r5"
+          ]
+        },
+        {
+          "id": "sample_routes",
+          "status": "preserved",
+          "assertion": "Separate PCR/index preparations retain seven sampled fractions. Library indexes identify selection sample/round; insert sequence identifies the displayed candidate. Third-round selection is not silently treated as the sequenced first/second-round fractions.",
+          "anchors": {
+            "state_property:reads:content": "/pd-seq/extraction/states/30/properties/2",
+            "state_property:a_e1_indexed:fraction": "/pd-seq/extraction/states/17/properties/2",
+            "operation:index_a_e1/information_effect": "/pd-seq/extraction/operations/7/information_effect",
+            "operation:sequence/inputs": "/pd-seq/extraction/operations/20/inputs",
+            "correction:sequenced_rounds": "/pd-seq/extraction/corrections/3"
+          },
+          "embedded_evidence_refs": [
+            "e10",
+            "e11",
+            "e12"
+          ],
+          "archived_review_refs": [
+            "r6",
+            "r7"
+          ]
+        },
+        {
+          "id": "input_reference_lineage",
+          "status": "unresolved",
+          "assertion": "Exact Input1/Input2 sampling origin relative to preclearing and A/C branches is intentionally unassigned in a nonblocking Unknown; no unsupported transfer repairs that gap.",
+          "anchors": {
+            "state:input1": "/pd-seq/extraction/states/14",
+            "state:input2": "/pd-seq/extraction/states/15",
+            "unknown:input_reference_sampling": "/pd-seq/extraction/unknowns/0"
+          },
+          "embedded_evidence_refs": [
+            "e10",
+            "e11"
+          ],
+          "archived_review_refs": [
+            "r8"
+          ]
+        }
+      ],
+      "missing_consequential_assertions_identified": [],
+      "findings": [
+        {
+          "id": "repeat_processing",
+          "classification": "consolidation_opportunity",
+          "finding": "Seven nearly identical PCR/index pairs repeat source-caption and granularity narration. Their distinct sample histories matter, but equivalent processing does not inherently require fourteen operation instances.",
+          "anchors": {
+            "operation:pcr_a_e1": "/pd-seq/extraction/operations/6",
+            "operation:index_a_e1": "/pd-seq/extraction/operations/7",
+            "operation:pcr_input2": "/pd-seq/extraction/operations/18",
+            "operation:index_input2": "/pd-seq/extraction/operations/19"
+          },
+          "candidate_improvement": "Use compact equivalent processing only if all retained fraction identities, sample-index assignments and input-output correspondence remain recoverable. Preserve genuinely different A/C selection and the unresolved Input1/Input2 lineage.",
+          "archived_review_refs": []
+        },
+        {
+          "id": "activation_information",
+          "classification": "field_ownership",
+          "finding": "activate.information_effect only says the support is prepared for bait immobilization; this restates a physical purpose rather than a distinct information claim.",
+          "anchors": {
+            "operation:activate/information_effect": "/pd-seq/extraction/operations/0/information_effect"
+          },
+          "candidate_improvement": "Keep support activation in description/mechanism; information_effect may be null if no separate supported attribution/preservation/loss is being stated.",
+          "archived_review_refs": []
+        }
+      ]
+    },
+    {
+      "method_id": "prop-pd",
+      "category": [
+        "Genome",
+        "Protein-Protein Interactions"
+      ],
+      "baseline_pins": {
+        "card.json": "76af43f72dad8c6ac94f852e466d15956083fc04e46378c33b828108c2228d10",
+        "source_registry.json": "e9d523d3fd0d9820eb72dd5958817e072ee30d2314d8a44a7b7e280db89cd9e8",
+        "extraction.json": "ded13fb211b7c0c12c1e87670e57e64e2a462ef3db82666536b75300ecdea0b8",
+        "review.json": "52c39c2476bf0cfa824d54f6c825bb4e0e460499926ca1715d5a8f0a893e713e"
+      },
+      "archived_review_summary": {
+        "status": "supported",
+        "revision": 0,
+        "checks": 99,
+        "supported_accept": 99,
+        "interpretation": "Historical decisions, not new source verification."
+      },
+      "annotation_counts": {
+        "states": 9,
+        "operations": 7,
+        "properties": 28
+      },
+      "assertions": [
+        {
+          "id": "designed_surrogate",
+          "status": "preserved",
+          "assertion": "Reference-derived C-terminal heptapeptides are encoded by synthetic DNA and displayed as M13 P8 fusions. They are a designed proteome representation, with incomplete/mutated representation and potentially nonunique peptide-to-protein mapping.",
+          "anchors": {
+            "state:peptide_design": "/prop-pd/extraction/states/1",
+            "state:display_library": "/prop-pd/extraction/states/3",
+            "operation:make_oligos": "/prop-pd/extraction/operations/1",
+            "operation:make_display": "/prop-pd/extraction/operations/2"
+          },
+          "embedded_evidence_refs": [
+            "e13",
+            "e14",
+            "e15",
+            "e16"
+          ],
+          "archived_review_refs": [
+            "r9"
+          ]
+        },
+        {
+          "id": "bait_and_selection",
+          "status": "preserved",
+          "assertion": "Independently supplied recombinant PDZ bait is immobilized on support; displayed peptides bind it. The Hybridize correction is implemented as binding. Human/viral libraries and bait selections are not asserted to be pooled.",
+          "anchors": {
+            "state:bait": "/prop-pd/extraction/states/4",
+            "state:immobilized_bait": "/prop-pd/extraction/states/5",
+            "operation:select": "/prop-pd/extraction/operations/4",
+            "correction:binding_not_hybridization": "/prop-pd/extraction/corrections/0",
+            "scope:ProP-PD": "/prop-pd/extraction/scope"
+          },
+          "embedded_evidence_refs": [
+            "e17",
+            "e18",
+            "e19",
+            "e20"
+          ],
+          "archived_review_refs": [
+            "r10",
+            "r11"
+          ]
+        },
+        {
+          "id": "encoding_counts",
+          "status": "preserved",
+          "assertion": "Selected phage DNA encodings yield peptide identities and counts attributed by selected-pool dataset identity to a bait, without an invented bait barcode. Counts are semiquantitative candidate-binding profiles with growth/display/PCR and physiological-context limits.",
+          "anchors": {
+            "state_property:sequence_reads:content": "/prop-pd/extraction/states/7/properties/2",
+            "state_property:sequence_reads:bait_attribution": "/prop-pd/extraction/states/7/properties/3",
+            "state_property:peptide_counts:interpretation_limits": "/prop-pd/extraction/states/8/properties/3",
+            "operation:count": "/prop-pd/extraction/operations/6"
+          },
+          "embedded_evidence_refs": [
+            "e21",
+            "e22",
+            "e23",
+            "e24"
+          ],
+          "archived_review_refs": [
+            "r12",
+            "r13"
+          ]
+        },
+        {
+          "id": "unavailable_details",
+          "status": "unresolved",
+          "assertion": "Plate format has diagram support while main-text confirmation of exact immobilization and selected-phage DNA/library preparation is absent. Two nonblocking Unknowns preserve this bounded evidence gap; a composite readout avoids inventing adapters or a specific preparation.",
+          "anchors": {
+            "unknown:primary_plate_confirmation": "/prop-pd/extraction/unknowns/0",
+            "unknown:selected_pool_sequencing_interface": "/prop-pd/extraction/unknowns/1",
+            "operation:isolate_sequence": "/prop-pd/extraction/operations/5"
+          },
+          "embedded_evidence_refs": [
+            "e25",
+            "e18",
+            "e26"
+          ],
+          "archived_review_refs": [
+            "r14",
+            "r15"
+          ]
+        }
+      ],
+      "missing_consequential_assertions_identified": [],
+      "findings": [
+        {
+          "id": "source_narration",
+          "classification": "presentation",
+          "finding": "identify, make_oligos, immobilize, select and isolate_sequence mix procedure with discussion of drawings, primary-text coverage or block construction. The unknown library interface and binding correction are scientifically meaningful and must remain available.",
+          "anchors": {
+            "operation:make_oligos/description": "/prop-pd/extraction/operations/1/description",
+            "operation:select/mechanism": "/prop-pd/extraction/operations/4/mechanism",
+            "operation:isolate_sequence/description": "/prop-pd/extraction/operations/5/description"
+          },
+          "candidate_improvement": "Move extraction-process narration to Evidence.rationale/Correction; retain direct binding, encoding, selection qualifications and the nonblocking evidence gaps.",
+          "archived_review_refs": []
+        }
+      ]
+    },
+    {
+      "method_id": "rad",
+      "category": [
+        "Genome",
+        "Rearrangements and Markers"
+      ],
+      "baseline_pins": {
+        "card.json": "58cf340ed88810734c575e3c76cce555af3d6959de768524f7cfc322f06bcd77",
+        "source_registry.json": "82b2cbd2e81643c17fcbcaee4a35342db713fccf4c83c2af5e3bc362f604284e",
+        "extraction.json": "714da056b270ef331267d7cc94992d37674d41386a84fa0e7c18f5b502b1a840",
+        "review.json": "5a88b1588d5a11b44a2509fcf794046f0d8ebcf9adff281ec731bfc6628da520"
+      },
+      "archived_review_summary": {
+        "status": "supported",
+        "revision": 0,
+        "checks": 93,
+        "supported_accept": 93,
+        "interpretation": "Historical decisions, not new source verification."
+      },
+      "annotation_counts": {
+        "states": 7,
+        "operations": 6,
+        "properties": 23
+      },
+      "assertions": [
+        {
+          "id": "restriction_entry",
+          "status": "preserved",
+          "assertion": "One chosen restriction enzyme defines the genomic subset. RAD uses random shearing after P1 ligation; the shared card second-digest alternative is assigned to ddRADseq, not forced into RAD.",
+          "anchors": {
+            "state:s1_restriction_fragments": "/rad/extraction/states/1",
+            "operation:o1_digest": "/rad/extraction/operations/0",
+            "operation:o3_shear_select": "/rad/extraction/operations/2",
+            "scope:RAD": "/rad/extraction/scope"
+          },
+          "embedded_evidence_refs": [
+            "e27",
+            "e28",
+            "e29",
+            "e30"
+          ],
+          "archived_review_refs": [
+            "r16"
+          ]
+        },
+        {
+          "id": "sample_tag_and_mixture",
+          "status": "preserved",
+          "assertion": "P1 covalently attaches a sample barcode plus primer sites to restriction ends. Optional combining occurs after barcoding. P1-bearing and P1-lacking sheared molecules remain one preparation; attribution is confined to the bearing component.",
+          "anchors": {
+            "state_property:s2_p1_ligated:p1_insert_link": "/rad/extraction/states/2/properties/2",
+            "state_property:s2_p1_ligated:sample_attribution": "/rad/extraction/states/2/properties/3",
+            "state:s3_sheared_selected": "/rad/extraction/states/3",
+            "operation:o3_shear_select/effects": "/rad/extraction/operations/2/effects"
+          },
+          "embedded_evidence_refs": [
+            "e31",
+            "e32",
+            "e33",
+            "e34"
+          ],
+          "archived_review_refs": [
+            "r17"
+          ]
+        },
+        {
+          "id": "p2_gate",
+          "status": "preserved",
+          "assertion": "Divergent P2 requires P1-initiated extension to create the productive reverse-primer interface. Selective PCR enriches P1-bearing tags while preserving the sample barcode.",
+          "anchors": {
+            "state_property:s4_p2_ligated:p2_design": "/rad/extraction/states/4/properties/2",
+            "operation:o4_p2": "/rad/extraction/operations/3",
+            "operation:o5_amplify": "/rad/extraction/operations/4",
+            "state_property:s5_rad_library:p2_site": "/rad/extraction/states/5/properties/2"
+          },
+          "embedded_evidence_refs": [
+            "e35",
+            "e36"
+          ],
+          "archived_review_refs": [
+            "r18"
+          ]
+        },
+        {
+          "id": "read_interpretation",
+          "status": "preserved",
+          "assertion": "Barcode-bearing restriction-adjacent reads support subsequent genotyping; they are not genotype calls. Enzyme-limited coverage and cut-site-dependent tag recovery are explicit.",
+          "anchors": {
+            "state_property:s6_rad_reads:read_content": "/rad/extraction/states/6/properties/2",
+            "state_property:s6_rad_reads:sample_attribution": "/rad/extraction/states/6/properties/3",
+            "operation:o6_sequence/information_effect": "/rad/extraction/operations/5/information_effect"
+          },
+          "embedded_evidence_refs": [
+            "e37",
+            "e30",
+            "e38"
+          ],
+          "archived_review_refs": [
+            "r19"
+          ]
+        },
+        {
+          "id": "clipped_image",
+          "status": "unresolved",
+          "assertion": "The terminal caption remains visually unverified due to clipping, while sequencing is supported in embedded catalogue/primary text. This is a source-quality gap, not an absent extraction endpoint.",
+          "anchors": {
+            "unknown:u1_clipped_terminal_caption": "/rad/extraction/unknowns/0",
+            "operation:o6_sequence": "/rad/extraction/operations/5"
+          },
+          "embedded_evidence_refs": [
+            "e39",
+            "e40"
+          ],
+          "archived_review_refs": [
+            "r20"
+          ]
+        }
+      ],
+      "missing_consequential_assertions_identified": [],
+      "findings": [
+        {
+          "id": "source_narration",
+          "classification": "presentation",
+          "finding": "o4_p2.description explains why end preparation is inside a block; o5_amplify.information_effect explains omitted diagram colors. These are provenance/granularity notes alongside valid chemistry and sample-attribution claims.",
+          "anchors": {
+            "operation:o4_p2/description": "/rad/extraction/operations/3/description",
+            "operation:o5_amplify/information_effect": "/rad/extraction/operations/4/information_effect"
+          },
+          "candidate_improvement": "Keep end polishing/adenine/P2 and barcode-preserving selection in the explanation; move diagram-compression commentary to evidence.",
+          "archived_review_refs": []
+        }
+      ]
+    },
+    {
+      "method_id": "bless",
+      "category": [
+        "Genome",
+        "Rearrangements and Markers"
+      ],
+      "baseline_pins": {
+        "card.json": "acd0ecf7811e408ef3e7c84cfb38457aa20c3af740b254589e2912fd26be4a3b",
+        "source_registry.json": "6642e437cce2dd138abb5408e72f9ebef256e1bfa247842b1f63563a64014759",
+        "extraction.json": "5578101dce5478dcbec5c1305ecd6c1eab87828a14e4ae3384d802d75fbd6c27",
+        "review.json": "78e817aac0d8e261d73c91c3aa8878c59fd71fad6be2a58d66e430dafa440c97"
+      },
+      "archived_review_summary": {
+        "status": "supported",
+        "revision": 0,
+        "checks": 119,
+        "supported_accept": 119,
+        "interpretation": "Historical decisions, not new source verification."
+      },
+      "annotation_counts": {
+        "states": 11,
+        "operations": 7,
+        "properties": 38
+      },
+      "assertions": [
+        {
+          "id": "original_label_timing",
+          "status": "preserved",
+          "assertion": "Accessible processed ends are proximal-linker labeled in purified fixed nuclei before extraction/fragmentation. Barcode junction and biotin have distinct positional and capture functions; resection/telomeres qualify original-break interpretation.",
+          "anchors": {
+            "state:s_nuclear_dna": "/bless/extraction/states/0",
+            "state:s_labeled_nuclei": "/bless/extraction/states/2",
+            "operation:o_label": "/bless/extraction/operations/0",
+            "operation:o_fragment/information_effect": "/bless/extraction/operations/1/information_effect"
+          },
+          "embedded_evidence_refs": [
+            "e41",
+            "e42",
+            "e43",
+            "e44",
+            "e45",
+            "e46"
+          ],
+          "archived_review_refs": [
+            "r21"
+          ]
+        },
+        {
+          "id": "fragmentation_and_distal_end",
+          "status": "preserved",
+          "assertion": "HaeIII fragmentation implements the correction. Labeled/unlabeled fragments coexist until streptavidin selection, and distal linker labels the later fragment extremity rather than a second independently established biological break.",
+          "anchors": {
+            "correction:c_fragmentation": "/bless/extraction/corrections/0",
+            "state:s_fragments": "/bless/extraction/states/3",
+            "operation:o_capture": "/bless/extraction/operations/2",
+            "operation:o_distal/information_effect": "/bless/extraction/operations/3/information_effect",
+            "state_property:s_two_linkers:linkers": "/bless/extraction/states/7/properties/1"
+          },
+          "embedded_evidence_refs": [
+            "e47",
+            "e48",
+            "e49"
+          ],
+          "archived_review_refs": [
+            "r22",
+            "r23"
+          ]
+        },
+        {
+          "id": "release_and_readout",
+          "status": "preserved",
+          "assertion": "I-SceI releases DNA for PCR; later XhoI trimming precedes the Illumina library. Amplified copies retain sequence-junction information without an assertion of intact original hairpins/biotin. Raw reads carry proximal/distal barcodes; localization needs barcode recognition and alignment.",
+          "anchors": {
+            "operation:o_release_pcr": "/bless/extraction/operations/4",
+            "operation:o_illumina_prep": "/bless/extraction/operations/5",
+            "state_property:s_amplicons:attribution": "/bless/extraction/states/8/properties/3",
+            "state_property:s_reads:content": "/bless/extraction/states/10/properties/2"
+          },
+          "embedded_evidence_refs": [
+            "e50",
+            "e51",
+            "e52",
+            "e53"
+          ],
+          "archived_review_refs": [
+            "r24",
+            "r25"
+          ]
+        },
+        {
+          "id": "bounded_source_gaps",
+          "status": "unresolved",
+          "assertion": "Fine image structures are not visually verified and later catalogue background/fixation criticisms lack their primary context. Both gaps are preserved as nonblocking Unknowns, not promoted to focal-paper findings.",
+          "anchors": {
+            "unknown:u_image_fine_detail": "/bless/extraction/unknowns/0",
+            "unknown:u_catalogue_limits_confirmation": "/bless/extraction/unknowns/1",
+            "scope:BLESS": "/bless/extraction/scope"
+          },
+          "embedded_evidence_refs": [
+            "e54",
+            "e55",
+            "e56"
+          ],
+          "archived_review_refs": [
+            "r26",
+            "r27"
+          ]
+        }
+      ],
+      "missing_consequential_assertions_identified": [],
+      "findings": [
+        {
+          "id": "local_readout_scope",
+          "classification": "unclear_local_field",
+          "finding": "o_sequence.information_effect opens with the assay establishing genomic positions, while its actual output is sequence_reads. State content and attribution correctly condition localization on barcode recognition and alignment, so this is local imprecision rather than an established whole-record error.",
+          "anchors": {
+            "operation:o_sequence/information_effect": "/bless/extraction/operations/6/information_effect",
+            "state_property:s_reads:content": "/bless/extraction/states/10/properties/2",
+            "state_property:s_reads:attribution": "/bless/extraction/states/10/properties/3"
+          },
+          "candidate_improvement": "State the local output as barcode-adjacent genomic sequence and make alignment dependence explicit in this field. Preserve accessibility, telomere and resection qualifications.",
+          "archived_review_refs": [
+            "r28"
+          ]
+        },
+        {
+          "id": "source_narration",
+          "classification": "presentation",
+          "finding": "The explanations repeat which steps are drawn versus text-supported and which correction supersedes random shearing.",
+          "anchors": {
+            "operation:o_fragment/description": "/bless/extraction/operations/1/description",
+            "operation:o_distal/description": "/bless/extraction/operations/3/description",
+            "operation:o_sequence/description": "/bless/extraction/operations/6/description"
+          },
+          "candidate_improvement": "Retain HaeIII, ligation/release chemistry and measured-end limitations in the explanation; keep diagram comparison in Correction/Evidence.",
+          "archived_review_refs": []
+        }
+      ]
+    },
+    {
+      "method_id": "drop-seq",
+      "category": [
+        "Transcriptome",
+        "RNA Low-Level Detection"
+      ],
+      "baseline_pins": {
+        "card.json": "9fb8fa2799307e08d06f54ec5ed2f701db3ab67ab10e921769b3ae3806ecb0b0",
+        "source_registry.json": "703ad8bfbb7bf4eca45d8b3d4d3b4532c2d3327ccc15e5c84913679e5cae4e33",
+        "extraction.json": "5d5fed8c303ccdf33f801c1c0e20fef03c019c3b7d365cd943381571bfebc647",
+        "review.json": "80323960d2ff2fc1da1eb19e138d30dc96e981971455004dd23ee64648ce7b67"
+      },
+      "archived_review_summary": {
+        "status": "supported",
+        "revision": 0,
+        "checks": 94,
+        "supported_accept": 94,
+        "interpretation": "Historical decisions, not new source verification."
+      },
+      "annotation_counts": {
+        "states": 7,
+        "operations": 5,
+        "properties": 31
+      },
+      "assertions": [
+        {
+          "id": "capture_and_compartments",
+          "status": "preserved",
+          "assertion": "Prepared cell and bead/lysis streams form droplets. Productive co-encapsulation is conditional; poly(A) RNA hybridizes to bead oligo-dT before droplets break. Recovered beads, not intact compartments, enter bulk RT.",
+          "anchors": {
+            "state:droplets": "/drop-seq/extraction/states/2",
+            "state:captured_droplets": "/drop-seq/extraction/states/3",
+            "state:pooled_beads": "/drop-seq/extraction/states/4",
+            "operation:capture": "/drop-seq/extraction/operations/1",
+            "operation:recover": "/drop-seq/extraction/operations/2"
+          },
+          "embedded_evidence_refs": [
+            "e57",
+            "e58",
+            "e59",
+            "e60",
+            "e61"
+          ],
+          "archived_review_refs": [
+            "r29",
+            "r30"
+          ]
+        },
+        {
+          "id": "identity_carriers",
+          "status": "preserved",
+          "assertion": "Cell barcode and UMI begin on DNA capture primers; cell barcode is shared within a bead while UMI varies. RT extends primers into cDNA carrying both identifiers, and read pairing links them to transcript-derived sequence.",
+          "anchors": {
+            "state:beads": "/drop-seq/extraction/states/1",
+            "state_property:library:cell_link": "/drop-seq/extraction/states/5/properties/4",
+            "state_property:library:molecule_link": "/drop-seq/extraction/states/5/properties/5",
+            "state:reads": "/drop-seq/extraction/states/6",
+            "operation:prepare_library": "/drop-seq/extraction/operations/3"
+          },
+          "embedded_evidence_refs": [
+            "e62",
+            "e63",
+            "e64",
+            "e60",
+            "e65"
+          ],
+          "archived_review_refs": [
+            "r31",
+            "r32",
+            "r33"
+          ]
+        },
+        {
+          "id": "measurement_and_corrections",
+          "status": "preserved",
+          "assertion": "The endpoint is a 3-prime cDNA-derived readout, with poly(A) selection, incomplete capture, doublet and ambient-RNA limits. RNA endpoint wording and replacement of the universal handle are corrected in the graph; template switching adds a downstream handle.",
+          "anchors": {
+            "correction:c_readout_identity": "/drop-seq/extraction/corrections/0",
+            "correction:c_template_switch_handle": "/drop-seq/extraction/corrections/1",
+            "state_property:library:identity": "/drop-seq/extraction/states/5/properties/0",
+            "state_property:reads:measurement_limits": "/drop-seq/extraction/states/6/properties/5",
+            "operation:prepare_library/mechanism": "/drop-seq/extraction/operations/3/mechanism"
+          },
+          "embedded_evidence_refs": [
+            "e66",
+            "e65",
+            "e61",
+            "e67",
+            "e68",
+            "e69"
+          ],
+          "archived_review_refs": [
+            "r34",
+            "r35"
+          ]
+        }
+      ],
+      "missing_consequential_assertions_identified": [],
+      "findings": [
+        {
+          "id": "capture_covalence_wording",
+          "classification": "unclear_local_field",
+          "finding": "capture.information_effect says the compartment-specific mRNA-to-bead association is \"to be made covalent\" during RT. Read alone, that can imply covalent RNA attachment; adjacent properties and prepare_library correctly specify copied cDNA as the covalent reporter.",
+          "anchors": {
+            "operation:capture/information_effect": "/drop-seq/extraction/operations/1/information_effect",
+            "state_property:captured_droplets:capture_link": "/drop-seq/extraction/states/3/properties/4",
+            "state_property:pooled_beads:capture_link": "/drop-seq/extraction/states/4/properties/3",
+            "operation:prepare_library/information_effect": "/drop-seq/extraction/operations/3/information_effect"
+          },
+          "candidate_improvement": "Say that capture preserves a noncovalent RNA-primer association, and RT later creates barcode-bearing cDNA by primer extension. Do not add a state solely to fix this wording.",
+          "archived_review_refs": [
+            "r36",
+            "r37"
+          ]
+        },
+        {
+          "id": "source_narration",
+          "classification": "presentation",
+          "finding": "sequence.information_effect mixes a valid read-pair association with a justification for omitting a data-processing node.",
+          "anchors": {
+            "operation:sequence/information_effect": "/drop-seq/extraction/operations/4/information_effect"
+          },
+          "candidate_improvement": "Keep the read-pair carrier and downstream alignment/UMI-counting dependency; move the node-construction rationale into evidence.",
+          "archived_review_refs": []
+        }
+      ]
+    },
+    {
+      "method_id": "g-and-t-seq",
+      "category": [
+        "Transcriptome",
+        "RNA Low-Level Detection"
+      ],
+      "baseline_pins": {
+        "card.json": "7b19e44bcae868d5c41b7486ebfcd222c90fd5501e99f707a75ca66dca647666",
+        "source_registry.json": "8440d11d13c1495ba2452d2432840caf5da303503539f7c653ade9b12f067286",
+        "extraction.json": "5f5d0031bd772056b3706a5d6bdc3265cfc5ad6dbbfe47505eeb34411e7639a2",
+        "review.json": "3bea3f4f1fb72dd5d40a874b1ed2a53273e12271831be0981e8b4ae914d1b798"
+      },
+      "archived_review_summary": {
+        "status": "supported",
+        "revision": 0,
+        "checks": 207,
+        "supported_accept": 207,
+        "interpretation": "Historical decisions, not new source verification."
+      },
+      "annotation_counts": {
+        "states": 17,
+        "operations": 13,
+        "properties": 74
+      },
+      "assertions": [
+        {
+          "id": "physical_split",
+          "status": "preserved",
+          "assertion": "RNA and gDNA share one cell lysate and one captured-lysate mixture before magnetic separation. The resulting bead-bound poly(A) mRNA and gDNA-containing liquid are genuinely distinct fractions.",
+          "anchors": {
+            "state:s_lysate": "/g-and-t-seq/extraction/states/2",
+            "state:s_capture_mix": "/g-and-t-seq/extraction/states/4",
+            "operation:o_separate": "/g-and-t-seq/extraction/operations/3",
+            "state:s_bead_mrna": "/g-and-t-seq/extraction/states/5",
+            "state:s_gdna": "/g-and-t-seq/extraction/states/6"
+          },
+          "embedded_evidence_refs": [
+            "e70",
+            "e71",
+            "e72",
+            "e73"
+          ],
+          "archived_review_refs": [
+            "r38",
+            "r39"
+          ]
+        },
+        {
+          "id": "independent_reporters",
+          "status": "preserved",
+          "assertion": "Smart-seq2 yields mRNA-derived cDNA; MDA separately yields genomic DNA. Their libraries, reads and alignments remain distinct. Poly(A)-negative RNA is excluded, source RNA strand specificity is lost and WGA limitations remain explicit.",
+          "anchors": {
+            "operation:o_wta": "/g-and-t-seq/extraction/operations/4",
+            "operation:o_mda": "/g-and-t-seq/extraction/operations/5",
+            "state:s_cdna": "/g-and-t-seq/extraction/states/7",
+            "state:s_amp_gdna": "/g-and-t-seq/extraction/states/8",
+            "operation:o_sequence_rna": "/g-and-t-seq/extraction/operations/8",
+            "operation:o_sequence_dna": "/g-and-t-seq/extraction/operations/9"
+          },
+          "embedded_evidence_refs": [
+            "e74",
+            "e75",
+            "e76",
+            "e77",
+            "e78",
+            "e79"
+          ],
+          "archived_review_refs": [
+            "r40",
+            "r41"
+          ]
+        },
+        {
+          "id": "same_cell_not_same_molecule",
+          "status": "preserved",
+          "assertion": "Corresponding wells and library identities carry same-cell pairing through separated routes into data integration. Transcriptome library indexes identify a per-cell library; the paired result is neither a DNA-RNA molecular join nor a causal conclusion.",
+          "anchors": {
+            "state_property:s_bead_mrna:paired_origin": "/g-and-t-seq/extraction/states/5/properties/9",
+            "state_property:s_gdna:paired_origin": "/g-and-t-seq/extraction/states/6/properties/2",
+            "state_property:s_rna_library:cell_library": "/g-and-t-seq/extraction/states/9/properties/2",
+            "operation:o_integrate": "/g-and-t-seq/extraction/operations/12",
+            "state_property:s_paired_result:paired_cell_result": "/g-and-t-seq/extraction/states/16/properties/3"
+          },
+          "embedded_evidence_refs": [
+            "e73",
+            "e80",
+            "e81",
+            "e82"
+          ],
+          "archived_review_refs": [
+            "r42",
+            "r43"
+          ]
+        },
+        {
+          "id": "scope_and_library_generality",
+          "status": "preserved",
+          "assertion": "The selected schematic uses MDA, with Smart-seq2 embedded. Genomic library preparation stays broad because the diagram does not select one chemistry; a primary recommendation is not converted into an obligatory route. Full-length cDNA representation is distinguished from whole-transcript short reads.",
+          "anchors": {
+            "scope:G&T-Seq": "/g-and-t-seq/extraction/scope",
+            "operation:o_dna_library": "/g-and-t-seq/extraction/operations/7",
+            "operation:o_rna_library/information_effect": "/g-and-t-seq/extraction/operations/6/information_effect"
+          },
+          "embedded_evidence_refs": [
+            "e83",
+            "e84",
+            "e75"
+          ],
+          "archived_review_refs": [
+            "r44",
+            "r45"
+          ]
+        }
+      ],
+      "missing_consequential_assertions_identified": [],
+      "findings": [
+        {
+          "id": "branch_narration",
+          "classification": "presentation",
+          "finding": "Sequencing and alignment descriptions repeatedly justify separate instances under a shared caption. The independent genomic/cDNA routes and final joint data integration are already explicit and scientifically consequential.",
+          "anchors": {
+            "operation:o_sequence_rna/description": "/g-and-t-seq/extraction/operations/8/description",
+            "operation:o_sequence_dna/description": "/g-and-t-seq/extraction/operations/9/description",
+            "operation:o_align_rna/description": "/g-and-t-seq/extraction/operations/10/description",
+            "operation:o_integrate/description": "/g-and-t-seq/extraction/operations/12/description"
+          },
+          "candidate_improvement": "Move shared-caption interpretation into evidence. Compact equivalent readout instances only if molecular origin, separate datasets and cell correspondence stay explicit; do not collapse MDA and Smart-seq2 into a common transformation.",
+          "archived_review_refs": []
+        }
+      ]
+    }
+  ],
+  "prompt_consolidation": [
+    {
+      "id": "one_contract_for_identity_and_interfaces",
+      "sources": [
+        "src/genomics_discovery/illumina/prompts.py:53",
+        "src/genomics_discovery/illumina/prompts.py:159",
+        "src/genomics_discovery/illumina/prompts.py:227",
+        "src/genomics_discovery/illumina/representation.py:324",
+        "src/genomics_discovery/illumina/representation.py:346"
+      ],
+      "candidate": "Consolidate repeated material/reporter/interface guidance into the short contract FIELD MEANINGS plus subject-specific structured assertions. Keep actual preparation, reporter origin, carrier and applicable next-interface facts; do not repeat the same six-part checklist in several sections.",
+      "retain": "Schema field definitions, exact references, empty State.features, self identity/data_type, and consequential omission review."
+    },
+    {
+      "id": "one_construction_rule",
+      "sources": [
+        "src/genomics_discovery/illumina/prompts.py:159",
+        "src/genomics_discovery/illumina/representation.py:302",
+        "experiments/category_prompt_audit_20261112/author_contract.txt:10"
+      ],
+      "candidate": "Keep one diagram-block-first construction rule with supported text additions and a branch/interface exception. Equivalent repeated PCR/index operations may use compact collections if condition identity and correspondence remain explicit.",
+      "retain": "Genuine fractionation, distinct chemistry and data integration. Node count alone is neither a quality target nor a failure."
+    },
+    {
+      "id": "move_source_narration",
+      "sources": [
+        "experiments/category_prompt_audit_20261112/author_contract.txt:34"
+      ],
+      "candidate": "Move statements about what a caption depicts, why a block was retained, or what the extractor read to Evidence.rationale/Correction. Explain procedure and mechanism directly.",
+      "retain": "Qualifications such as inferred protein identity, count confounders, source-dependent applicability and unknown preparation details. A mention of the paper is not itself an error."
+    },
+    {
+      "id": "keep_local_information_effect",
+      "sources": [
+        "src/genomics_discovery/illumina/prompts.py:434",
+        "experiments/category_prompt_audit_20261112/author_contract.txt:43"
+      ],
+      "candidate": "Retain one concise local rule: name the supported distinction and its carrier, including preservation/loss and interpretation dependencies. Use null for a field that merely restates a preparation purpose.",
+      "retain": "PD-seq insert versus index, RAD sample attribution, BLESS proximal-end history, Drop-seq cDNA barcode linkage and G&T well-based pairing."
+    },
+    {
+      "id": "category_checks_stay_out_of_author_recipe",
+      "sources": [
+        "src/genomics_discovery/illumina/representation.py:432",
+        "experiments/category_prompt_audit_20261112/README.txt"
+      ],
+      "candidate": "Keep method-specific counterexamples and these category requirements in evaluation unless a demonstrated regression motivates a minimal shared-rule repair. Do not add a mandatory phage/RAD/droplet/UMI recipe to the common author prompt.",
+      "retain": "Primary evidence confirmation at actual assertion level, independent image review, member/version scope and targeted evidence gaps."
+    }
+  ],
+  "independent_review_criteria": [
+    "Reopen the same registered primary passages and diagram regions independently for factual review; compare actual assertions, not merely embedded quotations, accepted status, source names or JSON validity.",
+    "Trace a representative input through selection, reporter construction and readout, checking State properties, roles, effects and Flows together. Confirm the actual carrier and biological interpretation at each changed interface.",
+    "Check tag function separately from its name: insert identity, sample index, cell barcode, UMI and end-recognition barcode are not interchangeable. Do not require any one tag type absent source support.",
+    "When compact processing replaces repeated nodes, recover every retained unit/condition and input-output correspondence. Preserve genuinely different A/C selections or genomic/cDNA branches; do not infer mixing from a shared caption.",
+    "For corrections, confirm the operative graph implements the resolved bait, chemistry, order or endpoint. Preserve unresolved PD-seq Input1/Input2 lineage and ProP-PD preparation gaps unless newly inspected registered evidence resolves them.",
+    "Classify omitted supported consequential assertions as revision; unavailable consequential evidence as research; recorded-but-undisplayed facts as presentation; routine out-of-scope details as no added assertion. Evaluate source narration separately from scientific qualifications.",
+    "Check local information effects without requiring new signals: captured RNA is not covalently converted into barcoded RNA by RT; BLESS raw reads require barcode recognition/alignment before positional interpretation. Use adjacent assertions to distinguish a field-clarity issue from an incorrect whole workflow.",
+    "Compare archived and experimental outputs on the same category checklist and source bundle. Record holds/corrections and output readability, rather than treating brevity, node count or reviewer acceptance as scientific accuracy. One run per method is not a statistical superiority test."
+  ],
+  "artifact_validation": {
+    "json_pointers_resolved": 255,
+    "all_evidence_and_review_refs_resolved": true,
+    "baseline_pins_unchanged": true,
+    "validation_scope": "JSON syntax and exact references only; no new scientific validation."
+  },
+  "embedded_evidence_index": {
+    "e1": {
+      "pointer": "/pd-seq/extraction/states/0/evidence/0",
+      "source_id": "paper:23697369",
+      "locator": "Results and Discussion / PD-Seq Identifies Candidate Cellular Targets for Apigenin, first paragraph",
+      "support": "reported"
+    },
+    "e2": {
+      "pointer": "/pd-seq/extraction/states/5/evidence/0",
+      "source_id": "paper:23697369",
+      "locator": "Fig. 1 caption, panel B, library provenance",
+      "support": "reported"
+    },
+    "e3": {
+      "pointer": "/pd-seq/extraction/states/6/evidence/0",
+      "source_id": "paper:23697369",
+      "locator": "Materials and Methods / Phage Display Screening, opening sentences",
+      "support": "reported"
+    },
+    "e4": {
+      "pointer": "/pd-seq/extraction/states/6/properties/1/evidence/0",
+      "source_id": "paper:23697369",
+      "locator": "Fig. 1B,D caption and Results candidate criteria; explicit interpretation of phage-display genotype/phenotype linkage",
+      "support": "inferred"
+    },
+    "e5": {
+      "pointer": "/pd-seq/extraction/states/7/evidence/1",
+      "source_id": "paper:23697369",
+      "locator": "Materials and Methods / Phage Display Screening, selection after preclearing",
+      "support": "reported"
+    },
+    "e6": {
+      "pointer": "/pd-seq/extraction/states/8/evidence/0",
+      "source_id": "paper:23697369",
+      "locator": "Fig. 1 caption, panel B, cycle composition",
+      "support": "reported"
+    },
+    "e7": {
+      "pointer": "/pd-seq/extraction/states/6/properties/1/evidence/1",
+      "source_id": "paper:23697369",
+      "locator": "Results and Discussion / PD-Seq Identifies Candidate Cellular Targets for Apigenin, candidate calling criteria",
+      "support": "reported"
+    },
+    "e8": {
+      "pointer": "/pd-seq/extraction/states/31/properties/2/evidence/1",
+      "source_id": "paper:23697369",
+      "locator": "Results and Discussion / PD-Seq Identifies Candidate Cellular Targets for Apigenin, gene attribution",
+      "support": "reported"
+    },
+    "e9": {
+      "pointer": "/pd-seq/extraction/states/32/properties/3/evidence/2",
+      "source_id": "paper:23697369",
+      "locator": "Results and Discussion, comparison with conventional phage-display screening",
+      "support": "reported"
+    },
+    "e10": {
+      "pointer": "/pd-seq/extraction/states/8/evidence/3",
+      "source_id": "paper:23697369",
+      "locator": "Fig. 1 caption, panel C, sequenced fractions",
+      "support": "reported"
+    },
+    "e11": {
+      "pointer": "/pd-seq/extraction/states/14/evidence/0",
+      "source_id": "paper:23697369",
+      "locator": "Results and Discussion / PD-Seq Identifies Candidate Cellular Targets for Apigenin, seven sequenced libraries",
+      "support": "reported"
+    },
+    "e12": {
+      "pointer": "/pd-seq/extraction/states/17/evidence/1",
+      "source_id": "paper:23697369",
+      "locator": "Results and Discussion / PD-Seq Identifies Candidate Cellular Targets for Apigenin, indexed-library sentence",
+      "support": "reported"
+    },
+    "e13": {
+      "pointer": "/prop-pd/extraction/states/1/properties/2/evidence/2",
+      "source_id": "paper:24550280",
+      "locator": "Results > Library Design and Construction, sequence-to-protein mapping",
+      "support": "reported"
+    },
+    "e14": {
+      "pointer": "/prop-pd/extraction/states/2/evidence/1",
+      "source_id": "paper:24550280",
+      "locator": "Methods > Design of Human and Viral ProP-PD Libraries",
+      "support": "reported"
+    },
+    "e15": {
+      "pointer": "/prop-pd/extraction/states/3/evidence/1",
+      "source_id": "paper:24550280",
+      "locator": "Results > Library Design and Construction",
+      "support": "reported"
+    },
+    "e16": {
+      "pointer": "/prop-pd/extraction/states/3/properties/4/evidence/0",
+      "source_id": "paper:24550280",
+      "locator": "Results > Library Design and Construction, naive-library sequencing",
+      "support": "reported"
+    },
+    "e17": {
+      "pointer": "/prop-pd/extraction/states/4/evidence/0",
+      "source_id": "paper:24550280",
+      "locator": "Results > Analysis of the ProP-PD Selection Data",
+      "support": "reported"
+    },
+    "e18": {
+      "pointer": "/prop-pd/extraction/states/5/evidence/1",
+      "source_id": "paper:24550280",
+      "locator": "Results > Analysis of the ProP-PD Selection Data, immobilized-bait qualification",
+      "support": "reported"
+    },
+    "e19": {
+      "pointer": "/prop-pd/extraction/states/2/evidence/3",
+      "source_id": "paper:24550280",
+      "locator": "Fig. 1 caption, workflow overview",
+      "support": "reported"
+    },
+    "e20": {
+      "pointer": "/prop-pd/extraction/operations/2/evidence/4",
+      "source_id": "paper:24550280",
+      "locator": "Results > Library Design and Construction, display mechanism",
+      "support": "reported"
+    },
+    "e21": {
+      "pointer": "/prop-pd/extraction/states/3/properties/3/evidence/0",
+      "source_id": "paper:24550280",
+      "locator": "Fig. 1 caption, encoding and selected-pool sequencing",
+      "support": "inferred"
+    },
+    "e22": {
+      "pointer": "/prop-pd/extraction/states/7/properties/3/evidence/0",
+      "source_id": "paper:24550280",
+      "locator": "Fig. 1 caption and Results > Analysis of the ProP-PD Selection Data",
+      "support": "inferred"
+    },
+    "e23": {
+      "pointer": "/prop-pd/extraction/states/8/evidence/2",
+      "source_id": "paper:24550280",
+      "locator": "Results > Validation of Human Scribble Ligands in Vitro, counts interpretation",
+      "support": "reported"
+    },
+    "e24": {
+      "pointer": "/prop-pd/extraction/states/8/properties/3/evidence/3",
+      "source_id": "paper:24550280",
+      "locator": "Discussion > limitations of ProP-PD",
+      "support": "reported"
+    },
+    "e25": {
+      "pointer": "/prop-pd/extraction/states/5/evidence/0",
+      "source_id": "diagram:asset_ec90e21e2a403934cb3f9a74",
+      "locator": "Blue proteins on support and caption: Bait proteins immobilized on 96-well plate",
+      "support": "depicted"
+    },
+    "e26": {
+      "pointer": "/prop-pd/extraction/operations/5/evidence/5",
+      "source_id": "paper:24550280",
+      "locator": "Methods > ProP-PD Selections and Validation Experiments",
+      "support": "reported"
+    },
+    "e27": {
+      "pointer": "/rad/extraction/states/0/evidence/1",
+      "source_id": "paper:18852878",
+      "locator": "[b00037]",
+      "support": "reported"
+    },
+    "e28": {
+      "pointer": "/rad/extraction/states/1/evidence/0",
+      "source_id": "paper:18852878",
+      "locator": "[b00010]",
+      "support": "reported"
+    },
+    "e29": {
+      "pointer": "/rad/extraction/states/3/evidence/0",
+      "source_id": "diagram:asset_757cc031e4f7e90f878ecba8",
+      "locator": "Arrow from adapter-ligated long fragments to shorter fragments; caption Shear (Second restriction digest in ddRADseq)",
+      "support": "depicted"
+    },
+    "e30": {
+      "pointer": "/rad/extraction/states/5/properties/4/evidence/0",
+      "source_id": "paper:18852878",
+      "locator": "[b00007]",
+      "support": "reported"
+    },
+    "e31": {
+      "pointer": "/rad/extraction/states/2/evidence/2",
+      "source_id": "paper:18852878",
+      "locator": "[b00010]",
+      "support": "reported"
+    },
+    "e32": {
+      "pointer": "/rad/extraction/states/2/properties/3/evidence/2",
+      "source_id": "paper:18852878",
+      "locator": "[b00021]",
+      "support": "reported"
+    },
+    "e33": {
+      "pointer": "/rad/extraction/states/3/components/0/evidence/0",
+      "source_id": "paper:18852878",
+      "locator": "[b00011]",
+      "support": "inferred"
+    },
+    "e34": {
+      "pointer": "/rad/extraction/states/3/properties/2/evidence/1",
+      "source_id": "paper:18852878",
+      "locator": "[b00011]",
+      "support": "reported"
+    },
+    "e35": {
+      "pointer": "/rad/extraction/states/4/evidence/2",
+      "source_id": "paper:18852878",
+      "locator": "[b00011]",
+      "support": "reported"
+    },
+    "e36": {
+      "pointer": "/rad/extraction/states/4/components/0/evidence/2",
+      "source_id": "paper:18852878",
+      "locator": "[b00010]",
+      "support": "reported"
+    },
+    "e37": {
+      "pointer": "/rad/extraction/states/5/properties/3/evidence/2",
+      "source_id": "paper:18852878",
+      "locator": "[b00039]",
+      "support": "reported"
+    },
+    "e38": {
+      "pointer": "/rad/extraction/states/6/properties/2/evidence/1",
+      "source_id": "paper:18852878",
+      "locator": "[b00016]",
+      "support": "reported"
+    },
+    "e39": {
+      "pointer": "/rad/extraction/states/5/properties/0/evidence/2",
+      "source_id": "paper:18852878",
+      "locator": "[b00037]",
+      "support": "reported"
+    },
+    "e40": {
+      "pointer": "/rad/extraction/states/6/evidence/0",
+      "source_id": "card:rad-paired-end-rad-seq-ddrad-seq",
+      "locator": "Opening explanatory description",
+      "support": "reported"
+    },
+    "e41": {
+      "pointer": "/bless/extraction/states/0/evidence/1",
+      "source_id": "paper:23503052",
+      "locator": "[b00008] Method workflow",
+      "support": "reported"
+    },
+    "e42": {
+      "pointer": "/bless/extraction/states/0/evidence/2",
+      "source_id": "paper:23503052",
+      "locator": "[b00008] Method workflow",
+      "support": "reported"
+    },
+    "e43": {
+      "pointer": "/bless/extraction/states/1/evidence/2",
+      "source_id": "paper:23503052",
+      "locator": "[b00008] Method workflow, proximal linker design",
+      "support": "reported"
+    },
+    "e44": {
+      "pointer": "/bless/extraction/states/2/properties/1/evidence/2",
+      "source_id": "paper:23503052",
+      "locator": "[b00008] Method workflow, purpose of in situ labeling",
+      "support": "reported"
+    },
+    "e45": {
+      "pointer": "/bless/extraction/states/2/properties/4/evidence/1",
+      "source_id": "paper:23503052",
+      "locator": "[b00021] Discussion, positional qualification",
+      "support": "reported"
+    },
+    "e46": {
+      "pointer": "/bless/extraction/states/10/properties/3/evidence/2",
+      "source_id": "paper:23503052",
+      "locator": "[b00011] Method validation, accessible telomere ends",
+      "support": "reported"
+    },
+    "e47": {
+      "pointer": "/bless/extraction/states/3/evidence/1",
+      "source_id": "paper:23503052",
+      "locator": "[b00028] BLESS methods, fragmentation",
+      "support": "reported"
+    },
+    "e48": {
+      "pointer": "/bless/extraction/states/1/properties/1/evidence/1",
+      "source_id": "paper:23503052",
+      "locator": "[b00092] Figure 1a caption, steps 1–3",
+      "support": "reported"
+    },
+    "e49": {
+      "pointer": "/bless/extraction/states/3/properties/3/evidence/2",
+      "source_id": "paper:23503052",
+      "locator": "[b00008] Method workflow, distal linker",
+      "support": "reported"
+    },
+    "e50": {
+      "pointer": "/bless/extraction/states/7/evidence/3",
+      "source_id": "paper:23503052",
+      "locator": "[b00092] Figure 1a caption, steps 4–7",
+      "support": "reported"
+    },
+    "e51": {
+      "pointer": "/bless/extraction/states/8/properties/1/evidence/2",
+      "source_id": "paper:23503052",
+      "locator": "[b00030] BLESS methods, Illumina-specific interface",
+      "support": "reported"
+    },
+    "e52": {
+      "pointer": "/bless/extraction/states/9/evidence/1",
+      "source_id": "paper:23503052",
+      "locator": "[b00032] Next-generation sequencing, BLESS library preparation",
+      "support": "reported"
+    },
+    "e53": {
+      "pointer": "/bless/extraction/states/9/properties/1/evidence/2",
+      "source_id": "paper:23503052",
+      "locator": "[b00039] Illumina data, barcode interpretation and alignment",
+      "support": "reported"
+    },
+    "e54": {
+      "pointer": "/bless/extraction/states/10/properties/3/evidence/4",
+      "source_id": "card:bless",
+      "locator": "Pros and Cons",
+      "support": "reported"
+    },
+    "e55": {
+      "pointer": "/bless/extraction/paper_matches/1/evidence/0",
+      "source_id": "card:bless",
+      "locator": "References / neighboring kit entry",
+      "support": "reported"
+    },
+    "e56": {
+      "pointer": "/bless/extraction/paper_matches/2/evidence/0",
+      "source_id": "card:bless",
+      "locator": "References / neighboring kit entry",
+      "support": "reported"
+    },
+    "e57": {
+      "pointer": "/drop-seq/extraction/states/0/evidence/2",
+      "source_id": "paper:26000488",
+      "locator": "[b00015] Results, microfluidic co-flow inputs",
+      "support": "reported"
+    },
+    "e58": {
+      "pointer": "/drop-seq/extraction/states/2/evidence/3",
+      "source_id": "paper:26000488",
+      "locator": "[b00015] Results, droplet occupancy and productive subset",
+      "support": "reported"
+    },
+    "e59": {
+      "pointer": "/drop-seq/extraction/states/3/evidence/1",
+      "source_id": "card:drop-seq",
+      "locator": "Opening method description, lysis and capture",
+      "support": "reported"
+    },
+    "e60": {
+      "pointer": "/drop-seq/extraction/states/3/components/2/evidence/1",
+      "source_id": "paper:26000488",
+      "locator": "[b00017] Results, molecular attachment after pooling",
+      "support": "reported"
+    },
+    "e61": {
+      "pointer": "/drop-seq/extraction/states/4/evidence/3",
+      "source_id": "paper:26000488",
+      "locator": "[b00112] Figure 2A legend, droplet breaking and bulk RT",
+      "support": "reported"
+    },
+    "e62": {
+      "pointer": "/drop-seq/extraction/states/1/evidence/2",
+      "source_id": "paper:26000488",
+      "locator": "[b00011] Results, four-part primer design",
+      "support": "reported"
+    },
+    "e63": {
+      "pointer": "/drop-seq/extraction/states/1/components/1/evidence/0",
+      "source_id": "paper:26000488",
+      "locator": "[b00011] Results, bead primer orientation",
+      "support": "reported"
+    },
+    "e64": {
+      "pointer": "/drop-seq/extraction/states/1/properties/3/evidence/2",
+      "source_id": "paper:26000488",
+      "locator": "[b00012] Results, cell barcode, UMI and terminal oligo-dT",
+      "support": "reported"
+    },
+    "e65": {
+      "pointer": "/drop-seq/extraction/states/5/properties/1/evidence/2",
+      "source_id": "paper:26000488",
+      "locator": "[b00112] Figure 2C legend, paired-read content",
+      "support": "reported"
+    },
+    "e66": {
+      "pointer": "/drop-seq/extraction/states/5/evidence/3",
+      "source_id": "paper:26000488",
+      "locator": "[b00056] Experimental Procedures, PCR and 3-prime library construction",
+      "support": "reported"
+    },
+    "e67": {
+      "pointer": "/drop-seq/extraction/operations/3/evidence/6",
+      "source_id": "paper:26000488",
+      "locator": "[b00111] Figure 1B legend, pre-existing PCR handle",
+      "support": "reported"
+    },
+    "e68": {
+      "pointer": "/drop-seq/extraction/states/6/properties/5/evidence/3",
+      "source_id": "paper:26000488",
+      "locator": "[b00026] Results, Conversion efficiency",
+      "support": "reported"
+    },
+    "e69": {
+      "pointer": "/drop-seq/extraction/states/6/properties/5/evidence/5",
+      "source_id": "paper:26000488",
+      "locator": "[b00024] Results, Single-cell impurity",
+      "support": "reported"
+    },
+    "e70": {
+      "pointer": "/g-and-t-seq/extraction/states/2/evidence/1",
+      "source_id": "paper:27685099",
+      "locator": "Development and overview of the procedure, manuscript p. 4",
+      "support": "reported"
+    },
+    "e71": {
+      "pointer": "/g-and-t-seq/extraction/states/2/components/0/evidence/1",
+      "source_id": "paper:27685099",
+      "locator": "Development and overview of the procedure, manuscript p. 4",
+      "support": "reported"
+    },
+    "e72": {
+      "pointer": "/g-and-t-seq/extraction/states/4/components/3/evidence/0",
+      "source_id": "paper:27685099",
+      "locator": "Development and overview of the procedure, manuscript p. 4",
+      "support": "reported"
+    },
+    "e73": {
+      "pointer": "/g-and-t-seq/extraction/states/5/properties/8/evidence/1",
+      "source_id": "paper:27685099",
+      "locator": "Procedure, Physical separation of polyadenylated mRNA and gDNA, step 21, manuscript p. 18",
+      "support": "reported"
+    },
+    "e74": {
+      "pointer": "/g-and-t-seq/extraction/states/7/evidence/1",
+      "source_id": "paper:27685099",
+      "locator": "Procedure, Reverse Transcription, step 29, manuscript p. 19",
+      "support": "reported"
+    },
+    "e75": {
+      "pointer": "/g-and-t-seq/extraction/states/7/evidence/2",
+      "source_id": "paper:27685099",
+      "locator": "Introduction, Smart-seq2 principle, manuscript p. 3",
+      "support": "reported"
+    },
+    "e76": {
+      "pointer": "/g-and-t-seq/extraction/states/7/properties/2/evidence/0",
+      "source_id": "paper:27685099",
+      "locator": "Limitations, manuscript p. 6",
+      "support": "reported"
+    },
+    "e77": {
+      "pointer": "/g-and-t-seq/extraction/states/8/evidence/1",
+      "source_id": "paper:27685099",
+      "locator": "Procedure, step 55B heading, manuscript p. 26",
+      "support": "reported"
+    },
+    "e78": {
+      "pointer": "/g-and-t-seq/extraction/states/8/properties/1/evidence/0",
+      "source_id": "paper:27685099",
+      "locator": "Limitations, manuscript p. 6",
+      "support": "reported"
+    },
+    "e79": {
+      "pointer": "/g-and-t-seq/extraction/states/11/evidence/1",
+      "source_id": "paper:27685099",
+      "locator": "Procedure, Library sequencing, step 77, manuscript p. 31",
+      "support": "reported"
+    },
+    "e80": {
+      "pointer": "/g-and-t-seq/extraction/states/7/properties/4/evidence/1",
+      "source_id": "paper:27685099",
+      "locator": "Development and overview of the procedure, manuscript p. 5",
+      "support": "reported"
+    },
+    "e81": {
+      "pointer": "/g-and-t-seq/extraction/states/9/evidence/2",
+      "source_id": "paper:27685099",
+      "locator": "Procedure, tagmentation-based library preparation, steps 69–72, manuscript p. 29",
+      "support": "reported"
+    },
+    "e82": {
+      "pointer": "/g-and-t-seq/extraction/states/16/evidence/2",
+      "source_id": "paper:27685099",
+      "locator": "Procedure, Data analysis introduction, manuscript p. 31",
+      "support": "reported"
+    },
+    "e83": {
+      "pointer": "/g-and-t-seq/extraction/states/10/evidence/0",
+      "source_id": "paper:27685099",
+      "locator": "Figure Legends, Figure 1, manuscript p. 43",
+      "support": "reported"
+    },
+    "e84": {
+      "pointer": "/g-and-t-seq/extraction/states/10/evidence/2",
+      "source_id": "paper:27685099",
+      "locator": "Procedure, library preparation introduction, manuscript p. 28",
+      "support": "reported"
+    }
+  },
+  "archived_review_index": {
+    "r1": {
+      "target": "operation:display_library",
+      "pointer": "/pd-seq/review/checks/66",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r2": {
+      "target": "correction:interaction_identity",
+      "pointer": "/pd-seq/review/checks/2",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r3": {
+      "target": "operation_semantics:pan_a",
+      "pointer": "/pd-seq/review/checks/119",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r4": {
+      "target": "operation_semantics:pan_c",
+      "pointer": "/pd-seq/review/checks/120",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r5": {
+      "target": "operation:interpret",
+      "pointer": "/pd-seq/review/checks/74",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r6": {
+      "target": "construction",
+      "pointer": "/pd-seq/review/checks/0",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r7": {
+      "target": "correction:sequenced_rounds",
+      "pointer": "/pd-seq/review/checks/3",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r8": {
+      "target": "unknown:input_reference_sampling",
+      "pointer": "/pd-seq/review/checks/313",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r9": {
+      "target": "state_properties:display_library",
+      "pointer": "/prop-pd/review/checks/61",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r10": {
+      "target": "correction:binding_not_hybridization",
+      "pointer": "/prop-pd/review/checks/1",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r11": {
+      "target": "construction",
+      "pointer": "/prop-pd/review/checks/0",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r12": {
+      "target": "state_properties:sequence_reads",
+      "pointer": "/prop-pd/review/checks/68",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r13": {
+      "target": "state_properties:peptide_counts",
+      "pointer": "/prop-pd/review/checks/64",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r14": {
+      "target": "unknown:primary_plate_confirmation",
+      "pointer": "/prop-pd/review/checks/97",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r15": {
+      "target": "unknown:selected_pool_sequencing_interface",
+      "pointer": "/prop-pd/review/checks/98",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r16": {
+      "target": "scope:RAD",
+      "pointer": "/rad/review/checks/2",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r17": {
+      "target": "state_properties:s3_sheared_selected",
+      "pointer": "/rad/review/checks/21",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r18": {
+      "target": "operation_semantics:o5_amplify",
+      "pointer": "/rad/review/checks/61",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r19": {
+      "target": "state_properties:s6_rad_reads",
+      "pointer": "/rad/review/checks/42",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r20": {
+      "target": "unknown:u1_clipped_terminal_caption",
+      "pointer": "/rad/review/checks/92",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r21": {
+      "target": "operation:o_label",
+      "pointer": "/bless/review/checks/23",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r22": {
+      "target": "correction:c_fragmentation",
+      "pointer": "/bless/review/checks/1",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r23": {
+      "target": "state_properties:s_two_linkers",
+      "pointer": "/bless/review/checks/78",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r24": {
+      "target": "state_properties:s_amplicons",
+      "pointer": "/bless/review/checks/68",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r25": {
+      "target": "state_property:s_reads:content",
+      "pointer": "/bless/review/checks/110",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r26": {
+      "target": "unknown:u_catalogue_limits_confirmation",
+      "pointer": "/bless/review/checks/117",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r27": {
+      "target": "unknown:u_image_fine_detail",
+      "pointer": "/bless/review/checks/118",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r28": {
+      "target": "operation_semantics:o_sequence",
+      "pointer": "/bless/review/checks/39",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r29": {
+      "target": "state_properties:captured_droplets",
+      "pointer": "/drop-seq/review/checks/59",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r30": {
+      "target": "state_properties:pooled_beads",
+      "pointer": "/drop-seq/review/checks/60",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r31": {
+      "target": "state_properties:beads",
+      "pointer": "/drop-seq/review/checks/57",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r32": {
+      "target": "state_properties:library",
+      "pointer": "/drop-seq/review/checks/61",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r33": {
+      "target": "state_properties:reads",
+      "pointer": "/drop-seq/review/checks/62",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r34": {
+      "target": "correction:c_readout_identity",
+      "pointer": "/drop-seq/review/checks/1",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r35": {
+      "target": "correction:c_template_switch_handle",
+      "pointer": "/drop-seq/review/checks/2",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r36": {
+      "target": "operation:capture",
+      "pointer": "/drop-seq/review/checks/15",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r37": {
+      "target": "operation_semantics:capture",
+      "pointer": "/drop-seq/review/checks/25",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r38": {
+      "target": "construction",
+      "pointer": "/g-and-t-seq/review/checks/0",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r39": {
+      "target": "operation_semantics:o_separate",
+      "pointer": "/g-and-t-seq/review/checks/68",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r40": {
+      "target": "operation_semantics:o_wta",
+      "pointer": "/g-and-t-seq/review/checks/71",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r41": {
+      "target": "operation_semantics:o_mda",
+      "pointer": "/g-and-t-seq/review/checks/66",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r42": {
+      "target": "operation_semantics:o_integrate",
+      "pointer": "/g-and-t-seq/review/checks/63",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r43": {
+      "target": "state_property:s_rna_library:cell_library",
+      "pointer": "/g-and-t-seq/review/checks/200",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r44": {
+      "target": "scope:G&T-Seq",
+      "pointer": "/g-and-t-seq/review/checks/81",
+      "verdict": "supported",
+      "action": "accept"
+    },
+    "r45": {
+      "target": "state_properties:s_dna_library",
+      "pointer": "/g-and-t-seq/review/checks/124",
+      "verdict": "supported",
+      "action": "accept"
+    }
+  }
+}

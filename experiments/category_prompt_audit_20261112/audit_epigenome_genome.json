@@ -1,0 +1,1759 @@
+{
+  "audit_id": "category_prompt_audit_20261112_epigenome_genome",
+  "audit_date": "2026-11-12",
+  "scope": {
+    "method_ids": [
+      "atac-seq",
+      "capture-c",
+      "bischip-seq",
+      "mab-seq",
+      "duplex-sequencing",
+      "scatac-seq-cell-index"
+    ],
+    "task": "Audit archived extraction content and lean shared author guidance; define conditional category evaluation requirements.",
+    "evidence_boundary": "All six complete archived extractions were read, including properties, roles, effects, flows, scopes, corrections, unknowns and every distinct embedded evidence item. Repeated identical evidence was deduplicated only for inspection. Archived review verdicts and pertinent review explanations were inspected. No fresh paper retrieval, image inspection, wet-lab validation or independent full-paper verification was performed.",
+    "status_meaning": "preserved means explicitly represented in this archived extraction with its embedded source support; it is not fresh scientific acceptance. unresolved names a bounded evidence/interpretation gap. No current-output scientific contradiction was established by this annotation audit.",
+    "comparison_limit": "The six examples are development cases from three inventory categories. Category membership does not establish a shared mechanism, representativeness, or causal prompt superiority. New compact-author outputs were not yet available to this audit.",
+    "display_limit": "No live UI or rendered display was inspected. Potential display-only failures below mean facts already exist in assertions and must be sought in the display before calling them extraction omissions.",
+    "changes": "One new audit JSON only. No production, baseline, contract, plan, source or job changes."
+  },
+  "inputs": {
+    "baseline_records.json": {
+      "path": "experiments/category_prompt_audit_20261112/baseline_records.json",
+      "sha256": "e0fffb93ccdbb7e13fb05468cd3e88b365d6d6eb3bc28110f16f5f73fde08ea8"
+    },
+    "selection.json": {
+      "path": "experiments/category_prompt_audit_20261112/selection.json",
+      "sha256": "a50f9f07ee41a6e43a3d54365220873acd2189e5fa75ebe1cc135eb8be7ab029"
+    },
+    "README.txt": {
+      "path": "experiments/category_prompt_audit_20261112/README.txt",
+      "sha256": "5e639c5ed4420b99d14084ddd5c880a9ebe0cd4eb10c887a3e79986290572bc0"
+    },
+    "author_contract.txt": {
+      "path": "experiments/category_prompt_audit_20261112/author_contract.txt",
+      "sha256": "8247c5e485e11bbedc45de1ff1b93f63625ac0c82113617fa07ef70a421adcbb"
+    },
+    "prompts.py": {
+      "path": "src/genomics_discovery/illumina/prompts.py",
+      "sha256": "a2b8b5d5692ea8c141b16bb7ede64ca8b0ddccd3906e9b395cb04de8c63e1026"
+    },
+    "representation.py": {
+      "path": "src/genomics_discovery/illumina/representation.py",
+      "sha256": "cc5e3c6d8f092ee0c0f6bfe82775e2e67a8006824d5cab6ac5d301be758b88a6"
+    }
+  },
+  "issue_types": {
+    "ambiguity": "A scientific or attribution meaning remains unclear; a different wording alone is not an error.",
+    "evidence_insufficiency": "The registered evidence does not establish the consequential claim at the requested level, including source-quality limitations.",
+    "actual_contradiction": "Incompatible asserted claims/routes, or explicitly identified source conflicts. Resolved source conflicts are not current-output contradictions.",
+    "display_only": "A supported assertion exists but is not visible in a display. This audit flags candidates, not verified UI defects.",
+    "explanation_field_placement": "Extractor/source-reading narration occupies scientific explanation fields; moving it must preserve scientific qualifications.",
+    "representation_repetition": "Equivalent local processing is repeated. This is a simplification candidate, not proof of scientific error."
+  },
+  "categories": [
+    {
+      "category": [
+        "Epigenome",
+        "DNA-Protein Interactions"
+      ],
+      "method_ids": [
+        "atac-seq",
+        "capture-c"
+      ],
+      "essential_conditional_requirements": [
+        {
+          "id": "DPI-1",
+          "when": "A physical chromatin preparation is processed.",
+          "requirement": "Identify preparation and physical context, including any fixation or compartment needed for the selected mechanism.",
+          "check": "Trace starting State properties and the first transformation; do not interchange native nuclei, fixed chromatin and purified DNA."
+        },
+        {
+          "id": "DPI-2",
+          "when": "A selection or proximity-recording step is present.",
+          "requirement": "State what actually creates the selectivity or record and on which molecular substrate.",
+          "check": "For accessibility inspect preferential Tn5 insertion; for contact capture inspect fixation, restriction boundaries, covalent junction formation and target-probe capture separately."
+        },
+        {
+          "id": "DPI-3",
+          "when": "The resulting library represents a biological association.",
+          "requirement": "Name the sequenced carrier and distinguish it from proteins, probes, affinity handles and former associations.",
+          "check": "Trace association changes into the DNA library and read data, including where a physical protein association becomes a covalent DNA junction."
+        },
+        {
+          "id": "DPI-4",
+          "when": "Sequence positions, lengths or junction abundance are interpreted.",
+          "requirement": "Explain their supported measurement meaning and consequential selectivity/resolution limits.",
+          "check": "Accessibility is preferential; contact frequency is not functional proof. Raw sequence observations must not silently become analyzed coordinates or filtered contact counts."
+        },
+        {
+          "id": "DPI-5",
+          "when": "A shared card or conflicting source supplies the route.",
+          "requirement": "Keep assigned member history and supported corrections consistent in States, Operations and Flows.",
+          "check": "A corrected order must be implemented. Shared headings do not transfer another member's labeling chemistry or quantitative efficiency."
+        }
+      ],
+      "non_requirements": [
+        "No common mechanism for ATAC-seq and Capture-C.",
+        "No required extra node per chemistry detail or downstream analysis.",
+        "No exact performance/yield claim inferred from a shared catalogue."
+      ]
+    },
+    {
+      "category": [
+        "Epigenome",
+        "Methylation"
+      ],
+      "method_ids": [
+        "bischip-seq",
+        "mab-seq"
+      ],
+      "essential_conditional_requirements": [
+        {
+          "id": "METH-1",
+          "when": "Input selection or preparation limits the represented DNA population.",
+          "requirement": "Record the selected population and the actual selection basis.",
+          "check": "Distinguish chromatin-mark ChIP from methylated-DNA affinity enrichment and from methylase conversion within one DNA preparation."
+        },
+        {
+          "id": "METH-2",
+          "when": "Base chemistry encodes original states.",
+          "requirement": "Describe relevant original base states, treatment changes and resulting sequence calls, with the applicable sequence context.",
+          "check": "Check each treatment/control history; an original chemical mark is not automatically present in PCR copies."
+        },
+        {
+          "id": "METH-3",
+          "when": "Different original states share the same output.",
+          "requirement": "State which original states remain indistinguishable or explicitly retain unsupported specificity as unresolved.",
+          "check": "Do not infer separate modification calls from a combined C/T channel; do not import absent 5hmC-specific evidence from another method."
+        },
+        {
+          "id": "METH-4",
+          "when": "A control, comparison or incomplete reaction affects interpretation.",
+          "requirement": "Preserve condition-specific local effects and consequential protection/conversion limitations.",
+          "check": "Do not assign M.SssI protection to the untreated control or invent obligatory subtraction. Do not describe the idealized code as perfect chemical conversion."
+        },
+        {
+          "id": "METH-5",
+          "when": "Selection history or original chromatin context survives into the readout.",
+          "requirement": "Specify its carrier and resolution after material is removed or copied.",
+          "check": "ChIP fraction of origin can remain attributable after histones are removed; chromatin-fragment resolution differs from methylation base-call resolution."
+        }
+      ],
+      "non_requirements": [
+        "No mandatory ChIP, methylase, control or single common methylation mechanism across the category.",
+        "No forced physical separation of different base classes.",
+        "No exact reagent recipe or conversion percentage unless needed for the scoped claim."
+      ]
+    },
+    {
+      "category": [
+        "Genome",
+        "DNA Low-Level Detection"
+      ],
+      "method_ids": [
+        "duplex-sequencing",
+        "scatac-seq-cell-index"
+      ],
+      "essential_conditional_requirements": [
+        {
+          "id": "LOW-1",
+          "when": "Identity tags or compartments support attribution.",
+          "requirement": "Identify the unit, carrier and supported association at each change in attribution.",
+          "check": "Distinguish molecule/strand family, well, cell and sample identity; a barcode alone does not establish unique identity."
+        },
+        {
+          "id": "LOW-2",
+          "when": "Tagging, PCR or redistribution determines identity.",
+          "requirement": "Record when tags attach and how identities survive amplification and any physical pooling.",
+          "check": "Duplex tags precede PCR; scATAC first well index precedes intact-nucleus pooling and second index follows redistribution/lysis."
+        },
+        {
+          "id": "LOW-3",
+          "when": "Independent processing, a physical pool or a data collection is present.",
+          "requirement": "Keep unit-to-output correspondence recoverable and distinguish material organization from data grouping.",
+          "check": "Opposite strand families can coexist in one library/data State. Independently indexed wells can be compact collections only if the two splits, two pools and local barcode histories remain explicit."
+        },
+        {
+          "id": "LOW-4",
+          "when": "A computational readout or consensus yields the result.",
+          "requirement": "Explain the observation-to-result step without turning a dataset into a physical fraction.",
+          "check": "SSCS and DCS are computed sequence datasets; combinatorial index reads support cell grouping while chromatin DNA carries accessibility information."
+        },
+        {
+          "id": "LOW-5",
+          "when": "Residual error, collision or incomplete recovery changes the result.",
+          "requirement": "Retain the relevant failure mode and its stage-specific limit.",
+          "check": "SSCS can retain first-cycle errors; DCS needs both partner strands and concordance. Cell-index collisions remain possible and reported rates are implementation-specific."
+        }
+      ],
+      "non_requirements": [
+        "No forced UMIs or cell barcodes on every low-level assay.",
+        "No shared error-correction mechanism between Duplex Sequencing and scATAC.",
+        "No required fixed well count, branch count, family threshold or universal collision rate."
+      ]
+    }
+  ],
+  "methods": {
+    "atac-seq": {
+      "archived_status": "supported",
+      "archived_pins": {
+        "card.json": "8c92b1665c56197e16b558752a9e025908dfd64c385c25024b32185ad8332899",
+        "source_registry.json": "af917e4b0051369b5249adae5925ef0af2a293f65d3bcc36a140c04435ace8bf",
+        "extraction.json": "f022f2155b9b1fa895f1bfe210016cdc1886195a1598deeee550345bf87a9d70",
+        "review.json": "f42bf6d172c5eaebd88ede213fca9ee368e649efca631fc85457e4bf184c0344"
+      },
+      "archived_review": {
+        "checks": 95,
+        "actions": {
+          "accept": 95
+        },
+        "record_check_pointer": "/atac-seq/review/checks/0",
+        "interpretation": "Historical acceptance only; this audit does not reissue a scientific review."
+      },
+      "essential_assessments": [
+        {
+          "requirement": "DPI-1",
+          "status": "preserved",
+          "conclusion": "Prepared unfixed nuclei with native chromatin are explicitly recorded.",
+          "output_fields": [
+            {
+              "id": "native_chromatin",
+              "pointer": "/atac-seq/extraction/states/0/properties/0"
+            },
+            {
+              "id": "native_chromatin",
+              "pointer": "/atac-seq/extraction/states/0/properties/1"
+            }
+          ],
+          "source_evidence_ids": [
+            "A1"
+          ]
+        },
+        {
+          "requirement": "DPI-2",
+          "status": "preserved",
+          "conclusion": "Adapter-loaded Tn5 fragments and tags accessible genomic DNA in a coupled event; selection is preferential.",
+          "output_fields": [
+            {
+              "id": "tagment_accessible_chromatin",
+              "pointer": "/atac-seq/extraction/operations/0/mechanism"
+            },
+            {
+              "id": "tagment_accessible_chromatin",
+              "pointer": "/atac-seq/extraction/operations/0/effects"
+            }
+          ],
+          "source_evidence_ids": [
+            "A2",
+            "A3"
+          ]
+        },
+        {
+          "requirement": "DPI-3",
+          "status": "preserved",
+          "conclusion": "Genomic inserts and insertion boundaries carry accessibility information; the enzyme is not asserted to be incorporated.",
+          "output_fields": [
+            {
+              "id": "tagmented_preparation",
+              "pointer": "/atac-seq/extraction/states/2/properties/2"
+            },
+            {
+              "id": "tagment_accessible_chromatin",
+              "pointer": "/atac-seq/extraction/operations/0/effects/0"
+            }
+          ],
+          "source_evidence_ids": [
+            "A2",
+            "A3"
+          ]
+        },
+        {
+          "requirement": "DPI-4",
+          "status": "preserved",
+          "conclusion": "Read data precedes genome alignments, and paired lengths can represent nucleosome-spanning fragments.",
+          "output_fields": [
+            {
+              "id": "sequencing_library",
+              "pointer": "/atac-seq/extraction/states/3/properties/2"
+            },
+            {
+              "id": "sequence_reads",
+              "pointer": "/atac-seq/extraction/states/4"
+            },
+            {
+              "id": "genome_alignments",
+              "pointer": "/atac-seq/extraction/states/5"
+            }
+          ],
+          "source_evidence_ids": [
+            "A4",
+            "A5"
+          ]
+        },
+        {
+          "requirement": "DPI-5",
+          "status": "preserved",
+          "conclusion": "Scope retains the purified-before-PCR implementation and excludes the low-cell purification-omitting variant.",
+          "output_fields": [
+            {
+              "pointer": "/atac-seq/extraction/scope"
+            },
+            {
+              "id": "purify_and_amplify",
+              "pointer": "/atac-seq/extraction/operations/1"
+            }
+          ],
+          "source_evidence_ids": []
+        }
+      ],
+      "findings": [
+        {
+          "type": "explanation_field_placement",
+          "status": "simplification_candidate",
+          "finding": "Descriptions explain how image panels were decomposed; mechanism also comments on blue icons/end marks. These clauses can move without deleting the scientific preference or end-chemistry uncertainty.",
+          "output_fields": [
+            {
+              "id": "tagment_accessible_chromatin",
+              "pointer": "/atac-seq/extraction/operations/0/description"
+            },
+            {
+              "id": "tagment_accessible_chromatin",
+              "pointer": "/atac-seq/extraction/operations/0/mechanism"
+            },
+            {
+              "id": "purify_and_amplify",
+              "pointer": "/atac-seq/extraction/operations/1/description"
+            },
+            {
+              "id": "localize_fragments",
+              "pointer": "/atac-seq/extraction/operations/3/description"
+            }
+          ],
+          "recommended_action": "Move source-granularity narration to Evidence.rationale; keep actual procedure, probabilistic selectivity and fragment interpretation."
+        },
+        {
+          "type": "evidence_insufficiency",
+          "status": "already_recorded",
+          "finding": "Clipped terminal image and catalogue-only adapter/yield and processing caveats have bounded nonblocking Unknowns. They do not demonstrate a missing core mechanism.",
+          "output_fields": [
+            {
+              "id": "right_edge_image_quality",
+              "pointer": "/atac-seq/extraction/unknowns/0"
+            },
+            {
+              "id": "catalogue_amplification_caveats",
+              "pointer": "/atac-seq/extraction/unknowns/1"
+            },
+            {
+              "id": "catalogue_mechanical_caveat",
+              "pointer": "/atac-seq/extraction/unknowns/2"
+            }
+          ],
+          "recommended_action": "Retain qualifiers. Do not call exact half-yield or processing artifacts primary-verified; do not guess clipped end chemistry."
+        },
+        {
+          "type": "display_only",
+          "status": "potential_only",
+          "finding": "A label-only display could hide the already-recorded prepared-nuclei context and nonexclusive fragment population.",
+          "output_fields": [
+            {
+              "id": "native_chromatin",
+              "pointer": "/atac-seq/extraction/states/0/properties/1"
+            },
+            {
+              "id": "sequencing_library",
+              "pointer": "/atac-seq/extraction/states/3/properties/2"
+            }
+          ],
+          "recommended_action": "Inspect display/property visibility before requesting new extraction nodes."
+        }
+      ],
+      "source_evidence": {
+        "A1": {
+          "pointer": "/atac-seq/extraction/states/0/evidence/1",
+          "source_id": "paper:24097267",
+          "locator": "[b00008]",
+          "support": "reported",
+          "quote": "we hypothesized that transposition by purified Tn5, a prokaryotic transposase, on small numbers of unfixed eukaryotic nuclei would interrogate regions of accessible chromatin."
+        },
+        "A2": {
+          "pointer": "/atac-seq/extraction/states/1/evidence/1",
+          "source_id": "paper:24097267",
+          "locator": "[b00008]",
+          "support": "reported",
+          "quote": "Hyperactive Tn5 transposase10,11, loaded in vitro with adapters for high-throughput DNA sequencing, can simultaneously fragment and tag a genome with sequencing adapters (previously described as “tagmentation”11)."
+        },
+        "A3": {
+          "pointer": "/atac-seq/extraction/states/1/properties/1/evidence/1",
+          "source_id": "paper:24097267",
+          "locator": "[b00008]",
+          "support": "reported",
+          "quote": "ATAC-seq uses Tn5 transposase to integrate its adapter payload into regions of accessible chromatin, whereas steric hindrance less accessible chromatin makes transposition less probable. Therefore, amplifiable DNA fragments suitable for high-throughput sequencing are preferentially generated at locations of open chromatin (Fig 1a)."
+        },
+        "A4": {
+          "pointer": "/atac-seq/extraction/states/2/properties/3/evidence/1",
+          "source_id": "paper:24097267",
+          "locator": "[b00011]",
+          "support": "reported",
+          "quote": "We found that ATAC-seq paired-end reads produce detailed information about nucleosome packing and positioning. The insert size distribution of sequenced fragments from human chromatin has clear periodicity of approximately 200 base pairs, suggesting many fragments are protected by integer multiples of nucleosomes (Fig 2a)."
+        },
+        "A5": {
+          "pointer": "/atac-seq/extraction/states/2/properties/2/evidence/2",
+          "source_id": "paper:24097267",
+          "locator": "[b00038]",
+          "support": "reported",
+          "quote": "Reads were aligned to hg19 using BOWTIE36"
+        }
+      },
+      "reviewer_checks": [
+        "Check accessibility preference and nucleosome-spanning fragments survive shortening.",
+        "Verify both the physical library and data processing stages remain identifiable without requiring the same node count.",
+        "Ensure source narration removal does not erase catalogue-versus-primary evidence qualification."
+      ],
+      "missing_or_unclear": "No essential content omission or new internal contradiction established from the archive; the named source-level gaps remain unresolved."
+    },
+    "capture-c": {
+      "archived_status": "supported",
+      "archived_pins": {
+        "card.json": "ad33b5bd0292a2b12c2fd08497f45c782d75cc2341214f390858b8d2a3eaca75",
+        "source_registry.json": "c0e1dab52ef8a66e925d488421e2305456c48d7cfb636d0c2a93b72f3a834edb",
+        "extraction.json": "cea10e670238387b7ecc6fec61062ec583cd814032c264a6753683371f55e52e",
+        "review.json": "dcdd759bc24dc2e0fd12abd59a54f42fe58effabdfcd6c2c6eb9015cfd8b9e46"
+      },
+      "archived_review": {
+        "checks": 122,
+        "actions": {
+          "accept": 122
+        },
+        "record_check_pointer": "/capture-c/review/checks/0",
+        "interpretation": "Historical acceptance only; this audit does not reissue a scientific review."
+      },
+      "essential_assessments": [
+        {
+          "requirement": "DPI-1",
+          "status": "preserved",
+          "conclusion": "Formaldehyde-fixed chromatin is digested before ligation, decrosslinking and DNA recovery.",
+          "output_fields": [
+            {
+              "id": "s_fixed",
+              "pointer": "/capture-c/extraction/states/1"
+            },
+            {
+              "id": "s_digested",
+              "pointer": "/capture-c/extraction/states/2"
+            },
+            {
+              "id": "o_ligate",
+              "pointer": "/capture-c/extraction/operations/2"
+            }
+          ],
+          "source_evidence_ids": [
+            "C1"
+          ]
+        },
+        {
+          "requirement": "DPI-2",
+          "status": "preserved",
+          "conclusion": "The graph separates contact encoding by ligation from locus enrichment by RNA-probe hybridization and streptavidin capture.",
+          "output_fields": [
+            {
+              "id": "o_ligate",
+              "pointer": "/capture-c/extraction/operations/2/information_effect"
+            },
+            {
+              "id": "o_capture",
+              "pointer": "/capture-c/extraction/operations/4/mechanism"
+            }
+          ],
+          "source_evidence_ids": [
+            "C1",
+            "C2",
+            "C3"
+          ]
+        },
+        {
+          "requirement": "DPI-3",
+          "status": "preserved",
+          "conclusion": "Biotin belongs to RNA probes; genomic DNA junctions remain the sequenced carrier after protein-context removal.",
+          "output_fields": [
+            {
+              "id": "s_probes",
+              "pointer": "/capture-c/extraction/states/5/properties/2"
+            },
+            {
+              "id": "s_3c",
+              "pointer": "/capture-c/extraction/states/3/properties/1"
+            },
+            {
+              "id": "o_capture",
+              "pointer": "/capture-c/extraction/operations/4/effects/1"
+            }
+          ],
+          "source_evidence_ids": [
+            "C1",
+            "C2",
+            "C3"
+          ]
+        },
+        {
+          "requirement": "DPI-4",
+          "status": "preserved",
+          "conclusion": "Raw reads include background/noninformative molecules; contact resolution is distinguished from nucleotide reading and biological function.",
+          "output_fields": [
+            {
+              "id": "s_reads",
+              "pointer": "/capture-c/extraction/states/9/properties/2"
+            },
+            {
+              "id": "s_reads",
+              "pointer": "/capture-c/extraction/states/9/properties/3"
+            },
+            {
+              "id": "o_sequence",
+              "pointer": "/capture-c/extraction/operations/6/information_effect"
+            }
+          ],
+          "source_evidence_ids": [
+            "C4",
+            "C5"
+          ]
+        },
+        {
+          "requirement": "DPI-5",
+          "status": "preserved",
+          "conclusion": "All three supported corrections are applied to order, biotin carrier and final post-capture amplification.",
+          "output_fields": [
+            {
+              "id": "c_digest_ligate_extract_order",
+              "pointer": "/capture-c/extraction/corrections/0"
+            },
+            {
+              "id": "c_biotin_carrier",
+              "pointer": "/capture-c/extraction/corrections/1"
+            },
+            {
+              "id": "c_capture_before_final_pcr",
+              "pointer": "/capture-c/extraction/corrections/2"
+            }
+          ],
+          "source_evidence_ids": [
+            "C1",
+            "C3"
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "type": "actual_contradiction",
+          "status": "source_conflict_resolved",
+          "finding": "Catalogue extraction/ligation/digestion order conflicts with the focal Methods; the archive uses the primary order in the graph. This is not an unresolved current-output contradiction.",
+          "output_fields": [
+            {
+              "id": "c_digest_ligate_extract_order",
+              "pointer": "/capture-c/extraction/corrections/0"
+            },
+            {
+              "id": "o_digest",
+              "pointer": "/capture-c/extraction/operations/1"
+            },
+            {
+              "id": "o_ligate",
+              "pointer": "/capture-c/extraction/operations/2"
+            }
+          ],
+          "recommended_action": "Keep the source conflict in Correction and verify actual flow order in any compact output."
+        },
+        {
+          "type": "ambiguity",
+          "status": "resolved_for_architecture",
+          "finding": "The catalogue biotin carrier and unlabeled orange image symbol are ambiguous; primary evidence identifies biotinylated RNA probes. The symbol itself remains unassigned.",
+          "output_fields": [
+            {
+              "id": "c_biotin_carrier",
+              "pointer": "/capture-c/extraction/corrections/1"
+            },
+            {
+              "id": "u_orange_marker",
+              "pointer": "/capture-c/extraction/unknowns/1"
+            }
+          ],
+          "recommended_action": "Do not equate the orange junction mark with biotin or transfer Hi-C junction-labeling chemistry into Capture-C."
+        },
+        {
+          "type": "explanation_field_placement",
+          "status": "simplification_candidate",
+          "finding": "Several descriptions justify added blocks or report what catalogue/paper/diagram says instead of solely stating the transformation.",
+          "output_fields": [
+            {
+              "id": "o_prepare",
+              "pointer": "/capture-c/extraction/operations/3/description"
+            },
+            {
+              "id": "o_capture",
+              "pointer": "/capture-c/extraction/operations/4/description"
+            },
+            {
+              "id": "o_amplify",
+              "pointer": "/capture-c/extraction/operations/5/description"
+            },
+            {
+              "id": "o_sequence",
+              "pointer": "/capture-c/extraction/operations/6/description"
+            }
+          ],
+          "recommended_action": "Move source comparisons to evidence/corrections; retain probe selectivity, off-target limits, pre/post-capture order and raw-read interpretation."
+        },
+        {
+          "type": "evidence_insufficiency",
+          "status": "already_recorded",
+          "finding": "Terminal clipping and the shared less-than-one-percent yield have targeted unresolved qualifications.",
+          "output_fields": [
+            {
+              "id": "u_clipped_terminal_image",
+              "pointer": "/capture-c/extraction/unknowns/0"
+            },
+            {
+              "id": "u_catalogue_yield_applicability",
+              "pointer": "/capture-c/extraction/unknowns/2"
+            }
+          ],
+          "recommended_action": "Do not convert shared catalogue yield into a verified member-specific efficiency."
+        }
+      ],
+      "source_evidence": {
+        "C1": {
+          "pointer": "/capture-c/extraction/states/3/evidence/0",
+          "source_id": "paper:24413732",
+          "locator": "Online methods, Generation of 3C libraries; registered text characters 38716-39121",
+          "support": "reported",
+          "quote": "The digested chromatin was ligated overnight (Fermentas HC Ligase final\nconcentration 10U/ml) at 16 degrees at 1400 rpm on the Comfort Thermomixer.\nThe samples were then decrosslinked overnight at 65oC with Proteinase K\n(Roche) followed by a 30 minute incubation at 37oC with RNAse (Roche).\nPhenol/Chloroform extraction was then performed followed by an Ethanol\nprecipitation and a wash with 70% Ethanol."
+        },
+        "C2": {
+          "pointer": "/capture-c/extraction/states/3/properties/1/evidence/0",
+          "source_id": "paper:24413732",
+          "locator": "Introduction, 3C measurement principle; registered text characters 4852-5021",
+          "support": "reported",
+          "quote": "These techniques\ninvolve digestion and re-ligation of fixed chromatin, followed by quantification of\nligation junctions, which reflect the frequencies of interaction5,6."
+        },
+        "C3": {
+          "pointer": "/capture-c/extraction/states/5/evidence/0",
+          "source_id": "paper:24413732",
+          "locator": "Supplementary figure 1b legend, biotinylated RNA probe capture and streptavidin pull-down; registered text characters 63420-63572",
+          "support": "reported",
+          "quote": "hybridisation\t\n   to\t\n   120\t\n   bp\t\n   biotinylated\t\n   RNA\t\n   SureSelect\t\n   capture\t\n   probes\t\n   and\t\n  \nstreptavidin\t\n   pull\t\n   down."
+        },
+        "C4": {
+          "pointer": "/capture-c/extraction/states/4/properties/2/evidence/1",
+          "source_id": "paper:24413732",
+          "locator": "A multiplexed, high-resolution method, informative molecules and exclusions; registered text characters 9994-10341",
+          "support": "reported",
+          "quote": "The targeted regions capture several different types of molecule. Some are\nsimply interacting with the targeted region itself; others are interacting with\nlocal sequences (defined here as within 2kb). Some junction fragments will span\ntwo capture points and these are no longer quantitative. All such fragments are\nexcluded from further analysis."
+        },
+        "C5": {
+          "pointer": "/capture-c/extraction/operations/6/evidence/4",
+          "source_id": "paper:24413732",
+          "locator": "A multiplexed, high-resolution method, resolution determinants; registered text characters 7231-7827",
+          "support": "reported",
+          "quote": "First, the resolution of a 3C assay depends both on the frequency with\nwhich the restriction enzyme used cuts within the genome, and also the size of\nthe bioinformatic window used to analyze the resulting distribution of ligation\njunctions. For a given frequency of digestion, the size of the appropriate window\nto be used depends on the signal generated: the window size can be decreased as\nthe density of the signal increases. Hence the method should be capable of\nproducing sufficient enrichment of ligation junctions from a 3C library generated\nusing a frequently cutting restriction enzyme."
+        }
+      },
+      "reviewer_checks": [
+        "Trace fixation to covalent junction to captured DNA; ensure the carrier changes at the right step.",
+        "Check probe biotin and DNA reporter remain distinct in assertions, not just quotations.",
+        "Verify corrected order through actual interfaces and preserve capture limitations without demanding a full filtering pipeline."
+      ],
+      "missing_or_unclear": "No new essential omission established. Capture-specific chemistry and contact interpretation already occupy explicit properties/effects; a broad label is not evidence of their absence."
+    },
+    "bischip-seq": {
+      "archived_status": "supported",
+      "archived_pins": {
+        "card.json": "e67fa059fbdd382f3301f5ce1449afb3f8d3681f77dd4810fe55d52192bd3e54",
+        "source_registry.json": "c4f4f629fa86944dbe20c37d4600a0ebe16606cee8e44ac56e903df2db0b7ff6",
+        "extraction.json": "3894fecaac669093d2b22e4f24637542382f73c05d434726726e972386796579",
+        "review.json": "38a414dd13b173b1cb95a4fab1198da51c86eba538645ce73bc78d4fbac4901b"
+      },
+      "archived_review": {
+        "checks": 91,
+        "actions": {
+          "accept": 91
+        },
+        "record_check_pointer": "/bischip-seq/review/checks/39",
+        "interpretation": "Historical acceptance only; this audit does not reissue a scientific review."
+      },
+      "essential_assessments": [
+        {
+          "requirement": "METH-1",
+          "status": "preserved",
+          "conclusion": "H3K27me3 antibody ChIP selects a chromatin fraction that can contain both methylated and unmethylated DNA.",
+          "output_fields": [
+            {
+              "id": "immunoprecipitate",
+              "pointer": "/bischip-seq/extraction/operations/1/mechanism"
+            },
+            {
+              "id": "captured_complexes",
+              "pointer": "/bischip-seq/extraction/states/2/properties/4"
+            }
+          ],
+          "source_evidence_ids": [
+            "B1",
+            "B2"
+          ]
+        },
+        {
+          "requirement": "METH-2",
+          "status": "preserved",
+          "conclusion": "Methylated adapters precede bisulfite/PCR; the amplified DNA encodes original cytosine status in sequence rather than carrying original methyl groups.",
+          "output_fields": [
+            {
+              "id": "adapter_ligated_dna",
+              "pointer": "/bischip-seq/extraction/states/4"
+            },
+            {
+              "id": "amplified_library",
+              "pointer": "/bischip-seq/extraction/states/5/properties/2"
+            },
+            {
+              "id": "bisulfite_and_pcr",
+              "pointer": "/bischip-seq/extraction/operations/4"
+            }
+          ],
+          "source_evidence_ids": [
+            "B4",
+            "B5"
+          ]
+        },
+        {
+          "requirement": "METH-3",
+          "status": "unresolved",
+          "conclusion": "The archived evidence reports operational C/T methylation but does not establish 5mC versus 5hmC discrimination. The extraction explicitly avoids a 5mC-only claim.",
+          "output_fields": [
+            {
+              "id": "modified_cytosine_specificity",
+              "pointer": "/bischip-seq/extraction/unknowns/1"
+            },
+            {
+              "id": "bisulfite_and_pcr",
+              "pointer": "/bischip-seq/extraction/operations/4/information_effect"
+            }
+          ],
+          "source_evidence_ids": [
+            "B5"
+          ]
+        },
+        {
+          "requirement": "METH-4",
+          "status": "preserved",
+          "conclusion": "ChIP yield/selectivity is qualified; no unshown control or alternative optimization chemistry is made an obligatory branch.",
+          "output_fields": [
+            {
+              "id": "immunoprecipitate",
+              "pointer": "/bischip-seq/extraction/operations/1/information_effect"
+            },
+            {
+              "id": "bisulfite_and_pcr",
+              "pointer": "/bischip-seq/extraction/operations/4/mechanism"
+            }
+          ],
+          "source_evidence_ids": []
+        },
+        {
+          "requirement": "METH-5",
+          "status": "preserved",
+          "conclusion": "After protein removal, DNA/read attribution uses ChIP fraction of origin. Methylation base-call resolution is distinct from fragment-scale chromatin enrichment.",
+          "output_fields": [
+            {
+              "id": "purify_and_shear",
+              "pointer": "/bischip-seq/extraction/operations/2/information_effect"
+            },
+            {
+              "id": "sequence_reads",
+              "pointer": "/bischip-seq/extraction/states/6/properties/3"
+            },
+            {
+              "id": "methylation_resolution",
+              "pointer": "/bischip-seq/extraction/corrections/1"
+            }
+          ],
+          "source_evidence_ids": [
+            "B3",
+            "B5",
+            "B6"
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "type": "actual_contradiction",
+          "status": "source_conflict_resolved",
+          "finding": "Catalogue MBD/hypermethylation selection and approximately 150-base methylation resolution conflict with the focal selector and base-call interpretation. Existing corrections resolve both in the assertions.",
+          "output_fields": [
+            {
+              "id": "selection_claim_scope",
+              "pointer": "/bischip-seq/extraction/corrections/0"
+            },
+            {
+              "id": "methylation_resolution",
+              "pointer": "/bischip-seq/extraction/corrections/1"
+            }
+          ],
+          "recommended_action": "Preserve resolved selection and resolution distinctions; do not restore the literal catalogue statements as assay truth."
+        },
+        {
+          "type": "evidence_insufficiency",
+          "status": "already_recorded",
+          "finding": "5hmC specificity, primary artwork delivery and clipped final image are distinct bounded gaps; only the first concerns interpretation of modified-base discrimination.",
+          "output_fields": [
+            {
+              "id": "modified_cytosine_specificity",
+              "pointer": "/bischip-seq/extraction/unknowns/1"
+            },
+            {
+              "id": "primary_workflow_artwork",
+              "pointer": "/bischip-seq/extraction/unknowns/2"
+            },
+            {
+              "id": "right_boundary_quality",
+              "pointer": "/bischip-seq/extraction/unknowns/0"
+            }
+          ],
+          "recommended_action": "Keep targeted uncertainty; do not treat unavailable artwork as absent primary method text or conflate MBD binding specificity with bisulfite chemistry."
+        },
+        {
+          "type": "explanation_field_placement",
+          "status": "simplification_candidate",
+          "finding": "The mechanism contains a long account of why adapter protection is inferred and which text does not separately describe uracil. Those evidence details can leave the procedure fields while the inferential qualification remains attached to the claim.",
+          "output_fields": [
+            {
+              "id": "prepare_adapter_library",
+              "pointer": "/bischip-seq/extraction/operations/3/mechanism"
+            },
+            {
+              "id": "bisulfite_and_pcr",
+              "pointer": "/bischip-seq/extraction/operations/4/mechanism"
+            },
+            {
+              "id": "immunoprecipitate",
+              "pointer": "/bischip-seq/extraction/operations/1/description"
+            }
+          ],
+          "recommended_action": "Retain source support and inferred status in Evidence; keep the adapter-before-conversion compatibility and unresolved modified-base specificity readable."
+        },
+        {
+          "type": "display_only",
+          "status": "potential_only",
+          "finding": "Histone removal and retained fraction attribution are already explicit. A display of the amplified-library label alone could obscure this distinction.",
+          "output_fields": [
+            {
+              "id": "amplified_library",
+              "pointer": "/bischip-seq/extraction/states/5/properties/1"
+            },
+            {
+              "id": "sequence_reads",
+              "pointer": "/bischip-seq/extraction/states/6/properties/3"
+            }
+          ],
+          "recommended_action": "Expose the relevant property rather than adding a histone-bearing DNA copy or new node."
+        }
+      ],
+      "source_evidence": {
+        "B1": {
+          "pointer": "/bischip-seq/extraction/states/0/evidence/3",
+          "source_id": "paper:22466171",
+          "locator": "[b00034] Methods: Chromatin immunoprecipitation (ChIP), target",
+          "support": "reported",
+          "quote": "The complexes were immunoprecipitated with antibodies specific for tri-methyl-histone H3(lys27)"
+        },
+        "B2": {
+          "pointer": "/bischip-seq/extraction/states/2/properties/4/evidence/1",
+          "source_id": "paper:22466171",
+          "locator": "[b00028] Discussion, methylation composition of the selected fraction",
+          "support": "reported",
+          "quote": "H3K27me3-modified histones can bind directly to both methylated and unmethylated alleles in the same cell"
+        },
+        "B3": {
+          "pointer": "/bischip-seq/extraction/states/2/components/0/evidence/1",
+          "source_id": "paper:22466171",
+          "locator": "[b00034] Methods: Chromatin immunoprecipitation (ChIP), DNA recovery",
+          "support": "reported",
+          "quote": "The immune complexes were eluted with 1% SDS and 0.1 M NaHCO3; samples were treated with proteinase K for 1 h; and DNA was purified by phenol:chloroform extraction and ethanol precipitation"
+        },
+        "B4": {
+          "pointer": "/bischip-seq/extraction/states/4/evidence/2",
+          "source_id": "paper:22466171",
+          "locator": "[b00036] Methods: Preparation of ChIP DNA for bisulfite treatment and Illumina Genome Analyzer, adapter ligation",
+          "support": "reported",
+          "quote": "Methylated paired-end adaptors undiluted (Illumina Part #1005560) were then ligated onto the ChIP DNA using 1 μL of undiluted methylated adaptor oligo mix, 4 μL of DNA ligase (Illumina Part #1000522)"
+        },
+        "B5": {
+          "pointer": "/bischip-seq/extraction/states/5/evidence/5",
+          "source_id": "paper:22466171",
+          "locator": "[b00042] Methods: Alignment of bisulfite-treated sequencing reads, readout interpretation",
+          "support": "reported",
+          "quote": "The number of methylated (C) and unmethylated (T) base calls at each CpG site within the genome was then extracted and imported into R for downstream analysis."
+        },
+        "B6": {
+          "pointer": "/bischip-seq/extraction/states/6/properties/2/evidence/1",
+          "source_id": "paper:22466171",
+          "locator": "[b00017] Results: Analysis of BisChIP-seq data, quantitative methylation interpretation",
+          "support": "reported",
+          "quote": "The proportion of cytosine base calls that are not bisulfite-converted at CpG dinucleotides is used to determine DNA methylation levels."
+        }
+      },
+      "reviewer_checks": [
+        "Ensure ChIP selects the histone-associated fraction, not hypermethylated DNA.",
+        "Confirm the histone modification is never asserted as a DNA/PCR-copy modification.",
+        "Check C/T measurement is adequately qualified and that shortening does not silently claim 5hmC discrimination."
+      ],
+      "missing_or_unclear": "No unsupported 5hmC discrimination should be supplied to fill the unresolved requirement. Other essential distinctions are recorded; no new internal contradiction was established."
+    },
+    "mab-seq": {
+      "archived_status": "supported",
+      "archived_pins": {
+        "card.json": "86151c8d9e724e4714b2377d68b767084b05de0d43962a985a3cffc501b5e00c",
+        "source_registry.json": "3b02caf2177be97b62ea28faf9b96bfcc4f11e15bd054bd7c3a04de7db4bceda",
+        "extraction.json": "55475edc7e09a89e604d06e91fd08be4ae77628471fd89747cb65934e1b05734",
+        "review.json": "f4fcc1765a63082433985d564e85205977984a59a197776362b11c0797bf4304"
+      },
+      "archived_review": {
+        "checks": 49,
+        "actions": {
+          "accept": 49
+        },
+        "record_check_pointer": "/mab-seq/review/checks/21",
+        "interpretation": "Historical acceptance only; this audit does not reissue a scientific review."
+      },
+      "essential_assessments": [
+        {
+          "requirement": "METH-1",
+          "status": "preserved",
+          "conclusion": "The input is DNA, with adapter-ligated genome-scale preparation explicitly scoped. Methylase changes bases within the preparation and does not isolate a target fraction.",
+          "output_fields": [
+            {
+              "id": "dna_input",
+              "pointer": "/mab-seq/extraction/states/0/properties/2"
+            },
+            {
+              "id": "methylate_cpg",
+              "pointer": "/mab-seq/extraction/operations/0/information_effect"
+            }
+          ],
+          "source_evidence_ids": [
+            "M1",
+            "M2"
+          ]
+        },
+        {
+          "requirement": "METH-2",
+          "status": "preserved",
+          "conclusion": "Original-state mapping differs across control and M.SssI branches and is recorded in output properties and local effects.",
+          "output_fields": [
+            {
+              "id": "control_dna_library",
+              "pointer": "/mab-seq/extraction/states/2/properties/1"
+            },
+            {
+              "id": "mab_dna_library",
+              "pointer": "/mab-seq/extraction/states/3/properties/1"
+            },
+            {
+              "id": "control_bisulfite_pcr",
+              "pointer": "/mab-seq/extraction/operations/1/effects"
+            },
+            {
+              "id": "mab_bisulfite_pcr",
+              "pointer": "/mab-seq/extraction/operations/2/effects"
+            }
+          ],
+          "source_evidence_ids": [
+            "M2",
+            "M3"
+          ]
+        },
+        {
+          "requirement": "METH-3",
+          "status": "preserved",
+          "conclusion": "MAB T reports combined 5fC/5caC at CpGs, while C combines original C/5mC/5hmC; non-CpG ambiguity is explicit.",
+          "output_fields": [
+            {
+              "id": "mab_dna_library",
+              "pointer": "/mab-seq/extraction/states/3/properties/1"
+            },
+            {
+              "id": "mab_dna_library",
+              "pointer": "/mab-seq/extraction/states/3/properties/3"
+            }
+          ],
+          "source_evidence_ids": [
+            "M2",
+            "M4"
+          ]
+        },
+        {
+          "requirement": "METH-4",
+          "status": "preserved",
+          "conclusion": "The control bypasses methylase, is independently processed, and is not described as obligatory subtraction. Incomplete protection and unequal conversion are retained.",
+          "output_fields": [
+            {
+              "id": "control_bisulfite_pcr",
+              "pointer": "/mab-seq/extraction/operations/1/information_effect"
+            },
+            {
+              "id": "mab_bisulfite_pcr",
+              "pointer": "/mab-seq/extraction/operations/2/information_effect"
+            },
+            {
+              "id": "mab_dna_library",
+              "pointer": "/mab-seq/extraction/states/3/properties/3"
+            }
+          ],
+          "source_evidence_ids": [
+            "M3",
+            "M5",
+            "M6"
+          ]
+        },
+        {
+          "requirement": "METH-5",
+          "status": "preserved",
+          "conclusion": "Original analyte states are represented by positional sequence codes in copied DNA; physical DNA endpoints are not mislabeled as measurements already acquired.",
+          "output_fields": [
+            {
+              "id": "control_dna_library",
+              "pointer": "/mab-seq/extraction/states/2/properties/1"
+            },
+            {
+              "id": "mab_dna_library",
+              "pointer": "/mab-seq/extraction/states/3/properties/1"
+            },
+            {
+              "id": "mab_dna_library",
+              "pointer": "/mab-seq/extraction/states/3/properties/2"
+            }
+          ],
+          "source_evidence_ids": [
+            "M2",
+            "M3"
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "type": "actual_contradiction",
+          "status": "source_conflict_resolved",
+          "finding": "The catalogue says methyltransferases unmodify C; the archived correction and methylate_cpg assert addition of methyl groups.",
+          "output_fields": [
+            {
+              "id": "catalogue_methylation_wording",
+              "pointer": "/mab-seq/extraction/corrections/0"
+            },
+            {
+              "id": "methylate_cpg",
+              "pointer": "/mab-seq/extraction/operations/0"
+            }
+          ],
+          "recommended_action": "Preserve the corrected chemistry without treating the catalogue typo as a remaining graph defect."
+        },
+        {
+          "type": "explanation_field_placement",
+          "status": "simplification_candidate",
+          "finding": "Descriptions of both conversion blocks explain why captions remain composite. That decomposition commentary can move; the two branches' differing input histories and C/T patterns cannot.",
+          "output_fields": [
+            {
+              "id": "control_bisulfite_pcr",
+              "pointer": "/mab-seq/extraction/operations/1/description"
+            },
+            {
+              "id": "mab_bisulfite_pcr",
+              "pointer": "/mab-seq/extraction/operations/2/description"
+            }
+          ],
+          "recommended_action": "Shorten source narration, not condition-specific chemistry. A shared block is acceptable only with explicit local effects for each condition."
+        },
+        {
+          "type": "evidence_insufficiency",
+          "status": "already_recorded",
+          "finding": "The upper label is clipped, but the archived initial labels and primary quotations independently support the chemistry.",
+          "output_fields": [
+            {
+              "id": "upper_label_boundary",
+              "pointer": "/mab-seq/extraction/unknowns/0"
+            }
+          ],
+          "recommended_action": "Keep a source-quality qualification; do not manufacture a scientific unknown in the already-supported conversion map."
+        },
+        {
+          "type": "display_only",
+          "status": "potential_only",
+          "finding": "Short labels DNA product or M.SssI-treated DNA omit details already present in identity, encoded_bases and measurement_limits.",
+          "output_fields": [
+            {
+              "id": "methylated_dna",
+              "pointer": "/mab-seq/extraction/states/1/properties"
+            },
+            {
+              "id": "mab_dna_library",
+              "pointer": "/mab-seq/extraction/states/3/properties"
+            }
+          ],
+          "recommended_action": "Evaluate labels alongside displayed properties before declaring missing chemistry."
+        }
+      ],
+      "source_evidence": {
+        "M1": {
+          "pointer": "/mab-seq/extraction/states/0/evidence/2",
+          "source_id": "paper:25362244",
+          "locator": "Online Methods, Library generation for genome-scale MAB-seq/BS-seq, [b00040], entry boundary",
+          "support": "reported",
+          "quote": "For BS-seq, methylated-adpator-ligated DNA was directly subjected to bisulfite conversion using Qiagen EpiTect DNA Bisulfite Kit (Qiagen, 59104) per manufacturer’s instructions, except that the thermal cycle was repeated twice. For MAB-seq, methylated adpator-ligated DNA was treated by M.SssI (New England Biolabs, M0226M) in a 50-µL reaction for two rounds."
+        },
+        "M2": {
+          "pointer": "/mab-seq/extraction/states/1/evidence/2",
+          "source_id": "paper:25362244",
+          "locator": "Results, Experimental strategy and validation of MAB-seq, [b00008]",
+          "support": "reported",
+          "quote": "Bisulfite conversion of M. SssI-treated DNA may therefore only deaminate 5fC and 5caC; originally unmodified C within CpGs is protected as 5mC. Subsequent sequencing would reveal 5fC and 5caC as T, whereas C/5mC/5hmC as C (Supplementary Fig. 2a)."
+        },
+        "M3": {
+          "pointer": "/mab-seq/extraction/states/2/evidence/1",
+          "source_id": "paper:25362244",
+          "locator": "Results, Experimental strategy and validation of MAB-seq, [b00008]",
+          "support": "reported",
+          "quote": "In standard BS-seq, C/5fC/5caC react with sodium bisulfite and are efficiently deaminated to uracil (C/5fC) or 5caU (5caC), both of which are sequenced as thymine (T), whereas 5mC and 5hmC are resistant to this chemical conversion and sequenced as C (Fig. 1a)."
+        },
+        "M4": {
+          "pointer": "/mab-seq/extraction/states/1/properties/2/evidence/0",
+          "source_id": "paper:25362244",
+          "locator": "Results, Experimental strategy and validation of MAB-seq, [b00008]",
+          "support": "reported",
+          "quote": "Notably, MAB-seq is unable to distinguish 5fC/5caC from unmodified C within non-CpG context due to the poor activity of M. SssI towards C within non-CpG context."
+        },
+        "M5": {
+          "pointer": "/mab-seq/extraction/states/1/properties/2/evidence/1",
+          "source_id": "paper:25362244",
+          "locator": "Results, Experimental strategy and validation of MAB-seq, [b00009]",
+          "support": "reported",
+          "quote": "Successful detection of 5fC/5caC using MAB-seq requires complete conversion of C to 5mC by M. SssI as well as efficient bisulfite conversion of 5fC/5caC."
+        },
+        "M6": {
+          "pointer": "/mab-seq/extraction/states/3/properties/3/evidence/3",
+          "source_id": "paper:25362244",
+          "locator": "Results, Experimental strategy and validation of MAB-seq, [b00009]",
+          "support": "reported",
+          "quote": "Consistent with previous reports 21, our analysis showed that 5fC (84.7%) and 5caC (99.5%), but not 5hmC (3.3%), are efficiently deaminated by bisulfite treatment and read as T (Supplementary Fig. 2b)."
+        }
+      },
+      "reviewer_checks": [
+        "Compare the two full original-base-to-output maps, not just the final C/T label.",
+        "Reject any implication that M.SssI separates a fraction or distinguishes 5fC from 5caC individually.",
+        "Keep incomplete conversion and non-CpG limits even if exact experimental percentages are omitted."
+      ],
+      "missing_or_unclear": "No essential scientific omission established. Further physical isolation, extra sequencing nodes or obligatory BS subtraction are not required solely to make this record more detailed."
+    },
+    "duplex-sequencing": {
+      "archived_status": "supported",
+      "archived_pins": {
+        "card.json": "907a85ae404bd18e58a723df0995ccfe26578a5f7ffb33686e7ed769734854fb",
+        "source_registry.json": "0953a052081401880ca4cc2c706d5cfd0ab7d372d16c6eebcdc6e247b76be0ef",
+        "extraction.json": "636829092c76d7fb4acfb49ff1b5c649c7d8adf09772bc33b5d188511d4b255b",
+        "review.json": "a6449d51239a643ba2b10b14c34ddfd912e6d311e819fd6e2b6f59e0366ad41a"
+      },
+      "archived_review": {
+        "checks": 71,
+        "actions": {
+          "accept": 71
+        },
+        "record_check_pointer": "/duplex-sequencing/review/checks/27",
+        "interpretation": "Historical acceptance only; this audit does not reissue a scientific review."
+      },
+      "essential_assessments": [
+        {
+          "requirement": "LOW-1",
+          "status": "preserved",
+          "conclusion": "Tag/primer arrangement identifies strand families and links complementary original strands of a molecule, with no cell-identity claim.",
+          "output_fields": [
+            {
+              "id": "amplified_library",
+              "pointer": "/duplex-sequencing/extraction/states/2/properties/3"
+            },
+            {
+              "id": "sscs",
+              "pointer": "/duplex-sequencing/extraction/states/4/properties/3"
+            },
+            {
+              "id": "dcs",
+              "pointer": "/duplex-sequencing/extraction/states/5/properties/3"
+            }
+          ],
+          "source_evidence_ids": [
+            "D2",
+            "D3"
+          ]
+        },
+        {
+          "requirement": "LOW-2",
+          "status": "preserved",
+          "conclusion": "Tagged adapters are ligated before PCR, and prepared T-tailed DNA/A-tailed adapters are explicitly distinguished.",
+          "output_fields": [
+            {
+              "id": "dna_input",
+              "pointer": "/duplex-sequencing/extraction/states/0/properties/2"
+            },
+            {
+              "id": "adapters",
+              "pointer": "/duplex-sequencing/extraction/states/1/properties/3"
+            },
+            {
+              "id": "library_preparation",
+              "pointer": "/duplex-sequencing/extraction/operations/0"
+            }
+          ],
+          "source_evidence_ids": [
+            "D1",
+            "D2"
+          ]
+        },
+        {
+          "requirement": "LOW-3",
+          "status": "preserved",
+          "conclusion": "Strand-derived PCR families coexist in one library and datasets; consensus grouping is not physical separation or mixing of samples.",
+          "output_fields": [
+            {
+              "id": "library_preparation",
+              "pointer": "/duplex-sequencing/extraction/operations/0/description"
+            },
+            {
+              "id": "single_strand_consensus",
+              "pointer": "/duplex-sequencing/extraction/operations/2/input_roles"
+            },
+            {
+              "id": "duplex_consensus",
+              "pointer": "/duplex-sequencing/extraction/operations/3/input_roles"
+            }
+          ],
+          "source_evidence_ids": [
+            "D3",
+            "D5"
+          ]
+        },
+        {
+          "requirement": "LOW-4",
+          "status": "preserved",
+          "conclusion": "SSCS and DCS are derived data, with distinct within-family and between-partner computations.",
+          "output_fields": [
+            {
+              "id": "sscs",
+              "pointer": "/duplex-sequencing/extraction/states/4/properties/1"
+            },
+            {
+              "id": "dcs",
+              "pointer": "/duplex-sequencing/extraction/states/5/properties/1"
+            },
+            {
+              "id": "single_strand_consensus",
+              "pointer": "/duplex-sequencing/extraction/operations/2/mechanism"
+            },
+            {
+              "id": "duplex_consensus",
+              "pointer": "/duplex-sequencing/extraction/operations/3/mechanism"
+            }
+          ],
+          "source_evidence_ids": [
+            "D4",
+            "D5"
+          ]
+        },
+        {
+          "requirement": "LOW-5",
+          "status": "preserved",
+          "conclusion": "First-round errors can survive SSCS. DCS needs both partners/concordance and still has a theoretical coincident complementary-error route.",
+          "output_fields": [
+            {
+              "id": "sscs",
+              "pointer": "/duplex-sequencing/extraction/states/4/properties/2"
+            },
+            {
+              "id": "dcs",
+              "pointer": "/duplex-sequencing/extraction/states/5/properties/2"
+            },
+            {
+              "id": "duplex_consensus",
+              "pointer": "/duplex-sequencing/extraction/operations/3/information_effect"
+            }
+          ],
+          "source_evidence_ids": [
+            "D4",
+            "D5",
+            "D6"
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "type": "explanation_field_placement",
+          "status": "simplification_candidate",
+          "finding": "Library preparation and later descriptions recount how the diagram groups captions or illustrates errors. These can move to evidence without deleting the analyte/data distinction.",
+          "output_fields": [
+            {
+              "id": "library_preparation",
+              "pointer": "/duplex-sequencing/extraction/operations/0/description"
+            },
+            {
+              "id": "library_preparation",
+              "pointer": "/duplex-sequencing/extraction/operations/0/mechanism"
+            },
+            {
+              "id": "single_strand_consensus",
+              "pointer": "/duplex-sequencing/extraction/operations/2/description"
+            },
+            {
+              "id": "duplex_consensus",
+              "pointer": "/duplex-sequencing/extraction/operations/3/description"
+            }
+          ],
+          "recommended_action": "Keep tag-before-PCR, reciprocal strand identity and computational endpoint explicit; move cartoon interpretation to rationale."
+        },
+        {
+          "type": "evidence_insufficiency",
+          "status": "already_recorded",
+          "finding": "Specific nonlinear-PCR/reproducibility and GC-rich-template catalogue claims are not independently confirmed by the supplied focal evidence.",
+          "output_fields": [
+            {
+              "id": "catalogue_bias_primary_confirmation",
+              "pointer": "/duplex-sequencing/extraction/unknowns/0"
+            }
+          ],
+          "recommended_action": "Retain source-qualified limitations without presenting them as validated numerical performance."
+        },
+        {
+          "type": "display_only",
+          "status": "potential_only",
+          "finding": "The library label is broad but its end_tags and molecular_origin properties carry the reciprocal family logic.",
+          "output_fields": [
+            {
+              "id": "amplified_library",
+              "pointer": "/duplex-sequencing/extraction/states/2/properties/1"
+            },
+            {
+              "id": "amplified_library",
+              "pointer": "/duplex-sequencing/extraction/states/2/properties/3"
+            }
+          ],
+          "recommended_action": "Expose those assertions before calling the mechanism missing; no extra physical strand nodes are required."
+        }
+      ],
+      "source_evidence": {
+        "D1": {
+          "pointer": "/duplex-sequencing/extraction/states/0/evidence/1",
+          "source_id": "paper:22853953",
+          "locator": "Materials and Methods — Sequencing Library Preparation (registered text chars 30723:30993, end exclusive)",
+          "support": "reported",
+          "quote": "Double-stranded DNA was sheared and end repaired by standard protocols, followed by T-tailing with DNA polymerase and dTTP. T-tailed DNA was ligated to A-tailed Duplex Tag adapters, followed by PCR amplification for 18–20 cycles and sequencing on an Illumina HiSEq 2000."
+        },
+        "D2": {
+          "pointer": "/duplex-sequencing/extraction/states/2/evidence/2",
+          "source_id": "paper:22853953",
+          "locator": "Results, opening paragraph: adapter ligation, amplification and readout (registered text chars 7059:7370, end exclusive)",
+          "support": "reported",
+          "quote": "Following ligation of tagged adapters to sheared DNA, the individually labeled strands are PCR amplified from asymmetric primer sites on the adapter tails (Fig. 1B) and subjected to paired-end sequencing. Every PCR duplicate that arises from a single strand of DNA will carry the original strand’s tag sequence."
+        },
+        "D3": {
+          "pointer": "/duplex-sequencing/extraction/states/2/evidence/3",
+          "source_id": "paper:22853953",
+          "locator": "Figure 1B legend — tag/primer arrangement in the two PCR families (registered text chars 8542:8967, end exclusive)",
+          "support": "reported",
+          "quote": "PCR amplification with primers containing Illumina flow-cell–compatible tails is carried out to generate families of PCR duplicates. Two types of PCR products are produced from each DNA fragment. Those derived from one strand will have the α tag sequence adjacent to flow cell sequence 1 and the β tag sequence adjacent to flow cell sequence 2. PCR products originating from the complementary strand are labeled reciprocally."
+        },
+        "D4": {
+          "pointer": "/duplex-sequencing/extraction/states/4/properties/2/evidence/1",
+          "source_id": "paper:22853953",
+          "locator": "Results — next paragraph, why duplex comparison follows SSCS (registered text chars 11713:11956, end exclusive)",
+          "support": "reported",
+          "quote": "Comparing the sequences obtained from both strands eliminates errors introduced during the first round of PCR where an artifactual mutation may be propagated to all PCR duplicates of one strand and would not be removed by SSCS filtering alone."
+        },
+        "D5": {
+          "pointer": "/duplex-sequencing/extraction/states/4/properties/3/evidence/1",
+          "source_id": "paper:22853953",
+          "locator": "Materials and Methods — Data Processing (registered text chars 31375:31722, end exclusive)",
+          "support": "reported",
+          "quote": "Next, partner strands among SSCS reads were identified by virtue of the complementary tag sequences. The SSCS reads corresponding to both of the two strands of individual molecules of duplex DNA were then compared to form DCS reads. Resultant sequence positions were considered only when information from both DNA strands was in perfect agreement."
+        },
+        "D6": {
+          "pointer": "/duplex-sequencing/extraction/operations/3/evidence/7",
+          "source_id": "paper:22853953",
+          "locator": "Discussion — coincident errors on both strands (registered text chars 25869:26205, end exclusive)",
+          "support": "reported",
+          "quote": "In contrast to the damage sensitivity of single-strand consensus sequences, for DNA damage to result in an artifactual mutation in DCS, mutagenic lesions (or spontaneous, recurrent first-round PCR errors) would need to occur at the same nucleotide position on both strands of a molecule of duplex DNA and result in complementary errors."
+        }
+      },
+      "reviewer_checks": [
+        "Require molecule/strand-family attribution through both tags and orientation, not generic barcoding.",
+        "Keep SSCS and DCS error assumptions distinct even in a compact explanation.",
+        "Verify the final rare variant remains a sequence result and does not imply recovery of every original molecule."
+      ],
+      "missing_or_unclear": "No new core omission established. Do not add a universal collision model, family threshold, or physical strand isolation without scoped evidence."
+    },
+    "scatac-seq-cell-index": {
+      "archived_status": "supported",
+      "archived_pins": {
+        "card.json": "71c75cbb7c15e9b8089ef98b4211eb78132c137c514f5f0d87e54d8d6ef4cf0d",
+        "source_registry.json": "3844ef1f5ea7efd63b8d068e3fd7599c576b2739b79931159dbda8d1a3bfd5d6",
+        "extraction.json": "0b825cb59aecc3d2c3aae0a1604dd987887cfd1c1583053aee55a38f29468a86",
+        "review.json": "9f1629974c85b3aa19e93f3214aba9160a87b93775ce8e9b77c4f6a55a9339ce"
+      },
+      "archived_review": {
+        "checks": 179,
+        "actions": {
+          "accept": 179
+        },
+        "record_check_pointer": "/scatac-seq-cell-index/review/checks/73",
+        "interpretation": "Historical acceptance only; this audit does not reissue a scientific review."
+      },
+      "essential_assessments": [
+        {
+          "requirement": "LOW-1",
+          "status": "preserved",
+          "conclusion": "The first barcode attributes DNA to a many-nucleus well; the paired barcode supports likely cell identity and explicitly allows collisions.",
+          "output_fields": [
+            {
+              "id": "first_a_tagged",
+              "pointer": "/scatac-seq-cell-index/extraction/states/5/properties/3"
+            },
+            {
+              "id": "second_a_amplicons",
+              "pointer": "/scatac-seq-cell-index/extraction/states/12/properties/3"
+            },
+            {
+              "id": "sequence_reads",
+              "pointer": "/scatac-seq-cell-index/extraction/states/16/properties/3"
+            }
+          ],
+          "source_evidence_ids": [
+            "S2",
+            "S4",
+            "S5"
+          ]
+        },
+        {
+          "requirement": "LOW-2",
+          "status": "preserved",
+          "conclusion": "First indexes attach by Tn5 before intact-nucleus pooling; second indexes attach during PCR after redistribution and lysis.",
+          "output_fields": [
+            {
+              "id": "tag_a",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/2"
+            },
+            {
+              "id": "pool_dilute",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/5"
+            },
+            {
+              "id": "split_second",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/6"
+            },
+            {
+              "id": "pcr_a",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/7"
+            }
+          ],
+          "source_evidence_ids": [
+            "S1",
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "requirement": "LOW-3",
+          "status": "preserved",
+          "conclusion": "Independent well routes and two different physical pools are explicit; the cartoon's three paths are illustrative rather than a prescribed well count.",
+          "output_fields": [
+            {
+              "id": "split_first",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/1"
+            },
+            {
+              "id": "pool_dilute",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/5"
+            },
+            {
+              "id": "split_second",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/6"
+            },
+            {
+              "id": "pool_library",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/10"
+            },
+            {
+              "id": "scATAC-Seq (Cell Index)",
+              "pointer": "/scatac-seq-cell-index/extraction/method_scopes/0"
+            }
+          ],
+          "source_evidence_ids": [
+            "S2",
+            "S3",
+            "S4"
+          ]
+        },
+        {
+          "requirement": "LOW-4",
+          "status": "preserved",
+          "conclusion": "Chromatin-derived DNA and sequence reads carry accessibility information; cell attribution is supplied by the two indexes.",
+          "output_fields": [
+            {
+              "id": "sequence_reads",
+              "pointer": "/scatac-seq-cell-index/extraction/states/16/properties/2"
+            },
+            {
+              "id": "sequence",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/11/information_effect"
+            }
+          ],
+          "source_evidence_ids": [
+            "S1",
+            "S4"
+          ]
+        },
+        {
+          "requirement": "LOW-5",
+          "status": "preserved",
+          "conclusion": "Collisions remain possible, and the approximately eleven-percent estimate is limited to the paper's experiments.",
+          "output_fields": [
+            {
+              "pointer": "/scatac-seq-cell-index/extraction/scope"
+            },
+            {
+              "id": "sequence_reads",
+              "pointer": "/scatac-seq-cell-index/extraction/states/16/properties/3"
+            }
+          ],
+          "source_evidence_ids": [
+            "S4",
+            "S5"
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "type": "representation_repetition",
+          "status": "simplification_candidate",
+          "finding": "tag_a/tag_b/tag_c and pcr_a/pcr_b/pcr_c repeat equivalent wording and corresponding properties for illustrative wells. The archive is explicit and scientifically intelligible, but can be more compact.",
+          "output_fields": [
+            {
+              "id": "tag_a",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/2"
+            },
+            {
+              "id": "tag_b",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/3"
+            },
+            {
+              "id": "tag_c",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/4"
+            },
+            {
+              "id": "pcr_a",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/7"
+            },
+            {
+              "id": "pcr_b",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/8"
+            },
+            {
+              "id": "pcr_c",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/9"
+            }
+          ],
+          "recommended_action": "Allow collections of independently processed wells if identities, per-well correspondence and condition effects remain explicit. Keep actual nuclei pooling, redistribution and later DNA pooling. Do not use a required node-count target."
+        },
+        {
+          "type": "explanation_field_placement",
+          "status": "simplification_candidate",
+          "finding": "Some operation prose narrates what the primary text or cartoon specifies. The lysis-before-PCR timing itself is essential and must remain.",
+          "output_fields": [
+            {
+              "id": "isolate_nuclei",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/0/description"
+            },
+            {
+              "id": "pcr_a",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/7/mechanism"
+            },
+            {
+              "id": "pool_library",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/10/description"
+            },
+            {
+              "id": "sequence",
+              "pointer": "/scatac-seq-cell-index/extraction/operations/11/description"
+            }
+          ],
+          "recommended_action": "Move source-reading clauses to rationale while retaining nuclear integrity, lysis timing, primer compatibility and which material is pooled."
+        },
+        {
+          "type": "evidence_insufficiency",
+          "status": "outside_required_scope",
+          "finding": "Detailed supplementary execution methods are not included in the archived source; main-text quotations already explain the retained diagram-level mechanism and routes.",
+          "output_fields": [
+            {
+              "id": "pm_cusanovich_2015",
+              "pointer": "/scatac-seq-cell-index/extraction/paper_matches/0"
+            }
+          ],
+          "recommended_action": "Do not demand unshown isolation chemistry or exact read layout merely because the supplement is absent; do not claim that supplement was inspected."
+        },
+        {
+          "type": "display_only",
+          "status": "potential_only",
+          "finding": "The same-word barcode labels can hide the already-recorded change from first-well attribution to qualified cell attribution.",
+          "output_fields": [
+            {
+              "id": "first_a_tagged",
+              "pointer": "/scatac-seq-cell-index/extraction/states/5/properties/3"
+            },
+            {
+              "id": "second_a_nuclei",
+              "pointer": "/scatac-seq-cell-index/extraction/states/9/properties/2"
+            },
+            {
+              "id": "second_a_amplicons",
+              "pointer": "/scatac-seq-cell-index/extraction/states/12/properties/3"
+            }
+          ],
+          "recommended_action": "Show unit and carrier properties before diagnosing extraction absence."
+        }
+      ],
+      "source_evidence": {
+        "S1": {
+          "pointer": "/scatac-seq-cell-index/extraction/states/1/evidence/2",
+          "source_id": "paper:25953818",
+          "locator": "[b00006], ATAC-seq mechanism",
+          "support": "reported",
+          "quote": "In ATAC-seq, permeabilized nuclei are exposed to transposase loaded with sequencing adapters (‘tagmentation’; (4, 20)). In the context of chromatin, the transposase preferentially inserts adapters into nucleosome-free regions."
+        },
+        "S2": {
+          "pointer": "/scatac-seq-cell-index/extraction/states/1/properties/1/evidence/0",
+          "source_id": "paper:25953818",
+          "locator": "[b00005], combinatorial indexing principle",
+          "support": "reported",
+          "quote": "We then pool, dilute and redistribute intact nuclei to a second set of wells, introduce a second barcode and complete library construction."
+        },
+        "S3": {
+          "pointer": "/scatac-seq-cell-index/extraction/states/5/properties/2/evidence/2",
+          "source_id": "paper:25953818",
+          "locator": "[b00007], nuclear lysis and indexed PCR",
+          "support": "reported",
+          "quote": "After lysing nuclei, a second barcode is introduced during PCR with indexed primers complementary to the transposase-introduced adapters."
+        },
+        "S4": {
+          "pointer": "/scatac-seq-cell-index/extraction/states/12/evidence/3",
+          "source_id": "paper:25953818",
+          "locator": "[b00007], pooled products, sequencing and attribution qualification",
+          "support": "reported",
+          "quote": "Finally, all PCR products are pooled and sequenced, with the expectation that most sequence reads bearing the same combination of barcodes will be derived from a single cell (estimated collision rate of ~11% for experiments described here; Fig. S1)."
+        },
+        "S5": {
+          "pointer": "/scatac-seq-cell-index/extraction/states/12/properties/3/evidence/3",
+          "source_id": "paper:25953818",
+          "locator": "[b00005], barcode collisions",
+          "support": "reported",
+          "quote": "The rate of “collisions”, i.e. nuclei coincidentally receiving the same combination of indexes, can be tuned by adjusting how many nuclei are distributed to the second set of wells (Fig. S1; (19))."
+        }
+      },
+      "reviewer_checks": [
+        "Distinguish pooling intact nuclei from pooling DNA after lysis/PCR.",
+        "Verify first-well index alone is never claimed as a unique cell or molecule identifier.",
+        "If compacted, trace one representative nucleus through both wells and a fragment through both indexes without relying on graph reachability alone.",
+        "Keep collision qualification and preferred accessibility sampling; do not require the old three illustrative branches."
+      ],
+      "missing_or_unclear": "No essential omission or actual route contradiction established. The main opportunity is representation repetition, with intact-compartment and index timing as regression gates."
+    }
+  },
+  "shared_prompt_recommendations": [
+    {
+      "action": "consolidate",
+      "locations": [
+        "src/genomics_discovery/illumina/prompts.py:53",
+        "src/genomics_discovery/illumina/prompts.py:159",
+        "src/genomics_discovery/illumina/prompts.py:286",
+        "src/genomics_discovery/illumina/representation.py:301",
+        "src/genomics_discovery/illumina/representation.py:346"
+      ],
+      "recommendation": "Retain one construction rule: start from source action blocks, define actual boundaries, confirm each retained operation in matching primary content, and split only for a consequential route/interface/attribution distinction. Remove repeated expansions of the same rule from author scientific guidance.",
+      "keep": "Primary confirmation at the retained scope and targeted Unknowns; diagram granularity does not excuse missing the capture block or barcode history."
+    },
+    {
+      "action": "replace_conflicting_placement_guidance",
+      "locations": [
+        "src/genomics_discovery/illumina/prompts.py:92",
+        "src/genomics_discovery/illumina/prompts.py:227",
+        "experiments/category_prompt_audit_20261112/author_contract.txt:35"
+      ],
+      "recommendation": "Use the compact contract's clear ownership: descriptions explain actions, mechanisms explain causation, Evidence.rationale/Correction explain source interpretation. The old instruction allowing source clarification in description fields can encourage narrated reading.",
+      "keep": "Scientific uncertainty, reported-vs-demonstrated qualification, preferential selection, reaction efficiency and residual error remain in the explanation when they change its meaning. A sentence mentioning a paper is not automatically removable."
+    },
+    {
+      "action": "retain_compact_local_information_effect",
+      "locations": [
+        "experiments/category_prompt_audit_20261112/author_contract.txt:43",
+        "src/genomics_discovery/illumina/prompts.py:431"
+      ],
+      "recommendation": "Keep a concise local carrier-and-meaning rule, allowing null when no distinct effect exists. Do not remove information_effect or replace it with the assay goal.",
+      "keep": "Capture-C changes the physical contact carrier; BisChIP changes physical association to fraction provenance; MAB merges original-base classes; Duplex/scATAC maintain different identity units."
+    },
+    {
+      "action": "consolidate_routing_guidance",
+      "locations": [
+        "src/genomics_discovery/illumina/prompts.py:169",
+        "src/genomics_discovery/illumina/representation.py:308",
+        "experiments/category_prompt_audit_20261112/author_contract.txt:50"
+      ],
+      "recommendation": "Keep one rule permitting compact equivalent processing with explicit correspondence and real split/pool history. Do not force three scATAC instances because the cartoon draws three wells.",
+      "keep": "Never collapse differently treated MAB histories into one unqualified effect; compactness cannot erase which material stays in nuclei or when contents mix."
+    },
+    {
+      "action": "remove_author_method_example_list",
+      "locations": [
+        "src/genomics_discovery/illumina/representation.py:432"
+      ],
+      "recommendation": "Use general field semantics in shared author guidance and reserve named counterexamples for regression evaluation. No additional examples from these six methods are needed in the author prompt.",
+      "keep": "Reporter origin, actual preparation, subject-specific chemistry and absence-versus-unrecorded semantics remain explicit and schema-compatible."
+    },
+    {
+      "action": "avoid_schema_restatement",
+      "locations": [
+        "src/genomics_discovery/illumina/representation.py:409",
+        "experiments/category_prompt_audit_20261112/author_contract.txt:59"
+      ],
+      "recommendation": "Keep short author guidance for owning subjects, attribution carriers and input/output effects; let the supplied schema define enum values and exact structure. Do not expand property families or invent a new category ontology.",
+      "keep": "Scientific review of omission and interfaces remains essential; structural validation alone cannot check truth."
+    }
+  ],
+  "compact_contract_assessment": {
+    "conclusion": "The experimental contract contains the shared rules needed for these six cases. This content audit supports testing it, not production promotion.",
+    "necessary_existing_spans": [
+      "lines 17-24: block construction and correction applied to graph",
+      "lines 27-41: actual boundary/reporter and explanation ownership",
+      "lines 43-57: local information effects and preserved unit routing",
+      "lines 60-74: explicit subject properties, attribution and participant effects",
+      "lines 77-95: evidence level, Unknowns and cross-field consistency"
+    ],
+    "no_new_author_paragraph_proposed": true,
+    "evaluation_rule": "Compare fresh outputs against source-grounded category requirements, not archived IDs, counts or exact wording. If a distinction fails, revise the smallest shared rule only after examining its source and output; retain the experimental profile until consequential regressions are excluded.",
+    "reviewer_rule": "The production reviewer remains unchanged for this experiment. Category checks here are an evaluation overlay and must not silently change admission criteria."
+  },
+  "cross_method_conclusions": [
+    "The archive already records the key carrier changes; indiscriminate removal of information_effect would discard useful scientific content.",
+    "No fresh current-output contradiction was established. Existing source conflicts are documented and resolved, while bounded primary-evidence gaps remain explicit.",
+    "Most actionable simplification concerns field ownership and repeated scATAC illustrative wells, not missing ontology terms or insufficient node counts.",
+    "Scientific qualifications must survive prose cleanup. The presence of words such as diagram, paper or reported is a navigation cue, not an error count.",
+    "No display-only defect was verified; all such entries identify facts already in assertions and specify what a later display inspection must check."
+  ],
+  "validation": {
+    "baseline_pointers_resolved": 180,
+    "method_count": 6,
+    "category_count": 3,
+    "json_serializable": true,
+    "scientific_revalidation": false
+  }
+}

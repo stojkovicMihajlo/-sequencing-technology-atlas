@@ -1,0 +1,3445 @@
+{
+  "format_version": "category_prompt_audit/1",
+  "date": "2026-11-12",
+  "scope": "Eight RNA methods in four supplied website-card categories; annotation, representation and prompt audit.",
+  "inspection": {
+    "baseline_file": "experiments/category_prompt_audit_20261112/baseline_records.json",
+    "baseline_sha256": "e0fffb93ccdbb7e13fb05468cd3e88b365d6d6eb3bc28110f16f5f73fde08ea8",
+    "selection_file": "experiments/category_prompt_audit_20261112/selection.json",
+    "read_fields": [
+      "scope",
+      "States: labels, components, properties and embedded evidence",
+      "Operations: descriptions, mechanisms, information_effect, roles, effects, grouping and evidence",
+      "Flows",
+      "method_scopes",
+      "paper_matches",
+      "corrections",
+      "unknowns"
+    ],
+    "review_inspection": "Enumerated all archived review statuses; inspected targeted operation/flow reviews for Pseudo-seq mock and Frag-seq controls. No independent re-review of every archived review check.",
+    "source_inspection": "Inspected exact quotations and image locators embedded in the materialized archive. No fresh full-paper reading, external scientific verification or independent visual inspection of original diagrams was performed.",
+    "scientific_status": "Captured means explicitly present and consistent with inspected embedded evidence; it is not a new full-paper acceptance. Unclear includes local wording ambiguity and documented unavailable evidence. No inferred UI omission: rendered UI was not inspected.",
+    "work_boundary": "Only this audit JSON is written in the experiment. No production/prompt/contract changes and no job or local model launch."
+  },
+  "category_requirements": [
+    {
+      "category": [
+        "Transcriptome",
+        "RNA Modifications"
+      ],
+      "methods": [
+        "pseudo-seq",
+        "miclip-m6a"
+      ],
+      "essential_conditional_requirements": [
+        "Identify the targeted RNA feature and the specific chemical or antibody action that makes it observable.",
+        "When a treatment or antibody generates an RT signature, state its DNA carrier and positional/signature relationship to the original RNA feature.",
+        "When interpretation requires a comparator or antibody-specific route, preserve that dependency and the independently processed inputs.",
+        "Retain modification specificity and sequence-context limits."
+      ],
+      "do_not_force": [
+        "One shared modification chemistry",
+        "A mock branch for every assay",
+        "All paper applications",
+        "One node per repeated library step"
+      ],
+      "regression_anchors": [
+        "pseudo_chemistry",
+        "pseudo_comparator",
+        "pseudo_mock_leakage",
+        "miclip_routes",
+        "miclip_readout"
+      ]
+    },
+    {
+      "category": [
+        "Transcriptome",
+        "RNA Structure"
+      ],
+      "methods": [
+        "icshape",
+        "frag-seq"
+      ],
+      "essential_conditional_requirements": [
+        "Identify probing context and whether the method modifies RNA or cleaves it.",
+        "State the retained molecular product, selection basis and where the resulting structural signal is recorded.",
+        "When controls/background are necessary to interpret stops or cuts, preserve their distinct physical history and comparison.",
+        "Retain the inferential limit between reactivity/accessibility and a complete conformation or base-pair assignment."
+      ],
+      "do_not_force": [
+        "A common stop mechanism",
+        "All controls as separate nodes when only endpoint interpretation is in scope",
+        "All RNA structure measurements to be in vivo",
+        "Identical branch counts"
+      ],
+      "regression_anchors": [
+        "icshape_capture_carrier",
+        "icshape_controls",
+        "frag_ends_capture",
+        "frag_control_wording",
+        "frag_interpretation"
+      ]
+    },
+    {
+      "category": [
+        "Transcriptome",
+        "RNA Transcription"
+      ],
+      "methods": [
+        "rasl-seq",
+        "cp-rna-seq"
+      ],
+      "essential_conditional_requirements": [
+        "Identify which RNA population can enter the assay and the physical selection/encoding steps.",
+        "Distinguish native RNA, synthetic probe DNA and copied cDNA.",
+        "When tags or chemically selected origin support interpretation, name their actual carrier and supported association.",
+        "State how sequence/read counts relate to the measurement and retain selectivity/representation limits."
+      ],
+      "do_not_force": [
+        "Nascent transcription or time windows",
+        "RNA-to-cDNA conversion for RASL",
+        "Separate fractions for cP end-chemistry rows",
+        "Original chemical features on final DNA"
+      ],
+      "regression_anchors": [
+        "rasl_reporter",
+        "rasl_capture_order",
+        "rasl_identity_readout",
+        "cp_mixture_end_chemistry",
+        "cp_reporter_history"
+      ]
+    },
+    {
+      "category": [
+        "Transcriptome",
+        "RNA-Protein Interactions"
+      ],
+      "methods": [
+        "irclip",
+        "ribo-seq"
+      ],
+      "essential_conditional_requirements": [
+        "Identify the starting preparation and how the relevant RNA-protein association survives or is selected.",
+        "State which RNA fragment or endpoint is recovered and the physical mechanism producing that signal.",
+        "Distinguish selected RNA from copied DNA and how sequence reports the association.",
+        "Retain association-specific limitations, including conditional RT-stop interpretation or occupancy-dependent inference."
+      ],
+      "do_not_force": [
+        "Crosslinking for all RNA-protein assays",
+        "Protein sequencing",
+        "Ribosome occupancy equal to steady-state protein abundance",
+        "A complete paper recipe to resolve a catalogue block"
+      ],
+      "regression_anchors": [
+        "irclip_peptide_capture",
+        "irclip_contact_inference",
+        "ribo_protected_fragment",
+        "ribo_primary_limit",
+        "ribo_measurement_limit"
+      ]
+    }
+  ],
+  "methods": [
+    {
+      "method_id": "pseudo-seq",
+      "category": [
+        "Transcriptome",
+        "RNA Modifications"
+      ],
+      "baseline_status": "supported",
+      "pins": {
+        "card.json": "a2d8345d679c0f0cbefcf68392e56f5c6e3ccd0091cd27f09e4b2ba3f1faf440",
+        "source_registry.json": "7fabf6722cc11872bbc88108c4a490066038217d33df51bc6b70bab50a02ea67",
+        "extraction.json": "8b40d11a7d5ccb633d80fd8bfb37b63710dbf859ef106b61d702d0a13f9bd0a5",
+        "review.json": "39f691b5b94bf21b78b320a5c452b97e4882f292f38e7bd81208721f388b6ca3"
+      },
+      "counts": {
+        "states": 22,
+        "operations": 20,
+        "flows": 42
+      },
+      "archived_review": {
+        "checks": 236,
+        "nonaccept": 0
+      },
+      "findings": [
+        {
+          "id": "pseudo_chemistry",
+          "status": "captured",
+          "statement": "CMC treatment followed by alkaline reversal supplies a treatment-dependent RNA mark; RT copies sequence and records an endpoint rather than copying Ψ/CMC chemistry onto DNA.",
+          "targets": [
+            {
+              "id": "chemistry_plus",
+              "pointer": "/pseudo-seq/extraction/operations/3/mechanism",
+              "value": "CMC derivatization followed by sodium-carbonate alkaline treatment reverses U/G modifications; Ψ-directed retained modification gives the reported RT block."
+            },
+            {
+              "id": "rna_chem_plus:residual_adduct",
+              "pointer": "/pseudo-seq/extraction/states/5/properties/1",
+              "value": {
+                "id": "residual_adduct",
+                "subject": "self",
+                "property": "modification",
+                "value": "CMC adducts retained at susceptible Ψ sites after reversal of U/G modification",
+                "site": "Pseudouridine bases"
+              }
+            },
+            {
+              "id": "rt_plus",
+              "pointer": "/pseudo-seq/extraction/operations/6/information_effect",
+              "value": "RNA sequence becomes DNA sequence; termination position is retained as a cDNA endpoint. The RNA Ψ/CMC group itself is not copied as that chemical modification into DNA."
+            },
+            {
+              "id": "rt_products_plus:stop_origin",
+              "pointer": "/pseudo-seq/extraction/states/8/properties/3",
+              "value": {
+                "id": "stop_origin",
+                "subject": "cdna",
+                "property": "attribution",
+                "value": {
+                  "unit": "molecule",
+                  "carrier": "RNA-complementary cDNA sequence and its extension endpoint",
+                  "association": "Associates an RNA-derived sequence with an RT stop; CMC-dependent stops occur one nucleotide 3′ of Ψ, alongside background stops."
+                }
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/pseudo-seq/extraction/states/1/properties/2/evidence/2",
+              "source_id": "paper:25192136",
+              "locator": "Main text [b00003], CMC mechanism",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Ψ can be selectively modified with N-cyclohexyl-N′-(2-morpholinoethyl)carbodiimide metho-p-toluenesulfonate (CMC) to generate a block to reverse transcriptase (RT) one nucleotide 3′ to the pseudouridylated site20.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/pseudo-seq/extraction/states/5/evidence/0",
+              "source_id": "paper:25192136",
+              "locator": "Methods: Pseudo-seq Library Preparation [b00020], CMC and alkaline reversal",
+              "basis": "text",
+              "support": "reported",
+              "quote": "CMC modification was carried out at 40°C for 30 min, followed by ethanol precipitation. Subsequent reversal of modification of Us and Gs was carried out in NaCO3 buffer (50 mM sodium-carbonate, pH 10.4, 2 mM EDTA) at 50°C for 2 hr, followed by precipitation.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Retain the chemical distinction and RNA-to-cDNA carrier change in existing fields.",
+          "reviewer_check": "Trace the retained Ψ-associated CMC adduct to the +CMC RNA only, and the stop to the cDNA endpoint."
+        },
+        {
+          "id": "pseudo_comparator",
+          "status": "captured",
+          "statement": "Matched mock processing and the joint mapped-end comparison are explicit; the candidate call is one nucleotide upstream of the stop and is not an absolute modification fraction.",
+          "targets": [
+            {
+              "id": "chemistry_mock",
+              "pointer": "/pseudo-seq/extraction/operations/11/information_effect",
+              "value": "Preserves the comparator for CMC-independent RNA-sequence/structure-associated or other background RT stops."
+            },
+            {
+              "id": "rt_products_mock:stop_origin",
+              "pointer": "/pseudo-seq/extraction/states/16/properties/3",
+              "value": {
+                "id": "stop_origin",
+                "subject": "cdna",
+                "property": "attribution",
+                "value": {
+                  "unit": "molecule",
+                  "carrier": "RNA-complementary cDNA sequence and its extension endpoint",
+                  "association": "Associates an RNA-derived sequence with a CMC-independent RT stop for the matched comparator."
+                }
+              }
+            },
+            {
+              "id": "call_sites",
+              "pointer": "/pseudo-seq/extraction/operations/19/description",
+              "value": "Trim adaptor sequence, map RNA-derived reads, and compare scaled +CMC and −CMC mapped read-start counts. Normalize the excess at the peak position by local read-start background, require reproducibility, and report candidate Ψ one nucleotide 5′ of the stop peak."
+            },
+            {
+              "id": "psi_candidates:content",
+              "pointer": "/pseudo-seq/extraction/states/21/properties/2",
+              "value": {
+                "id": "content",
+                "subject": "self",
+                "property": "data_content",
+                "value": "RNA positions assigned as candidate Ψ from reproducible +CMC-minus-mock mapped-read-end enrichment, at one nucleotide 5′ of the peak position. Peak values are read-end enrichment statistics rather than absolute modification fractions."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/pseudo-seq/extraction/states/3/evidence/0",
+              "source_id": "paper:25192136",
+              "locator": "Main text [b00003], parallel control",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Mock-treated (−CMC) RNA fragments were processed in parallel to identify pseudouridine-independent RT stops.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/pseudo-seq/extraction/states/21/evidence/0",
+              "source_id": "paper:25192136",
+              "locator": "Methods: Identification of Ψ [b00028]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "For a given +/−CMC library pair, the −CMC libraries were first scaled to the size of the +CMC libraries.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/pseudo-seq/extraction/states/21/evidence/4",
+              "source_id": "paper:25192136",
+              "locator": "Methods: Identification of Ψ [b00029], site calls",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Sites with peak positions greater than a specified peak cutoff were flagged as potential Ψ. To filter out false positives reproducibility of peak calling in a certain number of libraries was required.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/pseudo-seq/extraction/states/21/evidence/5",
+              "source_id": "paper:25192136",
+              "locator": "Figure 1 caption [b00124], panels a and c",
+              "basis": "text",
+              "support": "reported",
+              "quote": "CMC-dependent RT stops are found 1 nt 3′ of known Ψs.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Preserve condition identity and background dependence even if repeated downstream preparation becomes compact.",
+          "reviewer_check": "A mock RT stop must remain CMC-independent; calling must use both datasets and retain the positional relationship."
+        },
+        {
+          "id": "pseudo_mock_leakage",
+          "status": "unclear",
+          "statement": "The mock graph is correct, but copied local wording is not fully condition-specific: ligate_mock mentions the +CMC template, rt_mock mentions a Ψ/CMC group, and sequence_mock jumps to pseudouridylation-associated stops. These do not explicitly assert CMC treatment of the mock; they obscure the local effect.",
+          "targets": [
+            {
+              "id": "ligate_mock",
+              "pointer": "/pseudo-seq/extraction/operations/13/information_effect",
+              "value": "Each ligated RNA fragment gains an adaptor sequence used for subsequent priming; the original Ψ remains an RNA-base feature in the +CMC template."
+            },
+            {
+              "id": "rt_mock",
+              "pointer": "/pseudo-seq/extraction/operations/14/information_effect",
+              "value": "RNA sequence becomes DNA sequence; termination position is retained as a cDNA endpoint. The RNA Ψ/CMC group itself is not copied as that chemical modification into DNA."
+            },
+            {
+              "id": "sequence_mock",
+              "pointer": "/pseudo-seq/extraction/operations/18/information_effect",
+              "value": "Measures the DNA reporter sequence; comparison of mapped read ends recovers RNA pseudouridylation-associated stops."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/pseudo-seq/extraction/states/3/evidence/0",
+              "source_id": "paper:25192136",
+              "locator": "Main text [b00003], parallel control",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Mock-treated (−CMC) RNA fragments were processed in parallel to identify pseudouridine-independent RT stops.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/pseudo-seq/extraction/states/3/evidence/1",
+              "source_id": "paper:25192136",
+              "locator": "Methods: Pseudo-seq Library Preparation [b00020], mock preparation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "In parallel mock-treated samples were incubated in BEU buffer without CMC.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Use mock-local prose: adapter priming is added; RNA sequence and background RT endpoints are copied; mock reads provide the comparison background. Retain the treatment-specific inference in call_sites.",
+          "reviewer_check": "Read each field using only its declared input history. Fail actual treatment-induced recording on mock; distinguish irrelevant cross-branch wording from a false chemistry assertion.",
+          "severity": "local_explanation_ambiguity",
+          "archived_review": {
+            "pointer": "/pseudo-seq/review/checks/50",
+            "action": "accept"
+          }
+        },
+        {
+          "id": "pseudo_order",
+          "status": "captured",
+          "statement": "The primary-supported size-selection order is implemented in Flows and operation inputs rather than left only in a correction.",
+          "targets": [
+            {
+              "id": "rna_size_order",
+              "pointer": "/pseudo-seq/extraction/corrections/0",
+              "value": {
+                "id": "rna_size_order",
+                "diagram_observation": "The drawing labels the initial arrow “Fragmentation and size selection”, followed by “CMC treatment and OH- treatment”; CIP/PNK dephosphorylation is unshown.",
+                "primary_statement": "Methods [b00019–b00021] describe fragmentation, CMC modification and alkaline reversal, then CIP/PNK dephosphorylation followed by RNA size selection and adaptor ligation. The catalogue prose also puts dephosphorylation and size selection after CMC. The graph therefore places RNA size selection in condition_select_plus/mock after chemistry_plus/mock, with no earlier RNA size-selection flow.",
+                "disposition": "use_primary"
+              }
+            },
+            {
+              "id": "condition_select_plus",
+              "pointer": "/pseudo-seq/extraction/operations/4/inputs",
+              "value": [
+                "rna_chem_plus"
+              ]
+            },
+            {
+              "id": "condition_select_mock",
+              "pointer": "/pseudo-seq/extraction/operations/12/inputs",
+              "value": [
+                "rna_chem_mock"
+              ]
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/pseudo-seq/extraction/states/6/evidence/0",
+              "source_id": "paper:25192136",
+              "locator": "Methods: Pseudo-seq Library Preparation [b00021], dephosphorylation and RNA size selection",
+              "basis": "text",
+              "support": "reported",
+              "quote": "RNA fragments were dephosphorylated with CIP (NEB; M0290) and PNK (NEB; M0201), followed by size selection and elution of 80–100, 100–120, and 120–140 nt fragments on an 8% urea-TBE PAGE gel, followed by precipitation.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep corrected order and a compact source discrepancy in Correction; remove source-order narration from fragment.description.",
+          "reviewer_check": "Verify both arms pass from chemical/mock treatment to dephosphorylation and RNA size selection before adapter ligation."
+        },
+        {
+          "id": "pseudo_repetition",
+          "status": "captured",
+          "statement": "Twenty operations include equivalent downstream treatment/mock processing. This is a compacting opportunity, not evidence that the branches can be mixed.",
+          "targets": [
+            {
+              "id": "parallel_routes",
+              "pointer": "/pseudo-seq/extraction/operations/2/outputs",
+              "value": [
+                "rna_frag_plus",
+                "rna_frag_mock"
+              ]
+            },
+            {
+              "id": "pcr_purify_plus",
+              "pointer": "/pseudo-seq/extraction/operations/9/information_effect",
+              "value": "Produces sequenceable copies of RNA-derived cDNA inserts and their termination boundaries. A barcoded reverse primer is reported; treatment provenance remains associated with separately prepared libraries."
+            },
+            {
+              "id": "pcr_purify_mock",
+              "pointer": "/pseudo-seq/extraction/operations/17/information_effect",
+              "value": "Produces sequenceable copies of RNA-derived cDNA inserts and their termination boundaries. A barcoded reverse primer is reported; treatment provenance remains associated with separately prepared libraries."
+            },
+            {
+              "id": "call_sites",
+              "pointer": "/pseudo-seq/extraction/operations/19/inputs",
+              "value": [
+                "reads_plus",
+                "reads_mock"
+              ]
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/pseudo-seq/extraction/states/3/evidence/0",
+              "source_id": "paper:25192136",
+              "locator": "Main text [b00003], parallel control",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Mock-treated (−CMC) RNA fragments were processed in parallel to identify pseudouridine-independent RT stops.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/pseudo-seq/extraction/states/10/evidence/0",
+              "source_id": "paper:25192136",
+              "locator": "Methods: Pseudo-seq Library Preparation [b00023], circularization and PCR",
+              "basis": "text",
+              "support": "reported",
+              "quote": "cDNAs were circularized with circLigase (Epicentre; CL4115K), and amplified by PCR with Phusion (NEB; M0530) with the forward primer (IDT; AATGATACGGCGACCACCGA), and a barcoded reverse primer (IDT; CAAGCAGAAGACGGCATACGAGATXXXXXXGTGACTGGAGTTCCTTGGCACCCGAGAATTCCA).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Allow collection representation only if +CMC/mock correspondence and differing RT meaning remain explicit. No target node count.",
+          "reviewer_check": "Check branch correspondence through every compact operation and preserve the genuinely joint data comparison."
+        }
+      ],
+      "missing_or_conflicting_assessment": "No demonstrably false chemistry or missing whole required route established by this bounded inspection. See individual unclear findings for local-language and evidence limits; miCLIP barcode-carrier completeness is conditional.",
+      "source_category_provenance": [
+        {
+          "path": [
+            "rna_poster",
+            "RNA Modifications"
+          ],
+          "source": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "locator": [
+            "w03193",
+            "w03194"
+          ],
+          "basis": "printed_poster_heading; column_continuation",
+          "source_record": "poster_5f0c6e755e407c75cee69f19"
+        }
+      ]
+    },
+    {
+      "method_id": "miclip-m6a",
+      "category": [
+        "Transcriptome",
+        "RNA Modifications"
+      ],
+      "baseline_status": "supported",
+      "pins": {
+        "card.json": "4e064d81ea135974d4c12977d04de65e80f941f49e2b2f113780b8219ddf7d47",
+        "source_registry.json": "60e1c20abdf5214d0bbb351fd0b13cecd507e0e37a7b4df54ed902aadca5ce0e",
+        "extraction.json": "0789d6932af7eac165b8b77616964261052dcf592a25a794ccb72978f08133f4",
+        "review.json": "36399da3f0f4a42785d8eb0df5517e5f2b25269bbebbaada8fba534ea472d772"
+      },
+      "counts": {
+        "states": 25,
+        "operations": 20,
+        "flows": 44
+      },
+      "archived_review": {
+        "checks": 252,
+        "nonaccept": 0
+      },
+      "findings": [
+        {
+          "id": "miclip_routes",
+          "status": "captured",
+          "statement": "The archived graph separates Abcam/poly(A)+ mRNA/CIMS from SySy/total-RNA/CITS. Antibody and input history are consequential; these routes must not be silently interchanged or made consecutive.",
+          "targets": [
+            {
+              "id": "s_cims_fragments:identity",
+              "pointer": "/miclip-m6a/extraction/states/1/properties/0",
+              "value": {
+                "id": "identity",
+                "subject": "self",
+                "property": "identity",
+                "value": "Poly(A)+ mRNA isolated and fragmented for the Abcam CIMS implementation."
+              }
+            },
+            {
+              "id": "s_cits_fragments:identity",
+              "pointer": "/miclip-m6a/extraction/states/13/properties/0",
+              "value": {
+                "id": "identity",
+                "subject": "self",
+                "property": "identity",
+                "value": "Fragmented total cellular RNA prepared for a SySy CITS implementation; mRNA isolation has not been imposed on this route."
+              }
+            },
+            {
+              "id": "o_cims_prepare",
+              "pointer": "/miclip-m6a/extraction/operations/0/description",
+              "value": "Select mRNA from total RNA and fragment it to produce the RNA population used for antibody binding. This preparation is explicit in catalogue prose; the diagram starts at sheared cellular RNA."
+            },
+            {
+              "id": "o_cits_prepare",
+              "pointer": "/miclip-m6a/extraction/operations/10/description",
+              "value": "Fragment total RNA before SySy antibody binding. This primary-supported alternative starts from total RNA and does not inherit mRNA isolation from the catalogue route."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/miclip-m6a/extraction/states/0/evidence/1",
+              "source_id": "paper:26121403",
+              "locator": "[b00062], Crosslinking of cellular RNA",
+              "basis": "text",
+              "support": "reported",
+              "quote": "For initial miCLIP libraries, total RNA was purified from HEK293 cells. Poly(A)+ RNA was prepared from four biological replicates of HEK293 cells and processed in parallel for miCLIP. Mouse liver RNA was depleted of ribosomal RNA by Ribominus (Life Technologies).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/miclip-m6a/extraction/states/0/evidence/2",
+              "source_id": "paper:26121403",
+              "locator": "[b00071], explicit identity of the mRNA dataset",
+              "basis": "text",
+              "support": "reported",
+              "quote": "For the HEK293 mRNA dataset (CIMS miCLIP), reads from the four replicates were combined at this point.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/miclip-m6a/extraction/states/12/evidence/0",
+              "source_id": "paper:26121403",
+              "locator": "[b00017], separately generated antibody libraries from total RNA",
+              "basis": "text",
+              "support": "reported",
+              "quote": "we generated miCLIP libraries from total cellular RNA crosslinked to the Abcam and SySy antibodies.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/miclip-m6a/extraction/states/14/evidence/4",
+              "source_id": "paper:26121403",
+              "locator": "[b00020], SySy signature used for calling",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Because in vitro analysis indicated that the SySy antibody efficiently induces cDNA truncations at the +1 position of m6A (Fig. 1b), truncations were used as this antibody’s mutational signature.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Preserve the supported antibody/input/readout association. Equivalent blocks may be concise, but no smaller-node objective should override these differences.",
+          "reviewer_check": "Follow each RNA preparation to its antibody, cDNA and callset; do not infer that the two example cartoons establish the independent routes."
+        },
+        {
+          "id": "miclip_crosslink_template",
+          "status": "captured",
+          "statement": "The corrected chemistry is 254 nm UV followed by recovery of peptide-bearing RNA. The retained peptide, not an intact antibody carried through RT, generates cDNA signatures.",
+          "targets": [
+            {
+              "id": "c_uv",
+              "pointer": "/miclip-m6a/extraction/corrections/0",
+              "value": {
+                "id": "c_uv",
+                "diagram_observation": "The lightning-marked crosslinking arrow between antibody addition and immunoprecipitation is labelled \"UV 365 nm\".",
+                "primary_statement": "The assigned miCLIP-m6A cellular-RNA methods and Figure 1c caption specify 254 nm UV and covalent antibody–RNA crosslinks. The actual operation and connected States use the primary-supported 254 nm implementation; no 365 nm or 4SU variant is assembled into it. Both independent UV-crosslinking instances implement this resolved primary wavelength.",
+                "disposition": "use_primary"
+              }
+            },
+            {
+              "id": "c_rt_template",
+              "pointer": "/miclip-m6a/extraction/corrections/1",
+              "value": {
+                "id": "c_rt_template",
+                "diagram_observation": "The \"Reverse transcription truncated at binding sites\" panel retains full magenta Y-shaped antibody symbols on purple RNA next to shorter blue cDNA strands; an intervening protease treatment is not drawn.",
+                "primary_statement": "The catalogue explicitly inserts proteinase K digestion before reverse transcription. Figure 1c and the paper methods establish proteinase K release of RNA with residual peptide fragments, which cause cDNA incorporation errors and truncations. The actual graph therefore routes purified peptide-bearing RNA into reverse transcription. Both independent library routes therefore use their own peptide-bearing RNA preparation as the reverse-transcription input.",
+                "disposition": "use_primary"
+              }
+            },
+            {
+              "id": "s_cims_peptide_rna:peptide_linkage",
+              "pointer": "/miclip-m6a/extraction/states/7/properties/2",
+              "value": {
+                "id": "peptide_linkage",
+                "subject": "peptide",
+                "property": "association",
+                "value": "covalently_linked_to",
+                "partner": "rna"
+              }
+            },
+            {
+              "id": "s_cits_peptide_rna:peptide_linkage",
+              "pointer": "/miclip-m6a/extraction/states/19/properties/2",
+              "value": {
+                "id": "peptide_linkage",
+                "subject": "peptide",
+                "property": "association",
+                "value": "covalently_linked_to",
+                "partner": "rna"
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/miclip-m6a/extraction/states/4/evidence/0",
+              "source_id": "paper:26121403",
+              "locator": "[b00063], cellular RNA crosslinking",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The solution was then transferred into a 3cm cell culture dish and crosslinked twice with 0.15 J cm−2 UV light (254 nm) in a Stratalinker (Agilent).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/miclip-m6a/extraction/states/7/evidence/2",
+              "source_id": "paper:26121403",
+              "locator": "[b00124], Figure 1c caption, proteinase K and signature formation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "RNA is then released from the membrane by proteinase K and reverse transcribed. Peptide fragments that remain on the RNA lead to nucleotide incorporation errors (indicated as C→T transition) and cDNA truncations.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep wavelength and peptide-bearing template in scientific fields; keep the diagram discrepancy in Correction.",
+          "reviewer_check": "Both crosslink operations must implement the corrected wavelength, and both RT inputs must follow proteinase-K recovery."
+        },
+        {
+          "id": "miclip_readout",
+          "status": "captured",
+          "statement": "CIMS uses the Abcam-associated +1 C→T signal and requires downstream C; CITS uses SySy-associated truncations and may identify m6A or m6Am with contextual interpretation.",
+          "targets": [
+            {
+              "id": "o_cims_call",
+              "pointer": "/miclip-m6a/extraction/operations/9/information_effect",
+              "value": "Produces candidate mRNA m6A locations at single-nucleotide resolution. Detection requires the +1 C and an appropriate, consistent antibody signature; read enrichment alone is insufficient."
+            },
+            {
+              "id": "o_cits_call",
+              "pointer": "/miclip-m6a/extraction/operations/19/information_effect",
+              "value": "Produces single-nucleotide modification-site calls that can include m6A and cap-adjacent m6Am. A truncation signature alone is not a direct chemical distinction between these modifications; mapped transcript position/context is consequential."
+            },
+            {
+              "id": "s_cits_sites:selectivity",
+              "pointer": "/miclip-m6a/extraction/states/23/properties/3",
+              "value": {
+                "id": "selectivity",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "interpretation limits",
+                "definition": "Selectivity and scope of this route’s inferred RNA-modification calls.",
+                "applicable_to": "data",
+                "value": "SySy signature performance is antibody-dependent. CITS detects both m6A and m6Am; a truncation alone does not chemically distinguish them or prove that an arbitrary RNA end is a crosslink-induced stop."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/miclip-m6a/extraction/states/2/evidence/2",
+              "source_id": "paper:26121403",
+              "locator": "[b00048], Discussion, antibody-dependent readout scope",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We mapped m6A residues using two antibodies, each of which has specific advantages. One antibody produced a C→T transition that is limited to detecting m6A, but can readily detect clustered m6A residues. Another antibody produced truncations that can be used to simultaneously map m6A and m6Am residues.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/miclip-m6a/extraction/states/2/evidence/5",
+              "source_id": "paper:26121403",
+              "locator": "[b00019], positional signature of Abcam antibody",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The only mutation seen with high frequency at these triplets was the C→T transition at position +1 relative to the A (Supplementary Fig. 1c). Thus, the Abcam antibody induces C→T transitions at m6A in a highly position-specific manner.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/miclip-m6a/extraction/states/11/properties/3/evidence/1",
+              "source_id": "paper:26121403",
+              "locator": "[b00040], CIMS sequence-context restriction",
+              "basis": "text",
+              "support": "reported",
+              "quote": "This enrichment was absent in CIMS miCLIP (Fig. 2e), presumably because CIMS miCLIP requires a C at the +1 position of the modified A.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/miclip-m6a/extraction/states/23/properties/2/evidence/5",
+              "source_id": "paper:26121403",
+              "locator": "[b00042], transcript-position evidence for m6Am interpretation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "truncations in BCA sequence context primarily localized to the 5′UTR (Fig. 4b), with highest enrichment near the annotated TSS (Fig. 4c).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Retain the signature-specific inference and limits; antibody enrichment alone is insufficient.",
+          "reviewer_check": "Reject generic modification calls that erase the antibody-specific signal or claim truncation alone distinguishes m6A from m6Am."
+        },
+        {
+          "id": "miclip_duplication_carrier",
+          "status": "unclear",
+          "statement": "The call operation claims molecular-duplicate handling and its evidence names random barcodes, while the material States only record inserts/signatures. Barcode introduction and carrier are not explicit in the State assertions. This is a targeted completeness question if duplicate handling is retained as an explained mechanism, not a demand for every barcode recipe.",
+          "targets": [
+            {
+              "id": "o_cims_call",
+              "pointer": "/miclip-m6a/extraction/operations/9/mechanism",
+              "value": "CIMS identifies C→T at the cytosine immediately downstream of modified A, with reported molecular-duplicate handling and filters for mutation/background noise. Exact analysis settings are outside this schematic scope."
+            },
+            {
+              "id": "s_cims_library:retained_signature",
+              "pointer": "/miclip-m6a/extraction/states/9/properties/1",
+              "value": {
+                "id": "retained_signature",
+                "subject": "self",
+                "property": "attribution",
+                "value": {
+                  "unit": "molecule",
+                  "carrier": "cDNA insert sequences and boundaries represented in the amplified library",
+                  "association": "The iCLIP-style library preserves RNA-derived sequence and crosslink-induced signature information for sequencing; no methyl group on DNA is asserted."
+                }
+              }
+            },
+            {
+              "id": "s_cits_library:retained_signature",
+              "pointer": "/miclip-m6a/extraction/states/21/properties/1",
+              "value": {
+                "id": "retained_signature",
+                "subject": "self",
+                "property": "attribution",
+                "value": {
+                  "unit": "molecule",
+                  "carrier": "cDNA insert sequences and boundaries represented in the amplified library",
+                  "association": "The iCLIP-style library preserves RNA-derived sequence and crosslink-induced signature information for sequencing; no methyl group on DNA is asserted."
+                }
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/miclip-m6a/extraction/states/10/properties/2/evidence/1",
+              "source_id": "paper:26121403",
+              "locator": "[b00077], Mutation calling, mapped positions and molecular duplicate handling",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Positions of C→T transitions and the coordinates of mapped reads were extracted from native Novoalign output files using the novoalign2bed.pl script of the CIMS software package15. Reads that mapped to the same start and end coordinates and that shared the same random barcode were then collapsed into unique tags using the CIMS script tag2collapse.pl.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "If the new extraction explains barcode-based duplicate collapse, record the supported barcode carrier at an existing boundary and avoid inventing its introduction step. Otherwise keep analysis at supported signature scope.",
+          "reviewer_check": "Distinguish a fact merely quoted from an asserted molecular carrier; establish necessity before requiring an additional property.",
+          "missing_assertion": "Explicit barcode carrier/history in material State properties",
+          "consequence": "Conditional on retaining molecular duplicate handling as a substantive mechanism."
+        },
+        {
+          "id": "miclip_field_ownership",
+          "status": "unclear",
+          "statement": "Correct chemistry is diluted by explanation of what the image shows or what a passage does not supply. This is presentation and evidence placement, not a demonstrated chemistry failure.",
+          "targets": [
+            {
+              "id": "o_cims_crosslink",
+              "pointer": "/miclip-m6a/extraction/operations/2/description",
+              "value": "Convert antibody–RNA binding contacts into covalently crosslinked complexes using primary-supported 254 nm UV. Correction c_uv preserves the diagram’s 365 nm label."
+            },
+            {
+              "id": "o_cims_rt",
+              "pointer": "/miclip-m6a/extraction/operations/6/information_effect",
+              "value": "cDNA sequence locates the RNA of origin; the primary analyzed Abcam CIMS signature is C→T at the cytosine +1 to modified A. The image depicts truncation generically and does not visibly depict this substitution."
+            },
+            {
+              "id": "o_cits_rt",
+              "pointer": "/miclip-m6a/extraction/operations/16/mechanism",
+              "value": "Superscript III reverse transcriptase copies RNA. Peptide residues left after protease digestion perturb reverse transcription, producing the characteristic truncations or substitutions. The full antibody symbol in the image is resolved by correction c_rt_template."
+            },
+            {
+              "id": "o_cims_library",
+              "pointer": "/miclip-m6a/extraction/operations/7/mechanism",
+              "value": "The reported cDNA workflow retains circularization and subsequent relinearization before PCR. Exact circle-forming and relinearization chemistries are not supplied in the inspected paper passage and are not reconstructed from iCLIP by name."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/miclip-m6a/extraction/states/7/evidence/2",
+              "source_id": "paper:26121403",
+              "locator": "[b00124], Figure 1c caption, proteinase K and signature formation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "RNA is then released from the membrane by proteinase K and reverse transcribed. Peptide fragments that remain on the RNA lead to nucleotide incorporation errors (indicated as C→T transition) and cDNA truncations.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/miclip-m6a/extraction/states/9/evidence/1",
+              "source_id": "paper:26121403",
+              "locator": "[b00069], cDNA selection through sequencing",
+              "basis": "text",
+              "support": "reported",
+              "quote": "First strand cDNA was size-selected on a 6% TBE-Urea gel (Life Technologies) and regions corresponding to 80–120 nt (for the total RNA dataset) or 70–100 nt (for the mRNA dataset) were used for further analysis. Circularization and re-linearization of cDNA were performed as described in the iCLIP protocol10. Libraries were PCR amplified for 18 to 21 cycles and sequenced on an Illumina HiSeq 2500 instrument.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Move image comparison and inspection limits to Evidence.rationale/Correction. Preserve known iCLIP-style circularization, relinearization and amplification without guessing enzymes.",
+          "reviewer_check": "Do not count every occurrence of “paper” as an error; check whether the sentence explains a scientific transformation or the extraction process."
+        }
+      ],
+      "missing_or_conflicting_assessment": "No demonstrably false chemistry or missing whole required route established by this bounded inspection. See individual unclear findings for local-language and evidence limits; miCLIP barcode-carrier completeness is conditional.",
+      "source_category_provenance": [
+        {
+          "path": [
+            "Transcriptome",
+            "RNA Modifications"
+          ],
+          "source": "provenance/experiments/illumina_full_20261031/sources/live_cms_snapshot/taxonomy-rna.json",
+          "locator": "/rna-modifications/miclip-m6a",
+          "basis": "original_illumina_taxonomy",
+          "source_record": "miclip-m6a"
+        },
+        {
+          "path": [
+            "Transcriptome",
+            "RNA Modifications"
+          ],
+          "source": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/miclip-m6a.html",
+          "basis": "archived_illumina_category",
+          "source_record": "miclip-m6a"
+        },
+        {
+          "path": [
+            "rna_poster",
+            "RNA Modifications"
+          ],
+          "source": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "locator": [
+            "w03193",
+            "w03194"
+          ],
+          "basis": "printed_poster_heading; column_continuation",
+          "source_record": "poster_9ba44892d95660d1319e8bf3"
+        }
+      ]
+    },
+    {
+      "method_id": "icshape",
+      "category": [
+        "Transcriptome",
+        "RNA Structure"
+      ],
+      "baseline_status": "supported",
+      "pins": {
+        "card.json": "199c02f0f870deb85111165f996333cb9afac721c235569d96632f13aefc45cc",
+        "source_registry.json": "b59f32d092a1ad28441ce5b0de1ef5319ae7cd1b653e6a68968dc2f45aeb259a",
+        "extraction.json": "6809adfda4184bfadafcb5e120da7dd538abcc0ced05d79d0abd748882e61f2a",
+        "review.json": "1b9530d7974957445d3da966bdcfdee214923268ec377f410952c979adb029b4"
+      },
+      "counts": {
+        "states": 12,
+        "operations": 10,
+        "flows": 21
+      },
+      "archived_review": {
+        "checks": 135,
+        "nonaccept": 0
+      },
+      "findings": [
+        {
+          "id": "icshape_context_chemistry",
+          "status": "captured",
+          "statement": "The retained route probes RNA in living cells using NAI-N3 acylation at reactive 2′-OH groups, then isolates poly(A)-selected RNA and tags the probe azide with DIBO-biotin.",
+          "targets": [
+            {
+              "id": "cellular_rna:context",
+              "pointer": "/icshape/extraction/states/0/properties/1",
+              "value": {
+                "id": "context",
+                "subject": "self",
+                "property": "physical_context",
+                "value": "RNA remains within living cells at the probing boundary."
+              }
+            },
+            {
+              "id": "probed_cells:acylation",
+              "pointer": "/icshape/extraction/states/1/properties/2",
+              "value": {
+                "id": "acylation",
+                "subject": "modified_rna",
+                "property": "modification",
+                "value": "Azide-bearing NAI-N3 acyl adducts on reactive ribose 2′-OH groups; probing is not restricted to one nucleobase identity.",
+                "site": "Reactive ribose 2′-hydroxyl positions"
+              }
+            },
+            {
+              "id": "click",
+              "pointer": "/icshape/extraction/operations/2/mechanism",
+              "value": "Copper-free click coupling adds the biotin-bearing DIBO reagent to NAI-N3-modified RNA, creating a streptavidin-binding handle."
+            },
+            {
+              "id": "isolate_select",
+              "pointer": "/icshape/extraction/operations/1/effects/1/statement",
+              "value": "Retain the poly(A)-enriched RNA population before click-mediated enrichment."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/icshape/extraction/states/1/evidence/1",
+              "source_id": "card:icshape",
+              "locator": "Briefly: modification, lysis, poly(A) selection, tagging and fragmentation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Briefly, NAI-N3 is added to RNA in vivo to mark it selectively for DIBO-biotin tagging. The cells are lysed, the RNA is poly(A)-selected, tagged with DIBO-biotin, and fragmented.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/icshape/extraction/states/1/properties/2/evidence/1",
+              "source_id": "paper:26766114",
+              "locator": "[b00009] 2′-OH reactivity in SHAPE",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The recent development of Selective Hydroxyl Acylation analyzed by Primer Extension, or SHAPE, has greatly extended chemical probing experiments because of its ability to interrogate every position in the RNA through 2′-OH reactivity11.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/icshape/extraction/states/3/properties/1/evidence/0",
+              "source_id": "paper:25799993",
+              "locator": "[b00008] bifunctional NAI-N3 probe and copper-free click chemistry",
+              "basis": "text",
+              "support": "reported",
+              "quote": "By using copper-free click chemistry, a biotin moiety is selectively and efficiently added to NAI-N3-modified RNA, providing a stringent purification handle with streptavidin beads (Fig. 1c, Extended Data Fig. 2).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Retain the probing context, targeted chemical group and poly(A) implementation boundary within current blocks.",
+          "reviewer_check": "Do not replace in-cell probing with in-vitro folded RNA or infer that all RNA was chemically modified."
+        },
+        {
+          "id": "icshape_capture_carrier",
+          "status": "captured",
+          "statement": "Biotin remains on modified RNA; associated cDNA is co-retained and then released by RNA digestion. The reporter is cDNA sequence/endpoints, not biotinylated DNA.",
+          "targets": [
+            {
+              "id": "rt_products:rna_tag",
+              "pointer": "/icshape/extraction/states/6/properties/2",
+              "value": {
+                "id": "rna_tag",
+                "subject": "modified_templates",
+                "property": "modification",
+                "value": "NAI-N3-linked biotin resides on the modified RNA template subset.",
+                "site": null
+              }
+            },
+            {
+              "id": "captured_complexes:cdna_rna",
+              "pointer": "/icshape/extraction/states/8/properties/2",
+              "value": {
+                "id": "cdna_rna",
+                "subject": "cdna",
+                "property": "association",
+                "value": "hybridized_to",
+                "partner": "biotinylated_rna"
+              }
+            },
+            {
+              "id": "capture",
+              "pointer": "/icshape/extraction/operations/6/mechanism",
+              "value": "Streptavidin binds biotin on NAI-N3-modified RNA. Non-denaturing handling preserves hybridized cDNA, so the cDNA reporter is co-retained with its RNA template."
+            },
+            {
+              "id": "elute",
+              "pointer": "/icshape/extraction/operations/7/mechanism",
+              "value": "The focal protocol elutes cDNA using RNaseA/T1 plus RNaseH, followed by denaturation and transfer of the cDNA eluate away from the magnetic support."
+            },
+            {
+              "id": "eluted_cdna:origin",
+              "pointer": "/icshape/extraction/states/9/properties/3",
+              "value": {
+                "id": "origin",
+                "subject": "self",
+                "property": "attribution",
+                "value": {
+                  "unit": "other",
+                  "carrier": "Eluted cDNA sequence and RT extension endpoint",
+                  "association": "Preserves the sequence and termination-site information of RNA templates retained by NAI-N3-dependent biotin selection; the RNA chemical tag is not copied onto DNA."
+                }
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/icshape/extraction/states/5/evidence/0",
+              "source_id": "card:icshape",
+              "locator": "Briefly: RNA end preparation and reverse transcription",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The RNA strands are 3'-end-repaired with T4 PNK and ligated to 3' adapters. After size-selection, the RNA strands are reverse-transcribed, and both the RNA and first-strand cDNA are captured on streptavidin beads.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/icshape/extraction/states/6/evidence/2",
+              "source_id": "paper:25799993",
+              "locator": "[b00062] maintain post-RT association",
+              "basis": "text",
+              "support": "reported",
+              "quote": "After cDNA extension do not raise samples above 37°C to avoid denaturing conditions.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/icshape/extraction/states/9/evidence/1",
+              "source_id": "paper:25799993",
+              "locator": "[b00063] cDNA elution",
+              "basis": "text",
+              "support": "reported",
+              "quote": "cDNA is eluted by adding 1μL RNaseA/T1 cocktail (Ambion, Inc) 1μL RNaseH (Enzymatics), 12.5μL 50mM D-Biotin, 5μL 10x Elution Buffer (500mM HEPES, 750mM NaCl, 30mM MgCl2, 1.25% Sarkosyl, 0.25% Na-deoxycholate, 50mM DTT), 30.5μL water and incubating at 37°C for 30min in a Thermomixer at 800 rpm.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep molecule-specific associations and capture handle. Existing composite boundaries are sufficient.",
+          "reviewer_check": "Trace biotin to RNA and hybrid association to cDNA; reject an apparent transfer of the chemical tag to copied DNA."
+        },
+        {
+          "id": "icshape_controls",
+          "status": "captured",
+          "statement": "The extraction already records the experimental ddC adapter versus biotin-bearing mock adapter, DMSO-background dependence, barcode-aware duplicates and false RT stops. The mock branch need not be built solely to state its interpretive role at this library endpoint.",
+          "targets": [
+            {
+              "id": "prepare_rna",
+              "pointer": "/icshape/extraction/operations/4/mechanism",
+              "value": "T4 PNK resolves fragmentation-generated 3′ phosphates before T4 RNL2tr K227Q ligates the preadenylated 3′ adapter in the focal implementation. The NAI-N3 experimental adapter ends in ddC; the mock-control adapter instead carries biotin. Gel selection retains ligated RNA products."
+            },
+            {
+              "id": "reverse_transcribe",
+              "pointer": "/icshape/extraction/operations/5/information_effect",
+              "value": "The cDNA sequence and extension endpoint carry the RNA-position readout. Biotin remains on RNA. Modified-template enrichment does not eliminate premature RT stops, which can yield false-positive reactivity signals."
+            },
+            {
+              "id": "sequencing_library:measurement",
+              "pointer": "/icshape/extraction/states/11/properties/3",
+              "value": {
+                "id": "measurement",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "intended_readout",
+                "definition": "Meaning of subsequent sequencing of this physical library; this State is not a measured dataset.",
+                "applicable_to": "material",
+                "value": "The primary study estimates base-resolution reactivity from mapped stops relative to DMSO-background stops and base density. In vivo reactivity can reflect protein binding as well as structural flexibility."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/icshape/extraction/states/5/components/0/evidence/1",
+              "source_id": "paper:25799993",
+              "locator": "[b00059] Ligation Note: experimental versus mock adapter",
+              "basis": "text",
+              "support": "reported",
+              "quote": "NAI-N3 samples must use “3’-Adaptor-3’ddc” (/5rApp/AGATCGGA AGAGCGGTTCAG/3ddC/) while DMSO samples must use “3’-Adaptor-3’Biotin” (/5rApp/AGATCGGAAGAGCGGTTCAG/3Bio/).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/icshape/extraction/states/6/properties/4/evidence/2",
+              "source_id": "paper:26766114",
+              "locator": "[b00020] limitations of enrichment and RT-stop specificity",
+              "basis": "text",
+              "support": "reported",
+              "quote": "An additional advantage of icSHAPE is the specific enrichment of NAI-N3–modified RNAs; however, it is formally possible that reverse transcriptase does not always fully extend to the nucleotides modified with NAI-N3, thereby possibly generating a false-positive signal.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/icshape/extraction/states/11/properties/3/evidence/0",
+              "source_id": "paper:25799993",
+              "locator": "[b00074] reactivity score calculation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We defined reactivity score as the subtraction of background RT stops (DMSO libraries) from RT stops of the modified NAI libraries, and then adjusted by the background base density:",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep the control dependence and different capture basis in concise local/endpoint explanation; avoid adding a full mock recipe absent assigned routing.",
+          "reviewer_check": "If a mock route is added or grouped, do not assign NAI-dependent capture to it; require the correct carrier per condition."
+        },
+        {
+          "id": "icshape_measurement_limit",
+          "status": "captured",
+          "statement": "Chemical reactivity supports nucleotide flexibility; protein binding can affect the in-vivo signal. The record avoids treating an individual stop as a unique conformation, base pair, protein contact or m6A event.",
+          "targets": [
+            {
+              "id": "probe",
+              "pointer": "/icshape/extraction/operations/0/information_effect",
+              "value": "Reactivity samples nucleotide flexibility across all four base identities. In vivo reactivity is also affected by protein interactions; no individual modification establishes a unique protein-binding or m6A event."
+            },
+            {
+              "id": "sequencing_library:measurement",
+              "pointer": "/icshape/extraction/states/11/properties/3",
+              "value": {
+                "id": "measurement",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "intended_readout",
+                "definition": "Meaning of subsequent sequencing of this physical library; this State is not a measured dataset.",
+                "applicable_to": "material",
+                "value": "The primary study estimates base-resolution reactivity from mapped stops relative to DMSO-background stops and base density. In vivo reactivity can reflect protein binding as well as structural flexibility."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/icshape/extraction/states/6/properties/4/evidence/2",
+              "source_id": "paper:26766114",
+              "locator": "[b00020] limitations of enrichment and RT-stop specificity",
+              "basis": "text",
+              "support": "reported",
+              "quote": "An additional advantage of icSHAPE is the specific enrichment of NAI-N3–modified RNAs; however, it is formally possible that reverse transcriptase does not always fully extend to the nucleotides modified with NAI-N3, thereby possibly generating a false-positive signal.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/icshape/extraction/states/11/properties/3/evidence/1",
+              "source_id": "paper:26766114",
+              "locator": "[b00017] measurement interpretation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Traditionally, SHAPE reactivity directly reports on the structural flexibility of an individual nucleotide; however, in vivo icSHAPE reactivities can be influenced by protein binding20, among other things.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Preserve this measurement qualification when removing source commentary.",
+          "reviewer_check": "Distinguish direct RT-endpoint observations from background-corrected reactivity and further structural interpretation."
+        },
+        {
+          "id": "icshape_field_ownership",
+          "status": "unclear",
+          "statement": "Several fields mix local explanation with route justification and source inspection, although their scientific content is present.",
+          "targets": [
+            {
+              "id": "isolate_select",
+              "pointer": "/icshape/extraction/operations/1/information_effect",
+              "value": "The library route now samples poly(A)-selected RNA. The paper also permits total-RNA libraries, but that alternative does not replace the catalogue route in this graph."
+            },
+            {
+              "id": "complete_library",
+              "pointer": "/icshape/extraction/operations/9/information_effect",
+              "value": "Subsequent sequencing maps cDNA-derived boundaries to RNA RT-stop positions; the primary study uses DMSO background and barcode-aware duplicate removal to interpret them as reactivity. The catalogue warns that circularization may introduce additional bias; the inspected primary passages confirm the operation but do not establish that particular bias mechanism."
+            },
+            {
+              "id": "circularization_bias_confirmation",
+              "pointer": "/icshape/extraction/unknowns/0",
+              "value": {
+                "id": "circularization_bias_confirmation",
+                "question": "The catalogue cautions that circularization may introduce additional bias, but the inspected focal circularization/PCR passage and protocol limitations do not establish the source or magnitude of this bias for this implementation. A registered primary characterization of circularization-dependent representation bias would be needed to upgrade the catalogue qualification; the transformation and library route are already confirmed."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/icshape/extraction/states/10/evidence/0",
+              "source_id": "card:icshape",
+              "locator": "Briefly: cDNA selection and library completion",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Another cDNA size-selection step is carried out before circularization and PCR amplification. The samples are ready for NGS.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/icshape/extraction/operations/9/evidence/4",
+              "source_id": "card:icshape",
+              "locator": "Cons",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Circularization may introduce additional bias",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Move the total-RNA alternative and evidence-limit reasoning to scope/rationale/Unknown; keep poly(A) selection, retained endpoint/barcode and the qualified circularization concern.",
+          "reviewer_check": "Judge brevity together with properties; do not erase a real limit simply because its provenance sentence moves."
+        }
+      ],
+      "missing_or_conflicting_assessment": "No demonstrably false chemistry or missing whole required route established by this bounded inspection. See individual unclear findings for local-language and evidence limits; miCLIP barcode-carrier completeness is conditional.",
+      "source_category_provenance": [
+        {
+          "path": [
+            "rna_poster",
+            "RNA Structure"
+          ],
+          "source": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "locator": [
+            "w03018",
+            "w03019"
+          ],
+          "basis": "printed_poster_heading; column_continuation",
+          "source_record": "poster_a07a44789eb17c95627fca13"
+        }
+      ]
+    },
+    {
+      "method_id": "frag-seq",
+      "category": [
+        "Transcriptome",
+        "RNA Structure"
+      ],
+      "baseline_status": "supported",
+      "pins": {
+        "card.json": "73b10bf4515b3ff92be5d024958ac4cd37240ac67d53928145ef5ffc4f6b5dee",
+        "source_registry.json": "cab7faa5e1e3c6afdf2ad10283cab5994e6242b61fc2043c6c84173c68824357",
+        "extraction.json": "78762e91965d1579ceec8efcd995c5e5c43dd8cdee5510d11aa4e8ed1c42bee4",
+        "review.json": "f9235f165e9a63c2395b9927eb35f955cbe64ca2e077b2554bf47e2e51b19114"
+      },
+      "counts": {
+        "states": 16,
+        "operations": 12,
+        "flows": 27
+      },
+      "archived_review": {
+        "checks": 174,
+        "nonaccept": 0
+      },
+      "findings": [
+        {
+          "id": "frag_input_arms",
+          "status": "captured",
+          "statement": "The corrected input is naked nuclear RNA, with separate P1, no-nuclease and PNK control preparations. The PNK input explicitly retains a pre-existing 20–100-nt history.",
+          "targets": [
+            {
+              "id": "rna_p1_input:identity",
+              "pointer": "/frag-seq/extraction/states/0/properties/0",
+              "value": {
+                "id": "identity",
+                "subject": "self",
+                "property": "identity",
+                "value": "Naked nuclear RNA in the nuclease arm"
+              }
+            },
+            {
+              "id": "rna_pnk_input:input_history",
+              "pointer": "/frag-seq/extraction/states/2/properties/1",
+              "value": {
+                "id": "input_history",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "PNK input preparation",
+                "definition": "Reported input size at this branch boundary.",
+                "applicable_to": "material",
+                "value": "The paper specifies 20–100-nt RNA as the PNK input; this prepared starting boundary retains that history. The precise upstream preparation is not expanded."
+              }
+            },
+            {
+              "id": "correct_input_caption",
+              "pointer": "/frag-seq/extraction/corrections/0",
+              "value": {
+                "id": "correct_input_caption",
+                "diagram_observation": "The shared starting caption says “In vitro folded polyA RNA” and branches to all three treatments.",
+                "primary_statement": "The focal paper applies FragSeq to naked mouse nuclear RNA and explicitly describes gel-isolated nuclear RNAs and multiple ncRNAs. The asserted input is therefore naked nuclear RNA for the focal implementation; no poly(A)-selection operation or universal polyadenylated-input restriction is introduced.",
+                "disposition": "use_primary"
+              }
+            },
+            {
+              "id": "treat_pnk",
+              "pointer": "/frag-seq/extraction/operations/1/information_effect",
+              "value": "This branch exposes naturally occurring breaks that would be missed by the untreated end-chemistry-dependent capture. It is a control treatment, not another nuclease-specific structural probe."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/frag-seq/extraction/states/0/evidence/0",
+              "source_id": "paper:21057495",
+              "locator": "[b00010] Introduction: assay principle and input",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We apply FragSeq to naked RNAs from the mouse nuclear transcriptome and deduce structure data for known and novel ncRNAs.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/frag-seq/extraction/states/0/properties/1/evidence/1",
+              "source_id": "paper:21057495",
+              "locator": "[b00014] FragSeq methodology: size selection and untreated control",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We either gel-isolated intact nuclear RNAs of 20-100 nucleotides directly or first performed a limited P1 nuclease digestion before gel isolation. The control treatment without nuclease digestion allowed us to estimate the occurrence of fragments with an endogenous 5′ phosphate, as opposed to fragments with a 5′ phosphate produced by nuclease cleavage.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/frag-seq/extraction/states/2/evidence/0",
+              "source_id": "paper:21057495",
+              "locator": "[b00014] FragSeq methodology: PNK control",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Additionally, we treated an equal mass of input 20-100 nucleotide RNAs with polynucleotide kinase (“PNK” treatment) and ATP, catalyzing 5′ phosphorylation and 3′ cyclic phosphate removal12, which allowed us to examine endogenous breaks that do not leave a 5′ phosphate and 3′ OH.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Retain independent treatment histories without forcing a new folding, poly(A) selection or repeated gel-isolation step.",
+          "reviewer_check": "PNK control is neither P1 digestion nor an isolated pure 5′OH fraction; the input history must survive any compact grouping."
+        },
+        {
+          "id": "frag_ends_capture",
+          "status": "captured",
+          "statement": "New P1 scissions have 5′ monophosphate/3′OH products, and ligation requires compatible ends on the same captured fragment. Size selection alone is not chemical purification.",
+          "targets": [
+            {
+              "id": "rna_p1_digest:p1_5p",
+              "pointer": "/frag-seq/extraction/states/3/properties/1",
+              "value": {
+                "id": "p1_5p",
+                "subject": "new_5ends",
+                "property": "terminal_group",
+                "end": "five_prime",
+                "value": "monophosphate"
+              }
+            },
+            {
+              "id": "rna_p1_digest:p1_3oh",
+              "pointer": "/frag-seq/extraction/states/3/properties/2",
+              "value": {
+                "id": "p1_3oh",
+                "subject": "new_3ends",
+                "property": "terminal_group",
+                "end": "three_prime",
+                "value": "hydroxyl"
+              }
+            },
+            {
+              "id": "ligate_p1",
+              "pointer": "/frag-seq/extraction/operations/3/description",
+              "value": "Ligate adapters directly to the size-selected RNA in this arm. Capture requires both a 5′ phosphate and a 3′OH on the same RNA fragment; the product is adapter-linked RNA, before reverse transcription."
+            },
+            {
+              "id": "rna_p1_selected:symbol_scope",
+              "pointer": "/frag-seq/extraction/states/4/properties/4",
+              "value": {
+                "id": "symbol_scope",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "schematic population convention",
+                "definition": "Interpretation of the simplified fragment symbols, not a physical separation into chemical fractions.",
+                "applicable_to": "material",
+                "value": "The isolated 5′P cartoon represents clonable molecules. Size selection alone is not asserted to purify an end-chemistry class."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/frag-seq/extraction/states/3/evidence/1",
+              "source_id": "paper:21057495",
+              "locator": "[b00013] FragSeq methodology: nuclease product chemistry",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To specifically clone RNA fragments derived from nuclease cuts and not those derived from random hydrolysis, we used endonuclease P1 (EC 3.1.30.1), which has preference for single-stranded DNA and RNA and yields 5′ monophosphate and 3′ OH products11.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/frag-seq/extraction/states/4/evidence/1",
+              "source_id": "paper:21057495",
+              "locator": "[b00014] FragSeq methodology: three treatments and directional RNA-adapter ligation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "After gel isolation of these three parallel treatments, adapters were ligated directly to RNA fragments in a manner requiring both a 5′ phosphate and 3′ OH on each RNA, thus preserving orientation information for each fragment.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/frag-seq/extraction/states/4/evidence/3",
+              "source_id": "paper:21057495",
+              "locator": "[b00074] Figure 1a caption: chemical symbols and clonability",
+              "basis": "text",
+              "support": "reported",
+              "quote": "RNA 5′ and 3′ end chemistry is specifically shown to highlight PNK and nuclease products; when RNA end chemistry is not shown, it denotes any possible end chemistry. Only clonable RNA fragments are shown at and after the size-selection step.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep the chemistry on the participating fragment populations; move cartoon interpretation out of routine scientific description.",
+          "reviewer_check": "Do not claim all native termini were generated by P1 or that a drawn clonable fragment proves an isolated end-chemistry fraction."
+        },
+        {
+          "id": "frag_control_wording",
+          "status": "unclear",
+          "statement": "ligate_native and ligate_pnk repeat an information_effect sentence about compatible endogenous fragments in the P1 arm. That sentence can be true as assay context, but is not the local effect on either control input. The actual control States, effects and Flows remain separate; this is not proof that P1 was applied to controls.",
+          "targets": [
+            {
+              "id": "ligate_native",
+              "pointer": "/frag-seq/extraction/operations/6/information_effect",
+              "value": "RNA sequence, fragment boundaries and orientation can be carried into cDNA. Compatible endogenous fragments remain eligible in the P1 arm, motivating the parallel untreated control. The paper also reports that trimethylguanosine-capped native 5′ ends of examined ncRNAs block ligation."
+            },
+            {
+              "id": "ligate_pnk",
+              "pointer": "/frag-seq/extraction/operations/8/information_effect",
+              "value": "RNA sequence, fragment boundaries and orientation can be carried into cDNA. Compatible endogenous fragments remain eligible in the P1 arm, motivating the parallel untreated control. The paper also reports that trimethylguanosine-capped native 5′ ends of examined ncRNAs block ligation."
+            },
+            {
+              "id": "ligate_native",
+              "pointer": "/frag-seq/extraction/operations/6/inputs",
+              "value": [
+                "rna_native_selected"
+              ]
+            },
+            {
+              "id": "ligate_pnk",
+              "pointer": "/frag-seq/extraction/operations/8/inputs",
+              "value": [
+                "rna_pnk_selected"
+              ]
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/frag-seq/extraction/states/0/properties/1/evidence/1",
+              "source_id": "paper:21057495",
+              "locator": "[b00014] FragSeq methodology: size selection and untreated control",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We either gel-isolated intact nuclear RNAs of 20-100 nucleotides directly or first performed a limited P1 nuclease digestion before gel isolation. The control treatment without nuclease digestion allowed us to estimate the occurrence of fragments with an endogenous 5′ phosphate, as opposed to fragments with a 5′ phosphate produced by nuclease cleavage.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/frag-seq/extraction/states/2/evidence/0",
+              "source_id": "paper:21057495",
+              "locator": "[b00014] FragSeq methodology: PNK control",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Additionally, we treated an equal mass of input 20-100 nucleotide RNAs with polynucleotide kinase (“PNK” treatment) and ATP, catalyzing 5′ phosphorylation and 3′ cyclic phosphate removal12, which allowed us to examine endogenous breaks that do not leave a 5′ phosphate and 3′ OH.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/frag-seq/extraction/states/4/evidence/1",
+              "source_id": "paper:21057495",
+              "locator": "[b00014] FragSeq methodology: three treatments and directional RNA-adapter ligation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "After gel isolation of these three parallel treatments, adapters were ligated directly to RNA fragments in a manner requiring both a 5′ phosphate and 3′ OH on each RNA, thus preserving orientation information for each fragment.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "State that native control ligation captures existing compatible-end fragments, while PNK control ligation captures the population made compatible by PNK. Keep the reason for P1-versus-control comparison at infer_accessibility.",
+          "reviewer_check": "Case-check each field against its branch input: irrelevant cross-arm explanation is ambiguity; a claim that P1 generated a control end is a scientific error. No blanket keyword failure.",
+          "severity": "local_explanation_ambiguity",
+          "archived_review": {
+            "pointer": "/frag-seq/review/checks/31",
+            "action": "accept"
+          }
+        },
+        {
+          "id": "frag_interpretation",
+          "status": "captured",
+          "statement": "Mapped boundary comparisons use P1 versus untreated control for cutting scores, with PNK as an additional endogenous-break assessment. Scores support accessibility of the upstream base and do not establish a complete fold or uniform transcript abundance.",
+          "targets": [
+            {
+              "id": "infer_accessibility",
+              "pointer": "/frag-seq/extraction/operations/11/description",
+              "value": "Map treatment reads to the genome and use transcript coordinates to compare P1-generated break frequencies with the untreated endogenous-phosphate control, producing transcript-relative cutting scores. Keep the PNK arm as an additional endogenous-break assessment, not as the stated denominator of the P1 cutting-score algorithm."
+            },
+            {
+              "id": "infer_accessibility",
+              "pointer": "/frag-seq/extraction/operations/11/mechanism",
+              "value": "Read-boundary mapping locates observed backbone breaks. The reported score compares nuclease and no-nuclease break probabilities within each transcript after abundance and low/missing-data correction; a high score at a site is attributed to the base immediately upstream because P1 cuts 3′ of an unpaired base."
+            },
+            {
+              "id": "accessibility_profiles:interpretive_limits",
+              "pointer": "/frag-seq/extraction/states/15/properties/3",
+              "value": {
+                "id": "interpretive_limits",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "measurement scope and ascertainment limits",
+                "definition": "Limits applying to the inferred RNA accessibility measurement.",
+                "applicable_to": "data",
+                "value": "Accessibility profiles favor stem-loops and hinges and generally miss small interior loops or bulges. End-chemistry capture, fragment-size selection and observed multiple-cut products limit interpretation; the profiles do not establish a complete fold or uniform transcript abundance."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/frag-seq/extraction/states/15/evidence/1",
+              "source_id": "paper:21057495",
+              "locator": "[b00016] FragSeq algorithm: comparison and base attribution",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Briefly, the cutting score is the log ratio of probabilities of observing a break in the nuclease treatment versus the control treatment, after correcting for abundance differences and missing/low-valued data (see Supplementary Note 1 for the exact algorithm definition and Supplementary Note 2 for design rationale). Because P1 cuts 3′ of an unpaired base, a high cutting score at a site indicates that the upstream base is unlikely to be involved in base pairing or tertiary interactions13.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/frag-seq/extraction/states/15/evidence/2",
+              "source_id": "paper:21057495",
+              "locator": "[b00030] Discussion: information from PNK control",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Using the parallel PNK treatment where these latter products were converted to clonable RNAs showed how sequencing multiple treatments yields insights into naturally labile sites.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/frag-seq/extraction/states/15/properties/3/evidence/3",
+              "source_id": "paper:21057495",
+              "locator": "[b00029] Discussion: what the assay measures",
+              "basis": "text",
+              "support": "reported",
+              "quote": "FragSeq will not generate the uniform coverage across a transcript needed for accurate abundance estimates or alternative splicing characterization. Instead, quantitative comparisons along each transcript, expressed as cutting scores, are made between enzyme-treated samples versus control samples, yielding information about RNA structure.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep the comparison, positional interpretation and ascertainment limits. Do not add exact software thresholds for a schematic.",
+          "reviewer_check": "Reject use of the PNK arm as the stated cutting-score denominator or low cleavage as proof of base pairing."
+        },
+        {
+          "id": "frag_readout_route",
+          "status": "captured",
+          "statement": "Separate libraries gain treatment barcodes before pooling. The focal quoted implementation uses SOLiD3; the vendor page does not establish a new Illumina chemistry.",
+          "targets": [
+            {
+              "id": "sequence_libraries",
+              "pointer": "/frag-seq/extraction/operations/10/description",
+              "value": "Complete the three cDNA libraries with individual barcodes during PCR, pool them, and obtain high-throughput sequence reads. This composite endpoint expands the catalogue deep-sequencing statement only enough to preserve the paper-supported treatment attribution. The focal paper used ABI SOLiD3; no Illumina-specific adapter chemistry or sequencer is inferred."
+            },
+            {
+              "id": "treatment_reads:treatment_origin",
+              "pointer": "/frag-seq/extraction/states/13/properties/3",
+              "value": {
+                "id": "treatment_origin",
+                "subject": "self",
+                "property": "attribution",
+                "value": {
+                  "unit": "sample",
+                  "carrier": "Library-specific barcodes introduced during PCR and the associated sequencing records",
+                  "association": "Maintains assignment to the three distinct treatments after their libraries are pooled."
+                }
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/frag-seq/extraction/states/6/evidence/1",
+              "source_id": "paper:21057495",
+              "locator": "[b00014] FragSeq methodology: reverse transcription, barcoding, pooling, sequencing and mapping",
+              "basis": "text",
+              "support": "reported",
+              "quote": "After subsequent reverse transcription, the libraries were individually barcoded during PCR, pooled and sequenced using the ABI SOLiD3 platform, then mapped to the mouse genome using the ABI Small RNA Analysis Pipeline (http://solidsoftwaretools.com).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep barcode-before-pool attribution and true reporter origin; remove routine source narration while retaining platform scope.",
+          "reviewer_check": "Compact equivalent ligation/RT processing only if the three treatment outputs stay distinguishable until true pooling."
+        }
+      ],
+      "missing_or_conflicting_assessment": "No demonstrably false chemistry or missing whole required route established by this bounded inspection. See individual unclear findings for local-language and evidence limits; miCLIP barcode-carrier completeness is conditional.",
+      "source_category_provenance": [
+        {
+          "path": [
+            "Transcriptome",
+            "RNA Structure"
+          ],
+          "source": "provenance/experiments/illumina_full_20261031/sources/live_cms_snapshot/taxonomy-rna.json",
+          "locator": "/rna-structure/frag-seq",
+          "basis": "original_illumina_taxonomy",
+          "source_record": "frag-seq"
+        },
+        {
+          "path": [
+            "Transcriptome",
+            "RNA Structure"
+          ],
+          "source": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/frag-seq.html",
+          "basis": "archived_illumina_category",
+          "source_record": "frag-seq"
+        },
+        {
+          "path": [
+            "rna_poster",
+            "RNA Structure"
+          ],
+          "source": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "locator": [
+            "w03018",
+            "w03019"
+          ],
+          "basis": "printed_poster_heading; column_continuation",
+          "source_record": "poster_d6e6dcd8bac1632c7e8a5501"
+        }
+      ]
+    },
+    {
+      "method_id": "rasl-seq",
+      "category": [
+        "Transcriptome",
+        "RNA Transcription"
+      ],
+      "baseline_status": "supported",
+      "pins": {
+        "card.json": "d33adadbd8da643251c9e850f15341fabab71950f104a50aa109710286888741",
+        "source_registry.json": "c9f05a73ac68d453ab8008ff7ad47e4a1f3b1b9c3e09f8920636b70fcbf64276",
+        "extraction.json": "7ffc6e55301d09df00fbcc228e20a1d83dfd36242a338f80770a851111b875dc",
+        "review.json": "b226aaf66701c8cea685d914447067d9ab0efe86545f991e383e0c7709c6e83d"
+      },
+      "counts": {
+        "states": 11,
+        "operations": 8,
+        "flows": 18
+      },
+      "archived_review": {
+        "checks": 153,
+        "nonaccept": 0
+      },
+      "findings": [
+        {
+          "id": "rasl_reporter",
+          "status": "captured",
+          "statement": "RASL encodes RNA-directed adjacency by ligating synthetic DNA probes. The released and PCR-amplified reporters are probe-derived DNA rather than reverse-transcribed cDNA.",
+          "targets": [
+            {
+              "id": "ligate",
+              "pointer": "/rasl-seq/extraction/operations/2/mechanism",
+              "value": "T4 DNA ligase joins the adjacent annealed probe pair; the index-side probe bears the required 5′ phosphate. The joined product carries both universal primer regions and the two contiguous 20 nt target-specific regions."
+            },
+            {
+              "id": "elute",
+              "pointer": "/rasl-seq/extraction/operations/3/information_effect",
+              "value": "The RNA-to-probe hybrid association ends, while the ligated probe sequence retains its designed target identity. Sample identity remains in separate preparations pending barcode PCR."
+            },
+            {
+              "id": "indexed:identity",
+              "pointer": "/rasl-seq/extraction/states/7/properties/0",
+              "value": {
+                "id": "identity",
+                "subject": "self",
+                "property": "identity",
+                "value": "Per-sample PCR amplicons derived from ligated synthetic DNA probes, carrying P5/P7 sequences, the target-probe region and a sample barcode."
+              }
+            },
+            {
+              "id": "reporter_identity",
+              "pointer": "/rasl-seq/extraction/corrections/1",
+              "value": {
+                "id": "reporter_identity",
+                "diagram_observation": "The final product is captioned Indexed cDNA; the complete product drawing runs beyond the registered right boundary. The readable caption does not establish reverse transcription.",
+                "primary_statement": "The paper explicitly ligates the target DNA oligonucleotide pairs into PCR amplicons, releases the ligated probes from RNA templates and amplifies those probes with bar-coded primers. The pictured indexed product is therefore sample-indexed probe-derived DNA. This corrected identity is retained on pooling into the final sequencing library.",
+                "disposition": "use_primary"
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/rasl-seq/extraction/states/0/components/0/evidence/0",
+              "source_id": "paper:22470064",
+              "locator": "b00005; Introduction / Figure 1 explanation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "As diagramed in Figure 1, a pair of oligonucleotides is designed to target a specific splice junction region in each transcript from a selected panel of genes (Yeakley et al., 2002). Each oligonucleotide also carries a universal primer sequence and one of the primers also contains a 5′ phosphate. A pool of such probes is annealed to total RNA, and corresponding mRNAs are captured using oligo-dT biotin beads. After washing away free oligonucleotides, the aligned pairs of probes correctly annealed to their complementary templates are ligated by T4 ligase, thus converting the pairs of single probes to single PCR amplicons. The products from each sample (conditions) are indexed by performing a limited PCR amplification using a set of bar-coded primers in conjunction with a",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/1/evidence/6",
+              "source_id": "paper:22470064",
+              "locator": "b00053; RASL reaction / explicit identity of released ligated DNA",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Store the original plates at −20°C (as backup in case of problems during bar-coding; the ligated DNA should be very stable for years). Note that the original cell culture plates are used throughout the entire RASL procedure.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/4/evidence/3",
+              "source_id": "paper:22470064",
+              "locator": "b00051; RASL reaction / probe elution",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Incubate the plates at 65°C for 5 min to release ligated probes from their templates.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Preserve the corrected material identity in State labels/properties and explain RNA templating without adding RT.",
+          "reviewer_check": "Reject “indexed cDNA” as the asserted reporter identity even when retained as source_label."
+        },
+        {
+          "id": "rasl_capture_order",
+          "status": "captured",
+          "statement": "Biotin belongs to oligo(dT), which links poly(A) RNA to streptavidin beads. Selection removes free probes before RNA-templated DNA ligation, and the graph follows that corrected order.",
+          "targets": [
+            {
+              "id": "selected:capture_biotin",
+              "pointer": "/rasl-seq/extraction/states/3/properties/4",
+              "value": {
+                "id": "capture_biotin",
+                "subject": "capture",
+                "property": "modification",
+                "value": "Biotin",
+                "site": null
+              }
+            },
+            {
+              "id": "selected:capture_on_rna",
+              "pointer": "/rasl-seq/extraction/states/3/properties/3",
+              "value": {
+                "id": "capture_on_rna",
+                "subject": "capture",
+                "property": "association",
+                "value": "hybridized_to",
+                "partner": "rna"
+              }
+            },
+            {
+              "id": "selected:capture_on_beads",
+              "pointer": "/rasl-seq/extraction/states/3/properties/8",
+              "value": {
+                "id": "capture_on_beads",
+                "subject": "capture",
+                "property": "association",
+                "value": "bound_to",
+                "partner": "beads"
+              }
+            },
+            {
+              "id": "ligate",
+              "pointer": "/rasl-seq/extraction/operations/2/inputs",
+              "value": [
+                "selected"
+              ]
+            },
+            {
+              "id": "selection_order",
+              "pointer": "/rasl-seq/extraction/corrections/0",
+              "value": {
+                "id": "selection_order",
+                "diagram_observation": "The Illumina arrows place Add targeted primers, then Ligate, then Selection on streptavidin support, then Elute fragment. This depicted ligation-before-selection order is preserved here rather than asserted as the implemented route.",
+                "primary_statement": "The focal paper captures mRNAs on oligo(dT)-biotin beads and removes free oligonucleotides before ligating the annealed probes. The basic protocol performs magnetic selection before adding T4 DNA ligase. Accordingly, Operations, State histories and material Flows use anneal → select → ligate → elute.",
+                "disposition": "use_primary"
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/rasl-seq/extraction/states/1/evidence/2",
+              "source_id": "paper:22470064",
+              "locator": "b00021; Basic protocol / capture oligonucleotide",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Biotinylated oligo (dT)25. This can be chemically synthesized or directly purchased from various vendors (IDT or Life Technologies).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/3/evidence/4",
+              "source_id": "paper:22470064",
+              "locator": "b00043; RASL reaction / magnetic selection",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Transfer the plates to a magnetic stand and aspirate the supernatant, leaving ~10 μl in each well.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/3/evidence/5",
+              "source_id": "paper:22470064",
+              "locator": "b00047; RASL reaction / ligation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Add 20 μl of 1X ligation buffer containing 5 U (Weiss unit) of T4 DNA ligase and pipette the solution to resuspend the beads.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep carrier-specific binding and corrected order; broad capture/ligation blocks suffice.",
+          "reviewer_check": "Do not attach biotin covalently to mRNA or let the correction coexist with ligation-before-selection Flows."
+        },
+        {
+          "id": "rasl_identity_readout",
+          "status": "captured",
+          "statement": "PCR introduces a sample barcode physically linked to its probe reporter before pooling; linked probe/barcode reads are associated by flowcell cluster position. This is sample attribution, not a UMI.",
+          "targets": [
+            {
+              "id": "barcode_pcr",
+              "pointer": "/rasl-seq/extraction/operations/4/information_effect",
+              "value": "Creates a physical link between a sample barcode and its target-probe reporter. This barcode identifies the biological sample/condition, not a unique original RNA molecule."
+            },
+            {
+              "id": "indexed:sample_attribution",
+              "pointer": "/rasl-seq/extraction/states/7/properties/4",
+              "value": {
+                "id": "sample_attribution",
+                "subject": "self",
+                "property": "attribution",
+                "value": {
+                  "unit": "sample",
+                  "carrier": "PCR-incorporated barcode physically carried in the same DNA amplicon as its target-probe sequence",
+                  "association": "Identifies the sample/condition in which the ligated probe product was generated."
+                }
+              }
+            },
+            {
+              "id": "reads:sample_attribution",
+              "pointer": "/rasl-seq/extraction/states/9/properties/3",
+              "value": {
+                "id": "sample_attribution",
+                "subject": "self",
+                "property": "attribution",
+                "value": {
+                  "unit": "sample",
+                  "carrier": "Barcode read linked to the target-probe read by recorded flowcell cluster position",
+                  "association": "Assigns a target-probe sequence to its source sample when the barcode is decoded."
+                }
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/rasl-seq/extraction/states/6/evidence/0",
+              "source_id": "paper:22470064",
+              "locator": "b00031; Basic protocol / bar-coding primer design",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The bar-coding primer: 5′-CAAGCAGAAGACGGCATACGAG(XXXXXXX)TAG CTGATGCTACGACCACAGG -3′). Each of these primers contains a 7nt bar-code sequence (barcodes consist of any nucleotide combination, and we require at least two base differences between any two barcodes) between the P7 primer sequence (5′-CAAGCAGAAGACGGCATACGAG-3′) at the 5′ end and the index primer sequence (5′-TAGCTGATGCTACGACCACAGG-3′) at the 3′ end. Each of these primers is used in combination with a P5 common primer (5′-AATGATACGGCGACCACCGAGAT-3′) for PCR. The sequences of P5 and P7 primers correspond to those on the Illumina flowcell for cluster generating (note that the nomenclature of primers is according to the Solexa system at Illumina).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/7/properties/4/evidence/0",
+              "source_id": "paper:22470064",
+              "locator": "b00006; Introduction / linked sequencing reactions",
+              "basis": "text",
+              "support": "reported",
+              "quote": "A first sequencing reaction reads the ligated region of 40nt (which is the entire length of the ligated products) and a second sequence reaction decodes the bar-code region. The rationale behind this bar-coding strategy is to introduce the bar-code to each sample during post-ligation PCR. Because the positional information for individual clusters on the Illumina flowcell is recorded in the computer during the first round of sequencing, the bar-code information from the second round of sequencing can be directly linked to the sequences in the ligated region.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Retain sample unit, carrier and read-link mechanism without duplicating the full barcode recipe across fields.",
+          "reviewer_check": "Confirm separate sample processing until barcode addition; never convert barcode counts into unique original RNA-molecule counts."
+        },
+        {
+          "id": "rasl_count_limits",
+          "status": "captured",
+          "statement": "The count table represents intended probe products for selected targets. Probe efficiency, random ligations and nonspecific templating limit biological interpretation.",
+          "targets": [
+            {
+              "id": "counts:count_specificity",
+              "pointer": "/rasl-seq/extraction/states/10/properties/3",
+              "value": {
+                "id": "count_specificity",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "Limits of intended-product assignment",
+                "definition": "Which reporter classes the tag-count table includes, and the reported limit of that selection.",
+                "applicable_to": "data",
+                "value": "Unrelated random probe-pair ligations do not count as intended products, but nonspecific templating of some designed probe pairs is reported; target assignment is not proof of perfect biological specificity."
+              }
+            },
+            {
+              "id": "count",
+              "pointer": "/rasl-seq/extraction/operations/7/information_effect",
+              "value": "Reports selected-gene expression profiles across samples. Different probe efficiencies limit interpretation as absolute RNA abundance; the paper supports comparison of fold differences using validated probes. The catalogue cautions that short 40 nt tags can be problematic in repetitive regions."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/rasl-seq/extraction/states/10/properties/2/evidence/0",
+              "source_id": "paper:22470064",
+              "locator": "b00016; Strategic planning / probe-dependent efficiency",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Select one pair of probes per transcript based on two criteria. First, the pair gives the expected fold-difference according to prior profiling experiments or qPCR, and second, the count per probe is between 100 and 5000 after considering the final levels of multiplexing (for example, if 100 samples to be multiplexed to monitor a 100-gene signature, the total counts in a single sample should be between 1×104 and 5×105). As shown in Figure 2, we found that the ligation efficiency of different probe pairs that target the same transcripts can significantly vary, but the recorded fold-changes are relatively similar. By choosing probe pairs that produce sequence reads in a similar range, one can select high efficiency probes to target low abundance transcripts and low effici",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/10/properties/3/evidence/0",
+              "source_id": "paper:22470064",
+              "locator": "b00017; Strategic planning / nonspecific products",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We also detected a small number of probe pairs that produce very high reads, which might be due to their ligation templated by other non-specific sequences. Discard these pairs to prevent them contributing too many sequences in the final data set.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/10/properties/3/evidence/1",
+              "source_id": "paper:22470064",
+              "locator": "b00072; Critical parameters / random ligation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Another problem we frequently encountered is a high level of random ligation (i.e. unrelated oligos are ligated to one another). Normally, such random ligation is less than 10% among the total ligated products, which can be ignored because they will not be counted as the expected products during bioinformatics analysis of the data. When this reaches 30% or more, however, it is problematic, which is usually due to low levels of RNA or to RNA degradation that causes failure in polyA selection. If cell lysates are used, make sure that there are sufficient cells in each well. When the cell number is more than 10,000, on the other hand, the high viscosity due to released genomic DNA will cause loss of beads during polyA selection and/or buffer change. In this case, the polyA",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep the targeted-panel and efficiency qualifications; no compulsory nascent-transcription/time model follows from the category.",
+          "reviewer_check": "Exclude unrelated ligation sequences without claiming all intended probe pairs are biologically specific."
+        },
+        {
+          "id": "rasl_field_ownership",
+          "status": "unclear",
+          "statement": "The pool, sequence and count descriptions append notes about what is or is not drawn; the actions and mechanisms are otherwise explicit.",
+          "targets": [
+            {
+              "id": "pool",
+              "pointer": "/rasl-seq/extraction/operations/5/description",
+              "value": "Pool the separately indexed sample PCR products and purify the combined DNA library away from free primers before sequencing. This preparation is reported in the paper, not drawn as its own Illumina image block."
+            },
+            {
+              "id": "sequence",
+              "pointer": "/rasl-seq/extraction/operations/6/description",
+              "value": "Sequence the pooled library in two linked reactions: read the 40 nt ligated-probe target region from P5, then read the barcode from the index primer. Sequencing is reported in the catalogue and paper, not a separate visible block in the registered image."
+            },
+            {
+              "id": "count",
+              "pointer": "/rasl-seq/extraction/operations/7/description",
+              "value": "Match sequence tags to intended probe ligation products, segregate them by sample barcode, and compile gene-by-sample tag counts. This is the paper-reported interpretation of the assay signal, not an image-depicted computational block."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/rasl-seq/extraction/states/7/evidence/4",
+              "source_id": "paper:22470064",
+              "locator": "b00090; Figure 1 caption",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Figure 1Overview of the RASL-seq technology. All steps, including annealing, selection, ligation and elution, can be carried out manually or on a customized Biomek FX robot. One of the targeting oligos (the upstream one) contains a 5′ phosphate. Each oligo contains a specific universal primer as indicated. After incorporating bar-codes during PCR, the products are pooled, purified, and sequenced on Illumina sequencer (GAII or HiSeq 2000). The first sequencing run reads the ligated region from the P5 primer and the second identifies the bar-coded region from the index primer.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/8/properties/4/evidence/2",
+              "source_id": "paper:22470064",
+              "locator": "b00063; Sequencing and analysis / assignment",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Map the sequence tags to the sequences that correspond to intended ligation products and segregate tags for individual samples based on their bar-codes.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/rasl-seq/extraction/states/10/evidence/1",
+              "source_id": "paper:22470064",
+              "locator": "b00064; Sequencing and analysis / counting",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Compile tag numbers for each gene in each sample for further analysis.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Move text-versus-image support to Evidence.rationale and leave the operation descriptions as direct assay explanations.",
+          "reviewer_check": "Keep the evidence level intact after rephrasing; a correct fact already in properties is not a missing extraction fact."
+        }
+      ],
+      "missing_or_conflicting_assessment": "No demonstrably false chemistry or missing whole required route established by this bounded inspection. See individual unclear findings for local-language and evidence limits; miCLIP barcode-carrier completeness is conditional.",
+      "source_category_provenance": [
+        {
+          "path": [
+            "rna_poster",
+            "RNA Transcription"
+          ],
+          "source": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "locator": [
+            "w00007",
+            "w00008"
+          ],
+          "basis": "printed_poster_heading; column_continuation",
+          "source_record": "poster_e6ffb5f6cd929580cfa17ed3"
+        },
+        {
+          "path": [
+            "Transcriptome",
+            "RNA Transcription"
+          ],
+          "source": "provenance/experiments/illumina_full_20261031/sources/live_cms_snapshot/taxonomy-rna.json",
+          "locator": "/rna-transcription/rasl-seq",
+          "basis": "original_illumina_taxonomy",
+          "source_record": "rasl-seq"
+        },
+        {
+          "path": [
+            "Transcriptome",
+            "RNA Transcription"
+          ],
+          "source": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/rasl-seq.html",
+          "basis": "archived_illumina_category",
+          "source_record": "rasl-seq"
+        }
+      ]
+    },
+    {
+      "method_id": "cp-rna-seq",
+      "category": [
+        "Transcriptome",
+        "RNA Transcription"
+      ],
+      "baseline_status": "supported",
+      "pins": {
+        "card.json": "bc40841c93a916df4f49cdba93674ec205df9838e66ccbeb9b02fe9ef0b4c0a8",
+        "source_registry.json": "7006725257ae43ea62f5e23205126e5d679956b8fb0cece5bc1548fb21d8a772",
+        "extraction.json": "5ff87b92debd239e8b803b51bd991c5efc2e0943e79c7f3b00726bfe03699afe",
+        "review.json": "4be4899fac78a32c36b14a96182a2b4ee60cce0689bb9663925399c08fbd4514"
+      },
+      "counts": {
+        "states": 8,
+        "operations": 7,
+        "flows": 14
+      },
+      "archived_review": {
+        "checks": 100,
+        "nonaccept": 0
+      },
+      "findings": [
+        {
+          "id": "cp_mixture_end_chemistry",
+          "status": "captured",
+          "statement": "CIP, periodate and T4 PNK act sequentially on coexisting end-chemistry classes. End-specific properties retain their histories; no premature physical fraction separation is asserted.",
+          "targets": [
+            {
+              "id": "s2:cp_3",
+              "pointer": "/cp-rna-seq/extraction/states/2/properties/2",
+              "value": {
+                "id": "cp_3",
+                "subject": "cp_origin",
+                "property": "terminal_group",
+                "end": "three_prime",
+                "value": "2′,3′-cyclic phosphate"
+              }
+            },
+            {
+              "id": "s2:p_3",
+              "pointer": "/cp-rna-seq/extraction/states/2/properties/3",
+              "value": {
+                "id": "p_3",
+                "subject": "p_origin",
+                "property": "terminal_group",
+                "end": "three_prime",
+                "value": "hydroxyl"
+              }
+            },
+            {
+              "id": "s3:p_3",
+              "pointer": "/cp-rna-seq/extraction/states/3/properties/3",
+              "value": {
+                "id": "p_3",
+                "subject": "p_origin",
+                "property": "terminal_group",
+                "end": "three_prime",
+                "value": "2′,3′-dialdehydes; incompatible with 3′ adapter ligation"
+              }
+            },
+            {
+              "id": "s4:cp_3",
+              "pointer": "/cp-rna-seq/extraction/states/4/properties/2",
+              "value": {
+                "id": "cp_3",
+                "subject": "cp_origin",
+                "property": "terminal_group",
+                "end": "three_prime",
+                "value": "hydroxyl"
+              }
+            },
+            {
+              "id": "o3",
+              "pointer": "/cp-rna-seq/extraction/operations/2/information_effect",
+              "value": "Imposes chemical selection by disabling later 3′ ligation for susceptible non-cP RNAs; it is not a physical separation and is not perfectly specific for original cP."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/cp-rna-seq/extraction/states/2/evidence/1",
+              "source_id": "paper:26866791",
+              "locator": "Enzymatic and chemical treatments of RNAs [b00022]; CIP procedure [b00162-b00173]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The CIP treatment is used to remove a P from both the 5′- and 3′-ends of the RNAs, although the state of cP is not changed. Eventually, the RNA pools contain two subgroups: one with 5′-OH/3′-OH and a second with 5′-OH/3′-cP.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/3/evidence/1",
+              "source_id": "paper:26866791",
+              "locator": "Enzymatic and chemical treatments of RNAs [b00022]; periodate procedure [b00174-b00179]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Subsequent periodate treatment cleaves the cis-diol group of the 3′-OH end of the former group to generate 2′,3′-dialdehydes that no longer serve as a substrate for adapter ligation 35. The latter group survives periodate treatment because of the presence of a 3′-cP.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/4/evidence/1",
+              "source_id": "paper:26866791",
+              "locator": "Enzymatic and chemical treatments of RNAs [b00022]; T4 PNK procedure [b00181-b00184]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Therefore, after removal of the 3′-cP and addition of a 5′-P by T4 PNK treatment, the latter group becomes the only RNA that bears a 5′-P and 3′-OH ends for 5′- and 3′-adapter ligations.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep the mixture and subject-specific ends; no new nodes per molecular class.",
+          "reviewer_check": "Follow each original class through end chemistry and verify selection is chemical compatibility rather than an asserted purification."
+        },
+        {
+          "id": "cp_reporter_history",
+          "status": "captured",
+          "statement": "T4 PNK removes original cP before adapter ligation. cDNA reads report selected RNA sequences; original cP status follows the preparation history, not a retained cP group on the reporter.",
+          "targets": [
+            {
+              "id": "o4",
+              "pointer": "/cp-rna-seq/extraction/operations/3/information_effect",
+              "value": "Converts the previously protected RNA class to a 5′-P/3′-OH substrate for adapter ligation. Original cP is no longer physically present on that RNA."
+            },
+            {
+              "id": "s6:rna_origin",
+              "pointer": "/cp-rna-seq/extraction/states/6/properties/2",
+              "value": {
+                "id": "rna_origin",
+                "subject": "self",
+                "property": "attribution",
+                "value": {
+                  "unit": "other",
+                  "carrier": "RNA-derived insert sequence in the amplified cDNA",
+                  "association": "Represents the sequence identity of selected RNA species. Their original cP is removed before copying; cP origin is assigned through the preparation chemistry, with the stated ribose-modification exception."
+                }
+              }
+            },
+            {
+              "id": "s7:data_content",
+              "pointer": "/cp-rna-seq/extraction/states/7/properties/2",
+              "value": {
+                "id": "data_content",
+                "subject": "self",
+                "property": "data_content",
+                "value": "Read sequences identify RNA species represented by the chemically selected library; they do not directly measure a retained cyclic-phosphate group. Surviving ribose-modified RNAs can contribute false positives."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/cp-rna-seq/extraction/states/4/evidence/1",
+              "source_id": "paper:26866791",
+              "locator": "Enzymatic and chemical treatments of RNAs [b00022]; T4 PNK procedure [b00181-b00184]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Therefore, after removal of the 3′-cP and addition of a 5′-P by T4 PNK treatment, the latter group becomes the only RNA that bears a 5′-P and 3′-OH ends for 5′- and 3′-adapter ligations.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/6/evidence/2",
+              "source_id": "paper:26866791",
+              "locator": "RT-PCR [b00198-b00206]: RT primer, SuperScript III reverse transcriptase, and PCR amplification; Figure 2 caption [b00333]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "By using an Illumina kit, the treated RNAs are ligated to adapters (Steps 44–53) and their cDNAs are amplified by RT-PCR (Steps 54–59).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/6/properties/2/evidence/0",
+              "source_id": "paper:26866791",
+              "locator": "Overview of the protocol [b00011]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Subsequent RT-PCR amplification and next-generation sequencing of the amplified cDNAs thus selectively identify the sequences of 3′-cP-containing RNAs.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Retain carrier versus origin in the existing library/read fields.",
+          "reviewer_check": "Do not transfer original cP as a physical DNA modification or infer cP from every read without the selection qualification."
+        },
+        {
+          "id": "cp_adapter_gate",
+          "status": "captured",
+          "statement": "The diagram-derived lower rows can bear 5′ adapter while lacking a ligatable 3′ end. Only doubly adapted products contribute amplified inserts.",
+          "targets": [
+            {
+              "id": "s5:p_5_adapter",
+              "pointer": "/cp-rna-seq/extraction/states/5/properties/3",
+              "value": {
+                "id": "p_5_adapter",
+                "subject": "p_origin",
+                "property": "sequence_segment",
+                "value": "5′ adapter segment shown on the oxidized RNA row",
+                "location": "5′ side"
+              }
+            },
+            {
+              "id": "s5:p_3",
+              "pointer": "/cp-rna-seq/extraction/states/5/properties/5",
+              "value": {
+                "id": "p_3",
+                "subject": "p_origin",
+                "property": "terminal_group",
+                "end": "three_prime",
+                "value": "2′,3′-dialdehydes; no ligated 3′ adapter"
+              }
+            },
+            {
+              "id": "o5",
+              "pointer": "/cp-rna-seq/extraction/operations/4/information_effect",
+              "value": "Both adapters make an RNA sequence eligible for subsequent RT-PCR. A 5′ adapter alone does not make the lower, 3′-disabled rows contribute amplified library inserts. Periodate-resistant ribose-modified RNAs remain a selectivity exception."
+            },
+            {
+              "id": "o6",
+              "pointer": "/cp-rna-seq/extraction/operations/5/effects/1/statement",
+              "value": "RNAs lacking the two required adapters do not contribute amplified inserts; native PAGE purification recovers the targeted cDNA products."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/cp-rna-seq/extraction/states/5/evidence/0",
+              "source_id": "diagram:asset_4a8fea4a9c1c3946633be48c",
+              "locator": "Adaptor ligation arrow and product: green left segments on all rows; orange right segment only on top RNA, X at lower right ends",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.684,
+                0.0,
+                0.853,
+                0.94
+              ],
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/6/properties/0/evidence/0",
+              "source_id": "paper:26866791",
+              "locator": "Introduction [b00004]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Any RNAs that fail to ligate with both adapters are not amplified through subsequent RT-PCR reactions, hence they do not appear in the resulting sequencing data.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep this consequential compatibility inside the adapter/library blocks; no waste State is needed.",
+          "reviewer_check": "A 5′ adapter alone must not imply final library eligibility; periodate-disabled material is not silently removed before selection."
+        },
+        {
+          "id": "cp_selectivity",
+          "status": "captured",
+          "statement": "Terminal ribose modifications can survive periodate without cP, and RT-impairing RNA modifications can bias representation. The report already records these specificity limits.",
+          "targets": [
+            {
+              "id": "s5:selection_limit",
+              "pointer": "/cp-rna-seq/extraction/states/5/properties/7",
+              "value": {
+                "id": "selection_limit",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "selectivity qualification",
+                "definition": "Applicability limit of the end-chemistry selection.",
+                "applicable_to": "material",
+                "value": "If present, terminal 2′-O-methylated RNAs can also survive periodate treatment and enter the adapter-ligated population without having originally carried cP."
+              }
+            },
+            {
+              "id": "s6:representation_bias",
+              "pointer": "/cp-rna-seq/extraction/states/6/properties/3",
+              "value": {
+                "id": "representation_bias",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "representation limit",
+                "definition": "Limits on interpreting amplified cDNA representation.",
+                "applicable_to": "material",
+                "value": "Terminal 2′-O-methylated RNAs can be false positives; RNA modifications that inhibit reverse transcription can bias representation of heavily modified RNAs."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/cp-rna-seq/extraction/states/5/properties/7/evidence/0",
+              "source_id": "paper:26866791",
+              "locator": "Limitations [b00017]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Because the requirement for periodate cleavage is the presence of a 2′,3′-diol structure of ribose, post-transcriptional ribose modifications that displace the diol structure will prevent the cleavage.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/5/properties/7/evidence/1",
+              "source_id": "paper:26866791",
+              "locator": "Limitations [b00017]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Despite the absence of 3′-cP, these modified RNAs would not be cleaved via a periodate treatment and therefore would be sequenced by cP-RNA-seq.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/6/properties/3/evidence/2",
+              "source_id": "paper:26866791",
+              "locator": "cDNA library preparation and next-generation sequencing [b00025]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Many RNA post-transcriptional modifications are known to affect reverse transcription 36, which will cause biased sequencing results of heavily modified RNAs, such as tRNAs and their fragments.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Preserve the exception and bias in concise scientific language; avoid requiring an explicit exception branch absent routing evidence.",
+          "reviewer_check": "Do not convert chemical enrichment into perfect cP specificity or equal RNA-species recovery."
+        },
+        {
+          "id": "cp_field_ownership",
+          "status": "unclear",
+          "statement": "Source narration is localized to o1/o6 mechanisms and o5/o7 descriptions; the necessary chemistry is present rather than missing.",
+          "targets": [
+            {
+              "id": "o1",
+              "pointer": "/cp-rna-seq/extraction/operations/0/mechanism",
+              "value": "Total RNA extraction followed by length selection using denaturing PAGE; reported in catalogue prose and confirmed by the primary protocol, rather than depicted as separate actions."
+            },
+            {
+              "id": "o5",
+              "pointer": "/cp-rna-seq/extraction/operations/4/description",
+              "value": "Attach sequencing adapters to the RNA preparation. The cP-origin RNA row receives adapters at both ends; the lower oxidized rows are drawn with a 5′ adapter but remain blocked at their 3′ ends."
+            },
+            {
+              "id": "o6",
+              "pointer": "/cp-rna-seq/extraction/operations/5/mechanism",
+              "value": "The focal protocol uses reverse transcription of the adapter-ligated RNA, PCR amplification of the cDNA, and native PAGE to recover targeted cDNA bands. These steps remain one block matching “RT PCR and purify”."
+            },
+            {
+              "id": "o7",
+              "pointer": "/cp-rna-seq/extraction/operations/6/description",
+              "value": "Obtain sequence reads from the purified amplified cDNA library. This readout is reported in the catalogue and primary paper, beyond the diagram’s cDNA endpoint."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/cp-rna-seq/extraction/states/0/evidence/1",
+              "source_id": "paper:26866791",
+              "locator": "Figure 2 caption [b00333]; preparation [b00019-b00020], [b00124-b00161]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Total RNA is extracted from cell lines or tissues (Steps 1–10), and then the RNAs with targeted lengths are gel-purified using denaturing PAGE (Steps 11–27).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/6/evidence/2",
+              "source_id": "paper:26866791",
+              "locator": "RT-PCR [b00198-b00206]: RT primer, SuperScript III reverse transcriptase, and PCR amplification; Figure 2 caption [b00333]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "By using an Illumina kit, the treated RNAs are ligated to adapters (Steps 44–53) and their cDNAs are amplified by RT-PCR (Steps 54–59).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/cp-rna-seq/extraction/states/6/evidence/3",
+              "source_id": "paper:26866791",
+              "locator": "Figure 2 caption [b00333]; gel purification [b00207-b00226]",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The amplified cDNAs are gel-purified using native PAGE (Steps 60–72), and then subjected to Illumina next-generation sequencing.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Remove statements about depiction/row drawings from the explanation; retain literal image observations in evidence.",
+          "reviewer_check": "Retain the actual mixture and end chemistry when replacing “row” language with molecular subjects."
+        }
+      ],
+      "missing_or_conflicting_assessment": "No demonstrably false chemistry or missing whole required route established by this bounded inspection. See individual unclear findings for local-language and evidence limits; miCLIP barcode-carrier completeness is conditional.",
+      "source_category_provenance": [
+        {
+          "path": [
+            "Transcriptome",
+            "RNA Transcription"
+          ],
+          "source": "provenance/experiments/illumina_full_20261031/sources/live_cms_snapshot/taxonomy-rna.json",
+          "locator": "/rna-transcription/cp-rna-seq",
+          "basis": "original_illumina_taxonomy",
+          "source_record": "cp-rna-seq"
+        },
+        {
+          "path": [
+            "Transcriptome",
+            "RNA Transcription"
+          ],
+          "source": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/cp-rna-seq.html",
+          "basis": "archived_illumina_category",
+          "source_record": "cp-rna-seq"
+        },
+        {
+          "path": [
+            "rna_poster",
+            "RNA Transcription"
+          ],
+          "source": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "locator": [
+            "w00007",
+            "w00008"
+          ],
+          "basis": "printed_poster_heading; column_continuation",
+          "source_record": "poster_9fa12de65017f9a9d4443051"
+        }
+      ]
+    },
+    {
+      "method_id": "irclip",
+      "category": [
+        "Transcriptome",
+        "RNA-Protein Interactions"
+      ],
+      "baseline_status": "supported",
+      "pins": {
+        "card.json": "187bbb28e81a1422b3a6e0647b3fff23839a6a1307e866b6b52b8ea20f41a35a",
+        "source_registry.json": "7265ded8797e9dfe430bbf749057b308dff2b06e01f2aa38c3934178a8d47d32",
+        "extraction.json": "5459f0c347fa3b1a7575ce7852544b3d49a94b68d100b921004e56e856153243",
+        "review.json": "1243de2bfb391d67095782412412e5b6eb684cf8f0014c5a531313042c19127c"
+      },
+      "counts": {
+        "states": 9,
+        "operations": 7,
+        "flows": 15
+      },
+      "archived_review": {
+        "checks": 109,
+        "nonaccept": 0
+      },
+      "findings": [
+        {
+          "id": "irclip_context_selection",
+          "status": "captured",
+          "statement": "Cellular UV contacts survive lysate preparation, target-protein immunoprecipitation and on-bead trimming. RNase A and RNase 1 are compared conditions rather than a required cocktail.",
+          "targets": [
+            {
+              "id": "s1:context",
+              "pointer": "/irclip/extraction/states/1/properties/2",
+              "value": {
+                "id": "context",
+                "subject": "self",
+                "property": "physical_context",
+                "value": "Soluble fraction of SDS-lysed, sonicated cellular material"
+              }
+            },
+            {
+              "id": "s3:context",
+              "pointer": "/irclip/extraction/states/3/properties/1",
+              "value": {
+                "id": "context",
+                "subject": "self",
+                "property": "physical_context",
+                "value": "RNA remains associated with immunoprecipitated target protein on beads during nuclease digestion"
+              }
+            },
+            {
+              "id": "c_nucleases",
+              "pointer": "/irclip/extraction/corrections/0",
+              "value": {
+                "id": "c_nucleases",
+                "diagram_observation": "The action caption says “RNase A and RNase I digestion”; the catalogue likewise says the complexes are digested using both names, which can be read as a joint treatment.",
+                "primary_statement": "The focal paper compares RNase A, RNase 1 and S1 on-bead digestions as different conditions and reports maximal optimal-fragment yield with on-bead RNase A. Its methods refer separately to RNase-A- and RNase-1-digested complexes. The operation therefore retains one on-bead trimming block, with these two captioned nucleases treated as tested conditions rather than a required cocktail.",
+                "disposition": "use_primary"
+              }
+            },
+            {
+              "id": "o2",
+              "pointer": "/irclip/extraction/operations/1/information_effect",
+              "value": "Selection assigns the retained RNA population to the target-protein immunoprecipitation; this is not an assertion of complete recovery of all contacts."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/irclip/extraction/states/1/evidence/2",
+              "source_id": "paper:27111506",
+              "locator": "[b00019] irCLIP protein purification and ligation, lysate preparation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Pelleted cells were lysed in 0.2 mL of SDS lysis buffer (1% SDS; 50 mM Tris, pH 7.5; 1 mM EDTA) and sonicated using a Bioruptor (Diagenode) to remove all viscosity (high setting, six cycles of 30 s on, 45 s rest). Lysates were clarified by centrifugation at maximum speed for 15 min, and soluble fractions were transferred to new tubes.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/2/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00019] Immunoprecipitation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Lysates were rotated end over end for 1.5 h at 4 °C with antibody preconjugated to Protein G Dynabeads.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/3/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00006] On-bead nuclease comparison",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To determine whether a particular nuclease was better at generating optimal RNA fragments, we compared on-bead nuclease digestions across the same panel of RBPs using RNase A, RNase 1, and S1 nuclease.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Preserve physical preparation and RBP selection; keep alternate tested nucleases within one qualified block.",
+          "reviewer_check": "Do not pool alternate nuclease conditions into a mandatory joint digest or treat IP as complete recovery of all contacts."
+        },
+        {
+          "id": "irclip_adapter",
+          "status": "captured",
+          "statement": "The preadenylated DNA adapter supplies internal IR800, terminal biotin and an RT-priming interface after 3′ RNA ligation. The infrared signal reports adapter-bearing RNA complexes.",
+          "targets": [
+            {
+              "id": "sa:activation",
+              "pointer": "/irclip/extraction/states/4/properties/1",
+              "value": {
+                "id": "activation",
+                "subject": "self",
+                "property": "terminal_group",
+                "end": "five_prime",
+                "value": "Preadenylated 5′ end"
+              }
+            },
+            {
+              "id": "sa:biotin",
+              "pointer": "/irclip/extraction/states/4/properties/3",
+              "value": {
+                "id": "biotin",
+                "subject": "self",
+                "property": "modification",
+                "value": "Biotin",
+                "site": "3′ terminal base"
+              }
+            },
+            {
+              "id": "s4:adapter_link",
+              "pointer": "/irclip/extraction/states/5/properties/2",
+              "value": {
+                "id": "adapter_link",
+                "subject": "rna",
+                "property": "association",
+                "value": "covalently_linked_to",
+                "partner": "adapter"
+              }
+            },
+            {
+              "id": "o4",
+              "pointer": "/irclip/extraction/operations/3/information_effect",
+              "value": "The infrared label is attached through successful 3′ adapter ligation, so detection tracks adapter-bearing RNA complexes rather than merely a labeled free RNA 5′ end."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/irclip/extraction/states/4/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00015] irCLIP adaptor construction, substrate and modifications",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The L3-azide-biotin substrate oligonucleotide for irCLIP (5′-OH-AGATCGGAAGAGCGGTTCAGAAAAAAAAAAAA/iAzideN/AAAAAAAAAAAA/3Bio/-3′) is custom synthesized at the 1 μmol synthesis scale (approximate yield of 20 nmol) by Integrated DNA Technologies (IDT). The nonstandard modifications are the internal NHS-azide modification at nucleotide position 32 (/iAzideN/) and the 3′ biotin modification (/3bio/) at the terminal base.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/4/evidence/3",
+              "source_id": "paper:27111506",
+              "locator": "[b00015] Adapter 5′ activation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The entire volume of the phospho-oligonucleotide was next preadenylated using the 5′ DNA Adenylation Kit (NEB, cat# E2610L) by addition of 75 μL each of 1 mM ATP and 10× buffer and 100 μL of Mth RNA ligase.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/5/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00019] Adapter ligation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Dephosphorylation reactions were removed (not applicable to S1 digestions) and immunoprecipitates were 3′-end ligated with T4 RNA Ligase 1 (NEB, cat# M0204) overnight in an Eppendorf Thermomixer at 16 °C, 15 s 1,400 r.p.m., 90 s rest in a 30-μL reaction containing 10 units T4 RNA Ligase 1, 1 pmole preA-DNA-adaptor, and 0.1 μL SUPERase-IN.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/operations/3/evidence/7",
+              "source_id": "paper:27111506",
+              "locator": "[b00004] Nonisotopic detection and ligation reporting",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Radioisotopes are required for visualization of UV-crosslinked protein—RNA complexes, and standard radioactive labeling of protein–RNA complexes occurs on the free 5′ ends of crosslinked RNA molecules and therefore does not report successful library adaptor ligation of RNA 3′ ends.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep adapter identity, attachment and handle functions; routine synthesis volumes are unnecessary.",
+          "reviewer_check": "Check that dye/biotin remain assigned to the RNA-linked adapter and that detection is distinguished from the sequence readout."
+        },
+        {
+          "id": "irclip_peptide_capture",
+          "status": "captured",
+          "statement": "Proteinase K leaves RNA–peptide material. TGIRT copies this template; streptavidin captures RNA/cDNA hybrids through adapter biotin, followed by cDNA release/RNA degradation. The corrected block is not a second immunoprecipitation.",
+          "targets": [
+            {
+              "id": "s5:peptide",
+              "pointer": "/irclip/extraction/states/6/properties/1",
+              "value": {
+                "id": "peptide",
+                "subject": "rna",
+                "property": "modification",
+                "value": "Residual crosslinked peptide on the recovered RNA",
+                "site": null
+              }
+            },
+            {
+              "id": "o6",
+              "pointer": "/irclip/extraction/operations/5/description",
+              "value": "TGIRT-III copies adapter-primed RNA to cDNA. The cDNA–RNA hybrids are captured using the biotin-bearing RNA adapter on streptavidin beads; the reported cDNA-elution/RNA-degradation step then provides cDNA for circularization. These actions remain one composite block, correcting the catalogue caption “Immunopurify”."
+            },
+            {
+              "id": "c_capture",
+              "pointer": "/irclip/extraction/corrections/1",
+              "value": {
+                "id": "c_capture",
+                "diagram_observation": "The post-RNA-recovery caption is “Reverse-transcribe and Immunopurify”; the catalogue says the reverse-transcribed strands are “immunopurified once again”.",
+                "primary_statement": "The paper reports capture of cDNA–RNA hybrids on streptavidin C1 Dynabeads, followed by cDNA elution/RNA degradation before circularization. This is adapter-biotin affinity capture, not a second antibody immunoprecipitation. The operation and its cDNA output implement that interface.",
+                "disposition": "use_primary"
+              }
+            },
+            {
+              "id": "s6:primer5",
+              "pointer": "/irclip/extraction/states/7/properties/1",
+              "value": {
+                "id": "primer5",
+                "subject": "self",
+                "property": "terminal_group",
+                "end": "five_prime",
+                "value": "5′ phosphate inherited from the cDNA synthesis primer"
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/irclip/extraction/states/6/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00007] RNA-peptide liberation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We found that replacing urea with SDS and increasing the temperature facilitated liberation of nitrocellulose-bound RNA-peptide complexes. These changes significantly improved precipitation of irCLIP-adaptor-ligated RNA compared to urea-PK digestions and did not impact RNA integrity (Fig. 1c and Supplementary Fig. 4a–c).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/7/evidence/0",
+              "source_id": "paper:27111506",
+              "locator": "[b00026] Post-RT affinity capture",
+              "basis": "text",
+              "support": "reported",
+              "quote": "cDNA-RNA hybrids were captured by addition of 5 μL of MyOne Streptavidin C1 Dynabeads (Thermo Fisher Scientific, #65001) that had been rinsed and suspended in 100 μL of NT2 buffer and end-over-end rotation for 30 min at 4 °C.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/7/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00026] cDNA elution and RNA degradation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Beads were resuspended in 10 μL of cDNA elution/RNA degradation buffer (8.25 μL water, 1 μL of 1 μM P3short oligonucleotide, and 0.75 μL of 50 mM MnCl2) and placed in a thermocycler with the program: 5 min 95 °C, 1 min 75 °C, ramp 0.1° s−1 to 60 °C forever.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/7/evidence/2",
+              "source_id": "paper:27111506",
+              "locator": "[b00023] cDNA primer design",
+              "basis": "text",
+              "support": "reported",
+              "quote": "cDNA synthesis primers were purchased from IDT with three modifications, 5′ phosphorylation (/5phos/), and two internal carbon spacers (/iSpl8/), which are required for generation of linear PCR product using circularized cDNA as template. The 17 nt of the 5′ end comprised a degenerate barcode using the 6-bp Truseq Illumina barcode sequences.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Retain peptide-bearing template and physical capture carrier within the broad RT/capture block.",
+          "reviewer_check": "Trace the RNA-linked biotin to hybrid retention and primer-derived features to cDNA; do not copy adapter biotin onto DNA."
+        },
+        {
+          "id": "irclip_contact_inference",
+          "status": "captured",
+          "statement": "For RT-terminated molecules, cDNA sequence and endpoint report a position one base 3′ of the crosslink within the target-protein IP sample. The final library is linear double-stranded DNA, not protein sequence or an already measured dataset.",
+          "targets": [
+            {
+              "id": "s6:rt_end",
+              "pointer": "/irclip/extraction/states/7/properties/4",
+              "value": {
+                "id": "rt_end",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "RT-stop interpretation",
+                "definition": "Interpretation of the cDNA endpoint used by the focal irCLIP study; not a claim that every RNA molecule yields a uniquely interpretable stop.",
+                "applicable_to": "material",
+                "value": "For RT-terminated molecules, the cDNA end marks an RT stop one nucleotide 3′ of the protein–RNA crosslink in the RNA reference coordinate."
+              }
+            },
+            {
+              "id": "s7:contact",
+              "pointer": "/irclip/extraction/states/8/properties/3",
+              "value": {
+                "id": "contact",
+                "subject": "self",
+                "property": "attribution",
+                "value": {
+                  "unit": "contact",
+                  "carrier": "RNA-derived cDNA insert sequence and RT-stop boundary, interpreted within the target-protein IP sample",
+                  "association": "Represents recovered RNA sites contacted by the immunoprecipitated RBP; RT-stop endpoints are interpreted one base 3′ of the crosslink."
+                }
+              }
+            },
+            {
+              "id": "s7:topology",
+              "pointer": "/irclip/extraction/states/8/properties/2",
+              "value": {
+                "id": "topology",
+                "subject": "self",
+                "property": "topology",
+                "value": "linear"
+              }
+            },
+            {
+              "id": "o7",
+              "pointer": "/irclip/extraction/operations/6/information_effect",
+              "value": "The final physical DNA library carries copied RNA inserts and recoverable RT-stop boundaries from the target-protein IP. It is a sequencing substrate, not measurement data. The catalogue warns that circularization may introduce artifacts; the registered primary text does not establish their mechanism or frequency."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/irclip/extraction/states/7/properties/4/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00011] End interpretation used for irCLIP",
+              "basis": "text",
+              "support": "reported",
+              "quote": "iCLIP defines the end of each cDNA molecule as the RT stop (and thus one base 3′ of the direct protein–RNA crosslink8). Analytic tools such as FAST-iCLIP use this precise positional information to intersect replicate CLIP data sets at the RT-stop level to obtain high-confidence RBP binding sites for subsequent peak calling and downstream analysis11.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/8/evidence/4",
+              "source_id": "paper:27111506",
+              "locator": "[b00059] Figure 1e caption, text only",
+              "basis": "text",
+              "support": "reported",
+              "quote": "(e) Approximate time requirement for conversion of precipitated RNA to double-stranded DNA (dsDNA).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/8/properties/3/evidence/0",
+              "source_id": "paper:27111506",
+              "locator": "[b00011] irCLIP endpoint analysis interpreted with [b00019] target-protein IP",
+              "basis": "text",
+              "support": "inferred",
+              "quote": "iCLIP defines the end of each cDNA molecule as the RT stop (and thus one base 3′ of the direct protein–RNA crosslink8). Analytic tools such as FAST-iCLIP use this precise positional information to intersect replicate CLIP data sets at the RT-stop level to obtain high-confidence RBP binding sites for subsequent peak calling and downstream analysis11.",
+              "bbox": null,
+              "rationale": "RNA-derived insert sequence and the RT-stop boundary carry the recovered contact position; target-protein identity follows the immunoprecipitated sample. No protein-identifying barcode or protein sequence is asserted."
+            }
+          ],
+          "recommendation": "Keep endpoint conditionality and sample-level RBP association; no unshown sequencing operation is necessary at the library boundary.",
+          "reviewer_check": "Check that every RNA contact is not assumed to yield a uniquely interpretable stop, and that final PCR product is not labelled circular cDNA."
+        },
+        {
+          "id": "irclip_field_ownership",
+          "status": "unclear",
+          "statement": "Source comparison is interleaved with science: o1 discusses a unit typo; o3 discusses paper comparisons; o6 discusses what the paper does not specify; o7 repeats primary-confirmation limits. Their supported mechanism can be stated directly.",
+          "targets": [
+            {
+              "id": "o1",
+              "pointer": "/irclip/extraction/operations/0/mechanism",
+              "value": "254-nm UV-C crosslinking is followed by SDS lysis, sonication and clarification. The registered paper rendition prints “254 nM”; the diagram explicitly labels 254 nm."
+            },
+            {
+              "id": "o3",
+              "pointer": "/irclip/extraction/operations/2/description",
+              "value": "Nuclease digestion trims RNA flanking the crosslinked protein while complexes remain bead-bound. RNase A and RNase 1 are paper-tested digestion conditions, rather than a required joint digestion. The focal paper favors on-bead RNase A; the unshown S1 comparison is not a separate workflow here."
+            },
+            {
+              "id": "o6",
+              "pointer": "/irclip/extraction/operations/5/mechanism",
+              "value": "TGIRT-III reverse transcription at 60°C precedes streptavidin capture of cDNA–RNA hybrids. Capture is mediated by adapter biotin. The subsequent elution/RNA-degradation buffer contains P3short and MnCl2 and uses heating. The paper names this release step but does not specify a detailed molecular displacement pathway."
+            },
+            {
+              "id": "o7",
+              "pointer": "/irclip/extraction/operations/6/information_effect",
+              "value": "The final physical DNA library carries copied RNA inserts and recoverable RT-stop boundaries from the target-protein IP. It is a sequencing substrate, not measurement data. The catalogue warns that circularization may introduce artifacts; the registered primary text does not establish their mechanism or frequency."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/irclip/extraction/states/0/evidence/2",
+              "source_id": "paper:27111506",
+              "locator": "[b00019] irCLIP protein purification and ligation, crosslinking and lysis",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Adherent HeLa cells grown to ~80% confluence in six-well plates were quickly rinsed with ice-cold PBS, aspirated on-plate and crosslinked on ice with 254 nM UV-C at 0.3 J/cm2.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/3/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00006] On-bead nuclease comparison",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To determine whether a particular nuclease was better at generating optimal RNA fragments, we compared on-bead nuclease digestions across the same panel of RBPs using RNase A, RNase 1, and S1 nuclease.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/irclip/extraction/states/7/evidence/1",
+              "source_id": "paper:27111506",
+              "locator": "[b00026] cDNA elution and RNA degradation",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Beads were resuspended in 10 μL of cDNA elution/RNA degradation buffer (8.25 μL water, 1 μL of 1 μM P3short oligonucleotide, and 0.75 μL of 50 mM MnCl2) and placed in a thermocycler with the program: 5 min 95 °C, 1 min 75 °C, ramp 0.1° s−1 to 60 °C forever.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Move source wording, unshown alternatives and support-level reasoning to Evidence/Correction/Unknown. Preserve known recovery mechanisms and qualified artifact/bias concerns.",
+          "reviewer_check": "A reading-process sentence can move without deleting a genuine biological limitation or filling its unresolved mechanism.",
+          "retained_unknown_ids": [
+            "u_image_boundary",
+            "u_circular_artifacts",
+            "u_rt_bias_claim"
+          ]
+        }
+      ],
+      "missing_or_conflicting_assessment": "No demonstrably false chemistry or missing whole required route established by this bounded inspection. See individual unclear findings for local-language and evidence limits; miCLIP barcode-carrier completeness is conditional.",
+      "source_category_provenance": [
+        {
+          "path": [
+            "Transcriptome",
+            "RNA-Protein Interactions"
+          ],
+          "source": "provenance/experiments/illumina_full_20261031/sources/live_cms_snapshot/taxonomy-rna.json",
+          "locator": "/rna-protein-interactions/irclip",
+          "basis": "original_illumina_taxonomy",
+          "source_record": "irclip"
+        },
+        {
+          "path": [
+            "Transcriptome",
+            "RNA-Protein Interactions"
+          ],
+          "source": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/irclip.html",
+          "basis": "archived_illumina_category",
+          "source_record": "irclip"
+        },
+        {
+          "path": [
+            "rna_poster",
+            "RNA-Protein Interactions"
+          ],
+          "source": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "locator": [
+            "w00009",
+            "w00010"
+          ],
+          "basis": "printed_poster_heading; column_continuation",
+          "source_record": "poster_91e51c9ea4b650037050d777"
+        }
+      ]
+    },
+    {
+      "method_id": "ribo-seq",
+      "category": [
+        "Transcriptome",
+        "RNA-Protein Interactions"
+      ],
+      "baseline_status": "supported",
+      "pins": {
+        "card.json": "29fe2ea1fd7811b2e369c2592d781ff0bbf9f07723997509d2b64849e4df87fd",
+        "source_registry.json": "b169506446ddf802d2b150b86c5d1e55c4fb38771b7a3fc79b3f68b8851292a4",
+        "extraction.json": "5d787c364980f5ea9aff2047fff3170d4dd01f919fef6f5592f2afce205af7a6",
+        "review.json": "676c155c324619fc88fba0cdfcb725eb3732b031ff398069b8f18efc607dd2c5"
+      },
+      "counts": {
+        "states": 8,
+        "operations": 7,
+        "flows": 14
+      },
+      "archived_review": {
+        "checks": 106,
+        "nonaccept": 0
+      },
+      "findings": [
+        {
+          "id": "ribo_protected_fragment",
+          "status": "captured",
+          "statement": "The RNA-protein association is retained in the extract and converted into protected RNA fragments. Readout derives from RNA footprint sequence/boundaries; protein is not sequenced.",
+          "targets": [
+            {
+              "id": "s_extract:ribosome_binding",
+              "pointer": "/ribo-seq/extraction/states/1/properties/2",
+              "value": {
+                "id": "ribosome_binding",
+                "subject": "mrna",
+                "property": "association",
+                "value": "bound_to",
+                "partner": "ribosomes"
+              }
+            },
+            {
+              "id": "s_digest:protected_binding",
+              "pointer": "/ribo-seq/extraction/states/2/properties/1",
+              "value": {
+                "id": "protected_binding",
+                "subject": "footprints",
+                "property": "association",
+                "value": "bound_to",
+                "partner": "ribosomes"
+              }
+            },
+            {
+              "id": "s_digest:position_origin",
+              "pointer": "/ribo-seq/extraction/states/2/properties/3",
+              "value": {
+                "id": "position_origin",
+                "subject": "footprints",
+                "property": "attribution",
+                "value": {
+                  "unit": "molecule",
+                  "carrier": "Sequence and boundaries of the protected mRNA fragment",
+                  "association": "A footprint originates from the segment occupied by a ribosome; the fragment is the RNA carrier of positional information, with imperfect evidence from any individual fragment."
+                }
+              }
+            },
+            {
+              "id": "s_cdna:footprint_representation",
+              "pointer": "/ribo-seq/extraction/states/6/properties/1",
+              "value": {
+                "id": "footprint_representation",
+                "subject": "footprint_cdna",
+                "property": "attribution",
+                "value": {
+                  "unit": "molecule",
+                  "carrier": "DNA sequence copied from recovered RNA footprints",
+                  "association": "The cDNA sequence represents a recovered RNA fragment; its ribosome-position association derives from prior nuclease protection, rather than a ribosome remaining attached to the DNA."
+                }
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/ribo-seq/extraction/states/0/evidence/0",
+              "source_id": "card:ribo-seq-art-seq-gti-seq",
+              "locator": "Opening method description, numbered attention points 1–3",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Careful attention should be paid to: 1) generation of cell extracts in which ribosomes have been faithfully halted along the mRNA they are translating in vivo; 2) nuclease digestion of RNAs that are not protected by the ribosome, followed by recovery of the ribosome-protected mRNA fragments; and 3) quantitative conversion of the protected RNA fragments into a DNA library that can be analyzed by deep sequencing.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/ribo-seq/extraction/states/2/evidence/1",
+              "source_id": "paper:19213877",
+              "locator": "[b00006] nuclease-protection principle",
+              "basis": "text",
+              "support": "reported",
+              "quote": "The position of a translating ribosome can be precisely determined by using the fact that a ribosome protects a discrete footprint [∼30 nucleotides (nt)] on its mRNA template from nuclease digestion (12).",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/ribo-seq/extraction/states/2/properties/3/evidence/0",
+              "source_id": "paper:19213877",
+              "locator": "[b00008] three required assay stages",
+              "basis": "text",
+              "support": "reported",
+              "quote": "To establish ribosome profiling as a quantitative tool for monitoring translation, we needed to implement three steps: (i) robustly generate ribosome-protected mRNA fragments (“footprints”) whose sequences indicate the position of active ribosomes; (ii) convert these RNA footprints into a library of DNA molecules in a form that is suitable for deep sequencing with minimal distortion; and (iii) measure the abundance of different footprints in this library by means of deep sequencing.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep the protection mechanism and copied reporter origin; generic category wording would lose the distinction from irCLIP.",
+          "reviewer_check": "Check that an RNA footprint is not described as a crosslink-induced RT endpoint or a protein-identifying sequence."
+        },
+        {
+          "id": "ribo_rna_population",
+          "status": "captured",
+          "statement": "The first extraction contains footprints and rRNA together. Catalogue-level depletion reduces rRNA representation and the downstream recovery retains that history without claiming perfect removal.",
+          "targets": [
+            {
+              "id": "s_rna:copresence",
+              "pointer": "/ribo-seq/extraction/states/3/properties/3",
+              "value": {
+                "id": "copresence",
+                "subject": "footprints",
+                "property": "association",
+                "value": "co_present_with",
+                "partner": "rrna"
+              }
+            },
+            {
+              "id": "s_depleted:selection",
+              "pointer": "/ribo-seq/extraction/states/4/properties/1",
+              "value": {
+                "id": "selection",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "selected RNA population",
+                "definition": "Relative retention intended by the catalogue depletion block; no claim of complete rRNA elimination",
+                "applicable_to": "material",
+                "value": "Desired footprint RNA is retained while rRNA representation is reduced"
+              }
+            },
+            {
+              "id": "s_recovered:history",
+              "pointer": "/ribo-seq/extraction/states/5/properties/1",
+              "value": {
+                "id": "history",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "preparation history",
+                "definition": "This is the output of the second depicted extraction, downstream of rRNA depletion",
+                "applicable_to": "material",
+                "value": "RNA recovered after the depicted rRNA-depletion block"
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/ribo-seq/extraction/states/3/evidence/0",
+              "source_id": "card:ribo-seq-art-seq-gti-seq",
+              "locator": "Opening method description, digestion through cDNA",
+              "basis": "text",
+              "support": "reported",
+              "quote": "In this method, ribosome-bound RNA first undergoes digestion. The RNA is extracted, and the rRNA is depleted. The extracted RNA is reverse-transcribed to cDNA.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/ribo-seq/extraction/states/3/evidence/2",
+              "source_id": "paper:19213877",
+              "locator": "[b00011] rRNA contamination and proposed removal",
+              "basis": "text",
+              "support": "reported",
+              "quote": "7.0 million (16%) of sequencing reads aligned to CDSs, whereas most of the remainder were derived from ribosomal RNA (rRNA) (table S1). Because most contaminating rRNA is derived from a few specific sites, it should be straight-forward to remove them by means of subtractive hybridization before sequencing.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Keep mixed RNA and the two distinct recovery interfaces when they are part of assigned catalogue coverage.",
+          "reviewer_check": "Do not erase co-recovered rRNA or equate a footprint library with a perfectly pure mRNA dataset."
+        },
+        {
+          "id": "ribo_primary_limit",
+          "status": "unclear",
+          "statement": "The archived record explicitly lacks primary confirmation of the exact preparation, rRNA-depletion execution, second extraction and conversion chemistry. The 2009 excerpt proposes rRNA subtraction and delegates Methods to a missing supplement. These are documented evidence limits, not newly discovered biochemical errors.",
+          "targets": [
+            {
+              "id": "correction_primary_boundary",
+              "pointer": "/ribo-seq/extraction/corrections/0",
+              "value": {
+                "id": "correction_primary_boundary",
+                "diagram_observation": "The shared catalogue diagram explicitly places rRNA depletion between a first and a second RNA extraction, upstream of reverse transcription; the matching catalogue text also reports depletion.",
+                "primary_statement": "The focal 2009 publication reports that most reads outside CDSs derived from rRNA, then proposes removing the contaminating rRNA by subtractive hybridization before sequencing. Thus this paper confirms the footprint/DNA-library architecture but cannot be claimed as confirmation that the depicted rRNA-depletion block was executed. The graph retains the declared catalogue implementation; the paper association is explicitly limited to the supported common architecture.",
+                "disposition": "use_primary"
+              }
+            },
+            {
+              "id": "u_depletion_implementation",
+              "pointer": "/ribo-seq/extraction/unknowns/1",
+              "value": {
+                "id": "u_depletion_implementation",
+                "question": "What primary source confirms the rRNA-depleted Ribo-Seq implementation drawn by the catalogue, and what selection mechanism and recovery interface does it use? Paper:19213877 [b00011] proposes subtractive hybridization rather than confirming execution of this block. Acquire and register the matching refinement or explicit implementation passage; the proposal cannot establish the actual catalogue depletion chemistry or guarantee complete removal."
+              }
+            },
+            {
+              "id": "u_primary_conversion_interface",
+              "pointer": "/ribo-seq/extraction/unknowns/3",
+              "value": {
+                "id": "u_primary_conversion_interface",
+                "question": "What priming and RNA-to-DNA conversion/library interface does the focal method actually use for recovered footprint RNA? The catalogue explicitly reports reverse transcription, while registered primary [b00008] and Fig. 1A caption confirm only the coarse DNA-library conversion and avoidance of RNA ligases. The primary figure image and supporting Materials and methods are absent from the registry. Acquire and register those passages/image before assigning RNA end handling, primer design, cDNA topology, adapter placement, amplification or a more detailed preparation order."
+              }
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/ribo-seq/extraction/states/3/evidence/2",
+              "source_id": "paper:19213877",
+              "locator": "[b00011] rRNA contamination and proposed removal",
+              "basis": "text",
+              "support": "reported",
+              "quote": "7.0 million (16%) of sequencing reads aligned to CDSs, whereas most of the remainder were derived from ribosomal RNA (rRNA) (table S1). Because most contaminating rRNA is derived from a few specific sites, it should be straight-forward to remove them by means of subtractive hybridization before sequencing.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/ribo-seq/extraction/states/6/properties/2/evidence/2",
+              "source_id": "paper:19213877",
+              "locator": "[b00075] Fig. 1A caption, text only",
+              "basis": "text",
+              "support": "reported",
+              "quote": "(A) Schematic of the protocol for converting ribosome footprints or randomly fragmented mRNA into a deep-sequencing library.",
+              "bbox": null,
+              "rationale": "Only this caption is registered; the primary figure image and supporting methods are not supplied."
+            },
+            {
+              "pointer": "/ribo-seq/extraction/paper_matches/0/evidence/6",
+              "source_id": "paper:19213877",
+              "locator": "[b00050] reference 14; methods availability",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Materials and methods are available as supporting material on Science Online.",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Preserve source level and targeted Unknowns. State the supported transformation directly; do not invent a nuclease, depletion reagent, adapter or RNA-release mechanism.",
+          "reviewer_check": "A proposal must not become confirmed execution. Do not reject adequate catalogue architecture solely for omitting a full recipe.",
+          "missing_evidence": [
+            "Matching primary depletion implementation",
+            "Supporting Methods and primary Figure 1A",
+            "Specific second extraction interface"
+          ]
+        },
+        {
+          "id": "ribo_measurement_limit",
+          "status": "captured",
+          "statement": "Sequence representation supports occupancy and translated-region/reading-frame inference after alignment. Individual footprints have imperfect positional evidence; counts are not direct steady-state protein abundance or elongation kinetics.",
+          "targets": [
+            {
+              "id": "s_reads:content",
+              "pointer": "/ribo-seq/extraction/states/7/properties/2",
+              "value": {
+                "id": "content",
+                "subject": "self",
+                "property": "data_content",
+                "value": "Read sequences and their representation in the library. The desired reads report recovered mRNA-footprint sequences; mapping those sequences to transcripts supports ribosome-occupancy and reading-frame interpretation. The focal paper also reports rRNA-derived reads, and the catalogue depletion block does not establish complete removal."
+              }
+            },
+            {
+              "id": "s_reads:interpretation_limits",
+              "pointer": "/ribo-seq/extraction/states/7/properties/4",
+              "value": {
+                "id": "interpretation_limits",
+                "subject": "self",
+                "property": "defined_other",
+                "name": "measurement limits",
+                "definition": "Limits of interpreting the footprint sequence/count readout at catalogue scope",
+                "applicable_to": "data",
+                "value": "The catalogue describes a positional snapshot and states that multiple initiation sites complicate complete ORF assignment and that elongation kinetics are not provided. The paper describes individual-footprint position evidence as imperfect and protein-expression estimates as dependent on translation-speed effects."
+              }
+            },
+            {
+              "id": "o_sequence",
+              "pointer": "/ribo-seq/extraction/operations/6/information_effect",
+              "value": "Footprint sequences and their representation support positional ribosome-occupancy interpretation when aligned to transcripts. Coverage can identify translated regions and reading frames; the catalogue does not provide elongation kinetics, and counts are not a direct measurement of steady-state protein abundance."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/ribo-seq/extraction/states/2/properties/3/evidence/1",
+              "source_id": "paper:19213877",
+              "locator": "[b00012] limit on individual-footprint attribution",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Although each individual footprint provides imperfect statistical evidence of the ribosome position, averaging multiple codons allows unambiguous determination of the reading frame.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/ribo-seq/extraction/states/7/properties/4/evidence/0",
+              "source_id": "card:ribo-seq-art-seq-gti-seq",
+              "locator": "Cons, both entries",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Initiation from multiple sites within a single transcript makes it challenging to define all ORFs\nDoes not provide the kinetics of translational elongation",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/ribo-seq/extraction/states/7/properties/4/evidence/3",
+              "source_id": "paper:19213877",
+              "locator": "[b00014] occupancy as protein-expression estimate",
+              "basis": "text",
+              "support": "reported",
+              "quote": "We estimated protein expression from the density of ribosome footprints (14), although further improvements could incorporate variations in the speed of translation along a message (see below).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Retain inference conditions and speed/occupancy qualification in a short scientific explanation.",
+          "reviewer_check": "Raw reads must not already carry coordinates supplied by later alignment; abundance interpretation must retain its assumptions."
+        },
+        {
+          "id": "ribo_field_ownership",
+          "status": "unclear",
+          "statement": "Several descriptions largely explain the catalogue drawing and scope exclusions. s_depleted even embeds “catalogue-level” in its label. The molecule identity is available and can be presented directly while evidence limits remain elsewhere.",
+          "targets": [
+            {
+              "id": "s_depleted",
+              "pointer": "/ribo-seq/extraction/states/4/label",
+              "value": "RNA preparation after catalogue-level rRNA depletion"
+            },
+            {
+              "id": "o_rna1",
+              "pointer": "/ribo-seq/extraction/operations/2/description",
+              "value": "The first depicted RNA extraction produces an RNA preparation containing footprint RNA and rRNA. The catalogue describes recovery of protected mRNA fragments after digestion; the paper independently reports footprint copurification with 80S ribosomes. Recovery and extraction are retained together at this boundary, without adding an unshown isolated-ribosome State."
+            },
+            {
+              "id": "o_deplete",
+              "pointer": "/ribo-seq/extraction/operations/3/description",
+              "value": "The catalogue and drawing retain an rRNA-depletion block between the two RNA-extraction blocks. The pale rRNA symbol indicates reduced rRNA representation while RNA is retained. This is a catalogue-level selection; the focal paper proposes rRNA subtraction and does not confirm performing the depicted depletion."
+            },
+            {
+              "id": "o_rna2",
+              "pointer": "/ribo-seq/extraction/operations/4/description",
+              "value": "A second distinct block captioned RNA extraction follows rRNA depletion and yields the short purple RNA product routed into reverse transcription. Its input is already downstream of depletion; it is not another instance of the first extraction on ribosomal material."
+            },
+            {
+              "id": "o_cdna",
+              "pointer": "/ribo-seq/extraction/operations/5/description",
+              "value": "The diagram shows reverse transcription and ends at cDNA. The same catalogue prose explicitly requires quantitative conversion of protected RNA into a DNA library for deep sequencing. These are retained as one composite conversion block: the purple/black drawing identifies RNA-to-DNA copying, not an additional separately routed hybrid product. The paper confirms DNA-library generation at this coarse boundary."
+            }
+          ],
+          "embedded_evidence": [
+            {
+              "pointer": "/ribo-seq/extraction/states/3/evidence/0",
+              "source_id": "card:ribo-seq-art-seq-gti-seq",
+              "locator": "Opening method description, digestion through cDNA",
+              "basis": "text",
+              "support": "reported",
+              "quote": "In this method, ribosome-bound RNA first undergoes digestion. The RNA is extracted, and the rRNA is depleted. The extracted RNA is reverse-transcribed to cDNA.",
+              "bbox": null,
+              "rationale": null
+            },
+            {
+              "pointer": "/ribo-seq/extraction/states/5/evidence/1",
+              "source_id": "diagram:asset_f2da432c6658bc3791b546f7",
+              "locator": "Second RNA extraction caption, short purple RNA line and incoming/outgoing arrows",
+              "basis": "image",
+              "support": "depicted",
+              "quote": null,
+              "bbox": [
+                0.655,
+                0.0,
+                0.795,
+                0.93
+              ],
+              "rationale": null
+            },
+            {
+              "pointer": "/ribo-seq/extraction/operations/5/evidence/5",
+              "source_id": "paper:19213877",
+              "locator": "[b00008] library-conversion strategy",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Using this benchmark, we optimized a strategy, outlined in Fig. 1A, that avoided RNA ligases that typically are used in previous approaches for converting small RNAs to DNA (15) because they caused large distortions in the distribution of RNA species (figs. S3 and S4) (16).",
+              "bbox": null,
+              "rationale": null
+            }
+          ],
+          "recommendation": "Use a material label such as RNA preparation after rRNA depletion; describe recovery, depletion and RNA-to-DNA conversion directly. Keep implementation boundaries and unavailable mechanisms in scope/Correction/Unknown.",
+          "reviewer_check": "Do not confuse poorly displayed or evidence-qualified content with absent extraction. Source terms alone are not automatic scientific defects."
+        }
+      ],
+      "missing_or_conflicting_assessment": "No demonstrably false chemistry or missing whole required route established by this bounded inspection. See individual unclear findings for local-language and evidence limits; miCLIP barcode-carrier completeness is conditional.",
+      "source_category_provenance": [
+        {
+          "path": [
+            "rna_poster",
+            "RNA-Protein Interactions"
+          ],
+          "source": "https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seq-rna.pdf",
+          "locator": [
+            "w00009",
+            "w00010"
+          ],
+          "basis": "printed_poster_heading; column_continuation",
+          "source_record": "poster_a7f13bd5d79e309315289eb4"
+        },
+        {
+          "path": [
+            "Transcriptome",
+            "RNA-Protein Interactions"
+          ],
+          "source": "provenance/experiments/illumina_full_20261031/sources/live_cms_snapshot/taxonomy-rna.json",
+          "locator": "/rna-protein-interactions/ribo-seq-art-seq-gti-seq",
+          "basis": "original_illumina_taxonomy",
+          "source_record": "ribo-seq-art-seq-gti-seq"
+        },
+        {
+          "path": [
+            "Transcriptome",
+            "RNA-Protein Interactions"
+          ],
+          "source": "https://www.illumina.com/content/illumina-marketing/amr/en_US/science/sequencing-method-explorer/kits-and-arrays/ribo-seq-art-seq-gti-seq.html",
+          "basis": "archived_illumina_category",
+          "source_record": "ribo-seq-art-seq-gti-seq"
+        }
+      ]
+    }
+  ],
+  "prompt_recommendations": [
+    {
+      "id": "single_scientific_contract",
+      "action": "consolidate",
+      "locations": [
+        "src/genomics_discovery/illumina/prompts.py:SHARED_INSTRUCTIONS/PAPER CONFIRMATION AT DIAGRAM GRANULARITY",
+        "src/genomics_discovery/illumina/prompts.py:SHARED_INSTRUCTIONS/REPRESENTATION RULES",
+        "src/genomics_discovery/illumina/representation.py:STRUCTURED_INSTRUCTIONS/CONSTRUCT THE WORKFLOW IN THIS ORDER",
+        "src/genomics_discovery/illumina/representation.py:STRUCTURED_INSTRUCTIONS/STATE CONTENT REQUIREMENTS"
+      ],
+      "reason": "The same preparation, carrier, route and granularity requirements are restated in multiple long sections. The experimental author_contract retains those distinctions once and leaves the schema as the authority for field structure.",
+      "retain": "Diagram-led blocks, primary confirmation of retained operations, conditional detail, true input/output history and targeted unresolved evidence.",
+      "do_not_change": "Reviewer independence, schema validity, pinned source/attempt provenance or runtime/tool permissions."
+    },
+    {
+      "id": "remove_method_recipes_from_author",
+      "action": "remove_redundant_examples",
+      "locations": [
+        "src/genomics_discovery/illumina/representation.py:SOURCE-DERIVED REVIEW COUNTEREXAMPLES"
+      ],
+      "reason": "RASL and cP-RNA examples can be expressed by shared target/reporter and mixture/fraction rules. Their named cases are better regression checks for this experiment than accumulating author paragraphs.",
+      "retain": "No class-wide mechanism assumption; do not force all methods to instantiate every property family."
+    },
+    {
+      "id": "field_ownership",
+      "action": "retain_short_rule",
+      "locations": [
+        "experiments/category_prompt_audit_20261112/author_contract.txt:FIELD MEANINGS",
+        "src/genomics_discovery/illumina/prompts.py:FIELD OWNERSHIP AND LABELS"
+      ],
+      "reason": "The repeated problem is prose about reading the paper or interpreting the drawing inside mechanism/description. A short ownership rule should move that material to Evidence.rationale/Correction while keeping scientific qualifications.",
+      "retain": "Direct action, causal mechanism and local information effect are distinct; a word like paper is not an automatic error."
+    },
+    {
+      "id": "condition_locality",
+      "action": "retain_and_test",
+      "locations": [
+        "src/genomics_discovery/illumina/prompts.py:INFORMATION_EFFECT_LOCAL_CONTRACT",
+        "experiments/category_prompt_audit_20261112/author_contract.txt:Information_effect"
+      ],
+      "reason": "Pseudo-seq and Frag-seq copied sentences demonstrate why conditional inputs must govern local claims. Do not delete information_effect wholesale: it carries crucial reporter/control meaning.",
+      "retain": "Treatment/control specificity; actual material/data carrier; recorded feature versus later inference; null allowed when no distinct supported effect.",
+      "test_cases": [
+        "pseudo_mock_leakage",
+        "frag_control_wording"
+      ]
+    },
+    {
+      "id": "compact_without_loss",
+      "action": "retain_conditional_grouping",
+      "locations": [
+        "experiments/category_prompt_audit_20261112/author_contract.txt:Flows",
+        "src/genomics_discovery/illumina/representation.py:StructuredOperation"
+      ],
+      "reason": "Repeated downstream Pseudo-seq and Frag-seq blocks can be compact only if condition correspondence survives; miCLIP has distinct antibody/input/signature routes. Node count is not a quality target.",
+      "retain": "Existing composite blocks and subject-specific properties first; genuine split/pool/data integration stays explicit."
+    },
+    {
+      "id": "harness_debuggability",
+      "action": "keep_experiment_small",
+      "locations": [
+        "experiments/category_prompt_audit_20261112/README.txt:EVALUATION AND DECISION"
+      ],
+      "reason": "An author-only prompt replacement with unchanged schema/tools/reviewer, archived input pins and one revision gives an interpretable development comparison. No new classifier, ontology, property families or model stage is justified by this audit.",
+      "record": [
+        "Exact assembled prompt hash/length",
+        "Source-registry/candidate/review pins",
+        "Exact field pointers before and after",
+        "Review actions and unresolved holds",
+        "Elapsed time and actual usage when available"
+      ],
+      "limit": "Fresh controls cover irCLIP and PD-seq only; the other comparisons are historical and one run per method does not establish general superiority."
+    }
+  ],
+  "reviewer_checks": [
+    "Read labels with their actual properties and adjacent operations before calling a broad label a missing fact. UI concealment requires a rendered-view check and is not established here.",
+    "For every retained local claim, compare description, mechanism, information_effect, State properties, roles/effects and Flows under the actual condition history.",
+    "Trace biological feature → physical transformation/selection → reporter → observed readout → conditional inference; do not transfer template chemistry onto copies.",
+    "Inspect control-specific and alternative-route claims independently; do not require one branch per paper example or accept accidental mixing hidden by a disclaimer.",
+    "Check both unsupported assertions and consequential omissions, but establish why a detail changes the assigned measurement/interface before requiring it.",
+    "Keep primary/secondary/image/inferred support distinct and do not equate all-accept archived review with fresh verification.",
+    "Use semantic before/after checks on essential assertions, not node count, lexical source-word counts or reviewer acceptance alone."
+  ],
+  "summary": {
+    "main_result": "Most essential distinctions are already explicit. Simplification should remove source-process narration and repeated generic guidance while preserving local carrier/control/route semantics.",
+    "strong_local_ambiguities": [
+      "pseudo_mock_leakage",
+      "frag_control_wording"
+    ],
+    "evidence_limits": [
+      "ribo_primary_limit",
+      "miclip_duplication_carrier"
+    ],
+    "not_established": "No category-wide common mechanism, new source truth, comprehensive category coverage, or accuracy advantage for a compact prompt is established."
+  }
+}
