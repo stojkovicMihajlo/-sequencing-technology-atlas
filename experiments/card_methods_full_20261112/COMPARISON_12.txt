@@ -1,0 +1,129 @@
+Comparison of the first 12 accepted rerun workflows — 12 November 2026
+
+Scope and provenance
+The snapshot is inputs/accepted_comparison_snapshot.json, captured when the
+current extraction state was updated at 2026-11-12T14:25:23.691157+00:00.
+It pairs the current release_03/run_02 outputs with the selected previous
+card_methods_full_20261106/run_03 outcomes (whose artifact paths can point to
+earlier attempts). Each side contains extraction/review content, original paths
+and hashes, and source signatures. All 12 pairs have identical source signatures.
+This is the first available accepted subset, not a representative random sample.
+It compares final reviewed outputs, not matched first-author attempts. One output
+per configuration does not isolate prompt effects from model/run variability.
+
+Inspection performed
+Read State labels, Operation mechanisms and information_effect fields on both
+sides for all 12 methods. Inspected selected descriptions, scopes, evidence and
+reviews for the issues below; examined all BisChIP-seq State properties. This is
+an output-comparison audit, not a fresh full-paper verification of every claim.
+Acceptance by the previous independent reviewers is recorded, not treated as
+proof of completeness. Counts of nodes/properties are descriptive, not scores.
+
+Observed results
+3-prime-seq: The artificial nick-translation boundary is now distinguished more
+explicitly from a biological RNA cleavage site. Primer barcode is distinguished
+from a molecule identifier. Blunting and second-adapter ligation are combined;
+the mechanism still records their order. Operations 7 -> 6.
+
+3c-seq: Retains the paired genomic sequences through the second circular linkage
+and biotin-tag construction. The new explanation explicitly distinguishes
+amplified copies from independent biological contacts. Same 6 Operations.
+
+3p-seq: Both versions correctly distinguish the short poly(dT) extension from
+the final cDNA reporter. The new version explains the RNA release interface and
+terminal-A interpretation more directly. Residual adenylates remain in the
+mechanism even though the shorter State label omits them. Sequencing is no
+longer a separate Operation; its interpretation remains in the final Operation.
+Operations 8 -> 7. Do not describe this as newly discovering the RNA/DNA distinction.
+
+3seq: Retains the P7-bearing RT primer, subsequent P5 ligation and directional
+readout. New prose separates the intended end-tag representation from internal
+priming/slippage and distinguishes PCR product from expression data. Same 6
+Operations; a standalone P5 reagent State is no longer present.
+
+4sudrb-seq: Explains that the pulse can overlap the inhibited period and that
+4sU does not exclusively mark post-release RNA. Records additional uncertainty
+about tag release chemistry and sample encoding through pooling. These are
+newly explicit uncertainties, not automatically poorer extraction. The former
+rate-inference Operation is now explanatory prose. Operations 9 -> 7.
+
+5-prime-gro-seq: Better causal explanation of why CIP/TAP processing and adapter
+ligation distinguish formerly capped RNA. Both versions preserve the unresolved
+exact post-TAP terminal chemistry. Same 10 Operations. Some source commentary
+has been removed, but primary-versus-catalogue qualifications still need care.
+
+aba-seq: Both versions preserve endpoint tagging before random fragmentation,
+biotin selection, and mapping-dependent inference of 5hmC. New inference text
+states the paired offsets explicitly. Mapping remains a separate Operation here.
+Same 8 Operations; one standalone capture-support State is omitted.
+
+act-seq: Clearer distinction between suppression of dissociation artifacts and
+a hypothetical activation-specific molecular tag. Capture and RT explanations
+are more direct. The former capture/priming confirmation Unknown disappeared
+without a source-bundle change. The diagram can support some of that explanation;
+removal of the Unknown therefore needs an explicit sufficiency rationale, not
+automatic classification as an error or as improved evidence. Same 5 Operations.
+
+ago-clip: More concrete starting State (C. elegans worms, ALG-1 complexes).
+End preparation and ligation are combined, but the mechanism retains 5-prime
+phosphorylation, blocked target 3-prime ends and the miRNA 3-prime hydroxyl.
+The prior explicit denaturing-purification-before-proteolysis wording is absent
+from the recovery Operation; the selection rationale survives in the earlier IP
+explanation. Check its placement/order against the paper before declaring a
+scientific omission. Operations 10 -> 9.
+
+atac-seq: More direct tagmentation/PCR explanations and clearer nuclei input. The
+new PCR mechanism asserts that adapter orientation limits amplification to half
+the molecules, while its Unknown says the focal primary source does not confirm
+the quantitative applicability. The exact statement has catalogue support; it
+is not invented from no source. The problem is that its qualification is remote
+from the asserted mechanism. Review accepted both. A precise catalogue claim
+should not silently become an implementation-wide quantitative guarantee.
+Alignment moved from a separate Operation into explanation. Operations 4 -> 3.
+
+bischip-seq: More concrete captured State: antibody-chromatin complexes on
+agarose beads. Explanations distinguish histone-mark enrichment, genomic DNA
+methylation, and synthetic adapter methylation. However, typed modification
+assertions fell from 4 to 0 and association assertions from 4 to 0. Chemical and
+binding facts remain in identity, attribution and defined_other text. This is a
+confirmed loss of consistent field placement for graph retrieval, not evidence
+that the facts vanished from prose. Same 6 Operations.
+
+bsas: Preserves the key distinction between original DNA modification and its
+copied C/T reporter, including the 5mC/5hmC limitation. Indexing and pooling are
+now explicit, while alignment/C/T quantification is only explanatory. Operations
+5 -> 6; more nodes is not itself evidence of improvement. The term adapter
+ligation in the tagmentation mechanism also deserves terminology review.
+
+Confirmed BisChIP-seq placement change
+OLD: a modification property with subject marked_histones, site histone H3
+lysine 27; a separate modification property with subject adapters, with exact
+methylated positions unspecified. These address chemical features of molecules.
+NEW: defined_other/measurement_target on chromatin.self describes H3K27me3;
+defined_other/adapter_chemistry on adapted_dna.self describes adapter methylation.
+The scientific distinctions are visible, but a query restricted to modification
+properties returns none. The new reviewer explicitly accepted the local
+measurement_target property. The schema permits defined_other without requiring
+an explanation of why the existing property families cannot represent the fact.
+The prompt explains property meanings but does not establish a reliable
+precedence/enforcement rule for using an existing family over the fallback.
+
+These four old assertions describe two kinds of chemical fact, with the histone
+mark repeated at three States. Matching the old assertion count is not a goal;
+consistent placement and a chemically correct subject are the goals.
+
+Follow-up priorities (not yet implemented or live-validated by this audit)
+1. Require facts fitting existing property families to be recorded there; retain
+   prose for purpose/measurement explanation. Use defined_other for a genuinely
+   different assertion, with a reason the existing types do not fit. Review must
+   check placement as well as scientific support, including the actual subject.
+2. Keep consequential qualifications attached to the claim they qualify. Removing
+   source commentary must not remove uncertainty or tested-context limitations.
+3. Establish a consistent graph endpoint policy. Interpretation can be explained
+   without an extra node, but graph tools must know where that interpretation is
+   recorded. Do not infer improved fidelity from fewer nodes or longer prose.
+4. Preserve before/after comparisons and evaluate targeted retrieval questions,
+   rather than use reviewer acceptance or property counts as the sole quality metric.
+
+No historical output, admitted graph, or active frozen runtime was edited by
+this comparison. The 12 accepted outputs remain the model-produced records.
