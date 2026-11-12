@@ -82,12 +82,14 @@ class Operation(StrictModel):
     mechanism: Text | None = Field(default=None, description=
         "How the transformation, selection or inspection works, with source-supported interactions, "
         "reagent roles or computational rules as applicable. Explain it directly; do not invent "
-        "an enzyme, chemical recipe or analysis procedure.")
+        "an enzyme, chemical recipe or analysis procedure. Preserve proposed explanations and "
+        "uncertainty as such; evidence quotations do not replace the explanation here.")
     information_effect: Text | None = Field(default=None, description=
-        "The specific distinction introduced, retained or lost in these outputs, its material/data "
+        "What the output lets us identify or distinguish: the distinction introduced, retained or lost, its material/data "
         "carrier, and what that permits the measurement to establish. Qualify by actual input "
         "condition and distinguish the recorded feature from interpretation requiring later "
-        "comparison or inference. Null if no distinct supported effect; analyte and reporter may differ.")
+        "comparison or inference. Preserve scientific uncertainty without narrating source reading. "
+        "Null if no distinct supported effect; analyte and reporter may differ.")
     evidence: EvidenceSet
 
 

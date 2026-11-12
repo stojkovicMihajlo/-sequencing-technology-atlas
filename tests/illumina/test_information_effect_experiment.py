@@ -4,9 +4,26 @@ from pathlib import Path
 
 import pytest
 
-from genomics_discovery.illumina.prompts import build_prompt, INFORMATION_EFFECT_LOCAL_CONTRACT
+from genomics_discovery.illumina.prompts import (
+    build_prompt, INFORMATION_EFFECT_LOCAL_CONTRACT, OPERATION_FIELD_INSTRUCTIONS,
+)
 from experiments.information_effect_20261108.run import trial_plan
 from tests.illumina.test_illumina_batch_controls import acquired, FakeWorker
+
+
+@pytest.mark.parametrize('mode', ['diagram', 'paper'])
+@pytest.mark.parametrize('version', ['illumina_diagram/1.0', 'illumina_diagram/1.1'])
+def test_operation_definitions_reach_both_roles_in_each_source_mode(mode, version):
+    """Check prompt delivery, not whether an LLM obeys the scientific definitions."""
+    context = {'source_mode': mode, 'representation_version': version}
+    feedback = {'checks': [{'target': 'operation:example', 'action': 'revise'}]}
+    for role in ['author', 'reviewer']:
+        prompt = build_prompt(role, context, {'type': 'object'}, previous_review=feedback)
+        scientific, rest = prompt.split('CALLER CONTEXT\n', 1)
+        assert scientific.count(OPERATION_FIELD_INSTRUCTIONS) == 1
+        assert OPERATION_FIELD_INSTRUCTIONS not in rest
+        assert json.dumps(context, indent=2, ensure_ascii=False) in rest
+        assert json.dumps(feedback, indent=2, ensure_ascii=False) in rest
 
 
 @pytest.mark.parametrize('mode', ['diagram', 'paper'])

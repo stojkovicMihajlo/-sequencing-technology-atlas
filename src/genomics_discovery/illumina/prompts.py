@@ -11,6 +11,45 @@ import json
 from pathlib import Path
 
 
+OPERATION_FIELD_INSTRUCTIONS = """OPERATION FIELD DEFINITIONS
+Operation.label names the action actually represented on its declared inputs.
+Operation.description states what is done to the named input and what changes
+in the material or data. Name an available, supported change rather than hiding
+it behind processing, preparation or treatment. A broad Operation can remain
+composite while its description names the supported changes inside it. Do not
+infer an unavailable reaction or add nodes merely to make a label more specific.
+mechanism explains how that transformation, selection or inspection works:
+the supported molecular interaction, reagent role or computational rule needed
+to understand it. A consequential explanation present only in an evidence quote
+is missing from the scientific account; put it in the field it explains.
+
+information_effect explains what the output lets us identify or distinguish.
+State the specific distinction introduced, retained or lost, the material or
+data feature carrying it, and its meaning for the measurement at this stage.
+The carrier may be an association, copied sequence, barcode, chemical mark or
+endpoint. Distinguish that recorded feature from a conclusion requiring later
+mapping, control comparison, calibration or other inference; name the dependency
+when consequential. Make the statement true for each actual input condition,
+fraction or component. Never attribute a treatment-dependent signal to an
+untreated input. Check agreement with the description, mechanism, connected
+States and structured effects. Copying a template does not transfer its chemical
+modifications to the reporter without evidence. Use null if no distinct supported
+information effect can be stated. An assay goal, performance claim or unspecified
+"information link" is not a substitute for this explanation.
+
+Write these fields as an explanation of the assay, not a report of the extraction.
+Put source comparisons, diagram/grouping decisions and reasons for interpreting
+evidence in Evidence.rationale or Correction. State scientific qualifications
+alongside the claim they limit: a possible bias remains possible, a proposed
+rationale remains proposed, an unquantified benefit remains unquantified, and a
+condition-specific result stays condition-specific. Record source identity and
+support level in Evidence; removing "the paper reports" must never strengthen
+a claim. Keep consequential unresolved questions in Unknown as well as any
+qualification needed to read the affected field correctly. Do not suppress
+available scientific detail merely to shorten the text.
+"""
+
+
 SHARED_INSTRUCTIONS = """SCIENTIFIC TASK
 Describe the explanatory assay architecture in the supplied Illumina method
 description and diagram(s), in the declared method/version scope. The result should explain what
@@ -237,33 +276,7 @@ being measured. State labels must remain correct when read beside their kind and
 the adjacent Operation, without needing a disclaimer elsewhere. Use only the
 specificity supported by the evidence; do not invent a carrier or chemical form
 to make the label more precise.
-Operation.label names the action actually represented on its declared inputs.
-Operation.description states what is done to the named input and what changes
-in the material or data. When the sources specify the change, name it here; a generic
-action such as processing, preparation or treatment must not conceal it. A broad
-Operation can remain composite while its description names the supported changes
-inside it. Do not infer an unavailable reaction or add nodes merely to make a
-label more specific. Mechanism explains why that transformation or selection
-works, including the supported molecular interaction, reagent role or
-computational rule needed to understand it. Description and mechanism explain
-the assay directly. Put source
-comparisons, diagram interpretation and extraction/grouping decisions in
-Evidence.rationale or Correction. Retain scientific qualifications and uncertainty
-that change the explanation's meaning; do not replace them with unwarranted certainty.
-
-information_effect identifies the specific information or attribution introduced,
-retained or lost in the declared output. Name the specific distinction and
-the material or data carrying it: for example a molecular association, copied
-sequence, barcode, chemical mark or endpoint. Explain how that carrier supports
-the measurement at this stage. Distinguish a recorded feature from a conclusion
-requiring later mapping, a control comparison, calibration or other inference;
-name that dependency when consequential. Make the statement true for each actual
-input condition, fraction or component. Qualify differing effects explicitly;
-never attribute a treatment-dependent signal to an untreated input. Check the
-description, mechanism, connected States and structured effects agree. Copying a
-template does not transfer its chemical modifications to the reporter without
-evidence. Use null if no distinct supported information effect can be stated;
-do not substitute the assay's overall goal or an unspecified "information link."
+""" + OPERATION_FIELD_INSTRUCTIONS + """
 Keep source-caption wording when accurate, but literal transcription is not a
 requirement for a scientific label. Retain the exact caption/region in Evidence.
 If primary evidence corrects the diagram, put both accounts in Correction and
@@ -367,10 +380,14 @@ A locally plausible operation does not validate contradictory surrounding edges.
 For consequential details established by the registered sources within the
 assigned coverage, inspect the actual State/Operation/Flow assertions, not only
 their evidence quotations. A quotation containing a fact does not mean the graph
-records it. For each Operation, check the FIELD OWNERSHIP definitions against
+records it. For each Operation, check the OPERATION FIELD DEFINITIONS against
 the sources and its actual inputs/outputs. Request revision when a generic action
-hides an available physical explanation, or source-reading/grouping commentary
-stands in for the scientific account. For information_effect, verify the named
+hides an available material/data explanation, or source-reading/grouping commentary
+occupies a scientific field. Identify the affected field and the scientific
+content or qualification that must survive the correction. Do not request a
+source-prefaced account merely to express uncertainty, or accept a rewrite that
+turns a possible or proposed effect into an established result. Judge the meaning,
+not a forbidden-word list. For information_effect, verify the named
 distinction, its carrier, its condition-specific applicability and any necessary
 interpretation dependency; plausible assay-level wording alone is insufficient.
 Check input/output preparation, identity carrier, capture basis,
@@ -516,7 +533,8 @@ def build_prompt(
     paper = context.get('source_mode') == 'paper'
     if paper:
         from .paper_prompts import PAPER_INSTRUCTIONS, PAPER_ROLES
-        shared, role_instructions = PAPER_INSTRUCTIONS, PAPER_ROLES[role]
+        shared = PAPER_INSTRUCTIONS + "\n\n" + OPERATION_FIELD_INSTRUCTIONS
+        role_instructions = PAPER_ROLES[role]
     else:
         shared = SHARED_INSTRUCTIONS
         role_instructions = AUTHOR_INSTRUCTIONS if role == "author" else REVIEWER_INSTRUCTIONS

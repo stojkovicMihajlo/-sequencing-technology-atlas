@@ -71,5 +71,9 @@ revision; unavailable decisive evidence needs research; support must cite actual
 target sources. The author is not evidence. You are not given the experimental
 condition; judge the candidate and registered sources only. Do not inspect other
 conditions or the author's prompt. Write a complete independent review.
+Apply OPERATION FIELD DEFINITIONS to the actual scientific fields, not only
+their quotations. For a correction, name the affected field and the scientific
+content and qualification to preserve. Move extraction commentary to evidence
+without upgrading a possible or proposed effect into an established result.
 """,
 }
