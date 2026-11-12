@@ -170,6 +170,13 @@ Routine aligners, peak-analysis software, reference annotations, datasets and
 generic analysis tools are general_method or other supporting context. Their
 documented use may be valid documented_reuse, but does not make them experimental
 assay ancestors. Classify the actual contribution, not the paper's broad topic.
+Measurement-defining encoding, decoding or error correction can be an integral
+assay-design contribution, including when implemented computationally. Such a
+contribution may be experimental_component when the papers establish how it
+defines the measurement or its information carrier/readout and that the later
+assay actually uses it. Distinguish that design role from routine tool/resource
+use. Computational implementation does not by itself exclude a contribution,
+and an experimental innovation need not introduce new chemistry.
 Do not relabel a computational/resource contribution as experimental_component
 just because its output appears in a workflow Operation. The reviewer checks this
 eligibility independently; publication derives a supporting-context layer from
@@ -186,6 +193,10 @@ when those are what changed. State what was retained. If the paper only credits
 reuse, explicitly say that no change to the reused feature or isolated benefit
 is established. Attribution alone does not independently verify molecular identity.
 Do not manufacture a difference to make every historical edge an innovation.
+Explain the relationship as the later method building on the specified
+contribution of the earlier method, with the supported use/adaptation and one or
+several coordinated changes described in change_records. This is not a forced
+component-versus-whole-method class or a requirement that every use has a gain.
 
 Use the registered source_tool to traverse the complete seed paper from start0
 through total_characters with bounded pages, following start + returned-text
