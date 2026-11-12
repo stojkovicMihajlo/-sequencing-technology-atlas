@@ -1,39 +1,24 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {createRoot} from 'react-dom/client';
-import {ReactFlow, ReactFlowProvider, Handle, Position, Controls, Background, MiniMap, useNodesState, useEdgesState} from '@xyflow/react';
+import {ReactFlowProvider} from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import {layoutGraph} from './graph';
-import Inspector, {words} from './Inspector';
+import {words} from './Inspector';
+import Workflow from './Workflow';
+import Reader from './Reader';
 import './style.css';
 
 const statusName = {supported:'Accepted',research_needed:'Needs research',needs_revision:'Needs revision',source_recovery_needed:'Needs sources',failed:'Failed'};
 const baseURL = import.meta.env.BASE_URL;
 async function read(url) { const r = await fetch(url, {cache:'no-cache'}); if (!r.ok) throw new Error(`Could not load ${url} (${r.status})`); return r.json(); }
-function AssayNode({data}) {
-  return <div className={`assay-node ${data.type.toLowerCase()}`}><Handle type="target" position={Position.Left}/><small>{data.type}</small><div>{data.label}</div><Handle type="source" position={Position.Right}/></div>;
-}
-const nodeTypes = {assay: AssayNode};
-function Workflow({record,base}) {
-  const [nodes,setNodes,onNodesChange] = useNodesState([]), [edges,setEdges,onEdgesChange] = useEdgesState([]);
-  const [selection,select] = useState(null), [error,setError] = useState(null), [ready,setReady] = useState(false);
-  useEffect(() => { let active = true; setReady(false); select(null);
-    if (record.candidate) layoutGraph(record.candidate).then(graph => {if(active){setNodes(graph.nodes);setEdges(graph.edges);setReady(true);}}).catch(e=>setError(e.message));
-    return () => {active=false;};
-  },[record]);
-  if(!record.candidate) return <div className="no-graph"><h2>Workflow awaiting completion</h2><p>{record.reason}</p></div>;
-  return <div className="workflow"><div className="canvas">{error ? <p role="alert">{error}</p> : ready ? <ReactFlow key={record.record_id} nodes={nodes} edges={edges} nodeTypes={nodeTypes} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} fitView fitViewOptions={{nodes:[...nodes].sort((a,b)=>a.position.x-b.position.x || a.position.y-b.position.y).slice(0,3),padding:0.25,minZoom:0.6,maxZoom:0.9}} minZoom={0.08} maxZoom={2} nodesConnectable={false} deleteKeyCode={null} onNodeClick={(_,n)=>select(n.data)} onEdgeClick={(_,e)=>select(e.data)} onPaneClick={()=>select(null)}>
-      <Background color="#d4dcd6" gap={22} size={1}/><Controls showInteractive={false}/><MiniMap pannable zoomable nodeColor={n=>n.data.type==='State'?'#c8d8de':'#287266'}/>
-    </ReactFlow> : <div className="loading">Arranging workflow…</div>}
-    <div className="canvas-caption"><span className="state-dot"/> State <span className="operation-dot"/> Operation <span>→ Flow</span></div></div><Inspector selection={selection} record={record} base={base} onClose={()=>select(null)} onSelect={select}/></div>;
-}
 function Method({record,base,back}) {
   const [tab,setTab]=useState('workflow');
   const c=record.candidate;
   return <div className="method"><div className="breadcrumb"><button onClick={back}>← Method library</button><span>/</span>{record.category?.join(' / ')}</div>
     <div className="method-heading"><div><span className="eyebrow">{record.category?.[0]}</span><h1>{record.title}</h1></div><span className={`status ${record.status}`}>{statusName[record.status] || words(record.status)}</span></div>
     <div className="method-meta">{c ? `${c.operations.length} Operations · ${c.states.length} States · ${c.flows.length} Flows` : 'No completed workflow'}<span>Source-grounded extraction</span></div>
-    <nav className="tabs">{['workflow','diagram','review'].map(t=><button className={tab===t?'active':''} key={t} onClick={()=>setTab(t)}>{t==='diagram'?'Illumina diagram':t==='review'?'Sources & review':'Workflow'}</button>)}</nav>
-    {tab==='workflow' && <ReactFlowProvider><Workflow record={record} base={base}/></ReactFlowProvider>}
+    <nav className="tabs">{['workflow','network','diagram','review'].map(t=><button className={tab===t?'active':''} key={t} onClick={()=>setTab(t)}>{t==='diagram'?'Illumina diagram':t==='review'?'Sources & review':t==='network'?'Graph overview':'Read workflow'}</button>)}</nav>
+    {tab==='workflow' && <Reader record={record} base={base}/>}
+    {tab==='network' && <ReactFlowProvider><Workflow record={record} base={base}/></ReactFlowProvider>}
     {tab==='diagram' && <div className="document">{(record.source_comparison?.diagrams || []).map(d=><section key={d.source_id}><div className="section-heading"><h2>Original workflow diagram</h2><a href={d.url} target="_blank" rel="noreferrer">Illumina source ↗</a></div>{d.local_asset && <div className="diagram-wrap"><img src={base+d.local_asset} alt={`Original Illumina workflow for ${record.title}`}/></div>}</section>)}{!record.source_comparison?.diagrams?.length && <p>No diagram is available in this snapshot.</p>}</div>}
     {tab==='review' && <div className="document"><h2>Extraction outcome</h2><p>{record.reason}</p>{c?.scope && <details><summary>Extraction scope</summary><p>{c.scope}</p></details>}<h2>Sources</h2>{Object.values(record.sources || {}).filter(s=>s.url && s.kind!=='image').map((s,i)=><a className="source-link" key={i} href={s.url} target="_blank" rel="noreferrer">{s.title || words(s.content_level)} ↗</a>)}{['unknowns','corrections'].map(k=>c?.[k]?.length>0 && <details key={k}><summary>{words(k)} · {c[k].length}</summary><pre>{JSON.stringify(c[k],null,2)}</pre></details>)}<details><summary>Full independent review</summary><pre>{JSON.stringify(record.review,null,2)}</pre></details><a className="download" href={base+record._file} download>Download original extraction JSON ↓</a></div>}
   </div>;

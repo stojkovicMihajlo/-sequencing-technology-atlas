@@ -37,7 +37,9 @@ deploy the resulting `dist` directory. No frontend code edits are needed.
 ## Read the code
 
 - `import_data.py`: validated snapshot publication.
-- `src/main.jsx`: library, method navigation and workflow canvas.
+- `src/main.jsx`: library and method navigation.
+- `src/Reader.jsx`: readable Operation cards with input/output State navigation.
+- `src/Workflow.jsx`: alternate graph overview, compact projection, zoom and fullscreen.
 - `src/graph.js`: ELK layout of the recorded nodes and Flows.
 - `src/Inspector.jsx`: exact scientific fields and evidence.
 - `src/style.css`: visual presentation.
@@ -64,3 +66,19 @@ Set `ATLAS_BROWSER` to an existing Chromium executable if required.
 The current display is the older November 6 snapshot, not the live Sherlock job.
 This prototype presents individual workflow graphs. The evolutionary graph view
 will need reviewed relationship records supplied through its own data adapter.
+
+## Reading and graph projection update
+
+The default method tab is now a reader at normal document scale. Each Operation
+shows its original input/output States and text, with producer/consumer links.
+The navigation follows a topological reading order when the graph is acyclic;
+otherwise it retains source order and displays a notice. List positions do not
+assert a new temporal dependency between independent branches.
+
+The graph overview offers curved edges, vertical/horizontal layout, explicit
+zoom buttons and fullscreen. Compact mode contracts only unary Operations
+with exactly two incident input/output Flows. Joint inputs, output splits and
+additional dependencies retain their Operation node. All 144 available graphs
+preserve every original Flow under this projection. This changes presentation,
+not scientific records. Browser checks additionally passed for Drop-seq, BSAS
+and RASL-seq readers, State inspection, zoom and fullscreen.
