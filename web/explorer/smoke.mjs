@@ -10,9 +10,10 @@ try {
   await expect(page.locator('.method-card')).toHaveCount(108);
   await page.getByRole('textbox',{name:'Search methods'}).fill('ATAC');
   await page.locator('.method-card').filter({has:page.getByRole('heading',{name:'ATAC-Seq',exact:true})}).click();
+  await page.getByRole('button',{name:'Text view',exact:true}).click();
   await expect(page.locator('.operation-card')).toHaveCount(4);
   await page.screenshot({path:'test-results/atac-reader.png'});
-  await page.getByRole('button',{name:'Graph overview',exact:true}).click();
+  await page.getByRole('button',{name:'Method diagram',exact:true}).click();
   await expect(page.locator('.react-flow__node').first()).toBeVisible({timeout:30000});
   const count=await page.locator('.react-flow__node').count();
   await page.locator('.react-flow__node').first().click();

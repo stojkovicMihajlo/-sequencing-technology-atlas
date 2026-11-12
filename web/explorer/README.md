@@ -82,3 +82,22 @@ additional dependencies retain their Operation node. All 144 available graphs
 preserve every original Flow under this projection. This changes presentation,
 not scientific records. Browser checks additionally passed for Drop-seq, BSAS
 and RASL-seq readers, State inspection, zoom and fullscreen.
+
+## Diagram-first focus update
+
+The method opens on its diagram. Library navigation collapses to provide a full
+workspace. The initial focus is the first recorded Operation and every node
+connected to it by a Flow. The selector moves to another Operation or restores
+the whole graph. This view does not combine reactions, rename records or infer
+new connections. Text view remains optional.
+
+Uses React Flow's built-in NodeToolbar (readable selection controls at any zoom),
+Handle, MiniMap, BaseEdge and EdgeLabelRenderer, plus its contextual-zoom pattern.
+Reference: https://reactflow.dev/api-reference/components/node-toolbar
+Reference: https://reactflow.dev/examples/interaction/contextual-zoom
+The commercial Workflow Editor template was evaluated but not copied or added.
+
+Browser validation: Drop-seq starts with four nodes (two inputs, one Operation,
+one output); whole-workflow mode has all twelve nodes. Selecting the next
+Operation shows its three-node neighborhood. State/Operation inspection and
+fullscreen passed with no browser errors.
