@@ -43,9 +43,9 @@ def publish(protocols,evolution,renders,destination,snapshot,issues_from=None):
         ('eclip-wording','iCLIP → eCLIP: unclear comparison wording','Readability issue','iclip','eclip','R6_capture',
          'The stored paragraphs mix retained capture processing with different specimen demonstrations. The facts can be supported while the design comparison remains hard to read.',
          'HeLa/hnRNP C versus RBFOX2/K562 examples obscure that this capture strategy was retained. The harness now asks for aligned, feature-specific comparisons; that prompt change still needs a fresh outcome comparison.'),
-        ('faire-predecessor','An earlier FAIRE implementation is outside the workflow collection','Coverage gap',None,'faire-seq','R3_readout',
-         'The earlier implementation uses a microarray readout. Its contribution can be documented even though its workflow has not been extracted into this snapshot.',
-         'A missing predecessor is not automatically a missing sequencing-technology card. Historical precursors and adopted experimental components need their own identity and scope decisions.')]
+        ('faire-predecessor','FAIRE: microarray readout → sequencing','Readout transition',None,'faire-seq','R3_readout',
+         'FAIRE-Seq is present in the imported FAIRE-Seq/Sono-Seq card. Its associated sources include the earlier FAIRE paper (PMID 17002501); the extracted sequencing workflow is scoped to PMID 20118932. This is not evidence of a missing card or a failed extraction.',
+         'The compared feature is the readout of recovered FAIRE DNA: fluorescent microarray hybridization in the earlier implementation versus an adapter-ligated sequencing library in the later implementation. The earlier microarray workflow has no separate extraction here; its paper and the FAIRE-Seq card are already recorded.')]
     for ident,title,kind,source,target_id,feature,explanation,talking in specifications:
         candidates=[e for e in graph['edges'] if e['historical_development_edge'] and graph['nodes'][e['target']].get('record_id')==target_id and
             (graph['nodes'][e['source']].get('record_id')==source if source else 'FAIRE with yeast DNA-microarray' in graph['nodes'][e['source']]['name'])]
@@ -56,6 +56,13 @@ def publish(protocols,evolution,renders,destination,snapshot,issues_from=None):
         manifest['cases'].append({'id':ident,'title':title,'kind':kind,'explanation':explanation,'talking_point':talking,
             'edge_file':'/evolution/'+evolution.name+'/'+edge['file'],'edge_sha256':edge['sha256'],'feature':feature,
             'explorer_link':'#evolution?'+urlencode({'snapshot':evolution.name,'edge':edge['id'],'feature':feature})})
+        if ident=='faire-predecessor':
+            manifest['cases'][-1]['catalogue_check']={
+                'card_present':True,'card_name':'FAIRE-Seq/Sono-Seq','method_record_id':'faire-seq',
+                'card_url':'https://www.illumina.com/science/sequencing-method-explorer/kits-and-arrays/faire-seq-sono-seq.html',
+                'earlier_paper_pmid':'17002501','earlier_paper_in_associated_sources':True,
+                'extracted_implementation_pmid':'20118932',
+                'assessment':'Historical readout comparison; not a demonstrated extraction failure or missing card.'}
     for ident,mid,title,explanation,talking in [
         ('spatial-inference','spatial-nt-seq','Spatial NT-seq: an incorrect kinetic dependency',
          'The original draft described synthesis estimation from new-to-total ratio and labelling duration while omitting abundance as an additional input.',
