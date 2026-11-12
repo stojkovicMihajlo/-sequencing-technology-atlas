@@ -9,7 +9,7 @@ hostname
 printenv SLURM_JOB_ID
 source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
 work="$ATLAS_PROJECT_ROOT/technology_atlas/v2/work"
-stage="$work/metadata_retry3_20261112"
+stage="${ATLAS_METADATA_RETRY_STAGE:-$work/metadata_retry3_20261112}"
 export ATLAS_METADATA_RETRY_STAGE="$stage"
 export ATLAS_REPOSITORY="$stage/runtime_${SLURM_JOB_ID}"
 export ATLAS_CODEX_BIN_DIR="$GROUP_HOME/mstojkov/software/codex/0.163.0/bin"

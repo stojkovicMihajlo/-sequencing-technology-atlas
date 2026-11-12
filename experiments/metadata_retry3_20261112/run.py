@@ -3,6 +3,7 @@ import argparse
 import asyncio
 from pathlib import Path
 import os
+import copy
 
 from genomics_discovery.illumina.extraction import read, write, sha, registered_text_groups, verify_registry_files
 from experiments.diagram_paper_pilot_20261106 import run as extractor
@@ -57,6 +58,43 @@ def verify_pre_model_failure(attempt):
         'stage_files':files, 'unhashable_metadata_sources':affected, 'native_calls_observed':0}
 
 
+def reconcile_reference_bindings(previous_card, current_card, previous_registry, current_registry):
+    """Permit only explicit, verified IDs added to unchanged dependency entries.
+
+    This is a recorded metadata enrichment, not byte-identical card reuse. Source
+    registries remain exactly equal; scientific fields and reference values are
+    never normalized, ignored or rewritten to make equality pass.
+    """
+    if previous_registry != current_registry:
+        raise ValueError('Registered source values changed; requires an updated-evidence retry')
+    old_refs = previous_card.get('references', [])
+    new_refs = current_card.get('references', [])
+    if len(old_refs) != len(new_refs):
+        raise ValueError('Reference count changed; not metadata binding enrichment')
+    comparable = copy.deepcopy(current_card)
+    changes = []
+    for position, (old, new) in enumerate(zip(old_refs, new_refs)):
+        if 'source_id' in old or 'source_id' not in new:
+            continue
+        source_id = new['source_id']
+        source = current_registry.get(source_id) if isinstance(source_id, str) else None
+        pmid = str(old.get('pmid') or '')
+        without_binding = {key:value for key,value in new.items() if key != 'source_id'}
+        if (without_binding != old or ':dependency:' not in str(old.get('reference_id', ''))
+                or not pmid.isdecimal() or not isinstance(source, dict)
+                or source.get('kind') != 'text' or source.get('content_level') != 'fulltext'
+                or source.get('document_role') == 'supplement'
+                or str(source.get('pmid') or '') != pmid):
+            raise ValueError('Added reference binding does not identify the same registered dependency')
+        changes.append({'path':f'/references/{position}/source_id', 'change':'added_verified_source_id',
+            'source_id':source_id,'pmid':pmid,'reference_id':old['reference_id']})
+        del comparable['references'][position]['source_id']
+    if comparable != previous_card:
+        raise ValueError('Scientific scope or other card fields changed; not metadata binding enrichment')
+    return {'card_status':'metadata_enriched_card' if changes else 'unchanged_card',
+            'same_scientific_card_fields':True,'same_registry':True,'reference_binding_changes':changes}
+
+
 async def execute(args):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Same-source native retries require Qiu Slurm')
@@ -80,7 +118,7 @@ async def execute(args):
     for mid,row in failures.items():
         receipt['verified_failures'][mid] = verify_pre_model_failure(row['attempt_directory'])
     selection = {'format_version':'curated_method_pilot/1','methods':methods,
-        'reason_for_fresh_extraction':'Exact pre-model metadata-key failures retried using the existing verified fix; scientific instructions, original selections and source bundles unchanged.'}
+        'reason_for_fresh_extraction':'Exact pre-model metadata-key failures retried using the existing verified fix; scientific instructions, original selections and registered evidence unchanged. Any added dependency source-ID bindings are verified and recorded as card metadata enrichment, not byte-identical card reuse.'}
     selection_path = args.output/'selected.json';write(selection_path,selection)
     subset_additions = {mid:additions.get(mid,{}) for mid in TARGETS}
     subset_overrides = {mid:overrides.get(mid,{}) for mid in TARGETS}
@@ -97,10 +135,14 @@ async def execute(args):
             if source.get('document_role') != 'supplement':
                 card['references'].append(extractor.dependency_reference(mid,sid,source))
         previous = Path(failures[mid]['attempt_directory'])
-        if card != read(previous/'card.json') or registry != read(previous/'source_registry.json'):
-            raise ValueError('Scientific scope or sources changed; not a same-source retry: '+mid)
+        reconciliation = reconcile_reference_bindings(read(previous/'card.json'), card,
+            read(previous/'source_registry.json'), registry)
         verify_registry_files(registry)
-        receipt['source_equivalence'][mid]={'same_card':True,'same_registry':True,'images':len(images)}
+        prepared_card = args.output/'prepared_cards'/(mid+'.json')
+        write(prepared_card,card)
+        receipt['source_equivalence'][mid]={**reconciliation,'images':len(images),
+            'previous_card_sha256':sha(previous/'card.json'),'prepared_card_sha256':sha(prepared_card),
+            'card_bytes_identical':sha(previous/'card.json')==sha(prepared_card)}
     write(args.output/'PREFLIGHT.json',receipt)
     write(args.output/'additions.json',subset_additions)
     result = await extractor.execute(args.library,args.vault,selection_path,args.output/'extraction',3,

@@ -37,7 +37,7 @@ def export(index_path, receipt_path, destination, snapshot, label, method_index=
             record = records.get(node.get('record_id'))
             if record and record.get('title'):
                 node['display_name'] = record['title']
-    
+
     edges = original['edges']
     if len({e['id'] for e in edges}) != len(edges):
         raise ValueError('Duplicate relationship identity')

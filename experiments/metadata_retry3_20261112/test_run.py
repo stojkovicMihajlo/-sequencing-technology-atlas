@@ -46,6 +46,40 @@ def test_pre_model_metadata_failure_is_proved_and_native_trace_rejected(tmp_path
     with pytest.raises(ValueError,match='Native traces'):retry.verify_pre_model_failure(tmp_path)
 
 
+def binding_case():
+    old={'record_id':'fixture','implementation_scope':'Exact scientific scope',
+         'references':[{'reference_id':'fixture:dependency:19136955','pmid':'19136955','role':'recovered'}]}
+    new=copy.deepcopy(old);new['references'][0]['source_id']='paper:19136955'
+    registry={'paper:19136955':{'kind':'text','content_level':'fulltext','pmid':'19136955','text':'Unchanged registered evidence'}}
+    return old,new,registry
+
+
+def test_actual_ptb_shape_allows_only_recorded_dependency_binding_enrichment():
+    old,new,registry=binding_case();preserved=copy.deepcopy((old,new,registry))
+    receipt=retry.reconcile_reference_bindings(old,new,registry,registry)
+    assert receipt['card_status']=='metadata_enriched_card'
+    assert receipt['reference_binding_changes']==[{'path':'/references/0/source_id',
+        'change':'added_verified_source_id','source_id':'paper:19136955','pmid':'19136955',
+        'reference_id':'fixture:dependency:19136955'}]
+    assert (old,new,registry)==preserved
+    assert retry.reconcile_reference_bindings(old,old,registry,registry)['card_status']=='unchanged_card'
+
+
+@pytest.mark.parametrize('change', ['wrong_pmid','unknown_source','changed_reference','changed_scope','changed_text','reordered_references','changed_existing_binding'])
+def test_metadata_reconciliation_rejects_scientific_or_reference_identity_changes(change):
+    old,new,registry=binding_case();changed=copy.deepcopy(registry)
+    if change=='wrong_pmid':registry['paper:19136955']['pmid']='999';changed=copy.deepcopy(registry)
+    if change=='unknown_source':new['references'][0]['source_id']='paper:missing'
+    if change=='changed_reference':new['references'][0]['pmid']='999'
+    if change=='changed_scope':new['implementation_scope']='Different scientific scope'
+    if change=='changed_text':changed['paper:19136955']['text']='Different source evidence'
+    if change=='reordered_references':
+        old['references'].append({'reference_id':'fixture:dependency:222','pmid':'222','role':'recovered'})
+        new['references'].insert(0,copy.deepcopy(old['references'][1]))
+    if change=='changed_existing_binding':old['references'][0]['source_id']='paper:old'
+    with pytest.raises(ValueError):retry.reconcile_reference_bindings(old,new,registry,changed)
+
+
 @pytest.mark.asyncio
 async def test_isolated_retry_preserves_sources_and_only_dispatches_three_fresh_parallel_methods(tmp_path,monkeypatch):
     monkeypatch.setenv('SLURM_JOB_ID','retry-test')
