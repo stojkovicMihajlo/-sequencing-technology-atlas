@@ -1,3 +1,23 @@
+ACTIVE WORK — full extraction harness, not prompt shortening
+
+Completed: job52047726, irCLIP/Pseudo-seq/MAB-seq/RASL-seq all supported by model
+review. Sources match their archived baselines exactly. irCLIP used one revision.
+Read full_contract_review.json -> final_check for the actual inspected fields,
+source passages, remaining issues and limits on improvement claims.
+
+Running: explanation_02, job52052181. Two same-source follow-ups, irCLIP/Pseudo-seq.
+Definitions and review obligations are shared across diagram and paper modes.
+85 software tests and both source preflights passed. No scientific outcome yet.
+Current job/configuration: explanation_02/submission.json, pins.json, plan.json.
+
+Inspect: deliverables/full_harness_comparison_20261112/index.html (from repository).
+Each new/archived page contains its original diagram, exact graph, evidence and
+model review. build_full_inspection.py creates this read-only comparison; it
+checks source equality, final artifact hashes and review/candidate binding.
+
+Earlier experiments and their findings follow. They remain preserved; they are
+not the active harness definition or the current run status.
+
 CURRENT DECISION (12 November): User stopped the compact experiment. Use the full harness with focused explanation/information_effect refinements. See RESULTS.txt, full_contract_plan.json and full_contract_submission.json. The original experiment below and its immutable runtime/results are retained for comparison, not the active production default.
 
 CATEGORY AUDIT AND AUTHOR-PROMPT SIMPLIFICATION — 12 November 2026
@@ -9,7 +29,7 @@ Two contrasting methods per category are development examples, not evidence that
 all methods within a category share a mechanism. Some examples were previously
 used for development; this is not a held-out evaluation.
 
-CURRENT EXPERIMENT
+HISTORICAL COMPACT EXPERIMENT (CANCELLED)
 Reuse the existing diagrams, paper registrations, schema, tools, native execution,
 reviewer and one-revision limit. Simplify only the author's scientific guidance.
 author_contract.txt replaces the long shared scientific and structured guidance
