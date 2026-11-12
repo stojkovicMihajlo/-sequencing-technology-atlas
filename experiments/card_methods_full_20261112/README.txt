@@ -6,6 +6,10 @@ The user authorized a fresh run after the explanation-prompt refinement, with
 methods and historical-edge extraction are separate work.
 
 Current submission: 52055656, Qiu Sherlock, gpt-6.1-sol / xhigh.
+Recovery finished: 122 methods eligible; 50 evidence/source holds; 2 provider
+blocks. Extraction started with 10 parallel tasks. Targeted evidence-recovery
+pilot 52058374 investigates Smart-seq2, Hi-C and 2b-RAD in evidence_repair_01.
+See docs/decisions/2026-11-12-held-evidence-recovery.txt for the changes and limits.
 Frozen deployment: release_03/job.sbatch and release_03/patch_pins.json.
 Remote stage:
 /scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/card_methods_full_20261112/release_03

@@ -81,7 +81,7 @@ def parent_structure(source):
         if d['identity']['identifiers'].get('pmid')==[source.get('pmid')]:return d
     return None
 
-def recover_evidence(registry, card, review, output, cache, *, contact_email):
+def recover_evidence(registry, card, review, output, cache, *, contact_email, archive_cache=None):
     """Register actual focal-paper attachments; proposed applicability stays open."""
     output.mkdir(parents=True,exist_ok=False);added={};report=[]
     pmid=card['curation_binding']['primary_paper_id'].removeprefix('pmid-')
@@ -100,7 +100,7 @@ def recover_evidence(registry, card, review, output, cache, *, contact_email):
         if 'supplement:'+pmid+':'+key in registry:
             report.append({'status':'already_registered','attachment':item});continue
         try:
-            row=recover_supplement(request,source,output/key)
+            row=recover_supplement(request,source,output/key,archive_cache=archive_cache)
             registered='supplement:'+pmid+':'+key
             if registered in registry:
                 report.append({'status':'already_registered','source_id':registered});continue

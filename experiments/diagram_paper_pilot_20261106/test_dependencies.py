@@ -1,10 +1,62 @@
 import copy
+from concurrent.futures import ThreadPoolExecutor
+from zipfile import ZipFile
 
 import pytest
 
 from experiments.diagram_paper_pilot_20261106 import recover_dependencies as mod
 from genomics_discovery.illumina.extraction import read, write, verify_registry_files
 from genomics_discovery.illumina.extraction import sha
+
+
+def test_archive_acquisition_is_shared_between_concurrent_attachment_requests(tmp_path, monkeypatch):
+    calls = []
+    def fetch(url, destination):
+        calls.append(url)
+        with ZipFile(destination, 'w') as archive:
+            archive.writestr('one.pdf', b'%PDF-first')
+            archive.writestr('two.pdf', b'%PDF-second')
+        return {'url': url, 'sha256': sha(destination)}
+    monkeypatch.setattr(mod, 'fetch', fetch)
+    cache = tmp_path / 'cache'
+    with ThreadPoolExecutor(max_workers=3) as workers:
+        rows = list(workers.map(lambda _: mod.cached_supplement_archive('https://example.org/PMC1', cache), range(3)))
+    assert calls == ['https://example.org/PMC1']
+    assert sum(not row[2]['cache_reused'] for row in rows) == 1
+    assert len({row[0] for row in rows}) == 1
+    assert mod.selected_pdf(rows[0][0].read_bytes(), 'one.pdf')[0] == b'%PDF-first'
+    assert mod.selected_pdf(rows[1][0].read_bytes(), 'two.pdf')[0] == b'%PDF-second'
+    other, _, _ = mod.cached_supplement_archive('https://example.org/PMC2', cache)
+    assert other != rows[0][0]
+    assert len(calls) == 2
+
+
+@pytest.mark.parametrize('failure', ['timeout', 'html', 'truncated_zip'])
+def test_failed_archive_attempt_is_not_repeated_for_each_attachment(tmp_path, monkeypatch, failure):
+    calls = []
+    def fetch(url, destination):
+        calls.append(url)
+        if failure == 'timeout':
+            raise RuntimeError('Timed out')
+        destination.write_bytes(b'<html>Not an archive</html>' if failure == 'html' else b'PKtruncated')
+        return {'url': url}
+    monkeypatch.setattr(mod, 'fetch', fetch)
+    for _ in range(3):
+        with pytest.raises(ValueError, match='not repeated'):
+            mod.cached_supplement_archive('https://example.org/PMC1', tmp_path)
+    assert len(calls) == 1
+
+
+def test_cached_archive_custody_is_checked_before_reuse(tmp_path, monkeypatch):
+    def fetch(url, destination):
+        with ZipFile(destination, 'w') as archive:
+            archive.writestr('one.pdf', b'%PDF-first')
+        return {'url': url}
+    monkeypatch.setattr(mod, 'fetch', fetch)
+    archive, _, _ = mod.cached_supplement_archive('https://example.org/PMC1', tmp_path)
+    archive.write_bytes(b'Changed bytes')
+    with pytest.raises(ValueError, match='differ from their receipt'):
+        mod.cached_supplement_archive('https://example.org/PMC1', tmp_path)
 
 
 @pytest.mark.parametrize('defect', [None, 'parent_quote', 'article_identity', 'abstract_only'])
@@ -53,7 +105,7 @@ def test_dependency_registration_requires_delegation_own_identity_and_full_body(
         assert read(tmp_path / 'recovery/registered_additions.json') == result
 
 
-@pytest.mark.parametrize('defect', [None, 'wrong_parent', 'wrong_attachment', 'public_copy', 'public_copy_badcover'])
+@pytest.mark.parametrize('defect', [None, 'wrong_parent', 'wrong_attachment', 'public_copy', 'public_copy_badcover', 'archive'])
 def test_supplement_is_bound_to_parent_identity_and_exact_attachment(tmp_path, monkeypatch, defect):
     original = tmp_path / 'parent.xml'
     original.write_text('<article xmlns:xlink="http://www.w3.org/1999/xlink"><front><article-meta>'
@@ -71,8 +123,13 @@ def test_supplement_is_bound_to_parent_identity_and_exact_attachment(tmp_path, m
     calls = []
     def fetch(url, destination):
         calls.append(url); destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes(b'<error>Not a downloadable document</error>'
-            if defect in {'public_copy', 'public_copy_badcover'} and 'example.org' not in url else b'%PDF-fixture')
+        if defect == 'archive' and url.endswith('/supplementaryFiles'):
+            with ZipFile(destination, 'w') as archive:
+                archive.writestr('methods.pdf', b'%PDF-fixture')
+        else:
+            destination.write_bytes(b'<error>Not a downloadable document</error>'
+                if defect == 'archive' or (defect in {'public_copy', 'public_copy_badcover'}
+                    and 'example.org' not in url) else b'%PDF-fixture')
         return {'final_url': url, 'path': str(destination), 'sha256': sha(destination)}
     def converted(folder, pmid, output):
         output.mkdir(parents=True)

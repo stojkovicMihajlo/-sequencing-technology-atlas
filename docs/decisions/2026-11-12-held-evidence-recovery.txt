@@ -1,0 +1,60 @@
+Held evidence recovery — 12 November 2026
+
+Problem and observed state
+Job 52055656 completed source preflight for all 174 card methods. Fifty methods
+were excluded for unresolved evidence: 24 lacked their assigned primary article;
+26 retained scientific requests after the fixed retrieval routes. Two additional
+methods (CirSeq and SHAPE-MaP) have recorded provider policy blocks and are not
+retried or rephrased. The remaining 122 entered extraction (10 running and 112
+pending at the recorded 47-minute check). Counts are distinct methods, not papers.
+
+Failures addressed here
+1. Recovery retried a publication's entire supplement archive for individual
+   attachments. A shared per-URL, process-locked cache now records both successful
+   downloads and failed attempts. Exact attachment selection remains mandatory;
+   a new recovery batch is needed to deliberately retry a failed archive route.
+2. Fixed recovery only enumerated supplements from available JATS. PDF-only
+   parents and publisher-hosted public copies needed another discovery route.
+3. Requests sometimes name a scientific ambiguity, not a missing file. Source
+   discovery must retain those exact requests and the selected implementation;
+   acquiring more files cannot by itself resolve a scientific discrepancy.
+
+Implementation
+investigate_holds.py uses the existing CodexWorker transport and public-source
+Findings schema. It groups affected methods by assigned publication, preserving
+all individual reviewer requests, and excludes provider blocks before dispatch.
+The investigator reads existing evidence and searches public literature. It
+returns document locations, identities, search records and applicability notes.
+It cannot write scientific source text or certify graph acceptance.
+
+located_documents.py adapts existing host retrieval, PDF identity, JATS identity,
+HTML preview rejection and citation-linked supplement checks. Python retrieves
+original bytes. Generated prose never becomes source evidence. Failed identity,
+access or conversion checks retain the case. Cited/manufacturer documents are
+retained as leads for explicit dependency registration; this adapter does not yet
+automatically register them. Original source and runtime artifacts are immutable.
+
+Validation and deployment
+26 local checks passed. They cover wrong publication IDs, metadata-only XML,
+HTML returned at a PDF URL, missing supplement-parent links, provider exclusion,
+publication deduplication and archive-cache concurrency/failure/integrity.
+First test invocation exposed a relative test import; corrected before deployment.
+New job 52058374: three source investigations (Smart-seq2, Hi-C, 2b-RAD), Qiu
+scratch, sol6.1/xhigh, 3 concurrent workers, 30-minute per-worker timeout,
+2-hour Slurm limit. This is a bounded pilot, not a completed 50-case repair.
+
+Remote outputs
+/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/card_methods_full_20261112/evidence_repair_01
+pilot/state.json: source-investigation status, never scientific acceptance.
+pilot/publications/<paper>/finder/: exact request, prompt, schema, native events.
+pilot/publications/<paper>/documents/: original bytes, identity checks, renditions.
+pilot/primary_overrides.json and registered_additions.json: new source inputs
+that may be passed to a targeted fresh author/reviewer run after inspection.
+
+Next gate
+Inspect real pilot artifacts and retrieval failures before expanding recovery.
+Reconcile each old reviewer request against the enlarged source bundle. Then
+submit eligible held methods with bounded author correction and fresh review.
+Do not rerun the 122-method batch, silently substitute another primary paper,
+declare a source-version conflict solved by a download, or weaken admission to
+make counts improve. No extraction retry was launched by this recovery pilot.

@@ -4,6 +4,8 @@ This resolves recorded evidence requests; it does not discover all dependencies
 or decide scientific sufficiency. Existing registries are never rewritten.
 """
 import argparse
+import fcntl
+import hashlib
 import os
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -17,7 +19,46 @@ from genomics_discovery.sources.cached_documents import supplements
 from genomics_discovery.sources.acquisition.supplement_archive import selected_pdf
 
 
-def recover_supplement(request, source, folder):
+def cached_supplement_archive(url, cache):
+    """One publication-archive attempt per recovery cache, including failures.
+
+    The caller still selects and validates its exact parent-cited member. A new
+    recovery batch can explicitly retry a failed route with a new cache directory.
+    Per-URL file locks also prevent simultaneous workers downloading it twice.
+    """
+    folder = cache / hashlib.sha256(url.encode()).hexdigest()
+    folder.mkdir(parents=True, exist_ok=True)
+    record = folder / 'archive_receipt.json'
+    archive = folder / 'attachments.zip'
+    with (folder / 'acquisition.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        reused = record.exists()
+        if reused:
+            receipt = read(record)
+            if receipt.get('url') != url:
+                raise ValueError('Cached archive receipt URL differs from requested publication')
+        else:
+            try:
+                acquisition = fetch(url, archive)
+                with ZipFile(archive) as downloaded:
+                    if not downloaded.infolist():
+                        raise ValueError('Publication archive has no members')
+                receipt = {'url': url, 'status': 'downloaded', 'sha256': sha(archive),
+                           'acquisition': acquisition}
+            except (RuntimeError, ValueError, BadZipFile, OSError) as exc:
+                receipt = {'url': url, 'status': 'failed',
+                           'error': f'{type(exc).__name__}: {exc}'}
+            write(record, receipt)
+        if receipt['status'] != 'downloaded':
+            raise ValueError('Publication archive attempt failed; not repeated for another '
+                             f'attachment in this batch. Receipt: {record}. {receipt["error"]}')
+        if not archive.is_file() or sha(archive) != receipt['sha256']:
+            raise ValueError('Cached publication archive bytes differ from their receipt')
+        return archive, record, {'url': url, 'cache_reused': reused,
+                                'receipt_path': str(record), 'sha256': receipt['sha256']}
+
+
+def recover_supplement(request, source, folder, *, archive_cache=None):
     """Follow one exact primary-article attachment; never relabel it a new paper."""
     structures = []
     for pin in source.get('custody_files', []):
@@ -64,21 +105,15 @@ def recover_supplement(request, source, folder):
         attempts.append({'url': direct, 'registration': 'not accepted', 'error': str(exc)})
         endpoint = 'https://www.ebi.ac.uk/europepmc/webservices/rest/PMC' + pmc + '/supplementaryFiles'
         try:
-            receipt = fetch(endpoint, folder / 'attachments.zip')
-            attempts.append(receipt); intermediates.append(folder / 'attachments.zip')
+            archive_path, archive_receipt, receipt = cached_supplement_archive(
+                endpoint, archive_cache if archive_cache is not None else folder.parent / 'publication_archives')
+            attempts.append(receipt); intermediates.extend([archive_path, archive_receipt])
             record_attempts()
-            if not (folder / 'attachments.zip').read_bytes().startswith(b'PK'):
-                try:
-                    response = ET.fromstring((folder / 'attachments.zip').read_bytes())
-                    message = next((e.text for e in response.iter() if e.tag.rsplit('}', 1)[-1] == 'errMsg'), None)
-                except ET.ParseError:
-                    message = None
-                raise ValueError('Supplement provider returned ' + (message or 'a non-ZIP response'))
-            with ZipFile(folder / 'attachments.zip') as archive:
+            with ZipFile(archive_path) as archive:
                 names = [n for n in archive.namelist() if n.rsplit('/', 1)[-1] == name]
             if len(names) != 1:
                 raise ValueError('Publication-bound archive lacks one exact cited PDF member')
-            content, _ = selected_pdf((folder / 'attachments.zip').read_bytes(), names[0])
+            content, _ = selected_pdf(archive_path.read_bytes(), names[0])
             provenance_url = endpoint
         except (RuntimeError, ValueError, BadZipFile) as error:
             attempts.append({'url': endpoint, 'registration': 'not accepted', 'error': str(error)})

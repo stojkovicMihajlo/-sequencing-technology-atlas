@@ -59,7 +59,8 @@ def recover(previous, audit, library, vault, scope, pilot, existing, output, con
                 previous_attempt = Path(state['cards'][mid]['attempt_directory'])
                 review = read(previous_attempt / 'review.json')
                 new_sources = recover_evidence(registry, card, review,
-                    output / 'methods' / mid, {}, contact_email=contact_email)
+                    output / 'methods' / mid, {}, contact_email=contact_email,
+                    archive_cache=output / 'publication_archives')
                 verify_registry_files(new_sources)
                 log['recovery_receipt'] = str(output / 'methods' / mid / 'RECOVERY.json')
             changed = bool(local_overrides or new_sources)
