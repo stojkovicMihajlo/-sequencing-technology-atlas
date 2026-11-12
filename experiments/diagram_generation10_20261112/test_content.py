@@ -134,9 +134,9 @@ async def test_all_ten_sources_are_prepared_before_calls_and_ten_authors_start_i
             else:document=review(run.read(attempt/'candidate_plan.json'))
             write(attempt/'artifact.json',document)
             registry=run.read(source);record_read(attempt/'source_reads.jsonl',source,registry,source_excerpt(registry,'paper'))
-            return SimpleNamespace(exit_code=0,error=None,thread_id=method['method_id']+attempt.name,usage={},elapsed_seconds=0)
+            return SimpleNamespace(exit_code=0,error=None,thread_id=str(attempt),usage={},elapsed_seconds=0)
     monkeypatch.setattr(run,'CodexWorker',Worker)
-    monkeypatch.setattr(run,'assess_archived_attempt',lambda a:SimpleNamespace(complete=True,thread_id=a.parents[1].name+a.name,usage={}))
+    monkeypatch.setattr(run,'assess_archived_attempt',lambda a:SimpleNamespace(complete=True,thread_id=str(a),usage={}))
     args=SimpleNamespace(manifest=manifest,examples=manifest,output=tmp_path/'out',agents=10)
     result=await asyncio.wait_for(run.execute(args),timeout=10)
     assert seen['peak']==10 and seen['calls']==20
@@ -145,9 +145,28 @@ async def test_all_ten_sources_are_prepared_before_calls_and_ten_authors_start_i
     assert requests['ready_requests']==10
     assert all(len(r['arguments']['referenced_image_paths'])==10 for r in requests['requests'])
     assert all('Cell-barcoded cDNA' in r['arguments']['prompt'] for r in requests['requests'])
+    # Approved plans are reopened without additional model calls.
+    previous=args.output;args.previous=previous;args.output=tmp_path/'approved_reuse'
+    reused=await run.execute(args)
+    assert seen['calls']==20 and reused['counts']=={'ready_for_image_generation':10}
+    assert len(run.read(args.output/'CONTINUATION.json')['reused_approved'])==10
+    # Two source-fixable reviews start exactly two authors and two fresh reviewers.
+    state=run.read(previous/'state.json')
+    for mid in ['m0','m1']:
+        row=state['methods'][mid];row['status']='needs_revision'
+        stage=row['stages'][-1];artifact=Path(stage['path'])/'artifact.json'
+        document=run.read(artifact);document['checks'][0]['decision']='revise'
+        write(artifact,document);stage['artifact_sha256']=sha(artifact)
+    write(previous/'state.json',state)
+    args.output=tmp_path/'two_corrections';args.agents=2
+    corrected=await run.execute(args)
+    assert seen['calls']==24 and corrected['counts']=={'ready_for_image_generation':10}
+    continuation=run.read(args.output/'CONTINUATION.json')
+    assert continuation['continued_revision']==['m0','m1']
+    assert len(continuation['reused_approved'])==8
     # A bad tenth source blocks every method before any author/renderer starts.
     methods[-1]['sources']['paper']['sha256']='0'*64;write(manifest,{'format_version':'assay_diagram_sources/1','methods':methods})
     args.output=tmp_path/'blocked'
     with pytest.raises(ValueError,match='Readable source bytes changed'):await run.execute(args)
-    assert seen['calls']==20
+    assert seen['calls']==24
     assert run.read(args.output/'PREFLIGHT.json')['model_calls']==0

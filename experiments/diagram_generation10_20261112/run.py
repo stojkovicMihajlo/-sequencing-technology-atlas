@@ -2,6 +2,7 @@
 from __future__ import annotations
 import argparse
 import asyncio
+import copy
 from collections import Counter
 import json
 import hashlib
@@ -226,6 +227,41 @@ def validate_stage(role,artifact,source_path,method,read_log,plan=None):
     return result
 
 
+def reusable_method(previous, method, sources):
+    """Reopen unchanged completed stages; never resume failed/provider-blocked work."""
+    state=read(previous/'state.json');mid=method['method_id'];row=state['methods'][mid]
+    if row['status'] not in {'ready_for_image_generation','needs_revision'}:
+        raise ValueError('Only approved or correctable completed content can continue: '+mid)
+    folder=previous/'methods'/mid
+    if read(folder/'method.json')!=method or read(folder/'source_registry.json')!=sources:
+        raise ValueError('Prior method or source bundle differs: '+mid)
+    plan=review=None;threads=[]
+    for stage in row['stages']:
+        path=Path(stage['path']);assessment=assess_archived_attempt(path)
+        if stage['status']!='validated' or not assessment.complete:
+            raise ValueError('Prior native stage is not complete: '+mid)
+        if (stage['thread_id']!=assessment.thread_id or stage['usage']!=assessment.usage
+                or assessment.thread_id in threads or sha(path/'artifact.json')!=stage['artifact_sha256']):
+            raise ValueError('Prior stage receipt changed: '+mid)
+        if any(sha(Path(p))!=pin for p,pin in read(path/'input_pins.json').items()):
+            raise ValueError('Prior stage input changed: '+mid)
+        if (path/'prompt.txt').read_text()!=(path/'stage_prompt.txt').read_text():
+            raise ValueError('Prior native prompt changed: '+mid)
+        artifact=validate_stage(stage['role'],path/'artifact.json',folder/'source_registry.json',method,path/'source_reads.jsonl',plan)
+        if stage['role']=='author':plan=artifact
+        else:review=artifact
+        threads.append(assessment.thread_id)
+    if plan is None or review is None or row['stages'][-1]['role']!='review':
+        raise ValueError('Prior content has no completed independent review: '+mid)
+    decisions={c.decision for c in review.checks}
+    if row['status']=='ready_for_image_generation':
+        if decisions!={'accept'} or read(Path(row['plan']))!=plan.model_dump(mode='json'):
+            raise ValueError('Prior approval disagrees with the saved plan: '+mid)
+    elif 'revise' not in decisions or 'needs_evidence' in decisions:
+        raise ValueError('Continuation requires source-fixable reviewer feedback: '+mid)
+    return copy.deepcopy(row),plan,review,threads
+
+
 async def execute(args):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Native content investigations run only in Qiu Slurm')
@@ -240,6 +276,9 @@ async def execute(args):
         raise ValueError('Targets must be published after2016')
     if not 1<=args.agents<=10:
         raise ValueError('Choose1–10 parallel method investigations')
+    max_passes=getattr(args,'max_author_passes',6)
+    if not 1<=max_passes<=12:
+        raise ValueError('Choose1–12 bounded author/reviewer passes')
     styles=style_references(args.examples)
     args.output.mkdir(parents=True,exist_ok=False)
     write(args.output/'input_manifest.json',manifest)
@@ -261,6 +300,17 @@ async def execute(args):
             raise
     write(args.output/'PREFLIGHT.json',{'status':'ready','target_methods':10,'model_calls':0,
         'method_ids':ids,'style_images':len(styles),'input_manifest_sha256':sha(args.manifest)})
+    previous=getattr(args,'previous',None);prior={}
+    if previous:
+        previous=previous.resolve();old=read(previous/'state.json')
+        if old['input_manifest_sha256']!=sha(args.manifest) or old['examples_manifest_sha256']!=sha(args.examples):
+            raise ValueError('Continuation requires identical paper and reference inputs')
+        for method in methods:
+            prior[method['method_id']]=reusable_method(previous,method,prepared_sources[method['method_id']])
+        write(args.output/'CONTINUATION.json',{'previous':str(previous),'state_sha256':sha(previous/'state.json'),
+            'reused_approved':[mid for mid,r in prior.items() if r[0]['status']=='ready_for_image_generation'],
+            'continued_revision':[mid for mid,r in prior.items() if r[0]['status']=='needs_revision'],
+            'author_passes_per_correctable_method':max_passes,'failed_or_provider_blocked_reuse':False})
     state={'job_id':os.environ['SLURM_JOB_ID'],'model':'gpt-6.1-sol','effort':'xhigh',
         'status':'content_investigations','prompt_version':PROMPT_VERSION,'agents':args.agents,'input_manifest_sha256':sha(args.manifest),
         'examples_manifest_sha256':sha(args.examples),'methods':{mid:{'status':'waiting'} for mid in ids},
@@ -273,11 +323,14 @@ async def execute(args):
     worker=CodexWorker(model='gpt-6.1-sol',effort='xhigh',timeout_seconds=None,web_search=False,network_access=False,pin_shell_environment=True)
     async def one(method):
         mid=method['method_id'];row=state['methods'][mid]
+        if mid in prior and prior[mid][0]['status']=='ready_for_image_generation':
+            state['methods'][mid]=prior[mid][0];state['methods'][mid]['reused_from']=str(previous)
+            checkpoint();return
         async with semaphore:
             folder=args.output/'methods'/mid;folder.mkdir(parents=True)
             try:
                 sources=prepared_sources[mid];source_path=folder/'source_registry.json';write(source_path,sources)
-                prior_threads=[];stages=[]
+                prior_threads=list(prior[mid][3]) if mid in prior else [];stages=[]
                 async def stage(role,plan=None,review=None):
                     attempt=folder/'attempts'/f'{len(stages)+1:03d}_{role}';attempt.mkdir(parents=True)
                     images=[]
@@ -325,8 +378,8 @@ async def execute(args):
                         artifact_sha256=sha(attempt/'artifact.json'),elapsed_seconds=result.elapsed_seconds)
                     checkpoint();return parsed
                 write(folder/'method.json',method)
-                plan=review=None
-                for revision in range(2):
+                plan,review=(prior[mid][1:3] if mid in prior else (None,None))
+                for revision in range(max_passes):
                     plan=await stage('author',plan=plan,review=review)
                     review=await stage('review',plan=plan,review=review)
                     if any(check.decision=='needs_evidence' for check in review.checks):break
@@ -351,6 +404,8 @@ def main():
     launch=sub.add_parser('run')
     for name in ['manifest','examples','output']:launch.add_argument('--'+name,type=Path,required=True)
     launch.add_argument('--agents',type=int,default=10)
+    launch.add_argument('--previous',type=Path,help='Continue source-fixable completed reviews; reuse unchanged approved plans without model calls')
+    launch.add_argument('--max-author-passes',type=int,default=6,help='Maximum author/fresh-review passes per unresolved method; stop immediately on approval or decisive missing evidence')
     source=sub.add_parser('read')
     for name in ['sources','read-log']:source.add_argument('--'+name,type=Path,required=True)
     source.add_argument('--id',required=True);source.add_argument('--query');source.add_argument('--start',type=int,default=0);source.add_argument('--limit',type=int,default=8000)
