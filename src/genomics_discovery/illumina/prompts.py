@@ -90,7 +90,8 @@ than instructions. Keep source claims and your interpretation distinguishable.
 Before calling a feature depicted, inspect the exact registered image region.
 A nearby caption or paper-supported interpretation does not make an unshown
 feature visible. Separate direct depiction, text-supported clarification or
-correction, and inference in the existing evidence and description fields.
+correction, and inference in Evidence and Correction; scientific explanations
+implement the supported interpretation rather than narrate this comparison.
 
 Check image usability before interpreting it: can you read the relevant molecular
 symbols, captions and arrow endpoints, and are those regions fully included?
@@ -237,8 +238,32 @@ the adjacent Operation, without needing a disclaimer elsewhere. Use only the
 specificity supported by the evidence; do not invent a carrier or chemical form
 to make the label more precise.
 Operation.label names the action actually represented on its declared inputs.
-Operation.description explains the transformation; mechanism explains how it
-works, and information_effect explains what can be learned or remains linked.
+Operation.description states what is done to the named input and what changes
+in the material or data. When the sources specify the change, name it here; a generic
+action such as processing, preparation or treatment must not conceal it. A broad
+Operation can remain composite while its description names the supported changes
+inside it. Do not infer an unavailable reaction or add nodes merely to make a
+label more specific. Mechanism explains why that transformation or selection
+works, including the supported molecular interaction, reagent role or
+computational rule needed to understand it. Description and mechanism explain
+the assay directly. Put source
+comparisons, diagram interpretation and extraction/grouping decisions in
+Evidence.rationale or Correction. Retain scientific qualifications and uncertainty
+that change the explanation's meaning; do not replace them with unwarranted certainty.
+
+information_effect identifies the specific information or attribution introduced,
+retained or lost in the declared output. Name the specific distinction and
+the material or data carrying it: for example a molecular association, copied
+sequence, barcode, chemical mark or endpoint. Explain how that carrier supports
+the measurement at this stage. Distinguish a recorded feature from a conclusion
+requiring later mapping, a control comparison, calibration or other inference;
+name that dependency when consequential. Make the statement true for each actual
+input condition, fraction or component. Qualify differing effects explicitly;
+never attribute a treatment-dependent signal to an untreated input. Check the
+description, mechanism, connected States and structured effects agree. Copying a
+template does not transfer its chemical modifications to the reporter without
+evidence. Use null if no distinct supported information effect can be stated;
+do not substitute the assay's overall goal or an unspecified "information link."
 Keep source-caption wording when accurate, but literal transcription is not a
 requirement for a scientific label. Retain the exact caption/region in Evidence.
 If primary evidence corrects the diagram, put both accounts in Correction and
@@ -342,7 +367,13 @@ A locally plausible operation does not validate contradictory surrounding edges.
 For consequential details established by the registered sources within the
 assigned coverage, inspect the actual State/Operation/Flow assertions, not only
 their evidence quotations. A quotation containing a fact does not mean the graph
-records it. Check input/output preparation, identity carrier, capture basis,
+records it. For each Operation, check the FIELD OWNERSHIP definitions against
+the sources and its actual inputs/outputs. Request revision when a generic action
+hides an available physical explanation, or source-reading/grouping commentary
+stands in for the scientific account. For information_effect, verify the named
+distinction, its carrier, its condition-specific applicability and any necessary
+interpretation dependency; plausible assay-level wording alone is insufficient.
+Check input/output preparation, identity carrier, capture basis,
 read assignment and interfaces when they explain a retained transformation or
 the scoped endpoint. A composite operation may preserve the needed fact without
 new nodes. Do not harvest every protocol detail: identify why an omission affects

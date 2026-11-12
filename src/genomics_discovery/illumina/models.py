@@ -74,14 +74,20 @@ class Operation(StrictModel):
         "Reuse a source caption when it conveys that action accurately; otherwise retain "
         "literal wording in Evidence/Correction. Do not invent hidden suboperations.")
     description: Text = Field(description=
-        "What changes or is inspected at schematic scope. Do not expand routine execution details.")
+        "What is done to the input and what changes in material or data, or is inspected, at schematic scope. "
+        "Name the supported change rather than a generic processing action. Source comparisons "
+        "and extraction decisions belong in evidence/corrections, not this explanation.")
     inputs: tuple[Text, ...]
     outputs: tuple[Text, ...]
     mechanism: Text | None = Field(default=None, description=
-        "Only a source-supported mechanism, not an inferred enzyme or invented chemical recipe.")
+        "How the transformation, selection or inspection works, with source-supported interactions, "
+        "reagent roles or computational rules as applicable. Explain it directly; do not invent "
+        "an enzyme, chemical recipe or analysis procedure.")
     information_effect: Text | None = Field(default=None, description=
-        "What association or information is introduced, retained or lost and its physical carrier, "
-        "when supported. The biological analyte need not be the molecule sequenced.")
+        "The specific distinction introduced, retained or lost in these outputs, its material/data "
+        "carrier, and what that permits the measurement to establish. Qualify by actual input "
+        "condition and distinguish the recorded feature from interpretation requiring later "
+        "comparison or inference. Null if no distinct supported effect; analyte and reporter may differ.")
     evidence: EvidenceSet
 
 

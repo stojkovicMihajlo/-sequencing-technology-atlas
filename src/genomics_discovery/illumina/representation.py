@@ -379,6 +379,10 @@ Operation merely to fill a requirement. A source-supported broad boundary is val
    is introduced, changed or removed, identify the actual carrier: sequence,
    barcode, molecular association, chemical mark or sample metadata. Distinguish
    physical measurement from inference and preserve the required attribution.
+   Record that consequential unit/carrier/association in an attribution property
+   at the boundary where it is introduced or changed, not solely in Operation
+   prose or evidence. This is not a fixed property count or a requirement to
+   restate unchanged attribution at every boundary.
    Existing Flows and producing Operations can supply unchanged history; do not
    copy the entire assay explanation into every State.
 Every factual assertion needs source support. A consequential fact absent from

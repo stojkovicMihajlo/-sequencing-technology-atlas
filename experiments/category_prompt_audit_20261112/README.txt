@@ -1,3 +1,5 @@
+CURRENT DECISION (12 November): User stopped the compact experiment. Use the full harness with focused explanation/information_effect refinements. See RESULTS.txt, full_contract_plan.json and full_contract_submission.json. The original experiment below and its immutable runtime/results are retained for comparison, not the active production default.
+
 CATEGORY AUDIT AND AUTHOR-PROMPT SIMPLIFICATION — 12 November 2026
 
 Start here. selection.json names the 20 methods and pins the inventory. The
