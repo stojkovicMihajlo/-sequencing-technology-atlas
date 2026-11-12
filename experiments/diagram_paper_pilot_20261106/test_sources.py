@@ -109,7 +109,7 @@ def test_selection_is_exactly_ten_distinct_curated_methods():
     assert len(run.validate_selection(selection)) == 10
 
 
-@pytest.mark.parametrize('independent_hold', [False, True, 'source_hold'])
+@pytest.mark.parametrize('independent_hold', [False, True, 'source_hold', 'intervention', 'correction'])
 def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
         acquired, tmp_path, monkeypatch, independent_hold):
     from tests.illumina import test_illumina_batch_controls as transport
@@ -124,6 +124,8 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
 
     def typed_factory(sources, *, revised=False):
         raw = copy.deepcopy(legacy)
+        if revised:
+            raw['operations'][0]['description'] = 'Corrected capture description'
         raw['format_version'] = 'illumina_diagram/1.1'
         for state in raw['states']:
             state['properties'] = [dict(id='identity', subject='self', property='identity',
@@ -153,7 +155,7 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
             put(attempt / 'artifact.json', artifact)
             return result
 
-    worker = Worker()
+    worker = Worker(request_correction=independent_hold == 'correction')
     monkeypatch.setattr(run, 'CodexWorker', lambda **_: worker)
     # Source-adapter admission has separate negative tests above. This test uses
     # a synthetic registered bundle and exercises the real remaining pipeline.
@@ -161,18 +163,36 @@ def test_new_runner_extracts_reviews_and_publishes_through_actual_graph_gate(
     if independent_hold is True:
         bundles.append(({**card, 'record_id': 'other'}, registry, images))
     monkeypatch.setattr(run, 'prepare', lambda *_: bundles)
-    if independent_hold == 'source_hold':
+    if independent_hold in ('source_hold', 'intervention'):
         held_card = {**card, 'record_id': 'missing'}
         held = {'missing': {'record_id': 'missing', 'status': 'source_recovery_needed',
                             'reason': 'Synthetic missing primary paper'}}
-        monkeypatch.setattr(run, 'prepare_independently', lambda *_: (bundles, held, [card, held_card]))
+        if independent_hold == 'source_hold':
+            monkeypatch.setattr(run, 'prepare_independently', lambda *_: (bundles, held, [card, held_card]))
+        else:
+            bundles.append((held_card, registry, images))
     monkeypatch.setenv('SLURM_JOB_ID', 'fake-runner-publication-test')
     selection = tmp_path / 'selection.json'
-    put(selection, {'methods': [{'method_id': 'example', 'primary_paper_id': 'pmid-1'}],
+    put(selection, {'methods': [{'method_id': 'example', 'primary_paper_id': 'pmid-1'}] +
+                   ([{'method_id': 'missing'}] if independent_hold == 'intervention' else []),
                     'reason_for_fresh_extraction': 'Synthetic software integration test'})
     output = tmp_path / 'pilot'
     asyncio.run(run.execute(source_root, source_root, selection, output, 1,
-                           isolate_source_failures=independent_hold == 'source_hold'))
+                           isolate_source_failures=independent_hold == 'source_hold',
+                           max_revisions=2 if independent_hold == 'correction' else 0,
+                           intervention_holds={'missing': {'reason': 'Recorded provider block',
+                               'evidence': 'Synthetic archived error'}} if independent_hold == 'intervention' else None))
+    if independent_hold == 'correction':
+        assert [c['role'] for c in worker.calls] == ['author', 'reviewer', 'author', 'reviewer']
+        assert run.read(output / 'state.json')['policy']['max_revisions'] == 2
+        assert run.read(output / 'RESULT.json')['all_supported'] is True
+        assert run.read(output / 'atlas.json')['cards']['example']['admission'] == 'supported'
+        return
+    if independent_hold == 'intervention':
+        assert [c['role'] for c in worker.calls] == ['author', 'reviewer']
+        assert run.read(output / 'RESULT.json')['counts'] == {'supported': 1, 'intervention_required': 1}
+        assert run.read(output / 'RESULT.json')['execution_complete'] is True
+        return
     if independent_hold == 'source_hold':
         report = run.read(output / 'RESULT.json')
         assert report['counts'] == {'supported': 1, 'source_recovery_needed': 1}

@@ -49,6 +49,11 @@ support level in Evidence; removing "the paper reports" must never strengthen
 a claim. Keep consequential unresolved questions in Unknown as well as any
 qualification needed to read the affected field correctly. Do not suppress
 available scientific detail merely to shorten the text.
+Express qualifications directly: "This interaction may reduce sequence bias;
+the magnitude is unquantified" rather than "The paper describes a reduction."
+This is a wording example, not an additional scientific claim to import. A
+barcode's role belongs in the explanation; that it is "reported" belongs in
+Evidence. Do not replace a specific carrier or mechanism with a generic summary.
 """
 
 

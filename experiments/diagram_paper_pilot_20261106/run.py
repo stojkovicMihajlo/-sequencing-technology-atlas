@@ -194,7 +194,7 @@ def prepare(library, vault, selection):
     return [prepare_method(paths[r['method_id']], vault, r) for r in rows]
 
 
-def prepare_independently(library, vault, selection):
+def prepare_independently(library, vault, selection, *, primary_overrides=None):
     """Keep every selected identity; isolate unavailable or invalid source bundles."""
     rows = validate_selection(selection)
     selected = {r['method_id'] for r in rows}
@@ -224,7 +224,8 @@ def prepare_independently(library, vault, selection):
         try:
             if ident not in paths:
                 raise SourceUnavailable('Missing curated source package: ' + ident)
-            bundle = prepare_method(paths[ident], vault, row)
+            bundle = prepare_method(paths[ident], vault, row,
+                primary_overrides=(primary_overrides or {}).get(ident))
             card = bundle[0]
             bundles.append(bundle)
         except Exception as exc:
@@ -243,17 +244,29 @@ class PilotIssue(RuntimeError):
 
 async def execute(library, vault, selection_path, output, workers, *, additions_path=None,
                   resume_authors=None, stop_on_first_issue=False,
-                  isolate_source_failures=False, reuse_reviewed_holds=False):
+                  isolate_source_failures=False, reuse_reviewed_holds=False,
+                  max_revisions=0, intervention_holds=None, primary_overrides=None):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Native extraction requires a Sherlock Slurm allocation')
     if not 1 <= workers <= 10:
         raise ValueError('Select 1-10 explicit concurrent method workers')
+    if not 0 <= max_revisions <= 2:
+        raise ValueError('Select 0-2 correction rounds, each followed by fresh review')
     output.mkdir(parents=True, exist_ok=False)
     selection = read(selection_path)
+    intervention_holds = intervention_holds or {}
+    if set(intervention_holds) - {m['method_id'] for m in selection['methods']}:
+        raise ValueError('An intervention hold names an unselected method')
+    if any(not h.get('reason') or not h.get('evidence') for h in intervention_holds.values()):
+        raise ValueError('Intervention holds require reasons and evidence')
+    if any(h.get('status', 'intervention_required') not in {'intervention_required', 'source_recovery_needed'}
+           for h in intervention_holds.values()):
+        raise ValueError('A preflight hold cannot assign scientific acceptance or a model review verdict')
     write(output / 'selection.json', selection)
     try:
         if isolate_source_failures:
-            bundles, source_holds, cards = prepare_independently(library.resolve(), vault.resolve(), selection)
+            options = {'primary_overrides': primary_overrides} if primary_overrides else {}
+            bundles, source_holds, cards = prepare_independently(library.resolve(), vault.resolve(), selection, **options)
         else:
             bundles = prepare(library.resolve(), vault.resolve(), selection)
             source_holds, cards = {}, [c for c, _, _ in bundles]
@@ -314,7 +327,7 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
     inventory = output / 'inventory.json'
     write(inventory, {'cards': cards})
     policy = {'model': 'gpt-6.1-sol', 'effort': 'xhigh', 'workers': workers,
-              'max_revisions': 0, 'stop_on_first_issue': stop_on_first_issue, 'representation_version': 'illumina_diagram/1.1',
+              'max_revisions': max_revisions, 'stop_on_first_issue': stop_on_first_issue, 'representation_version': 'illumina_diagram/1.1',
               'inventory_sha256': sha(inventory), 'record_ids': [c['record_id'] for c in cards],
               'library': str(library.resolve()), 'vault': str(vault.resolve()),
               'selection_sha256': sha(selection_path), 'prior_extractions_used_as_evidence': False}
@@ -324,6 +337,10 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
                                       'status': 'pending'} for c in cards}}
     state['cards'].update(completed)
     state['cards'].update(source_holds)
+    for ident, hold in intervention_holds.items():
+        state['cards'][ident].update(status=hold.get('status', 'intervention_required'),
+            failure_category=hold.get('failure_category', 'manual_intervention'),
+            reason=hold['reason'], intervention_evidence=hold['evidence'])
     checkpoint(output, state, cards)
     worker = CodexWorker(model=policy['model'], effort=policy['effort'], timeout_seconds=None,
                          web_search=False, network_access=False, pin_shell_environment=True)
@@ -338,7 +355,7 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
             checkpoint(output, state, cards)
             try:
                 row.update(await extract_registered_workflow(card, registry, images, directory, worker,
-                    max_revisions=0, representation='illumina_diagram/1.1', author_seed=seeds.get(ident)))
+                    max_revisions=max_revisions, representation='illumina_diagram/1.1', author_seed=seeds.get(ident)))
             except asyncio.CancelledError:
                 row.update(status='interrupted', reason='Pilot stopped after another method exposed an issue',
                            finished_at=now())
@@ -351,7 +368,8 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
             checkpoint(output, state, cards)
             if stop_on_first_issue and row['status'] != 'supported':
                 raise PilotIssue(ident + ': ' + row.get('reason', row['status']))
-    tasks = [asyncio.create_task(one(*bundle)) for bundle in bundles if bundle[0]['record_id'] not in completed]
+    tasks = [asyncio.create_task(one(*bundle)) for bundle in bundles
+             if bundle[0]['record_id'] not in completed and bundle[0]['record_id'] not in intervention_holds]
     stop_reason = None
     try:
         await asyncio.gather(*tasks)
@@ -396,6 +414,7 @@ if __name__ == '__main__':
     for name in ('library', 'vault', 'selection', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--workers', type=int, default=4)
+    parser.add_argument('--max-revisions', type=int, choices=range(3), default=0)
     parser.add_argument('--additions', type=Path)
     parser.add_argument('--resume-authors', type=Path)
     parser.add_argument('--stop-on-first-issue', action='store_true',
@@ -406,5 +425,6 @@ if __name__ == '__main__':
     report = asyncio.run(execute(args.library, args.vault, args.selection, args.output, args.workers,
         additions_path=args.additions, resume_authors=args.resume_authors,
         stop_on_first_issue=args.stop_on_first_issue,
-        isolate_source_failures=args.isolate_source_failures, reuse_reviewed_holds=args.reuse_reviewed_holds))
+        isolate_source_failures=args.isolate_source_failures, reuse_reviewed_holds=args.reuse_reviewed_holds,
+        max_revisions=args.max_revisions))
     raise SystemExit(completion_exit_code(report))

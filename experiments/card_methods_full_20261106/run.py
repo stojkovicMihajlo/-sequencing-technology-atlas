@@ -77,11 +77,17 @@ def combine_prior_runs(runs, output):
         'meaning': 'Later explicitly selected run replaces an earlier row; all attempts remain at original paths.'})
 
 
-async def execute(library, vault, scope_csv, pilot_selection, prior_runs, additions, output, workers):
+async def execute(library, vault, scope_csv, pilot_selection, prior_runs, additions, output, workers,
+                  *, max_revisions=2, fresh=False, intervention_holds=None, primary_overrides=None):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Full extraction preparation and execution require a Sherlock Slurm allocation')
     output.mkdir(parents=True, exist_ok=False)
     selection = build_selection(library, scope_csv, pilot_selection)
+    if fresh:
+        selection['reason_for_fresh_extraction'] = (
+            'User requests all distinct website-card methods with the updated explanation '
+            'contract and automatic correction followed by independent review. '
+            'Previous artifacts remain unchanged; none is reused as a new extraction.')
     if len(selection['methods']) != 174 or selection['source_card_count'] != 154:
         raise ValueError('Current reviewed scope must be 174 distinct named methods from154 cards')
     selection_path = output / 'selected.json'
@@ -89,8 +95,9 @@ async def execute(library, vault, scope_csv, pilot_selection, prior_runs, additi
     prior_index = output / 'prior_index'
     combine_prior_runs(prior_runs, prior_index)
     report = await engine.execute(library, vault, selection_path, output / 'extraction', workers,
-        additions_path=additions, resume_authors=prior_index, stop_on_first_issue=False,
-        isolate_source_failures=True, reuse_reviewed_holds=True)
+        additions_path=additions, resume_authors=None if fresh else prior_index, stop_on_first_issue=False,
+        isolate_source_failures=True, reuse_reviewed_holds=not fresh, max_revisions=max_revisions,
+        intervention_holds=intervention_holds, primary_overrides=primary_overrides)
     state = engine.read(output / 'extraction/state.json')
     engine.write(output / 'ISSUES.json', {'methods': [
         {'method_id': ident, **{k: row[k] for k in ('status', 'failure_category', 'reason',
@@ -107,7 +114,14 @@ if __name__ == '__main__':
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--prior-run', action='append', type=Path, required=True)
     parser.add_argument('--workers', type=int, default=10)
+    parser.add_argument('--max-revisions', type=int, choices=range(3), default=2)
+    parser.add_argument('--fresh', action='store_true', help='Record prior outcomes but do not reuse model outputs.')
+    parser.add_argument('--intervention-holds', type=Path)
+    parser.add_argument('--primary-overrides', type=Path)
     args = parser.parse_args()
     result = asyncio.run(execute(args.library, args.vault, args.scope, args.pilot_selection,
-        args.prior_run, args.additions, args.output, args.workers))
+        args.prior_run, args.additions, args.output, args.workers,
+        max_revisions=args.max_revisions, fresh=args.fresh,
+        intervention_holds=engine.read(args.intervention_holds) if args.intervention_holds else None,
+        primary_overrides=engine.read(args.primary_overrides) if args.primary_overrides else None))
     raise SystemExit(engine.completion_exit_code(result))
