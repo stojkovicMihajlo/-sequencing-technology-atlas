@@ -52,6 +52,7 @@ Find the exact original publication and the specific supplemental/procedural evi
 The request contains the unchanged assigned paper identity, old reviewer requests, available source paths, and failed acquisition receipts. Read relevant existing paper passages to understand which document is actually needed. Equivalent requests from several methods assigned the same paper share this investigation; preserve their scopes.
 Use public web search, publisher pages, official institutional/author repositories and article-linked supplements. Search beyond Europe PMC. A PDF parent can have supplements linked from its publisher HTML page. Prefer direct original PDF/XML/HTML URLs; use their actual observed links, never guessed filenames. Record every search and failures.
 For each candidate, give its URL, format, role, publication PMID/DOI/title, and rationale tying it to the precise request. For a supplement, linked_from must be the paper's citation-bearing page that actually links the candidate. A DOI on a landing page alone does not establish readable full text. An abstract, review, later protocol variant or similarly named assay is not a replacement for the assigned paper.
+Public author/institutional mirrors can be useful. If no parent hyperlink is observed, a PDF explicitly headed Supplementary Materials/Information for the exact parent title with its DOI/PMID on the cover can be proposed as supplement with linked_from=null; the host verifies that document-declared association against registered parent evidence, without claiming publisher delivery or completeness. Do not guess attachment association. DOC/DOCX and publication-bound BioStudies files may also be proposed. A cited protocol needs its own identity and the actual parent procedural citation. Distinguish a missing document from a genuine catalogue/focal-implementation discrepancy; more downloads alone do not resolve applicability.
 Missing primary: locate that exact paper. Existing primary: inspect the relevant Methods/figure/supplement descriptions, then locate the needed attachment. If a cited dependency is essential, include it as cited_protocol with its own identity and the actual citation link; the host will hold it for explicit dependency registration.
 For catalogue/primary discrepancies, identify which implementation each source describes. Do not invent pooling, routing, chemistry or missing operations to reconcile them. If existing evidence already addresses a request, record the exact source path/block and brief passage in a Search.note for human adjudication; do not label the graph accepted.
 You may read the supplied source files and use web tools. Do not write scripts, publication text, extracted workflows or source registries. The host downloads original bytes, converts them and validates identity. Do not download documents yourself. No subagents, SSH, scheduler commands, credentials, paywall/captcha workarounds, or reads of unrelated projects.
@@ -59,11 +60,11 @@ Never retry or rephrase a provider refusal. Record an unavailable/access_limited
 '''
 
 
-async def run(snapshot_path, library, vault, output, *, workers=4, selected=None):
+async def run(snapshot_path, library, vault, output, *, workers=4, selected=None, on_recovered=None):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('Run native investigation inside the Qiu Slurm allocation')
-    if not 1 <= workers <= 10:
-        raise ValueError('Use 1–10 bounded concurrent source investigations')
+    if not 1 <= workers <= 50:
+        raise ValueError('Use 1–50 bounded concurrent source investigations')
     snapshot = read(snapshot_path); snapshot_hash = sha(snapshot_path)
     selected_groups = groups(snapshot, selected)
     output.mkdir(parents=True, exist_ok=False)
@@ -101,6 +102,7 @@ async def run(snapshot_path, library, vault, output, *, workers=4, selected=None
                 verify_registry_files(registry)
                 write(attempt / 'source_registry.json', registry)
                 write(attempt / 'request.json', {'cases': requests,
+                    'observed_source_leads': [lead for lead in snapshot.get('observed_source_leads', []) if lead.get('paper_id') == pid],
                     'available_sources': {k: {f: v.get(f) for f in ('title','path','url','content_level','custody_files')} for k,v in registry.items()},
                     'source_reader': shlex.join([sys.executable, '-m', 'genomics_discovery.illumina.extraction', 'source', '--registry', str(attempt / 'source_registry.json')])})
                 write(attempt / 'schema.json', strict_schema(Findings.model_json_schema()))
@@ -121,13 +123,16 @@ async def run(snapshot_path, library, vault, output, *, workers=4, selected=None
                 documents = []
                 primary_found = None
                 extra = {}
-                for doc in findings.documents:
+                registration_parents = dict(registry)
+                for doc in sorted(findings.documents, key=lambda d: d.role != 'primary_paper'):
                     try:
-                        source = await asyncio.to_thread(register, doc, cases[0]['paper'], folder / 'documents' / doc.id)
-                        sid = 'paper:' + pid.removeprefix('pmid-') if doc.role == 'primary_paper' else 'supplement:' + pid.removeprefix('pmid-') + ':' + sha(Path(source['path']))[:16]
+                        source = await asyncio.to_thread(register, doc, cases[0]['paper'], folder / 'documents' / doc.id, parent_sources=registration_parents)
+                        prefix = 'protocol' if doc.role == 'cited_protocol' else 'supplement'
+                        sid = 'paper:' + pid.removeprefix('pmid-') if doc.role == 'primary_paper' else prefix + ':' + pid.removeprefix('pmid-') + ':' + sha(Path(source['path']))[:16]
                         if doc.role == 'primary_paper':
                             # Preserve one rendition per exact primary; additional copies remain originals.
                             if primary_found is None: primary_found = source
+                            registration_parents['recovered-primary:' + doc.id] = source
                         else: extra[sid] = source
                         documents.append({'id': doc.id, 'status': 'registered_for_fresh_review', 'source_id': sid})
                     except Exception as exc:
@@ -136,14 +141,28 @@ async def run(snapshot_path, library, vault, output, *, workers=4, selected=None
                     mid = case['selection']['method_id']
                     if primary_found and case['hold']['failure_category'] == 'evidence_recovery_failed':
                         overrides[mid] = {pid: primary_found}
+                    elif primary_found:
+                        extra['paper:' + pid.removeprefix('pmid-') + ':recovered:' + sha(Path(primary_found['path']))[:16]] = primary_found
                     if extra: additions[mid] = {**existing.get(mid, {}), **extra}
                 states[pid] = {'status': 'sources_recovered_need_review' if extra or primary_found else 'investigated_still_held',
                     'methods': mids, 'documents': documents, 'scientific_gaps_resolved': False,
-                    'findings': str(folder / 'findings.json')}
+                    'findings': str(folder / 'findings.json'), 'usage': result.usage,
+                    'elapsed_seconds': result.elapsed_seconds}
             except Exception as exc:
                 states[pid] = {'status': 'investigation_failed', 'methods': mids, 'reason': f'{type(exc).__name__}: {exc}'}
             checkpoint()
             print(pid + ': ' + states[pid]['status'], flush=True)
+            # One bounded handoff after completed source investigation. This is
+            # not a polling supervisor or a retry loop. Keep retrieval outcomes
+            # intact if extraction subsequently fails.
+            if on_recovered is not None:
+                try:
+                    states[pid]['extraction'] = await on_recovered(pid, cases,
+                        {m: additions.get(m, {}) for m in mids},
+                        {m: overrides.get(m, {}) for m in mids}, states[pid])
+                except Exception as exc:
+                    states[pid]['extraction'] = {'status': 'handoff_failed', 'reason': f'{type(exc).__name__}: {exc}'}
+                checkpoint()
 
     def checkpoint():
         write(output / 'state.json', {'publications': states, 'counts': dict(Counter(x['status'] for x in states.values())), 'scientific_resolution': False})

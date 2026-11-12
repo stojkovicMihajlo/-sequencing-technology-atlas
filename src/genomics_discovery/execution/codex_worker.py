@@ -275,11 +275,19 @@ def classify_archived_terminal_failure(attempt_dir: Path) -> dict[str, Any]:
         if not isinstance(error, dict) or not isinstance(error.get("message"), str):
             diagnosis["basis"] = "invalid_terminal_error"
             return diagnosis
-        # This exact uncoded message is pinned from CLI 0.163.0. Other provider
+        # Exact uncoded messages observed from CLI 0.163.0. Other provider
         # codes/phrases (including quota/auth/output errors) are not inferred.
+        # A policy block is a stop decision, never a trigger to alter/retry input.
         observed_capacity = ("code" not in error and error["message"] ==
             "Selected model is at capacity. Please try a different model.")
-        diagnosis.update(category="provider_capacity" if observed_capacity else "unknown",
+        observed_biological_block = ("code" not in error and error["message"] ==
+            "This content was flagged for possible biological risk. If this seems wrong, "
+            "try rephrasing your request. We are continuously refining our work in detecting "
+            "biological risk, and you can read more about our approach in our blog post: "
+            "https://openai.com/index/preparing-for-future-ai-capabilities-in-biology")
+        category = ("provider_biological_risk_block" if observed_biological_block else
+                    "provider_capacity" if observed_capacity else "unknown")
+        diagnosis.update(category=category,
                          basis="terminal_error_record")
     except (OSError, ValueError, UnicodeDecodeError):
         diagnosis["basis"] = "unreadable_or_invalid_archive"

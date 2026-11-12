@@ -1,0 +1,39 @@
+{
+  "record_id": "maine-seq",
+  "job_id": "52055656",
+  "diagnostic_class": "provider_biological_risk_block",
+  "attempt_directory": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/card_methods_full_20261112/release_03/run_02/extraction/cards/maine-seq/attempt_001/attempts/001_author",
+  "process_exit_code": 1,
+  "elapsed_seconds": 398.50724517399794,
+  "terminal_event": {
+    "file": "events.jsonl",
+    "line": 37,
+    "type": "turn.failed",
+    "error_pointer": "/error/message",
+    "message_summary": "Provider flagged the content for possible biological risk."
+  },
+  "preceding_error_event": {
+    "file": "events.jsonl",
+    "line": 36,
+    "type": "error"
+  },
+  "archive_sha256": {
+    "result.json": "f83c8491177c52ae89a5b4a29e1c39addf85bb0af3dec7f8ed02d399dbc80a29",
+    "events.jsonl": "008abaf1143c389c0cb146aec195b16806a3deadeeb130a593b8074b3b9802cc",
+    "stderr.log": "3e75d28a6681c31400a3f0fcb564c7613fd42796fb83294e4d53fea86bcbd401",
+    "prompt.txt": "c1c1c0508fe99cea1816222db8f8aecf381a7c0ac924ffe50e59538541128927",
+    "schema.json": "1ace7b574958fb8b7fee9513da9020d2949bad89d93f7e32de486fec332e7a7e"
+  },
+  "author_artifact_present": false,
+  "final_text_bytes": 0,
+  "reviewer_started": false,
+  "eligible_for_retry": false,
+  "eligible_for_author_reuse": false,
+  "requires_intervention": true,
+  "required_dispatch_handling": "Exclude from all automatic retry/rephrasing/model-routing/source-enlargement runs. Preserve originals. Source acquisition does not authorize replaying blocked content.",
+  "software_issue": "The generic native_execution wrapper hid the explicit provider stop cause in top-level state. New development code records a typed nonaccepting terminal diagnostic and provider_biological_risk_block failure_category.",
+  "active_runtime_or_outputs_changed": false,
+  "new_model_calls": 0,
+  "test_status": "80 targeted software tests passed; no model calls",
+  "test_command": ".venv/bin/python -m pytest -p asyncio -q tests/illumina/test_provider_block.py tests/execution/test_codex_terminal_failure_diagnostics.py tests/illumina/test_illumina_batch_controls.py"
+}

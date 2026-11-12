@@ -1,0 +1,35 @@
+EpiRADSeq metadata-key failure
+
+Observed job:52055656, release_03, run_02/extraction/cards/epiradseq/attempt_001.
+The attempt contains card.json, source_registry.json and an author-stage schema
+and diagram, but no author prompt/events. No native model call was reached.
+The registered external primary article has doi=["10.1111/2041-210X.12435"].
+
+Cause
+registered_text_groups() built a tuple of pmid/doi/url/title/content_level and
+used it in a dictionary key. A list-valued DOI makes that key unhashable.
+The defect occurs while constructing duplicate_text_registrations for the model
+context. It is a source-metadata handling bug, not a scientific extraction error
+or evidence that the method lacks sources.
+
+Correction
+Encode the exact selected JSON metadata as a canonical JSON string before using
+it in the grouping key. Keep the original text hash and all source registrations.
+Do not rewrite the registry, coerce a DOI list to one identifier, equate a scalar
+with a singleton list, or relax scientific admission. This grouping reduces
+duplicate retrieval output; it does not merge publication or method identities.
+Existing frozen runtime and failed attempt remain unchanged. Retry under a newly
+pinned runtime/attempt, with the same source bundle and normal independent review.
+
+Validation
+The previous function reproduces TypeError: unhashable type: 'list' on this DOI
+shape; the corrected function returns the registered paper as a valid group.
+New tests cover unchanged list metadata, identical duplicates, scalar/list
+distinctions, different/multiple DOI values, structured title metadata and changes
+in text/evidence level. Metadata are not mutated.
+46 targeted source-query, author-resume and review-control tests passed locally
+with PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 and pytest-asyncio enabled. The first test
+invocation timed out reading an offloaded environment RECORD during plugin
+auto-discovery, before test execution; disabling unrelated plugin autoload
+resolved that environmental test-startup problem.
+This establishes a software fix, not a successful new EpiRADSeq extraction.

@@ -60,3 +60,30 @@ def test_distinct_evidence_is_never_collapsed_due_to_a_matching_title_or_text(ch
     base = {'kind': 'text', 'pmid': '123', 'title': 'An assay',
         'content_level': 'fulltext', 'text': 'RNA capture is described.'}
     assert registered_text_groups({'a': base, 'b': {**base, **changed}}) == [['a'], ['b']]
+
+
+def test_list_doi_registration_is_hashable_without_rewriting_its_metadata():
+    # The EpiRADSeq source bundle used this list-valued DOI and failed before
+    # writing the author prompt. This retrieval grouping must accept JSON values.
+    base = {'kind': 'text', 'pmid': None, 'doi': ['10.1111/2041-210X.12435'],
+        'title': 'EpiRADseq: scalable analysis of genomewide patterns of methylation using next-generation sequencing',
+        'url': 'http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12435/abstract',
+        'content_level': 'fulltext', 'text': 'Registered protocol text.'}
+    registry = {'paper': base, 'duplicate': {**base, 'association_status': 'another depiction'}}
+    original = json.dumps(registry, sort_keys=True)
+    assert registered_text_groups(registry) == [['paper', 'duplicate']]
+    assert json.dumps(registry, sort_keys=True) == original
+
+
+@pytest.mark.parametrize('changed', [
+    {'doi': '10.1111/2041-210X.12435'},
+    {'doi': ['10.1111/2041-210X.99999']},
+    {'doi': ['10.1111/2041-210X.12435', '10.1111/2041-210X.99999']},
+    {'title': ['An assay']},
+    {'content_level': 'abstract'},
+    {'text': 'Different registered protocol text.'},
+])
+def test_structured_metadata_does_not_conflate_different_registration_values(changed):
+    base = {'kind': 'text', 'doi': ['10.1111/2041-210X.12435'],
+        'title': 'An assay', 'content_level': 'fulltext', 'text': 'Registered protocol text.'}
+    assert registered_text_groups({'a': base, 'b': {**base, **changed}}) == [['a'], ['b']]

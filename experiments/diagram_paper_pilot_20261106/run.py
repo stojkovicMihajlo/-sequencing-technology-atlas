@@ -53,6 +53,13 @@ def validate_selection(selection):
     return rows
 
 
+def dependency_reference(ident, source_id, source):
+    """A recovered DOI-only protocol still has a directly addressable source."""
+    publication = str(source.get('pmid') or source_id)
+    return {'reference_id': ident + ':dependency:' + publication,
+            'source_id': source_id, 'role': 'recovered', 'pmid': source.get('pmid')}
+
+
 class SourceUnavailable(ValueError):
     """A required source is unavailable; preserve the method for source recovery."""
 
@@ -282,8 +289,7 @@ async def execute(library, vault, selection_path, output, workers, *, additions_
                     raise ValueError('Dependency must be a distinct registered full-text source')
                 registry[sid] = source
                 if source.get('document_role') != 'supplement':
-                    card['references'].append({'reference_id': ident + ':dependency:' + source['pmid'],
-                                              'role': 'recovered', 'pmid': source['pmid']})
+                    card['references'].append(dependency_reference(ident, sid, source))
             verify_registry_files(registry)
             if resume_authors is None:
                 continue

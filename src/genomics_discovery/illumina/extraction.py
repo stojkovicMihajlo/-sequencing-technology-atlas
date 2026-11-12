@@ -22,7 +22,9 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-from genomics_discovery.execution.codex_worker import CodexWorker, assess_archived_attempt
+from genomics_discovery.execution.codex_worker import (
+    CodexWorker, assess_archived_attempt, classify_archived_terminal_failure,
+)
 from genomics_discovery.illumina.models import (
     DiagramExtraction,
     DiagramReview,
@@ -426,7 +428,12 @@ def registered_text_groups(registry):
     for sid, row in registry.items():
         if row.get("kind") != "text":
             continue
-        identity = tuple(row.get(k) for k in ("pmid", "doi", "url", "title", "content_level"))
+        # Source registries contain JSON metadata, including list-valued DOIs.
+        # Preserve that structure exactly rather than coercing identifiers or
+        # putting potentially unhashable containers directly in a dictionary key.
+        identity = json.dumps({k: row.get(k) for k in
+            ("pmid", "doi", "url", "title", "content_level")},
+            sort_keys=True, ensure_ascii=False, separators=(",", ":"))
         identified = row.get("pmid") or row.get("doi") or (row.get("url") and row.get("title"))
         text_pin = hashlib.sha256(row.get("text", "").encode()).hexdigest()
         key = (identity, text_pin) if identified and row.get("text") else (sid,)
@@ -628,6 +635,11 @@ async def extract_registered_workflow(card, registry, images, directory, worker,
             result = await worker.run(prompt, attempt, image_paths=paths)
             assessment = assess_archived_attempt(attempt)
             if not assessment.complete or result.exit_code != 0 or result.error:
+                diagnostic = classify_archived_terminal_failure(attempt)
+                entry["terminal_failure"] = diagnostic
+                if diagnostic["category"] == "provider_biological_risk_block":
+                    raise StageFailure("provider_biological_risk_block",
+                        "Native stage blocked by provider policy; retain the archive and do not retry or rephrase")
                 raise StageFailure("native_execution", "Native stage failed: " + str(assessment.error or result.error))
             if result.thread_id != assessment.thread_id or result.usage != assessment.usage:
                 raise ValueError("Worker result disagrees with archived native transport")
