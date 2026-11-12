@@ -20,7 +20,7 @@ def evidence_union(items):
 class ChangeClaim(Record):
     id: str
     reference_id: str
-    contributor: str
+    contributor: str = Field(description='Name the specific contribution of the cited work relevant to this claim: a mechanism, reagent design, analysis rule, linked procedure or assay strategy. For documented_reuse, identify what the later assay actually uses; a paper title or generic similarity is insufficient.')
     contributor_kind: Literal['assay', 'experimental_component', 'general_method', 'other']
     relation: Literal['documented_reuse', 'mechanistic_precedent', 'comparison', 'background', 'no_established_relation']
     citation_context: str
@@ -70,7 +70,7 @@ class ChangeCheck(Record):
     decision: Literal['accept', 'revise', 'needs_evidence', 'reject']
     factual_assessment: str = Field(min_length=1, description='Check the compared feature, before, after and retained features against both papers.')
     workflow_assessment: str = Field(min_length=1, description='Check the exact State/Operation/Flow/property locations and consequential interfaces.')
-    evidence_assessment: str = Field(min_length=1, description='Distinguish source support for facts from actual historical attribution; a real quote alone is insufficient.')
+    evidence_assessment: str = Field(min_length=1, description='Verify what the later assay actually uses from the cited contribution and how the later paper establishes that use. Distinguish inheritance from comparison or mechanistic precedent. Shared features and a real quotation alone do not establish inheritance; do not expand component reuse into adoption of the whole earlier assay.')
     consequence_assessment: str = Field(min_length=1, description='Check improvement/change, comparator, context, causal scope, trade-offs and unknowns; no reported gain is allowed.')
     evidence: list[Evidence] = Field(min_length=1)
 

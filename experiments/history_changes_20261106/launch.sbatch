@@ -69,9 +69,14 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 "$ATLAS_ENV_DIR/bin/python" -m pytest -p asynci
     experiments/pilot50_20261104/test_history_stage.py \
     experiments/history_changes_20261106/test_history_changes.py \
     --junitxml="$ATLAS_HISTORY_ROOT/software_${SLURM_JOB_ID}.xml"
+history_options=()
+if [[ "${ATLAS_HISTORY_CITATION_ONLY:-0}" == "1" ]]; then
+    history_options+=(--citation-only)
+fi
 "$ATLAS_ENV_DIR/bin/python" -m experiments.history_changes_20261106.run \
     --batch "$ATLAS_HISTORY_BATCH" \
     --library "$ATLAS_PROJECT_ROOT/technology_sources/illumina_library_20261105_07" \
     --vault "$ATLAS_PROJECT_ROOT/technology_sources/illumina_task2_sources_20261105_08" \
     --runtime "$ATLAS_REPOSITORY" --output "$ATLAS_HISTORY_ROOT/$ATLAS_HISTORY_OUTPUT" \
-    --selection "$ATLAS_HISTORY_SELECTION" --workers "${ATLAS_HISTORY_WORKERS:-4}"
+    --selection "$ATLAS_HISTORY_SELECTION" --workers "${ATLAS_HISTORY_WORKERS:-4}" \
+    "${history_options[@]}"

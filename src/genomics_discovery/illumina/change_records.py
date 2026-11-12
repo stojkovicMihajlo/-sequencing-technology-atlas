@@ -98,7 +98,7 @@ class ExperimentalChange(Record):
     compared_feature: str = Field(min_length=1, description='Identify the experimental feature being compared; not a vague benefit such as better library preparation.')
     before: str | None = Field(description='The specified earlier implementation at this feature; null if the earlier evidence is unavailable.')
     after: str = Field(min_length=1, description='What the later implementation does at the same feature, including consequential material/mechanism/placement distinctions.')
-    retained: list[str] = Field(description='Concrete relevant features established as retained across these implementations; no generic same backbone assertion.')
+    retained: list[str] = Field(description='Features retained within the specific contribution being compared, when needed to delimit what is adopted or changed. Do not inventory everything the assays share. Shared features alone do not establish inheritance. Empty is allowed when no such feature is established.')
     workflow_locations: WorkflowLocations
     evidence: ChangeEvidence
     consequence_and_limits: ConsequenceAndLimits
@@ -188,6 +188,10 @@ For every scoped contribution, fill the supplied compared_feature, before, after
 retained, workflow_locations, evidence, and consequence_and_limits fields.
 Identify the same experimental feature on both sides. Several Operations may
 implement one feature; one Operation may contain several distinct changes.
+For documented inheritance, establish the specific earlier contribution actually
+used in the later assay, its role there, and how that use changes or remains
+unchanged. Do not infer inheritance from shared features. The retained list only
+delimits this contribution; it is not a checklist of similarities across assays.
 The before/after facts and technical consequence are primary. A broad relationship
 summary is not their substitute, and component size does not determine ancestry.
 

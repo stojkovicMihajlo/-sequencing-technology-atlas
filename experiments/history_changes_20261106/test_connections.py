@@ -41,7 +41,9 @@ def test_changed_article_or_text_is_not_an_earlier_implementation_match(tmp_path
         changed['methods']['earlier']['papers'][0][key] = '0' * 64
         result = binding_candidates(changed, runs)
         assert not result['plans']
-        assert result['unbound_contributions'][0]['reason'] == 'no_exact_reviewed_workflow_for_cited_contribution'
+        row = result['unbound_contributions'][0]
+        assert row['reason'] == 'registered_source_version_mismatch'
+        assert row['publication_candidates'][0]['record_id'] == 'earlier'
 
 
 def test_shared_publication_does_not_choose_between_distinct_methods(tmp_path):
@@ -66,3 +68,36 @@ def test_precedent_comparison_and_unfinished_citations_do_not_schedule_ancestry(
         assert not binding_candidates(index, runs)['plans']
     write(tmp_path / 'citation/state.json', {'status': 'failed'})
     assert not binding_candidates(index, runs)['plans']
+
+
+def test_incorrect_name_hint_cannot_hide_exact_publication_candidate(tmp_path):
+    from genomics_discovery.illumina.extraction import read
+    index, runs = inputs(tmp_path)
+    path = tmp_path / 'citation/graph.json'; graph = read(path)
+    graph['links'][0]['claim']['catalogue_candidates'] = ['Earlier assay display name']
+    write(path, graph)
+    result = binding_candidates(index, runs)
+    assert len(result['plans']) == 1
+    assert result['plans'][0]['plan']['left']['record_id'] == 'earlier'
+    assert result['plans'][0]['name_hints_used_as_identity_filter'] is False
+
+
+def test_name_hint_cannot_resolve_shared_publication_ambiguity(tmp_path):
+    index, runs = inputs(tmp_path)
+    other = copy.deepcopy(index['methods']['earlier']); other['record_id'] = 'other'
+    index['methods']['other'] = other
+    # The author suggests only earlier, but both exact-source implementations
+    # still require scientific disambiguation before a mapping is scheduled.
+    result = binding_candidates(index, runs)
+    assert not result['plans']
+    assert result['unbound_contributions'][0]['candidate_methods'] == ['earlier', 'other']
+
+
+def test_missing_workflow_differs_from_registered_but_ineligible_paper(tmp_path):
+    index, runs = inputs(tmp_path)
+    index['methods']['earlier']['papers'][0]['pair_eligible'] = False
+    result = binding_candidates(index, runs)
+    assert result['unbound_contributions'][0]['reason'] == 'cited_publication_not_pair_eligible'
+    index['methods'].pop('earlier')
+    result = binding_candidates(index, runs)
+    assert result['unbound_contributions'][0]['reason'] == 'no_accepted_workflow_for_cited_publication'

@@ -148,6 +148,13 @@ async def execute(args):
             'seed_extraction': str(Path(binding['parent_attempt']) / 'extraction.json'),
             'source_registry': {'path': str(root / 'inputs/sources.json'), 'sha256': sha(root / 'inputs/sources.json')}})
     write(output / 'history_inputs.json', {'format_version': 'illumina_history_inputs/1', 'overlays': overlays})
+    # A reviewed method-level relationship does not require extraction or exact
+    # Operation/State mapping of the cited donor. Publish the citation graph first.
+    from genomics_discovery.illumina.history import build_history_index
+    from genomics_discovery.illumina.history_view import build as build_history_view
+    history_index = build_history_index(output / 'history_inputs.json')
+    write(output / 'history_index.json', history_index)
+    state['history_view'] = build_history_view(output / 'history_index.json', output / 'view')
     state.update(status='completed_with_issues' if any(r['status'] != 'completed'
                  for r in state['citation_runs'].values()) else 'completed', completed_citation_runs=len(completed))
     write(output / 'state.json', state)
@@ -174,7 +181,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', action='append', default=[])
     parser.add_argument('--selection', type=Path)
     parser.add_argument('--workers', type=int, default=2)
-    parser.add_argument('--citation-only', action='store_true', help='Stop after paper-contribution publication; do not execute exact workflow mappings.')
+    parser.add_argument('--citation-only', action='store_true', help='Publish the reviewed method/contribution graph and viewer; omit optional exact workflow-location mapping.')
     parser.add_argument('--review-existing', type=Path, action='append', default=[])
     parser.add_argument('--prior-manifest', type=Path, action='append', default=[])
     args = parser.parse_args()

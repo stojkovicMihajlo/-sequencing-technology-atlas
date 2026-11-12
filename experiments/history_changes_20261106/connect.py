@@ -20,8 +20,8 @@ def binding_candidates(index, citation_runs):
     by_pmid, plans, unresolved = {}, {}, []
     for method in index['methods'].values():
         for paper in method['papers']:
-            if paper['pmid'] and paper['pair_eligible']:
-                by_pmid.setdefault(paper['pmid'], []).append((method, paper))
+            if paper.get('pmid'):
+                by_pmid.setdefault(str(paper['pmid']), []).append((method, paper))
     for later_id, run in citation_runs.items():
         root = Path(run)
         if read(root / 'state.json').get('status') != 'completed':
@@ -36,18 +36,36 @@ def binding_candidates(index, citation_runs):
             publication = sources[claim['reference_id']]
             original = publication.get('original') or publication.get('provenance', {}).get('original', {})
             text_sha = hashlib.sha256(publication['text'].encode()).hexdigest()
-            candidates = {}
-            for method, paper in by_pmid.get(str(publication.get('pmid') or ''), []):
-                if method['record_id'] == later_id:
-                    continue
-                if claim['catalogue_candidates'] and method['record_id'] not in claim['catalogue_candidates']:
-                    continue
-                if paper['article_sha256'] == original.get('sha256') and paper['text_sha256'] == text_sha:
+            # Names suggested by the citation author are retrieval hints, not a
+            # verified method-identity registry. Never let them hide a matching
+            # publication or select one implementation from an ambiguous set.
+            candidates, checks = {}, []
+            publication_matches = by_pmid.get(str(publication.get('pmid') or ''), [])
+            for method, paper in publication_matches:
+                check = {'record_id': method['record_id'], 'source_id': paper['source_id'],
+                    'different_method': method['record_id'] != later_id,
+                    'pair_eligible': bool(paper.get('pair_eligible')),
+                    'same_article_bytes': paper.get('article_sha256') == original.get('sha256') and bool(original.get('sha256')),
+                    'same_readable_text': paper.get('text_sha256') == text_sha}
+                if check not in checks:
+                    checks.append(check)
+                if all(check[k] for k in ('different_method', 'pair_eligible', 'same_article_bytes', 'same_readable_text')):
                     candidates.setdefault(method['record_id'], (method, paper))
+            diagnostics = {'publication_candidates': checks,
+                'author_suggested_methods': claim.get('catalogue_candidates', []),
+                'name_hints_used_as_identity_filter': False}
             if len(candidates) != 1:
+                eligible = [c for c in checks if c['different_method'] and c['pair_eligible']]
+                reason = ('ambiguous_method_assignment_requires_resolution' if candidates else
+                    'cited_publication_identifier_missing' if not publication.get('pmid') else
+                    'no_accepted_workflow_for_cited_publication' if not checks else
+                    'same_method_requires_version_resolution' if all(not c['different_method'] for c in checks) else
+                    'cited_publication_not_pair_eligible' if not eligible else
+                    'registered_source_version_mismatch')
                 unresolved.append({'later': later_id, 'claim_id': claim['id'],
-                    'reason': 'no_exact_reviewed_workflow_for_cited_contribution' if not candidates else 'ambiguous_method_assignment_requires_resolution',
+                    'reason': reason,
                     'pmid': publication.get('pmid'), 'candidate_methods': sorted(candidates),
+                    **diagnostics,
                     'boundary': 'Keep the reviewed paper contribution; do not invent or choose a workflow by name.'})
                 continue
             earlier, paper = next(iter(candidates.values()))
@@ -57,6 +75,7 @@ def binding_candidates(index, citation_runs):
             ident = hashlib.sha256(json.dumps([sha(overlay_path), claim['id'], earlier['record_id'],
                 earlier['extraction_sha256'], later_id, later['extraction_sha256']]).encode()).hexdigest()[:24]
             plans[ident] = {'id': ident, 'plan': plan,
+                **diagnostics,
                 'basis': 'Accepted citation claim plus exact article/text candidate; no workflow correspondence accepted yet.'}
     return {'plans': list(plans.values()), 'unbound_contributions': unresolved}
 
