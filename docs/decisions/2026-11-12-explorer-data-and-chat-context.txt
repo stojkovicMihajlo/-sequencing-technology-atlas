@@ -1,0 +1,23 @@
+User requests: enlarge this chat's context; make new cards easy to insert.
+
+Codex configuration
+Saved model_context_window=872000 and model_auto_compact_token_limit=760000
+in the user's local Codex configuration, preserving the model selection and a
+backup. Local GPT-6.1 Sol metadata reports context_window=500000 and
+max_context_window=872000. This is configuration, not proof the current thread
+has adopted the larger window. No extraction runtime configuration was changed.
+Official reference: https://developers.openai.com/codex/config-reference/
+
+Explorer data contract
+web/explorer/import_data.py publishes a complete review-site export as an
+immutable snapshot, with a manifest, per-method original JSON, and diagrams.
+UI categories, counts, method cards and graph structure come from that snapshot.
+New methods do not require editing React code. Revised methods retain their
+record_id; a newer snapshot supersedes the displayed version, while preserving
+the earlier snapshot. Duplicate record IDs are rejected. Identity consolidation
+remains upstream and does not use fuzzy label matching in the display layer.
+
+Publication validates references and image hashes before changing current.json.
+Bad newer imports leave the old selection intact. This validates data integrity;
+it does not establish scientific correctness or replace independent review.
+The current extraction continues on Sherlock as previously requested.
