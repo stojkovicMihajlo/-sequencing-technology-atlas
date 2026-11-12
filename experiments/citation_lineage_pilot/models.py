@@ -4,7 +4,7 @@ import json
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
-from genomics_discovery.illumina.relationships import RELATIONS, HISTORICAL_RELATIONS, contribution_layer, ASSAY_HISTORY_POLICY
+from genomics_discovery.illumina.relationships import RELATIONS, HISTORICAL_RELATIONS, contribution_layer, ASSAY_HISTORY_POLICY, catalogue_method_pmids, catalogue_entry_sha256
 
 
 class Record(BaseModel):
@@ -193,7 +193,7 @@ def check_citation_binding(claim, sources):
                 raise ValueError(f"Historical claim needs a nonblank {field} description")
 
 
-def validate_review(document, analysis, analysis_sha256, sources):
+def validate_review(document, analysis, analysis_sha256, sources, *, catalogue=None):
     if document.analysis_sha256 != analysis_sha256:
         raise ValueError("Review is bound to a different analysis")
     expected = {x.id for x in analysis.claims}
@@ -209,6 +209,19 @@ def validate_review(document, analysis, analysis_sha256, sources):
     for finding in document.findings:
         check_evidence(finding.evidence, sources)
         claim = claims[finding.claim_id]
+        if hasattr(finding, 'method_match'):
+            match = finding.method_match
+            check_evidence(match.evidence, sources, allowed={claim.reference_id}, scientific=True)
+            if any(sources[e.source_id].get('content_level') != 'fulltext' for e in match.evidence):
+                raise ValueError('Method identity review requires the cited earlier full text')
+            if match.status == 'resolved':
+                entries = [c for c in (catalogue or []) if c.get('record_id') == match.record_id]
+                if len(entries) != 1:
+                    raise ValueError('Resolved method match must name one known catalogue method')
+                publication = str(sources[claim.reference_id].get('pmid') or '')
+                assigned = catalogue_method_pmids(entries[0])
+                if not publication or publication not in assigned:
+                    raise ValueError('Resolved method match publication disagrees with catalogue assignment')
         if (is_current_claim(claim) and finding.decision == "accept"
                 and claim.relation not in {"background", "no_established_relation"}):
             cited = {x.source_id for x in finding.evidence}
@@ -243,11 +256,15 @@ def validate_review(document, analysis, analysis_sha256, sources):
                         raise ValueError('Documented reuse requires actual later-paper attribution')
 
 
-def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
+def graph_overlay(analysis, review, sources, analysis_sha256, bindings, *, catalogue=None,
+                  classification_policy=ASSAY_HISTORY_POLICY):
     """Export only independently accepted, two-sided claims; never edit the atlas."""
-    validate_review(review, analysis, analysis_sha256, sources)
+    validate_review(review, analysis, analysis_sha256, sources, catalogue=catalogue)
     decisions = {x.claim_id: x for x in review.findings}
-    scoped_history = getattr(analysis, 'format_version', None) == 'citation_analysis/4'
+    if classification_policy not in {None, ASSAY_HISTORY_POLICY}:
+        raise ValueError('Unknown contribution classification policy')
+    scoped_history = (getattr(analysis, 'format_version', None) == 'citation_analysis/4'
+                      and classification_policy == ASSAY_HISTORY_POLICY)
     nodes = [{"id": "seed", "kind": "assay", "name": analysis.seed_method,
               "bindings": bindings}]
     links, withheld = [], []
@@ -285,6 +302,11 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
                       "name": claim.contributor, "reference_id": claim.reference_id,
                       "catalogue_candidates": claim.catalogue_candidates,
                       "identity_status": "scoped_to_cited_contribution; catalogue_matches_are_candidates"})
+        match = getattr(finding, 'method_match', None)
+        if match is not None and match.status == 'resolved':
+            card = next(c for c in catalogue if c['record_id'] == match.record_id)
+            nodes[-1]['method_identity_basis'] = {'record_id': match.record_id,
+                                                 'catalogue_entry_sha256': catalogue_entry_sha256(card)}
         links.append({"id": claim.id, "source": contributor_id, "target": "seed",
                       "kind": claim.relation,
                       "historical_development_edge": (contribution_layer(claim) == 'history' if scoped_history else claim.relation == "method_development"),

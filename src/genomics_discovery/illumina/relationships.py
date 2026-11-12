@@ -78,6 +78,24 @@ ASSAY_CONTRIBUTION_KINDS = frozenset({'assay', 'experimental_component'})
 ASSAY_HISTORY_POLICY = 'assay_contribution_scope/1'
 
 
+def catalogue_entry_sha256(card):
+    """Pin the exact method metadata independently of unrelated catalogue rows."""
+    return hashlib.sha256(json.dumps(card, sort_keys=True, separators=(',', ':'),
+                                     ensure_ascii=False).encode()).hexdigest()
+
+
+def catalogue_method_pmids(card):
+    """Method-assigned publications, excluding procedural dependency citations."""
+    if 'method_pmids' in card:
+        values = card['method_pmids']
+    else:
+        primary = card.get('curation_binding', {}).get('primary_paper_id', '')
+        values = [primary.removeprefix('pmid-')] if primary else []
+        values += [reference.get('pmid') for reference in card.get('references', [])
+                   if ':dependency:' not in str(reference.get('reference_id', ''))]
+    return {str(value) for value in values if value is not None and str(value).isdecimal()}
+
+
 def contribution_layer(claim, *, relation=None):
     """Derive graph eligibility without changing the reviewed relation or text.
 

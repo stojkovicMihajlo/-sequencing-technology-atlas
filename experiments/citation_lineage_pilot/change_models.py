@@ -1,7 +1,7 @@
 """Version4 citation output: explicit changes, with derived legacy query summaries."""
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from models import Record, Finding, Review
 from genomics_discovery.illumina.change_records import ExperimentalChange, Evidence
@@ -97,7 +97,33 @@ class CoverageChangeReview(Record):
         return [f.description for f in self.coverage_findings if f.kind == 'omitted_supported_contribution']
 
 
+class MethodMatch(Record):
+    status: Literal['resolved','unresolved','ambiguous','not_applicable']
+    record_id: str | None = Field(description='Known catalogue method ID only when identity and relevant implementation are independently resolved; otherwise null.')
+    rationale: str = Field(min_length=1, description='Explain publication identity and relevant implementation match, mismatch or ambiguity. A shared paper or matching name alone is insufficient. Earlier Operation/State mapping is not required.')
+    evidence: list[Evidence] = Field(description='For resolved, quote the cited earlier full text establishing the relevant assay/implementation. Catalogue text alone cannot resolve a method identity.')
+
+    @model_validator(mode='after')
+    def resolution_is_explicit(self):
+        if self.status == 'resolved':
+            if not self.record_id or not self.record_id.strip() or not self.evidence:
+                raise ValueError('Resolved method match needs a method ID and earlier full-text evidence')
+        elif self.record_id is not None:
+            raise ValueError('Unresolved/ambiguous/not-applicable method match cannot choose an endpoint')
+        return self
+
+
+class MethodChangeFinding(ChangeFinding):
+    method_match: MethodMatch
+
+
+class CoverageMethodReview(CoverageChangeReview):
+    format_version: Literal['citation_change_review/3'] = 'citation_change_review/3'
+    findings: list[MethodChangeFinding]
+
+
 def parse_review(document):
-    model = (CoverageChangeReview if document.get('format_version') == 'citation_change_review/2'
+    model = (CoverageMethodReview if document.get('format_version') == 'citation_change_review/3'
+             else CoverageChangeReview if document.get('format_version') == 'citation_change_review/2'
              else ChangeReview if document.get('format_version') == 'citation_change_review/1' else Review)
     return model.model_validate(document)

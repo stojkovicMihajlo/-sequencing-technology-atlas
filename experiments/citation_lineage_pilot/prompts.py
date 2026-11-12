@@ -259,7 +259,19 @@ errors, needs_evidence for unavailable decisive support, reject for a false link
 Do not rewrite and then approve your own replacement. A whole-assay or joint gain
 must not become a causal benefit of one isolated change. Unchanged reuse and no
 reported gain are valid. A new approach can remain without an ancestry edge.
-Return citation_change_review/2. coverage_findings separates two cases:
+Return citation_change_review/3. For every finding, fill method_match separately
+from the relationship decision. Read the supplied pinned catalogue's record_id,
+method_names, implementation_scope and method_pmids, then check the cited earlier
+full paper. A resolved match names exactly one known record_id, explains the
+relevant implementation correspondence and cites earlier full-text evidence.
+A matching title, suggested catalogue_candidates or matching publication alone
+does not establish that correspondence; one paper may describe several methods.
+Use unresolved or ambiguous with record_id=null when identity is not established,
+or not_applicable for contributions without an experimental-method endpoint.
+Unresolved identity does not turn a supported contribution into a rejected use:
+retain its named, publication-bound endpoint for later resolution. No earlier
+State/Operation decomposition is required for method-level resolution.
+coverage_findings separates two cases:
 - omitted_supported_contribution: a consequential in-scope contribution absent
   from the analysis but already established by BOTH registered full papers. Cite
   both; a missing earlier paper cannot support this category. This requests a

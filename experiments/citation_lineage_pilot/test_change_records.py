@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from change_models import ChangeAnalysis, ChangeReview
+from change_models import ChangeAnalysis, ChangeReview, CoverageMethodReview, parse_review
 from models import parse_analysis, validate_analysis, validate_review, graph_overlay
 from genomics_discovery.illumina.change_records import ExperimentalChange, validate_changes, workflow_records
 from genomics_discovery.illumina.paper_reads import record_read, check_full_reads
@@ -91,6 +91,73 @@ def test_documented_use_is_scoped_separately_from_experimental_ancestry(contribu
     assert edge['historical_development_edge'] is historical
     assert edge['claim']['change_records']==raw['claims'][0]['change_records']
     assert edge['review']==judged.findings[0].model_dump()
+
+
+def method_review():
+    raw=review();raw.pop('omitted_candidates')
+    raw.update(format_version='citation_change_review/3',coverage_findings=[])
+    raw['findings'][0]['method_match']={'status':'resolved','record_id':'earlier-assay',
+        'rationale':'The cited earlier implementation uses purified DNA at the compared adapter-introduction interface.',
+        'evidence':[evidence('R1',BEFORE)]}
+    return raw
+
+
+def method_catalogue():
+    return [{'record_id':'earlier-assay','method_pmids':['111'],'method_names':['Earlier assay'],
+             'implementation_scope':'Purified-DNA adapter introduction, original implementation.'}]
+
+
+def method_sources():
+    sources=copy.deepcopy(SOURCES);sources['R1']['pmid']='111';return sources
+
+
+def test_independent_method_match_survives_publication_without_earlier_operations():
+    candidate=parse_analysis(proposal());judged=parse_review(method_review())
+    assert isinstance(judged,CoverageMethodReview)
+    sources=method_sources();catalogue=method_catalogue()
+    validate_review(judged,candidate,'test-pin',sources,catalogue=catalogue)
+    graph=graph_overlay(candidate,judged,sources,'test-pin',{},catalogue=catalogue)
+    assert graph['links'][0]['review']['method_match']['record_id']=='earlier-assay'
+    assert graph['links'][0]['claim']['change_records'][0]['workflow_locations']['earlier']==[]
+    from genomics_discovery.illumina.relationships import catalogue_entry_sha256
+    assert graph['nodes'][1]['method_identity_basis']=={'record_id':'earlier-assay',
+        'catalogue_entry_sha256':catalogue_entry_sha256(catalogue[0])}
+    larger=catalogue+[{'record_id':'unrelated-assay','method_pmids':['999']}]
+    again=graph_overlay(candidate,judged,sources,'test-pin',{},catalogue=larger)
+    assert again['nodes'][1]['method_identity_basis']==graph['nodes'][1]['method_identity_basis']
+
+
+@pytest.mark.parametrize('defect',['unknown_method','wrong_publication','dependency_only',
+                                  'missing_catalogue','wrong_evidence_side','abstract','title_only'])
+def test_method_resolution_requires_known_assignment_and_earlier_fulltext(defect):
+    raw=method_review();sources=method_sources();catalogue=method_catalogue()
+    if defect=='unknown_method':raw['findings'][0]['method_match']['record_id']='invented'
+    elif defect=='wrong_publication':catalogue[0]['method_pmids']=['222']
+    elif defect=='dependency_only':
+        catalogue[0].pop('method_pmids');catalogue[0]['references']=[{'pmid':'111','reference_id':'target:dependency:111'}]
+    elif defect=='missing_catalogue':catalogue=None
+    elif defect=='wrong_evidence_side':raw['findings'][0]['method_match']['evidence']=[evidence('seed',AFTER)]
+    elif defect=='abstract':sources['R1']['content_level']='abstract'
+    elif defect=='title_only':sources['R1']['title']=BEFORE
+    with pytest.raises(ValueError):
+        validate_review(parse_review(raw),parse_analysis(proposal()),'test-pin',sources,catalogue=catalogue)
+
+
+def test_unresolved_method_identity_keeps_a_supported_named_contribution():
+    raw=method_review();raw['findings'][0]['method_match'].update(status='ambiguous',record_id=None,evidence=[])
+    graph=graph_overlay(parse_analysis(proposal()),parse_review(raw),method_sources(),'test-pin',{})
+    assert len(graph['links'])==1
+    assert graph['links'][0]['review']['method_match']['status']=='ambiguous'
+    assert graph['nodes'][1]['name']=='Earlier procedure'
+    assert graph['nodes'][1]['reference_id']=='R1'
+
+
+def test_legacy_change_review_remains_parseable_without_method_match():
+    assert isinstance(parse_review(review()),ChangeReview)
+    candidate=parse_analysis(proposal())
+    old=graph_overlay(candidate,parse_review(review()),SOURCES,'test-pin',{},classification_policy=None)
+    assert 'classification_policy' not in old
+    assert old['links'][0]['historical_development_edge'] is False
 
 
 @pytest.mark.parametrize('defect', ['wrong_before_side', 'invented_state', 'invented_property', 'invented_earlier_ids'])

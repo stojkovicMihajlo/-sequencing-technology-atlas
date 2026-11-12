@@ -27,7 +27,7 @@ from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jat
 from genomics_discovery.illumina.citations import bibliography
 from genomics_discovery.illumina.history_inputs import resolve_article
 from genomics_discovery.illumina.paper_reads import record_read, check_full_reads
-from change_models import ChangeAnalysis, ChangeReview, CoverageChangeReview, parse_review
+from change_models import ChangeAnalysis, ChangeReview, CoverageChangeReview, CoverageMethodReview, parse_review
 from genomics_discovery.illumina.history_coverage import validate_coverage
 from models import (
     Analysis, CurrentAnalysis, CurrentNominations, Nominations, Review, graph_overlay, parse_analysis, validate_analysis,
@@ -236,7 +236,7 @@ def acquire_registered(inputs, nominations):
     return sources
 
 
-SCHEMAS = {"nominate": CurrentNominations, "analyse": ChangeAnalysis, "review": CoverageChangeReview}
+SCHEMAS = {"nominate": CurrentNominations, "analyse": ChangeAnalysis, "review": CoverageMethodReview}
 
 
 def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
@@ -255,7 +255,8 @@ def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
             seed_extraction=read(inputs / 'seed_extraction.json'))
     else:
         analysis = parse_analysis(read(analysis_path))
-        validate_review(document, analysis, sha(analysis_path), sources)
+        validate_review(document, analysis, sha(analysis_path), sources,
+                        catalogue=read(inputs / 'catalogue.json'))
     if paper_read_log is not None:
         required = ['seed']
         if role == 'analyse':
@@ -299,8 +300,11 @@ def validate_completed_citation(previous):
         raise ValueError('Previous review handoff differs from its native artifact')
     judged = validate('review', review_path, previous / 'inputs', original)
     analysis = parse_analysis(read(original))
+    previous_graph = read(previous / 'graph.json')
     expected = graph_overlay(analysis, judged, read(previous / 'inputs/sources.json'),
-                             sha(original), read(previous / 'inputs/seed_binding.json'))
+                             sha(original), read(previous / 'inputs/seed_binding.json'),
+                             catalogue=read(previous / 'inputs/catalogue.json'),
+                             classification_policy=previous_graph.get('classification_policy'))
     if read(previous / 'graph.json') != expected:
         raise ValueError('Previous graph differs from its reviewed citation export')
     return prior, original
@@ -394,6 +398,7 @@ async def execute(args):
         context = {"inputs": str(inputs), "seed_extraction": str(inputs / 'seed_extraction.json'),
             'analysis_format': 'citation_analysis/4',
             "bibliography": str(inputs / 'bibliography.json'),
+            "catalogue": str(inputs / 'catalogue.json'),
             "schema": str(attempt / 'schema.json'), "output": str(attempt / 'artifact.json'),
             "source_tool": read_command + " [--id SOURCE_ID] [--query TEXT] [--start N] [--limit N]",
             "self_check": shlex.join(check_command),
@@ -456,7 +461,8 @@ async def execute(args):
             sources = acquire(inputs, nominations)
         initial = (validate('analyse', reused_analysis, inputs), reused_analysis) if reused_analysis else None
         analysis, analysis_path, review = await review_cycle(stage, 'analyse', initial)
-        overlay = graph_overlay(analysis, review, sources, sha(analysis_path), read(inputs / 'seed_binding.json'))
+        overlay = graph_overlay(analysis, review, sources, sha(analysis_path), read(inputs / 'seed_binding.json'),
+                                catalogue=read(inputs / 'catalogue.json'))
         write(root / 'analysis.json', analysis.model_dump())
         write(root / 'review.json', review.model_dump())
         write(root / 'graph.json', overlay)
