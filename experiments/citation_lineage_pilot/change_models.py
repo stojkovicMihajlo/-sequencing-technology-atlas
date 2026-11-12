@@ -68,9 +68,9 @@ class ChangeAnalysis(Record):
 class ChangeCheck(Record):
     change_id: str
     decision: Literal['accept', 'revise', 'needs_evidence', 'reject']
-    factual_assessment: str = Field(min_length=1, description='Check the compared feature, before, after and retained features against both papers.')
+    factual_assessment: str = Field(min_length=1, description='Check the compared feature, before, after and retained features against both papers. Independently check contributor_kind: an experimental assay/design contribution or supporting software/resource context; a workflow data Operation alone does not make a generic tool experimental ancestry.')
     workflow_assessment: str = Field(min_length=1, description='Check the exact State/Operation/Flow/property locations and consequential interfaces.')
-    evidence_assessment: str = Field(min_length=1, description='Verify what the later assay actually uses from the cited contribution and how the later paper establishes that use. Distinguish inheritance from comparison or mechanistic precedent. Shared features and a real quotation alone do not establish inheritance; do not expand component reuse into adoption of the whole earlier assay.')
+    evidence_assessment: str = Field(min_length=1, description='Verify what the later assay actually uses from the cited contribution and how the later paper establishes that use. Distinguish experimental inheritance, supporting software/resource use, comparison and mechanistic precedent. Shared features and a real quotation alone do not establish inheritance; do not expand component reuse into adoption of the whole earlier assay. Catalogue candidate names/IDs are not verified method implementation identities.')
     consequence_assessment: str = Field(min_length=1, description='Check improvement/change, comparator, context, causal scope, trade-offs and unknowns; no reported gain is allowed.')
     evidence: list[Evidence] = Field(min_length=1)
 

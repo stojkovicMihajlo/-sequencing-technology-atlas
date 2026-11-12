@@ -74,6 +74,34 @@ RELATIONS = {
     "no_established_relation": {"layer": "excluded", "meaning": "The considered relation is unsupported; retain the disposition without forcing an edge."},
 }
 HISTORICAL_RELATIONS = frozenset(k for k, v in RELATIONS.items() if v["layer"] == "history")
+ASSAY_CONTRIBUTION_KINDS = frozenset({'assay', 'experimental_component'})
+ASSAY_HISTORY_POLICY = 'assay_contribution_scope/1'
+
+
+def contribution_layer(claim, *, relation=None):
+    """Derive graph eligibility without changing the reviewed relation or text.
+
+    Computational/resource use can be documented reuse while remaining outside
+    experimental assay ancestry. Legacy paired claims lack contributor_kind and
+    retain their established relation-layer checks.
+    """
+    get = claim.get if isinstance(claim, dict) else lambda key, default=None: getattr(claim, key, default)
+    kind = relation or get('relation')
+    layer = RELATIONS[kind]['layer']
+    contributor = get('contributor_kind')
+    if layer == 'history' and contributor is not None and contributor not in ASSAY_CONTRIBUTION_KINDS:
+        return 'supporting_context'
+    return layer
+
+
+def is_assay_history(edge):
+    """Use effective scope, including for loaded legacy citation overlays."""
+    claim = edge.get('claim', edge)
+    layer = (contribution_layer(claim, relation=edge.get('relation', edge.get('kind')))
+             if claim.get('contributor_kind') is not None else edge.get('relationship_layer'))
+    if layer is None:
+        layer = contribution_layer(claim, relation=edge.get('relation', edge.get('kind')))
+    return layer == 'history'
 
 HISTORY_DECISION_RULES = """
 HISTORICAL DECISION RULES

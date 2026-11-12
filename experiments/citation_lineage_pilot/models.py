@@ -4,7 +4,7 @@ import json
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
-from genomics_discovery.illumina.relationships import RELATIONS, HISTORICAL_RELATIONS
+from genomics_discovery.illumina.relationships import RELATIONS, HISTORICAL_RELATIONS, contribution_layer, ASSAY_HISTORY_POLICY
 
 
 class Record(BaseModel):
@@ -247,6 +247,7 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
     """Export only independently accepted, two-sided claims; never edit the atlas."""
     validate_review(review, analysis, analysis_sha256, sources)
     decisions = {x.claim_id: x for x in review.findings}
+    scoped_history = getattr(analysis, 'format_version', None) == 'citation_analysis/4'
     nodes = [{"id": "seed", "kind": "assay", "name": analysis.seed_method,
               "bindings": bindings}]
     links, withheld = [], []
@@ -268,7 +269,8 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
         elif is_current_claim(claim) and not claim.citation_context:
             reason = "no_located_citation_context"
         elif (is_current_claim(claim) and
-              RELATIONS[claim.relation]["layer"] == "history" and claim.claim_scope != "seed_workflow"):
+              (contribution_layer(claim) if scoped_history else RELATIONS[claim.relation]["layer"]) == "history"
+              and claim.claim_scope != "seed_workflow"):
             reason = "not_part_of_seed_workflow"
         if reason:
             withheld.append({"claim": claim_record(claim), "reason": reason,
@@ -285,8 +287,8 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
                       "identity_status": "scoped_to_cited_contribution; catalogue_matches_are_candidates"})
         links.append({"id": claim.id, "source": contributor_id, "target": "seed",
                       "kind": claim.relation,
-                      "historical_development_edge": claim.relation == "method_development",
-                      "relationship_layer": RELATIONS[claim.relation]["layer"],
+                      "historical_development_edge": (contribution_layer(claim) == 'history' if scoped_history else claim.relation == "method_development"),
+                      "relationship_layer": contribution_layer(claim) if scoped_history else RELATIONS[claim.relation]["layer"],
                       "status": "model_reviewed_pilot_overlay",
                       "claim": claim_record(claim), "review": finding.model_dump()})
     version = ('citation_lineage_pilot/4' if getattr(analysis, 'format_version', None) == 'citation_analysis/4' else
@@ -296,6 +298,8 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings):
             "boundary": "One-hop source-guided pilot, not a complete lineage or canonical atlas admission."
                         " Shared evidence, comparisons and mechanistic precedents are not descent."
                         " Referenced methods have not received full workflow extraction."}
+    if scoped_history:
+        result['classification_policy'] = ASSAY_HISTORY_POLICY
     if hasattr(review, 'coverage_findings'):
         from genomics_discovery.illumina.history_coverage import coverage_record
         result['coverage_review'] = coverage_record(review.coverage_findings)

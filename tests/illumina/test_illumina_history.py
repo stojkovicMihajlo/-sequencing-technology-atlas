@@ -164,6 +164,36 @@ def test_current_citation_keeps_scope_qualifications_and_external_identity(tmp_p
     assert result["direct_withheld_claims"][0]["status"] == "withheld_not_a_graph_edge"
 
 
+def test_legacy_general_tool_reuse_stays_queryable_but_not_in_experimental_lineage(tmp_path):
+    graph,save=current_citation_fixture(tmp_path)
+    graph['links'][0]['claim']['contributor_kind']='general_method'
+    graph['nodes'][1]['kind']='general_method'
+    path=save();original=(tmp_path/'graph.json').read_bytes()
+    index=build_history_index(path)
+    result=technology_history(index,'new_assay')
+    assert not result['historical_contributions']
+    assert len(result['other_direct_relationships'])==1
+    edge=result['other_direct_relationships'][0]
+    assert edge['relationship_layer']=='supporting_context'
+    assert edge['historical_development_edge'] is False
+    assert edge['relation']=='component_adoption'
+    assert edge['claim']==graph['links'][0]['claim']
+    assert (tmp_path/'graph.json').read_bytes()==original
+
+
+def test_scoped_publication_flags_cannot_promote_general_tool_to_assay_history(tmp_path):
+    from genomics_discovery.illumina.history import _check_current_citation
+    graph,_=current_citation_fixture(tmp_path);item=graph['links'][0]
+    item['claim']['relation']='documented_reuse';item['kind']='documented_reuse'
+    item['historical_development_edge']=True
+    _check_current_citation(item,scoped_history=True)
+    item['claim']['contributor_kind']='general_method'
+    with pytest.raises(ValueError,match='layer'):
+        _check_current_citation(item,scoped_history=True)
+    item.update(relationship_layer='supporting_context',historical_development_edge=False)
+    _check_current_citation(item,scoped_history=True)
+
+
 @pytest.mark.parametrize("mutation", ["context", "scope", "scope_anchor", "review_side", "layer",
                                       "development_flag", "anchor", "reject", "blocking", "source_side"])
 def test_current_citation_invalid_declarations_are_not_queried(tmp_path, mutation):

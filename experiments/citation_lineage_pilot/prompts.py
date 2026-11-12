@@ -157,6 +157,24 @@ The existing extraction is read-only and supplies workflow locations; the papers
 establish what changed. A component may span several Operations. A distinguishing
 new approach need not have an established historical donor; explain it in summary
 with source support rather than forcing an ancestry edge.
+The main evolutionary graph concerns experimental assay/design contributions.
+Use contributor_kind=assay for an earlier experimental assay strategy and
+experimental_component for a specified sample-preparation, molecular manipulation,
+labeling, capture, partitioning or experimental readout design actually used.
+Routine aligners, peak-analysis software, reference annotations, datasets and
+generic analysis tools are general_method or other supporting context. Their
+documented use may be valid documented_reuse, but does not make them experimental
+assay ancestors. Classify the actual contribution, not the paper's broad topic.
+Do not relabel a computational/resource contribution as experimental_component
+just because its output appears in a workflow Operation. The reviewer checks this
+eligibility independently; publication derives a supporting-context layer from
+the existing contributor_kind rather than changing the reviewed evidence.
+The cited contribution and its canonical method endpoint are distinct records.
+An existing method can be an endpoint only when publication identity and the
+relevant implementation are established; a shared name, paper, or candidate ID
+alone does not resolve identity. Preserve unextracted named contributors and
+publication identifiers. Exact earlier State/Operation mapping is optional
+enrichment and is not required to record supported method-level inheritance.
 Make the before/after comparison understandable without a label such as "earlier
 use". Identify the relevant material/data, action, product and workflow placement
 when those are what changed. State what was retained. If the paper only credits
@@ -192,6 +210,11 @@ or record why its context is out of this methodological task. Do not select only
 citations whose names resemble catalogue entries; legitimate donors may be external.
 Do not decide final historical relations before inspecting the earlier work.
 No expected predecessors, chemistry or number of nominations is supplied.
+Prioritize sources needed to establish experimental design contributions.
+Routine software/resource citations may be accounted for as supporting context
+without a full historical investigation unless they resolve the claimed assay
+change. Bibliography coverage is not a requirement to build an ancestry for every
+tool used in the study.
 """,
     'analyse': """Read the full seed paper and every acquired earlier full paper.
 Account for every nominated reference, including false leads. Use citation_analysis/4
@@ -206,6 +229,10 @@ Operations or Flows belong in change_records.workflow_locations. The earlier sid
 is paper_only here: no earlier workflow has been supplied, so do not invent its IDs.
 State whether the claim belongs to the seed_workflow, a supporting_experiment or
 is unlocalized; only the first can publish historical contributions.
+Experimental ancestry additionally requires contributor_kind=assay or
+experimental_component. Preserve supported general_method/other use as context.
+If one publication supplies both experimental and software contributions, scope
+those separately rather than expanding experimental inheritance to the paper.
 Distinguish an unchanged inherited feature from a changed one, a reported gain
 from author rationale, and joint/whole-assay results from effects of one component.
 No positive relation, improvement or catalogue match is required.
@@ -217,6 +244,14 @@ every change record. Judge factual before/after/retained descriptions, actual
 workflow locations and interfaces, source support versus attribution, and reported
 consequences/limits. A matching quote is not proof of entailment. A graph's accepted
 extraction does not establish a new historical interpretation or compatibility.
+Independently check contributor_kind and explain whether the cited contribution
+is an experimental assay/design contribution or supporting software/resource
+context in the existing factual/evidence assessments. Routine mapping, annotation
+and general-purpose analysis use must not become experimental ancestry, even
+when it is correctly cited and part of the extracted data-processing workflow.
+Check endpoint identity separately from the contribution: catalogue_candidates
+are hints, not verified method/version matches. Missing exact Operation/State
+anchors for a donor do not invalidate independently supported method-level use.
 Accept requires both paper sides. Do not accept abstract-only or unavailable
 earlier methods as full-paper confirmation. Review every unresolved issue and
 identify which genuinely blocks this exact claim. Request revise for source-fixable

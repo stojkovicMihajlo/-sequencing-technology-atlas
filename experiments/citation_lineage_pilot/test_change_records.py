@@ -70,9 +70,27 @@ def test_explicit_fields_flow_from_native_format_to_reviewed_overlay():
     assert result['format_version'] == 'citation_lineage_pilot/4'
     item = result['links'][0]
     assert item['kind'] == 'documented_reuse' and item['relationship_layer'] == 'history'
+    assert item['historical_development_edge'] is True
+    assert result['classification_policy'] == 'assay_contribution_scope/1'
     assert item['claim']['change_records'][0]['workflow_locations']['later'][0]['kind'] == 'state'
     assert 'seed_design_change' not in candidate.model_dump()['claims'][0]
     assert item['claim']['seed_design_change'] == candidate.claims[0].seed_design_change
+
+
+@pytest.mark.parametrize('contributor_kind,layer,historical', [
+    ('assay','history',True),('experimental_component','history',True),
+    ('general_method','supporting_context',False),('other','supporting_context',False)])
+def test_documented_use_is_scoped_separately_from_experimental_ancestry(contributor_kind,layer,historical):
+    raw=proposal();raw['claims'][0]['contributor_kind']=contributor_kind
+    candidate=parse_analysis(raw);validate(candidate)
+    judged=ChangeReview.model_validate(review())
+    result=graph_overlay(candidate,judged,SOURCES,'test-pin',{})
+    edge=result['links'][0]
+    assert edge['kind']=='documented_reuse'  # Keep a valid source-supported use.
+    assert edge['relationship_layer']==layer
+    assert edge['historical_development_edge'] is historical
+    assert edge['claim']['change_records']==raw['claims'][0]['change_records']
+    assert edge['review']==judged.findings[0].model_dump()
 
 
 @pytest.mark.parametrize('defect', ['wrong_before_side', 'invented_state', 'invented_property', 'invented_earlier_ids'])

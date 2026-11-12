@@ -14,6 +14,7 @@ from pathlib import Path
 
 from genomics_discovery.illumina.relationships import (
     HISTORICAL_RELATIONS, RELATIONS, load_reviewed_pair, relationship_neighbors,
+    contribution_layer, is_assay_history, ASSAY_HISTORY_POLICY,
 )
 
 
@@ -33,7 +34,7 @@ def _check_review(claim, review):
         raise ValueError("Unreviewed or blocking relationship qualification")
 
 
-def _check_current_citation(item):
+def _check_current_citation(item, *, scoped_history=False):
     """Keep v3 scope/review declarations intact when reading a pinned export.
 
     This does not reread the bibliography or establish quotation entailment;
@@ -47,13 +48,15 @@ def _check_current_citation(item):
         raise ValueError("Unknown current citation scope")
     if bool(claim["seed_operation_ids"]) != (scope == "seed_workflow"):
         raise ValueError("Citation scope disagrees with seed Operation anchors")
-    if claim["relation"] in HISTORICAL_RELATIONS and scope != "seed_workflow":
+    expected_layer = contribution_layer(claim) if scoped_history else RELATIONS[claim['relation']]['layer']
+    if expected_layer == 'history' and scope != "seed_workflow":
         raise ValueError("Historical contribution must belong to the extracted seed workflow")
     cited = {e["source_id"] for e in review.get("evidence", []) if e.get("quote", "").strip()}
     if not {"seed", claim["reference_id"]} <= cited:
         raise ValueError("Current citation review needs seed and exact predecessor evidence")
-    if (item.get("relationship_layer") != RELATIONS[claim["relation"]]["layer"] or
-            item.get("historical_development_edge") != (claim["relation"] == "method_development")):
+    expected_flag = expected_layer == 'history' if scoped_history else claim["relation"] == "method_development"
+    if (item.get("relationship_layer") != expected_layer or
+            item.get("historical_development_edge") != expected_flag):
         raise ValueError("Citation relationship layer disagrees with its declared type")
 
 
@@ -196,7 +199,10 @@ def build_history_index(manifest_path):
                         or item["status"] != "model_reviewed_pilot_overlay"):
                     raise ValueError("Invalid published citation relation")
                 if graph["format_version"] in {"citation_lineage_pilot/3", "citation_lineage_pilot/4"}:
-                    _check_current_citation(item)
+                    policy = graph.get('classification_policy')
+                    if policy not in {None, ASSAY_HISTORY_POLICY}:
+                        raise ValueError('Unknown citation contribution classification policy')
+                    _check_current_citation(item, scoped_history=policy == ASSAY_HISTORY_POLICY)
                 if graph['format_version'] == 'citation_lineage_pilot/4':
                     from .change_records import ExperimentalChange, validate_changes, workflow_records
                     specification = entry.get('source_registry')
@@ -250,10 +256,15 @@ def build_history_index(manifest_path):
     nodes = {key:value for key,value in nodes.items() if value['kind'] == 'bound_workflow' or key in used}
     if len({e["id"] for e in edges}) != len(edges):
         raise ValueError("Duplicate relationship claim")
+    # Classify the query view without rewriting the original pinned artifacts.
+    # Older citation exports could call software/resource reuse historical.
+    for edge in edges:
+        edge['relationship_layer'] = contribution_layer(edge['claim'], relation=edge['relation'])
+        edge['historical_development_edge'] = is_assay_history(edge)
     # Detect contradictions rather than silently looping or choosing an arbitrary parent.
     pending = {n: set() for n in nodes}
     for e in edges:
-        if e["relation"] in HISTORICAL_RELATIONS:
+        if is_assay_history(e):
             pending[e["target"]].add(e["source"])
     while pending:
         ready = {n for n, predecessors in pending.items() if not predecessors}
@@ -276,7 +287,7 @@ def technology_history(index, record_id, *, extraction_sha256=None, max_depth=2)
     selected, stops = {}, []
     while frontier:
         node, depth = frontier.pop(0)
-        incoming = [e for e in index["edges"] if e["target"] == node and e["relation"] in HISTORICAL_RELATIONS]
+        incoming = [e for e in index["edges"] if e["target"] == node and is_assay_history(e)]
         if depth == max_depth or not incoming:
             stops.append({"node": copy.deepcopy(index["nodes"][node]),
                           "reason": "depth_limit" if depth == max_depth and incoming else "no_further_history_in_loaded_evidence",
@@ -290,7 +301,7 @@ def technology_history(index, record_id, *, extraction_sha256=None, max_depth=2)
             if edge["source"] not in visited:
                 visited.add(edge["source"]); frontier.append((edge["source"], depth + 1))
     other_direct = [copy.deepcopy(e) for e in index["edges"]
-                    if target["id"] in {e["source"], e["target"]} and e["relation"] not in HISTORICAL_RELATIONS]
+                    if target["id"] in {e["source"], e["target"]} and not is_assay_history(e)]
     related_ids = {n for e in other_direct for n in (e["source"], e["target"])} - visited
     return {
         "technology": copy.deepcopy(target), "max_depth": max_depth,
