@@ -1,0 +1,13 @@
+Remaining33 registration audit
+
+Source scope is pinned in REGISTRATION_AUDIT.json. The diagnostic distinguishes access failures, missing/ambiguous identity, attachment association, and unsupported role/version. Counts are rejected documents, not distinct methods.
+
+Generic changes
+1. DOI+fulltitle may establish publisher JATS identity when its own PMID is omitted; every present identifier must still match. This mirrors the pre-existing HTML rule.
+2. Query-order/percent-encoding differences are candidate matches only. The literal observed attachment href must be downloaded independently and produce the exact same bytes before association.
+3. Registered parent HTML now supplies explicit Methods-xref -> unique bibliography-record -> DOI/PMID association and exact observed attachment links. Untagged text and generic names do not suffice.
+4. Actual CAPTCHA responses are reported as access-limited content before missing metadata; originals remain retained and unregistered.
+
+Adversarial tests cover wrong PMID, DOI/title, no identifiers, different attachment bytes, duplicate query keys, non-Methods citations and duplicate reference IDs.20 combined registrar/recovery tests pass. Actual previously rejected PLOS originals pass identity only; these two are outside remaining33 and must not be re-extracted. DamID/GTI HTML parser behavior was verified against cached originals and correctly still withholds their proposed unrelated/unscoped procedural links.
+
+No current runtime, source registry or scientific artifact was mutated. Complete source/invention correctness still requires new registration and fresh independent scientific review.

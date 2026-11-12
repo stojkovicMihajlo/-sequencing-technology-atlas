@@ -131,3 +131,70 @@ def test_explicit_supplement_cover_binds_mirror_without_claiming_backlink(tmp_pa
         _supplement_cover(text.replace('10.1234/test','10.1234/other'),expected,parents,sources)
     with pytest.raises(ValueError,match='registered'):
         _supplement_cover(text,expected,[],{})
+
+
+def test_publisher_jats_without_pmid_requires_exact_scoped_doi_and_title(tmp_path):
+    raw=xml().replace(b'<article-id pub-id-type="pmid">123</article-id>',b'')
+    result=register(candidate(),PAPER,tmp_path/'good',downloader=lambda u:Download(raw,u,'application/xml'))
+    assert result['pmid']=='123'
+    receipt=json.loads((tmp_path/'good/retrieval.json').read_text())
+    assert receipt['identity_check']['identifier_route']=='exact_scoped_doi_title_missing_pmid'
+    for name,bad in [('wrongdoi',raw.replace(b'10.1234/test',b'10.1234/other')),
+                     ('wrongtitle',raw.replace(PAPER['title'].encode(),b'A different article title.')),
+                     ('conflictingpmid',xml('999')),
+                     ('noids',raw.replace(b'<article-id pub-id-type="doi">10.1234/test</article-id>',b''))]:
+        with pytest.raises(ValueError):
+            register(candidate(),PAPER,tmp_path/name,downloader=lambda u:Download(bad,u,'application/xml'))
+
+
+def test_observed_attachment_query_variants_require_actual_same_bytes(tmp_path):
+    from experiments.card_methods_full_20261112.located_documents import _landing_attachment,_same_query_resource
+    requested='https://example.org/file?id=10.1234%2Ftest.s001&type=supplementary'
+    observed='https://example.org/file?type=supplementary&id=10.1234/test.s001'
+    raw=('<html><head><meta name="citation_doi" content="10.1234/test"><meta name="citation_title" content="'+PAPER['title']+'"></head><body><a href="'+observed.replace('&','&amp;')+'">Supplement</a></body></html>').encode()
+    identity={'title':PAPER['title'],'identifiers':{'doi':['10.1234/test'],'pmid':['123']}}
+    original=tmp_path/'original.doc';original.write_bytes(b'Original document bytes')
+    fetched=Download(original.read_bytes(),requested,'application/msword')
+    called=[]
+    def fetch(url):called.append(url);return Download(original.read_bytes(),url,'application/msword')
+    result=_landing_attachment(raw,'https://example.org/article',identity,requested,fetched,original,fetch)
+    assert called==[observed]
+    assert result['observed_link_retrieval']['same_original_bytes']
+    with pytest.raises(ValueError,match='different bytes'):
+        _landing_attachment(raw,'https://example.org/article',identity,requested,fetched,original,
+            lambda u:Download(b'A different file',u,'application/msword'))
+    assert not _same_query_resource(requested,observed+'&id=other')
+
+
+def test_captcha_source_is_reported_as_access_failure_before_metadata(tmp_path):
+    raw=b'<html><head><base href="https://www.google.com/recaptcha/challengepage/"><title>Checking your browser</title></head><body>Challenge</body></html>'
+    with pytest.raises(ValueError,match='access challenge'):
+        register(candidate(format='html'),PAPER,tmp_path/'html',downloader=lambda u:Download(raw,u,'text/html'))
+    assert (tmp_path/'html/original.html').read_bytes()==raw
+    assert not (tmp_path/'html/registered_source.json').exists()
+    with pytest.raises(ValueError,match='access challenge'):
+        register(candidate(format='pdf'),PAPER,tmp_path/'pdf',downloader=lambda u:Download(raw,u,'text/html'))
+
+
+def test_registered_parent_html_requires_methods_xref_and_unique_reference(tmp_path):
+    from genomics_discovery.illumina.extraction import sha
+    from experiments.card_methods_full_20261112.located_documents import _parent_records,_dependency_binding
+    from genomics_discovery.sources.acquisition.models import Identity
+    header='<html><head><meta name="citation_pmid" content="123"><meta name="citation_doi" content="10.1234/test"><meta name="citation_title" content="'+PAPER['title']+'"></head><body>'
+    section='<section id="methods"><h2>Materials and Methods</h2><p>Procedure follows <a href="#R1">1</a>.</p></section>'
+    reference='<li id="R1"><cite>A cited procedure.</cite><a href="https://doi.org/10.1234/protocol">DOI</a><a href="https://pubmed.ncbi.nlm.nih.gov/999/">PubMed</a></li>'
+    path=tmp_path/'parent.html'
+    doc=candidate(role='cited_protocol',identity={'pmid':'999','doi':'10.1234/protocol','title':'A cited procedure.'})
+    expected=Identity(pmid='123',doi='10.1234/test',title=PAPER['title'])
+    def parents(body):
+        path.write_text(header+body+'</body></html>')
+        sources={'p':{'kind':'text','content_level':'fulltext','pmid':'123','url':'https://example.org/article',
+            'custody_files':[{'path':str(path),'sha256':sha(path)}]}}
+        return _parent_records(sources,expected)
+    bound=_dependency_binding(doc,parents(section+'<ul>'+reference+'</ul>'))
+    assert bound['citation']['section_locator']=='HTML section#methods'
+    for bad in [section.replace('Materials and Methods','Introduction')+reference,
+                section+reference+reference,
+                section+reference.replace('10.1234/protocol','10.1234/other')]:
+        with pytest.raises(ValueError,match='Methods citation'):
+            _dependency_binding(doc,parents(bad))

@@ -3,6 +3,8 @@ import subprocess
 import re
 from pathlib import Path
 from xml.etree.ElementTree import ParseError
+from urllib.parse import urlsplit, parse_qsl, urljoin
+from html.parser import HTMLParser
 
 from genomics_discovery.illumina.extraction import sha, write, verify_registry_files
 from genomics_discovery.illumina.sources import jats_text
@@ -11,10 +13,126 @@ from genomics_discovery.sources.acquisition.pdf_registration import verify_pdf_t
 from genomics_discovery.sources.acquisition.runtime import _identity, _match, _links
 from genomics_discovery.sources.acquisition.associations import citation_html_record, biostudies_record
 from genomics_discovery.sources.acquisition.legacy_word import word_rendition
-from genomics_discovery.sources.acquisition.html_identity import assess_primary_html
+from genomics_discovery.sources.acquisition.html_identity import assess_primary_html, _AccessText
 from genomics_discovery.sources.acquisition.models import Identity
 from genomics_discovery.sources.cached_documents import ArticleHTML
 from genomics_discovery.sources.document_manifest import inspect_jats, MAX_BYTES
+
+
+def _article_identity(actual, expected):
+    """Mirror the existing HTML gate's exact DOI+title missing-PMID route.
+
+    Publisher JATS can omit PMID. No present conflicting identifier is excused,
+    and no finder-proposed title or identifier supplies the scoped expectation.
+    """
+    from genomics_discovery.sources.acquisition.runtime import _doi, _normal
+    ids = actual.get('identifiers', {})
+    missing_pmid = (expected.pmid is not None and not ids.get('pmid'))
+    doi_title = (expected.doi and expected.title
+        and {_doi(v) for v in ids.get('doi', [])} == {_doi(expected.doi)}
+        and _normal(actual.get('title', '')) == _normal(expected.title))
+    scoped = expected.model_copy(update={'pmid': None}) if missing_pmid and doi_title else expected
+    _match(actual, scoped)
+    return {'identifier_route': 'exact_scoped_doi_title_missing_pmid' if missing_pmid and doi_title else 'exact_expected_identifiers',
+            'expected_identity': expected.model_dump(mode='json'), 'actual_identity': actual,
+            'absent_identifiers': ['pmid'] if missing_pmid and doi_title else []}
+
+
+def _reject_access_response(raw):
+    """Report actual challenge bytes as access failure, never missing science."""
+    if b'<html' not in raw[:500].lower() and b'<!doctype html' not in raw[:500].lower():
+        return
+    parser = _AccessText(); parser.feed(raw.decode('utf-8',errors='replace'));parser.close()
+    title = ' '.join(''.join(parser.title_parts).split())
+    if (re.search(r'^(?:checking your browser|just a moment|access denied|captcha challenge)\b',title,re.I)
+            or re.search(br'<base\b[^>]*href=["\']https://www\.google\.com/recaptcha/challengepage/',raw,re.I)):
+        raise ValueError('Source endpoint returned an explicit browser/CAPTCHA access challenge, not paper content')
+
+
+def _same_query_resource(left, right):
+    """Candidate matching only; actual observed link must also yield same bytes."""
+    a, b = urlsplit(left), urlsplit(right)
+    qa, qb = parse_qsl(a.query, keep_blank_values=True), parse_qsl(b.query, keep_blank_values=True)
+    if len({k for k, _ in qa}) != len(qa) or len({k for k, _ in qb}) != len(qb):
+        return False
+    return ((a.scheme, a.netloc.lower(), a.path) == (b.scheme, b.netloc.lower(), b.path)
+            and sorted(qa) == sorted(qb))
+
+
+def _landing_attachment(raw, page_url, identity, requested, fetched, original, downloader):
+    urls = [requested, fetched.final_url]
+    extra = None
+    observed = _links(raw, page_url)
+    if not any(url in observed for url in urls):
+        equivalents = sorted(link for link in observed if _same_query_resource(link, requested))
+        if len(equivalents) == 1:
+            verified = downloader(equivalents[0])
+            if verified.content != fetched.content:
+                raise ValueError('Observed attachment link yielded different bytes from candidate')
+            urls = [equivalents[0]]
+            extra = {'observed_url': equivalents[0], 'final_url': verified.final_url,
+                     'same_original_bytes': True,
+                     'basis': 'Literal parent link independently retrieved; query ordering/encoding candidate matched, bytes verified'}
+    result = citation_html_record(raw, page_url, identity, urls, fetched.content, sha(original),
+                                 identify=_identity, match=_match, links=_links)
+    if extra: result['observed_link_retrieval'] = extra
+    return result
+
+
+class _ParentHTML(HTMLParser):
+    """Conservative structured Methods-xref to bibliography extraction.
+
+    Untagged prose and PDF references remain unsupported, rather than becoming
+    name matches. A Methods hyperlink and actual reference identifiers are kept
+    as association evidence, not proof of procedural applicability.
+    """
+    void = {'area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'}
+
+    def __init__(self, base):
+        super().__init__(convert_charrefs=True)
+        self.base=base;self.stack=[];self.refs={};self.citations=[];self.links=set()
+
+    def handle_starttag(self, tag, attrs):
+        attrs=dict(attrs)
+        if tag=='a' and attrs.get('href'):
+            href=attrs['href'];absolute=urljoin(self.base,href);self.links.add(absolute)
+            for row in self.stack:
+                if row['tag']=='li' and row['id']:row['links'].append(absolute)
+            sections=[row for row in self.stack if row['tag']=='section' and row.get('methods')]
+            if href.startswith('#') and len(href)>1 and sections:
+                self.citations.append({'reference_id':href[1:],'section_locator':'HTML section#'+sections[-1]['id'],
+                                       'xref_locator':'HTML anchor '+href})
+        if tag not in self.void:
+            self.stack.append({'tag':tag,'id':attrs.get('id',''),'text':[],'links':[]})
+
+    def handle_endtag(self, tag):
+        index=next((i for i in range(len(self.stack)-1,-1,-1) if self.stack[i]['tag']==tag),None)
+        if index is None:return
+        row=self.stack[index]
+        if tag in {'h1','h2','h3','h4','h5','h6'}:
+            heading=' '.join(''.join(row['text']).split())
+            if re.search(r'^(?:(?:materials?\s+and\s+|online\s+)?methods?|experimental\s+procedures?)\b',heading,re.I):
+                section=next((s for s in reversed(self.stack[:index]) if s['tag']=='section'),None)
+                if section is not None:section['methods']=True
+        if tag=='li' and row['id']:
+            ids={'doi':set(),'pmid':set()}
+            for href in row['links']:
+                parsed=urlsplit(href)
+                if parsed.hostname in {'doi.org','dx.doi.org'}:ids['doi'].add(parsed.path.lstrip('/'))
+                elif parsed.hostname=='pubmed.ncbi.nlm.nih.gov' and parsed.path.strip('/').isdecimal():ids['pmid'].add(parsed.path.strip('/'))
+            self.refs.setdefault(row['id'],[]).append({'reference_id':row['id'],'locator':'HTML li#'+row['id'],
+                'identifiers':{k:sorted(v) for k,v in ids.items()},'citation':' '.join(''.join(row['text']).split())})
+        del self.stack[index:]
+
+    def handle_data(self, data):
+        if any(row['tag'] in {'script','style','template','head'} for row in self.stack):return
+        for row in self.stack:
+            if row['tag']=='li' or row['tag'] in {'h1','h2','h3','h4','h5','h6'}:row['text'].append(data)
+
+    def structure(self, identity):
+        return {'identity':identity,'procedure_citation_candidates':[
+            {**c,'reference_records':self.refs.get(c['reference_id'],[])} for c in self.citations],
+            'supplements':[]}
 
 
 def _parent_records(parent_sources, expected):
@@ -31,17 +149,26 @@ def _parent_records(parent_sources, expected):
             candidates.append(source['original'])
         for pin in candidates:
             path = Path(pin['path'])
-            if path.suffix.lower() not in {'.xml', '.nxml'} or str(path) in seen:
+            if path.suffix.lower() not in {'.xml', '.nxml', '.html', '.htm'} or str(path) in seen:
                 continue
             seen.add(str(path))
             raw = path.read_bytes()
             try:
-                structure = inspect_jats(raw)
-                _match(structure['identity'], expected)
+                if path.suffix.lower() in {'.html','.htm'}:
+                    _reject_access_response(raw)
+                    actual=_identity(raw,'html')
+                    from genomics_discovery.sources.acquisition.runtime import _normal,_doi
+                    assess_primary_html(raw,actual,expected,expected,source.get('url',''),normal=_normal,doi=_doi)
+                    parser=_ParentHTML(source.get('url',''));parser.feed(raw.decode('utf-8'));parser.close()
+                    structure=parser.structure(actual);links=parser.links
+                else:
+                    structure = inspect_jats(raw)
+                    _article_identity(structure['identity'], expected)
+                    links = {href for item in structure['supplements'] for href in item['hrefs']}
             except (ValueError, ParseError):
                 continue
-            links = {href for item in structure['supplements'] for href in item['hrefs']}
             results.append({'structure': structure, 'links': links,
+                            'format':'html' if path.suffix.lower() in {'.html','.htm'} else 'jats',
                             'original': {'path': str(path), 'sha256': sha(path)}})
     return results
 
@@ -83,6 +210,8 @@ def _dependency_binding(document, parents):
     from genomics_discovery.sources.acquisition.runtime import _doi
     for parent in parents:
         for citation in parent['structure']['procedure_citation_candidates']:
+            if len(citation['reference_records']) != 1:
+                continue
             for reference in citation['reference_records']:
                 ids = reference['identifiers']
                 comparable = []
@@ -127,6 +256,9 @@ def register(document, paper, output, *, downloader=download, parent_sources=Non
                'declared_candidate': document.model_dump(mode='json')}
     write(output / 'retrieval.json', receipt)
     pins = [original, output / 'retrieval.json']
+    _reject_access_response(fetched.content)
+    if document.format == 'pdf' and not fetched.content.startswith(b'%PDF-'):
+        raise ValueError('PDF URL returned non-PDF bytes')
     if dependency:
         write(output / 'dependency.json', dependency)
         pins.extend([Path(dependency['parent_original']['path']), output / 'dependency.json'])
@@ -138,7 +270,7 @@ def register(document, paper, output, *, downloader=download, parent_sources=Non
             'doi': [expected.doi] if expected.doi else [], 'pmid': [expected.pmid]}}
         direct = next((p for p in parents if document.url in p['links'] or fetched.final_url in p['links']), None)
         if direct:
-            association = {'basis': 'Exact attachment URL in registered identity-checked primary JATS',
+            association = {'basis': 'Exact attachment URL in registered identity-checked primary '+direct.get('format','jats').upper(),
                            'parent_original': direct['original'], 'original_sha256': sha(original)}
             pins.append(Path(direct['original']['path']))
         elif document.association_record:
@@ -163,9 +295,9 @@ def register(document, paper, output, *, downloader=download, parent_sources=Non
             else:
                 landing = downloader(document.linked_from)
                 page = output / 'parent_landing.html'; page.write_bytes(landing.content); pins.append(page)
-                association = citation_html_record(landing.content, landing.final_url,
-                    parent_identity, [document.url, fetched.final_url], fetched.content, sha(original),
-                    identify=_identity, match=_match, links=_links)
+                _reject_access_response(landing.content)
+                association = _landing_attachment(landing.content, landing.final_url,
+                    parent_identity, document.url, fetched, original, downloader)
         if not pending_cover:
             write(output / 'association.json', association)
             pins.append(output / 'association.json')
@@ -186,7 +318,7 @@ def register(document, paper, output, *, downloader=download, parent_sources=Non
             pins.extend(Path(p['path']) for p in association['parent_custody'])
     elif document.format == 'jats':
         structure = inspect_jats(fetched.content)
-        _match(structure['identity'], expected)
+        receipt['identity_check'] = _article_identity(structure['identity'], expected)
         if not structure.get('sections') and b'<body' not in fetched.content:
             raise ValueError('JATS has no article body')
         text, blocks = jats_text(fetched.content)
