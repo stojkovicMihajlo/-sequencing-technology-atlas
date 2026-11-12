@@ -178,6 +178,9 @@ def build_history_index(manifest_path):
                 raise ValueError("Seed extraction identity mismatch")
             op_ids = {o["id"] for o in extraction["operations"]}
             target = workflow(binding["record_id"], pin_extraction, seed["name"])
+            if seed.get('method_contribution_summary'):
+                nodes[target].setdefault('method_contribution_summaries', []).append({
+                    'artifact_sha256': pin, **copy.deepcopy(seed['method_contribution_summary'])})
             if 'coverage_review' in graph:
                 from .history_coverage import check_published_coverage
                 specification = entry.get('source_registry')

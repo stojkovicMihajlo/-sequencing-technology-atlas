@@ -5,6 +5,7 @@ Direct bind_reviewed_methods tests cannot detect an upstream node-copy loss.
 """
 import hashlib
 import json
+from pathlib import Path
 
 import pytest
 
@@ -78,3 +79,21 @@ def test_reviewed_identity_without_host_proof_remains_unbound(tmp_path):
     assert index['edges'][0]['source'].startswith('external:')
     assert len(index['method_identity_issues'])==1
     assert connectivity_report(index)['resolved_method_relationships']==0
+
+
+def test_method_summary_survives_compilation_without_becoming_reviewed_novelty(tmp_path):
+    path,_,_=inputs(tmp_path)
+    manifest=json.loads(path.read_text())
+    overlay_path=manifest['overlays'][0]['path']
+    overlay=json.loads(Path(overlay_path).read_text())
+    seed=next(node for node in overlay['nodes'] if node['id']=='seed')
+    summary={'text':'The later assay changes the library route.',
+             'status':'model-authored summary; not independently adjudicated structured novelty',
+             'source':{'path':'analysis.json','field':'summary'}}
+    seed['method_contribution_summary']=summary
+    pin=write(Path(overlay_path),overlay)
+    manifest['overlays'][0].update(pin)
+    path.write_text(json.dumps(manifest))
+    index=build_history_index(path)
+    published=next(node for node in index['nodes'].values() if node.get('method_contribution_summaries'))
+    assert published['method_contribution_summaries'][0]=={'artifact_sha256':pin['sha256'],**summary}
