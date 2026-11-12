@@ -1,0 +1,236 @@
+{
+  "checked_at": "2026-11-12T11:22:58.880710+00:00",
+  "job": "52047726",
+  "definition": "What the output makes identifiable or distinguishable, its material/data carrier, and any necessary later interpretation.",
+  "scope": "Engineering reading of saved outputs and registered source passages; not a blind evaluation or complete independent paper re-review.",
+  "scientific_artifacts_modified": false,
+  "comparisons": [
+    {
+      "method": "irclip",
+      "candidate_path": "completed/full_run_01/cards/irclip/attempt_001/attempts/003_author/artifact.json",
+      "candidate_file_sha256": "452e43696f503a4739980920186576be807bc117f7c3336cda65bd9350360719",
+      "source_bundle_unchanged": true,
+      "source_registry_sha256": "7265ded8797e9dfe430bbf749057b308dff2b06e01f2aa38c3934178a8d47d32",
+      "stage": "revised_author_awaiting_fresh_review",
+      "before_counts": {
+        "operations": 7,
+        "states": 9,
+        "flows": 15
+      },
+      "after_counts": {
+        "operations": 7,
+        "states": 9,
+        "flows": 15
+      },
+      "comparisons": [
+        {
+          "feature": "Adapter attachment",
+          "correspondence": "manually inspected scientific roles, not name or ID equality",
+          "before": {
+            "id": "o4",
+            "label": "Dephosphorylate RNA and ligate the 3′ IR800–biotin adapter",
+            "description": "End-treated RNA fragments acquire the labeled DNA adapter at their 3′ ends while the complexes remain immunoprecipitated. The standalone adapter drawing is a reagent input, not a separate preparation reaction.",
+            "mechanism": "T4 PNK dephosphorylates RNase-A- or RNase-1-digested complexes; T4 RNA Ligase 1 then joins the preadenylated DNA adapter to RNA 3′ ends. Internal IR800 supports nonisotopic detection, terminal biotin supports later affinity capture, and the adapter includes the depicted RT-priming region.",
+            "information_effect": "The infrared label is attached through successful 3′ adapter ligation, so detection tracks adapter-bearing RNA complexes rather than merely a labeled free RNA 5′ end."
+          },
+          "after": {
+            "id": "o4",
+            "label": "Dephosphorylate RNA ends and ligate the 3′ adapter",
+            "description": "Dephosphorylate RNase-digested complexes with T4 PNK, then attach the preadenylated IR800–biotin DNA adapter to RNA 3′ ends using T4 RNA Ligase 1.",
+            "mechanism": "Dephosphorylation prepares the RNase-digested RNA ends for ligation. The preadenylated adapter is the ligation substrate; its infrared dye supports nonisotopic detection, its terminal biotin supplies the later streptavidin handle, and its sequence supplies the RT priming interface.",
+            "information_effect": "Covalently tagging RNA 3′ ends links infrared detection and later affinity recovery to adapter-ligated RNA rather than to all crosslinked molecules."
+          }
+        },
+        {
+          "feature": "Reverse transcription",
+          "correspondence": "manually inspected scientific roles, not name or ID equality",
+          "before": {
+            "id": "o6",
+            "label": "Reverse-transcribe, capture with streptavidin and elute cDNA",
+            "description": "TGIRT-III copies adapter-primed RNA to cDNA. The cDNA–RNA hybrids are captured using the biotin-bearing RNA adapter on streptavidin beads; the reported cDNA-elution/RNA-degradation step then provides cDNA for circularization. These actions remain one composite block, correcting the catalogue caption “Immunopurify”.",
+            "mechanism": "TGIRT-III reverse transcription at 60°C precedes streptavidin capture of cDNA–RNA hybrids. Capture is mediated by adapter biotin. The subsequent elution/RNA-degradation buffer contains P3short and MnCl2 and uses heating. The paper names this release step but does not specify a detailed molecular displacement pathway.",
+            "information_effect": "RNA sequence is copied into DNA. For RT-terminated molecules, residual peptide–RNA crosslinks give an endpoint interpreted as one base 3′ of the contact. Biotin and IR800 reside on the RNA-linked adapter and are not asserted to be chemical modifications of the cDNA. The primer contributes the barcode region, 5′ phosphate and internal spacers."
+          },
+          "after": {
+            "id": "o6",
+            "label": "Reverse-transcribe RNA, affinity-capture hybrids and release cDNA",
+            "description": "Anneal the cDNA synthesis primer and copy recovered RNA with TGIRT-III at 60°C. Capture RNA–cDNA hybrids on streptavidin beads via the biotinylated RNA adapter, then degrade RNA and elute cDNA before circularization.",
+            "mechanism": "The adapter supplies the RT primer-binding region. TGIRT-III makes RNA-derived cDNA at 60°C; the catalogue reports that this temperature melts secondary RNA structures to reduce reverse-transcription bias. RT can stop at the crosslinked peptide. Streptavidin binds the RNA adapter’s biotin to capture hybrids. The MnCl2-containing RNA-degradation/cDNA-elution step uses P3short oligonucleotide and releases cDNA. The cDNA primer supplies a 5′ phosphate, barcode and internal spacers; the adapter’s dye and biotin are on the RNA-side capture substrate, not modifications copied into DNA.",
+            "information_effect": "RNA sequence and, for peptide-stopped molecules, the termination endpoint become DNA-encoded surrogates for RNA identity and the contact position. Primer-encoded barcode/index information is introduced. Subsequent sequencing and mapping are required to interpret these features as binding sites."
+          }
+        }
+      ],
+      "initial_review_requests": [
+        {
+          "target": "operation:o6",
+          "verdict": "unsupported",
+          "action": "revise",
+          "rationale": "The candidate records TGIRT-III and 60°C in o6.description, but o6.mechanism never explains the catalogue-reported reason for this condition: melting secondary RNA structures to reduce bias. That explanation occurs only in o6.evidence. Add it to o6.mechanism as a reported catalogue claim, retaining the distinction that the primary methods confirm the enzyme and temperature rather than independently establishing the bias-reduction claim. This is a missing explanation of a retained, method-distinguishing operation; no added State or Operation, RT execution settings, or new research is needed.",
+          "evidence": [
+            {
+              "source_id": "card:irclip",
+              "locator": "Pros: reported reason for thermostable RT at 60°C",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Uses thermostable reverse transcriptase at 60°C, reducing biases by melting secondary RNA structures1"
+            },
+            {
+              "source_id": "paper:27111506",
+              "locator": "[b00026] TGIRT-III extension at 60°C",
+              "basis": "text",
+              "support": "reported",
+              "quote": "0.2 μL of TIGRT-III reverse transcriptase (Ingex, #TGIRT50) was added to the annealed RNA and incubated at room temperature for 30 min. 1 μL of 25 mM dNTPs was added to the reaction, mixed well, and incubated in a thermocycler for 2 h at 60 °C."
+            },
+            {
+              "source_id": "paper:27111506",
+              "locator": "[b00026] hybrid capture with streptavidin beads",
+              "basis": "text",
+              "support": "reported",
+              "quote": "cDNA-RNA hybrids were captured by addition of 5 μL of MyOne Streptavidin C1 Dynabeads (Thermo Fisher Scientific, #65001)"
+            },
+            {
+              "source_id": "paper:27111506",
+              "locator": "[b00026] RNA degradation/cDNA elution before circularization",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Beads were resuspended in 10 μL of cDNA elution/RNA degradation buffer (8.25 μL water, 1 μL of 1 μM P3short oligonucleotide, and 0.75 μL of 50 mM MnCl2) and placed in a thermocycler with the program: 5 min 95 °C, 1 min 75 °C, ramp 0.1° s−1 to 60 °C forever."
+            }
+          ]
+        },
+        {
+          "target": "record",
+          "verdict": "unsupported",
+          "action": "revise",
+          "rationale": "The molecular route, labels, primary-supported corrections and citation levels are otherwise supported, but the scientific explanation needs one localized revision. The candidate records TGIRT-III and 60°C in o6.description, but o6.mechanism never explains the catalogue-reported reason for this condition: melting secondary RNA structures to reduce bias. That explanation occurs only in o6.evidence. Add it to o6.mechanism as a reported catalogue claim, retaining the distinction that the primary methods confirm the enzyme and temperature rather than independently establishing the bias-reduction claim. This is a missing explanation of a retained, method-distinguishing operation; no added State or Operation, RT execution settings, or new research is needed.",
+          "evidence": [
+            {
+              "source_id": "card:irclip",
+              "locator": "Pros: reported reason for thermostable RT at 60°C",
+              "basis": "text",
+              "support": "reported",
+              "quote": "Uses thermostable reverse transcriptase at 60°C, reducing biases by melting secondary RNA structures1"
+            },
+            {
+              "source_id": "paper:27111506",
+              "locator": "[b00026] TGIRT-III extension at 60°C",
+              "basis": "text",
+              "support": "reported",
+              "quote": "0.2 μL of TIGRT-III reverse transcriptase (Ingex, #TGIRT50) was added to the annealed RNA and incubated at room temperature for 30 min. 1 μL of 25 mM dNTPs was added to the reaction, mixed well, and incubated in a thermocycler for 2 h at 60 °C."
+            },
+            {
+              "source_id": "diagram:asset_c7d282d55723e94951593396",
+              "locator": "Entire horizontal workflow: left irCLIP illustration, seven action captions, adapter legend and final cDNA",
+              "basis": "image",
+              "support": "depicted",
+              "bbox": [
+                0,
+                0,
+                1,
+                1
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "pseudo-seq",
+      "candidate_path": "completed/full_run_01/cards/pseudo-seq/attempt_001/extraction.json",
+      "candidate_file_sha256": "df2b081c0dc0bd2a5138b250245ab8d2d9ad1c9881b1153fc63c31181194e152",
+      "source_bundle_unchanged": true,
+      "source_registry_sha256": "7fabf6722cc11872bbc88108c4a490066038217d33df51bc6b70bab50a02ea67",
+      "stage": "accepted_after_independent_review",
+      "before_counts": {
+        "operations": 20,
+        "states": 22,
+        "flows": 42
+      },
+      "after_counts": {
+        "operations": 13,
+        "states": 24,
+        "flows": 45
+      },
+      "comparisons": [
+        {
+          "feature": "Mock control",
+          "correspondence": "manually inspected scientific roles, not name or ID equality",
+          "before": {
+            "id": "chemistry_mock",
+            "label": "Mock-treat RNA without CMC",
+            "description": "Process the parallel RNA preparation in BEU buffer without CMC, providing a background-stop control.",
+            "mechanism": "The reported mock exposure uses BEU buffer without CMC.",
+            "information_effect": "Preserves the comparator for CMC-independent RNA-sequence/structure-associated or other background RT stops."
+          },
+          "after": {
+            "id": "mock_treat",
+            "label": "Mock-treat RNA without CMC",
+            "description": "Process the matched control fragments in the reported mock-treatment buffer without adding CMC.",
+            "mechanism": "Omitting CMC prevents introduction of the treatment-dependent RT-blocking mark; RT stops in this branch provide a background comparison.",
+            "information_effect": "The separately identified −CMC preparation supplies pseudouridine-independent RT-stop background, not a Ψ-specific endpoint signal."
+          }
+        },
+        {
+          "feature": "Reverse transcription of treated RNA",
+          "correspondence": "manually inspected scientific roles, not name or ID equality",
+          "before": {
+            "id": "rt_plus",
+            "label": "Reverse-transcribe +CMC RNA",
+            "description": "Synthesize cDNA from adaptor-ligated RNA; CMC-modified Ψ can terminate extension, producing truncated cDNAs together with other RT products.",
+            "mechanism": "AMV reverse transcriptase extends the adaptor-complementary, 5′-phosphorylated RT primer. The source reports arrest one nucleotide 3′ of CMC-modified Ψ.",
+            "information_effect": "RNA sequence becomes DNA sequence; termination position is retained as a cDNA endpoint. The RNA Ψ/CMC group itself is not copied as that chemical modification into DNA."
+          },
+          "after": {
+            "id": "reverse_transcribe",
+            "label": "Reverse-transcribe adapter-ligated RNA",
+            "description": "Independently anneal the 5′-phosphorylated adapter-complementary RT primer and extend it with AMV-RT on each RNA-fragment preparation, producing RNA-derived cDNA products, including truncated cDNAs.",
+            "mechanism": "The adapter-complementary primer initiates RNA copying. In +CMC RNA, the retained Ψ-dependent mark can stop RT one nucleotide 3′ of Ψ; background termination also occurs and is measured by the parallel −CMC preparation.",
+            "information_effect": "cDNA sequence and its termination boundary encode RNA origin and RT-stop position. The RNA chemical modification is not copied into DNA. Only +CMC-versus−CMC comparison after mapping can attribute excess stops to candidate Ψ sites."
+          }
+        },
+        {
+          "feature": "Reverse transcription of mock RNA",
+          "correspondence": "manually inspected scientific roles, not name or ID equality",
+          "before": {
+            "id": "rt_mock",
+            "label": "Reverse-transcribe −CMC RNA",
+            "description": "Synthesize cDNA from the mock-treated adaptor-ligated RNA, recording background RT stops.",
+            "mechanism": "The same adaptor-complementary RT-primer/AMV-RT interface is used on separately processed mock RNA.",
+            "information_effect": "RNA sequence becomes DNA sequence; termination position is retained as a cDNA endpoint. The RNA Ψ/CMC group itself is not copied as that chemical modification into DNA."
+          },
+          "after": {
+            "id": "reverse_transcribe",
+            "label": "Reverse-transcribe adapter-ligated RNA",
+            "description": "Independently anneal the 5′-phosphorylated adapter-complementary RT primer and extend it with AMV-RT on each RNA-fragment preparation, producing RNA-derived cDNA products, including truncated cDNAs.",
+            "mechanism": "The adapter-complementary primer initiates RNA copying. In +CMC RNA, the retained Ψ-dependent mark can stop RT one nucleotide 3′ of Ψ; background termination also occurs and is measured by the parallel −CMC preparation.",
+            "information_effect": "cDNA sequence and its termination boundary encode RNA origin and RT-stop position. The RNA chemical modification is not copied into DNA. Only +CMC-versus−CMC comparison after mapping can attribute excess stops to candidate Ψ sites."
+          }
+        }
+      ],
+      "review_binding_verified": true,
+      "all_review_checks_supported": true
+    }
+  ],
+  "other_method_checks": [
+    {
+      "method": "mab-seq",
+      "new_run": "author_running",
+      "previous_strength": "Distinguishes combined 5fC/5caC signal from individual-base identification; explains collapse of original C and 5mC after protective methylation.",
+      "new_improvement_claimed": false
+    },
+    {
+      "method": "rasl-seq",
+      "new_run": "pending_worker_slot",
+      "previous_strength": "Reporter is ligated synthetic DNA probes, not RNA-derived cDNA; barcode identifies sample, not an individual original RNA molecule.",
+      "new_improvement_claimed": false
+    }
+  ],
+  "findings": [
+    "irCLIP names dephosphorylation and ligation in description; those details already existed in the archived mechanism. This is improved placement, not new scientific discovery.",
+    "irCLIP reviewer requested the temperature-related rationale already present in evidence. Author amended mechanism; fresh review remains pending.",
+    "Pseudo-seq separates +CMC and mock information meaning and states the mapping/control inference dependency. It passed review without revision.",
+    "Pseudo-seq has shared Operations with separate condition States and explicit per-condition effects; fewer Operations does not establish higher accuracy.",
+    "This preserves the local-condition principle tested on November 8; do not claim it is newly discovered or proven better than all prior refined runs.",
+    "Source-attribution wording remains in some fields. Distinguish unnecessary reading/grouping commentary from consequential qualification of a reported but unverified benefit.",
+    "One output per method cannot establish a prompt effect or reduced hallucination rate."
+  ]
+}
