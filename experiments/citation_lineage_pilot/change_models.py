@@ -98,9 +98,10 @@ class CoverageChangeReview(Record):
 
 
 class MethodMatch(Record):
-    status: Literal['resolved','unresolved','ambiguous','not_applicable']
+    status: Literal['resolved','not_in_atlas','unresolved','ambiguous','not_applicable']
     record_id: str | None = Field(description='Known catalogue method ID only when identity and relevant implementation are independently resolved; otherwise null.')
-    rationale: str = Field(min_length=1, description='Explain publication identity and relevant implementation match, mismatch or ambiguity. A shared paper or matching name alone is insufficient. Earlier Operation/State mapping is not required.')
+    method_name: str | None = Field(default=None, description='Reviewed name of an identified earlier method absent from the atlas. Required and nonempty for not_in_atlas; null when no method identity is established. Do not invent a method merely to create an ancestor.')
+    rationale: str = Field(min_length=1, description='Explain publication identity and relevant implementation match, mismatch or ambiguity after checking the supplied catalogue first. For not_in_atlas, identify known candidates considered and why their implementations do not match, or state that none is present. A shared paper or matching name alone is insufficient; a same-named different implementation can remain absent. Earlier Operation/State mapping is not required.')
     evidence: list[Evidence] = Field(description='For resolved, quote the cited earlier full text establishing the relevant assay/implementation. Catalogue text alone cannot resolve a method identity.')
 
     @model_validator(mode='after')
@@ -110,6 +111,8 @@ class MethodMatch(Record):
                 raise ValueError('Resolved method match needs a method ID and earlier full-text evidence')
         elif self.record_id is not None:
             raise ValueError('Unresolved/ambiguous/not-applicable method match cannot choose an endpoint')
+        if self.status == 'not_in_atlas' and (not self.method_name or not self.method_name.strip() or not self.evidence):
+            raise ValueError('Identified method absent from atlas needs a reviewed method name and earlier full-text evidence')
         return self
 
 

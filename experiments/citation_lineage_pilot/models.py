@@ -4,7 +4,7 @@ import json
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
-from genomics_discovery.illumina.relationships import RELATIONS, HISTORICAL_RELATIONS, contribution_layer, ASSAY_HISTORY_POLICY, catalogue_method_pmids, catalogue_entry_sha256
+from genomics_discovery.illumina.relationships import RELATIONS, HISTORICAL_RELATIONS, contribution_layer, ASSAY_HISTORY_POLICY, ASSAY_CONTRIBUTION_KINDS, catalogue_method_pmids, catalogue_entry_sha256
 
 
 class Record(BaseModel):
@@ -222,6 +222,14 @@ def validate_review(document, analysis, analysis_sha256, sources, *, catalogue=N
                 assigned = catalogue_method_pmids(entries[0])
                 if not publication or publication not in assigned:
                     raise ValueError('Resolved method match publication disagrees with catalogue assignment')
+            elif match.status == 'not_in_atlas':
+                if claim.contributor_kind not in ASSAY_CONTRIBUTION_KINDS:
+                    raise ValueError('Absent experimental method endpoint cannot be inferred from general software/resource use')
+                if catalogue is None:
+                    raise ValueError('Absent-method decision requires the supplied catalogue to be checked')
+                publication = str(sources[claim.reference_id].get('pmid') or '')
+                if not publication.isdecimal():
+                    raise ValueError('Identified absent method needs the cited publication PMID')
         if (is_current_claim(claim) and finding.decision == "accept"
                 and claim.relation not in {"background", "no_established_relation"}):
             cited = {x.source_id for x in finding.evidence}
@@ -307,6 +315,11 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings, *, catal
             card = next(c for c in catalogue if c['record_id'] == match.record_id)
             nodes[-1]['method_identity_basis'] = {'record_id': match.record_id,
                                                  'catalogue_entry_sha256': catalogue_entry_sha256(card)}
+        elif match is not None and match.status == 'not_in_atlas':
+            nodes[-1]['method_identity_basis'] = {
+                'paper_pmid': str(sources[claim.reference_id]['pmid']),
+                'method_name': match.method_name,
+                'identity_status': 'identified_unextracted_method'}
         links.append({"id": claim.id, "source": contributor_id, "target": "seed",
                       "kind": claim.relation,
                       "historical_development_edge": (contribution_layer(claim) == 'history' if scoped_history else claim.relation == "method_development"),

@@ -158,6 +158,11 @@ establish what changed. A component may span several Operations. A distinguishin
 new approach need not have an established historical donor; explain it in summary
 with source support rather than forcing an ancestry edge.
 The main evolutionary graph concerns experimental assay/design contributions.
+Record actual use or adaptation of an earlier contribution. A later method may
+change one feature or several coordinated features while retaining that
+contribution. Do not force a component-versus-whole-method relation taxonomy;
+specific physical changes belong in the existing change_records, not a new
+broad evolutionary label.
 Use contributor_kind=assay for an earlier experimental assay strategy and
 experimental_component for a specified sample-preparation, molecular manipulation,
 labeling, capture, partitioning or experimental readout design actually used.
@@ -268,6 +273,14 @@ A matching title, suggested catalogue_candidates or matching publication alone
 does not establish that correspondence; one paper may describe several methods.
 Use unresolved or ambiguous with record_id=null when identity is not established,
 or not_applicable for contributions without an experimental-method endpoint.
+Use not_in_atlas when the earlier paper establishes an identifiable method but
+no matching method is present in the supplied atlas. First inspect catalogue
+names, aliases, assigned publications and implementation scopes. Set record_id
+to null, give the source-supported method_name and earlier full-text evidence,
+and explain why existing candidates do not match. This is an identified absent
+method, not a generic unresolved citation. Do not invent an ID or a donor to
+fill a gap. A matching publication containing another method does not require
+merging the two; differences remain explicit for later alias/identity review.
 Unresolved identity does not turn a supported contribution into a rejected use:
 retain its named, publication-bound endpoint for later resolution. No earlier
 State/Operation decomposition is required for method-level resolution.

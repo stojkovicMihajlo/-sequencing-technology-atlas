@@ -160,6 +160,58 @@ def test_legacy_change_review_remains_parseable_without_method_match():
     assert old['links'][0]['historical_development_edge'] is False
 
 
+def absent_method_review():
+    raw=method_review()
+    raw['findings'][0]['method_match'].update(status='not_in_atlas',record_id=None,
+        method_name='Capture-X',rationale='The cited full paper names Capture-X; none of the supplied atlas implementations matches it.',
+        evidence=[evidence('R1','The earlier implementation was named Capture-X.')])
+    return raw
+
+
+def test_identified_absent_predecessor_is_distinct_from_unresolved_and_keeps_use():
+    sources=method_sources();sources['R1']['text']+=' The earlier implementation was named Capture-X.'
+    judged=parse_review(absent_method_review())
+    graph=graph_overlay(parse_analysis(proposal()),judged,sources,'test-pin',{},catalogue=method_catalogue())
+    assert len(graph['links'])==1
+    assert graph['links'][0]['review']['method_match']['status']=='not_in_atlas'
+    assert graph['nodes'][1]['method_identity_basis']=={'paper_pmid':'111','method_name':'Capture-X',
+        'identity_status':'identified_unextracted_method'}
+    assert graph['links'][0]['claim']['change_records'][0]['workflow_locations']['earlier']==[]
+
+
+def test_same_name_does_not_force_a_different_implementation_to_merge():
+    sources=method_sources();sources['R1']['text']+=' The earlier implementation was named Capture-X.'
+    catalogue=method_catalogue();catalogue[0]['method_names']=['Capture-X']
+    raw=absent_method_review();raw['findings'][0]['method_match']['rationale']='Checked earlier-assay: it has the same name and publication but a different retained implementation; the cited design is absent.'
+    graph=graph_overlay(parse_analysis(proposal()),parse_review(raw),sources,'test-pin',{},catalogue=catalogue)
+    assert graph['nodes'][1]['method_identity_basis']['identity_status']=='identified_unextracted_method'
+    assert 'record_id' not in graph['nodes'][1]['method_identity_basis']
+
+
+@pytest.mark.parametrize('defect',['no_name','no_evidence','chosen_id','no_catalogue','no_pmid','general_tool'])
+def test_absent_predecessor_requires_identified_experimental_method(defect):
+    raw=absent_method_review();sources=method_sources();sources['R1']['text']+=' The earlier implementation was named Capture-X.'
+    catalogue=method_catalogue();proposal_raw=proposal()
+    if defect=='no_name':raw['findings'][0]['method_match']['method_name']=None
+    elif defect=='no_evidence':raw['findings'][0]['method_match']['evidence']=[]
+    elif defect=='chosen_id':raw['findings'][0]['method_match']['record_id']='invented'
+    elif defect=='no_catalogue':catalogue=None
+    elif defect=='no_pmid':sources['R1'].pop('pmid')
+    elif defect=='general_tool':proposal_raw['claims'][0]['contributor_kind']='general_method'
+    with pytest.raises(ValueError):
+        validate_review(parse_review(raw),parse_analysis(proposal_raw),'test-pin',sources,catalogue=catalogue)
+
+
+def test_new_native_review_requests_explicit_nullable_method_name():
+    from run import native_schema
+    schema=native_schema('review')['$defs']['MethodMatch']
+    assert 'method_name' in schema['required']
+    assert 'not_in_atlas' in schema['properties']['status']['enum']
+    # Earlier review/3 records without this field remain Python-readable.
+    judged=parse_review(method_review())
+    assert judged.findings[0].method_match.method_name is None
+
+
 @pytest.mark.parametrize('defect', ['wrong_before_side', 'invented_state', 'invented_property', 'invented_earlier_ids'])
 def test_change_locations_and_evidence_sides_are_checked(defect):
     raw = proposal(); c = raw['claims'][0]['change_records'][0]

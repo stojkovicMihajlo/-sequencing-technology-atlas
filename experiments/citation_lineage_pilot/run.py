@@ -115,11 +115,8 @@ def prepare(args):
     seed = read(parent / "extraction.json")
     write(inputs / "seed_extraction.json", seed)
     inventory = read(args.inventory)
-    cards = [{"record_id": c["record_id"], "title": card_title(c),
-              "description": c.get("description_verbatim", ""),
-              "references": c.get("references", []),
-              "source_page_url": c.get("source_page_url")}
-             for c in inventory["cards"]]
+    from genomics_discovery.illumina.history_method_identity import catalogue_cards
+    cards = catalogue_cards(inventory)
     write(inputs / "catalogue.json", cards)
     sources = {
         "seed": {"content_level": "fulltext", "title": paper["title"],
@@ -237,6 +234,18 @@ def acquire_registered(inputs, nominations):
 
 
 SCHEMAS = {"nominate": CurrentNominations, "analyse": ChangeAnalysis, "review": CoverageMethodReview}
+
+
+def native_schema(role):
+    """New native review outputs spell out the nullable method-name field.
+
+    Python parsing still defaults it to None for earlier review/3 documents.
+    """
+    schema = SCHEMAS[role].model_json_schema()
+    if role == 'review':
+        match = schema['$defs']['MethodMatch']
+        match['required'] = list(match['properties'])
+    return schema
 
 
 def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
@@ -382,7 +391,7 @@ async def execute(args):
     async def stage(role, *, analysis_path=None, feedback=None, previous_analysis_path=None):
         attempt = root / "attempts" / f"{len(state['stages']) + 1:03d}_{role}"
         attempt.mkdir(parents=True)
-        write(attempt / "schema.json", SCHEMAS[role].model_json_schema())
+        write(attempt / "schema.json", native_schema(role))
         registered_images = read(inputs / "images.json")
         attached, delivery = stage_images(
             [(x["source_id"], Path(x["path"])) for x in registered_images], attempt)
