@@ -341,3 +341,23 @@ adapter instead reuses the local PMID/rendition custody contract and conservativ
 citation-range principle inspected at Git e4822afd in cached_documents.ArticleHTML,
 history_inputs.resolve_article and citations.bibliography. It uses the standard
 library HTML parser, with no new external parser dependency.
+
+Explicit source-only recovery now uses the same citation entrypoint and the
+evolution.recover-sources pipeline action. It reopens completed research and its
+native nomination proof, copies seed/catalogue/bibliography/nomination unchanged,
+and upgrades only missing already-nominated earlier texts from a pinned cache.
+Available earlier fulltexts stay unchanged. Fresh analysis and independent review
+are required; no prior nomination/analyse stages are fabricated in the new run.
+Changed-source provenance is separate from unchanged review-only provenance and
+is recomputed during completion validation. Wrong inherited inputs, donor identity,
+cache/provenance assertions and absent fresh analysis are rejected.
+
+Legacy nomination is parsed under its actual archived schema, kept byte-exact,
+and does not acquire invented exclusions or a full-accounting ledger. New change
+analysis and review still use the current contracts. Actual scATAC preparation
+changed only R15 (abstract to the 68,635-character primary); seed XML, extraction,
+binding, bibliography, catalogue, initial sources, nomination and existing R13
+were hash-identical. This zero-model check is preparation, not a reviewed result.
+The fresh source-repair reason asks for the R15 implementation and regression
+review of retained R13 descriptions, low-input purification exceptions and scoped
+assay results. Seed release chemistry remains unresolved without new seed evidence.
