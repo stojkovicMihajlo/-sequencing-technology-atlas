@@ -3,12 +3,30 @@
   "purpose": "Pointers to verified launch records and outputs. These are historical records, not live scheduler status. Append entries here rather than creating another status document for every update.",
   "remote_project_root": "/scratch/groups/xiaojie/mstojkov/agents_snRNA",
   "history_completion_sources": [
-    {"path": "technology_atlas/v2/work/diagram_generation10_20261112/final_assets_01/merged_52094468/history_inputs.json", "kind": "compiled_manifest"},
-    {"path": "technology_atlas/v2/work/history_pilot_20261112/run_52063823", "kind": "native_batch"},
-    {"path": "technology_atlas/v2/work/history_parallel_20261112/run_52073185", "kind": "native_batch"},
-    {"path": "technology_atlas/v2/work/history_changes_20261106/run_01", "kind": "native_batch"},
-    {"path": "technology_atlas/v2/work/history_changes_20261106/batch_10_01", "kind": "native_batch"},
-    {"path": "sequencing-technology-atlas/provenance/experiments/citation_lineage_20261102/atac", "kind": "native_run"}
+    {
+      "path": "technology_atlas/v2/work/diagram_generation10_20261112/final_assets_01/merged_52094468/history_inputs.json",
+      "kind": "compiled_manifest"
+    },
+    {
+      "path": "technology_atlas/v2/work/history_pilot_20261112/run_52063823",
+      "kind": "native_batch"
+    },
+    {
+      "path": "technology_atlas/v2/work/history_parallel_20261112/run_52073185",
+      "kind": "native_batch"
+    },
+    {
+      "path": "technology_atlas/v2/work/history_changes_20261106/run_01",
+      "kind": "native_batch"
+    },
+    {
+      "path": "technology_atlas/v2/work/history_changes_20261106/batch_10_01",
+      "kind": "native_batch"
+    },
+    {
+      "path": "sequencing-technology-atlas/provenance/experiments/citation_lineage_20261102/atac",
+      "kind": "native_run"
+    }
   ],
   "runs": [
     {
@@ -148,29 +166,31 @@
       "output": "technology_atlas/v2/work/pipeline/new_papers_source_01/run_02/output",
       "code_version": "Frozen source runtime_source_fixed, with recorded code archive and input hashes",
       "last_verified_date": "2026-11-13",
-      "observed_process_state": "RUNNING",
+      "observed_process_state": "COMPLETED",
       "native_slot_limit": 25,
       "input_records": 24238,
       "screenable_abstracts": 23992,
       "missing_abstracts": 246,
       "observed_checkpoint": {
-        "completed_batches": 509,
-        "original_failed_batches": 1,
-        "running_batches": 25,
-        "queued_batches": 665,
-        "original_complete_paper_decisions": 10176,
-        "separately_repaired_paper_decisions": 20,
-        "new_verified_originals": 2194,
-        "cached_verified_originals": 10,
-        "separate_repair_verified_originals": 3,
-        "public_or_identity_holds": 1428,
-        "separate_repair_holds": 9,
-        "doi_hold": 1,
-        "acquiring": 2,
-        "acquisition_queued": 28
+        "original_validated_screen_rows": 23952,
+        "original_failed_batch_rows": 40,
+        "missing_abstracts": 246,
+        "publication_acquisition": {
+          "new_verified_originals": 5148,
+          "cached_verified_originals": 10,
+          "source_holds": 2427,
+          "duplicate_doi_hold": 1
+        }
       },
-      "note": "Original failed batch57 remains preserved; a separate one-row repair reused19valid rows and repaired1literal source-quote mismatch. Counts are checkpoint publication records, not technologies. Current screening reserves25 native slots; the repair slot is released.",
-      "last_verified_utc": "2026-11-13T14:47:36Z"
+      "note": "Original cohort completed. Two separate pinned validation repairs retain valid rows and correct two literal-quote transcription errors. Combined final counts are in current_source_checkpoint. Paper counts do not imply distinct technologies or admission.",
+      "last_verified_utc": "2026-11-13T14:47:36Z",
+      "exit_code": "0:0",
+      "finished_at": "2026-11-13T16:09:28.267611Z",
+      "receipts": {
+        "pipeline_manifest_sha256": "8350c1cf1dda8dfd828b23266243866e9114bbebc7496ba2833909d77569defb",
+        "results_sha256": "3c10296c187ca73b8badba194a4bc68d317da08c0c6333f13866ce2dc7bc1121",
+        "acquisition_sha256": "80f7e20b86c7bf112104494de144dcdb63b927b3156762fc54d4b1f16b63244c"
+      }
     },
     {
       "stage": "sources",
@@ -245,13 +265,17 @@
       "model": "gpt-6.1-sol",
       "effort": "xhigh",
       "native_slots": 1,
-      "last_verified_utc": "2026-11-13T14:47:36Z",
+      "last_verified_utc": "2026-11-13T17:23:16.663640+00:00",
       "pipeline_status": "running",
       "current_method_counts": {
         "running": 1
       },
       "code_version": "Frozen runtime/authoritative pipeline code archive; see manifest. No exact equivalence to current Git HEAD is claimed.",
-      "observed_process_state": "RUNNING"
+      "observed_process_state": "COMPLETED",
+      "observed_active_targets": 0,
+      "verified_outputs": {
+        "research_needed": 1
+      }
     },
     {
       "stage": "extraction",
@@ -304,10 +328,10 @@
       "purpose": "First six source-backed evidence-necessity clarification reviews with bounded author correction and fresh review",
       "output": "technology_atlas/v2/work/card_methods_full_20261112/continuations/clarification_01/run",
       "pipeline_manifest_sha256": "87f5c501f765caaa4fece418fd1915cf767042148735792b49ad929ea886ab47",
-      "observed_process_state": "RUNNING",
-      "last_verified_utc": "2026-11-13T15:18:22Z",
+      "observed_process_state": "COMPLETED",
+      "last_verified_utc": "2026-11-13T17:23:16.663640+00:00",
       "native_slot_limit": 6,
-      "observed_running_reviewers": 6,
+      "observed_running_reviewers": 0,
       "methods": [
         "chip-bs-seq",
         "brdu-clip",
@@ -316,21 +340,27 @@
         "bruchase-seq",
         "bubble-seq"
       ],
-      "note": "Existing fresh-review/revision_seed controller. A new scope question is not permission to waive factual support."
+      "note": "Existing fresh-review/revision_seed controller. A new scope question is not permission to waive factual support.",
+      "observed_active_targets": 0,
+      "verified_outputs": {
+        "supported": 3,
+        "research_needed": 3
+      }
     },
     {
       "stage": "evolution",
       "job_id": "52192270",
       "purpose": "Selective-reading batch, stopped after incomplete prior-run reuse inventory was detected",
-      "observed_process_state": "CANCELLATION_REQUESTED",
+      "observed_process_state": "CANCELLED",
       "cancel_command_succeeded": true,
       "native_slot_limit": 18,
       "planned_target_cap": 20,
       "source_ready_targets_at_launch": 14,
       "actual_cohort_reconciliation": {
-        "first_history_targets": 8,
+        "first_history_targets": 7,
         "declared_policy_tests": 2,
-        "unintended_same_workflow_repeats": 4
+        "unintended_same_workflow_repeats": 4,
+        "unintended_provider_hold_retry": 1
       },
       "unintended_repeats": [
         "atac-seq",
@@ -346,43 +376,200 @@
       },
       "actual_nomination_threads_started": 14,
       "scientific_completion_verified": false,
-      "usage_boundary": "Reported usage from completed native stages still requires audit; cancelled in-flight usage must not be reported as zero."
+      "usage_boundary": "Reported usage from completed native stages still requires audit; cancelled in-flight usage must not be reported as zero.",
+      "output": "technology_atlas/v2/work/history_parallel_20261112/continuations/selective_wave_01/recorded/output",
+      "additional_prior_hold_surfaced": {
+        "method": "tn-seq",
+        "stage": "evolution",
+        "category": "provider_biological_risk_block",
+        "note": "Older failed investigation was absent from the82-history merged manifest; the all-run registry surfaces it. No further retry is permitted."
+      }
+    },
+    {
+      "stage": "evolution",
+      "job_id": "52195874",
+      "purpose": "Corrected selective-history cohort after all-run reuse checks",
+      "output": "technology_atlas/v2/work/history_parallel_20261112/continuations/selective_wave_02/recorded/output",
+      "observed_process_state": "COMPLETED",
+      "code_commit": "c447940",
+      "requested_targets": 10,
+      "native_slot_limit": 18,
+      "observed_active_targets": 7,
+      "held_before_model_calls": {
+        "review_only_provenance_loader": 2,
+        "provider_policy_block": 1
+      },
+      "actual_new_target_ids": [
+        "ddradseq",
+        "friscr",
+        "hi-c",
+        "pro-cap",
+        "pro-seq",
+        "ptb-seq",
+        "sctrio-seq"
+      ],
+      "note": "Seven new investigations completed and revalidated; separate policy checks and prior provider holds are not included in these seven.",
+      "completed_children": 7,
+      "failed_children": 0
+    },
+    {
+      "stage": "evolution",
+      "job_id": "52210232",
+      "purpose": "Next six source-ready histories, excluding validated current completions",
+      "output": "technology_atlas/v2/work/history_parallel_20261112/continuations/current_backlog_01/recorded/output",
+      "observed_process_state": "RUNNING",
+      "requested_targets": 6,
+      "eligible_targets": 6,
+      "native_slot_limit": 20,
+      "actual_native_threads_started": 6,
+      "code_commit": "e4822af",
+      "code_archive_sha256": "823a87514c6b3efba4314275eb9ab43290d5d5443ef52d1a6d732582234d9c51",
+      "pipeline_manifest_sha256": "68640cf96b32b4699eaee5e0fd8b03910ade2eb179c9976c31d37a1cf8fc1a38",
+      "note": "Worker limit is capacity; six eligible targets actually started. No provider retries."
+    },
+    {
+      "stage": "sources",
+      "job_id": "52198466.1",
+      "purpose": "One bounded literal-evidence repair and composition of both screening patches",
+      "output": "technology_atlas/v2/work/pipeline/new_papers_source_01/validation_repair_02/run/output",
+      "observed_process_state": "COMPLETED",
+      "finished_at": "2026-11-13T17:22:35.898233Z",
+      "pipeline_manifest_sha256": "390652a7d54fde07d8d7be938211838d4429012b49ea2312cf13914fb8bcfdc0",
+      "verified_outputs": {
+        "reused_valid_rows": 19,
+        "repaired_rows": 1,
+        "new_verified_originals": 7,
+        "source_holds": 3
+      },
+      "repair_sha256": "6f45993a2afe93910761d8b4657bb0fc02de0d13d60b039faf5b7cb1c007818e",
+      "note": "The original failed output remains unchanged. Classification did not change; the repair preserves the source spelling in its exact quotation. No previous repaired cohort reacquired."
+    },
+    {
+      "stage": "extraction",
+      "job_id": "52214203",
+      "purpose": "Seven source-bound historical reviewer controls, two sequential fresh diagnostic configurations",
+      "output": "technology_atlas/v2/work/harness_execution_audit_20261113/reviewer_regression_01/run/output",
+      "observed_process_state": "SUBMITTED",
+      "native_slot_limit": 1,
+      "planned_native_sessions": 2,
+      "code_commit": "471d3c9",
+      "pipeline_manifest_sha256": "0e5c1e36ad7fabae187ed1412272df4d8828fe5e2827b387432f919c48f72d20",
+      "code_payload_sha256": "bd836999c043cc4250f63340eb1e7626385e70e95da6696327b13dde5d15a39d",
+      "pipeline_overlay_sha256": "bf8c3b1f89d3ebb36e90a457d397c2dc77183fb06bdd180193843d1f1cc0496f",
+      "dataset_sha256": "5e7d7673029474e83df5acec2fe8d81ebd44c68a43e872fc09319cb103ac3c98",
+      "host_labels_sha256": "fbdcd7519f6f18a28d63e622e305d75a9f728ed0384842d7a2860c4ae3ef6751",
+      "software_checks": {
+        "local_passed": 24,
+        "qiu_passed": 24
+      },
+      "note": "Model-authored source-checked diagnostic labels, not expert gold. Scientific claims and connected context are preserved; host labels/custody paths are excluded from reader projection. Existing runner; production extraction prompts and admission gates unchanged. Preparation ran in a spare share of52208495; native execution has this separate bounded allocation."
+    },
+    {
+      "stage": "evolution",
+      "job_id": "52198466",
+      "purpose": "Two declared focused-reference policy checks on completed eCLIP/scATAC investigations",
+      "output": "technology_atlas/v2/work/history_parallel_20261112/continuations/selective_policy_checks_01/recorded_canonical/output",
+      "observed_process_state": "COMPLETED",
+      "pipeline_manifest_sha256": "abafc7b571f3769d3bbbff9e7ec23f92f49234c5843c811867cff099d3ecc04a",
+      "code_archive_sha256": "02333178d5436cfa1547d1acca65d13155b95a7c25299a9b72abaa3af249eb2a",
+      "code_commit": "d3963b8",
+      "verified_outputs": {
+        "completed_children": 2,
+        "variants_merged_as_additional_independent_histories": 0
+      },
+      "note": "Variants compared separately. scATAC lost a previously supported donor after acquisition failed; its earlier supported record remains preserved while targeted source recovery is prepared."
+    },
+    {
+      "stage": "evolution",
+      "job_id": "52212838",
+      "purpose": "HTML-history expansion preflight, stopped before any native thread",
+      "output": "technology_atlas/v2/work/history_parallel_20261112/continuations/html_backlog_01/recorded/output",
+      "observed_process_state": "FAILED_PREMODEL",
+      "pipeline_manifest_sha256": "c4e1e5aa7ad19125f0dc57da36895216c88a66072b80580304a7581345d1c6f1",
+      "code_archive_sha256": "d70ece0a14216df25baf199748d6bbe94dc8419aa4118a0d88a693eaf39635de",
+      "code_commit": "43146f8",
+      "native_threads_started": 0,
+      "cause": "The prepared completed-run catalog omitted the output pointer for cancelled52192270. Strict inventory preflight blocked execution; scientific prompts/code unchanged."
+    },
+    {
+      "stage": "evolution",
+      "job_id": "52214563",
+      "purpose": "Fourteen HTML-source histories with corrected, independently pinned completion catalog",
+      "output": "technology_atlas/v2/work/history_parallel_20261112/continuations/html_backlog_02/recorded/output",
+      "observed_process_state": "SUBMITTED",
+      "pipeline_manifest_sha256": "1aef0f0fc65d24a6753be5d8b194f2fc8512a109152bc5212ef2ddf04fd9b777",
+      "code_archive_sha256": "d70ece0a14216df25baf199748d6bbe94dc8419aa4118a0d88a693eaf39635de",
+      "code_commit": "43146f8",
+      "eligible_targets": 14,
+      "native_slot_limit": 14,
+      "note": "All seven declared evolution outputs audited before submission. Previous missing-pointer failure is preserved; guard is unchanged. Actual native starts still need verification."
     }
   ],
   "coverage": "Initial index of the recent verified launches. Earlier extraction and graph runs remain in their existing provenance ledgers; this index does not claim to include every historical run.",
   "current_extraction_checkpoint": {
-    "as_of_utc": "2026-11-13T14:47:36Z",
+    "as_of_utc": "2026-11-13T17:23:16.663640+00:00",
     "total_methods": 174,
     "counts": {
-      "supported": 123,
-      "research_needed": 21,
-      "source_recovery_needed": 25,
+      "supported": 133,
+      "research_needed": 18,
+      "source_recovery_needed": 18,
       "provider_policy_block": 4,
-      "running": 1
+      "needs_revision": 1
     },
-    "running_methods": [
-      "dsrna-seq"
-    ],
-    "accepted_since_initial_continuation": [
-      "pars",
-      "ptb-seq",
-      "ddradseq",
-      "2b-rad"
-    ],
-    "basis": "Revalidated accepted records in method ledger plus live scheduler and final Ribo correction state. No successful workflow rerun."
+    "ledger": "data/extraction/illumina_card_methods.json",
+    "basis": "Completed ordinary clarification/correction outputs revalidated. Scientific outcomes are independent of later running recovery attempts.",
+    "initial_supported_unchanged": 119,
+    "newly_supported": 14,
+    "snapshot": {
+      "path": "technology_atlas/v2/work/card_methods_full_20261112/continuations/checkpoints/ledger_20261113T172316Z.json",
+      "sha256": "e4618a16e771da1f2c39074a178669313a45cc7290b984bb803567d7dd8f826e"
+    }
   },
   "current_evolution_checkpoint": {
-    "as_of_utc": "2026-11-13T14:47:36Z",
-    "running_project_jobs": 0,
-    "combined_receipt": "experiments/history_parallel_20261112/merged_52094468/MERGE_RECEIPT.json",
-    "connectivity": "experiments/history_parallel_20261112/merged_52094468/CONNECTIVITY.json",
-    "reviewed_method_histories": 82,
-    "experimental_relationships": 106,
-    "resolved_method_relationships": 92,
-    "contribution_only_relationships": 14,
-    "selective_followup_commit": "295796c",
-    "new_selective_nomination_live_test_completed": false,
-    "boundary": "Saved reviewed outputs compiled; experimental relationship count includes more than documented inheritance. Reader/policy changes do not create a new scientific validation.",
-    "note": "52192270 started14nomination workers, then was cancelled for4unintended repeats. Preserve original plan and actual cohort audit; corrected selection not yet launched."
-  }
+    "reviewed_investigations_merged": 93,
+    "retained_typed_relationships": 402,
+    "merged_models_new_calls": 0,
+    "note": "Seven prior new investigations and two policy checks completed and revalidated; seven added to86, policy variants compared separately. Totals include context/comparison relations, not only experimental inheritance.",
+    "pending_native_cohorts": [
+      {
+        "job_id": "52210232",
+        "targets": 6,
+        "native_threads_started": 6
+      },
+      {
+        "job_id": "52214563",
+        "targets": 14,
+        "native_threads_started_verified": false
+      }
+    ]
+  },
+  "current_source_checkpoint": {
+    "cohort_publication_records": 24238,
+    "abstracts_screened": 23992,
+    "missing_abstracts": 246,
+    "unresolved_screen_failures": 0,
+    "routes": {
+      "negative_inspectable": 16384,
+      "acquisition_or_followup_candidate": 7608,
+      "metadata_recovery": 246
+    },
+    "publication_acquisition": {
+      "verified_originals": 5168,
+      "public_or_identity_holds": 2439,
+      "duplicate_doi_hold": 1
+    },
+    "consolidated_screening": {
+      "path": "technology_atlas/v2/work/pipeline/new_papers_source_01/validation_repair_02/run/output/CONSOLIDATED_SCREENING.json",
+      "sha256": "e3111dc46664b99f4c4dbd5f7ca1f5c6bad21e0da7a45ca7cfdeebe1b46e39ef"
+    },
+    "basis": "Original cohort plus both pinned validation repairs. These are first-pass publication decisions and source receipts, not distinct methods or atlas admission.",
+    "as_of_utc": "2026-11-13T17:22:35.898233Z"
+  },
+  "known_missing_completion_sources": [
+    {
+      "path": "sequencing-technology-atlas/provenance/experiments/citation_lineage_20261102/atac",
+      "status": "declared_legacy_source_missing_on_qiu",
+      "note": "No completion is inferred from this missing source. Current ATAC history is independently reused from the validated Nov12 four-pilot run. The old declared source is retained for provenance recovery."
+    }
+  ]
 }

@@ -1,5 +1,16 @@
 # Deployment status
 
+Current source preparation, extraction and evolutionary runs are indexed in
+[data/run_catalog.json](../data/run_catalog.json). It records actual outputs,
+observed process states, input/code pins and current counting units. The
+[method ledger](../data/extraction/illumina_card_methods.json) records each of the
+174 card-derived methods separately from its running recovery attempts.
+
+Use [pipeline.json](../pipeline.json) for maintained commands and
+[the harness review](HARNESS_REVIEW_20261113.txt) for the current scientific and
+engineering questions. The dated sections below are historical checkpoints;
+their job states, counts and runtime selections are not current instructions.
+
 ## Configurable design team and corrected submission — 5 November 2026, 19:14 UTC
 
 Four-designer job **51227731** has been submitted on Qiu; native execution has not
