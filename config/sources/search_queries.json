@@ -1,0 +1,52 @@
+{
+  "format_version": "source_refresh_plan/1",
+  "supplement_queries": [
+    {
+      "source_id": "supplement-library-preparation",
+      "query": "(sequencing[Title/Abstract] OR RNA-seq[Title/Abstract]) AND (\"library preparation\"[Title/Abstract] OR \"library construction\"[Title/Abstract] OR tagmentation[Title/Abstract] OR transposase[Title/Abstract] OR \"reverse transcriptase\"[Title/Abstract] OR \"DNA polymerase\"[Title/Abstract] OR ligase[Title/Abstract])",
+      "from_date": "2017-01-01",
+      "kind": "recall_gap_supplement"
+    },
+    {
+      "source_id": "supplement-rna-physical-assays",
+      "query": "(RNA[Title/Abstract] OR transcriptome[Title/Abstract]) AND (sequencing[Title/Abstract] OR RNA-seq[Title/Abstract]) AND (\"chemical probing\"[Title/Abstract] OR \"metabolic labeling\"[Title/Abstract] OR \"RNA modification\"[Title/Abstract] OR \"RNA structure\"[Title/Abstract] OR \"RNA-protein\"[Title/Abstract] OR \"RNA-RNA\"[Title/Abstract])",
+      "from_date": "2017-01-01",
+      "kind": "recall_gap_supplement"
+    },
+    {
+      "source_id": "supplement-chromatin-physical-assays",
+      "query": "(DNA[Title/Abstract] OR chromatin[Title/Abstract]) AND sequencing[Title/Abstract] AND (\"targeted nuclease\"[Title/Abstract] OR immunocleavage[Title/Abstract] OR methyltransferase[Title/Abstract] OR \"chromatin accessibility\"[Title/Abstract] OR \"chromosome conformation\"[Title/Abstract] OR \"enzymatic conversion\"[Title/Abstract])",
+      "from_date": "2017-01-01",
+      "kind": "recall_gap_supplement"
+    },
+    {
+      "source_id": "supplement-single-cell-spatial-architecture",
+      "query": "(\"single-cell\"[Title/Abstract] OR \"single-nucleus\"[Title/Abstract] OR spatial[Title/Abstract]) AND (sequencing[Title/Abstract] OR transcriptome[Title/Abstract]) AND (barcoding[Title/Abstract] OR \"combinatorial indexing\"[Title/Abstract] OR tagmentation[Title/Abstract] OR \"library preparation\"[Title/Abstract] OR \"joint profiling\"[Title/Abstract])",
+      "from_date": "2017-01-01",
+      "kind": "recall_gap_supplement"
+    }
+  ],
+  "query_recall_positive_pmids": [
+    "28079019",
+    "33098772",
+    "28095828",
+    "29472610"
+  ],
+  "recall_denominator_note": "Only four post2016 assay/library-improvement positives;2014Picelli/software/application are not recall controls. Direct control metadata fetch is not a search hit.",
+  "include_demonstrated_library_preparation_and_enzyme_contributions": true,
+  "require_novelty_words": false,
+  "public_catalogue_leads": [
+    {
+      "resource": "Teichlab/scg_lib_structs",
+      "url": "https://github.com/Teichlab/scg_lib_structs",
+      "status": "Existing curated experimental-method/library-structure leads; no install or fulltext harvest in this job."
+    },
+    {
+      "resource": "Museum of Spatial Transcriptomics",
+      "url": "https://pachterlab.github.io/museumst/reference/read_metadata.html",
+      "reusable_api": "read_metadata(sheet_use=c(\"NGS barcoding\",\"ISS\",\"ROI selection\"),cache=TRUE,update=TRUE); get_pubs_df(sheet)",
+      "status": "Public catalogue identifiers not yet fetched in this source job; avoid pretending dataset rows are distinct assays."
+    }
+  ],
+  "through_date": "2026-11-13"
+}

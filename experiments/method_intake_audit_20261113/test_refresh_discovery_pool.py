@@ -2,7 +2,7 @@ from pathlib import Path
 import hashlib,json,tempfile,unittest
 from urllib.parse import parse_qs,urlsplit
 
-from refresh_discovery_pool import query_identity,refresh,search
+from refresh_discovery_pool import query_identity,refresh,search,prepare_requests
 from genomics_discovery.illumina.sources import parse_pubmed
 
 
@@ -21,18 +21,30 @@ def fetched(url,path,timeout):
 class RefreshTests(unittest.TestCase):
     def setup_inputs(self,root):
         pool=root/'pool';pool.mkdir();base=parse_pubmed(xml(['1']));raw=json.dumps(base).encode();(pool/'candidate_papers.json').write_bytes(raw)
-        plan={'queries':[{'id':'old-rna','query':'RNA sequencing'}]};queries=[{'id':'seed-target-seq','query':'("TARGET-seq+"[Title/Abstract]) AND ("2017/01/01"[Date - Publication] : "2026/11/05"[Date - Publication])','error':'historic slug collision'}]
+        plan={'from_date':'2017/01/01','through_date':'2026/11/05','queries':[{'id':'old-rna','query':'RNA sequencing'}]};queries=[{'id':'seed-target-seq','query':'("TARGET-seq+"[Title/Abstract]) AND ("2017/01/01"[Date - Publication] : "2026/11/05"[Date - Publication])','error':'historic slug collision'}]
         for name,data in [('search_plan.json',plan),('query_results.json',queries)]: (pool/name).write_text(json.dumps(data))
         pin=lambda p:{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
         inputs={'pool':pin(pool/'candidate_papers.json'),'existing_search_plan':pin(pool/'search_plan.json'),'existing_query_results':pin(pool/'query_results.json'),'missing_metadata_pmids':['3'],'cached_pool_articles':[{'pmid':'1','article_files':[{'path':'existing/article.xml','sha256':'unverified-record'}]}]}
         request={'source_id':'library','query':'tagmentation','from_date':'2017-01-01','through_date':'2026-11-13','kind':'supplement'}
-        (root/'inputs.json').write_text(json.dumps(inputs));(root/'plan.json').write_text(json.dumps({'supplement_queries':[request],'query_recall_positive_pmids':['1','2','3','4']}))
+        (root/'inputs.json').write_text(json.dumps(inputs));(root/'plan.json').write_text(json.dumps({'date':'2026-11-13','supplement_queries':[request],'query_recall_positive_pmids':['1','2','3','4']}))
         return root/'inputs.json',root/'plan.json',raw
 
     def test_query_namespace_uses_exact_query_identity(self):
         q={'source_id':'TARGET-seq','query':'"TARGET-seq"','from_date':'2017-01-01','through_date':'2026-11-13'}
         self.assertNotEqual(query_identity(q),query_identity({**q,'query':'"TARGET-seq+"'}))
         self.assertEqual(query_identity(q),query_identity(dict(q)))
+
+    def test_dates_follow_configuration_for_later_runs_without_new_code(self):
+        old={'from_date':'2019/01/01','through_date':'2027/02/20','queries':[{'id':'rna','query':'RNA'}]}
+        plan={'through_date':'2027-03-01','supplement_queries':[{'source_id':'chemistry','query':'library preparation'}]}
+        failed=[{'id':'failed','query':'(sequencing) AND ("2019/01/01"[Date - Publication] : "2027/02/20"[Date - Publication])','error':'prior failure'}]
+        rows=prepare_requests(plan,old,failed)
+        self.assertEqual(rows[0]['through_date'],'2027-03-01')
+        self.assertEqual(rows[1]['from_date'],'2027-02-21')
+        self.assertEqual(rows[1]['through_date'],'2027-03-01')
+        self.assertEqual(rows[2]['from_date'],'2019-01-01')
+        plan['through_date']='2027-02-20'
+        self.assertFalse(any(r['kind']=='date_delta' for r in prepare_requests(plan,old,failed) if 'kind' in r))
 
     def test_refresh_reuses_original_and_writes_one_own_id_queue(self):
         with tempfile.TemporaryDirectory() as temp:

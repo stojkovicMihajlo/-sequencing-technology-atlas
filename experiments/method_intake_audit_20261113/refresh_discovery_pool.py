@@ -62,17 +62,25 @@ def search(request,output,*,probe=False,fetcher=fetch):
 
 
 def prepare_requests(plan,old_plan,old_query_results,*,probe=False):
-    requests=list(plan['supplement_queries'])
-    for q in old_plan['queries']:
-        requests.append({'source_id':'delta-'+q['id'],'query':q['query'],
-                         'from_date':'2026-11-06','through_date':'2026-11-13','kind':'date_delta'})
+    parse_date=lambda value:date.fromisoformat(value.replace('/','-'))
+    through=parse_date(plan.get('through_date') or plan['date'])
+    old_stop=parse_date(old_plan['through_date'])
+    old_start=parse_date(old_plan['from_date'])
+    requests=[{**q,'from_date':q.get('from_date',old_start.isoformat()),
+               'through_date':q.get('through_date',through.isoformat())}
+              for q in plan['supplement_queries']]
+    if old_stop < through:
+        for q in old_plan['queries']:
+            requests.append({'source_id':'delta-'+q['id'],'query':q['query'],
+                             'from_date':(old_stop+timedelta(days=1)).isoformat(),
+                             'through_date':through.isoformat(),'kind':'date_delta'})
     for q in old_query_results:
         if 'error' not in q:continue
         # Use the exact failed source query before its old date clause. A new
         # hashed namespace avoids repeating the old TARGET-seq slug collision.
         term=q['query'].rsplit(' AND ("',1)[0]
         requests.append({'source_id':'repair-'+q['id'],'query':term,
-                         'from_date':'2017-01-01','through_date':'2026-11-13','kind':'failed_query_repair'})
+                         'from_date':old_start.isoformat(),'through_date':through.isoformat(),'kind':'failed_query_repair'})
     if probe:
         # Metadata samples plus query counts only; not a complete search claim.
         return requests

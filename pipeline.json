@@ -1,0 +1,61 @@
+{
+  "format_version": "atlas_pipeline/1",
+  "stages": [
+    {"id": "sources", "description": "Collect Illumina cards/diagrams and online literature, screen contributions, acquire and register sources.", "depends_on": []},
+    {"id": "extraction", "description": "Prepared method sources become reviewed State–Operation–Flow workflows.", "depends_on": ["sources"]},
+    {"id": "evolution", "description": "Investigate primary papers and citations to establish supported earlier-to-later contributions and changes.", "depends_on": ["extraction"]}
+  ],
+  "code_patterns": ["src/**/*.py", "config/**/*.json", "scripts/sherlock/environment.sh", "scripts/sherlock/atlas-account.sh", "scripts/sherlock/pipeline.sbatch", "experiments/method_intake_audit_20261113/preserve_bytes.py", "pyproject.toml", "uv.lock", "AGENTS.md"],
+  "actions": {
+    "sources.refresh": {
+      "stage": "sources", "native_models": false,
+      "entrypoint": ["{python}", "-m", "experiments.method_intake_audit_20261113.refresh_discovery_pool"],
+      "code_patterns": ["experiments/method_intake_audit_20261113/refresh_discovery_pool.py"],
+      "inputs": {"inputs": "config/sources/refresh_inputs.json", "queries": "config/sources/search_queries.json"},
+      "parameters": {"phase": "expand"},
+      "arguments": ["--inputs", "{inputs}", "--plan", "{queries}", "--phase", "{phase}", "--output", "{output}"],
+      "result": "output/OVERLAY.json",
+      "notes": "Metadata/abstract acquisition. Full-article acquisition is a separate action inside source preparation."
+    },
+    "sources.screen": {
+      "stage": "sources", "native_models": true,
+      "entrypoint": ["{python}", "-m", "experiments.method_intake_audit_20261113.bulk_screen"],
+      "code_patterns": ["experiments/method_intake_audit_20261113/bulk_screen.py", "experiments/method_intake_audit_20261113/live_pilot.py"],
+      "inputs": {"pool": "${ATLAS_PROJECT_ROOT}/technology_atlas/v2/work/technology_sources_20261105/source_library_release_01/post_2016_discovery/candidate_papers.json", "runtime_manifest": ""},
+      "parameters": {"pool_sha256": "fd625c3e843642ef22ec7f57cb125b146f014a4b8b4682723bf5462ff9d354c9", "agents": "10", "batch_size": "20"},
+      "arguments": ["--pool", "{pool}", "--pool-sha256", "{pool_sha256}", "--runtime-manifest", "{runtime_manifest}", "--agents", "{agents}", "--batch-size", "{batch_size}", "--output", "{output}"],
+      "result": "output/SCREENING.json",
+      "notes": "One first-pass screen per batch. Model decisions do not admit a new method. Supply the selected frozen-runtime manifest."
+    },
+    "sources.acquire": {
+      "stage": "sources", "native_models": true,
+      "entrypoint": ["{python}", "-m", "genomics_discovery.sources.acquisition"],
+      "code_patterns": [],
+      "inputs": {"worklist": ""}, "parameters": {"concurrency": "2"},
+      "arguments": ["{worklist}", "--concurrency", "{concurrency}", "--output", "{output}"],
+      "result": "output/result.json",
+      "notes": "Uses the existing source-recovery worklist contract. Screening JSON is not automatically such a worklist; inspect/prepare the handoff first."
+    },
+    "extraction": {
+      "stage": "extraction", "native_models": true,
+      "entrypoint": ["{python}", "-m", "genomics_discovery.illumina.extraction", "run"],
+      "code_patterns": [],
+      "inputs": {"sources": ""}, "parameters": {"workers": "10", "max_revisions": "2"},
+      "arguments": ["{sources}", "--workers", "{workers}", "--max-revisions", "{max_revisions}", "--representation", "illumina_diagram/1.1", "--output", "{output}"],
+      "result": "output/state.json",
+      "notes": "Uses a prepared extraction-source registry, not raw search-result papers. Author and reviewer prompts are in illumina/prompts.py; representation fields are in illumina/representation.py."
+    },
+    "evolution": {
+      "stage": "evolution", "native_models": true,
+      "entrypoint": ["{python}", "{repo}/experiments/citation_lineage_pilot/run.py", "run"],
+      "code_patterns": ["experiments/citation_lineage_pilot/*.py", "experiments/history_contract_audit_20261113/focused_reading.py"],
+      "inputs": {"sources": "", "manifest": "", "atlas": ""},
+      "parameters": {"record": "", "paper": "", "reading_policy": "full"},
+      "arguments": ["--sources", "{sources}", "--manifest", "{manifest}", "--atlas", "{atlas}", "--record", "{record}", "--paper", "{paper}", "--reading-policy", "{reading_policy}", "--output", "{output}"],
+      "result": "output/graph.json",
+      "notes": "Current citation-investigation driver remains a pilot at this listed path. Edit it in place. Exact earlier workflow mapping is optional; supported history and comparisons remain distinct."
+    }
+  },
+  "history": "provenance/ and dated experiments preserve earlier inputs, code and outcomes. They are not a menu of interchangeable current launchers.",
+  "model": "gpt-6.1-sol", "effort": "xhigh"
+}
