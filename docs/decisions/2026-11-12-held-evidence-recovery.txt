@@ -109,6 +109,16 @@ Inspected precedents and adoption decisions:
    not by the existence of a failure flag. This guidance is architectural advice,
    not scientific validation or a task-specific recovery implementation.
 
+4. ROBIN official implementation, Apache-2.0, commit
+   4a5cce310f3bc7663a67117db88af43b84733ffe:
+   robin/assays.py::experimental_assay generates explicit literature queries and
+   performs proposal-specific investigation through call_platform; robin/utils.py
+   ::call_platform binds service task IDs to original queries, preserves returned
+   references and records per-task/overall failures. Transfer that request-to-result
+   traceability to each reviewer field/source question. Its Edison backend is an
+   external service; the wrapper does not expose its document-recovery internals
+   or establish our exact-source graph validation. No Edison integration is claimed.
+
 Next integration contract: persist the actual unresolved request and source state;
 route correctable content to revision, missing sources to existing acquisition,
 scope ambiguity to the existing evidence assessment, and execution errors to their
