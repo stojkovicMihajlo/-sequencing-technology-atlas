@@ -26,7 +26,7 @@ def write(path, value):
     path.write_text(json.dumps(value))
 
 
-@pytest.mark.parametrize("size,expected", [((1081, 70), [2162, 140]), ((2880, 195), [2880, 195])])
+@pytest.mark.parametrize("size,expected", [((1081, 70), [1081, 70]), ((2880, 195), [2880, 195])])
 def test_image_delivery_preserves_native_resolution_without_claiming_quality(tmp_path, size, expected):
     image_module = pytest.importorskip("PIL.Image")
     original = tmp_path / "source.png"

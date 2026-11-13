@@ -325,33 +325,34 @@ def stage_images(images, directory):
                 display = Image.new("RGBA", rgba.size, "white")
                 display.alpha_composite(rgba)
                 display = display.convert("RGB")
-                # Enlargement changes display size, not source detail or legibility.
-                if display.width < 1600:
-                    display = display.resize((display.width * 2, display.height * 2))
                 attachment_dimensions = list(display.size)
                 display.save(destination)
-            derivation = "RGBA composited on white; 2x display enlargement if original width <1600"
+            derivation = "RGBA composited on white; original pixel dimensions preserved"
         except ImportError:
-            with original.open('rb') as handle:
-                is_png = handle.read(8) == b'\x89PNG\r\n\x1a\n'
-            if is_png:
-                shutil.copyfile(original, destination)
-            else:
-                executable = shutil.which('magick') or shutil.which('convert')
-                if not executable:
-                    raise StageFailure('image_conversion_unavailable',
-                        'Non-PNG image delivery requires Pillow or the configured ImageMagick converter')
-                command = [executable, '-limit', 'thread', '1', str(original),
-                    '-background', 'white', '-alpha', 'remove', '-alpha', 'off', 'PNG:' + str(destination)]
-                try:
-                    subprocess.run(command, check=True, capture_output=True, timeout=90)
-                    version = subprocess.run([executable, '-version'], check=True,
-                        capture_output=True, text=True, timeout=15).stdout.splitlines()[0]
-                except (OSError, subprocess.SubprocessError, IndexError) as exc:
-                    raise StageFailure('image_conversion_failed', f'ImageMagick PNG delivery failed: {exc}') from exc
-                converter = {'name': 'ImageMagick', 'path': str(Path(executable).resolve()),
-                    'sha256': sha(Path(executable)), 'version': version, 'command': command}
-                derivation = 'ImageMagick PNG display rendition; alpha composited on white; no enlargement'
+            executable = shutil.which('magick') or shutil.which('convert')
+            if not executable:
+                raise StageFailure('image_conversion_unavailable',
+                    'Image delivery requires Pillow or ImageMagick to composite transparency explicitly')
+            command = [executable, '-limit', 'thread', '1', str(original),
+                '-background', 'white', '-alpha', 'remove', '-alpha', 'off', 'PNG:' + str(destination)]
+            try:
+                subprocess.run(command, check=True, capture_output=True, timeout=90)
+                dimensions=[]
+                for image in (original,destination):
+                    values=subprocess.run([executable,'-limit','thread','1',str(image),'-format','%w %h','info:'],
+                        check=True,capture_output=True,text=True,timeout=15).stdout.split()
+                    if len(values)!=2:raise ValueError('Display delivery requires one raster image')
+                    dimensions.append([int(v) for v in values])
+                original_dimensions,attachment_dimensions=dimensions
+                if original_dimensions!=attachment_dimensions:
+                    raise ValueError('Display conversion changed original pixel dimensions')
+                version = subprocess.run([executable, '-version'], check=True,
+                    capture_output=True, text=True, timeout=15).stdout.splitlines()[0]
+            except (OSError, subprocess.SubprocessError, IndexError, ValueError) as exc:
+                raise StageFailure('image_conversion_failed', f'ImageMagick PNG delivery failed: {exc}') from exc
+            converter = {'name': 'ImageMagick', 'path': str(Path(executable).resolve()),
+                'sha256': sha(Path(executable)), 'version': version, 'command': command}
+            derivation = 'ImageMagick PNG display rendition; alpha composited on white; original pixel dimensions preserved'
         with destination.open('rb') as handle:
             if handle.read(8) != b'\x89PNG\r\n\x1a\n':
                 raise StageFailure('image_conversion_failed', 'Display converter did not produce PNG bytes')
