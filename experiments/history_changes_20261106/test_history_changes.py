@@ -173,3 +173,20 @@ def test_duplicate_method_rejected_before_snapshot_or_model_calls(monkeypatch, t
     with pytest.raises(ValueError, match='duplicate seed methods'):
         asyncio.run(history_run.execute(args))
     assert not args.output.exists()
+
+
+@pytest.mark.asyncio
+async def test_ready_seed_limit_keeps_holds_and_defers_extra_work(monkeypatch,tmp_path):
+    args,seen=orchestration_fixture(monkeypatch,tmp_path,['policy','missing-a','pdf-held','missing-b'],2,
+                                  holds=['pdf-held'])
+    args.max_ready_seeds=2;args.reading_policy='focused'
+    result=await history_run.execute(args)
+    assert seen['started']==['policy','missing-a']
+    eligibility=json.loads((args.output/'selection_eligibility.json').read_text())
+    assert eligibility['deferred_ready']==['missing-b']
+    assert eligibility['candidates']['pdf-held']['status']=='held'
+    assert result['workers']==2
+    paths=[piece for name in ['batch','library','vault','runtime','output'] for piece in ['--'+name,'/fixture/'+name]]
+    parsed=history_run.parse_args([*paths,'--seed','method','--agents','18','--max-ready-seeds','20',
+                                  '--reading-policy','focused','--software-preflight','--citation-only'])
+    assert parsed.workers==18 and parsed.max_ready_seeds==20 and parsed.software_preflight

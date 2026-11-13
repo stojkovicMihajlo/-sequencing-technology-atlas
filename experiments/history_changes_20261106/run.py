@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import subprocess
 from collections import Counter
 
 from genomics_discovery.illumina.extraction import now, read, sha, write
@@ -100,6 +101,13 @@ async def execute(args):
     if not os.environ.get('SLURM_JOB_ID'):
         raise ValueError('History pilot requires a Sherlock Slurm allocation')
     output = args.output.resolve(); output.mkdir(parents=True, exist_ok=False)
+    if getattr(args,'software_preflight',False):
+        command=[sys.executable,'-m','pytest','-q','--import-mode=importlib','-p','no:cacheprovider',
+                 'experiments/citation_lineage_pilot/test_contract.py',
+                 'experiments/citation_lineage_pilot/test_change_records.py',
+                 'experiments/citation_lineage_pilot/test_review_coverage.py']
+        with (output/'software_preflight.log').open('wb') as log:
+            subprocess.run(command,cwd=args.runtime,stdout=log,stderr=subprocess.STDOUT,check=True)
     method_inventory = getattr(args, 'method_inventory', None) or args.batch / 'inventory.json'
     snapshot = output / 'accepted_snapshot'
     snapshot_result = snapshot_accepted(args.batch, snapshot)
@@ -116,6 +124,19 @@ async def execute(args):
     write(output / 'primary_selection.json', selection)
     index = prepare_index(snapshot, output / 'primary_selection.json')
     write(output / 'methods.json', index)
+    limit=getattr(args,'max_ready_seeds',None)
+    eligibility={mid:{'status':index['methods'].get(mid,{}).get('status','absent'),
+                      'reason':index['methods'].get(mid,{}).get('hold_reason')}
+                 for mid in args.seed}
+    if limit is not None:
+        ready=[mid for mid in args.seed if eligibility[mid]['status']=='ready']
+        write(output/'selection_eligibility.json',{'candidates':eligibility,'selected':ready[:limit],
+              'deferred_ready':ready[limit:],'max_ready_seeds':limit,
+              'boundary':'Batch scheduling limit, not a reference or ancestry limit. PDF/identity/source holds remain explicit.'})
+        args.seed=ready[:limit]
+        methods_requested=[*args.seed,*review_runs]
+        if not methods_requested:
+            raise ValueError('No source-ready registered JATS seed; see selection_eligibility.json')
     cache = reference_cache(snapshot, args.library, args.vault, output / 'reference_cache.json')
     citation_runs = {}
     for mid in methods_requested:
@@ -159,6 +180,7 @@ async def execute(args):
                         '--batch', str(snapshot), '--inventory', str(method_inventory), '--record', mid,
                         '--paper', paper['source_id'], '--article', paper['article'], '--source-cache', str(cache),
                         '--output', str(destination)]
+                command+=['--reading-policy',getattr(args,'reading_policy','focused')]
                 log = output / (mid + '.log')
                 row.update(status='running', command=command, started_at=now(), log=str(log))
                 checkpoint()
@@ -229,6 +251,9 @@ def build_parser():
     parser.add_argument('--citation-only', action='store_true', help='Publish the reviewed method/contribution graph and viewer; omit optional exact workflow-location mapping.')
     parser.add_argument('--review-existing', type=Path, action='append', default=[])
     parser.add_argument('--prior-manifest', type=Path, action='append', default=[])
+    parser.add_argument('--reading-policy',choices=('focused','full'),default='focused')
+    parser.add_argument('--max-ready-seeds',type=int,choices=range(1,51),help='Select the first N ready new seeds after source preflight; record all holds/deferred candidates.')
+    parser.add_argument('--software-preflight',action='store_true',help='Run bounded citation-contract software checks before source/model work.')
     return parser
 
 
