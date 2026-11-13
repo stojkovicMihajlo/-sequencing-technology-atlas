@@ -40,7 +40,8 @@ def plan(mid='fixture',name='Fixture assay'):
 def review(candidate):
     targets=['measurement','design','image_prompt',*[s['id'] for s in candidate['stages']],
              *['readout:'+r['id'] for r in candidate['readouts']]]
-    return {'format_version':'assay_diagram_review/1','checks':[{'target':t,'decision':'accept',
+    return {'format_version':'assay_diagram_review/2','candidate_digest':models.digest(candidate),
+        'checks':[{'target':t,'decision':'accept',
         'explanation':'Synthetic fixture content matches its source passage','evidence':[E]} for t in targets],
         'summary':'Synthetic software fixture, not an evaluated assay.'}
 
@@ -74,6 +75,21 @@ def test_independent_review_covers_every_readout_and_critical_plan_target():
     assert all(c.decision=='accept' for c in result.checks)
     missing=review(plan());missing['checks']=[c for c in missing['checks'] if c['target']!='readout:expression']
     with pytest.raises(ValueError,match='every Stage/readout'):models.validate_review(missing,candidate,sources())
+
+
+def test_review_is_bound_to_complete_plan_even_if_target_ids_and_quotes_match():
+    original=plan(); changed=copy.deepcopy(original)
+    changed['readouts'][0]['assignment']='A different interpretation with identical target IDs'
+    with pytest.raises(ValueError,match='candidate digest'):
+        models.validate_review(review(original),models.DiagramPlan.model_validate(changed),sources())
+    # A new matching receipt passes the mechanical gate; this does not establish
+    # that this altered scientific interpretation is correct.
+    models.validate_review(review(changed),models.DiagramPlan.model_validate(changed),sources())
+    old=review(original);old['format_version']='assay_diagram_review/1';del old['candidate_digest']
+    with pytest.raises(ValueError,match='new reviews require version2'):
+        models.validate_review(old,models.DiagramPlan.model_validate(original),sources())
+    assert models.validate_review(old,models.DiagramPlan.model_validate(original),sources(),
+        allow_archived=True).format_version=='assay_diagram_review/1'
 
 
 def test_source_tool_delivery_must_cover_primary_before_plan_is_eligible(tmp_path):

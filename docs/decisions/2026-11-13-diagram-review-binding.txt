@@ -1,0 +1,28 @@
+13 November 2026 — bind diagram-plan reviews to their exact candidate
+
+Observation
+The main Illumina DiagramReview already binds candidate_digest. The separate
+ten-paper image-content prototype's PlanReview/1 checked target coverage and
+source quotations but lacked that binding. With unchanged target IDs, a review
+could structurally validate against a changed plan. This is a mechanical gap;
+the audit does not establish that it happened in an actual published attempt.
+
+Change
+New diagram reviews use assay_diagram_review/2 with candidate_digest, computed
+by the existing canonical digest function over the complete parsed plan. The
+host supplies the value and independently checks it after the model finishes.
+This covers scientific prose, readout assignment and the image brief, not only
+Stage IDs. It does not establish that the reviewer understood those fields.
+
+Archived version1 reviews remain readable only through explicit archived reuse.
+That loader verifies native receipts and input hashes, and now also checks that
+the preserved review input equals the preceding unchanged author plan. A fresh
+stage cannot submit a version1 review. Frozen runtimes and existing artifacts
+remain unchanged; no old acceptance has been upgraded to a fresh review.
+
+Validation
+10 diagram-content tests passed locally, including a stale review with identical
+target IDs and valid source quotes, a fresh matching binding, explicit legacy
+handling, source delivery, complete review coverage, parallel ten-author startup,
+unchanged approved reuse and bounded correction scheduling. These are software
+controls. Scientific reviewer sensitivity is a separate paired-control task.

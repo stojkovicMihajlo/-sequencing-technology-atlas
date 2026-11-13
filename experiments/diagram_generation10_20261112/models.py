@@ -1,6 +1,7 @@
 """Paper-grounded content for native image generation, not a drawing language."""
 from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
+from genomics_discovery.illumina.models import digest
 
 Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
@@ -87,10 +88,16 @@ class ReviewCheck(Record):
     evidence: list[Evidence]
 
 
-class PlanReview(Record):
+class ArchivedPlanReview(Record):
     format_version: Literal['assay_diagram_review/1']
     checks: list[ReviewCheck]
     summary: Text
+
+
+class PlanReview(ArchivedPlanReview):
+    format_version: Literal['assay_diagram_review/2']
+    candidate_digest: Annotated[str, Field(pattern=r'^[0-9a-f]{64}$',
+        description='Exact canonical digest supplied for the complete candidate plan being reviewed.')]
 
 
 def check_evidence(items, sources):
@@ -117,8 +124,17 @@ def validate_plan(document, method_id, sources):
     return plan
 
 
-def validate_review(document, plan, sources):
-    review = PlanReview.model_validate(document)
+def validate_review(document, plan, sources, *, allow_archived=False):
+    if document.get('format_version') == 'assay_diagram_review/1':
+        if not allow_archived:
+            raise ValueError('An archived review lacks a candidate digest; new reviews require version2')
+        # Only the archived-attempt loader opts in, after checking exact native
+        # input receipts and equality with the preceding unchanged author plan.
+        review = ArchivedPlanReview.model_validate(document)
+    else:
+        review = PlanReview.model_validate(document)
+        if review.candidate_digest != digest(plan.model_dump(mode='json')):
+            raise ValueError('Review candidate digest differs from the complete plan')
     required = {'measurement','design','image_prompt', *[stage.id for stage in plan.stages],
                 *['readout:'+readout.id for readout in plan.readouts]}
     actual = [check.target for check in review.checks]

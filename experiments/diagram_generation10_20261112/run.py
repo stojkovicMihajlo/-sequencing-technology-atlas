@@ -89,7 +89,8 @@ If revising, address every supplied reviewer finding and preserve correct detail
 """
 REVIEW = """Independently review the submitted plan against the supplied target primary
 paper and relevant supplements. Cover every Stage, every readout (readout:ID),
-and measurement, design and image_prompt. Return assay_diagram_review/1. Check
+and measurement, design and image_prompt. Return assay_diagram_review/2 and copy
+the supplied candidate_digest into the review. Check
 the actual materials, transformation order, branching, carrier associations and
 readout assignment; a plausible caption or matching quotation alone is insufficient.
 Look specifically for scientific detail that would be misleading if omitted from
@@ -202,9 +203,10 @@ def protocol_outline(plan):
     return '\n'.join(lines)
 
 
-def validate_stage(role,artifact,source_path,method,read_log,plan=None):
+def validate_stage(role,artifact,source_path,method,read_log,plan=None,*,allow_archived_review=False):
     sources=read(source_path)
-    result=validate_plan(read(artifact),method['method_id'],sources) if role=='author' else validate_review(read(artifact),plan,sources)
+    result=validate_plan(read(artifact),method['method_id'],sources) if role=='author' else validate_review(
+        read(artifact),plan,sources,allow_archived=allow_archived_review)
     if role=='author' and result.method_name!=method['name']:
         raise ValueError('Diagram name/version differs from the declared target method')
     coverage=check_full_reads(read_log,source_path,sources,[method['primary_source_id']])
@@ -247,7 +249,11 @@ def reusable_method(previous, method, sources):
             raise ValueError('Prior stage input changed: '+mid)
         if (path/'prompt.txt').read_text()!=(path/'stage_prompt.txt').read_text():
             raise ValueError('Prior native prompt changed: '+mid)
-        artifact=validate_stage(stage['role'],path/'artifact.json',folder/'source_registry.json',method,path/'source_reads.jsonl',plan)
+        if stage['role']=='review' and (plan is None or
+                read(path/'candidate_plan.json')!=plan.model_dump(mode='json')):
+            raise ValueError('Archived review input differs from its preceding author plan: '+mid)
+        artifact=validate_stage(stage['role'],path/'artifact.json',folder/'source_registry.json',method,
+            path/'source_reads.jsonl',plan,allow_archived_review=True)
         if stage['role']=='author':plan=artifact
         else:review=artifact
         threads.append(assessment.thread_id)
@@ -350,7 +356,10 @@ async def execute(args):
                         'schema':str(attempt/'schema.json'),'output':str(attempt/'artifact.json')}
                     if plan is not None:
                         write(attempt/'candidate_plan.json',plan.model_dump(mode='json'));context['candidate_plan']=str(attempt/'candidate_plan.json')
-                        if role=='review':check+=['--plan',str(attempt/'candidate_plan.json')]
+                        if role=='review':
+                            from genomics_discovery.illumina.models import digest
+                            context['candidate_digest']=digest(plan.model_dump(mode='json'))
+                            check+=['--plan',str(attempt/'candidate_plan.json')]
                     if review is not None:
                         write(attempt/'feedback.json',review.model_dump(mode='json'));context['feedback']=str(attempt/'feedback.json')
                     context['check_tool']=shlex.join(check)
