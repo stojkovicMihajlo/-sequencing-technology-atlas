@@ -1,5 +1,8 @@
 """Bounded, checkpointed research-review return to existing source tools and review."""
 from __future__ import annotations
+import argparse
+import asyncio
+from collections import Counter
 import copy
 import hashlib
 import json
@@ -341,3 +344,57 @@ async def recover_review(row,directory,output,worker,policy,*,cache_lookup=cache
             if result['status']!='research_needed' or result.get('recovery',{}).get('status')!='new_sources_reviewed':break
         episode.update(finished=True,latest_result=copy.deepcopy(result));save()
         return result
+
+
+async def run_completed(manifest,policy_path,output,*,workers=1,worker=None):
+    """Return actual completed research checkpoints directly to bounded recovery."""
+    if not os.environ.get('SLURM_JOB_ID'):raise ValueError('Completed-review recovery requires Qiu Slurm')
+    if type(workers)!=int or not 1<=workers<=50:raise ValueError('Use 1-50 explicit native workflow slots')
+    raw=Path(manifest).read_bytes();config=json.loads(raw)
+    policy_raw=Path(policy_path).read_bytes();base_policy=json.loads(policy_raw)
+    if not config.get('purpose'):raise ValueError('Declare the recovery purpose before execution')
+    cases=config['checkpoints'];ids=[c['method_id'] for c in cases]
+    if len(ids)!=len(set(ids)):raise ValueError('Duplicate completed method checkpoint')
+    if any(Path(mid).name!=mid or mid in {'.','..'} for mid in ids):raise ValueError('Use simple method IDs')
+    output=Path(output);output.mkdir(parents=True,exist_ok=False)
+    state={'purpose':config['purpose'],'native_slot_limit':workers,'cards':{},
+        'manifest_sha256':hashlib.sha256(raw).hexdigest(),'policy_sha256':hashlib.sha256(policy_raw).hexdigest()}
+    from genomics_discovery.execution.codex_worker import CodexWorker
+    worker=worker or CodexWorker(model='gpt-6.1-sol',effort='xhigh',timeout_seconds=None,
+        web_search=False,network_access=False,pin_shell_environment=True)
+    slots=asyncio.Semaphore(workers)
+    def save():
+        state['counts']=dict(Counter(r['status'] for r in state['cards'].values()));write(output/'state.json',state)
+    async def one(case):
+        mid=case['method_id'];row=state['cards'][mid]={'record_id':mid,'status':'pending'};save()
+        async with slots:
+            try:
+                prior=_pinned(case['checkpoint']);directory=Path(prior['attempt_directory'])
+                revalidate_completed(prior)
+                if read(directory/'card.json')['record_id']!=mid:raise ValueError('Completed checkpoint changed method identity')
+                row.update(prior);row['activity']={'status':'running','phase':'evidence_recovery'};save()
+                policy={**base_policy,**config.get('recovery',{}),**case.get('recovery',{})}
+                if row['status']=='research_needed':
+                    row.update(await recover_review(row,directory,output/'methods'/mid,worker,policy))
+                else:row['recovery_skipped']='Completed outcome is not a research request'
+                row['activity']={'status':'complete','phase':'completed_recovery'}
+            except Exception as exc:
+                storage=host_storage_failure(exc)
+                row.update(status='failed',failure_category='host_storage_failure' if storage else getattr(exc,'category','software_error'),
+                    recovery_failure={'stage':'completed_review_handoff','exception_type':type(exc).__name__,'reason':str(exc)})
+            save()
+    await asyncio.gather(*(one(case) for case in cases));return state
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('manifest',type=Path)
+    parser.add_argument('--policy',type=Path,required=True)
+    parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--workers',type=int,default=1)
+    args=parser.parse_args()
+    result=asyncio.run(run_completed(args.manifest,args.policy,args.output,workers=args.workers))
+    print(json.dumps(result['counts']))
+
+
+if __name__=='__main__':main()

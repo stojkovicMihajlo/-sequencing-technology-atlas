@@ -411,6 +411,38 @@
       ],
       "result": "output/RESULT.json",
       "notes": "Existing history runner with canonical all-run completion join, exact source/workflow/policy identities, explicit revisit/recovery reasons, pinned state-directory consistency and bounded scheduling. No completed history is rerun merely because absent from a display merge."
+    },
+    "extraction.recover-review": {
+      "stage": "extraction",
+      "native_models": true,
+      "entrypoint": [
+        "{python}",
+        "-m",
+        "genomics_discovery.illumina.review_recovery"
+      ],
+      "code_patterns": [
+        "experiments/card_methods_full_20261112/investigate_holds.py",
+        "experiments/card_methods_full_20261112/located_documents.py",
+        "experiments/diagram_paper_pilot_20261106/run.py"
+      ],
+      "inputs": {
+        "policy": "config/extraction/review_recovery.json",
+        "checkpoints": ""
+      },
+      "parameters": {
+        "workers": "1"
+      },
+      "arguments": [
+        "{checkpoints}",
+        "--policy",
+        "{policy}",
+        "--workers",
+        "{workers}",
+        "--output",
+        "{output}"
+      ],
+      "result": "output/state.json",
+      "notes": "Pinned actual completed research checkpoints enter bounded existing recovery directly, with no preliminary author/reviewer. Cache and source custody precede any new extraction; same episode resumes without duplicate calls. Declare purpose and pinned inventories/curation inputs in the checkpoint manifest. Fresh scientific review remains mandatory; no canonical admission is implied."
     }
   },
   "history": "provenance/ and dated experiments preserve earlier inputs, code and outcomes. They are not a menu of interchangeable current launchers.",

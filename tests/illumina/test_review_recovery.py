@@ -268,3 +268,37 @@ async def test_actual_cache_registration_host_failure_never_reaches_finder(held_
     assert register.call_count==1 and result['status']=='failed' and result['failure_category']==category
     assert result['recovery_failure']['exception_type']==type(failure).__name__
     finder.assert_not_awaited();dispatch.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_completed_checkpoint_entry_has_no_preliminary_model_calls_and_replays(held_case,tmp_path,monkeypatch):
+    from functools import partial
+    old=tmp_path/'original';row=await initial(held_case,old);row['attempt_directory']=str(old)
+    checkpoint=tmp_path/'checkpoint.json';core.write(checkpoint,{'cards':{'example':row}})
+    manuscript=source(tmp_path/'new.txt','New registered source supplied for the exact held question.')
+    async def lookup(*args):
+        assert len(held_case[-1].calls)==2
+        return {'sources':{'supplement:first':manuscript}}
+    cache=AsyncMock(side_effect=lookup)
+    monkeypatch.setattr(recovery,'recover_review',partial(recovery.recover_review,cache_lookup=cache))
+    policy=tmp_path/'policy.json';core.write(policy,{'max_rounds':1,'state_directory':str(tmp_path/'episodes')})
+    manifest=tmp_path/'manifest.json';core.write(manifest,{'purpose':'recovery_validation','checkpoints':[{
+        'method_id':'example','checkpoint':{'path':str(checkpoint),'sha256':core.sha(checkpoint),'pointer':'/cards/example'}}]})
+    first=await recovery.run_completed(manifest,policy,tmp_path/'run',workers=1,worker=held_case[-1])
+    assert first['counts']=={'research_needed':1} and len(held_case[-1].calls)==4 and cache.await_count==1
+    again=await recovery.run_completed(manifest,policy,tmp_path/'resume',workers=1,worker=held_case[-1])
+    assert again['cards']['example']['recovery_reused'] and len(held_case[-1].calls)==4 and cache.await_count==1
+
+
+@pytest.mark.asyncio
+async def test_completed_entry_rejects_a_synthetic_outcome_before_cache_or_worker(held_case,tmp_path,monkeypatch):
+    old=tmp_path/'original';row=await initial(held_case,old)
+    row.update(status='supported',attempt_directory=str(old))  # Contradicts the actual preserved research review.
+    checkpoint=tmp_path/'checkpoint.json';core.write(checkpoint,row)
+    manifest=tmp_path/'manifest.json';core.write(manifest,{'purpose':'recovery_validation','checkpoints':[{
+        'method_id':'example','checkpoint':{'path':str(checkpoint),'sha256':core.sha(checkpoint)}}]})
+    policy=tmp_path/'policy.json';core.write(policy,{'max_rounds':1})
+    handoff=AsyncMock();monkeypatch.setattr(recovery,'recover_review',handoff)
+    result=await recovery.run_completed(manifest,policy,tmp_path/'run',worker=held_case[-1])
+    assert result['counts']=={'failed':1} and len(held_case[-1].calls)==2
+    handoff.assert_not_awaited()
