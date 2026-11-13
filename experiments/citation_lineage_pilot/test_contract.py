@@ -660,3 +660,77 @@ def test_current_comparison_keeps_citation_context_without_becoming_history():
     g = graph_overlay(a, r, sources, 'pin', {})
     assert g['links'][0]['relationship_layer'] == 'comparison'
     assert g['links'][0]['claim']['citation_context'] == SOURCES['seed']['text']
+
+
+def review_only_completion_fixture(tmp_path, *, bad_provenance=False):
+    """Synthetic archives exercising the real transport, science and graph checks."""
+    import run as runner
+    base = tmp_path / 'research'; inputs = base / 'inputs'; inputs.mkdir(parents=True)
+    runner.write(inputs / 'sources.json', SOURCES)
+    runner.write(inputs / 'seed_extraction.json', {'operations': [{'id': 'o1'}]})
+    runner.write(inputs / 'catalogue.json', [])
+    runner.write(inputs / 'seed_binding.json', {'record_id': 'synthetic-seed'})
+    nominations = {'references': [{'reference_id': 'R1', 'contribution': 'method',
+        'reason_to_follow': 'Resolve the comparison baseline',
+        'seed_evidence': [{'source_id': 'seed', 'quote': SOURCES['seed']['text']}]}],
+        'selection_rationale': 'Synthetic fixture', 'unresolved_searches': []}
+    analysis, review = case()
+
+    def stage(root, role, document, thread):
+        attempt = root / 'native' / role; attempt.mkdir(parents=True)
+        runner.write(attempt / 'artifact.json', document)
+        usage = {'input_tokens': 1, 'output_tokens': 1}
+        runner.write(attempt / 'result.json', {'exit_code': 0, 'error': None,
+            'thread_id': thread, 'usage': usage, 'elapsed_seconds': 1})
+        (attempt / 'events.jsonl').write_text(''.join(json.dumps(event) + '\n' for event in [
+            {'type': 'thread.started', 'thread_id': thread}, {'type': 'turn.started'},
+            {'type': 'turn.completed', 'usage': usage}]))
+        (attempt / 'final.txt').write_text('Synthetic completed transport fixture.')
+        runner.write(attempt / 'image_delivery.json', [])
+        runner.write(attempt / 'command.json', {'argv': ['codex', 'exec']})
+        runner.write(attempt / 'input_pins.json', {str(p): runner.sha(p)
+            for p in (root / 'inputs').rglob('*') if p.is_file()})
+        return {'role': role, 'path': str(attempt), 'status': 'validated',
+            'thread_id': thread, 'artifact_sha256': runner.sha(attempt / 'artifact.json')}
+
+    rows = [stage(base, 'nominate', nominations, 'research-nominate'),
+            stage(base, 'analyse', analysis.model_dump(mode='json'), 'research-analyse')]
+    author = Path(rows[-1]['path']) / 'artifact.json'
+    review.analysis_sha256 = runner.sha(author)
+    rows.append(stage(base, 'review', review.model_dump(mode='json'), 'research-review'))
+    runner.write(base / 'nominations.json', nominations)
+    runner.write(base / 'analysis.json', analysis.model_dump(mode='json'))
+    runner.write(base / 'review.json', review.model_dump(mode='json'))
+    runner.write(base / 'graph.json', graph_overlay(analysis, review, SOURCES,
+        runner.sha(author), runner.read(inputs / 'seed_binding.json'), catalogue=[]))
+    runner.write(base / 'state.json', {'status': 'completed', 'stages': rows})
+    current = tmp_path / 'review-only'
+    copied, prior_analysis = runner.prepare_review_reuse(base, current)
+    provenance = runner.read(copied / 'review_reuse.json')
+    if bad_provenance:
+        provenance['source_registry_sha256'] = '0' * 64
+        runner.write(copied / 'review_reuse.json', provenance)
+    fresh = stage(current, 'review', review.model_dump(mode='json'), 'fresh-review')
+    runner.write(current / 'analysis.json', runner.read(prior_analysis))
+    runner.write(current / 'review.json', review.model_dump(mode='json'))
+    runner.write(current / 'graph.json', runner.read(base / 'graph.json'))
+    runner.write(current / 'state.json', {'status': 'completed', 'stages': [fresh],
+        'review_reuse': provenance})
+    return base, current
+
+
+def test_review_only_completion_reopens_real_provenance_transport_and_graph_contract(tmp_path):
+    import run as runner
+    base, current = review_only_completion_fixture(tmp_path)
+    before = (base / 'state.json').read_bytes()
+    state, author = runner.validate_completed_citation(current)
+    assert [row['role'] for row in state['stages']] == ['review']
+    assert author == current / 'inputs/prior_analysis.json'
+    assert (base / 'state.json').read_bytes() == before
+
+
+def test_review_only_completion_rejects_recorded_but_false_prior_source_pin(tmp_path):
+    import run as runner
+    _, current = review_only_completion_fixture(tmp_path, bad_provenance=True)
+    with pytest.raises(ValueError, match='does not match validated prior research'):
+        runner.validate_completed_citation(current)

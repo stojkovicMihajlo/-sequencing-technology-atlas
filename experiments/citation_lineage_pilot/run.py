@@ -302,12 +302,17 @@ def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None, re
     return document
 
 
-def validate_completed_citation(previous):
+def validate_completed_citation(previous, _seen=None, _lineage_threads=None):
     """Reopen a completed native citation result before reuse or workflow mapping."""
     previous = previous.resolve()
+    seen=set() if _seen is None else _seen
+    lineage_threads=set() if _lineage_threads is None else _lineage_threads
+    if previous in seen:raise ValueError('Cyclic review-only provenance')
+    seen.add(previous)
     prior = read(previous / 'state.json')
     if prior['status'] != 'completed':
         raise ValueError('Review reuse requires a completed run, never a failed/provider-blocked attempt')
+    current_threads=set()
     for row in prior['stages']:
         attempt = Path(row['path'])
         assessment = assess_archived_attempt(attempt)
@@ -317,11 +322,40 @@ def validate_completed_citation(previous):
             raise ValueError('Previous native stage failed custody/transport revalidation')
         verify_stage_inputs(attempt, read(attempt / 'image_delivery.json'),
                             read(attempt / 'input_pins.json'))
-    nomination_row = next(x for x in prior['stages'] if x['role'] == 'nominate')
-    if read(previous / 'nominations.json') != read(Path(nomination_row['path']) / 'artifact.json'):
-        raise ValueError('Previous nomination handoff differs from its native artifact')
-    author = [x for x in prior['stages'] if x['role'] == 'analyse'][-1]
-    original = Path(author['path']) / 'artifact.json'
+        if row['thread_id'] in current_threads:raise ValueError('Native stages must use independent threads')
+        current_threads.add(row['thread_id'])
+    reuse=prior.get('review_reuse')
+    if reuse is not None:
+        if reuse!=read(previous/'inputs/review_reuse.json'):
+            raise ValueError('Review-only provenance differs from its input record')
+        source=Path(reuse['previous_run']).resolve()
+        source_state,source_analysis=validate_completed_citation(source,seen,lineage_threads)
+        if (sha(source/'state.json')!=reuse['state_sha256'] or
+                sha(source_analysis)!=reuse['analysis_sha256'] or
+                Path(reuse['analysis_path']).resolve()!=source_analysis.resolve() or
+                sha(source/'inputs/sources.json')!=reuse['source_registry_sha256'] or
+                reuse['prior_threads']!=[x['thread_id'] for x in source_state['stages']]):
+            raise ValueError('Review-only provenance does not match validated prior research')
+        for file in (source/'inputs').rglob('*'):
+            if not file.is_file():continue
+            rel=file.relative_to(source/'inputs')
+            if str(rel) in {'prior_analysis.json','review_reuse.json'}:continue
+            if sha(previous/'inputs'/rel)!=sha(file):
+                raise ValueError('Review-only copied scientific input changed: '+str(rel))
+        if (sha(previous/'inputs/prior_analysis.json')!=reuse['analysis_sha256'] or
+                sha(previous/'nominations.json')!=sha(source/'nominations.json')):
+            raise ValueError('Review-only copied analysis or nominations changed')
+        if current_threads & lineage_threads:
+            raise ValueError('Review-only stages must be fresh independent native threads')
+    else:
+        nominations=[x for x in prior['stages'] if x['role']=='nominate']
+        if not nominations:raise ValueError('Completed research has no nomination or review-only provenance')
+        if read(previous/'nominations.json')!=read(Path(nominations[-1]['path'])/'artifact.json'):
+            raise ValueError('Previous nomination handoff differs from its native artifact')
+    authors=[x for x in prior['stages'] if x['role']=='analyse']
+    if authors:original=Path(authors[-1]['path'])/'artifact.json'
+    elif reuse is not None:original=previous/'inputs/prior_analysis.json'
+    else:raise ValueError('Completed research has no analysis or pinned prior analysis')
     if read(previous / 'analysis.json') != read(original):
         raise ValueError('Previous analysis handoff differs from its native artifact')
     validate('analyse', original, previous / 'inputs')
@@ -342,6 +376,7 @@ def validate_completed_citation(previous):
                                           if 'reference_ledger' in previous_graph else None))
     if read(previous / 'graph.json') != expected:
         raise ValueError('Previous graph differs from its reviewed citation export')
+    lineage_threads.update(current_threads)
     return prior, original
 
 
