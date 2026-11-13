@@ -58,3 +58,69 @@ submit eligible held methods with bounded author correction and fresh review.
 Do not rerun the 122-method batch, silently substitute another primary paper,
 declare a source-version conflict solved by a download, or weaken admission to
 make counts improve. No extraction retry was launched by this recovery pilot.
+
+13 November follow-up — automatic recovery and implementation precedents
+
+Local contract: input is a pinned method, source bundle, candidate and completed
+review or concrete execution failure. Success is a supported reviewed artifact,
+or an explicit exhausted/access/applicability hold retaining the exact unanswered
+question and next action. A retry does not change scientific scope or prove a
+claim. New sources pass the existing identity and association checks before use.
+
+Why the174-method run still needed engineering intervention: the existing author
+revision loop handles revise verdicts, but a research verdict ends that workflow.
+Recovery has been a separate bounded pass. It does not consistently feed a newly
+raised question back into acquisition, check whether existing evidence answers
+it, or repair a conversion/registration fault at the appropriate layer. Some
+25source-held cases have candidate documents already; others have real public
+access failures. Repeating an extraction on the same evidence cannot fix either.
+
+Inspected precedents and adoption decisions:
+
+1. LangGraph official implementation, MIT, commit
+   3183e90eca59850a607d8a4c1b24fa8c5c8a2b69:
+   https://github.com/langchain-ai/langgraph/blob/3183e90eca59850a607d8a4c1b24fa8c5c8a2b69/libs/langgraph/langgraph/pregel/_retry.py
+   run_with_retry, arun_with_retry and _should_retry_on select retry policy by
+   exception, bound attempts, apply backoff and keep cancellation/graph interrupts
+   distinct. libs/langgraph/langgraph/func/__init__.py::task/entrypoint provide
+   checkpointed task boundaries and resumed results. Transfer the principles of
+   typed recovery, per-step checkpoints and avoiding repeated side effects to
+   our existing runner. Do not equate a missing scientific source with a transient
+   API exception. Framework use alone cannot determine evidence sufficiency.
+   Official fault-tolerance documentation inspected:
+   https://github.com/langchain-ai/docs/blob/main/src/oss/langgraph/fault-tolerance.mdx
+
+2. PaperQA official implementation, Apache-2.0, commit
+   c692d0dfeac4a0296599f7fe21a253a58b7ac12a:
+   src/paperqa/agents/tools.py::EnvironmentState, PaperSearch.paper_search,
+   GatherEvidence.gather_evidence; agents/env.py::settings_to_tools.
+   Transfer named, question-specific search/evidence tools and visible document/
+   evidence state. Its GatherEvidence mutates session.question and explicitly
+   disallows concurrent calls to itself: use isolated method state, not a shared
+   mutable session for50workers. PaperQA answers literature questions; its answer
+   completion is not our graph admission rule. Existing reference manifest records
+   original code hashes and license. No copied code or new dependency here.
+
+3. Anthropic, Building effective agents:
+   https://www.anthropic.com/research/building-effective-agents
+   Transfer simple composable routing, programmatic gates and evaluator/optimizer
+   feedback. The author's bounded correction/fresh-review loop already follows
+   this pattern. Another agent is justified by a distinct evidence/scope judgment,
+   not by the existence of a failure flag. This guidance is architectural advice,
+   not scientific validation or a task-specific recovery implementation.
+
+Next integration contract: persist the actual unresolved request and source state;
+route correctable content to revision, missing sources to existing acquisition,
+scope ambiguity to the existing evidence assessment, and execution errors to their
+tool layer. Restore completed work from checkpoints, fingerprint repeated requests
+and exhausted routes, and reserve one worker slot across each method's handoffs.
+New review-time requests must reach this same bounded path. Existing provider
+holds and genuine unavailable facts retain explicit outcomes. A new run directory
+records changed inputs; it does not create another extractor implementation.
+
+Implementation boundary: prepared.py already provides source-investigation to
+eligible extraction/review and fresh source-backed adjudication. The current
+targeted jobs exercise those pieces. This decision and the engineering skill do
+not establish that the complete automatic review-to-acquisition return path is
+implemented or validated. Check that path on saved failures and a matched live
+pilot before claiming unattended full-cohort recovery.

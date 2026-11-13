@@ -3,6 +3,11 @@
 The project pipeline is **source preparation → extraction → evolutionary graph**.
 Abstract screening and article acquisition belong to source preparation.
 
+When developing or debugging the harness, read
+`skills/harness-development/SKILL.md` for implementation reuse, code organization,
+reproducible runs and bounded recovery. Per-paper scientific workers follow their
+assigned extraction/review instructions and `skills/assay-extraction/SKILL.md`.
+
 - Read `pipeline.json` and the main `README.md` to identify active code and commands.
 - Reuse and edit the listed implementation. Do not create another dated copy of
   an extractor, classifier, query runner or Slurm launcher for a routine fix/run.
