@@ -131,8 +131,9 @@ def test_oai_extracts_identity_bound_article_and_preserves_original_response(tmp
     article = b'<article><front><article-meta><article-id pub-id-type="pmid">12</article-id><article-id pub-id-type="pmc">PMC12</article-id></article-meta></front><body><p>Methods.</p></body></article>'
     response = b'<OAI-PMH><GetRecord><record><metadata>' + article + b'</metadata></record></GetRecord></OAI-PMH>'
 
-    def fetch(url, dest):
+    def fetch(url, dest, **options):
         assert url.startswith("https://pmc.ncbi.nlm.nih.gov/api/oai/v1/mh/")
+        assert options['preserve_http_error'] is True
         return receipt(url, dest, response)
 
     monkeypatch.setattr(mod, "fetch", fetch)
@@ -147,16 +148,29 @@ def test_oai_extracts_identity_bound_article_and_preserves_original_response(tmp
 
 def test_missing_pmc_and_non_oa_are_explicit(tmp_path, monkeypatch):
     assert mod.acquire_pmc_fulltext({"pmid": "12"}, tmp_path)["status"] == "no_pmc_identifier_in_pubmed_metadata"
-    monkeypatch.setattr(mod, "fetch", lambda url, dest: receipt(url, dest,
+    monkeypatch.setattr(mod, "fetch", lambda url, dest, **options: receipt(url, dest,
         b'<OAI-PMH><error code="cannotDisseminateFormat">Full text unavailable</error></OAI-PMH>'))
     result = mod.acquire_pmc_fulltext({"pmid": "12", "identifiers": {"pmc": ["PMC12"]}}, tmp_path)
     assert result["status"] == "fulltext_not_available_via_pmc_oai"
     assert result["reason"] == "Full text unavailable"
 
 
+def test_http400_oai_protocol_body_is_an_availability_hold_not_an_article(tmp_path, monkeypatch):
+    raw=b'<OAI-PMH><error code="cannotDisseminateFormat">The document is unsupported for the given prefix.</error></OAI-PMH>'
+    def fetch(url,dest,**options):
+        assert options['preserve_http_error']
+        result=receipt(url,dest,raw);result['http_status']=400;return result
+    monkeypatch.setattr(mod,'fetch',fetch)
+    result=mod.acquire_pmc_fulltext({'pmid':'12','identifiers':{'pmc':['PMC12']}},tmp_path)
+    assert result['status']=='fulltext_not_available_via_pmc_oai'
+    assert result['original_response']['http_status']==400
+    assert (tmp_path/result['original_response']['path']).read_bytes()==raw
+    assert not (tmp_path/'papers/12/article.xml').exists()
+
+
 def test_oai_wrong_article_identity_cannot_become_fulltext(tmp_path, monkeypatch):
     response = b'<OAI-PMH><GetRecord><record><metadata><article><front><article-meta><article-id pub-id-type="pmid">99</article-id><article-id pub-id-type="pmcid">PMC99</article-id></article-meta></front><body><p>Wrong paper.</p></body></article></metadata></record></GetRecord></OAI-PMH>'
-    monkeypatch.setattr(mod, "fetch", lambda url, dest: receipt(url, dest, response))
+    monkeypatch.setattr(mod, "fetch", lambda url, dest, **options: receipt(url, dest, response))
     result = mod.acquire_pmc_fulltext({"pmid": "12", "identifiers": {"pmc": ["PMC12"]}}, tmp_path)
     assert result["status"] == "failed"
     assert not (tmp_path / "papers/12/article.xml").exists()

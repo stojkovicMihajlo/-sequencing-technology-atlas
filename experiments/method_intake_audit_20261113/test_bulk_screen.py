@@ -143,6 +143,39 @@ class BulkTests(unittest.TestCase):
         self.assertEqual([r['pmid'] for r in result['papers']],['2','4'])
         self.assertEqual(result['papers'][-1]['route'],'metadata_recovery')
 
+    def test_bounded_complete_transport_repair_reuses_valid_rows_and_keeps_old_attempt(self):
+        p=self.pool([paper(1),paper(2,'A protocol for Saccharomyce cerevisiae sequencing.')])
+        class TypoCorrectingWorker(Worker):
+            async def run(self,prompt,attempt,**kwargs):
+                result=await super().run(prompt,attempt,**kwargs)
+                value=json.loads((attempt/'final.txt').read_text());value['papers'][1]['methodological_claim_quote']='A protocol for Saccharomyces cerevisiae sequencing.'
+                final=json.dumps(value);(attempt/'final.txt').write_text(final)
+                events=[json.loads(line) for line in (attempt/'events.jsonl').read_text().splitlines()]
+                next(e for e in events if e['type']=='item.completed')['item']['text']=final
+                (attempt/'events.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in events))
+                return result
+        failed=self.run_screen(p,TypoCorrectingWorker(),batch_size=2)
+        self.assertEqual(failed['counts'],{'screening_batch_failed':2})
+        original=next((self.root/'screen').glob('00001-*'));before=(original/'final.txt').read_bytes()
+        config={'original_attempt':str(original),'source_pins':{name:bulk.pilot.sha(original/name) for name in ['papers.json','final.txt','events.jsonl','result.json','EXPECTED.json']},
+                'reserved_repair_slots':1,'bulk_source_slots':25,'extraction_reserved_max':24,'max_repair_papers':1}
+        config_path=self.root/'repair.json';config_path.write_text(json.dumps(config));repair_worker=Worker()
+        result=asyncio.run(bulk.repair_complete_transport(config_path,self.root/'repair',repair_worker))
+        self.assertEqual(repair_worker.calls,[['2']]);self.assertEqual(result['reused_valid_papers'],1)
+        self.assertEqual((original/'final.txt').read_bytes(),before)
+        patched=bulk.read(self.root/'repair/VALIDATION_REPAIR.json')['papers']
+        self.assertEqual(patched[0]['methodological_claim_quote'],paper(1)['abstract'][0]['text'])
+        self.assertEqual(patched[1]['methodological_claim_quote'],'A protocol for Saccharomyce cerevisiae sequencing.')
+
+    def test_validation_repair_refuses_incomplete_provider_transport(self):
+        p=self.pool([paper(1)]);self.run_screen(p,Worker(fail={'1'}));original=next((self.root/'screen').glob('00001-*'))
+        config={'original_attempt':str(original),'source_pins':{name:bulk.pilot.sha(original/name) for name in ['papers.json','events.jsonl','result.json','EXPECTED.json']},
+                'reserved_repair_slots':1,'bulk_source_slots':25,'extraction_reserved_max':24,'max_repair_papers':1}
+        path=self.root/'repair.json';path.write_text(json.dumps(config));worker=Worker()
+        with self.assertRaisesRegex(ValueError,'complete successful native transport'):
+            asyncio.run(bulk.repair_complete_transport(path,self.root/'repair',worker))
+        self.assertEqual(worker.calls,[])
+
     def test_rubric_includes_improvements_and_has_no_seq_name_requirement(self):
         self.assertIn('library-preparation, enzyme',bulk.RUBRIC)
         self.assertIn("need not introduce a wholly new architecture or a named '-seq'",bulk.RUBRIC)

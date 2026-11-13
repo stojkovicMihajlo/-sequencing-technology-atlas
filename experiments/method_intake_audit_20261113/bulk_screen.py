@@ -232,7 +232,79 @@ async def screen(pool,output,worker,*,pool_sha256,overlays=(),agents=10,batch_si
     write(output/'SCREENING.json',result);return result
 
 
+async def repair_complete_transport(config_path,output,worker):
+    """One bounded repair call for invalid rows; reuse valid rows verbatim.
+
+    Original completed transport, scope and evidence pins must independently
+    verify. No provider-blocked/incomplete attempt is eligible. Old files stay
+    unchanged; the new patch is a separate first-pass screening artifact.
+    """
+    if not os.environ.get('SLURM_JOB_ID'):raise ValueError('Repair requires Qiu Slurm')
+    config=read(config_path);original=Path(config['original_attempt']).resolve()
+    if worker.model!='gpt-6.1-sol' or worker.effort!='xhigh':raise ValueError('Use requested model/effort')
+    if config['reserved_repair_slots']!=1 or config['bulk_source_slots']+config['extraction_reserved_max']+1>50:
+        raise ValueError('One reserved repair slot must fit the global native ceiling')
+    source_pins={str(original/name):pin for name,pin in config['source_pins'].items()}
+    verify_pins(source_pins)
+    archive=pilot.assess_archived_attempt(original)
+    if not archive.complete:raise ValueError('Only complete successful native transport can enter validation repair')
+    previous=pilot.final_from_stdout(original);papers=read(original/'papers.json')['papers'];expected=read(original/'EXPECTED.json')
+    plan=read(original.parent/'PLAN.json');verify_pins(plan['runtime_pins']);verify_pins(plan['input_pins'])
+    if digest(papers)!=expected['input_sha256'] or digest(plan['runtime_pins'])!=expected['runtime_sha256']:
+        raise ValueError('Original attempt scope/runtime binding differs')
+    if hashlib.sha256((original/'prompt.txt').read_bytes()).hexdigest()!=expected['prompt_sha256']:
+        raise ValueError('Original prompt changed')
+    by_id={p['pmid']:p for p in papers}
+    if len(previous.get('papers',[]))!=len(papers) or {r.get('pmid') for r in previous['papers']}!=set(by_id):
+        raise ValueError('Ambiguous original PMID coverage is not a row-validation repair')
+    valid,invalid=[],[]
+    for row in previous['papers']:
+        try:validate({'papers':[row]},[by_id[row['pmid']]]);valid.append(row)
+        except ValueError as exc:
+            if str(exc) not in {'Quote absent from exact abstract section','Missing rationale or focused question'}:
+                raise ValueError('Validation failure needs explicit separate repair design: '+str(exc))
+            invalid.append({'judgment':row,'validation_error':str(exc)})
+    if not invalid or len(invalid)>config.get('max_repair_papers',1):
+        raise ValueError('Invalid row count exceeds this bounded repair request')
+    output=Path(output).resolve();output.mkdir(parents=True,exist_ok=False)
+    repair_papers=[by_id[r['judgment']['pmid']] for r in invalid]
+    write(output/'REPAIR_BINDING.json',{'config':config,'source_pins':source_pins,'reused_valid_pmids':[r['pmid'] for r in valid],
+          'repair_pmids':[p['pmid'] for p in repair_papers],'original_transport_usage':archive.usage,'scientific_admission':False})
+    attempt=output/'attempt';attempt.mkdir();write(attempt/'response_schema.json',schema())
+    instruction=('ROLE: BOUNDED VALIDATION REPAIR\nThe previous native call completed. Correct only the supplied invalid rows. '
+        'Preserve all literal source spelling, punctuation and whitespace in quotations, including apparent typos; never silently correct source text. '
+        'Choose an exact contiguous passage within ONE supplied abstract section that supports the methodological judgment. '
+        'Earlier judgments are drafts, not evidence. Do not claim independent scientific review or new-method admission. '
+        'Return the normal schema for ONLY these repair PMIDs. Do not write files, browse or inspect other attempts.\n'
+        +RUBRIC+'\nPREVIOUS_INVALID_JUDGMENTS:\n'+json.dumps(invalid,ensure_ascii=False)
+        +'\nSUPPLIED_PRIMARY_METADATA:\n'+json.dumps({'papers':repair_papers},ensure_ascii=False))
+    result=await worker.run(instruction,attempt,response_schema_path=attempt/'response_schema.json')
+    checked=pilot.assess_archived_attempt(attempt)
+    if result.exit_code or result.error or not checked.complete:raise ValueError('Repair native transport did not complete')
+    repaired=validate(pilot.final_from_stdout(attempt),repair_papers)
+    verify_pins(source_pins)
+    merged={r['pmid']:r for r in valid};merged.update({r['pmid']:r for r in repaired['papers']})
+    final=validate({'papers':[merged[p['pmid']] for p in papers]},papers)
+    write(output/'VALIDATION_REPAIR.json',{'version':'bulk_validation_repair/1','original_attempt':str(original),
+          'source_pins':source_pins,'reused_valid_papers':len(valid),'new_repair_papers':len(repair_papers),'native_calls':1,
+          'repair_usage':checked.usage,'papers':[{**r,'status':'screened','route':route_for(r)} for r in final['papers']],
+          'boundary':'Separate validated first-pass patch. Original batch remains unchanged; no scientific acceptance, model rerun of valid rows or automatic method admission.'})
+    return {'reused_valid_papers':len(valid),'new_repair_papers':len(repair_papers),'native_calls':1}
+
+
+def repair_main():
+    parser=argparse.ArgumentParser(description='Repair only invalid evidence rows from complete native transport')
+    parser.add_argument('--config',type=Path,required=True);parser.add_argument('--output',type=Path,required=True)
+    args=parser.parse_args(sys.argv[2:])
+    if not os.environ.get('SLURM_JOB_ID') or os.environ.get('ATLAS_CODEX_ACCOUNT_LABEL')!='atlas-agent-runs':
+        parser.error('Use Qiu Slurm and the selected project account')
+    worker=pilot.AbstractReadOnlyWorker(executable=str(Path(os.environ['ATLAS_CODEX_BIN_DIR'])/'codex'),model='gpt-6.1-sol',effort='xhigh',
+        timeout_seconds=1200,web_search=False,network_access=False,pin_shell_environment=True)
+    print(json.dumps(asyncio.run(repair_complete_transport(args.config,args.output,worker)),indent=2))
+
+
 def main():
+    if len(sys.argv)>1 and sys.argv[1]=='repair':return repair_main()
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--pool',type=Path,required=True);p.add_argument('--pool-sha256',required=True)
     p.add_argument('--overlay',type=Path,action='append',default=[]);p.add_argument('--overlay-sha256',action='append',default=[])

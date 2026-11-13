@@ -195,6 +195,32 @@
       "result": "output/METHOD_LEDGER.json",
       "notes": "Reconcile pinned actual method states, retain accepted/provider-held cases, investigate exact source gaps, then extract/review genuinely enlarged bundles. Finders and sequential handoffs share the same 1-50 native slot limit."
     },
+    "extraction.adjudicate": {
+      "stage": "extraction",
+      "native_models": true,
+      "entrypoint": [
+        "{python}",
+        "-m",
+        "genomics_discovery.illumina.prepared",
+        "adjudicate"
+      ],
+      "code_patterns": [],
+      "inputs": {
+        "sources": ""
+      },
+      "parameters": {
+        "workers": "4"
+      },
+      "arguments": [
+        "{sources}",
+        "--workers",
+        "{workers}",
+        "--output",
+        "{output}"
+      ],
+      "result": "output/state.json",
+      "notes": "Source/pointer-bound curation questions receive a fresh complete existing DiagramReview. Only an actual needs_revision verdict enters the existing one-correction revision_seed path; unavailable facts remain research-held. One slot stays reserved through all handoffs. No new scientific schema or verdict inheritance."
+    },
     "evolution": {
       "stage": "evolution",
       "native_models": true,
@@ -263,6 +289,33 @@
       ],
       "result": "output/RESULTS.json",
       "notes": "One initial abstract screen per batch, streaming assay/library/component/unclear/review/later-protocol candidates to existing identity-checked public-paper acquisition. Native concurrency is configured with a total ceiling of50 across tracks; source run selects25 while extraction reserves25. No automatic method admission."
+    },
+    "sources.repair-validation": {
+      "stage": "sources",
+      "native_models": true,
+      "entrypoint": [
+        "{python}",
+        "-m",
+        "experiments.method_intake_audit_20261113.bulk_screen",
+        "repair"
+      ],
+      "code_patterns": [
+        "experiments/method_intake_audit_20261113/bulk_screen.py",
+        "experiments/method_intake_audit_20261113/live_pilot.py",
+        "experiments/method_intake_audit_20261113/test_bulk_screen.py"
+      ],
+      "inputs": {
+        "config": "config/sources/validation_repair.json"
+      },
+      "parameters": {},
+      "arguments": [
+        "--config",
+        "{config}",
+        "--output",
+        "{output}"
+      ],
+      "result": "output/VALIDATION_REPAIR.json",
+      "notes": "Single bounded correction of invalid evidence rows from complete successful transport; no providerblocked retry, no rerunofvalidpapers, originalartifactsunchanged. One global slot explicitly reserved within50."
     }
   },
   "history": "provenance/ and dated experiments preserve earlier inputs, code and outcomes. They are not a menu of interchangeable current launchers.",

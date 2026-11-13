@@ -146,7 +146,7 @@ def build_inventory(catalogue: Path, selector: Path | None = None) -> dict:
             "scope": "Cached source catalogue inventory; no inference of one-card/one-method identity, publication priority, or scientific claim support."}
 
 
-def fetch(url: str, destination: Path, *, timeout: int = 90) -> dict:
+def fetch(url: str, destination: Path, *, timeout: int = 90, preserve_http_error: bool = False) -> dict:
     """Use system TLS trust and preserve only completed download bodies."""
     url = https_url(url)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -163,12 +163,15 @@ def fetch(url: str, destination: Path, *, timeout: int = 90) -> dict:
         with _NCBI_LOCK:
             time.sleep(max(0.0, _NCBI_NEXT - time.monotonic()))
             _NCBI_NEXT = time.monotonic() + 0.35
-    result = subprocess.run([
-        curl, "--silent", "--show-error", "--fail", "--location", "--proto", "=https",
+    command = [
+        curl, "--silent", "--show-error", "--location", "--proto", "=https",
         "--proto-redir", "=https", "--max-redirs", "5", "--max-time", str(timeout),
         "--max-filesize", "200000000", "--output", str(temporary),
         "--write-out", "%{http_code}\n%{url_effective}", url,
-    ], capture_output=True, timeout=timeout + 10)
+    ]
+    if not preserve_http_error:
+        command.insert(3, "--fail")
+    result = subprocess.run(command, capture_output=True, timeout=timeout + 10)
     if result.returncode:
         if temporary.exists():
             temporary.unlink()
@@ -277,7 +280,9 @@ def acquire_pmc_fulltext(publication: dict, output: Path) -> dict:
     oa_path = directory / "original_oai_response.xml"
     try:
         with _OAI_LOCK:
-            oa_receipt = fetch(oa_url, oa_path)
+            # OAI returns typed protocol errors with HTTP400. Keep those original
+            # bodies for availability diagnosis; they are never article sources.
+            oa_receipt = fetch(oa_url, oa_path, preserve_http_error=True)
         root = ET.fromstring(oa_path.read_bytes())
         local = lambda e: e.tag.rsplit("}", 1)[-1]
         errors = [e for e in root.iter() if local(e) == "error"]
@@ -288,6 +293,8 @@ def acquire_pmc_fulltext(publication: dict, output: Path) -> dict:
             return {"source_id": "paper:" + pmid, "pmcid": pmcid, "status": status,
                     "original_response": {**oa_receipt, "path": str(oa_path.relative_to(output))},
                     "error_code": error.get("code"), "reason": " ".join(error.itertext()).strip()}
+        if oa_receipt.get('http_status', 200) >= 400:
+            raise ValueError('HTTP error response lacks a recognized OAI error; retain original response for inspection')
         candidates = []
         for article in (e for e in root.iter() if local(e) == "article"):
             front = next((e for e in article if local(e) == "front"), None)
