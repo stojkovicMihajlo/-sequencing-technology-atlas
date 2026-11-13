@@ -317,6 +317,35 @@
       ],
       "result": "output/VALIDATION_REPAIR.json",
       "notes": "Single bounded correction of invalid evidence rows from complete successful transport; no providerblocked retry, no rerunofvalidpapers, originalartifactsunchanged. One global slot explicitly reserved within50."
+    },
+    "sources.recover-assigned-primaries": {
+      "stage": "sources",
+      "native_models": false,
+      "entrypoint": [
+        "{python}",
+        "-m",
+        "genomics_discovery.sources.publication_intake",
+        "recover-primaries"
+      ],
+      "code_patterns": [
+        "experiments/card_methods_full_20261112/located_documents.py",
+        "experiments/method_intake_audit_20261113/bulk_screen.py",
+        "experiments/method_intake_audit_20261113/live_pilot.py",
+        "scripts/illumina/technology_sources/*.py",
+        "tests/sources/test_publication_intake.py"
+      ],
+      "inputs": {
+        "config": "config/sources/assigned_primary_recovery.json"
+      },
+      "parameters": {},
+      "arguments": [
+        "--config",
+        "{config}",
+        "--output",
+        "{output}"
+      ],
+      "result": "output/RESULTS.json",
+      "notes": "Zero-model exact assigned-primary recovery: check full publication vault and bulk-acquisition cache; reuse pinned approved OA metadata; try only new public original routes. Failed URLs/challenge hosts are held without repetition. Original-byte identity and existing registration precede handoff; fresh scientific review remains required."
     }
   },
   "history": "provenance/ and dated experiments preserve earlier inputs, code and outcomes. They are not a menu of interchangeable current launchers.",
