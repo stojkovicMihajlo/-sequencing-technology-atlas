@@ -88,11 +88,16 @@ def validate_cached_reference(pmid, source):
 
 
 def prepare(args):
+    batch_state=getattr(args,'batch_state',None)
+    batch=getattr(args,'batch',None)
+    if (batch_state is None)==(batch is None):
+        raise ValueError('Choose one extraction state file or legacy batch directory')
+    state_path=Path(batch_state) if batch_state is not None else Path(batch)/'state.json'
     root = args.output.resolve()
     root.mkdir(parents=True, exist_ok=False)
     inputs = root / "inputs"
     inputs.mkdir()
-    state = read(args.batch / "state.json")
+    state = read(state_path)
     row = state["cards"][args.record]
     if row["status"] != "supported":
         raise ValueError("Pilot requires an existing supported seed extraction")
@@ -261,7 +266,8 @@ def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None, re
                 if role == 'review' else SCHEMAS[role].model_validate(raw))
     sources = read(inputs / ("sources_initial.json" if role == "nominate" else "sources.json"))
     if role == "nominate":
-        validate_nominations(document, sources, read(inputs / "bibliography.json"))
+        validate_nominations(document,sources,read(inputs/'bibliography.json'),
+                             selective=reading_policy=='focused')
     elif role == "analyse":
         refs = [x["reference_id"] for x in read(inputs.parent / "nominations.json")["references"]]
         validate_analysis(document, sources, refs,
@@ -331,7 +337,9 @@ def validate_completed_citation(previous):
                              catalogue=read(previous / 'inputs/catalogue.json'),
                              classification_policy=previous_graph.get('classification_policy'),
                              include_method_summary=any(n.get('id') == 'seed' and
-                                 'method_contribution_summary' in n for n in previous_graph['nodes']))
+                                 'method_contribution_summary' in n for n in previous_graph['nodes']),
+                             nominations=(SCHEMAS['nominate'].model_validate(read(previous / 'nominations.json'))
+                                          if 'reference_ledger' in previous_graph else None))
     if read(previous / 'graph.json') != expected:
         raise ValueError('Previous graph differs from its reviewed citation export')
     return prior, original
@@ -503,7 +511,7 @@ async def execute(args):
         initial = (validate('analyse', reused_analysis, inputs), reused_analysis) if reused_analysis else None
         analysis, analysis_path, review = await review_cycle(stage, 'analyse', initial)
         overlay = graph_overlay(analysis, review, sources, sha(analysis_path), read(inputs / 'seed_binding.json'),
-                                catalogue=read(inputs / 'catalogue.json'))
+                                catalogue=read(inputs / 'catalogue.json'), nominations=nominations)
         write(root / 'analysis.json', analysis.model_dump())
         write(root / 'review.json', review.model_dump())
         write(root / 'graph.json', overlay)
@@ -525,7 +533,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
     run = sub.add_parser('run')
-    for name in ('batch','article','inventory','output'):
+    batch_input=run.add_mutually_exclusive_group(required=True)
+    batch_input.add_argument('--batch-state',type=Path,help='Pinned extraction state file')
+    batch_input.add_argument('--batch',type=Path,help='Legacy extraction batch directory containing state.json')
+    for name in ('article','inventory','output'):
         run.add_argument('--'+name, type=Path, required=True)
     run.add_argument('--record', required=True)
     run.add_argument('--paper', required=True)
@@ -533,8 +544,10 @@ def main():
     reuse = sub.add_parser('review-existing', help='Fresh review of completed unchanged research; no failed-run resumption')
     reuse.add_argument('--previous', type=Path, required=True)
     reuse.add_argument('--output', type=Path, required=True)
-    for command_parser in (run, reuse):
-        command_parser.add_argument('--reading-policy', choices=('full', 'focused'), default='full')
+    run.add_argument('--reading-policy', choices=('full','focused'), default='focused',
+                     help='New evolution runs use question-focused retrieval; full traversal remains an explicit fallback.')
+    reuse.add_argument('--reading-policy', choices=('full','focused'), default='full',
+                       help='Archived reviews retain their full-reading default unless focused is explicitly requested.')
     inspect = sub.add_parser('read')
     inspect.add_argument('--sources', type=Path, required=True)
     inspect.add_argument('--id')

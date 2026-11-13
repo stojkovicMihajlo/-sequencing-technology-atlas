@@ -254,8 +254,12 @@ def check_focused_reads(path, source_file, sources, analysis, review=None):
                        'context_end': supported[1], 'quote_sha256': digest(item['quote']),
                        'content_level': level})
     if not required:
-        raise ValueError('No claim evidence duties; retain the existing full/nomination gate')
+        if (not analysis.get('summary','').strip() or 'seed' not in outlines or
+                not covered(ranges.get('seed',[]),0,len(sources['seed']['text'])) or
+                not any(q['source_id']=='seed' and q['broader_reading_reason'] for q in queries)):
+            raise ValueError('No ancestry claims: preserve primary-method contribution coverage with a reasoned full-seed summary fallback')
     return {'reading_policy': 'focused', 'evidence_delivery': proofs,
+            'primary_seed_summary_fallback':not required,
             'unresolved_questions': unresolved, 'source_limitations': source_limitations,
             'query_ledger': queries,
             'boundary': 'Quote/context and navigation delivery only. Scientific validation, '
@@ -272,22 +276,11 @@ def check_policy(path, source_file, sources, required_ids, *, role,
 
 
 def focused_instructions(role, instructions):
-    """Opt-in replacement of the deployed full-delivery wording, not a new schema."""
+    """Question-focused delivery instructions; scientific schemas stay unchanged."""
     if role == 'nominate':
         return instructions
-    instructions = re.sub(
-        r'Use the registered source_tool to traverse the complete seed paper.*?'
-        r'Never replace missing source facts with model memory\.',
-        'Use focused primary-source retrieval under the delivery obligations below.',
-        instructions, flags=re.S)
-    instructions = instructions.replace(
-        'Read the full seed paper and every acquired earlier full paper.',
-        'Inspect the primary implementation and attribution evidence for each scoped claim.')
-    instructions = instructions.replace(
-        'Independently read the full seed and the full earlier papers for\nthe proposed claims.',
-        'Independently inspect primary implementation evidence for the proposed claims.')
     return instructions + '''
-FOCUSED READING POLICY (explicit opt-in; scientific checks unchanged)
+FOCUSED READING POLICY (scientific checks unchanged)
 First deliver each used source's outline, object/supplement inventory via
 source_tool --id SOURCE_ID --outline. A flat inventory provides heading hints,
 counts and deduplicated object mentions, not proof that objects/SI were inspected or absent.
@@ -309,6 +302,9 @@ If focused retrieval cannot resolve the question or has conflicting context,
 expand to a whole section or paper with its reason. No hit/keyword count proves
 coverage. Inspect the later contribution account and citation dispositions for
 omissions; never treat an author summary as the reviewer's primary evidence.
+No selected historical connection is a valid outcome. If no claim quotations
+anchor the method summary, inspect the primary seed fully with an explicit
+broader-reading reason; do not omit its own innovations or invent a donor.
 An author is not its reviewer. Existing factual, identity, coverage and publication
 gates still apply. Avoid truncating command output; reopen smaller ranges if needed.
 '''

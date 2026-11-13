@@ -8,10 +8,53 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import copy
 from pathlib import Path
 
 
-def view_data(index):
+def change_text_pin(change):
+    return hashlib.sha256(json.dumps(change,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
+
+
+def reader_changes(edge, edits, target_record_id):
+    """Apply explicitly authored editorial wording only to the exact accepted facts.
+
+    The whitelist/hash checks protect record identity and non-prose fields; they
+    do not establish semantic equivalence. Editorial prose still requires review.
+    Scope, values, baselines, anchors and quotations stay in the canonical record.
+    """
+    result=copy.deepcopy(edge['claim'].get('change_records',[])); applied=[]
+    for row in (edits or {}).get('edits',[]):
+        if row['record_id']!=target_record_id or row['claim_id']!=edge['claim']['id']:
+            continue
+        matches=[c for c in result if c['id']==row['change_id']]
+        if len(matches)!=1 or change_text_pin(matches[0])!=row['source_change_sha256']:
+            raise ValueError('Editorial wording does not match the exact saved change')
+        change=matches[0]; text=row['text']
+        if set(text)-{'compared_feature','before','after','effect_descriptions','scope_notes'}:
+            raise ValueError('Editorial pass cannot change scientific evidence, decisions or scope')
+        for key in ('compared_feature','before','after'):
+            if key in text:
+                if change[key] is None or not isinstance(text[key],str) or not text[key].strip():
+                    raise ValueError('Editorial pass cannot fill an unknown scientific fact')
+                change[key]=text[key]
+        if 'effect_descriptions' in text:
+            effects=change['consequence_and_limits']['reported_effects']
+            if len(effects)!=len(text['effect_descriptions']):
+                raise ValueError('Editorial pass cannot add or remove reported results')
+            for effect,description in zip(effects,text['effect_descriptions']):
+                if not isinstance(description,str) or not description.strip():
+                    raise ValueError('Editorial result description must remain explicit')
+                effect['description']=description
+        if 'scope_notes' in text:
+            if not isinstance(text['scope_notes'],list) or any(not isinstance(x,str) or not x.strip() for x in text['scope_notes']):
+                raise ValueError('Editorial scope notes must be explicit scientific prose')
+            change['reader_scope_notes']=copy.deepcopy(text['scope_notes'])
+        applied.append(change['id'])
+    return result,applied
+
+
+def view_data(index, reader_edits=None):
     """Add presentation metadata without changing the scientific index."""
     nodes = {}
     for key, original in index['nodes'].items():
@@ -30,16 +73,29 @@ def view_data(index):
         edge = dict(original)
         registry = original.get('artifact', {}).get('source_registry', {}).get('sources', {})
         edge['sources'] = registry
+        if reader_edits:
+            changes,applied=reader_changes(edge,reader_edits,nodes[edge['target']].get('record_id'))
+            if applied:
+                edge['reader_changes']=changes
+                edge['reader_wording']={'status':'editorial candidate; canonical record retained',
+                                       'change_ids':applied}
         edges.append(edge)
-    return {'nodes': nodes, 'edges': edges}
+    return {'nodes': nodes, 'edges': edges,'reference_ledgers':index.get('reference_ledgers',[])}
 
 
-def build(index_path, output):
+def build(index_path, output, reader_edits=None):
     raw = Path(index_path).read_bytes()
-    data = view_data(json.loads(raw))
+    edits_raw=None
+    if isinstance(reader_edits,(str,Path)):
+        edits_raw=Path(reader_edits).read_bytes();reader_edits=json.loads(edits_raw)
+    elif reader_edits is not None:
+        edits_raw=(json.dumps(reader_edits,ensure_ascii=False,indent=2)+'\n').encode()
+    data = view_data(json.loads(raw),reader_edits)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     (output / 'history_index.json').write_bytes(raw)
+    if edits_raw is not None:
+        (output/'reader_edits.json').write_bytes(edits_raw)
     # Escape HTML-significant characters, including any source quote containing
     # a closing script tag. Scientific records remain unchanged in the JSON file.
     encoded = json.dumps(data, ensure_ascii=False).replace('<', '\\u003c')
@@ -47,7 +103,12 @@ def build(index_path, output):
     receipt = {'history_index_sha256': hashlib.sha256(raw).hexdigest(),
         'nodes': len(data['nodes']), 'relationships': len(data['edges']),
         'scientific_records_changed': False,
-        'boundary': 'Presentation of saved review decisions; no new evidence adjudication or method-identity merging.'}
+        'canonical_record_bytes_preserved':True,
+        'editorial_changes':sum(len(e.get('reader_wording',{}).get('change_ids',[])) for e in data['edges']),
+        'reader_edits_sha256':hashlib.sha256(edits_raw).hexdigest() if edits_raw is not None else None,
+        'reader_edits_file':'reader_edits.json' if edits_raw is not None else None,
+        'editorial_projection_requires_review':edits_raw is not None,
+        'boundary': 'Canonical records and saved reviews are preserved. Source-pinned editorial prose still requires review; hashes/field whitelists do not prove semantic equivalence. No new scientific adjudication or method-identity merging.'}
     (output / 'VIEW_RECEIPT.json').write_text(json.dumps(receipt, indent=2) + '\n')
     return receipt
 
@@ -73,20 +134,20 @@ const visible=()=>data.edges.filter(e=>$('context').checked||historical(e));
 function section(parent,title){const n=el('details');n.append(el('summary',title));parent.append(n);return n;}
 function citations(parent,values,e){for(const v of values||[]){const source=e.sources[v.source_id]||{},box=el('div'),link=el('a',source.title||'Source passage');if(/^https?:\/\//.test(source.url||'')){link.href=source.url;link.target='_blank';link.rel='noopener';}box.append(link,el('blockquote',v.quote));parent.append(box);}}
 function inspect(e){const r=$('report');r.replaceChildren(el('p',types[e.relation]||e.relation),el('h2',data.nodes[e.source].name+' → '+data.nodes[e.target].name));
- r.append(el('p','Contribution used: '+(e.claim.contributor||e.source_contribution?.name||'See change records below')));
- const boundary=el('p',status(data.nodes[e.source])+' → '+status(data.nodes[e.target]));boundary.className='status';r.append(boundary);
- if(!historical(e)){const p=el('p','This is contextual evidence, not a demonstrated evolutionary relationship.');p.className='note';r.append(p);}
- for(const c of e.claim.change_records||[]){r.append(el('h3',c.compared_feature));const pair=el('div');pair.className='before-after';
-  for(const [heading,text]of[['Earlier implementation',c.before||'Not established in the registered sources'],['Later implementation',c.after]]){const box=el('div');box.append(el('strong',heading),el('p',text));pair.append(box);}r.append(pair);
-  const outcome=c.consequence_and_limits;r.append(el('h3','What this enabled or changed'));
-  if(!outcome.reported_effects.length)r.append(el('p','No separate performance benefit is established for this contribution in the saved record.'));
-  for(const effect of outcome.reported_effects){r.append(el('p',effect.description));const qualifiers=[effect.reported_value,effect.comparator?'Comparator: '+effect.comparator:null,effect.tested_context?'Tested context: '+effect.tested_context:null,'Evidence: '+effect.status.replaceAll('_',' '),'Attribution: '+effect.attribution_scope.replaceAll('_',' ')].filter(Boolean);const p=el('p',qualifiers.join(' · '));p.className='muted';r.append(p);citations(section(r,'Evidence for this consequence'),effect.evidence,e);}
-  for(const [title,items]of[['Supported limits',outcome.limits],['Unresolved questions',outcome.unresolved]])if(items.length){r.append(el('h3',title));for(const text of items)r.append(el('p',text));}
+ section(r,historical(e)?'Adopted procedure':'Cited contribution').append(el('p',e.claim.contributor||e.source_contribution?.name||''));
+
+ for(const c of e.reader_changes||e.claim.change_records||[]){r.append(el('h3',c.compared_feature));const pair=el('div');pair.className='before-after';
+  for(const [heading,text]of[[(data.nodes[e.source].display_name||data.nodes[e.source].name),c.before||'Earlier procedure not specified'],[(data.nodes[e.target].display_name||data.nodes[e.target].name),c.after]]){const box=el('div');box.append(el('strong',heading),el('p',text));pair.append(box);}r.append(pair);
+  const outcome=c.consequence_and_limits;
+  for(const effect of outcome.reported_effects){r.append(el('h3',effect.attribution_scope==='whole_assay'?'Whole-assay results':effect.attribution_scope==='joint_changes'?'Results for the combined changes':'Reported result'),el('p',effect.description));const qualifiers=[effect.reported_value,effect.comparator?'Compared against: '+effect.comparator:null,effect.tested_context,'Evidence: '+effect.status.replaceAll('_',' ')].filter(Boolean);const p=el('p',qualifiers.join(' · '));p.className='muted';r.append(p);citations(section(r,'Result evidence'),effect.evidence,e);}
+  const notes=c.reader_scope_notes||[...outcome.limits,...outcome.unresolved];if(notes.length){const scope=section(r,'Scientific scope and open questions');for(const text of notes)scope.append(el('p',text));}
   for(const [key,title]of[['inheritance','Evidence of actual reuse'],['before','Evidence for the earlier implementation'],['after','Evidence for the later implementation']])citations(section(r,title),c.evidence[key],e);
   if(c.retained.length){const s=section(r,'Relevant retained features');for(const t of c.retained)s.append(el('p',t));}
  }
  if(!e.claim.change_records?.length){r.append(el('p','This older record has no structured change description. Inspect its original record below.'));}
  section(r,'Original reviewed relationship').append(el('pre',JSON.stringify(e,null,2)));
+ if(e.reader_wording)r.append(el('p','Reader wording edited; original record retained.'));
+ for(const item of data.reference_ledgers.filter(x=>x.target===e.target)){const ledger=section(r,'All references ('+item.ledger.references.length+')');for(const ref of item.ledger.references){const row=section(ledger,ref.reference_id+': '+(ref.publication.citation||''));row.append(el('p',ref.analysis_disposition||ref.selection_reason),el('p',ref.review_status.length?'Reviewed disposition: '+ref.review_status.join(', '):'Reference disposition; no separate claim review'));for(const claim of ref.claims)row.append(el('p',claim.relation+' · '+(claim.published?claim.relationship_layer:'Not published: '+claim.withheld_reason)));for(const context of ref.citation_contexts||[])row.append(el('blockquote',typeof context==='string'?context:JSON.stringify(context)));}}
 }
 const svg=(tag,attrs={},text)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text!=null)n.textContent=text;return n;};
 function node(canvas,n,x,y){const g=svg('g');g.append(svg('rect',{x,y,width:340,height:104,rx:10,fill:'#214354',stroke:'#96bdcf','stroke-dasharray':n.workflow_status==='not_extracted_or_not_matched'?'6 4':'none'}));const words=n.name.split(/\s+/),lines=[''];for(const word of words){if((lines.at(-1)+' '+word).length>37)lines.push(word);else lines[lines.length-1]+=(lines.at(-1)?' ':'')+word;}lines.slice(0,3).forEach((line,i)=>g.append(svg('text',{x:x+14,y:y+24+i*19,fill:'white','font-size':15},i===2&&lines.length>3?line+'…':line)));g.append(svg('title',{},n.name));const label=n.workflow_status==='extracted'?'EXTRACTED WORKFLOW':n.workflow_status==='not_extracted_or_not_matched'?'WORKFLOW PENDING':'COMPONENT / OTHER CONTRIBUTION';g.append(svg('text',{x:x+14,y:y+89,fill:'#a9cad8','font-size':10},label));canvas.append(g);}
@@ -102,5 +163,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('index', type=Path)
     parser.add_argument('output', type=Path)
+    parser.add_argument('--reader-edits',type=Path,help='Explicit source-pinned editorial wording; original scientific JSON remains unchanged')
     args = parser.parse_args()
-    print(json.dumps(build(args.index, args.output)))
+    print(json.dumps(build(args.index,args.output,args.reader_edits)))

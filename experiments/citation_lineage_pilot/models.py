@@ -18,20 +18,20 @@ class Evidence(Record):
 
 class Nomination(Record):
     reference_id: str
-    contribution: str
-    reason_to_follow: str
+    contribution: str = Field(description='The specific experimental feature or adopted contribution whose interpretation needs this earlier source; not merely its topic or citation function.')
+    reason_to_follow: str = Field(description='State the concrete source question and which history/mechanism/design-difference decision its answer changes. Prioritize actual adoption/change attribution. A validation, biological precedent, generic mechanism or optional baseline alone is not a reason for full-paper follow-up; a baseline is needed only if its comparative result is retained.')
     seed_evidence: list[Evidence] = Field(min_length=1)
 
 
 class Nominations(Record):
     references: list[Nomination]
-    selection_rationale: str
+    selection_rationale: str = Field(description='Map the seed paper own distinguishing contributions first, including changes with no donor, then explain why the selected earlier sources are necessary. Preserve all other references in context dispositions without forcing investigation or ancestry.')
     unresolved_searches: list[str]
 
 
 class CurrentNominations(Nominations):
     format_version: Literal["citation_nomination/2"] = "citation_nomination/2"
-    excluded_references: dict[str, str] = Field(description="Every bibliography reference not nominated, mapped to its source-context reason for not following. Do not silently omit a reference; uncertain methodological leads should be nominated.")
+    excluded_references: dict[str, str] = Field(description="Every bibliography reference not nominated, mapped to its citation function and source-context reason for not following. Classify from the seed context first. Preserve background/result/resource uses here without inventing ancestry; nominate consequential uncertain technical leads. Do not silently omit references.")
 
 
 Relation = Literal[
@@ -130,12 +130,19 @@ def check_evidence(items, sources, *, allowed=None, scientific=False):
                 raise ValueError("An article title cannot support a scientific relationship")
 
 
-def validate_nominations(document, sources, bibliography):
+def validate_nominations(document, sources, bibliography, *, selective=False):
     ids = [x.reference_id for x in document.references]
     if len(ids) != len(set(ids)) or set(ids) - bibliography.keys():
         raise ValueError("Duplicate or unknown nominated reference")
     for item in document.references:
         check_evidence(item.seed_evidence, sources, allowed={"seed"})
+        if selective:
+            if not item.contribution.strip() or not item.reason_to_follow.strip():
+                raise ValueError('Selected follow-up needs its feature and decision-changing source question')
+            contexts=bibliography[item.reference_id].get('contexts',[])
+            if not any(e.quote in context or context in e.quote
+                       for e in item.seed_evidence for context in contexts if context):
+                raise ValueError('Selected follow-up must be grounded in its own seed citation context')
     if isinstance(document, CurrentNominations):
         excluded = document.excluded_references
         if set(ids) & set(excluded) or (set(ids) | set(excluded)) != set(bibliography):
@@ -264,8 +271,44 @@ def validate_review(document, analysis, analysis_sha256, sources, *, catalogue=N
                         raise ValueError('Documented reuse requires actual later-paper attribution')
 
 
+def reference_disposition_ledger(nominations, analysis, sources, links, withheld):
+    """Retain every cited reference without turning its disposition into ancestry."""
+    bibliography = json.loads(sources['bibliography']['text'])
+    validate_nominations(nominations, sources, bibliography)
+    nominated = {x.reference_id: x for x in nominations.references}
+    excluded = getattr(nominations, 'excluded_references', {})
+    if set(nominated) | set(excluded) != set(bibliography):
+        raise ValueError('Full reference ledger needs every bibliography disposition')
+    if set(analysis.reference_dispositions) != set(nominated):
+        raise ValueError('Reference ledger needs every nominated analysis disposition')
+    rows = []
+    for reference_id, publication in bibliography.items():
+        claims = []
+        for item in [*links, *withheld]:
+            claim = item['claim']
+            if claim['reference_id'] == reference_id:
+                claims.append({'claim_id': claim['id'], 'relation': claim['relation'],
+                    'review_decision': item['review']['decision'],
+                    'published': 'reason' not in item,
+                    'relationship_layer': item.get('relationship_layer'),
+                    'withheld_reason': item.get('reason')})
+        rows.append({'reference_id': reference_id, 'publication': publication,
+            'citation_contexts': publication.get('contexts', []),
+            'selection': 'nominated' if reference_id in nominated else 'not_followed',
+            'selection_reason': (nominated[reference_id].reason_to_follow if reference_id in nominated
+                                 else excluded[reference_id]),
+            'analysis_disposition': analysis.reference_dispositions.get(reference_id),
+            'classification': ([c['relation'] for c in claims] if claims else
+                               analysis.reference_dispositions.get(reference_id, excluded.get(reference_id))),
+            'review_status': sorted({c['review_decision'] for c in claims}),
+            'claims': claims})
+    return {'format_version': 'citation_reference_ledger/1', 'references': rows,
+            'boundary': 'Complete bibliography accounting. A disposition or citation is not a technical connection; only independently accepted scoped claims can become graph edges.'}
+
+
 def graph_overlay(analysis, review, sources, analysis_sha256, bindings, *, catalogue=None,
-                  classification_policy=ASSAY_HISTORY_POLICY, include_method_summary=True):
+                  classification_policy=ASSAY_HISTORY_POLICY, include_method_summary=True,
+                  nominations=None):
     """Export only independently accepted, two-sided claims; never edit the atlas."""
     validate_review(review, analysis, analysis_sha256, sources, catalogue=catalogue)
     decisions = {x.claim_id: x for x in review.findings}
@@ -345,4 +388,6 @@ def graph_overlay(analysis, review, sources, analysis_sha256, bindings, *, catal
     if hasattr(review, 'coverage_findings'):
         from genomics_discovery.illumina.history_coverage import coverage_record
         result['coverage_review'] = coverage_record(review.coverage_findings)
+    if nominations is not None:
+        result['reference_ledger'] = reference_disposition_ledger(nominations, analysis, sources, links, withheld)
     return result

@@ -20,7 +20,7 @@ RELATIONS = {
         "layer": "history",
         "meaning": "The later work attributes actual use or adaptation of a specified experimental contribution to the earlier work, which demonstrates it at the claimed scope. The contribution may cover one property or several Operations. Structured before/after records, not component size or a whole-assay label, explain the transfer and changes.",
         "required": (
-            "Read the full later paper to identify its contributions and attribution, then inspect the relevant earlier full paper. Cite the actual use/adaptation and earlier demonstration separately.",
+            "Use available full-text primary sources to establish the later contribution/attribution and the earlier implementation. Inspect the relevant passages, figures and supplements under the reading policy; full-text availability is not compulsory traversal of every character. Cite actual use/adaptation and earlier demonstration separately.",
             "Record the compared feature, before, after, retained features, exact workflow locations, evidence, and reported consequences/limits. Unchanged reuse is valid; no gain or chemical invention is required.",
         ),
         "exclusions": (

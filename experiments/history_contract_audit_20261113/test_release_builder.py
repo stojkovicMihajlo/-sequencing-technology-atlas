@@ -28,6 +28,12 @@ class ReleaseBuilderTest(unittest.TestCase):
         self.exp=self.payload/'experiments/history_contract_audit_20261113';self.exp.mkdir(parents=True)
         for name in ('focused_reading.py','native_integration.patch','native_integration_expected_pins.json','native_base_receipt.json'):
             shutil.copyfile(HERE/name,self.exp/name)
+        # This tests a prospective local payload's byte preservation, not replay
+        # of the old frozen payload. Never edit its original expected-pin file.
+        expected=self.exp/'native_integration_expected_pins.json'
+        pins=json.loads(expected.read_text())
+        pins['experiments/history_contract_audit_20261113/focused_reading.py']=sha(self.exp/'focused_reading.py')
+        expected.write_text(json.dumps(pins))
         helper=self.payload/'experiments/method_intake_audit_20261113';helper.mkdir(parents=True)
         shutil.copyfile(ROOT/'experiments/method_intake_audit_20261113/preserve_bytes.py',helper/'preserve_bytes.py')
         self.source=self.root/'synthetic_prior';self.source.mkdir();(self.source/'sources.json').write_text('{"original":"source bytes"}\n')

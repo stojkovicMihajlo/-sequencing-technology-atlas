@@ -140,6 +140,36 @@ class FocusedReadingTest(unittest.TestCase):
         old=CHANGE_COMMON+'\n'+CHANGE_ROLES['nominate']
         self.assertEqual(focused_instructions('nominate',old),old)
 
+    def test_complete_built_prompt_has_no_unconditional_full_read_rule_when_focused(self):
+        sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'citation_lineage_pilot'))
+        from prompts import build_prompt
+        for role in ('analyse','review'):
+            text=build_prompt(role,{'analysis_format':'citation_analysis/4','reading_policy':'focused'})
+            for forbidden in ('Read the full later paper','Analyse every acquired earlier full paper',
+                              'Independently read the full seed and the full earlier papers',
+                              'receipts are checked for full-text coverage'):
+                self.assertNotIn(forbidden,text)
+            self.assertIn('Full-text primary sources must be available',text)
+            self.assertIn('compulsory traversal',text)  # Relation requirements are included too.
+            self.assertIn('whole section or paper with its reason',text)
+        full=build_prompt('analyse',{'analysis_format':'citation_analysis/4','reading_policy':'full'})
+        self.assertIn('Analyse every acquired earlier full paper',full)
+        nominate=build_prompt('nominate',{'analysis_format':'citation_analysis/4','reading_policy':'focused'})
+        self.assertIn('Read the full seed paper first',nominate)
+        self.assertIn('concrete question',nominate)
+        self.assertIn("seed's own distinguishing",nominate)
+
+    def test_no_ancestor_selection_keeps_primary_method_summary_with_reasoned_fallback(self):
+        analysis={'claims':[],'summary':'The primary paper introduces its own new measurement design.'}
+        deliver_outline(self.log,self.registry,self.sources,'seed')
+        with self.assertRaisesRegex(ValueError,'primary-method contribution coverage'):
+            check_focused_reads(self.log,self.registry,self.sources,analysis)
+        for start in range(0,len(self.sources['seed']['text']),8000):
+            read_source(self.log,self.registry,self.sources,'seed',question='What does this primary method introduce?',
+                start=start,limit=8000,reason='No historical claims anchor the summary; inspect the primary seed contribution in full.')
+        result=check_focused_reads(self.log,self.registry,self.sources,analysis)
+        self.assertTrue(result['primary_seed_summary_fallback'])
+
     def test_compact_default_has_no_paragraph_previews_and_reports_more_rows(self):
         self.sources['seed']['text']='\n\n'.join(
             f'[b{i:05}] Heading {i}' if i%3==0 else f'Paragraph {i}. See Fig. 1 and Supplementary Table 2.'
@@ -190,19 +220,9 @@ class FocusedReadingTest(unittest.TestCase):
             shutil.copyfile(root/'experiments/citation_lineage_pilot'/name,dest)
         dest=self.root/'experiments/history_contract_audit_20261113/focused_reading.py'
         dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(candidate/'focused_reading.py',dest)
-        for name in ('integration.patch','native_integration.patch'):
-            patch=candidate/name
-            if not patch.is_file():
-                continue
-            pending=subprocess.run(['git','apply','--check',str(patch)],cwd=self.root,capture_output=True,text=True)
-            if pending.returncode==0:
-                subprocess.run(['git','apply',str(patch)],cwd=self.root,check=True,capture_output=True,text=True)
-                break
-            applied=subprocess.run(['git','apply','--reverse','--check',str(patch)],cwd=self.root,capture_output=True,text=True)
-            if applied.returncode==0:
-                break
-        else:
-            self.fail('Neither staged development nor native adaptation patch matches the runtime')
+        # Current development is already integrated. Historical patches remain
+        # frozen artifacts; later contract edits need not remain patch-reversible.
+        self.assertIn('def focused_policy(', (self.root/'experiments/citation_lineage_pilot/run.py').read_text())
         env={**os.environ,'PYTHONPATH':str(root/'src')}
         code="""from experiments.citation_lineage_pilot.prompts import build_prompt
 import sys

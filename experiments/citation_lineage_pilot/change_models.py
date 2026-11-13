@@ -61,7 +61,7 @@ class ChangeAnalysis(Record):
     format_version: Literal['citation_analysis/4'] = 'citation_analysis/4'
     seed_method: str
     claims: list[ChangeClaim]
-    reference_dispositions: dict[str, str]
+    reference_dispositions: dict[str, str] = Field(description='Every nominated reference, mapped to its source-context classification and investigation outcome, including no-link or unavailable-evidence leads. A disposition does not require an ancestry claim.')
     summary: str = Field(description='Explain the method contribution, including source-supported new approaches with no established historical donor. Do not invent a parent.')
 
 
@@ -71,7 +71,7 @@ class ChangeCheck(Record):
     factual_assessment: str = Field(min_length=1, description='Check the compared feature, before, after and retained features against both papers. Independently check contributor_kind: an experimental assay/design contribution or supporting software/resource context; a workflow data Operation alone does not make a generic tool experimental ancestry.')
     workflow_assessment: str = Field(min_length=1, description='Check the exact State/Operation/Flow/property locations and consequential interfaces.')
     evidence_assessment: str = Field(min_length=1, description='Verify what the later assay actually uses from the cited contribution and how the later paper establishes that use. Distinguish experimental inheritance, supporting software/resource use, comparison and mechanistic precedent. Shared features and a real quotation alone do not establish inheritance; do not expand component reuse into adoption of the whole earlier assay. Catalogue candidate names/IDs are not verified method implementation identities.')
-    consequence_assessment: str = Field(min_length=1, description='Check improvement/change, comparator, context, causal scope, trade-offs and unknowns; no reported gain is allowed.')
+    consequence_assessment: str = Field(min_length=1, description='Check source-reported results, actual baseline, experimental context, causal scope and scientific limits. No reported gain is a valid outcome. Keep verifier instructions in this review field, not reader prose.')
     evidence: list[Evidence] = Field(min_length=1)
 
 

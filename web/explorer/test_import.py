@@ -3,9 +3,28 @@ from pathlib import Path
 import tempfile
 import unittest
 from import_data import publish
+from export_evolution import export
+import hashlib
 
 
 class SnapshotTests(unittest.TestCase):
+    def test_context_references_export_without_manufacturing_evolution_edges(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);index=root/'index.json';receipt=root/'receipt.json'
+            value={'nodes':{'method':{'kind':'bound_workflow','record_id':'m','name':'m'}},'edges':[],
+                   'reference_ledgers':[{'target':'method','artifact':{'sha256':'source'},'ledger':{
+                       'references':[{'reference_id':'R1','classification':'background','citation_contexts':['Motivation.']}]
+                   }}]}
+            index.write_text(json.dumps(value));pin=hashlib.sha256(index.read_bytes()).hexdigest()
+            receipt.write_text(json.dumps({'scientific_records_changed':False,'view':{'history_index_sha256':pin}}))
+            counts=export(index,receipt,root/'out','refs','References')
+            manifest=json.loads((root/'out/refs/manifest.json').read_text())
+            self.assertEqual(counts['experimental_relationships'],0)
+            self.assertEqual(manifest['edges'],[])
+            ledger=json.loads((root/'out/refs'/manifest['reference_ledgers'][0]['file']).read_text())
+            self.assertEqual(ledger['ledger']['references'][0]['classification'],'background')
+            self.assertEqual(json.loads(index.read_text()),value)
+
     def test_new_cards_and_revisions_use_same_ui_without_overwriting_history(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

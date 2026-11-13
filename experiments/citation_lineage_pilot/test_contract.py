@@ -11,6 +11,7 @@ from models import CurrentNominations, Nominations, validate_nominations
 from run import bibliography, prepare_review_reuse
 import json
 import copy
+import hashlib
 from types import SimpleNamespace
 from run import review_cycle
 
@@ -216,6 +217,212 @@ def test_fresh_nomination_accounts_for_all_references_without_fetching_all():
     n.excluded_references['invented'] = 'Invented reference'
     with pytest.raises(ValueError, match='every bibliography'):
         validate_nominations(n, SOURCES, {'R1': {}, 'R2': {}})
+
+
+def test_full_reference_ledger_keeps_background_and_uninvestigated_leads_without_edges():
+    from models import reference_disposition_ledger
+    a,r=case();sources=copy.deepcopy(SOURCES)
+    sources['seed']['text']+=' R3 is an unverified reagent lead.'
+    bibliography={'R1':{'citation':'Method A','contexts':[SOURCES['seed']['text']]},
+                  'R2':{'citation':'Biological result','contexts':['Background motivation.']},
+                  'R3':{'citation':'Reagent lead','contexts':['R3 is an unverified reagent lead.']}}
+    sources['bibliography']={'text':json.dumps(bibliography)}
+    n=CurrentNominations(references=[
+        {'reference_id':'R1','contribution':'method A','reason_to_follow':'Compare the implementation',
+         'seed_evidence':[{'source_id':'seed','quote':SOURCES['seed']['text']}]},
+        {'reference_id':'R3','contribution':'possible reagent','reason_to_follow':'Resolve the reagent lead',
+         'seed_evidence':[{'source_id':'seed','quote':'R3 is an unverified reagent lead.'}]}],
+        selection_rationale='Technical context',unresolved_searches=[],
+        excluded_references={'R2':'Biological-result background in the seed context'})
+    a.reference_dispositions['R3']='Held: earlier implementation evidence is unavailable'
+    g=graph_overlay(a,r,sources,'pin',{},nominations=n)
+    rows={x['reference_id']:x for x in g['reference_ledger']['references']}
+    assert set(rows)==set(bibliography)
+    assert rows['R1']['claims'][0]['relationship_layer']=='comparison'
+    assert rows['R2']['claims']==[] and rows['R2']['selection']=='not_followed'
+    assert rows['R2']['citation_contexts']==['Background motivation.']
+    assert rows['R3']['analysis_disposition'].startswith('Held:') and not rows['R3']['claims']
+    assert len(g['links'])==1 and not g['links'][0]['historical_development_edge']
+    # Archived export calls do not acquire a new ledger or new ancestry assurances.
+    assert 'reference_ledger' not in graph_overlay(a,r,sources,'pin',{})
+    n.excluded_references={}
+    with pytest.raises(ValueError,match='every bibliography'):
+        reference_disposition_ledger(n,a,sources,g['links'],g['withheld'])
+
+
+def test_selective_acquisition_and_own_context_grounding_are_self_contained(tmp_path,monkeypatch):
+    """Check routing/binding, not whether a question is scientifically important."""
+    import run as runner
+    first='We adapt Adapter Alpha [R1] to attach library handles.'
+    second='We use Index Beta [R3] to identify cell-origin libraries.'
+    background='Population biology [R2] motivates the demonstration sample.'
+    seed='\n\n'.join([first,second,background,'Our release procedure is a separate contribution.'])
+    bibliography={
+        'R1':{'citation':'Adapter Alpha','identifiers':{'pmid':'111101'},'contexts':[first]},
+        'R2':{'citation':'Population biology','identifiers':{'pmid':'222202'},'contexts':[background]},
+        'R3':{'citation':'Index Beta','identifiers':{'pmid':'333303'},'contexts':[second]}}
+    sources={'seed':{'text':seed,'content_level':'fulltext'},
+             'bibliography':{'text':json.dumps(bibliography),'content_level':'seed_reference_contexts'}}
+    nomination=CurrentNominations(references=[
+        {'reference_id':'R1','contribution':'Library-handle attachment',
+         'reason_to_follow':'Which Alpha adapter arrangement is adopted? This determines the library-route comparison.',
+         'seed_evidence':[{'source_id':'seed','quote':first}]},
+        {'reference_id':'R3','contribution':'Cell-origin indexing',
+         'reason_to_follow':'Which Beta indexing feature is used? This determines whether the cell-attribution design is inherited.',
+         'seed_evidence':[{'source_id':'seed','quote':second}]}],
+        selection_rationale='Map handle attachment, cell attribution and the seed own release design before selecting earlier-source questions.',
+        unresolved_searches=['The seed release design has no assigned historical donor.'],
+        excluded_references={'R2':'Biological demonstration context; no technical connection question.'})
+    validate_nominations(nomination,sources,bibliography,selective=True)
+    wrong=nomination.model_copy(deep=True)
+    wrong.references[1].seed_evidence[0].quote=first  # Real seed text, wrong citation.
+    with pytest.raises(ValueError,match='own seed citation context'):
+        validate_nominations(wrong,sources,bibliography,selective=True)
+    blank=nomination.model_copy(deep=True);blank.references[0].reason_to_follow=' '
+    with pytest.raises(ValueError,match='source question'):
+        validate_nominations(blank,sources,bibliography,selective=True)
+    runner.write(tmp_path/'sources_initial.json',sources)
+    runner.write(tmp_path/'bibliography.json',bibliography)
+    metadata_ids=[];requested=[]
+    def metadata(url,path):
+        from urllib.parse import parse_qs,urlparse
+        metadata_ids.extend(parse_qs(urlparse(url).query)['id'][0].split(','))
+        path.write_text('<PubmedArticleSet/>')
+        return {'path':str(path),'sha256':runner.sha(path)}
+    monkeypatch.setattr(runner,'fetch',metadata)
+    monkeypatch.setattr(runner,'parse_pubmed',lambda raw:{p:{'pmid':p,'title':'Synthetic source','abstract':[],'identifiers':{}} for p in ['111101','333303']})
+    def acquire(publication,output):
+        requested.append(publication['pmid']);return {'status':'unavailable'}
+    monkeypatch.setattr(runner,'acquire_pmc_fulltext',acquire)
+    result=runner.acquire_registered(tmp_path,nomination)
+    assert set(metadata_ids)==set(requested)=={'111101','333303'}
+    assert set(result)-set(sources)=={'R1','R3'}
+    assert 'R2' in nomination.excluded_references and 'R2' not in result
+    assert set(x.reference_id for x in nomination.references)|set(nomination.excluded_references)==set(bibliography)
+
+
+def test_selective_followups_use_actual_seed_contexts_without_reading_all60_refs(tmp_path,monkeypatch):
+    import run as runner
+    root=Path(__file__).resolve().parents[2]
+    bundle=root/'experiments/history_contract_audit_20261113/reader_inputs.json'
+    receipt=root/'experiments/history_contract_audit_20261113/READER_INPUT_VERIFICATION.json'
+    if not bundle.is_file():
+        pytest.skip('Optional real-source audit: restore the private reader_inputs.json bundle to '
+                    f'{bundle}; verify its SHA256 using {receipt} (source job52178921). '
+                    'The raw publication bundle is intentionally not required or committed for ordinary tests.')
+    raw_bundle=bundle.read_bytes()
+    expected=json.loads(receipt.read_text())['reader_inputs_sha256']
+    assert hashlib.sha256(raw_bundle).hexdigest()==expected,'Restore the exact private bundle identified by READER_INPUT_VERIFICATION.json'
+    cached=json.loads(raw_bundle)
+    scope=json.loads((root/'experiments/history_contract_audit_20261113/fixtures.json').read_text())['selective_followup']
+    selected_total=metadata_total=0
+    for method,row in cached['methods'].items():
+        plan=scope[method];raw=copy.deepcopy(row['nominations'])
+        raw['references']=[x for x in raw['references'] if x['reference_id'] in plan['questions']]
+        for item in raw['references']:item['reason_to_follow']=plan['questions'][item['reference_id']]
+        raw['excluded_references'].update(plan['deferred'])
+        raw['selection_rationale']=plan['primary_contributions']
+        raw['unresolved_searches']=[plan['unresolved']]
+        nomination=CurrentNominations.model_validate(raw)
+        bibliography=json.loads(row['sources']['bibliography']['text'])
+        validate_nominations(nomination,row['sources'],bibliography,selective=True)
+        assert set(x.reference_id for x in nomination.references)|set(nomination.excluded_references)==set(bibliography)
+        # Existing acquisition must fetch ONLY the chosen questions, not all metadata.
+        inputs=tmp_path/method;inputs.mkdir()
+        runner.write(inputs/'sources_initial.json',row['sources'])
+        runner.write(inputs/'bibliography.json',bibliography)
+        requested=[];pmids={bibliography[x.reference_id]['identifiers']['pmid'] for x in nomination.references}
+        def metadata(url,path):path.write_text('<PubmedArticleSet/>');return {'path':str(path),'sha256':runner.sha(path)}
+        monkeypatch.setattr(runner,'fetch',metadata)
+        monkeypatch.setattr(runner,'parse_pubmed',lambda raw:{p:{'pmid':p,'title':'Fixture','abstract':[],'identifiers':{}} for p in pmids})
+        def acquire(publication,output):requested.append(publication['pmid']);return {'status':'unavailable'}
+        monkeypatch.setattr(runner,'acquire_pmc_fulltext',acquire)
+        result=runner.acquire_registered(inputs,nomination)
+        assert set(requested)==pmids
+        assert set(result)-set(row['sources'])==set(plan['questions'])
+        selected_total+=len(nomination.references);metadata_total+=len(bibliography)
+        bad=nomination.model_copy(deep=True);bad.references[0].reason_to_follow=' '
+        with pytest.raises(ValueError,match='source question'):validate_nominations(bad,row['sources'],bibliography,selective=True)
+    assert metadata_total==60 and selected_total==4
+    # Four is this stated design scope, not a production count limit or gold ancestry list.
+
+
+def test_real_source_selectivity_audit_skips_cleanly_without_private_bundle(tmp_path,monkeypatch):
+    bundle=Path(__file__).resolve().parents[2]/'experiments/history_contract_audit_20261113/reader_inputs.json'
+    original=Path.is_file
+    monkeypatch.setattr(Path,'is_file',lambda path:False if path==bundle else original(path))
+    with pytest.raises(pytest.skip.Exception,match='READER_INPUT_VERIFICATION.json') as skipped:
+        test_selective_followups_use_actual_seed_contexts_without_reading_all60_refs(tmp_path,monkeypatch)
+    assert str(bundle) in str(skipped.value)
+
+
+def test_new_run_defaults_focused_archived_review_defaults_full(monkeypatch):
+    import run as runner
+    captured=[]
+    async def capture(args):captured.append(args)
+    monkeypatch.setattr(runner,'execute',capture)
+    monkeypatch.setattr(sys,'argv',['run.py','run','--batch','b','--article','a','--inventory','i','--output','o','--record','r','--paper','p'])
+    runner.main();assert captured[-1].reading_policy=='focused'
+    monkeypatch.setattr(sys,'argv',['run.py','review-existing','--previous','p','--output','o'])
+    runner.main();assert captured[-1].reading_policy=='full'
+    pipeline=json.loads((Path(__file__).resolve().parents[2]/'pipeline.json').read_text())
+    assert pipeline['actions']['evolution']['parameters']['reading_policy']=='focused'
+
+
+def test_evolution_file_inputs_resolve_through_recorder_and_real_cli(tmp_path,monkeypatch):
+    from genomics_discovery.execution import pipeline as recorder
+    import run as runner
+    root=Path(__file__).resolve().parents[2]
+    actual=json.loads((root/'pipeline.json').read_text())
+    project=tmp_path/'repo';project.mkdir()
+    action=copy.deepcopy(actual['actions']['evolution'])
+    mapping={'format_version':actual['format_version'],'stages':actual['stages'],
+             'model':actual['model'],'effort':actual['effort'],'code_patterns':[],
+             'actions':{'evolution':action}}
+    for rel in ('experiments/citation_lineage_pilot/run.py',
+                'experiments/history_contract_audit_20261113/focused_reading.py'):
+        target=project/rel;target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_bytes((root/rel).read_bytes())
+    map_file=project/'pipeline.json';map_file.write_text(json.dumps(mapping))
+    inputs={}
+    for key,content in {'batch_state':'{"cards":{}}','article':'<article/>','inventory':'{}'}.items():
+        path=tmp_path/(key+'.input');path.write_text(content);inputs[key]=str(path)
+    plan=recorder.plan(map_file,'evolution',tmp_path/'recorded',inputs=inputs,
+                       parameters={'record':'example','paper':'paper:123'})
+    captured=[]
+    async def capture(args):captured.append(args)
+    monkeypatch.setattr(runner,'execute',capture)
+    monkeypatch.setattr(sys,'argv',plan['command'][1:])
+    runner.main()
+    args=captured[0]
+    assert args.batch is None and args.batch_state==Path(inputs['batch_state'])
+    assert args.article==Path(inputs['article']) and args.inventory==Path(inputs['inventory'])
+    assert args.reading_policy=='focused'
+    assert set(plan['input_pins'])==set(inputs.values())
+    assert not Path(plan['resolved_values']['output']).exists()
+    assert '--sources' not in plan['command'] and '--manifest' not in plan['command'] and '--atlas' not in plan['command']
+    # Legacy directory input remains supported; the two input forms cannot mix.
+    monkeypatch.setattr(sys,'argv',['run.py','run','--batch','legacy','--article','a',
+        '--inventory','i','--output','o','--record','r','--paper','p'])
+    runner.main();assert captured[-1].batch==Path('legacy') and captured[-1].batch_state is None
+    monkeypatch.setattr(sys,'argv',['run.py','run','--batch','legacy','--batch-state','state.json',
+        '--article','a','--inventory','i','--output','o','--record','r','--paper','p'])
+    with pytest.raises(SystemExit):runner.main()
+
+
+def test_prepare_reads_direct_state_file_or_legacy_state_and_reaches_custody_gate(tmp_path,monkeypatch):
+    import run as runner
+    direct=tmp_path/'extraction_state.input';legacy=tmp_path/'legacy';legacy.mkdir()
+    runner.write(direct,{'cards':{'seed':{'status':'supported','origin':'direct'}}})
+    runner.write(legacy/'state.json',{'cards':{'seed':{'status':'supported','origin':'legacy'}}})
+    seen=[]
+    def custody(row):seen.append(row['origin']);raise RuntimeError('scientific custody gate reached')
+    monkeypatch.setattr(runner,'revalidate_completed',custody)
+    for kind in ('direct','legacy'):
+        args=SimpleNamespace(output=tmp_path/('out_'+kind),record='seed',
+            batch_state=direct if kind=='direct' else None,batch=legacy if kind=='legacy' else None)
+        with pytest.raises(RuntimeError,match='custody gate reached'):runner.prepare(args)
+    assert seen==['direct','legacy']
 
 
 def test_nomination_cannot_both_follow_and_exclude_or_give_blank_reason():

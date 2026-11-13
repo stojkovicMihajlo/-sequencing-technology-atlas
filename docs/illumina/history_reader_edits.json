@@ -1,0 +1,96 @@
+{
+  "format_version": "history_reader_edits/1",
+  "status": "editorial wording only; no new scientific review or evidence",
+  "basis": "Unchanged eCLIP C_R6 and scATAC R13.atac_assay analyses; these claims were also accepted in focused review job52178921. Original scientific records remain available.",
+  "edits": [
+    {
+      "record_id": "eclip",
+      "claim_id": "C_R6",
+      "change_id": "R6_capture",
+      "source_change_sha256": "dfbf111aeb77b5a2c5ebf8f7f0d336fc0ac09e7d65c6db835f16c454ff861a5f",
+      "text": {
+        "compared_feature": "Retained RBP capture and purification",
+        "before": "iCLIP uses UV-C crosslinking, partial RNA digestion and antibody capture of the selected RNA-binding protein. Gel electrophoresis and membrane transfer precede proteinase K recovery of the attached RNA.",
+        "after": "eCLIP retains this capture and purification route. The recovered RNA then enters its modified library-conversion procedure.",
+        "scope_notes": []
+      }
+    },
+    {
+      "record_id": "eclip",
+      "claim_id": "C_R6",
+      "change_id": "R6_truncated_library",
+      "source_change_sha256": "ab0efe854a96e15b69941081d9ed6ce974f1d36953bb0137c62f956e181d3b16",
+      "text": {
+        "compared_feature": "eCLIP replaces cDNA circularization with direct adapter ligation",
+        "before": "iCLIP ligates an RNA 3′ adapter and reverse transcribes the RNA with a primer carrying inverse adapter regions and a BamHI site. The cDNA is circularized and reopened with BamHI to make it amplifiable.",
+        "after": "eCLIP ligates an indexed 3′ adapter to bead-bound RNA, reverse transcribes the RNA, then ligates a second ssDNA adapter directly to the cDNA 3′ end. Direct adapter ligation replaces circularization and BamHI reopening while preserving the crosslink-proximal reverse-transcription endpoint.",
+        "effect_descriptions": [
+          "In matched RBFOX2 experiments, the normalized PCR estimate implies approximately 1,000-fold more pre-amplification adapter-ligated material for eCLIP than the locally generated iCLIP library, assuming 100% PCR efficiency.",
+          "At matched uniquely mapped read depth, eCLIP produced a higher usable-read fraction than the local RBFOX2 iCLIP experiment.",
+          "eCLIP retained the crosslink-associated read-termination pattern seen with local iCLIP and previously reported RBFOX2 motif positions."
+        ],
+        "scope_notes": [
+          "The result baseline is the local RBFOX2 iCLIP experiment; the procedure comparison above describes the original HeLa hnRNP C iCLIP implementation.",
+          "The eCT estimate assumes 100% PCR efficiency. Random-mer sequencing errors can inflate apparent molecule counts near saturation.",
+          "The exact local iCLIP variant and reagent differences remain unspecified in the registered material; the supplementary protocol and comparator figures were not separately available."
+        ]
+      }
+    },
+    {
+      "record_id": "eclip",
+      "claim_id": "C_R6",
+      "change_id": "R6_molecule_tags",
+      "source_change_sha256": "3d179269cb5c3c44ebfc71bf8d8c43d7f2a763fc1b47c989f29807c5c4f46acb",
+      "text": {
+        "compared_feature": "eCLIP moves molecular tags from the RT primer to the cDNA adapter",
+        "before": "Original iCLIP carries a three-base random molecular tag in its reverse-transcription primer. Reads sharing the genomic truncation nucleotide and tag are treated as PCR copies.",
+        "after": "eCLIP installs an N5 or N10 random tag in the ssDNA adapter ligated after reverse transcription. Duplicate reads share the Read1 start, Read2 start and random-mer sequence.",
+        "scope_notes": [
+          "Random-mer sequencing errors can inflate apparent unique-molecule counts near saturation.",
+          "The registered main text specifies endpoint-and-tag matching but does not specify an adopted barcode error-correction algorithm."
+        ]
+      }
+    },
+    {
+      "record_id": "scatac-seq-microfluidics",
+      "claim_id": "R13.atac_assay",
+      "change_id": "R13.single_cell_implementation",
+      "source_change_sha256": "129d95fcbae849a24eeab6df6aa5121bf86cc31d8d152a20bf3fe1b72c2d705a",
+      "text": {
+        "compared_feature": "Microfluidic scATAC-seq assigns accessibility libraries to individual cells",
+        "before": "ATAC-seq tags accessible chromatin in pooled preparations of unfixed nuclei and amplifies one population library. Its low-input 500- and 5,000-nucleus variants transfer the transposition reaction directly into PCR.",
+        "after": "Microfluidic scATAC-seq captures individual cells on the Fluidigm C1 IFC and performs transposition and initial PCR on-chip. Recovered cell-origin libraries receive cell-identifying PCR indexes before pooling and sequencing.",
+        "effect_descriptions": [
+          "scATAC-seq was reported to improve input sensitivity by more than 500-fold relative to the published ATAC-seq benchmark that profiled down to 500 nuclei.",
+          "Quality-filtered C1 chambers yielded an average of 7.3×10⁴ fragments mapping to the nuclear genome."
+        ],
+        "scope_notes": [
+          "The fragment yield applies to chambers passing quality filters; low-diversity and poor-accessibility chambers were excluded.",
+          "Single-cell coverage is sparse: about 9.4% of promoters were represented in a typical library, limiting analysis of variation at individual elements.",
+          "The earlier ATAC-seq study reported diminished sensitivity at smaller inputs.",
+          "Exact lysis, end-processing, indexing and final-purification details remain unresolved because the supplementary Methods/Discussion and oligonucleotide table were not separately available."
+        ]
+      }
+    },
+    {
+      "record_id": "scatac-seq-microfluidics",
+      "claim_id": "R13.atac_assay",
+      "change_id": "R13.post_transposition_handling",
+      "source_change_sha256": "d593881a10fe51e253907e9d4df986eb7e770766cb8ba08606c2548db689b55f",
+      "text": {
+        "compared_feature": "Microfluidic scATAC-seq optimizes Tn5 release before downstream processing",
+        "before": "Standard 50,000-cell ATAC-seq purifies transposed DNA before PCR. The earlier 500- and 5,000-cell variants already omit that purification.",
+        "after": "Microfluidic scATAC-seq introduces Tn5 release between transposition and downstream amplification so enzymatic processing can continue without DNA purification.",
+        "effect_descriptions": [
+          "Release-optimization conditions increased qPCR-measured library diversity relative to no-release and MinElute-purification controls.",
+          "Releasing Tn5 from DNA was intended to permit downstream enzymatic reactions without DNA purification."
+        ],
+        "scope_notes": [
+          "The final on-chip release reagent and condition-specific fold gains require the unavailable supplementary Methods and condition table.",
+          "EDTA and SDS were tested for in-vitro Tn5–DNA dissociation; the adopted on-chip condition remains unspecified.",
+          "A preceding method for this release design is not identified in the available sources."
+        ]
+      }
+    }
+  ]
+}

@@ -119,7 +119,7 @@ def build_history_index(manifest_path):
     manifest = json.loads(manifest_path.read_text())
     if manifest["format_version"] != "illumina_history_inputs/1":
         raise ValueError("Unknown history manifest")
-    nodes, edges, loaded, withheld, coverage_reports = {}, [], set(), [], []
+    nodes, edges, loaded, withheld, coverage_reports, reference_ledgers = {}, [], set(), [], [], []
 
     def workflow(record_id, extraction_sha, title):
         if len(extraction_sha) != 64:
@@ -181,6 +181,22 @@ def build_history_index(manifest_path):
             if seed.get('method_contribution_summary'):
                 nodes[target].setdefault('method_contribution_summaries', []).append({
                     'artifact_sha256': pin, **copy.deepcopy(seed['method_contribution_summary'])})
+            if 'reference_ledger' in graph:
+                ledger=graph['reference_ledger']
+                ids=[r['reference_id'] for r in ledger['references']]
+                if ledger.get('format_version')!='citation_reference_ledger/1' or len(ids)!=len(set(ids)):
+                    raise ValueError('Invalid full reference ledger')
+                specification=entry.get('source_registry')
+                if specification is None:
+                    raise ValueError('Reference ledger requires its pinned source registry')
+                registered=_read((manifest_path.parent/specification['path']).resolve(),specification['sha256'])
+                bibliography=json.loads(registered['bibliography']['text'])
+                if set(ids)!=set(bibliography) or any(r['publication']!=bibliography[r['reference_id']] or
+                        r['citation_contexts']!=bibliography[r['reference_id']].get('contexts',[])
+                        for r in ledger['references']):
+                    raise ValueError('Reference ledger differs from the complete source bibliography')
+                reference_ledgers.append({'target':target,'artifact':copy.deepcopy(source),
+                                          'ledger':copy.deepcopy(ledger)})
             if 'coverage_review' in graph:
                 from .history_coverage import check_published_coverage
                 specification = entry.get('source_registry')
@@ -284,7 +300,7 @@ def build_history_index(manifest_path):
         if not ready:
             raise ValueError("Historical contribution cycle needs review")
         pending = {n: predecessors - ready for n, predecessors in pending.items() if n not in ready}
-    return {"nodes": nodes, "edges": edges, "withheld": withheld, "coverage_reports": coverage_reports, "overlay_sha256": sorted(loaded), "method_identity_issues": identity_issues,
+    return {"nodes": nodes, "edges": edges, "withheld": withheld, "coverage_reports": coverage_reports, "reference_ledgers":reference_ledgers, "overlay_sha256": sorted(loaded), "method_identity_issues": identity_issues,
             "boundary": "Explicitly loaded, previously model-reviewed pilot overlays; no new scientific validation, "
                         "date/priority verification, or exact earlier-Operation mapping. Canonical endpoints require explicit reviewed identity and pinned method metadata."}
 
@@ -326,11 +342,31 @@ def technology_history(index, record_id, *, extraction_sha256=None, max_depth=2)
                                    if item["target"] == target["id"]],
         "coverage_reports": [copy.deepcopy(item) for item in index.get('coverage_reports', [])
                              if item['target'] == target['id']],
+        "reference_ledgers": [{'artifact':copy.deepcopy(item['artifact']),
+                               'reference_count':len(item['ledger']['references'])}
+                              for item in index.get('reference_ledgers', []) if item['target']==target['id']],
         "frontier": stops, "overlay_sha256": index["overlay_sha256"],
         "boundary": index["boundary"] + " Paths join distinct scoped claims; they do not establish transitive "
                     "inheritance of a component or whole assay. A traversal endpoint is not proof of first invention. "
                     "An external contribution has no verified workflow binding here; withheld findings are research leads, not edges.",
     }
+
+
+def technology_references(index,record_id,*,reference_id=None,extraction_sha256=None):
+    """Query full citation dispositions separately from the bounded lineage packet."""
+    targets=[n['id'] for n in index['nodes'].values() if n.get('record_id')==record_id and
+             (extraction_sha256 is None or n.get('extraction_sha256')==extraction_sha256)]
+    if len(targets)!=1:
+        raise ValueError('Expected one exact workflow for reference lookup')
+    ledgers=[]
+    for item in index.get('reference_ledgers',[]):
+        if item['target']==targets[0]:
+            ledger=copy.deepcopy(item)
+            if reference_id is not None:
+                ledger['ledger']['references']=[r for r in ledger['ledger']['references'] if r['reference_id']==reference_id]
+            ledgers.append(ledger)
+    return {'record_id':record_id,'reference_ledgers':ledgers,
+            'boundary':'Saved reference dispositions and source contexts. These records do not create ancestry edges.'}
 
 
 def select_history_claim(result, claim_id, *, overlay_sha256=None):
@@ -425,10 +461,17 @@ if __name__ == "__main__":
                    help="summary indexes repeated evidence without rewriting or truncating scientific text")
     p.add_argument("--claim-id", help="Return one exact local claim ID from this history selection")
     p.add_argument("--overlay-sha256", help="Disambiguate a claim ID reused across loaded overlays")
+    p.add_argument('--references',action='store_true',help='Return the full reference-disposition ledger, including context and no-link entries')
+    p.add_argument('--reference-id',help='Select one exact citation from the reference ledger')
     args = p.parse_args()
     if args.overlay_sha256 and not args.claim_id:
         p.error("--overlay-sha256 requires --claim-id")
-    result = technology_history(build_history_index(args.manifest), args.record_id,
+    index=build_history_index(args.manifest)
+    if args.references or args.reference_id:
+        print(json.dumps(technology_references(index,args.record_id,reference_id=args.reference_id,
+            extraction_sha256=args.extraction_sha256),ensure_ascii=False,indent=2))
+        raise SystemExit(0)
+    result = technology_history(index, args.record_id,
         extraction_sha256=args.extraction_sha256, max_depth=args.max_depth)
     if args.claim_id:
         result = select_history_claim(result, args.claim_id, overlay_sha256=args.overlay_sha256)

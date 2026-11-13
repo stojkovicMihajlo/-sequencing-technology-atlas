@@ -15,7 +15,7 @@ def sha(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
-def export(index_path, receipt_path, destination, snapshot, label, method_index=None):
+def export(index_path, receipt_path, destination, snapshot, label, method_index=None,reader_edits=None):
     raw = index_path.read_bytes()
     original = json.loads(raw)
     receipt = json.loads(receipt_path.read_text())
@@ -39,6 +39,9 @@ def export(index_path, receipt_path, destination, snapshot, label, method_index=
                 node['display_name'] = record['title']
 
     edges = original['edges']
+    if reader_edits:
+        from genomics_discovery.illumina.history_view import view_data
+        edges=view_data(original,json.loads(Path(reader_edits).read_text()))['edges']
     if len({e['id'] for e in edges}) != len(edges):
         raise ValueError('Duplicate relationship identity')
     for edge in edges:
@@ -64,13 +67,25 @@ def export(index_path, receipt_path, destination, snapshot, label, method_index=
             summaries[-1].update(file='edges/'+filename, sha256=sha(encoded),
                 contribution=edge.get('claim', {}).get('contributor'))
         main = sum(e['historical_development_edge'] for e in edges)
+        references=[]
+        if original.get('reference_ledgers'):
+            (staging/'references').mkdir()
+            for item in original['reference_ledgers']:
+                if item['target'] not in nodes:
+                    raise ValueError('Reference ledger target is absent from the index')
+                encoded=json.dumps(item,ensure_ascii=False,indent=2).encode()
+                filename=sha(encoded)[:24]+'.json'
+                (staging/'references'/filename).write_bytes(encoded)
+                references.append({'target':item['target'],'file':'references/'+filename,
+                                   'sha256':sha(encoded),'reference_count':len(item['ledger']['references'])})
         manifest = {'format_version':'atlas-evolution-explorer/1','snapshot':snapshot,'label':label,
                     'source_index_sha256':sha(raw),'source_rebuild_receipt_sha256':sha(receipt_path.read_bytes()),
                     'counts':{'experimental_relationships':main,'supporting_relationships':len(edges)-main,
                               'nodes':len(nodes),'reviewed_overlays':receipt.get('reviewed_overlays_recompiled',receipt.get('reviewed_method_histories'))},
                     'identity_issue_count':len(original.get('method_identity_issues',[])),
                     'display_name_source':display_source,
-                    'nodes':nodes,'edges':summaries,
+                    'nodes':nodes,'edges':summaries,'reference_ledgers':references,
+                    'editorial_wording':bool(reader_edits),
                     'boundary':'Accepted saved relationship records only. Layout and selection do not establish ancestry or experimental validity.'}
         (staging/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2))
         (staging/'REBUILD_RECEIPT.json').write_bytes(receipt_path.read_bytes())
@@ -87,7 +102,8 @@ if __name__ == '__main__':
     parser.add_argument('--receipt',type=Path,required=True)
     parser.add_argument('--snapshot',required=True)
     parser.add_argument('--method-index',type=Path,help='Optional exact-ID catalogue display titles; original names are preserved.')
+    parser.add_argument('--reader-edits',type=Path,help='Optional source-pinned reader wording; source facts/reviews remain unchanged')
     parser.add_argument('--label',default='Reviewed technology histories')
     parser.add_argument('--destination',type=Path,default=Path(__file__).parent/'public/evolution')
     args = parser.parse_args()
-    print(export(args.index,args.receipt,args.destination,args.snapshot,args.label,args.method_index))
+    print(export(args.index,args.receipt,args.destination,args.snapshot,args.label,args.method_index,args.reader_edits))

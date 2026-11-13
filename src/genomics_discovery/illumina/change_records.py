@@ -51,7 +51,7 @@ class ChangeEvidence(Record):
 
 class ReportedEffect(Record):
     status: Literal['measured', 'reported_qualitative', 'author_rationale']
-    description: str = Field(min_length=1, description='What improved, worsened, stayed similar, or was proposed to change; do not presume a benefit.')
+    description: str = Field(min_length=1, description='Reader-facing scientific result: name the assay/intervention and state what improved, worsened, stayed similar or was proposed to change. Preserve uncertainty and causal scope. Put verifier instructions in review fields; do not presume a benefit.')
     metric: str | None
     reported_value: str | None = Field(description='Preserve the source value and units; do not calculate an unsupported effect.')
     comparison_basis: Literal['comparative', 'absolute', 'not_reported'] = Field(description='Comparative results have an actual comparator; an absolute capability measurement need not have one. Do not infer improvement from an absolute value.')
@@ -80,9 +80,9 @@ class ReportedEffect(Record):
 class ConsequenceAndLimits(Record):
     effect_status: Literal['reported', 'not_established']
     reported_effects: list[ReportedEffect]
-    limits: list[str] = Field(description='Source-qualified trade-offs or limits of interpretation/transfer. Missing reports do not establish that none exist.')
+    limits: list[str] = Field(description='Direct scientific statements of source-qualified trade-offs or limits, with the relevant assay/context. Keep generic verification or component-attribution instructions in review; attribution_scope already records result scope. Missing reports do not establish that none exist.')
     limit_evidence: list[Evidence]
-    unresolved: list[str] = Field(description='Explicit unknown compatibility or attribution questions; do not present these as demonstrated limits.')
+    unresolved: list[str] = Field(description='Concrete unresolved scientific details or compatibility/attribution questions, such as the final reagent or a version identity. Do not fill this with generic proof warnings or repeat that an optional isolated benefit was unreported.')
 
     @model_validator(mode='after')
     def report_matches(self):
@@ -96,8 +96,8 @@ class ConsequenceAndLimits(Record):
 class ExperimentalChange(Record):
     id: str = Field(min_length=1, description='Local address for this comparison, not a primitive class or mechanism label.')
     compared_feature: str = Field(min_length=1, description='Identify the experimental feature being compared; not a vague benefit such as better library preparation.')
-    before: str | None = Field(description='Answer the compared feature with the earlier material, ordered transformation and product. Lead with the mechanism relevant to the difference, not an example experiment; null if earlier evidence is unavailable.')
-    after: str = Field(min_length=1, description='Answer the same feature from the same workflow boundary. State explicitly what replaces, adds to, moves or retains the earlier implementation, naming consequential material, mechanism and placement. Keep unrelated application context out of this comparison.')
+    before: str | None = Field(description='Reader-facing scientific prose: name the earlier method and the concrete material, ordered transformation and product answering compared_feature. Lead with its mechanism; null if earlier evidence is unavailable. Keep verification instructions and review-process commentary in evidence/review fields.')
+    after: str = Field(min_length=1, description='Reader-facing scientific prose: name the later method and state the specific replacement, addition, relocation or retention at the same workflow boundary. Name consequential material, mechanism and product. Preserve scientific uncertainty; keep verification instructions and review-process commentary out of the explanation.')
     retained: list[str] = Field(description='Features retained within the specific contribution being compared, when needed to delimit what is adopted or changed. Do not inventory everything the assays share. Shared features alone do not establish inheritance. Empty is allowed when no such feature is established.')
     workflow_locations: WorkflowLocations
     evidence: ChangeEvidence
@@ -200,6 +200,17 @@ explicitly state which earlier mechanism, substrate, position or routing is chan
 or retained. Keep application-specific cell types and demonstration experiments in
 tested_context unless changing that context is itself the compared feature.
 Do not bury the distinguishing move among a list of common surrounding steps.
+Before finishing, edit these reader-facing fields for clarity using only the
+supported facts already recorded. Name the methods and concrete experimental
+feature; avoid vague phrases such as earlier/later arrangement. This is an
+editorial pass within the author task, not another scientific claim or agent.
+Keep verifier instructions, acceptance commentary and statements about what a
+record does/does not prove in review fields. State real unknowns directly, such
+as an unspecified final reagent. Do not delete uncertainty or change causal scope.
+When reporting a whole-assay result, name the assay and actual experimental
+baseline; do not repeat a warning about component attribution in the reader prose.
+If no isolated effect is reported, leave reported_effects empty rather than
+adding a sentence lecturing the reader that a gain was not established.
 For example, a library-route comparison can say that direct DNA-adapter ligation
 to a cDNA end replaces cDNA circularization followed by restriction reopening.
 A substrate/placement comparison can distinguish tagging purified DNA after

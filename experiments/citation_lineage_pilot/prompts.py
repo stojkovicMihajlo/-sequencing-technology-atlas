@@ -144,6 +144,8 @@ def build_prompt(role, context):
     if context.get('reading_policy') == 'focused':
         from experiments.history_contract_audit_20261113.focused_reading import focused_instructions
         instructions = focused_instructions(role, instructions)
+    elif context.get('analysis_format') == 'citation_analysis/4':
+        instructions += '\n' + FULL_READING_INSTRUCTIONS
     if role == 'analyse' and context.get('previous_review'):
         instructions += '\n' + REVISION_INSTRUCTIONS
     if role == 'review' and context.get('previous_review'):
@@ -151,8 +153,8 @@ def build_prompt(role, context):
     return instructions + '\nCONTEXT\n' + json.dumps(context, indent=2)
 
 
-CHANGE_COMMON = """Identify the seed sequencing method's contributions from its full
-paper, then investigate the relevant earlier full papers. Citation windows are
+CHANGE_COMMON = """Identify the seed sequencing method's own contributions from its
+primary text, Methods and figures, then investigate selected earlier-source questions. Citation windows are
 navigation and attribution locators, not the whole scientific evidence. Do not
 compare every catalogue method against every other method. Use actual citations
 and the paper's accounts of what it uses, changes, tests or newly introduces.
@@ -198,23 +200,22 @@ publication identifiers. Exact earlier State/Operation mapping is optional
 enrichment and is not required to record supported method-level inheritance.
 Make the before/after comparison understandable without a label such as "earlier
 use". Identify the relevant material/data, action, product and workflow placement
-when those are what changed. State what was retained. If the paper only credits
-reuse, explicitly say that no change to the reused feature or isolated benefit
-is established. Attribution alone does not independently verify molecular identity.
+when those are what changed. State what was retained. For unchanged reuse, name
+the retained experimental route directly. Leave optional isolated-effect results
+empty when unreported. Keep proof/verification commentary in review fields.
+Attribution alone does not independently verify molecular identity.
 Do not manufacture a difference to make every historical edge an innovation.
 Explain the relationship as the later method building on the specified
 contribution of the earlier method, with the supported use/adaptation and one or
 several coordinated changes described in change_records. This is not a forced
 component-versus-whole-method class or a requirement that every use has a gain.
 
-Use the registered source_tool to traverse the complete seed paper from start0
-through total_characters with bounded pages, following start + returned-text
-length. Analyse every acquired earlier full paper before asserting its contribution;
-the reviewer independently reads the full papers for its claims. Tool paging
-receipts are checked for full-text coverage. Query-only snippets are insufficient.
-Use pages of at most8000characters with adequate command-output allowance; if an
-output is truncated, reread smaller pages. Available same-paper supplements are
-separate sources and must be inspected when they establish a consequential detail.
+Full-text primary sources must be available for accepted implementation claims;
+that does not require every character to be delivered under focused reading.
+Inspect the passages and relevant figures/supplements needed for the specific
+question, including qualifications and contradictory context. If broader reading
+is needed, record why and expand to a full section or paper. Keep the seed's own
+design contributions visible even when no earlier donor is selected.
 Unavailable full texts can remain research leads but cannot establish accepted
 new experimental changes. Never replace missing source facts with model memory.
 
@@ -226,6 +227,15 @@ supplied schema and run self_check before finishing. An author is not its review
 """ + '\n' + relation_instructions(('documented_reuse', 'mechanistic_precedent',
     'comparison', 'background', 'no_established_relation')) + '\n' + CHANGE_RECORD_INSTRUCTIONS
 
+FULL_READING_INSTRUCTIONS = """FULL READING POLICY
+Use the registered source_tool to traverse the complete seed paper from start0
+through total_characters with bounded pages, following start + returned-text
+length. Analyse every acquired earlier full paper before asserting its contribution;
+the reviewer independently reads the full papers for its claims. Tool paging
+receipts are checked for full-text coverage. Query-only snippets are insufficient.
+Use pages of at most8000characters; if output is truncated, reread smaller pages.
+"""
+
 CHANGE_ROLES = {
     'nominate': """Read the full seed paper first, including its contribution,
 Methods, figures/tables and limitations. Then identify references needed to
@@ -235,13 +245,29 @@ or record why its context is out of this methodological task. Do not select only
 citations whose names resemble catalogue entries; legitimate donors may be external.
 Do not decide final historical relations before inspecting the earlier work.
 No expected predecessors, chemistry or number of nominations is supplied.
-Prioritize sources needed to establish experimental design contributions.
+First summarize the seed's own distinguishing features in selection_rationale,
+including source-supported innovations without a donor. For each selected
+reference use contribution and reason_to_follow to state a concrete question and
+the history/mechanism/design-difference decision that its answer changes. If the
+answer would not change that account, keep the reference in excluded_references
+with its seed-context disposition; an uncertain but nondecisive lead can remain
+in unresolved_searches. Prioritize actual use/adaptation and change attribution.
+An optional result baseline is followed only if that comparison is retained and
+its required baseline fact cannot be established from the seed's own evidence.
+Background, biological precedents, routine resources and validation agreement stay
+in the ledger unless they resolve a consequential technical question. Citation
+relevance alone does not justify earlier full-paper reading. No fixed count is
+required; select as many or as few sources as the concrete questions need.
 Routine software/resource citations may be accounted for as supporting context
 without a full historical investigation unless they resolve the claimed assay
 change. Bibliography coverage is not a requirement to build an ancestry for every
 tool used in the study.
+Classify citation function from the seed context first. Follow earlier full
+papers when needed to resolve a consequential candidate technical connection;
+background/result/resource references can remain in the complete disposition
+ledger without a separate historical investigation or ancestry claim.
 """,
-    'analyse': """Read the full seed paper and every acquired earlier full paper.
+    'analyse': """Resolve each selected source question from primary implementation evidence.
 Account for every nominated reference, including false leads. Use citation_analysis/4
 and populate explicit change_records. Do not write the old free-form
 earlier_demonstration/seed_design_change/reported_gain fields: query summaries are
@@ -267,9 +293,16 @@ those separately rather than expanding experimental inheritance to the paper.
 Distinguish an unchanged inherited feature from a changed one, a reported gain
 from author rationale, and joint/whole-assay results from effects of one component.
 No positive relation, improvement or catalogue match is required.
+Before submitting, make a final editorial pass over reader-facing descriptions:
+lead with the concrete experimental feature and specific change, naming methods.
+Use an adopted/retained procedure heading for unchanged reuse, not key innovation.
+State whole-assay results directly with their actual context and comparator;
+keep component-attribution checks in review, and omit unreported isolated effects.
+Keep real scientific uncertainty in the relevant scope/evidence fields. Do not
+add verifier/process commentary to the explanation or invent a fact while editing.
 """,
-    'review': """Independently read the full seed and the full earlier papers for
-the proposed claims. Check the papers' contributions as well as the submitted list
+    'review': """Independently inspect primary evidence for the proposed claims under
+the reading policy. Check the seed's own contributions as well as the submitted list
 to detect omissions. Return one finding for every claim and one change_check for
 every change record. Judge factual before/after/retained descriptions, actual
 workflow locations and interfaces, source support versus attribution, and reported
@@ -280,6 +313,9 @@ workflow boundary and make the specific change or retention explicit. Request
 revise when supported facts are presented as two broad assay summaries, or when
 unrelated example specimens obscure the actual difference. Use the existing
 factual_assessment and workflow_assessment; do not invent a change to satisfy this.
+Treat wording cleanup separately from scientific correction: request a bounded
+editorial revision when supported facts are obscured by process commentary. Do
+not demand new evidence for a prose edit, or remove real uncertainty/causal scope.
 Independently check contributor_kind and explain whether the cited contribution
 is an experimental assay/design contribution or supporting software/resource
 context in the existing factual/evidence assessments. Routine mapping, annotation
