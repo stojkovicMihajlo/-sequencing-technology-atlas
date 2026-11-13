@@ -70,6 +70,10 @@ Record resolved configuration, source/candidate hashes, prompt/tool versions,
 actual model usage and outcomes. Keep implementation decisions, tests and code
 together in Git; keep large scientific inputs in the recorded source store. Use
 one current run index and method ledger rather than competing status documents.
+Report inventory size, target caps, eligible/selected targets, configured workers,
+actual active calls and reviewed outcomes as distinct quantities. Check reuse
+against all registered completed investigations before launch. A repeat needs a
+declared purpose; an unintended repeat cannot become an experiment retrospectively.
 Explain changes through the input → tool → artifact → review path, including what
 is implemented, actually running and still unvalidated.
 
