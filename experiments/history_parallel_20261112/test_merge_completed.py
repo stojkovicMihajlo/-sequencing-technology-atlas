@@ -108,6 +108,19 @@ def test_completion_join_uses_all_catalog_sources_versions_and_zero_edge_outcome
     assert selected==[] and decisions['fresh']['reason']=='prior_completion_requires_validation'
 
 
+def test_declared_evolution_without_output_surfaces_incomplete_inventory_and_blocks_selection(tmp_path):
+    catalog=tmp_path/'catalog.json'
+    catalog.write_text(json.dumps({'format_version':'atlas_run_catalog/1',
+        'remote_project_root':str(tmp_path),'runs':[{'stage':'evolution','job_id':'earlier-job',
+        'actual_nomination_threads_started':2}]}))
+    registry=completed_history_registry(catalog)
+    assert registry['inventory_complete'] is False
+    assert registry['inventory_issues']==[{'job_id':'earlier-job',
+        'reason':'declared_evolution_output_missing'}]
+    with pytest.raises(ValueError,match='inventory is incomplete'):
+        select_uninvestigated_histories({'new':{'status':'ready'}},['new'],registry)
+
+
 def test_completed_native_history_extends_index_and_keeps_identity_summary_and_sources(tmp_path):
     manifest=base(tmp_path);native=completed(tmp_path/'new','new-seed')
     original=(native/'graph.json').read_bytes()

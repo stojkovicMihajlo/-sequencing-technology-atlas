@@ -53,7 +53,7 @@ def completed_history_registry(catalog_path, *, project_root=None, validate_run=
     catalog_path=Path(catalog_path).resolve();catalog=read(catalog_path)
     if catalog.get('format_version')!='atlas_run_catalog/1':raise ValueError('Unknown run catalog')
     project=Path(project_root or catalog['remote_project_root'])
-    entries={};excluded=[];visited=set();sources=[]
+    entries={};excluded=[];visited=set();sources=[];inventory_issues=[]
     def resolve(value,origin=project):
         path=Path(value);return path.resolve() if path.is_absolute() else (origin/path).resolve()
     def individual(folder):
@@ -128,15 +128,22 @@ def completed_history_registry(catalog_path, *, project_root=None, validate_run=
     for spec in catalog.get('history_completion_sources',[]):
         source=resolve(spec['path'] if isinstance(spec,dict) else spec);sources.append(str(source));visit(source)
     for row in catalog['runs']:
-        if row.get('stage')=='evolution' and row.get('output'):
-            source=resolve(row['output']);sources.append(str(source));visit(source)
+        if row.get('stage')!='evolution':continue
+        if not row.get('output'):
+            inventory_issues.append({'job_id':row.get('job_id'),
+                'reason':'declared_evolution_output_missing'})
+            continue
+        source=resolve(row['output']);sources.append(str(source));visit(source)
     return {'format_version':'completed_history_registry/1','catalog':{'path':str(catalog_path),'sha256':sha(catalog_path)},
         'sources':sources,'entries':list(entries.values()),'excluded':excluded,
+        'inventory_complete':not inventory_issues,'inventory_issues':inventory_issues,
         'boundary':'Validated completed investigations, including zero-edge results. Exact source/workflow/policy identities retained. No model calls or new scientific judgments.'}
 
 
 def select_uninvestigated_histories(methods, candidates, registry, *, policy_revisits=None, recovery_reasons=None):
     """Completion is exact-version coverage; policy reruns require explicit reasons."""
+    if registry.get('inventory_complete') is False:
+        raise ValueError('Completion inventory is incomplete; declared evolution runs require output pointers')
     revisits=policy_revisits or {};recoveries=recovery_reasons or {};selected=[];decisions={}
     if set(revisits)-set(candidates) or any(not isinstance(x,str) or not x.strip() for x in revisits.values()):
         raise ValueError('Policy revisits need candidate IDs and explicit reasons')
