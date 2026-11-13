@@ -346,6 +346,69 @@
       ],
       "result": "output/RESULTS.json",
       "notes": "Zero-model exact assigned-primary recovery: check full publication vault and bulk-acquisition cache; reuse pinned approved OA metadata; try only new public original routes. Failed URLs/challenge hosts are held without repetition. Original-byte identity and existing registration precede handoff; fresh scientific review remains required."
+    },
+    "evolution.batch": {
+      "stage": "evolution",
+      "native_models": true,
+      "entrypoint": [
+        "{python}",
+        "-m",
+        "experiments.history_changes_20261106.run"
+      ],
+      "code_patterns": [
+        "experiments/history_changes_20261106/*.py",
+        "experiments/citation_lineage_pilot/*.py",
+        "experiments/pilot50_20261104/history_stage.py",
+        "experiments/diagram_paper_pilot_20261106/run.py",
+        "experiments/history_parallel_20261112/prepare.py",
+        "experiments/history_contract_audit_20261113/focused_reading.py",
+        "experiments/history_parallel_20261112/merge_completed.py"
+      ],
+      "inputs": {
+        "batch_state": "",
+        "method_inventory": "",
+        "selection": "",
+        "library_inventory": "",
+        "completed_catalog": ""
+      },
+      "parameters": {
+        "batch": "",
+        "library": "",
+        "vault": "",
+        "agents": "18",
+        "max_ready_seeds": "20",
+        "reading_policy": "focused"
+      },
+      "arguments": [
+        "--batch",
+        "{batch}",
+        "--library",
+        "{library}",
+        "--vault",
+        "{vault}",
+        "--runtime",
+        "{repo}",
+        "--output",
+        "{output}",
+        "--method-inventory",
+        "{method_inventory}",
+        "--selection",
+        "{selection}",
+        "--agents",
+        "{agents}",
+        "--max-ready-seeds",
+        "{max_ready_seeds}",
+        "--reading-policy",
+        "{reading_policy}",
+        "--software-preflight",
+        "--citation-only",
+        "--batch-state",
+        "{batch_state}",
+        "--completed-catalog",
+        "{completed_catalog}"
+      ],
+      "result": "output/RESULT.json",
+      "notes": "Existing history runner with canonical all-run completion join, exact source/workflow/policy identities, explicit revisit/recovery reasons, pinned state-directory consistency and bounded scheduling. No completed history is rerun merely because absent from a display merge."
     }
   },
   "history": "provenance/ and dated experiments preserve earlier inputs, code and outcomes. They are not a menu of interchangeable current launchers.",

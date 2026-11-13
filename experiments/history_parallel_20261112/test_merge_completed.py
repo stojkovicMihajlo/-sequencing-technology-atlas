@@ -5,7 +5,8 @@ import shutil
 
 import pytest
 
-from experiments.history_parallel_20261112.merge_completed import merge_completed,sha
+from experiments.history_parallel_20261112.merge_completed import (
+    merge_completed,sha,completed_history_registry,select_uninvestigated_histories)
 from tests.illumina.test_history_identity_compiler import inputs
 BLOCK='This content was flagged for possible biological risk. If this seems wrong, try rephrasing your request. We are continuously refining our work in detecting biological risk, and you can read more about our approach in our blog post: https://openai.com/index/preparing-for-future-ai-capabilities-in-biology'
 
@@ -41,6 +42,70 @@ def completed(folder,mid):
 
 def validated(folder):
     assert json.loads((folder/'state.json').read_text())['status']=='completed'
+
+
+def test_completion_join_uses_all_catalog_sources_versions_and_zero_edge_outcomes(tmp_path):
+    def native(folder,mid,workflow,*,links=(),policy='full'):
+        (folder/'inputs').mkdir(parents=True)
+        text='Primary method '+mid
+        binding={'record_id':mid,'parent_artifact_pins':{'extraction.json':workflow},
+                 'seed_article_sha256':'article-'+mid}
+        (folder/'graph.json').write_text(json.dumps({'nodes':[{'id':'seed','bindings':binding}],
+            'links':list(links),'format_version':'citation_lineage_pilot/4','classification_policy':'assay_contribution_scope/1'}))
+        (folder/'state.json').write_text(json.dumps({'status':'completed','reading_policy':policy,
+            'model':'gpt-6.1-sol','effort':'xhigh','stages':[]}))
+        (folder/'inputs/sources.json').write_text(json.dumps({'seed':{'text':text}}))
+        (folder/'analysis.json').write_text(json.dumps({'format_version':'citation_analysis/4'}))
+        (folder/'review.json').write_text(json.dumps({'format_version':'citation_change_review/3'}))
+        import hashlib
+        return {'status':'ready','extraction_sha256':workflow,'selected_primary':{
+            'article_sha256':'article-'+mid,'text_sha256':hashlib.sha256(text.encode()).hexdigest()}}
+    first=tmp_path/'in_merge';other=tmp_path/'other_batch/citations/other'
+    methods={'first':native(first,'first','workflow-first',links=[{'id':'existing'}]),
+             'other':native(other,'other','workflow-other')}
+    # A failed parent does not erase a validated completed child absent from main merge.
+    (other.parents[1]/'state.json').write_text(json.dumps({'status':'failed','citation_runs':{
+        'other':{'path':str(other),'status':'completed'}}}))
+    merged=tmp_path/'merged.json';merged.write_text(json.dumps({'format_version':'illumina_history_inputs/1',
+        'overlays':[{'path':str(first/'graph.json')}]}))
+    catalog=tmp_path/'catalog.json';catalog.write_text(json.dumps({'format_version':'atlas_run_catalog/1',
+        'remote_project_root':str(tmp_path),'history_completion_sources':[{'path':str(merged)}],
+        'runs':[{'stage':'evolution','output':str(other.parents[1])}]}))
+    registry=completed_history_registry(catalog,validate_run=validated)
+    assert {r['record_id'] for r in registry['entries']}=={'first','other'}
+    assert next(r for r in registry['entries'] if r['record_id']=='other')['positive_relationships']==0
+    assert all(r['policy_id'] and r['policy']['reading_policy']=='full' for r in registry['entries'])
+    selected,decisions=select_uninvestigated_histories(methods,['first','other'],registry)
+    assert selected==[] and decisions['other']['reason']=='completed_exact_version_reused'
+    # Same name is not enough: a genuinely different accepted workflow needs history.
+    changed=copy.deepcopy(methods);changed['other']['extraction_sha256']='new-workflow'
+    selected,decisions=select_uninvestigated_histories(changed,['other'],registry)
+    assert selected==['other'] and decisions['other']['reason']=='new_current_version_history'
+    # Changed policy alone never silently authorizes repeat work.
+    selected,decisions=select_uninvestigated_histories(methods,['other'],registry,
+        policy_revisits={'other':'Explicit matched comparison of new selective nomination policy'})
+    assert selected==['other'] and decisions['other']['reason']=='explicit_policy_revisit'
+    with pytest.raises(ValueError,match='explicit reasons'):
+        select_uninvestigated_histories(methods,['other'],registry,policy_revisits={'other':''})
+    partial=tmp_path/'interrupted';(partial/'inputs').mkdir(parents=True)
+    (partial/'state.json').write_text(json.dumps({'status':'failed','stages':[
+        {'role':'nominate','status':'validated'}]}))
+    (partial/'inputs/seed_binding.json').write_text(json.dumps({'record_id':'fresh',
+        'parent_artifact_pins':{'extraction.json':'workflow-fresh'}}))
+    catalog_value=json.loads(catalog.read_text());catalog_value['runs'].append({'stage':'evolution','output':str(partial)})
+    catalog.write_text(json.dumps(catalog_value))
+    registry=completed_history_registry(catalog,validate_run=validated)
+    fresh={'fresh':{'status':'ready','extraction_sha256':'workflow-fresh','selected_primary':{}}}
+    selected,decisions=select_uninvestigated_histories(fresh,['fresh'],registry)
+    assert selected==[] and decisions['fresh']['reason']=='interrupted_history_requires_recovery_reason'
+    selected,decisions=select_uninvestigated_histories(fresh,['fresh'],registry,
+        recovery_reasons={'fresh':'Parent cancelled for a cohort-selection bug; resume valid unfinished current-version research.'})
+    assert selected==['fresh'] and decisions['fresh']['reason']=='interrupted_history_recovery'
+    corrupt=copy.deepcopy(registry);corrupt['excluded'].append({'record_id':'fresh',
+        'extraction_sha256':'workflow-fresh','reason':'completed_history_validation_failed'})
+    selected,decisions=select_uninvestigated_histories(fresh,['fresh'],corrupt,
+        recovery_reasons={'fresh':'A recovery reason cannot bypass corrupt completion custody.'})
+    assert selected==[] and decisions['fresh']['reason']=='prior_completion_requires_validation'
 
 
 def test_completed_native_history_extends_index_and_keeps_identity_summary_and_sources(tmp_path):

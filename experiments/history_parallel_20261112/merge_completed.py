@@ -44,6 +44,125 @@ def native_validator(folder):
     validate_completed_citation(folder)
 
 
+def completed_history_registry(catalog_path, *, project_root=None, validate_run=native_validator):
+    """Join all declared history sources, including completed children of failed jobs.
+
+    A display merge is not a global completion inventory. Policies and exact
+    primary/workflow versions are retained; no relationship is re-adjudicated.
+    """
+    catalog_path=Path(catalog_path).resolve();catalog=read(catalog_path)
+    if catalog.get('format_version')!='atlas_run_catalog/1':raise ValueError('Unknown run catalog')
+    project=Path(project_root or catalog['remote_project_root'])
+    entries={};excluded=[];visited=set();sources=[]
+    def resolve(value,origin=project):
+        path=Path(value);return path.resolve() if path.is_absolute() else (origin/path).resolve()
+    def individual(folder):
+        state_path=folder/'state.json'
+        if not state_path.is_file():return
+        state=read(state_path)
+        if state.get('status')!='completed':
+            binding=read(folder/'inputs/seed_binding.json') if (folder/'inputs/seed_binding.json').is_file() else {}
+            item={'path':str(folder),'record_id':binding.get('record_id'),
+                'extraction_sha256':binding.get('parent_artifact_pins',{}).get('extraction.json'),
+                'reason':'history_not_completed',
+                'status':state.get('status'),'validated_nomination_present':any(
+                    x.get('role')=='nominate' and x.get('status')=='validated' for x in state.get('stages',[]))}
+            failed=[x for x in state.get('stages',[]) if x.get('status')=='failed' and x.get('path')]
+            if failed:
+                from genomics_discovery.execution.codex_worker import classify_archived_terminal_failure
+                item['failure_category']=classify_archived_terminal_failure(Path(failed[-1]['path']))['category']
+            excluded.append(item)
+            return
+        mid=extraction=None
+        try:
+            graph=read(folder/'graph.json');binding=next(n['bindings'] for n in graph['nodes'] if n['id']=='seed')
+            mid=binding['record_id'];extraction=binding['parent_artifact_pins']['extraction.json']
+            validate_run(folder)
+            source=read(folder/'inputs/sources.json')['seed']
+            article=binding.get('seed_article_sha256') or source.get('provenance',{}).get('original',{}).get('sha256') or source.get('original',{}).get('sha256')
+            analysis=read(folder/'analysis.json');review=read(folder/'review.json')
+            policy={'analysis_format':analysis.get('format_version'),'review_format':review.get('format_version'),
+                'classification_policy':graph.get('classification_policy'),
+                'reading_policy':state.get('reading_policy','not_recorded'),'model':state.get('model'),'effort':state.get('effort')}
+            policy_id=hashlib.sha256(json.dumps(policy,sort_keys=True).encode()).hexdigest()
+            row={'record_id':mid,'extraction_sha256':extraction,'primary_article_sha256':article,
+                'primary_text_sha256':hashlib.sha256(source['text'].encode()).hexdigest(),
+                'policy':policy,'policy_id':policy_id,'native_run':str(folder),
+                'graph':{'path':str(folder/'graph.json'),'sha256':sha(folder/'graph.json')},
+                'source_registry_sha256':sha(folder/'inputs/sources.json'),
+                'state_sha256':sha(state_path),'positive_relationships':len(graph.get('links',[])),
+                'locations':[str(folder)]}
+            ident=(mid,extraction,article,row['primary_text_sha256'],policy_id,row['graph']['sha256'])
+            if ident in entries:entries[ident]['locations'].append(str(folder))
+            else:entries[ident]=row
+        except Exception as exc:
+            excluded.append({'path':str(folder),'record_id':mid,'extraction_sha256':extraction,
+                'reason':'completed_history_validation_failed','error':f'{type(exc).__name__}: {exc}'})
+    def visit(path):
+        path=Path(path).resolve()
+        if path in visited:return
+        visited.add(path)
+        if not path.exists():excluded.append({'path':str(path),'reason':'declared_source_missing'});return
+        if path.is_file():
+            value=read(path)
+            if value.get('format_version')=='illumina_history_inputs/1':
+                for item in value['overlays']:
+                    native=resolve(item['path'],path.parent).parent;visit(native)
+                    parent=native.parent.parent;parent_state=parent/'state.json'
+                    if parent_state.is_file():
+                        batch=read(parent_state)
+                        if any(resolve(x['path'],parent)==native for x in batch.get('citation_runs',{}).values() if x.get('path')):
+                            visit(parent)  # Also catch completed children omitted from this merge checkpoint.
+            return
+        state_path=path/'state.json'
+        if state_path.is_file():
+            state=read(state_path)
+            if 'citation_runs' in state:
+                for row in state['citation_runs'].values():
+                    if row.get('path'):visit(resolve(row['path'],path))
+            elif (path/'graph.json').is_file() or (path/'inputs/seed_binding.json').is_file():individual(path)
+        if (path/'history_inputs.json').is_file():visit(path/'history_inputs.json')
+        # Some recorded runs have per-method outputs without a batch state.
+        if not state_path.is_file():
+            for child in sorted(path.glob('*/state.json')):visit(child.parent)
+    for spec in catalog.get('history_completion_sources',[]):
+        source=resolve(spec['path'] if isinstance(spec,dict) else spec);sources.append(str(source));visit(source)
+    for row in catalog['runs']:
+        if row.get('stage')=='evolution' and row.get('output'):
+            source=resolve(row['output']);sources.append(str(source));visit(source)
+    return {'format_version':'completed_history_registry/1','catalog':{'path':str(catalog_path),'sha256':sha(catalog_path)},
+        'sources':sources,'entries':list(entries.values()),'excluded':excluded,
+        'boundary':'Validated completed investigations, including zero-edge results. Exact source/workflow/policy identities retained. No model calls or new scientific judgments.'}
+
+
+def select_uninvestigated_histories(methods, candidates, registry, *, policy_revisits=None, recovery_reasons=None):
+    """Completion is exact-version coverage; policy reruns require explicit reasons."""
+    revisits=policy_revisits or {};recoveries=recovery_reasons or {};selected=[];decisions={}
+    if set(revisits)-set(candidates) or any(not isinstance(x,str) or not x.strip() for x in revisits.values()):
+        raise ValueError('Policy revisits need candidate IDs and explicit reasons')
+    if set(recoveries)-set(candidates) or any(not isinstance(x,str) or not x.strip() for x in recoveries.values()):
+        raise ValueError('Interrupted recoveries need candidate IDs and explicit reasons')
+    for mid in candidates:
+        method=methods.get(mid,{});paper=method.get('selected_primary') or {}
+        prior=[r for r in registry['entries'] if r['record_id']==mid and r['extraction_sha256']==method.get('extraction_sha256')]
+        exact=[r for r in prior if r['primary_article_sha256']==paper.get('article_sha256') and r['primary_text_sha256']==paper.get('text_sha256')]
+        related=[r for r in registry['excluded'] if r.get('record_id')==mid and r.get('extraction_sha256')==method.get('extraction_sha256')]
+        if any(r.get('record_id')==mid and r.get('failure_category')=='provider_biological_risk_block' for r in registry['excluded']):reason='provider_history_hold'
+        elif method.get('status')!='ready':reason='source_not_ready'
+        elif any(r['reason']=='completed_history_validation_failed' for r in related):reason='prior_completion_requires_validation'
+        elif mid in revisits:reason='explicit_policy_revisit';selected.append(mid)
+        elif exact:reason='completed_exact_version_reused'
+        elif prior:reason='prior_primary_identity_differs_or_unavailable'
+        elif any(r['reason']=='history_not_completed' for r in related):
+            reason='interrupted_history_recovery' if mid in recoveries else 'interrupted_history_requires_recovery_reason'
+            if mid in recoveries:selected.append(mid)
+        else:reason='new_current_version_history';selected.append(mid)
+        decisions[mid]={'reason':reason,'prior_policy_ids':[r['policy_id'] for r in exact],
+            'prior_runs':[r['native_run'] for r in exact], 'revisit_reason':revisits.get(mid),
+            'recovery_reason':recoveries.get(mid)}
+    return selected,decisions
+
+
 def merge_completed(base_manifest, history_runs, output, *, validate_run=native_validator,
                     render=True):
     base_manifest=Path(base_manifest).resolve();output=Path(output).resolve()
