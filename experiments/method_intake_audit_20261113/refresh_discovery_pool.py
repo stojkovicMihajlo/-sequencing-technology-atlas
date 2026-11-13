@@ -76,6 +76,7 @@ def prepare_requests(plan,old_plan,old_query_results,*,probe=False):
                              'through_date':through.isoformat(),'kind':'date_delta'})
     for q in old_query_results:
         if 'error' not in q:continue
+        if old_start>through:continue
         # Use the exact failed source query before its old date clause. A new
         # hashed namespace avoids repeating the old TARGET-seq slug collision.
         term=q['query'].rsplit(' AND ("',1)[0]
@@ -98,9 +99,14 @@ def refresh(inputs_path,plan_path,output,*,phase='probe',prior_overlay=None,fetc
     if prior_overlay:
         prior=json.loads(Path(prior_overlay).read_text())
         if prior['base_pool']['sha256']!=inputs['pool']['sha256']:raise ValueError('Prior overlay belongs to another pool')
+        verified_originals={}
         for pmid,record in prior['metadata_overlay'].items():
             receipt=record['metadata_receipt'];path=Path(receipt['path'])
-            if not path.is_file() or sha(path)!=receipt['sha256']:raise ValueError('Prior metadata original changed')
+            if str(path) in verified_originals:
+                if verified_originals[str(path)]!=receipt['sha256']:raise ValueError('Conflicting pins for a prior metadata original')
+            else:
+                if not path.is_file() or sha(path)!=receipt['sha256']:raise ValueError('Prior metadata original changed')
+                verified_originals[str(path)]=receipt['sha256']
             overlay[pmid]=record
     missing=[p for p in inputs['missing_metadata_pmids'] if p not in base and p not in overlay]
     failures=[]

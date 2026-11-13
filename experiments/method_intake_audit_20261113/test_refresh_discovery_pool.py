@@ -34,6 +34,12 @@ class RefreshTests(unittest.TestCase):
         self.assertNotEqual(query_identity(q),query_identity({**q,'query':'"TARGET-seq+"'}))
         self.assertEqual(query_identity(q),query_identity(dict(q)))
 
+    def test_older_overlap_does_not_create_inverted_failed_query_window(self):
+        old={'from_date':'2017/01/01','through_date':'2026/11/05','queries':[]}
+        request={'source_id':'older','query':'library sequencing','from_date':'2010-01-01'}
+        rows=prepare_requests({'through_date':'2016-12-31','supplement_queries':[request]},old,[{'id':'failed','query':'x','error':'missing'}])
+        self.assertEqual(len(rows),1);self.assertEqual(rows[0]['through_date'],'2016-12-31')
+
     def test_dates_follow_configuration_for_later_runs_without_new_code(self):
         old={'from_date':'2019/01/01','through_date':'2027/02/20','queries':[{'id':'rna','query':'RNA'}]}
         plan={'through_date':'2027-03-01','supplement_queries':[{'source_id':'chemistry','query':'library preparation'}]}

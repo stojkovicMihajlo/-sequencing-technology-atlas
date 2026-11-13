@@ -29,7 +29,7 @@ class Worker:
             result=WorkerResult(1,thread,{},0.1,'Synthetic provider failure')
             (attempt/'events.jsonl').write_text(json.dumps({'type':'error','message':'Synthetic provider failure'})+'\n')
         else:
-            rows=[{'pmid':p['pmid'],'classification':'assay','methodological_claim_quote':p['abstract'][0]['text'],
+            rows=[{'pmid':p['pmid'],'classification':'assay','publication_role':'primary_methods','methodological_claim_quote':p['abstract'][0]['text'],
                    'rationale':'Synthetic first-pass result.','focused_question':''} for p in papers]
             final=json.dumps({'papers':rows});usage={'input_tokens':100,'output_tokens':30}
             events=[{'type':'thread.started','thread_id':thread},{'type':'turn.started'},
@@ -68,7 +68,7 @@ class BulkTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'without truncation'):bulk.batches_for(rows,20,cap-800)
 
     def test_quote_own_id_class_and_unclear_question_are_checked(self):
-        row=paper(1);base={'pmid':'1','classification':'unresolved','methodological_claim_quote':row['abstract'][0]['text'],
+        row=paper(1);base={'pmid':'1','classification':'unresolved','publication_role':'unresolved','methodological_claim_quote':row['abstract'][0]['text'],
              'rationale':'An assay dependency needs inspection.','focused_question':'Does the Methods demonstrate improved library preparation?'}
         bulk.validate({'papers':[base]},[row])
         for change in [{'pmid':'2'},{'classification':'new_method'},{'methodological_claim_quote':'Invented quote'},
@@ -122,19 +122,41 @@ class BulkTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'Slurm'):self.run_screen(p,w)
         self.assertEqual(w.calls,[])
 
+    def test_queue_visible_before_first_native_call(self):
+        p=self.pool([paper(1),paper(2),paper(3)])
+        parent=self
+        class InspectQueue(Worker):
+            async def run(self,prompt,attempt,**kwargs):
+                if not self.calls:
+                    state=bulk.read(attempt.parent/'STATE.json')
+                    parent.assertEqual(state['counts'],{'running':1,'queued':2})
+                    parent.assertEqual(state['planned_batches'],3)
+                    parent.assertEqual(state['max_concurrent_native_calls'],1)
+                return await super().run(prompt,attempt,**kwargs)
+        result=self.run_screen(p,InspectQueue(),batch_size=1,agents=1)
+        self.assertEqual(result['counts'],{'screened':3})
+
+    def test_prior_planned_roster_excluded_including_unscreenable_and_queued(self):
+        p=self.pool([paper(1),paper(2),paper(3,None),paper(4,None)]);w=Worker()
+        result=self.run_screen(p,w,batch_size=1,exclude_pmids={'1','3'})
+        self.assertEqual(w.calls,[['2']]);self.assertEqual(result['excluded_planned_papers'],2)
+        self.assertEqual([r['pmid'] for r in result['papers']],['2','4'])
+        self.assertEqual(result['papers'][-1]['route'],'metadata_recovery')
+
     def test_rubric_includes_improvements_and_has_no_seq_name_requirement(self):
         self.assertIn('library-preparation, enzyme',bulk.RUBRIC)
         self.assertIn("need not introduce a wholly new architecture or a named '-seq'",bulk.RUBRIC)
         self.assertIn('one screen',bulk.RUBRIC)
 
     def test_negative_classes_remain_inspectable_but_any_unclear_question_advances(self):
-        for classification in ('application','review','software_only'):
+        for classification in ('application','software_only'):
             self.assertEqual(bulk.route_for({'classification':classification,'focused_question':''}),'negative_inspectable')
             self.assertEqual(bulk.route_for({'classification':classification,'focused_question':'Is there an original workflow?'}),
                              'acquisition_review_candidate')
-        for classification in ('assay','component_only','unresolved'):
+        for classification in ('assay','component_only','unresolved','review'):
             self.assertEqual(bulk.route_for({'classification':classification,'focused_question':''}),
                              'acquisition_review_candidate')
+        self.assertEqual(bulk.route_for({'classification':'application','publication_role':'later_protocol','focused_question':''}),'acquisition_review_candidate')
 
 
 if __name__=='__main__':unittest.main()

@@ -6,6 +6,12 @@ set -euo pipefail
 : "${SCRATCH:?Sherlock SCRATCH is required}"
 module load devel python/3.12.1 uv/0.10.8 codex/0.156.0
 module load system poppler/0.47.0
+# Legacy Word supplements use the existing pinned Linux converter when present.
+export ATLAS_ANTIWORD_PREFIX="${ATLAS_ANTIWORD_PREFIX:-$GROUP_HOME/mstojkov/software/antiword/0.37-18-20261019-02}"
+if [[ -x "$ATLAS_ANTIWORD_PREFIX/bin/antiword" ]]; then
+    export PATH="$ATLAS_ANTIWORD_PREFIX/bin:$PATH"
+    export ANTIWORDHOME="$ATLAS_ANTIWORD_PREFIX/share/antiword"
+fi
 if [[ -n "${ATLAS_CODEX_BIN_DIR:-}" ]]; then
     [[ -x "$ATLAS_CODEX_BIN_DIR/codex" ]] || {
         echo 'ATLAS_CODEX_BIN_DIR must contain an executable codex' >&2

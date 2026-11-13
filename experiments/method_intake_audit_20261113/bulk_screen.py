@@ -29,6 +29,10 @@ reagent alone without a demonstrated assay workflow is component_only. Do not
 classify from title, keywords, scale or publication type alone. Distinguish a
 methods contribution from merely applying existing methods. An inconclusive
 abstract is unresolved, with one focused Methods/figure question, not rejected.
+Also record publication_role as primary_methods, later_protocol, application,
+review or unresolved. A later protocol remains a useful source even when it does
+not introduce a new assay; reviews supply literature-discovery/support sources.
+Original software/reagent papers can be primary_methods without being assay entries.
 For each own PMID return one exact contiguous nonempty abstract quotation bearing
 on the methodological contribution, one short scientific rationale and a focused
 question if unclear (empty otherwise). For a non-methods abstract quote the
@@ -55,6 +59,7 @@ def write(path,value):
 
 def schema():
     fields={'pmid':{'type':'string'},'classification':{'type':'string','enum':list(pilot.CLASSES)},
+            'publication_role':{'type':'string','enum':list(pilot.ROLES)},
             'methodological_claim_quote':{'type':'string'},'rationale':{'type':'string'},
             'focused_question':{'type':'string'}}
     return {'type':'object','additionalProperties':False,'required':['papers'],'properties':{
@@ -116,7 +121,7 @@ def validate(value,papers):
         raise ValueError('PMID coverage differs from batch')
     for row in rows:
         if set(row)!=set(schema()['properties']['papers']['items']['properties']):raise ValueError('Decision fields differ')
-        if row['classification'] not in pilot.CLASSES or any(not isinstance(row[k],str) for k in row):
+        if row['classification'] not in pilot.CLASSES or row['publication_role'] not in pilot.ROLES or any(not isinstance(row[k],str) for k in row):
             raise ValueError('Invalid class/text fields')
         quote=row['methodological_claim_quote']
         if not quote.strip() or not any(quote in s['text'] for s in expected[row['pmid']]['abstract']):
@@ -144,28 +149,41 @@ def verify_pins(pins):
 
 
 def route_for(row):
-    return ('acquisition_review_candidate' if row['classification'] in {'assay','component_only','unresolved'}
-            or row['focused_question'].strip() else 'negative_inspectable')
+    return ('acquisition_review_candidate' if row['classification'] in {'assay','component_only','unresolved','review'}
+            or row.get('publication_role')=='later_protocol' or row['focused_question'].strip() else 'negative_inspectable')
 
 
 async def screen(pool,output,worker,*,pool_sha256,overlays=(),agents=10,batch_size=20,
-                 max_prompt_bytes=75000,max_final_bytes=200000,runtime_manifest=None,resume=False):
+                 max_prompt_bytes=75000,max_final_bytes=200000,runtime_manifest=None,resume=False,on_batch=None,exclude_pmids=()):
     if not os.environ.get('SLURM_JOB_ID'):raise ValueError('Bulk screening requires a Qiu Sherlock Slurm allocation')
     if worker.model!='gpt-6.1-sol' or worker.effort!='xhigh':raise ValueError('Use requested sol6.1/xhigh')
-    if type(agents)!=int or agents<1:raise ValueError('Positive agent count required')
+    if type(agents)!=int or not 1<=agents<=50:raise ValueError('Native agent count must be within1..50')
     papers,missing,input_pins=load_pool(pool,pool_sha256,overlays)
+    excluded=set(exclude_pmids)
+    excluded_count=sum(p['pmid'] in excluded for p in papers)+sum(p['pmid'] in excluded for p in missing)
+    papers=[p for p in papers if p['pmid'] not in excluded]
+    missing=[p for p in missing if p['pmid'] not in excluded]
+    oversized=[p for p in papers if len(prompt_for([p]).encode())>max_prompt_bytes]
+    missing += [{'pmid':p['pmid'],'status':'unscreenable_context_guard','classification':None,
+                 'route':'focused_source_preparation','record_sha256':digest(p)} for p in oversized]
+    papers=[p for p in papers if p not in oversized]
     batches=batches_for(papers,batch_size,max_prompt_bytes)
     runtime=runtime_pins(worker,runtime_manifest)
     config={'version':VERSION,'input_pins':input_pins,'runtime_pins':runtime,
-        'model':worker.model,'effort':worker.effort,'batch_size':batch_size,
+        'model':worker.model,'effort':worker.effort,'batch_size':batch_size,'agents':agents,
+        'excluded_planned_pmids_sha256':digest(sorted(excluded)),'excluded_planned_papers':excluded_count,
         'max_prompt_bytes':max_prompt_bytes,'max_final_bytes':max_final_bytes,
         'schema_sha256':digest(schema()),'batches':[digest(b) for b in batches]}
     output=Path(output).resolve()
     if output.exists():
         if not resume or read(output/'PLAN.json')!=config:raise ValueError('Existing output requires same-input/prompt/runtime resume')
     else:output.mkdir(parents=True);write(output/'PLAN.json',config)
-    semaphore=asyncio.Semaphore(agents);states={}
-    def checkpoint():write(output/'STATE.json',{'batches':states,'counts':dict(Counter(x['status'] for x in states.values()))})
+    semaphore=asyncio.Semaphore(agents)
+    states={f'{i+1:05d}-{digest(batch)[:12]}':{'status':'queued','pmids':[p['pmid'] for p in batch]} for i,batch in enumerate(batches)}
+    def checkpoint():write(output/'STATE.json',{'batches':states,'counts':dict(Counter(x['status'] for x in states.values())),
+        'planned_batches':len(batches),'planned_screenable_papers':len(papers),'unscreenable_papers':len(missing),
+        'max_concurrent_native_calls':agents})
+    checkpoint()
     async def one(index,payload):
         ident=f'{index+1:05d}-{digest(payload)[:12]}';attempt=output/ident
         prompt=prompt_for(payload)
@@ -196,8 +214,10 @@ async def screen(pool,output,worker,*,pool_sha256,overlays=(),agents=10,batch_si
                 if not artifact.exists():write(artifact,value)
                 states[ident]={'status':'complete','pmids':[p['pmid'] for p in payload],
                     'thread_id':assessment.thread_id,'artifact_sha256':pilot.sha(artifact),'binding':expected}
-                checkpoint();return [{**r,'status':'screened','route':route_for(r),
+                checkpoint();rows=[{**r,'status':'screened','route':route_for(r),
                     'input_sha256':expected['input_sha256'],'batch':ident} for r in value['papers']]
+                if on_batch is not None:await on_batch(rows)
+                return rows
             except Exception as exc:
                 states[ident]={'status':'failed','pmids':[p['pmid'] for p in payload],'error':str(exc),
                     'diagnostic':classify_archived_terminal_failure(attempt)};checkpoint()
@@ -207,7 +227,7 @@ async def screen(pool,output,worker,*,pool_sha256,overlays=(),agents=10,batch_si
     verify_pins(input_pins);verify_pins(runtime)
     rows=sorted(missing+[r for batch in results for r in batch],key=lambda r:int(r['pmid']))
     result={'version':VERSION,'papers':rows,'counts':dict(Counter(r['status'] for r in rows)),
-        'routes':dict(Counter(r['route'] for r in rows)),'agents':agents,'batches':len(batches),
+        'routes':dict(Counter(r['route'] for r in rows)),'agents':agents,'batches':len(batches),'excluded_planned_papers':excluded_count,
         'boundary':'One first-pass abstract screen per batch; negatives inspectable, missing abstracts unscreenable; no acquisition, extraction or canonical admission.'}
     write(output/'SCREENING.json',result);return result
 

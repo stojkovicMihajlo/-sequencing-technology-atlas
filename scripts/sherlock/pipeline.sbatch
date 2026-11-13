@@ -9,12 +9,20 @@ hostname
 printenv SLURM_JOB_ID
 cat /etc/agents/AGENTS.md
 cat /etc/agents/slurm.md /etc/agents/storage.md /etc/agents/software.md /etc/agents/policy.md
+selected_repository="${ATLAS_REPOSITORY:?Select the Git checkout/frozen code root}"
+selected_run_directory="${ATLAS_RUN_DIR:?Select a prepared pipeline run directory}"
+selected_archive_root="${ATLAS_ARCHIVE_ROOT:-}"
 source /home/groups/xiaojie/mstojkov/atlas-qiu-environment.sh
-: "${ATLAS_REPOSITORY:?Select the Git checkout/frozen code root}"
-: "${ATLAS_RUN_DIR:?Select a prepared pipeline run directory}"
-source "$ATLAS_REPOSITORY/scripts/sherlock/environment.sh"
-source "$ATLAS_REPOSITORY/scripts/sherlock/atlas-account.sh"
+export ATLAS_REPOSITORY="$selected_repository"
+export ATLAS_RUN_DIR="$selected_run_directory"
+if [[ -n "$selected_archive_root" ]]; then
+    export ATLAS_ARCHIVE_ROOT="$selected_archive_root"
+fi
 export ATLAS_CODEX_BIN_DIR="$GROUP_HOME/mstojkov/software/codex/0.163.0/bin"
+source "$selected_repository/scripts/sherlock/environment.sh"
+source "$selected_repository/scripts/sherlock/atlas-account.sh"
+[[ "$ATLAS_REPOSITORY" == "$selected_repository" ]] || { echo 'Repository helper changed the selected runtime' >&2; exit 2; }
+[[ "$ATLAS_RUN_DIR" == "$selected_run_directory" ]] || { echo 'Repository helper changed the selected run' >&2; exit 2; }
 export PYTHONPATH="$ATLAS_REPOSITORY/src:$ATLAS_REPOSITORY"
 export PYTHONDONTWRITEBYTECODE=1
 export ATLAS_ARCHIVE_ROOT="${ATLAS_ARCHIVE_ROOT:-$GROUP_HOME/mstojkov/atlas-results/pipeline}"

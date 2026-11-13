@@ -17,13 +17,23 @@ Edit these settings and the listed code in place for subsequent batches.
 | **2. Extraction** | Explain each assigned method as States, Operations and Flows, then obtain independent review. Illumina diagrams guide decomposition; target papers establish consequential scientific details. Paper mode supports methods without an Illumina diagram. | [Controller](src/genomics_discovery/illumina/extraction.py), [author/reviewer instructions](src/genomics_discovery/illumina/prompts.py), [representation](src/genomics_discovery/illumina/representation.py), [paper mode](src/genomics_discovery/illumina/paper_prompts.py). | Structured extraction, review, evidence and method graph. |
 | **3. Evolutionary graph** | Investigate primary papers and citations to establish contributions used, earlier/later arrangements, changes and supported consequences. Methods may have several contributors. | [Current citation-investigation driver](experiments/citation_lineage_pilot/run.py), [its prompts](experiments/citation_lineage_pilot/prompts.py), [change fields](src/genomics_discovery/illumina/change_records.py), [relationship meanings](src/genomics_discovery/illumina/relationships.py), [graph assembly](src/genomics_discovery/illumina/history.py). | Reviewed change records and directed, evidence-supported connections. |
 
+The `sources.prepare-publications` action runs one initial screen per abstract
+batch and streams relevant/uncertain, review and later-protocol publications to
+the existing public-article acquisition tools. It checks the entire registered
+paper cache, original hashes and bibliographic identity before reuse. Settings
+and the native allocation are in [publication intake configuration](config/sources/publication_intake.json).
+The current allocation reserves 25 native calls for sources and 25 for extraction,
+within a configurable total ceiling of 50. Source HTTP workers are separately
+rate limited. Missing abstracts and negative screens stay inspectable.
+
 Abstract screening and full-article downloading are both parts of **source
 preparation**. Search-result papers are not automatically distinct technologies.
 Include experimentally demonstrated library-preparation and enzyme improvements.
 Keep papers, method identities, source depictions and extracted workflows distinct.
 
 The stage handoffs have explicit input contracts. In particular, screening JSON
-is not yet automatically a source-recovery worklist, and an arbitrary raw paper
+is not automatically a method-specific source-recovery worklist. The publication
+adapter records papers and source roles without creating method nodes; an arbitrary raw paper
 list is not an extraction source registry. The pipeline map documents these
 boundaries; the recording command does not invent the missing conversion.
 
@@ -50,6 +60,9 @@ Other action names and required inputs are in `pipeline.json`. An empty input
 means that a real input must be supplied; it is not a working sample dataset.
 The query configuration has one through-date. The refresh code derives the next
 search interval from the prior collection rather than hardcoding a batch date.
+Use [the overlap configuration](config/sources/overlap_queries.json) for the
+recorded 2010–2016 padding. This is a pragmatic overlap interval, not a claim
+about the catalogue's true cutoff; older cited predecessors have no date floor.
 
 Prepare execution plans on the selected Qiu runtime; plans record its exact paths
 and Python executable. A local plan is for inspection, not a portable Slurm job.

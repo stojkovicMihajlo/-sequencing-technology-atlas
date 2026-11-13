@@ -1,0 +1,20 @@
+{
+  "job_id": "52185066",
+  "action": "sources.prepare-publications",
+  "state": "SUBMITTED_not_yet_startup_verified",
+  "run": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/pipeline/new_papers_source_01/run_02",
+  "runtime": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/pipeline/new_papers_source_01/runtime_source_fixed",
+  "cpus": 2,
+  "memory": "8G",
+  "walltime": "12h",
+  "partitions": "service,xiaojie,normal",
+  "native_slots": 25,
+  "other_track_native_slots": 25,
+  "total_native_ceiling": 50,
+  "replaces_failed_precontroller_job": "52184481",
+  "failure_diagnosis": "Shared Qiu bootstrap overwrote ATLAS_REPOSITORY before repository environment.sh; no controller/model/download work began.",
+  "fix": "Same shared launcher captures selected repo/run before bootstrap; restores afterward; sources both helpers through captured repo; asserts selection after both helpers.",
+  "regression_test": "tests/execution/test_pipeline_launcher.py passed with simulated bootstrap reset and helper drift rejection.",
+  "source_input_hashes_unchanged": true,
+  "scientific_admissions": 0
+}
