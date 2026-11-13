@@ -15,9 +15,117 @@ def resolve(document,pointer):
     return document
 
 
+def prepare_diagnostic(spec_path, output):
+    """Project pinned historical claims into the existing blinded diagnostic.
+
+    This prepares data only. It neither relabels the source-checked specification
+    nor changes the production reviewer or historical scientific artifacts.
+    """
+    from genomics_discovery.evaluation.grounding_diagnostic import (
+        Dataset, Labels, public_input, validate_labels, verify_dataset,
+    )
+    from genomics_discovery.sources.packets import build_packet
+
+    spec_path, output = Path(spec_path).resolve(), Path(output).resolve()
+    if output.exists():
+        raise FileExistsError(output)
+    spec_bytes = spec_path.read_bytes()
+    spec = json.loads(spec_bytes)
+    contexts, cases, labels, bindings = [], [], [], {}
+
+    def pinned(path, expected):
+        path = Path(path)
+        raw = path.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != expected:
+            raise ValueError('Preserved input changed: ' + str(path))
+        bindings[str(path)] = expected
+        return raw
+
+    def neighborhood(document, pointers):
+        # Source evidence lives in the visible paper passages, not quotations
+        # attached to the historical candidate. Keep scientific uncertainty.
+        def clean(value):
+            if isinstance(value, dict):
+                return {k:clean(v) for k,v in value.items() if k != 'evidence'}
+            if isinstance(value, list):return [clean(v) for v in value]
+            return value
+        selected = {pointer:resolve(document,pointer) for pointer in pointers}
+        if '/states' in selected:
+            operation = next(value for key,value in selected.items() if key.startswith('/operations/'))
+            used = set(operation['inputs']) | set(operation['outputs'])
+            selected['/states'] = [s for s in selected['/states'] if s['id'] in used]
+        return clean(selected)
+
+    output.mkdir(parents=True)
+    for pair in spec['pairs']:
+        pinned(pair['registry']['path'],pair['registry']['raw_sha256'])
+        source = pair['source']
+        pinned(source['path'],source['sha256'])
+        if source.get('original'):
+            pinned(source['original']['path'],source['original']['sha256'])
+        packet = build_packet(method_id=pair['method'],title=source['title'],
+            scope='Preserved local scientific claim and its connected context',variant='Historical diagnostic',
+            sources=[{**source,'role':'primary_paper'}])
+        packet_path = output / (pair['id'] + '_packet.json')
+        packet_path.write_text(json.dumps(packet,ensure_ascii=False,indent=2)+'\n')
+        passages = packet['sources'][0]['passages']
+        indices = set()
+        for anchor in pair['anchors']:
+            needle = ' '.join(anchor.split())
+            hits = [i for i,p in enumerate(passages) if needle in ' '.join(p['text'].split())]
+            if not hits:raise ValueError('Decisive anchor is not within a registered passage: '+anchor)
+            for i in hits:indices.update(range(max(0,i-1),min(len(passages),i+2)))
+        visible = [{'source_id':source['source_id'],'passage_id':passages[i]['passage_id'],
+                    'text':passages[i]['text']} for i in sorted(indices)]
+        context_id = 'context_' + value_sha(pair['source_id'])[:12]
+        contexts.append(dict(id=context_id,method_id=pair['method'],family=pair['id'],split='diagnostic',
+            source_packet_path=str(packet_path),source_packet_sha256=raw_sha(packet_path),
+            source_packet_digest=value_sha(packet),passages=visible))
+        versions = [(v,pair['pointer'],pair['context_pointers'],v['expected_grounding_outcome'])
+                    for v in pair['versions'].values()]
+        positive = spec.get('same_wording_positive',{})
+        if positive.get('parent_pair') == pair['id']:
+            versions.append((positive,positive['field_pointer'],
+                [positive['field_pointer'].rsplit('/',1)[0],'/states'],'supported'))
+        for version,pointer,pointers,outcome in versions:
+            document = json.loads(pinned(version['path'],version['raw_sha256']))
+            claim = resolve(document,pointer)
+            if value_sha(claim) != version['field_value_sha256']:
+                raise ValueError('Pinned field value changed')
+            for p,h in version.get('context_value_sha256',{}).items():
+                if value_sha(resolve(document,p)) != h:raise ValueError('Pinned neighborhood changed')
+            value = {'claim':claim,'context':neighborhood(document,pointers)}
+            case_id = 'case_' + value_sha(value)[:16]
+            cases.append(dict(id=case_id,context_id=context_id,field_pointer=pointer,value=value))
+            labels.append(dict(case_id=case_id,outcome=outcome,phenomenon=pair['id'],
+                rationale=pair['rationale'],decisive_passages=[{k:p[k] for k in ('source_id','passage_id')}
+                                                             for p in visible]))
+    cases.sort(key=lambda x:x['id']);labels.sort(key=lambda x:x['case_id'])
+    common = {'annotation_status':'model_authored_diagnostic_candidate'}
+    dataset = Dataset.model_validate(dict(format_version='protocol_grounding_cases/1.0',
+        **common,contexts=contexts,cases=cases))
+    expected = Labels.model_validate(dict(format_version='protocol_grounding_labels/1.0',**common,cases=labels))
+    verify_dataset(dataset);validate_labels(expected,dataset)
+    for name,document in [('cases',dataset),('labels',expected)]:
+        (output/(name+'.json')).write_text(document.model_dump_json(indent=2)+'\n')
+    public = public_input(dataset)
+    # The whitelist excludes host labels and paths. Case IDs derive only from
+    # visible values, with no original/corrected suffix or expected outcome.
+    (output/'reader_input.json').write_text(json.dumps(public,ensure_ascii=False,indent=2)+'\n')
+    bindings[str(spec_path)] = hashlib.sha256(spec_bytes).hexdigest()
+    (output/'input_bindings.json').write_text(json.dumps(bindings,indent=2)+'\n')
+    return {'cases':len(cases),'contexts':len(contexts),'output':str(output),
+            'dataset_sha256':raw_sha(output/'cases.json'),'labels_sha256':raw_sha(output/'labels.json')}
+
+
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--work',type=Path,required=True);p.add_argument('--out',type=Path,required=True)
-    a=p.parse_args();w=a.work
+    p=argparse.ArgumentParser();p.add_argument('--work',type=Path);p.add_argument('--out',type=Path,required=True)
+    p.add_argument('--diagnostic-spec',type=Path,help='Prepare existing grounding Dataset/Labels from the pinned specification; no model calls.')
+    a=p.parse_args()
+    if a.diagnostic_spec:
+        print(json.dumps(prepare_diagnostic(a.diagnostic_spec,a.out),indent=2));return
+    if a.work is None:p.error('--work is required unless --diagnostic-spec is supplied')
+    w=a.work
     old=w/'diagram_generation10_20261112/release_02/run_52086711/methods'
     new=w/'diagram_generation10_20261112/continuation_03/run_52091865/methods'
     pseudo=w/'readability_audit_20261108/run_01/cards/pseudo-seq/attempt_001'
