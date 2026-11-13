@@ -7,14 +7,18 @@ resubmit methods already in the active extraction batch.
 import argparse
 import asyncio
 from collections import Counter
+from http.client import HTTPException
 import os
 from pathlib import Path
 import shlex
 import sys
+from ssl import SSLError
+from urllib.error import URLError
 
 from genomics_discovery.execution.codex_worker import CodexWorker, assess_archived_attempt
 from genomics_discovery.illumina.extraction import read, write, sha, verify_registry_files
 from genomics_discovery.sources.acquisition.models import Findings
+from genomics_discovery.sources.acquisition.failures import host_storage_failure
 from experiments.diagram_paper_pilot_20261106.run import prepare_method, SourceUnavailable
 from .located_documents import register
 
@@ -85,6 +89,8 @@ async def run(snapshot_path, library, vault, output, *, workers=4, selected=None
             mids = [c['selection']['method_id'] for c in cases]
             states[pid] = {'status': 'investigating', 'methods': mids}; checkpoint()
             registry, requests = {}, []
+            documents = []
+            stage, document_id = 'prepare_sources', None
             try:
                 if sha(snapshot_path) != snapshot_hash:
                     raise ValueError('Held-case selection changed')
@@ -109,22 +115,24 @@ async def run(snapshot_path, library, vault, output, *, workers=4, selected=None
                 input_pins = {p: sha(p) for p in attempt.iterdir() if p.is_file()}
                 expected_id = mids[0]
                 prompt = prompt_for(attempt) + '\nUse method_id ' + expected_id + '.\n'
+                stage = 'source_finder'
                 result = await worker.run(prompt, attempt, response_schema_path=attempt / 'schema.json')
                 if any(sha(p) != pin for p, pin in input_pins.items()):
                     raise ValueError('Finder modified an input file')
                 if result.exit_code or result.error or not assess_archived_attempt(attempt).complete:
                     raise ValueError('Source-finder transport did not complete; inspect archived events, no automatic retry')
+                stage = 'finder_output_validation'
                 findings = Findings.model_validate_json((attempt / 'final.txt').read_bytes())
                 if findings.method_id != expected_id:
                     raise ValueError('Finder changed method identity')
                 write(folder / 'findings.json', findings.model_dump(mode='json'))
                 # All previously supplied evidence remains byte-bound after the agent reads it.
                 verify_registry_files(registry)
-                documents = []
                 primary_found = None
                 extra = {}
                 registration_parents = dict(registry)
                 for doc in sorted(findings.documents, key=lambda d: d.role != 'primary_paper'):
+                    stage, document_id = 'document_registration', doc.id
                     try:
                         source = await asyncio.to_thread(register, doc, cases[0]['paper'], folder / 'documents' / doc.id, parent_sources=registration_parents)
                         prefix = 'protocol' if doc.role == 'cited_protocol' else 'supplement'
@@ -135,8 +143,12 @@ async def run(snapshot_path, library, vault, output, *, workers=4, selected=None
                             registration_parents['recovered-primary:' + doc.id] = source
                         else: extra[sid] = source
                         documents.append({'id': doc.id, 'status': 'registered_for_fresh_review', 'source_id': sid})
-                    except Exception as exc:
-                        documents.append({'id': doc.id, 'status': 'retrieval_or_registration_held', 'reason': str(exc)})
+                    except (ValueError, URLError, TimeoutError, ConnectionError, HTTPException, SSLError) as exc:
+                        if host_storage_failure(exc):raise
+                        documents.append({'id': doc.id, 'status': 'retrieval_or_registration_held',
+                            'failed_stage': stage, 'exception_type': type(exc).__name__,
+                            'failure_category': 'source_access_or_identity_hold', 'reason': str(exc)})
+                stage, document_id = 'prepare_handoff', None
                 for case in cases:
                     mid = case['selection']['method_id']
                     if primary_found and case['hold']['failure_category'] == 'evidence_recovery_failed':
@@ -149,7 +161,15 @@ async def run(snapshot_path, library, vault, output, *, workers=4, selected=None
                     'findings': str(folder / 'findings.json'), 'usage': result.usage,
                     'elapsed_seconds': result.elapsed_seconds}
             except Exception as exc:
-                states[pid] = {'status': 'investigation_failed', 'methods': mids, 'reason': f'{type(exc).__name__}: {exc}'}
+                storage = host_storage_failure(exc)
+                states[pid] = {'status': 'investigation_failed', 'methods': mids,
+                    'failed_stage': stage, 'exception_type': type(exc).__name__,
+                    'failure_category': ('host_storage_failure' if storage else
+                        'source_execution_failure' if stage in {'source_finder', 'finder_output_validation'} else 'software_error'),
+                    'category': 'source_execution_failure', 'documents': documents,
+                    'reason': f'{type(exc).__name__}: {exc}'}
+                if document_id is not None:states[pid]['failed_document_id'] = document_id
+                if storage:states[pid]['host_failure'] = storage
             checkpoint()
             print(pid + ': ' + states[pid]['status'], flush=True)
             # One bounded handoff after completed source investigation. This is

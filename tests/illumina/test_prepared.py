@@ -1,6 +1,7 @@
 """Prepared dispatch integrity and isolation, not scientific acceptance tests."""
 from unittest.mock import patch
 from types import SimpleNamespace
+from pathlib import Path
 import json
 import pytest
 from genomics_discovery.illumina import prepared
@@ -75,6 +76,23 @@ async def test_non_slurm_fails_before_output(tmp_path,monkeypatch):
     assert not (tmp_path/'never').exists()
 
 
+@pytest.mark.asyncio
+async def test_prepared_mixed_review_seed_goes_directly_to_one_correction(tmp_path,monkeypatch):
+    monkeypatch.setenv('SLURM_JOB_ID','offline-no-model')
+    seed={'directory':str(tmp_path/'preserved'),'pins':{'review.json':'a'*64}}
+    bundle={'method_id':'mixed','prior_status':'needs_revision','reason':'Known revise plus research findings.',
+        'card':pin(tmp_path/'card.json',{'record_id':'mixed'}),'registry':pin(tmp_path/'registry.json',{}),
+        'revision_seed':seed}
+    manifest=tmp_path/'manifest.json';prepared.write(manifest,{'bundles':[bundle]})
+    from unittest.mock import AsyncMock
+    dispatch=AsyncMock(return_value={'status':'research_needed'})
+    with patch.object(prepared,'extract_registered_workflow',dispatch):
+        result=await prepared.run_prepared(manifest,tmp_path/'run',workers=1,max_revisions=2,worker=object())
+    assert result['cards']['mixed']['status']=='research_needed'
+    assert dispatch.await_count==1 and dispatch.call_args.kwargs['revision_seed']==seed
+    assert dispatch.call_args.kwargs['max_revisions']==1
+
+
 @pytest.mark.parametrize('fault',[None,'quote','field','question','scope'])
 def test_adjudication_binds_questions_fields_and_literal_source_premises(fault):
     value={'unknowns':[{'question':'Which reported route applies?','blocking':True}]}
@@ -92,7 +110,8 @@ def test_adjudication_binds_questions_fields_and_literal_source_premises(fault):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize('fresh_outcome',['research_needed','needs_revision','supported'])
-async def test_real_adjudication_review_routes_only_actual_repair_verdict(tmp_path,monkeypatch,fresh_outcome):
+@pytest.mark.parametrize('auto_recovery',[False,True])
+async def test_real_adjudication_review_routes_only_actual_repair_verdict(tmp_path,monkeypatch,fresh_outcome,auto_recovery):
     from dataclasses import asdict
     import copy
     from genomics_discovery.execution.codex_worker import WorkerResult
@@ -132,7 +151,9 @@ async def test_real_adjudication_review_routes_only_actual_repair_verdict(tmp_pa
     request={'question':'Reassess this exact source claim.','scope_rationale':'Same method and scope.',
         'field_bindings':[{'pointer':'/scope','value_sha256':prepared.digest(candidate.scope)}],
         'source_premises':[{'source_id':quote.source_id,'quote':quote.quote}]}
-    manifest=tmp_path/'cases.json';prepared.write(manifest,{'cases':[{'method_id':candidate.record_id,'prior':prior,'request':request}]})
+    config={'cases':[{'method_id':candidate.record_id,'prior':prior,'request':request}]}
+    if auto_recovery:config['recovery']={'max_rounds':1,'state_directory':str(tmp_path/'cohort_recovery')}
+    manifest=tmp_path/'cases.json';prepared.write(manifest,config)
     class Worker:
         async def run(self,prompt,attempt,*,image_paths=()):
             doc=review({'research_needed':'research','needs_revision':'revise','supported':'accept'}[fresh_outcome])
@@ -147,11 +168,24 @@ async def test_real_adjudication_review_routes_only_actual_repair_verdict(tmp_pa
     async def corrected(*args,**kw):
         assert kw['max_revisions']==1 and 'revision_seed' in kw
         assert prepared.read(kw['revision_seed']['directory']+'/review.json')['checks']
-        return {'status':'research_needed'}
+        return {'status':'supported'}
+    from genomics_discovery.illumina import review_recovery
+    from unittest.mock import AsyncMock
+    from functools import partial
+    cache=AsyncMock(return_value={'sources':{}})
+    monkeypatch.setattr(prepared,'recover_review',partial(review_recovery.recover_review,cache_lookup=cache))
     monkeypatch.setenv('SLURM_JOB_ID','offline-no-model')
     with patch.object(prepared,'extract_registered_workflow',side_effect=corrected) as repair:
         result=await prepared.adjudicate(manifest,tmp_path/'adjudication',workers=1,worker=Worker())
     row=result['cards'][candidate.record_id]
-    assert row['status']==('research_needed' if fresh_outcome=='needs_revision' else fresh_outcome),row
+    assert row['status']==('supported' if fresh_outcome=='needs_revision' else fresh_outcome),row
     assert repair.call_count==(1 if fresh_outcome=='needs_revision' else 0)
     assert prepared.read(old/'review.json')['checks']==review('research').model_dump(mode='json')['checks']
+    if fresh_outcome=='research_needed':
+        assert prepared.read(row['attempt_directory']+'/review.json')==review('research').model_dump(mode='json')
+        assert row['attempt_directory']!=str(old)
+    if auto_recovery and fresh_outcome=='research_needed':
+        assert cache.await_count==1 and row['recovery']['status']=='held_no_new_evidence'
+        assert cache.call_args.args[0]['original_directory']==row['attempt_directory']
+        assert cache.call_args.args[0]['review_raw_sha256']==prepared.sha(Path(row['attempt_directory'])/'review.json')
+    else:cache.assert_not_awaited()

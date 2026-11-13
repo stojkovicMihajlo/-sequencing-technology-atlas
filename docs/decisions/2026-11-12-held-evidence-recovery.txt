@@ -134,3 +134,32 @@ targeted jobs exercise those pieces. This decision and the engineering skill do
 not establish that the complete automatic review-to-acquisition return path is
 implemented or validated. Check that path on saved failures and a matched live
 pilot before claiming unattended full-cohort recovery.
+
+13 November implementation update — opt-in return path
+
+illumina/review_recovery.py now owns the bounded request/checkpoint/cache/route
+return path; prepared.py invokes it inside the existing per-method reservation.
+The manifest's recovery policy is off unless max_rounds is nonzero. A cohort can
+use strategy=new_review_request with a pinned case_catalog, library/vault paths
+and optional pinned cache_registries; cache pointers may use {method_id}. New
+methods still require their curated method/publication identity. No per-method
+scientific rule or bespoke new_route file is required by that cohort policy.
+
+Journaled episodes preserve the consumed recovery bound across descendants and
+resumption. Logical tool names/content hashes, exact source state and declared
+route inputs determine reuse; physical runtime paths are provenance. Changed
+explicit root routes create a new recorded episode. Cache-only registration
+cannot fall through to HTTP. New evidence needs original/conversion custody;
+identifier ordering and source aliases do not create new evidence. Storage and
+programming failures retain their failed stage instead of becoming missing facts.
+
+The same host change forwards an actual revision_seed for a saved needs_revision
+verdict directly into the existing author/fresh-review pass. Research snapshots
+retain their fresh review and exact preserved candidate before any recovery.
+The existing scientific prompts, representation and core extractor are unchanged.
+
+Validation:56 combined recovery/dispatch/investigation controls passed locally,
+including real adapters with mocked model/download operations. This establishes
+mechanical behavior, not scientific success on all174methods. Native automatic
+return remains off until a matched source-recovery pilot is demonstrated. Current
+clarification jobs use their already-frozen bounded review/correction runtimes.

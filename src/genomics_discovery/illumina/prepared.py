@@ -17,15 +17,17 @@ from genomics_discovery.illumina.extraction import (
     stage_images, verify_stage_inputs, revision_handoff)
 from genomics_discovery.illumina.models import (
     parse_extraction, parse_review, review_model, validate_review, review_outcome,
-    review_targets, digest, export_graph)
+    review_targets, digest, export_graph, Evidence)
 from genomics_discovery.illumina.prompts import build_prompt
 from genomics_discovery.protocols.extraction.field_review import _resolve
+from genomics_discovery.illumina.review_recovery import recover_review
 
 
 def pinned(descriptor):
     path=Path(descriptor['path'])
-    if sha(path)!=descriptor['sha256']:raise ValueError('Pinned input changed: '+str(path))
-    return read(path)
+    raw=path.read_bytes()
+    if hashlib.sha256(raw).hexdigest()!=descriptor['sha256']:raise ValueError('Pinned input changed: '+str(path))
+    return json.loads(raw)
 
 
 def check_workers(workers):
@@ -124,9 +126,16 @@ async def run_prepared(manifest,output,*,workers=25,max_revisions=2,worker=None)
                 if card['record_id']!=mid:raise ValueError('Card/method identity differs')
                 images=[(sid,Path(s['path'])) for sid,s in registry.items() if s.get('kind')=='image']
                 attempt=output/'cards'/mid/'attempt_001';row.update(status='running',attempt_directory=str(attempt));save()
+                seed=bundle.get('revision_seed')
+                options={'max_revisions':1 if seed is not None else max_revisions,
+                    'representation':'illumina_diagram/1.1'}
+                if seed is not None:options['revision_seed']=seed
                 row.update(await extract_registered_workflow(card,registry,images,attempt,worker,
-                    max_revisions=max_revisions,representation='illumina_diagram/1.1'))
-            except Exception as exc:row.update(status='failed',reason=f'{type(exc).__name__}: {exc}')
+                    **options))
+                policy={**document.get('recovery',{}),**bundle.get('recovery',{})}
+                if row['status']=='research_needed' and policy.get('max_rounds',0):
+                    row.update(await recover_review(row,attempt,output/'recovery'/mid,worker,policy))
+            except Exception as exc:row.update(status='failed',failure_category=getattr(exc,'category','software_error'),reason=f'{type(exc).__name__}: {exc}')
             save()
     ids=[b['method_id'] for b in document['bundles']]
     if len(ids)!=len(set(ids)):raise ValueError('Duplicate prepared method')
@@ -141,14 +150,20 @@ async def recover(config_path,output,*,workers=25):
     snapshot=prepare_recovery(config,ledger,output)
     # Reuse the investigator/registration contract that produced the prior native run.
     from experiments.card_methods_full_20261112.investigate_holds import run as investigate
-    from experiments.diagram_paper_pilot_20261106.run import prepare_method,dependency_reference
+    from experiments.diagram_paper_pilot_20261106.run import prepare_method,dependency_reference,SourceUnavailable
     async def handoff(pid,cases,additions,overrides,finding):
         result={}
         for case in cases:
             method=case['selection'];mid=method['method_id'];old=ledger['cards'][mid]
             folder=output/'prepared'/mid;folder.mkdir(parents=True)
             try:
-                if finding.get('status')=='investigation_failed':raise ValueError('Finder failed; no unchanged retry')
+                if finding.get('status')=='investigation_failed':
+                    result[mid]={'status':'failed','failure_category':finding.get('failure_category','source_investigation_failure'),
+                        'reason':finding.get('reason','Finder failed; no unchanged retry'),
+                        'exception_type':finding.get('exception_type')}
+                    ledger['cards'][mid]['continuation']=result[mid]
+                    write(output/'METHOD_LEDGER.json',ledger)
+                    continue
                 if old.get('attempt_directory'):
                     prior=Path(old['attempt_directory']);card=read(prior/'card.json');registry=read(prior/'source_registry.json')
                 else:
@@ -157,7 +172,7 @@ async def recover(config_path,output,*,workers=25):
                 baseline={text_identity(s) for s in registry.values() if s.get('kind')=='text'}
                 supplied=additions.get(mid,{})
                 distinct={sid:s for sid,s in supplied.items() if s.get('kind')=='text' and text_identity(s) not in baseline}
-                if not distinct and not overrides.get(mid):raise ValueError('No distinct registered evidence; retain source/adjudication hold')
+                if not distinct and not overrides.get(mid):raise SourceUnavailable('No distinct registered evidence; retain source/adjudication hold')
                 for sid,s in distinct.items():
                     if sid in registry and registry[sid]!=s:raise ValueError('New source ID conflicts with earlier registration')
                     registry[sid]=s
@@ -171,7 +186,9 @@ async def recover(config_path,output,*,workers=25):
                 write(folder/'manifest.json',bundles)
                 state=await run_prepared(folder/'manifest.json',folder/'extraction',workers=1,max_revisions=2)
                 result[mid]=state['cards'][mid]
-            except Exception as exc:result[mid]={'status':'source_recovery_needed','reason':str(exc)}
+            except SourceUnavailable as exc:result[mid]={'status':'source_recovery_needed','failure_category':'source_unavailable','reason':str(exc)}
+            except Exception as exc:result[mid]={'status':'failed','failure_category':getattr(exc,'category','software_error'),
+                'stage':'prepared_source_handoff','exception_type':type(exc).__name__,'reason':str(exc)}
             ledger['cards'][mid]['continuation']=result[mid]
             ledger['continuation_counts']=dict(Counter(r.get('continuation',r)['status'] for r in ledger['cards'].values()))
             write(output/'METHOD_LEDGER.json',ledger)
@@ -194,7 +211,10 @@ def validate_adjudication_request(request,candidate,registry):
             raise ValueError('Adjudication candidate field changed')
     for evidence in request['source_premises']:
         source=registry.get(evidence['source_id'],{})
-        if not evidence.get('quote') or evidence['quote'] not in source.get('text',''):
+        if evidence.get('basis')=='image':
+            Evidence.model_validate(evidence)
+            if source.get('kind')!='image':raise ValueError('Image premise is not a registered image')
+        elif not evidence.get('quote') or evidence['quote'] not in source.get('text',''):
             raise ValueError('Adjudication premise is not in registered text')
 
 
@@ -282,7 +302,7 @@ async def adjudicate(manifest,output,*,workers=7,worker=None):
                     row.update(await extract_registered_workflow(card,registry,images,folder/'corrected',worker,
                         max_revisions=1,representation='illumina_diagram/1.1',revision_seed=binding))
                     row['attempt_directory']=str(folder/'corrected')
-                elif outcome=='supported':
+                else:
                     reviewed=folder/'reviewed';reviewed.mkdir()
                     for name,value in [('card.json',card),('source_registry.json',registry),
                         ('extraction.json',candidate.model_dump(mode='json')),('review.json',review.model_dump(mode='json'))]:write(reviewed/name,value)
@@ -291,14 +311,13 @@ async def adjudicate(manifest,output,*,workers=7,worker=None):
                     write(reviewed/'stages.json',[{'role':'reviewer','status':'validated','path':str(attempt),
                         'thread_id':assessment.thread_id,'usage':assessment.usage,'input_pins':pins,
                         'artifact_sha256':sha(attempt/'artifact.json'),'adjudication_of_preserved_candidate':True}])
-                    row.update(status='supported',attempt_directory=str(reviewed),candidate_sha256=digest(candidate),
+                    row.update(status=outcome,attempt_directory=str(reviewed),candidate_sha256=digest(candidate),
                         review_sha256=digest(review),original_attempt=str(old),closure=str(folder/'closure.json'),
                         artifact_pins={n:sha(reviewed/n) for n in ['card.json','source_registry.json','extraction.json','review.json','graph.json','stages.json']})
-                else:
-                    # This fresh complete review changes no old record and clears no blocking Unknown.
-                    row.update(status=outcome,review=str(attempt/'artifact.json'),review_sha256=sha(attempt/'artifact.json'),
-                        candidate_sha256=digest(candidate),original_attempt=str(old),closure=str(folder/'closure.json'))
                 row.pop('active_role',None)
+                policy={**config.get('recovery',{}),**case.get('recovery',{})}
+                if row['status']=='research_needed' and policy.get('max_rounds',0):
+                    row.update(await recover_review(row,row['attempt_directory'],folder/'recovery',worker,policy))
             except Exception as exc:
                 row.update(status='failed',reason=f'{type(exc).__name__}: {exc}')
                 if 'attempt' in locals() and (attempt/'events.jsonl').exists():

@@ -123,8 +123,7 @@ def verify_pdf_text(first_pages, identity):
             r"10\.\d{4,9}/[^\s<>\"']+", identity_front, re.I)}
         if doi and printed_dois - {_doi(doi)}:
             raise ValueError("Conflicting early-page DOI requires explicit publication inspection")
-        doi_match = bool(doi and re.search(
-            r"(?<![\w])" + re.escape(doi) + r"(?![\w./-])", identity_front, re.I))
+        doi_match = bool(doi and _doi(doi) in printed_dois)
         pmid = identity.get("pmid")
         pmid_match = bool(pmid and re.search(r"\bPMID\s*:?\s*" + re.escape(pmid) + r"\b", identity_front, re.I))
         if doi_match or pmid_match:

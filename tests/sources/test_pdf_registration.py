@@ -113,6 +113,18 @@ def test_full_title_and_printed_identifier():
     assert pdf.verify_pdf_text("Cover\f" + TITLE + "\nPMID: 123", {"title": TITLE, "pmid": "123"})["pdf_page"] == 2
 
 
+@pytest.mark.parametrize('punctuation',['.',',',';',':',')',']'])
+def test_exact_printed_doi_accepts_citation_punctuation(punctuation):
+    assert pdf.verify_pdf_text(TITLE+'\ndoi:'+DOI+punctuation,
+        {'title':TITLE,'doi':DOI})['printed_identifier']=='doi'
+
+
+@pytest.mark.parametrize('suffix',['.extra','/extra','-extra','0'])
+def test_printed_doi_suffix_is_a_different_identifier(suffix):
+    with pytest.raises(ValueError,match='Conflicting early-page DOI|First two PDF pages'):
+        pdf.verify_pdf_text(TITLE+'\ndoi:'+DOI+suffix+'.',{'title':TITLE,'doi':DOI})
+
+
 @pytest.mark.skipif(not shutil.which("pdftotext"), reason="Poppler unavailable")
 def test_original_rendition_packet_and_receipts_roundtrip(tmp_path):
     original = tmp_path / "article.pdf"; make_pdf(original, TITLE + "\ndoi: " + DOI + "\nMethods\nOriginal procedure text.")
