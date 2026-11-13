@@ -424,7 +424,9 @@ def recovered_sources(previous, cache_path):
     """Upgrade only already nominated, identity-bound missing earlier texts."""
     cache=validate_reference_cache(read(cache_path))
     sources=read(previous/'inputs/sources.json');refs=read(previous/'inputs/bibliography.json')
-    nominations=CurrentNominations.model_validate(read(previous/'nominations.json'))
+    nomination_data=read(previous/'nominations.json')
+    schema=CurrentNominations if 'excluded_references' in nomination_data else Nominations
+    nominations=schema.model_validate(nomination_data)
     validate_nominations(nominations,sources,refs)
     nominated=[row.reference_id for row in nominations.references]
     upgrades={}
@@ -586,6 +588,10 @@ async def execute(args):
             "self_check": shlex.join(check_command),
             "source_levels": {k: {"level": v["content_level"], "title": v.get('title'),
                                     "characters": len(v['text'])} for k,v in read(source_file).items()}}
+        if source_recovery:
+            context['source_recovery']={'reason':state['source_recovery']['reason'],
+                'upgraded_source_ids':list(state['source_recovery']['upgrades']),
+                'provenance':str(inputs/'source_recovery.json')}
         if getattr(args, 'reading_policy', 'full') == 'focused':
             context['reading_policy'] = 'focused'
             if role != 'nominate':
@@ -651,8 +657,11 @@ async def execute(args):
         if source_recovery:
             record=state['source_recovery'];prior,original=validate_completed_citation(Path(record['previous_run']))
             validate_source_recovery(Path(record['previous_run']),root,record,prior,original)
+        # Legacy nomination has no complete exclusion ledger. Preserve that
+        # boundary rather than fabricating dispositions during source recovery.
+        export_nominations=(None if source_recovery and not isinstance(nominations,CurrentNominations) else nominations)
         overlay = graph_overlay(analysis, review, sources, sha(analysis_path), read(inputs / 'seed_binding.json'),
-                                catalogue=read(inputs / 'catalogue.json'), nominations=nominations)
+                                catalogue=read(inputs / 'catalogue.json'), nominations=export_nominations)
         write(root / 'analysis.json', analysis.model_dump())
         write(root / 'review.json', review.model_dump())
         write(root / 'graph.json', overlay)

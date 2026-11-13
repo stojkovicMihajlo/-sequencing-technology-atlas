@@ -662,7 +662,7 @@ def test_current_comparison_keeps_citation_context_without_becoming_history():
     assert g['links'][0]['claim']['citation_context'] == SOURCES['seed']['text']
 
 
-def review_only_completion_fixture(tmp_path, *, bad_provenance=False, missing_reference=False, include_stage=False):
+def review_only_completion_fixture(tmp_path, *, bad_provenance=False, missing_reference=False, include_stage=False,legacy_nomination=False):
     """Synthetic archives exercising the real transport, science and graph checks."""
     import run as runner
     base = tmp_path / 'research'; inputs = base / 'inputs'; inputs.mkdir(parents=True)
@@ -682,7 +682,7 @@ def review_only_completion_fixture(tmp_path, *, bad_provenance=False, missing_re
         'reason_to_follow': 'Resolve the comparison baseline',
         'seed_evidence': [{'source_id': 'seed', 'quote': SOURCES['seed']['text']}]}],
         'selection_rationale': 'Synthetic fixture', 'unresolved_searches': []}
-    if missing_reference:nominations.update(format_version='citation_nomination/2',excluded_references={})
+    if missing_reference and not legacy_nomination:nominations.update(format_version='citation_nomination/2',excluded_references={})
     analysis, review = case()
 
     def stage(root, role, document, thread):
@@ -745,10 +745,10 @@ def test_review_only_completion_rejects_recorded_but_false_prior_source_pin(tmp_
         runner.validate_completed_citation(current)
 
 
-def source_recovery_fixture(tmp_path):
+def source_recovery_fixture(tmp_path,*,legacy_nomination=False):
     import run as runner
     from change_models import ChangeAnalysis,CoverageMethodReview
-    base,previous,stage=review_only_completion_fixture(tmp_path,missing_reference=True,include_stage=True)
+    base,previous,stage=review_only_completion_fixture(tmp_path,missing_reference=True,include_stage=True,legacy_nomination=legacy_nomination)
     original=tmp_path/'recovered.xml';original.write_text('<article><front><article-meta>'
         '<article-id pub-id-type="pmid">123</article-id></article-meta></front><body><p>'
         +SOURCES['R1']['text']+' Full molecular implementation is now available.</p></body></article>')
@@ -783,7 +783,7 @@ def source_recovery_fixture(tmp_path):
     runner.write(current/'analysis.json',analysis.model_dump(mode='json'));runner.write(current/'review.json',review.model_dump(mode='json'))
     runner.write(current/'graph.json',graph_overlay(analysis,review,runner.read(inputs/'sources.json'),
         runner.sha(author_path),runner.read(inputs/'seed_binding.json'),catalogue=[],
-        nominations=CurrentNominations.model_validate(runner.read(current/'nominations.json'))))
+        nominations=(None if legacy_nomination else CurrentNominations.model_validate(runner.read(current/'nominations.json')))))
     runner.write(current/'state.json',{'status':'completed','stages':[author,reviewer],
         'source_recovery':runner.read(inputs/'source_recovery.json')})
     return previous,current,cache
@@ -800,6 +800,15 @@ def test_source_recovery_reuses_real_validated_nomination_and_requires_fresh_ana
     assert (previous/'state.json').read_bytes()==prior
     assert runner.read(current/'inputs/sources.json')['R1']['content_level']=='fulltext'
     assert runner.read(previous/'inputs/sources.json')['R1']['content_level']=='abstract'
+
+
+def test_source_recovery_preserves_legacy_nomination_without_inventing_exclusion_accounting(tmp_path):
+    import run as runner
+    previous,current,_=source_recovery_fixture(tmp_path,legacy_nomination=True)
+    runner.validate_completed_citation(current)
+    assert (current/'nominations.json').read_bytes()==(previous/'nominations.json').read_bytes()
+    assert 'excluded_references' not in runner.read(current/'nominations.json')
+    assert 'reference_ledger' not in runner.read(current/'graph.json')
 
 
 @pytest.mark.parametrize('defect',['seed','bibliography','catalogue','donor','provenance','missing_analysis'])
