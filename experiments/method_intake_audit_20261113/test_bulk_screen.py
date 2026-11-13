@@ -185,6 +185,40 @@ class BulkTests(unittest.TestCase):
             asyncio.run(bulk.repair_complete_transport(path,self.root/'repair',worker))
         self.assertEqual(worker.calls,[])
 
+    def test_final_composition_keeps_both_pinned_repairs_and_only_new_batch_downloads(self):
+        p=self.pool([paper(i,'A protocol for Saccharomyce cerevisiae sequencing.') for i in range(1,6)])
+        class TypoWorker(Worker):
+            async def run(self,prompt,attempt,**kwargs):
+                result=await super().run(prompt,attempt,**kwargs)
+                value=json.loads((attempt/'final.txt').read_text())
+                for row in value['papers']:
+                    if row['pmid'] in {'2','4'}:row['methodological_claim_quote']=row['methodological_claim_quote'].replace('Saccharomyce','Saccharomyces')
+                final=json.dumps(value);(attempt/'final.txt').write_text(final)
+                events=[json.loads(line) for line in (attempt/'events.jsonl').read_text().splitlines()]
+                next(e for e in events if e['type']=='item.completed')['item']['text']=final
+                (attempt/'events.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in events));return result
+        self.run_screen(p,TypoWorker(),batch_size=2)
+        attempts=sorted((self.root/'screen').glob('0000[12]-*'));prior=[];outputs=[]
+        for index,original in enumerate(attempts):
+            config={'original_attempt':str(original),'source_pins':{name:bulk.pilot.sha(original/name) for name in ['papers.json','final.txt','events.jsonl','result.json','EXPECTED.json']},
+                'reserved_repair_slots':1,'bulk_source_slots':0,'extraction_reserved_max':49,'max_repair_papers':1,
+                'source_inputs':{'pool':{'path':str(p),'sha256':bulk.pilot.sha(p)},'overlays':[]},'prior_patches':list(prior)}
+            path=self.root/f'config-{index}.json';bulk.write(path,config);output=self.root/f'repair-{index}';worker=Worker()
+            asyncio.run(bulk.repair_complete_transport(path,output,worker))
+            self.assertEqual(worker.calls,[[str(2+2*index)]])
+            patch=output/'VALIDATION_REPAIR.json';prior.append({'path':str(patch),'sha256':bulk.pilot.sha(patch)});outputs.append(output)
+        combined=bulk.read(outputs[-1]/'CONSOLIDATED_SCREENING.json')
+        self.assertEqual(combined['counts'],{'screened_validation_repair':4,'screened':1})
+        self.assertEqual(len(combined['binding']['correction_overlays']),2)
+        self.assertEqual(combined['binding']['correction_overlays'][0]['sha256'],prior[0]['sha256'])
+        selection=bulk.read(outputs[-1]/'PUBLICATION_SELECTION.json')
+        self.assertEqual([r['pmid'] for r in selection['new_from_failed_batch_correction']],['3','4'])
+        self.assertEqual([r['pmid'] for r in selection['all_failed_batch_correction_candidates']],['1','2','3','4'])
+        worker=Worker();config['prior_patches'][0]['sha256']='0'*64;bulk.write(path,config)
+        with self.assertRaisesRegex(ValueError,'Pinned input/runtime changed'):
+            asyncio.run(bulk.repair_complete_transport(path,self.root/'rejected-repair',worker))
+        self.assertEqual(worker.calls,[])
+
     def test_rubric_includes_improvements_and_has_no_seq_name_requirement(self):
         self.assertIn('library-preparation, enzyme',bulk.RUBRIC)
         self.assertIn("need not introduce a wholly new architecture or a named '-seq'",bulk.RUBRIC)
