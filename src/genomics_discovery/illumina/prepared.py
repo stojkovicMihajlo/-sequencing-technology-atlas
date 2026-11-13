@@ -5,12 +5,21 @@ import asyncio
 from collections import Counter
 import copy
 import hashlib
+import json
 import os
 from pathlib import Path
+import shlex
+import sys
 
 from genomics_discovery.execution.codex_worker import CodexWorker, classify_archived_terminal_failure
 from genomics_discovery.illumina.extraction import (
-    extract_registered_workflow, read, write, sha, revalidate_completed, verify_registry_files)
+    extract_registered_workflow, read, write, sha, revalidate_completed, verify_registry_files,
+    stage_images, verify_stage_inputs, revision_handoff)
+from genomics_discovery.illumina.models import (
+    parse_extraction, parse_review, review_model, validate_review, review_outcome,
+    review_targets, digest, export_graph)
+from genomics_discovery.illumina.prompts import build_prompt
+from genomics_discovery.protocols.extraction.field_review import _resolve
 
 
 def pinned(descriptor):
@@ -173,16 +182,143 @@ async def recover(config_path,output,*,workers=25):
             'methods_investigated':len(snapshot['cases']),'ledger':str(output/'METHOD_LEDGER.json')}
 
 
+def validate_adjudication_request(request,candidate,registry):
+    """Bind the curation question, never certify its proposed scientific answer."""
+    if not request.get('question') or not request.get('scope_rationale'):
+        raise ValueError('Adjudication requires a focused question and scope rationale')
+    if not request.get('field_bindings') or not request.get('source_premises'):
+        raise ValueError('Adjudication requires exact candidate fields and source premises')
+    value=candidate.model_dump(mode='json')
+    for binding in request['field_bindings']:
+        if digest(_resolve(value,binding['pointer']))!=binding['value_sha256']:
+            raise ValueError('Adjudication candidate field changed')
+    for evidence in request['source_premises']:
+        source=registry.get(evidence['source_id'],{})
+        if not evidence.get('quote') or evidence['quote'] not in source.get('text',''):
+            raise ValueError('Adjudication premise is not in registered text')
+
+
+async def adjudicate(manifest,output,*,workers=7,worker=None):
+    """Fresh full review, then existing revision_seed only for an actual repair verdict.
+
+    This is curation of real held records, not agreement scoring. Every slot is
+    reserved through its reviewer, any author correction and final fresh review.
+    """
+    if not os.environ.get('SLURM_JOB_ID'):raise ValueError('Adjudication requires Qiu Slurm')
+    check_workers(workers);config=read(manifest);output=Path(output);output.mkdir(parents=True,exist_ok=False)
+    worker=worker or CodexWorker(model='gpt-6.1-sol',effort='xhigh',timeout_seconds=None,
+        web_search=False,network_access=False,pin_shell_environment=True)
+    state={'cards':{},'native_slot_limit':workers,'manifest_sha256':sha(manifest)}
+    semaphore=asyncio.Semaphore(workers)
+    def save():
+        state['counts']=dict(Counter(r['status'] for r in state['cards'].values()));write(output/'state.json',state)
+    async def one(case):
+        mid=case['method_id'];row=state['cards'][mid]={'record_id':mid,'status':'pending'};save()
+        async with semaphore:
+            try:
+                prior=case['prior'];old=Path(prior['attempt_directory'])
+                if prior['status']!='research_needed':raise ValueError('Adjudicate a completed research hold only')
+                for name,pin in prior['artifact_pins'].items():
+                    if sha(old/name)!=pin:raise ValueError('Prior reviewed artifact changed')
+                card=read(old/'card.json');registry=read(old/'source_registry.json');verify_registry_files(registry)
+                candidate=parse_extraction((old/'extraction.json').read_bytes());previous=parse_review((old/'review.json').read_bytes())
+                if validate_review(previous,candidate,registry):raise ValueError('Invalid previous review')
+                request=case['request'];validate_adjudication_request(request,candidate,registry)
+                folder=output/mid;attempt=folder/'adjudication_reviewer';attempt.mkdir(parents=True)
+                for name,value in [('card.json',card),('source_registry.json',registry),
+                    ('candidate.json',candidate.model_dump(mode='json')),('adjudication_request.json',request)]:write(attempt/name,value)
+                images=[(sid,Path(s['path'])) for sid,s in registry.items() if s.get('kind')=='image']
+                attached,delivery=stage_images(images,attempt)
+                schema=attempt/'schema.json';write(schema,review_model('illumina_diagram_review/1.2').model_json_schema())
+                last=Path(read(old/'stages.json')[-1]['path'])
+                context,_=json.JSONDecoder().raw_decode((last/'stage_prompt.txt').read_text().split('CALLER CONTEXT\n',1)[1])
+                context.update(candidate=str(attempt/'candidate.json'),candidate_sha256=digest(candidate),
+                    source_registry=str(attempt/'source_registry.json'),card=str(attempt/'card.json'),
+                    attached_images=delivery,output=str(attempt/'artifact.json'),
+                    review_format_version='illumina_diagram_review/1.2',
+                    review_targets=sorted(review_targets(candidate,format_version='illumina_diagram_review/1.2')),
+                    adjudication_request={'path':str(attempt/'adjudication_request.json'),
+                        'sha256':sha(attempt/'adjudication_request.json'),
+                        'question':request['question'],'scope_rationale':request['scope_rationale'],
+                        'field_bindings':request['field_bindings'],'source_premises':request['source_premises'],
+                        'boundary':'Explicit curation question/premises, not source evidence or permission to waive facts. Preserve method, focal implementation and scientific scope; retain unresolved if the registered sources do not answer.'})
+                command=[sys.executable,'-m','genomics_discovery.illumina.extraction']
+                context['source_helper']=shlex.join(command+['source','--registry',str(attempt/'source_registry.json')])
+                context['self_check']=shlex.join(command+['check',str(attempt/'artifact.json'),'--registry',str(attempt/'source_registry.json'),
+                    '--record-id',mid,'--card',str(attempt/'card.json'),'--candidate',str(attempt/'candidate.json'),
+                    '--review-format','illumina_diagram_review/1.2'])
+                feedback=revision_handoff(attempt,candidate,previous);context['revision_feedback']=feedback
+                context['artifact_helper']=shlex.join(command+['artifact'])
+                prompt=build_prompt('reviewer',context,schema);(attempt/'stage_prompt.txt').write_text(prompt)
+                fixed=[schema,attempt/'stage_prompt.txt',attempt/'image_delivery.json',attempt/'card.json',
+                    attempt/'source_registry.json',attempt/'candidate.json',attempt/'adjudication_request.json']
+                fixed.extend(Path(d['path']) for d in feedback.values());pins={str(p):sha(p) for p in fixed}
+                write(attempt/'input_pins.json',pins);row.update(status='running',active_role='adjudication_reviewer');save()
+                result=await worker.run(prompt,attempt,image_paths=attached)
+                from genomics_discovery.execution.codex_worker import assess_archived_attempt
+                assessment=assess_archived_attempt(attempt)
+                if result.error or result.exit_code or not assessment.complete:raise ValueError('Adjudication native review did not complete')
+                if result.thread_id!=assessment.thread_id or result.usage!=assessment.usage:raise ValueError('Review transport differs')
+                if (attempt/'prompt.txt').read_text()!=prompt:raise ValueError('Archived review prompt differs')
+                verify_stage_inputs(attempt,delivery,pins);verify_registry_files(registry)
+                review=parse_review((attempt/'artifact.json').read_bytes())
+                if errors:=validate_review(review,candidate,registry):raise ValueError('; '.join(errors))
+                outcome=review_outcome(review,candidate,registry,source_mode=card.get('source_mode','diagram'))
+                old_checks={c.target:(i,c) for i,c in enumerate(previous.checks)}
+                closure={'candidate_sha256':digest(candidate),'previous_review_sha256':sha(old/'review.json'),
+                    'fresh_review_sha256':sha(attempt/'artifact.json'),'request_sha256':sha(attempt/'adjudication_request.json'),
+                    'scope_rationale':request['scope_rationale'],'field_bindings':request['field_bindings'],
+                    'outcome':outcome,'decisions':[{'target':c.target,'previous_pointer':'/checks/'+str(old_checks[c.target][0]),
+                        'fresh_pointer':'/checks/'+str(i),'previous_action':old_checks[c.target][1].action,
+                        'fresh_action':c.action,'rationale':c.rationale,'evidence':[e.model_dump(mode='json') for e in c.evidence]}
+                        for i,c in enumerate(review.checks) if old_checks[c.target][1].action!='accept']}
+                write(folder/'closure.json',closure)
+                if outcome=='needs_revision':
+                    seed=folder/'repair_seed';seed.mkdir()
+                    for name,value in [('card.json',card),('source_registry.json',registry),
+                        ('extraction.json',candidate.model_dump(mode='json')),('review.json',review.model_dump(mode='json'))]:write(seed/name,value)
+                    binding={'directory':str(seed),'pins':{n:sha(seed/n) for n in ['card.json','source_registry.json','extraction.json','review.json']}}
+                    row.update(active_role='author_correction');save()
+                    row.update(await extract_registered_workflow(card,registry,images,folder/'corrected',worker,
+                        max_revisions=1,representation='illumina_diagram/1.1',revision_seed=binding))
+                    row['attempt_directory']=str(folder/'corrected')
+                elif outcome=='supported':
+                    reviewed=folder/'reviewed';reviewed.mkdir()
+                    for name,value in [('card.json',card),('source_registry.json',registry),
+                        ('extraction.json',candidate.model_dump(mode='json')),('review.json',review.model_dump(mode='json'))]:write(reviewed/name,value)
+                    graph=export_graph(candidate,review,registry,source_mode=card.get('source_mode','diagram'))
+                    write(reviewed/'graph.json',graph)
+                    write(reviewed/'stages.json',[{'role':'reviewer','status':'validated','path':str(attempt),
+                        'thread_id':assessment.thread_id,'usage':assessment.usage,'input_pins':pins,
+                        'artifact_sha256':sha(attempt/'artifact.json'),'adjudication_of_preserved_candidate':True}])
+                    row.update(status='supported',attempt_directory=str(reviewed),candidate_sha256=digest(candidate),
+                        review_sha256=digest(review),original_attempt=str(old),closure=str(folder/'closure.json'),
+                        artifact_pins={n:sha(reviewed/n) for n in ['card.json','source_registry.json','extraction.json','review.json','graph.json','stages.json']})
+                else:
+                    # This fresh complete review changes no old record and clears no blocking Unknown.
+                    row.update(status=outcome,review=str(attempt/'artifact.json'),review_sha256=sha(attempt/'artifact.json'),
+                        candidate_sha256=digest(candidate),original_attempt=str(old),closure=str(folder/'closure.json'))
+                row.pop('active_role',None)
+            except Exception as exc:
+                row.update(status='failed',reason=f'{type(exc).__name__}: {exc}')
+                if 'attempt' in locals() and (attempt/'events.jsonl').exists():
+                    row['failure_diagnostic']=classify_archived_terminal_failure(attempt)
+            save()
+    ids=[c['method_id'] for c in config['cases']]
+    if len(ids)!=len(set(ids)):raise ValueError('Duplicate adjudication method')
+    await asyncio.gather(*(one(c) for c in config['cases']));return state
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);s=p.add_subparsers(dest='command',required=True)
-    for name in ('run','recover'):
+    for name in ('run','recover','adjudicate'):
         q=s.add_parser(name);q.add_argument('manifest',type=Path);q.add_argument('--output',type=Path,required=True)
         q.add_argument('--workers',type=int,default=25)
         if name=='run':q.add_argument('--max-revisions',type=int,default=2)
     a=p.parse_args()
     result=asyncio.run(recover(a.manifest,a.output,workers=a.workers) if a.command=='recover' else
+        adjudicate(a.manifest,a.output,workers=a.workers) if a.command=='adjudicate' else
         run_prepared(a.manifest,a.output,workers=a.workers,max_revisions=a.max_revisions))
-    import json
     print(json.dumps(result.get('counts',result),indent=2))
 
 

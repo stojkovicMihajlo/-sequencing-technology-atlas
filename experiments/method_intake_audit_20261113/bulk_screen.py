@@ -178,6 +178,7 @@ async def screen(pool,output,worker,*,pool_sha256,overlays=(),agents=10,batch_si
     if output.exists():
         if not resume or read(output/'PLAN.json')!=config:raise ValueError('Existing output requires same-input/prompt/runtime resume')
     else:output.mkdir(parents=True);write(output/'PLAN.json',config)
+    write(output/'UNSCREENABLE.json',{'papers':missing,'boundary':'Source/context holds, never negative method judgments.'})
     semaphore=asyncio.Semaphore(agents)
     states={f'{i+1:05d}-{digest(batch)[:12]}':{'status':'queued','pmids':[p['pmid'] for p in batch]} for i,batch in enumerate(batches)}
     def checkpoint():write(output/'STATE.json',{'batches':states,'counts':dict(Counter(x['status'] for x in states.values())),
@@ -232,6 +233,47 @@ async def screen(pool,output,worker,*,pool_sha256,overlays=(),agents=10,batch_si
     write(output/'SCREENING.json',result);return result
 
 
+def consolidate_repair(original,patch,source_inputs,output):
+    """Create a separate checkpoint view; replace only bound failed-batch rows."""
+    original=Path(original);output=Path(output);base=original.parent;plan=read(base/'PLAN.json')
+    verify_pins(patch['source_pins'])
+    expected_pins={str(Path(source_inputs['pool']['path']).resolve()):source_inputs['pool']['sha256']}
+    expected_pins.update({str(Path(o['path']).resolve()):o['sha256'] for o in source_inputs.get('overlays',[])})
+    if plan['input_pins']!=expected_pins:raise ValueError('Correction metadata inputs differ from original planned cohort')
+    state_raw=(base/'STATE.json').read_bytes();state=json.loads(state_raw)
+    if state['batches'].get(original.name,{}).get('status')!='failed':raise ValueError('Correction may replace only an original failed batch')
+    write(output/'BASE_STATE_SNAPSHOT.json',json.loads(state_raw))
+    rows={}
+    for batch,entry in state['batches'].items():
+        if entry['status']=='complete':
+            path=base/batch/'artifact.json'
+            if pilot.sha(path)!=entry['artifact_sha256']:raise ValueError('Base accepted artifact changed')
+            for row in read(path)['papers']:rows[row['pmid']]={**row,'status':'screened','route':route_for(row),'batch':batch}
+        else:
+            for pmid in entry['pmids']:rows[pmid]={'pmid':pmid,'classification':None,'status':'screening_batch_failed' if entry['status']=='failed' else 'screening_'+entry['status'],
+                                                'route':'screening_failure_review' if entry['status']=='failed' else 'pending_screening','batch':batch}
+    if (base/'UNSCREENABLE.json').is_file():missing=read(base/'UNSCREENABLE.json')['papers']
+    else:
+        if plan.get('excluded_planned_papers',0):raise ValueError('Older excluded-cohort run lacks explicit unscreenable roster')
+        _,missing,_=load_pool(source_inputs['pool']['path'],source_inputs['pool']['sha256'],[(o['path'],o['sha256']) for o in source_inputs.get('overlays',[])])
+    rows.update({r['pmid']:r for r in missing})
+    for row in patch['papers']:
+        old=rows.get(row['pmid'])
+        if not old or old.get('status')!='screening_batch_failed' or old.get('batch')!=original.name:
+            raise ValueError('Correction attempted to replace a valid/running/queued or unrelated decision')
+        rows[row['pmid']]={**row,'status':'screened_validation_repair','batch':original.name,'correction_overlay':'VALIDATION_REPAIR.json'}
+    binding={'base_plan':{'path':str(base/'PLAN.json'),'sha256':pilot.sha(base/'PLAN.json')},
+             'base_state_snapshot_sha256':hashlib.sha256(state_raw).hexdigest(),'original_attempt':str(original),
+             'source_pins':patch['source_pins'],'correction_sha256':pilot.sha(output/'VALIDATION_REPAIR.json')}
+    write(output/'CONSOLIDATED_SCREENING.json',{'version':'bulk_screening_corrected_checkpoint/1','binding':binding,
+        'papers':sorted(rows.values(),key=lambda r:int(r['pmid'])),'counts':dict(Counter(r['status'] for r in rows.values())),
+        'boundary':'Checkpoint plus a pinned correction overlay. Active original STATE, artifacts and final SCREENING remain unchanged.'})
+    new=[r for r in patch['papers'] if r['route']=='acquisition_review_candidate']
+    write(output/'PUBLICATION_SELECTION.json',{'binding':binding,'new_from_failed_batch_correction':new,
+        'skip_original_active_pipeline_candidates':True,'boundary':'Acquire only these formerly failed rows; ordinary candidate acquisition continues in its original pipeline.'})
+    return len(rows),len(new)
+
+
 async def repair_complete_transport(config_path,output,worker):
     """One bounded repair call for invalid rows; reuse valid rows verbatim.
 
@@ -281,6 +323,7 @@ async def repair_complete_transport(config_path,output,worker):
     result=await worker.run(instruction,attempt,response_schema_path=attempt/'response_schema.json')
     checked=pilot.assess_archived_attempt(attempt)
     if result.exit_code or result.error or not checked.complete:raise ValueError('Repair native transport did not complete')
+    if result.thread_id!=checked.thread_id or result.usage!=checked.usage:raise ValueError('Repair result differs from native archive')
     repaired=validate(pilot.final_from_stdout(attempt),repair_papers)
     verify_pins(source_pins)
     merged={r['pmid']:r for r in valid};merged.update({r['pmid']:r for r in repaired['papers']})
@@ -289,7 +332,16 @@ async def repair_complete_transport(config_path,output,worker):
           'source_pins':source_pins,'reused_valid_papers':len(valid),'new_repair_papers':len(repair_papers),'native_calls':1,
           'repair_usage':checked.usage,'papers':[{**r,'status':'screened','route':route_for(r)} for r in final['papers']],
           'boundary':'Separate validated first-pass patch. Original batch remains unchanged; no scientific acceptance, model rerun of valid rows or automatic method admission.'})
-    return {'reused_valid_papers':len(valid),'new_repair_papers':len(repair_papers),'native_calls':1}
+    report={'reused_valid_papers':len(valid),'new_repair_papers':len(repair_papers),'native_calls':1}
+    if config.get('source_inputs'):
+        count,selected=consolidate_repair(original,read(output/'VALIDATION_REPAIR.json'),config['source_inputs'],output)
+        report.update(consolidated_publication_records=count,new_publication_candidates=selected)
+    if config.get('acquire_validated_candidates'):
+        from genomics_discovery.sources.publication_intake import acquire_validated_patch
+        report['publication_handoff']=await acquire_validated_patch(read(output/'VALIDATION_REPAIR.json'),papers,
+                                         output/'publications',config['cache_collection'])
+    write(output/'REPAIR_OUTCOME.json',report)
+    return report
 
 
 def repair_main():

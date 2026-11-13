@@ -108,6 +108,20 @@ def acquire_publication(metadata,directory,cached=(),*,pmc_acquirer=acquire_pmc_
             'attempts':attempts,'document_role':'publication_candidate','scientific_applicability':'not_reviewed'}
 
 
+async def acquire_validated_patch(patch,papers,output,collection_pin):
+    """Publication-only handoff from a separately validated correction patch."""
+    output=Path(output);output.mkdir(parents=True,exist_ok=False)
+    index,total=cache_index(collection_pin['path'],collection_pin['sha256']);by_id={p['pmid']:p for p in papers};results={}
+    for row in patch['papers']:
+        if row['route']!='acquisition_review_candidate':continue
+        pmid=row['pmid']
+        result=await asyncio.to_thread(acquire_publication,by_id[pmid],output/('pmid-'+pmid),index.get(pmid,[]))
+        results[pmid]={**result,'screening':row}
+        bulk_screen.write(output/'ACQUISITION_PATCH.json',{'papers':results,'counts':dict(Counter(r['status'] for r in results.values())),
+            'cache_publication_records_checked':total,'method_admissions':0,'boundary':'Publication source handoff only; no model calls or method-node admission.'})
+    return dict(Counter(r['status'] for r in results.values()))
+
+
 async def run(config_path,output):
     config=json.loads(Path(config_path).read_text());output=Path(output).resolve();output.mkdir(parents=True,exist_ok=False)
     if not 1<=config['agents']<=config['native_ceiling']<=50:raise ValueError('Invalid configured native workflow allocation')

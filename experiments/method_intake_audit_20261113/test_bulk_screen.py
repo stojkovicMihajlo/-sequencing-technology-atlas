@@ -144,21 +144,23 @@ class BulkTests(unittest.TestCase):
         self.assertEqual(result['papers'][-1]['route'],'metadata_recovery')
 
     def test_bounded_complete_transport_repair_reuses_valid_rows_and_keeps_old_attempt(self):
-        p=self.pool([paper(1),paper(2,'A protocol for Saccharomyce cerevisiae sequencing.')])
+        p=self.pool([paper(1),paper(2,'A protocol for Saccharomyce cerevisiae sequencing.'),paper(3)])
         class TypoCorrectingWorker(Worker):
             async def run(self,prompt,attempt,**kwargs):
                 result=await super().run(prompt,attempt,**kwargs)
-                value=json.loads((attempt/'final.txt').read_text());value['papers'][1]['methodological_claim_quote']='A protocol for Saccharomyces cerevisiae sequencing.'
+                value=json.loads((attempt/'final.txt').read_text())
+                if len(value['papers'])>1:value['papers'][1]['methodological_claim_quote']='A protocol for Saccharomyces cerevisiae sequencing.'
                 final=json.dumps(value);(attempt/'final.txt').write_text(final)
                 events=[json.loads(line) for line in (attempt/'events.jsonl').read_text().splitlines()]
                 next(e for e in events if e['type']=='item.completed')['item']['text']=final
                 (attempt/'events.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in events))
                 return result
         failed=self.run_screen(p,TypoCorrectingWorker(),batch_size=2)
-        self.assertEqual(failed['counts'],{'screening_batch_failed':2})
+        self.assertEqual(failed['counts'],{'screening_batch_failed':2,'screened':1})
         original=next((self.root/'screen').glob('00001-*'));before=(original/'final.txt').read_bytes()
         config={'original_attempt':str(original),'source_pins':{name:bulk.pilot.sha(original/name) for name in ['papers.json','final.txt','events.jsonl','result.json','EXPECTED.json']},
-                'reserved_repair_slots':1,'bulk_source_slots':25,'extraction_reserved_max':24,'max_repair_papers':1}
+                'reserved_repair_slots':1,'bulk_source_slots':25,'extraction_reserved_max':24,'max_repair_papers':1,
+                'source_inputs':{'pool':{'path':str(p),'sha256':bulk.pilot.sha(p)},'overlays':[]}}
         config_path=self.root/'repair.json';config_path.write_text(json.dumps(config));repair_worker=Worker()
         result=asyncio.run(bulk.repair_complete_transport(config_path,self.root/'repair',repair_worker))
         self.assertEqual(repair_worker.calls,[['2']]);self.assertEqual(result['reused_valid_papers'],1)
@@ -166,6 +168,13 @@ class BulkTests(unittest.TestCase):
         patched=bulk.read(self.root/'repair/VALIDATION_REPAIR.json')['papers']
         self.assertEqual(patched[0]['methodological_claim_quote'],paper(1)['abstract'][0]['text'])
         self.assertEqual(patched[1]['methodological_claim_quote'],'A protocol for Saccharomyce cerevisiae sequencing.')
+        consolidated=bulk.read(self.root/'repair/CONSOLIDATED_SCREENING.json')['papers']
+        self.assertEqual([r['status'] for r in consolidated],['screened_validation_repair','screened_validation_repair','screened'])
+        self.assertEqual(consolidated[2]['methodological_claim_quote'],paper(3)['abstract'][0]['text'])
+        bad_patch=bulk.read(self.root/'repair/VALIDATION_REPAIR.json');bad_patch['papers']=[consolidated[2]]
+        bad_out=self.root/'bad-merge';bad_out.mkdir()
+        with self.assertRaisesRegex(ValueError,'valid/running/queued'):
+            bulk.consolidate_repair(original,bad_patch,config['source_inputs'],bad_out)
 
     def test_validation_repair_refuses_incomplete_provider_transport(self):
         p=self.pool([paper(1)]);self.run_screen(p,Worker(fail={'1'}));original=next((self.root/'screen').glob('00001-*'))
