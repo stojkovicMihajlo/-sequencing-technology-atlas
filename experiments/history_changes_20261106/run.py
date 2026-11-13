@@ -85,6 +85,9 @@ def validate_request(args):
     expected_state=getattr(args,'batch_state',None)
     if expected_state and Path(expected_state).resolve()!=(args.batch/'state.json').resolve():
         raise ValueError('Pinned batch state does not match the selected batch directory')
+    expected_library=getattr(args,'library_inventory',None)
+    if expected_library and Path(expected_library).resolve()!=(args.library/'canonical_inventory.json').resolve():
+        raise ValueError('Pinned library inventory does not match the selected library directory')
     if any(not isinstance(mid, str) or not mid for mid in args.seed):
         raise ValueError('Seed methods must be nonempty canonical method IDs')
     if len(set(args.seed)) != len(args.seed):
@@ -278,6 +281,7 @@ def build_parser():
     parser.add_argument('--max-ready-seeds',type=int,choices=range(1,51),help='Select the first N ready new seeds after source preflight; record all holds/deferred candidates.')
     parser.add_argument('--software-preflight',action='store_true',help='Run bounded citation-contract software checks before source/model work.')
     parser.add_argument('--batch-state',type=Path,help='Optional file pin for recorded plans; must equal batch/state.json.')
+    parser.add_argument('--library-inventory',type=Path,help='Optional file pin for recorded plans; must equal library/canonical_inventory.json.')
     parser.add_argument('--completed-catalog',type=Path,default=Path(__file__).resolve().parents[2]/'data/run_catalog.json',help='Canonical run catalog consulted before launching any new seed; all declared completion sources are joined.')
     return parser
 

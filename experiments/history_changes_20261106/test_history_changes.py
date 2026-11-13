@@ -190,3 +190,7 @@ async def test_ready_seed_limit_keeps_holds_and_defers_extra_work(monkeypatch,tm
     parsed=history_run.parse_args([*paths,'--seed','method','--agents','18','--max-ready-seeds','20',
                                   '--reading-policy','focused','--software-preflight','--citation-only'])
     assert parsed.workers==18 and parsed.max_ready_seeds==20 and parsed.software_preflight
+    parsed=history_run.parse_args([*paths,'--seed','method','--library-inventory','/fixture/library/canonical_inventory.json'])
+    assert parsed.library_inventory==Path('/fixture/library/canonical_inventory.json')
+    with pytest.raises(SystemExit):
+        history_run.parse_args([*paths,'--seed','method','--library-inventory','/different/library.json'])
