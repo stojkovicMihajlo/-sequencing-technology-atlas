@@ -25,7 +25,16 @@ def tool_inventory():
     root=Path(__file__).resolve().parents[3]
     files.update(registration=root/'experiments/card_methods_full_20261112/located_documents.py',
                  legacy_word=root/'src/genomics_discovery/sources/acquisition/legacy_word.py')
-    for name in ('antiword','pdftotext'):
+    files.update({name:root/path for name,path in {
+        'pdf_identity':'src/genomics_discovery/sources/acquisition/pdf_registration.py',
+        'html_identity':'src/genomics_discovery/sources/acquisition/html_identity.py',
+        'attachment_association':'src/genomics_discovery/sources/acquisition/associations.py',
+        'acquisition_identity':'src/genomics_discovery/sources/acquisition/runtime.py',
+        'source_download':'src/genomics_discovery/sources/acquisition/downloads.py',
+        'jats_identity':'src/genomics_discovery/sources/document_manifest.py',
+        'jats_rendition':'src/genomics_discovery/illumina/sources.py',
+        'html_rendition':'src/genomics_discovery/sources/cached_documents.py'}.items()})
+    for name in ('antiword','pdftotext','magick','convert'):
         executable=shutil.which(name)
         if executable:files[name]=Path(executable)
     if os.environ.get('ANTIWORDHOME'):

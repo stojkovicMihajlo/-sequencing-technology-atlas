@@ -302,3 +302,18 @@ async def test_completed_entry_rejects_a_synthetic_outcome_before_cache_or_worke
     result=await recovery.run_completed(manifest,policy,tmp_path/'run',worker=held_case[-1])
     assert result['counts']=={'failed':1} and len(held_case[-1].calls)==2
     handoff.assert_not_awaited()
+
+
+def test_registration_dependency_hash_changes_but_relocation_does_not(tmp_path,monkeypatch):
+    import shutil
+    root=tmp_path/'runtime';module=root/'src/genomics_discovery/illumina/review_recovery.py'
+    module.parent.mkdir(parents=True);module.write_text('Same frozen recovery implementation.')
+    dependency=root/'src/genomics_discovery/sources/acquisition/pdf_registration.py'
+    dependency.parent.mkdir(parents=True);dependency.write_text('Original identity helper.')
+    monkeypatch.setattr(recovery,'__file__',str(module))
+    before=recovery.tool_versions();assert before['pdf_identity']==core.sha(dependency)
+    dependency.write_text('Repaired identity helper.')
+    after=recovery.tool_versions();assert before['pdf_identity']!=after['pdf_identity']
+    copied=tmp_path/'relocated';shutil.copytree(root,copied)
+    monkeypatch.setattr(recovery,'__file__',str(copied/module.relative_to(root)))
+    assert recovery.tool_versions()==after

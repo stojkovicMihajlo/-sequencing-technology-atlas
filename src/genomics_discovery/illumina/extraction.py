@@ -16,6 +16,7 @@ import os
 import re
 import shutil
 import shlex
+import subprocess
 import sys
 import time
 from collections import Counter
@@ -311,8 +312,10 @@ def stage_images(images, directory):
     """Attach deterministic display renditions, preserving original source pins."""
     attached, receipts = [], []
     for index, (source_id, original) in enumerate(images):
+        original = Path(original)
         destination = directory / f"diagram_{index:02d}.png"
         derivation = "byte-preserving copy"
+        converter = None
         original_dimensions, attachment_dimensions = None, None
         try:
             from PIL import Image
@@ -329,13 +332,36 @@ def stage_images(images, directory):
                 display.save(destination)
             derivation = "RGBA composited on white; 2x display enlargement if original width <1600"
         except ImportError:
-            shutil.copyfile(original, destination)
+            with original.open('rb') as handle:
+                is_png = handle.read(8) == b'\x89PNG\r\n\x1a\n'
+            if is_png:
+                shutil.copyfile(original, destination)
+            else:
+                executable = shutil.which('magick') or shutil.which('convert')
+                if not executable:
+                    raise StageFailure('image_conversion_unavailable',
+                        'Non-PNG image delivery requires Pillow or the configured ImageMagick converter')
+                command = [executable, '-limit', 'thread', '1', str(original),
+                    '-background', 'white', '-alpha', 'remove', '-alpha', 'off', 'PNG:' + str(destination)]
+                try:
+                    subprocess.run(command, check=True, capture_output=True, timeout=90)
+                    version = subprocess.run([executable, '-version'], check=True,
+                        capture_output=True, text=True, timeout=15).stdout.splitlines()[0]
+                except (OSError, subprocess.SubprocessError, IndexError) as exc:
+                    raise StageFailure('image_conversion_failed', f'ImageMagick PNG delivery failed: {exc}') from exc
+                converter = {'name': 'ImageMagick', 'path': str(Path(executable).resolve()),
+                    'sha256': sha(Path(executable)), 'version': version, 'command': command}
+                derivation = 'ImageMagick PNG display rendition; alpha composited on white; no enlargement'
+        with destination.open('rb') as handle:
+            if handle.read(8) != b'\x89PNG\r\n\x1a\n':
+                raise StageFailure('image_conversion_failed', 'Display converter did not produce PNG bytes')
         receipts.append({"source_id": source_id, "original": str(original),
             "original_sha256": sha(original), "attachment": str(destination),
             "attachment_sha256": sha(destination), "derivation": derivation,
             "original_dimensions_pixels": original_dimensions,
             "attachment_dimensions_pixels": attachment_dimensions,
             "source_detail_added": False,
+            "converter": converter,
             "visual_quality": "requires_inspection"})
         attached.append(destination)
     write(directory / "image_delivery.json", receipts)
