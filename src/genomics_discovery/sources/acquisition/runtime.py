@@ -37,7 +37,7 @@ from genomics_discovery.sources.acquisition.formats import jats_rendition
 from genomics_discovery.sources.acquisition.legacy_word import word_rendition
 from genomics_discovery.sources.acquisition.associations import biostudies_record, citation_html_record
 from genomics_discovery.sources.acquisition.models import Findings, Identity, Scope
-from genomics_discovery.sources.acquisition.html_identity import assess_primary_html
+from genomics_discovery.sources.acquisition.html_identity import assess_primary_html, silverchair_fragment_identity
 from genomics_discovery.sources.acquisition.failures import (
     SourceFinderFailure,
     host_storage_failure,
@@ -68,6 +68,8 @@ def _identity(raw, kind):
     parser = ArticleHTML(); parser.feed(raw.decode("utf-8")); parser.close()
     metadata = parser.metadata
     titles = {v.strip() for v in metadata.get("citation_title", []) if v.strip()}
+    if not titles:
+        return silverchair_fragment_identity(raw,metadata)
     if len(titles) != 1:
         raise ValueError("Primary HTML needs a unique citation_title")
     return {"title": next(iter(titles)), "identifiers": {

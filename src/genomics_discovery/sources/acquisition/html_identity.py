@@ -90,6 +90,68 @@ class _AccessText(HTMLParser):
         return ' '.join(''.join(self.parts).split())
 
 
+class _SilverchairFragment(HTMLParser):
+    """Read the publisher's own article header, never bibliography identifiers."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack=[];self.titles=[];self.doi_links=[];self.heading=None;self.active=None
+        self.sections={'methods':[],'results':[]}
+
+    def handle_starttag(self,tag,attrs):
+        attrs=dict(attrs);classes=set(attrs.get('class','').split())
+        inherited=self.stack[-1] if self.stack else {}
+        suppressed=(inherited.get('suppressed',False) or tag in _AccessText._excluded
+                    or 'hidden' in attrs or 'screenreader-text' in classes
+                    or any(c.startswith('icon-availability') for c in classes))
+        container=inherited.get('container',False) or 'minimal-article-container' in classes
+        header=inherited.get('header',False) or container and 'article-header' in classes
+        citation=inherited.get('citation',False) or header and 'ww-citation-primary' in classes
+        title=inherited.get('title',False)
+        if not suppressed and container and header and tag=='h1' and {'wi-article-title','article-title-main'}<=classes:
+            self.titles.append([]);title=True
+        if not suppressed and citation and tag=='a' and attrs.get('href'):
+            url=urlsplit(attrs['href'])
+            if url.scheme in {'http','https'} and url.hostname in {'doi.org','dx.doi.org'}:
+                self.doi_links.append(attrs['href'])
+        if not suppressed and container and tag=='h2':self.heading=[];self.active=None
+        if tag not in _AccessText._void:
+            self.stack.append({'tag':tag,'suppressed':suppressed,'container':container,
+                               'header':header,'citation':citation,'title':title})
+
+    def handle_endtag(self,tag):
+        if tag=='h2' and self.heading is not None:
+            heading=' '.join(''.join(self.heading).split());self.heading=None
+            self.active=('methods' if re.match(r'^\s*(?:\d+[.\s]*)?(?:(?:materials?|experimental)\s+(?:and\s+)?)?methods?\b',heading,re.I)
+                         else 'results' if re.match(r'^\s*(?:\d+[.\s]*)?results?\b',heading,re.I) else None)
+        for i in range(len(self.stack)-1,-1,-1):
+            if self.stack[i]['tag']==tag:del self.stack[i:];break
+
+    def handle_data(self,text):
+        state=self.stack[-1] if self.stack else {}
+        if state.get('suppressed'):return
+        if state.get('title') and self.titles:self.titles[-1].append(text)
+        if self.heading is not None:self.heading.append(text)
+        elif self.active and state.get('container') and not state.get('header'):
+            self.sections[self.active].append(text)
+
+
+def silverchair_fragment_identity(raw,metadata):
+    """Support full publisher fragments lacking citation meta tags, with origin checked later."""
+    parser=_SilverchairFragment();parser.feed(raw.decode('utf-8'));parser.close()
+    titles=[' '.join(''.join(parts).split()) for parts in parser.titles]
+    links=set(parser.doi_links)
+    if len(titles)!=1 or not titles[0] or len(links)!=1:
+        raise ValueError('Primary HTML needs a unique citation_title or a unique publisher-fragment title and own DOI header')
+    sections={key:len(' '.join(''.join(parts).split())) for key,parts in parser.sections.items()}
+    if any(size<200 for size in sections.values()):
+        raise ValueError('Publisher fragment lacks substantive Methods and Results beyond its abstract')
+    return {'title':titles[0],'identifiers':{
+        'pmid':sorted({v.strip() for v in metadata.get('citation_pmid',[]) if v.strip()}),
+        'doi':sorted({next(iter(links)),*[v.strip() for v in metadata.get('citation_doi',[]) if v.strip()]})},
+        'publisher_fragment':{'format':'silverchair_minimal_article','title_source':'article-header h1.wi-article-title.article-title-main',
+            'doi_source':'article-header .ww-citation-primary a','doi_link':next(iter(links)),'section_characters':sections}}
+
+
 def assess_primary_html(raw, actual, expected, declared, final_url, *, normal, doi):
     parser = _AccessText();parser.feed(raw.decode('utf-8'));parser.close()
     markers = _PublicationMarkers();markers.feed(raw.decode('utf-8'));markers.close()
@@ -99,6 +161,11 @@ def assess_primary_html(raw, actual, expected, declared, final_url, *, normal, d
         raise ValueError('Primary HTML is an explicit browser/access challenge, not readable article text')
     if re.search(r'\bthis\s+is\s+a\s+preview\s+of\s+subscription\s+content\b', title + ' ' + parser.text, re.I):
         raise ValueError('Primary HTML explicitly declares a subscription preview; citation identity does not make it full text')
+    if actual.get('publisher_fragment'):
+        origin=urlsplit(final_url)
+        if (origin.scheme!='https' or origin.hostname!='oup.silverchair-cdn.com'
+                or not re.fullmatch(r'/article-minimal/[0-9]+/?',origin.path)):
+            raise ValueError('Publisher-fragment identity requires its official HTTPS article endpoint')
     ids = {key:{(doi(v) if key == 'doi' else str(v)) for v in actual['identifiers'].get(key,[])}
            for key in ('pmid','doi')}
     if any(len(values)>1 for values in ids.values()):
@@ -150,5 +217,6 @@ def assess_primary_html(raw, actual, expected, declared, final_url, *, normal, d
             'absent_identifiers':sorted(set(missing)),'source_version':'author_manuscript' if documented_manuscript else 'unspecified',
             'documented_version_evidence':citations if documented_manuscript else [],
             'title_variant_accepted':variant,
+            'publisher_fragment_evidence':actual.get('publisher_fragment'),
             'identity_basis':'Frozen caller-scoped identity; finder assertions do not authorize missing-identifier or title exceptions',
             'content_boundary':'No explicit supported preview/challenge marker detected; this is not proof of full article, exclusive applicability, completeness or missing-dependency resolution.'}

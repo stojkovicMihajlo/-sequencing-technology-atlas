@@ -125,6 +125,59 @@ def test_no_methods_heading_or_arbitrary_length_is_an_identity_requirement():
     assert 'full_text' not in receipt
 
 
+def publisher_fragment(*,header_doi=DOI,extra_header='',methods=True,results=True,metadata='',preview=''):
+    title='<h1 class="wi-article-title article-title-main">Published <em>protocol</em><i class="icon-availability_free"><span class="screenreader-text">Free</span></i></h1>'
+    citation=(f'<div class="ww-citation-primary"><a href="https://doi.org/{header_doi}">{header_doi}</a></div>') if header_doi else ''
+    body=('<h2>2 MATERIAL AND METHODS</h2><p>'+('Actual experimental materials and methods. '*15 if methods else '')+'</p>'
+          '<h2>3 RESULTS AND DISCUSSION</h2><p>'+('Actual experimentally observed sequencing results. '*15 if results else '')+'</p>')
+    return ('<html><head>'+metadata+'</head><body><div class="minimal-article-container"><div class="article-header">'
+            +title+citation+extra_header+'</div>'+preview+body+'</div></body></html>').encode()
+
+
+def test_publisher_fragment_uses_own_header_and_ignores_accessibility_badge():
+    receipt=assess(publisher_fragment(),url='https://oup.silverchair-cdn.com/article-minimal/123')
+    assert receipt['actual_title']==FINAL
+    assert receipt['identifier_route']=='exact_scoped_doi_title_missing_pmid'
+    assert receipt['publisher_fragment_evidence']['doi_link']=='https://doi.org/'+DOI
+    assert receipt['frozen_expected_identity']['pmid']=='123'
+
+
+@pytest.mark.parametrize('url',['https://example.org/article-minimal/123','http://oup.silverchair-cdn.com/article-minimal/123','https://oup.silverchair-cdn.com/unrelated/123'])
+def test_publisher_fragment_cannot_authorize_other_origins(url):
+    with pytest.raises(ValueError,match='official HTTPS article endpoint'):assess(publisher_fragment(),url=url)
+
+
+@pytest.mark.parametrize('raw',[
+    publisher_fragment(header_doi=None,extra_header='<div class="references"><a href="https://doi.org/'+DOI+'">Reference DOI</a></div>'),
+    publisher_fragment(extra_header='<h1 class="wi-article-title article-title-main">Another article</h1>'),
+    publisher_fragment(extra_header='<div class="ww-citation-primary"><a href="https://doi.org/10.9999/wrong">Other DOI</a></div>'),
+    publisher_fragment(methods=False),publisher_fragment(results=False),
+])
+def test_publisher_fragment_needs_unique_own_header_and_substantive_body(raw):
+    with pytest.raises(ValueError):assess(raw,url='https://oup.silverchair-cdn.com/article-minimal/123')
+
+
+def test_publisher_fragment_keeps_present_identifier_conflicts_and_preview_rejection():
+    with pytest.raises(ValueError,match='pmid mismatch'):
+        assess(publisher_fragment(metadata='<meta name="citation_pmid" content="999">'),url='https://oup.silverchair-cdn.com/article-minimal/123')
+    with pytest.raises(ValueError,match='subscription preview'):
+        assess(publisher_fragment(preview='<p>This is a preview of subscription content.</p>'),url='https://oup.silverchair-cdn.com/article-minimal/123')
+
+
+def test_cached_publisher_fragment_registers_through_existing_helper_without_http(tmp_path):
+    from experiments.card_methods_full_20261112.located_documents import register
+    from genomics_discovery.sources.acquisition.downloads import Download
+    url='https://oup.silverchair-cdn.com/article-minimal/123';raw=publisher_fragment();calls=[]
+    def cached_only(request):
+        assert request==url;calls.append(request);return Download(raw,url,'text/html')
+    doc=Document(id='original',url=url,role='primary_paper',format='html',
+                 identity=Identity(pmid='123',doi=DOI,title=FINAL),rationale='Offline cached publisher fixture.')
+    result=register(doc,{'paper_id':'pmid-123','doi':[DOI],'title':FINAL},tmp_path/'registered',downloader=cached_only)
+    assert result['content_level']=='fulltext' and result['assigned_paper_id']=='pmid-123'
+    assert calls==[url]
+    assert (tmp_path/'registered/original.html').read_bytes()==raw
+
+
 async def test_real_acquisition_resolve_uses_host_assessment_and_retains_absence_without_invented_metadata(tmp_path):
     tasks=worklist(tmp_path)
     expected={'assay':{'method_id':'assay','title':'Assay assay','scope':'General original protocol',
