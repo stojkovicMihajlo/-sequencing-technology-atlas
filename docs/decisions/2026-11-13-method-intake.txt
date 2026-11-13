@@ -212,3 +212,39 @@ destinations may resume; differing bytes and symlinks fail without overwrite or
 dereference. An external receipt handles runtimes with their own original manifest.
 The root handles any bounded remote preservation repair. No logs are compressed
 or deleted, and the original source/model artifacts remain unchanged.
+
+CURRENT BULK AUDIT — NONSEQUENCING DETECTION FALSE POSITIVES
+Two rows in original batch00057-7c7ff1af495d demonstrate a semantic scope issue,
+separate from the correctly rejected literal-spelling quotation:
+- PMID29044197 describes a multiplex real-time RT-PCR assay for nine avian
+  influenza NA subtypes. Its quoted contribution is PCR detection, not a
+  sequencing readout or a sequencing-library preparation improvement.
+- PMID29044635 describes a quantitative real-time PCR assay targeting a
+  crAssphage DNA-polymerase gene; conventional PCR and sequencing are comparators.
+  Being sequence-specific does not itself make the new readout sequencing-based.
+Both original initial-screen rows were labelled assay. Preserve those judgments
+as inspectable first-pass outputs, flag the scope issue for focused adjudication,
+and do not turn them into assay/method nodes. No method admission occurred.
+This does not exclude PCR/enzyme improvements that actually prepare or improve
+sequencing libraries and demonstrate their sequencing performance.
+
+Exact original source/decision pointers are under
+technology_atlas/v2/work/pipeline/new_papers_source_01/run_02/output/screening/
+00057-7c7ff1af495d/{papers.json,final.txt,events.jsonl} on Qiu. Their source input
+SHA256 isb7f49d63379a38eda49090d3765e8bf71ea0c8cfcd1555145e99eed3a4583fb7
+and original finalSHA256b95a2826a2da30de942874be25bdcf25c8b95ce7564b3e810c798239b8a67e4a.
+The separate validation_repair_01/output/VALIDATION_REPAIR.json retains these19
+already-literal rows unchanged and corrects only PMID29043634's invalid quotation.
+Its correction, consolidated checkpoint and publication selection are not an
+independent scientific review or a claim that every initial assay label is correct.
+Current1200-batch source runtime and schema remain unchanged. A next-version scope
+instruction should explicitly distinguish sequencing/sequence-ready library
+contributions from purely fluorescent/qPCR detection and comparison-only sequencing.
+
+The quotation failure itself was a silent spelling correction: the PubMed source
+says Saccharomyce while the model wrote Saccharomyces. One bounded repair preserved
+the literal source spelling, reused19validrows, and produced a separate pinned
+correction overlay. A general next-version option is to have models select supplied
+section/passage IDs and let the host copy literal evidence. That avoids transcription
+changes; it does not establish scientific relevance or accuracy. It was not injected
+into the active1200-batch schema.
