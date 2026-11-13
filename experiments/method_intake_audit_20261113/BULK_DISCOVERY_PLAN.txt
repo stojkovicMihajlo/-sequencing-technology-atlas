@@ -1,0 +1,95 @@
+13 November — bulk literature acquisition for sequencing technologies
+
+User steering
+The deliverable is a searchable, downloaded paper corpus for finding technologies,
+followed by agent inspection. Agreement on seven abstract labels is not evidence
+that discovery is comprehensive. Include experimentally demonstrated sequencing
+library-preparation methods and improvements, including enzyme-centered work.
+Do not require a new assay name, a '-seq' suffix or an entirely new architecture.
+
+Starting material verified on Qiu
+12,040 existing paper metadata records,11,807 with abstracts. Use the preserved
+104,630,334-byte candidate_papers.json by exact hash and path in
+EXISTING_POOL_AUDIT_20261113.json; do not download or copy this corpus to the Mac.
+150 discovered identifiers lack metadata because one efetch batch failed. A
+TARGET-seq+ query collided with TARGET-seq's filename. Preserve those original
+receipts and recover into a new overlay. Catalogue method counts, paper metadata
+counts and downloaded full articles are separate. Verify named-paper presence
+against exact identifiers before describing an apparent retrieval gap.
+
+Execution order
+1. Reuse the existing metadata and cached article files. Repair the150 missing
+   records and the failed query. Refresh the existing date-limited searches and
+   add broad library-preparation/enzymatic and assay-architecture searches.
+   Search title AND abstract; neither a 'novel' word nor a performance word is
+   required for retrieval. Save original queries, dates, IDs, failures and bytes.
+2. Add publication leads from curated experimental-method resources and relevant
+   reviews. Add citation and semantic searches to recover differently worded work.
+   A cited paper is a discovery lead; historical inheritance still needs evidence.
+3. Batch complete abstracts for one first-pass model screen, with configurable
+   concurrency. Record paper ID, disposition, an exact supporting abstract claim,
+   rationale and a focused question for ambiguity. Missing abstracts and unclear
+   contributions remain candidates for document inspection. Do not discard an
+   enzyme/library method merely because it improves an existing workflow.
+4. Feed relevant and ambiguous candidates into the existing public article
+   acquisition system, reusing verified bytes first. Keep article, supplement and
+   cited protocol documents separate, with original URL/DOI/PMID/hash and source
+   access status. A failed download remains an access task, not a negative paper.
+   Full article acquisition and screening may proceed concurrently by completed
+   batch. No need to wait for all metadata before downloading selected papers.
+5. Resolve aliases/versions and assign existing Illumina categories, with explicit
+   cross-category tags, before publishing a method-folder view. A library-prep
+   contribution can be a workflow/version linked to the assays that use it.
+   Component details remain available even if several papers describe one method.
+   New papers without diagrams use the existing paper-mode extraction schema.
+
+Existing resources to use directly
+- Teichlab Single Cell Genomics Library Structure:
+  https://github.com/Teichlab/scg_lib_structs
+  Experimental library-generation pages and method/library structures, mainly
+  single-cell RNA-seq. Use its methods and original references as explicit leads.
+- Museum of Spatial Transcriptomics:
+  https://pachterlab.github.io/museumst/
+  Public curated literature table and read_metadata/get_pubs_df functions. Keep
+  experimental collection methods distinct from analysis and application papers;
+  current-era rows are not automatically unique methods. Separate sequencing
+  barcoding/in-situ sequencing from nonsequencing imaging when assigning scope.
+- scTrends commercial living review:
+  https://pmc.ncbi.nlm.nih.gov/articles/PMC11701258/
+  Useful commercial single-cell/spatial leads. Its commercial focus does not cover
+  all academic methods or bulk library preparation. The identically named 2026
+  pseudotime software package is a different resource.
+- seqspec:
+  https://github.com/pachterlab/seqspec
+  A complementary machine-readable library/read-structure source, not a complete
+  experimental-workflow or historical-inheritance catalogue.
+
+Literature-backed mechanisms and limits
+Citationchaser supplies forward/backward citation expansion from known relevant
+papers: https://doi.org/10.1002/jrsm.1563 . Its released R package uses the Lens API
+and requires a token; use the principle with existing available citation providers
+rather than silently introducing a new account/dependency. Citation expansion is
+supplementary: independent query discovery is needed for disconnected/new work.
+
+ASReview prioritizes title/abstract screening using relevance labels:
+https://doi.org/10.1038/s42256-020-00287-7
+https://github.com/asreview/asreview
+Its standard reference is human relevance assessment. Model agreement is not a
+replacement for reference judgments. Reuse prioritization later if helpful;
+begin with explicit batched screening and inspect uncertain/negative records.
+
+OpenAlex documents semantic search for differently worded papers:
+https://help.openalex.org/api/semantic-search/
+Current documented limit50 results/query means it is supplementary discovery,
+not a bulk complete-corpus endpoint. Semantic Scholar's recommendation endpoint
+has recency/pool limits, so it cannot alone recover all post-2016 biology papers.
+PubMed/OpenAlex identifiers and APIs are preferable to brittle search-page HTML;
+publisher/repository pages supply article files and supplementary attachments.
+
+What to measure
+Report unique papers found by channel, abstract availability, candidate decisions,
+verified full articles/attachments, unresolved access and method/version identities.
+Test recovery of known relevant papers held out of the seed list across technology
+areas, and inspect missed/rejected examples. Do not substitute two-model agreement
+or increasing raw download counts for discovery coverage. Do not claim that every
+sequencing technology has been found from a finite search alone.

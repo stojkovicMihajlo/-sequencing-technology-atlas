@@ -248,7 +248,13 @@ def native_schema(role):
     return schema
 
 
-def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
+def focused_policy():
+    # Candidate lives in its isolated experiment. Called only for explicit opt-in.
+    from experiments.history_contract_audit_20261113 import focused_reading
+    return focused_reading
+
+
+def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None, reading_policy='full'):
     raw = read(Path(artifact))
     document = (parse_analysis(raw) if role == 'analyse' else
                 parse_review(raw)
@@ -275,7 +281,17 @@ def validate(role, artifact, inputs, analysis_path=None, paper_read_log=None):
             required += sorted({c.reference_id for c in analysis.claims
                                 if sources[c.reference_id].get('content_level') == 'fulltext'})
         source_file = inputs / ('sources_initial.json' if role == 'nominate' else 'sources.json')
-        coverage = check_full_reads(paper_read_log, source_file, sources, required)
+        if reading_policy == 'focused':
+            coverage = focused_policy().check_policy(
+                paper_read_log, source_file, sources, required, role=role,
+                analysis=(document.model_dump(mode='json') if role == 'analyse' else
+                          analysis.model_dump(mode='json') if role == 'review' else None),
+                review=document.model_dump(mode='json') if role == 'review' else None,
+                reading_policy=reading_policy)
+        elif reading_policy == 'full':
+            coverage = check_full_reads(paper_read_log, source_file, sources, required)
+        else:
+            raise ValueError('Unknown reading policy')
         write(Path(artifact).parent / 'paper_read_coverage.json', coverage)
     return document
 
@@ -379,12 +395,17 @@ async def execute(args):
     if reused_analysis:
         state['review_reuse'] = read(inputs / 'review_reuse.json')
         prior_threads = state['review_reuse']['prior_threads']
+    if getattr(args, 'reading_policy', 'full') == 'focused':
+        state['reading_policy'] = 'focused'
     write(root / "state.json", state)
     implementation = {str(p): sha(p) for p in Path(__file__).parent.glob('*.py')}
     from genomics_discovery.illumina import change_records as change_policy
     for path in (Path(change_policy.__file__), Path(validate_coverage.__code__.co_filename), Path(record_read.__code__.co_filename),
                  Path(resolve_article.__code__.co_filename)):
         implementation[str(path.resolve())] = sha(path)
+    if getattr(args, 'reading_policy', 'full') == 'focused':
+        focused_path = Path(focused_policy().__file__).resolve()
+        implementation[str(focused_path)] = sha(focused_path)
     policy_path = Path(relationship_policy.__file__).resolve()
     implementation[str(policy_path)] = sha(policy_path)
     worker = CodexWorker(model=state["model"], effort=state["effort"], timeout_seconds=None,
@@ -404,6 +425,10 @@ async def execute(args):
                                   '--coverage-file', str(receipt_path)])
         check_command = [*command, "check", "--inputs", str(inputs), "--role", role,
                          "--artifact", str(attempt / "artifact.json"), '--paper-read-log', str(receipt_path)]
+        if getattr(args, 'reading_policy', 'full') == 'focused':
+            check_command += ['--reading-policy', 'focused']
+            if role != 'nominate':
+                read_command += ' --reading-policy focused'
         if analysis_path:
             check_command += ["--analysis", str(analysis_path)]
         context = {"inputs": str(inputs), "seed_extraction": str(inputs / 'seed_extraction.json'),
@@ -415,6 +440,10 @@ async def execute(args):
             "self_check": shlex.join(check_command),
             "source_levels": {k: {"level": v["content_level"], "title": v.get('title'),
                                     "characters": len(v['text'])} for k,v in read(source_file).items()}}
+        if getattr(args, 'reading_policy', 'full') == 'focused':
+            context['reading_policy'] = 'focused'
+            if role != 'nominate':
+                context['source_tool'] += ' [--outline] [--outline-detail sections|objects|mentions|blocks|supplements] [--question TEXT] [--reason TEXT]'
         if role != "nominate":
             context["nominations"] = str(root / 'nominations.json')
         if analysis_path:
@@ -448,7 +477,8 @@ async def execute(args):
         if (attempt / 'prompt.txt').read_text() != prompt:
             raise ValueError("Native prompt differs from planned prompt")
         verify_stage_inputs(attempt, delivery, pins)
-        doc = validate(role, attempt / 'artifact.json', inputs, analysis_path, receipt_path)
+        doc = validate(role, attempt / 'artifact.json', inputs, analysis_path, receipt_path,
+                            reading_policy=getattr(args, 'reading_policy', 'full'))
         if role == 'analyse' and not isinstance(doc, ChangeAnalysis):
             raise ValueError('Fresh analysis must follow citation_analysis/4 explicit change records')
         row.update(status="validated", thread_id=assessment.thread_id, usage=assessment.usage,
@@ -503,6 +533,8 @@ def main():
     reuse = sub.add_parser('review-existing', help='Fresh review of completed unchanged research; no failed-run resumption')
     reuse.add_argument('--previous', type=Path, required=True)
     reuse.add_argument('--output', type=Path, required=True)
+    for command_parser in (run, reuse):
+        command_parser.add_argument('--reading-policy', choices=('full', 'focused'), default='full')
     inspect = sub.add_parser('read')
     inspect.add_argument('--sources', type=Path, required=True)
     inspect.add_argument('--id')
@@ -510,23 +542,42 @@ def main():
     inspect.add_argument('--start', type=int, default=0)
     inspect.add_argument('--limit', type=int, default=10000)
     inspect.add_argument('--coverage-file', type=Path)
+    inspect.add_argument('--reading-policy', choices=('full', 'focused'), default='full')
+    inspect.add_argument('--outline', action='store_true')
+    inspect.add_argument('--outline-detail', choices=('sections','objects','mentions','blocks','supplements'))
+    inspect.add_argument('--question', default='')
+    inspect.add_argument('--reason')
     check = sub.add_parser('check')
     check.add_argument('--inputs', type=Path, required=True)
     check.add_argument('--role', choices=SCHEMAS, required=True)
     check.add_argument('--artifact', type=Path, required=True)
     check.add_argument('--analysis', type=Path)
     check.add_argument('--paper-read-log', type=Path)
+    check.add_argument('--reading-policy', choices=('full', 'focused'), default='full')
     args = parser.parse_args()
     if args.command in {'run', 'review-existing'}:
         asyncio.run(execute(args))
     elif args.command == 'check':
-        validate(args.role,args.artifact,args.inputs,args.analysis,args.paper_read_log)
+        validate(args.role,args.artifact,args.inputs,args.analysis,args.paper_read_log,args.reading_policy)
         print('structural_and_quote_checks_passed; semantic_review_still_required')
     else:
         sources = read(args.sources)
         if not args.id:
             print(json.dumps({k:{'level':v['content_level'],'title':v.get('title'),'characters':len(v['text'])} for k,v in sources.items()},indent=2))
         else:
+            if args.reading_policy == 'focused':
+                if not args.coverage_file:
+                    raise ValueError('Focused reading requires its pinned delivery ledger')
+                policy = focused_policy()
+                if args.outline:
+                    result = policy.deliver_outline(args.coverage_file, args.sources, sources, args.id,
+                        detail=args.outline_detail, start=args.start, limit=min(args.limit,50))
+                else:
+                    result = policy.read_source(args.coverage_file, args.sources, sources, args.id,
+                        question=args.question, query=args.query, start=args.start,
+                        limit=args.limit, reason=args.reason)
+                print(json.dumps(result, ensure_ascii=False))
+                return
             result = source_excerpt(sources, args.id, query=args.query, start=args.start, limit=args.limit)
             result.update(query_found=result['found'], level=sources[args.id].get('content_level'))
             if args.coverage_file:

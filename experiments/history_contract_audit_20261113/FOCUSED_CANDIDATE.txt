@@ -1,0 +1,125 @@
+Opt-in focused-reading candidate — 13 November 2026
+
+Status: integrated in development run.py/prompts.py after review, with default/full
+behavior preserved. Frozen runtimes, sources and scientific records are unchanged.
+No native job was launched by this worker. Canonical paper_mode and schemas are
+unchanged. This does not solve independently reviewed method-level coverage.
+
+Run from the repository root:
+
+PYTHONPATH=src:experiments/history_contract_audit_20261113 python -m unittest discover -s experiments/history_contract_audit_20261113 -p 'test_focused_reading.py' -v
+
+PYTHONPATH=src:experiments/history_contract_audit_20261113 python experiments/history_contract_audit_20261113/evaluate_focused.py
+
+python experiments/history_contract_audit_20261113/prepare_integration_patch.py --base-root experiments/history_contract_audit_20261113/native_base --prefix native_integration
+git -C experiments/history_contract_audit_20261113/native_base apply --check ../native_integration.patch
+
+The final command only checks adaptation to the original frozen code copies.
+Do not apply it to frozen jobs. Development integration.patch is already applied.
+The generator refuses changed integration points and compiles proposed files.
+The actual future native use still requires a new pinned Sherlock runtime/plan.
+
+What is runnable now
+
+focused_reading.py is a custody adapter around the existing deployed
+illumina.extraction.source_excerpt. It preserves the reader's exact flat-text
+offsets and source IDs. Query hits already have offsets; query misses have null
+start. Both are logged, and a miss never creates a delivered range. No new search
+ranker, parser framework, agent, scientific class or source rendition is added.
+
+Its standalone CLI can expose the real reader before integration, for example:
+
+PYTHONPATH=src python experiments/history_contract_audit_20261113/focused_reading.py --sources experiments/history_parallel_20261112/eclip_audit/sources.json --ledger /tmp/history-focused-reads.jsonl --id R6 --outline
+
+PYTHONPATH=src python experiments/history_contract_audit_20261113/focused_reading.py --sources experiments/history_parallel_20261112/eclip_audit/sources.json --ledger /tmp/history-focused-reads.jsonl --id R6 --question 'How is truncated cDNA made amplifiable?' --query self-circularization
+
+Manual/wider ranges require --reason. If a long block needs several pages, read
+all of its required context with consecutive --start/--limit calls. All source
+text remains unchanged and available; command output must not be truncated.
+
+Gate and explicit limits
+
+check_policy defaults to reading_policy='full' and delegates to the unchanged
+check_full_reads. Even focused nomination keeps the full-seed check in this
+bounded candidate; bibliography/contribution discovery is not claimed to be
+solved by keyword retrieval. Analyse/review become focused only by explicit opt-in.
+
+For focused analysis/review, derive duties from existing change records: asserted
+before, after, retained and documented-use attribution, plus any optional effect
+and source-supported limit evidence. Reviewer/method-identity/coverage evidence
+is checked too. Each exact quotation must occur in delivered source ranges that
+cover its containing text block and one adjacent block on either side. A title,
+search hit, hash, relevance score or source outline alone cannot satisfy that.
+Multiple exact occurrences and multi-page ranges preserve their separate offsets.
+
+The ledger binds registry hash, text hash, delivered-slice hash, original offsets,
+question, query hit/miss and broader-reading reason. The report maps each existing
+evidence field pointer to the delivered context. Stale sources or changed ranges
+fail. This is delivery accounting, never scientific entailment or completeness.
+Existing validators/review/publication gates must run before/after it as usual.
+
+Unresolved before-side questions and research leads remain explicit. Available
+abstract text can be delivered for an unaccepted lead/held claim, with its source
+limitation reported; an accepted claim cannot use it as full implementation
+confirmation. No source is invented to fill missing evidence. An absent donor
+does not mean that the later chemistry is unknown.
+
+Navigation reuse
+
+The existing canonical sources.packets catalog/search/read_batch and
+sources.document_manifest inspect_jats are unchanged and remain preferred for
+prepared packet/JATS navigation. This candidate adapts the actually deployed
+flat registry instead of converting normalized passages into fictitious offsets.
+Default --outline lists compact heading hints and deduplicated object/SI inventory
+pages with counts and next_start; no paragraph previews. Exact block offsets and
+every raw mention location remain losslessly pageable through --outline-detail
+blocks|mentions|sections|objects|supplements with --start/--limit. Existing JATS
+manifests and packet.catalog(all) are reused when supplied. Missing manifests
+remain null and mentions are explicitly not a complete inventory or evidence
+that graphics/supplements were inspected. Original prepared inventories can be
+attached without rebuilding scientific records. Any consequential missing object
+still needs existing source recovery and a research lead/claim hold.
+
+Integration surface in integration.patch
+
+1. run.py validate gains a default-full reading_policy argument and calls the
+   focused gate after unchanged scientific validation only for explicit focused.
+2. run/review-existing/read/check CLI parsers accept --reading-policy focused.
+   Stage source commands and self-check propagate it, and the host repeats it.
+   Nomination source reads keep their original legacy full-delivery ledger.
+3. Focused source-tool calls expose --outline/--question/--reason and log exact
+   current-reader output. Default read behavior is unchanged.
+4. The opt-in candidate file is pinned in stage implementation hashes and policy
+   is recorded in state. prompts.build_prompt replaces contradictory full-reading
+   wording only for focused analyse/review; schema and scientific instructions
+   remain. Default/full prompt text and nomination instructions remain unchanged.
+
+Evidence controls and metrics
+
+offline_retrieval/RESULTS.json records two actual eCLIP/iCLIP source controls:
+the circularization/reopening versus direct-adapter route, and molecular-tag
+placement/decoding including the optimized iCLIP R8 five-base RT-tag qualifier.
+Queries and generic hit-block/neighbor expansion are explicit. Expected evidence
+comes from saved reviewed fields and the primary R8 variant passage. No expected
+quote offsets are used to choose fallback ranges. Optional performance results
+are not proposed in this focused design-evidence experiment; retained limitations
+still create delivery duties and must be retrieved.
+
+These are preselected known-answer delivery controls, not blind retrieval,
+scientific accuracy, literature recall or novelty evaluation. Neighboring context
+does not prove every relevant exception was found. Keep the 17 semantic/adversarial
+fixtures, independent review, later-contribution/bibliography coverage and explicit
+broader-source escalation. Full sections/papers remain the fallback when needed.
+
+Unique delivered body-read characters exclude outline previews, artifact quoted
+text and repeated tool transport. Outline serialized characters and repeated
+read-result serialized characters are reported separately. Those totals are not
+model input/token cost and do not measure latency or semantic gains. The legacy
+whole-text body length is a mechanical comparison denominator only.
+
+Current default outline sizes: seed2014/R6 1949/R8 1766 characters. Aggregate
+outline transport in the two controls is3965/5732 characters, separately from
+60665/39571 repeated read-result characters. All29 required evidence items pass.
+Fifteen focused/interface tests and204 existing citation/history tests passed;
+two byte-preserving release-builder tests passed. See PILOT_PLAN.txt for the
+unlaunched two-method native plan and exact payload requirements.

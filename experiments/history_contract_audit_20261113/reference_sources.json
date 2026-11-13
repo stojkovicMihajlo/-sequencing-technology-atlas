@@ -1,0 +1,50 @@
+{
+  "inspected_on": "2026-11-13",
+  "boundary": "Primary papers and official code inspected for retrieval/classification design; no reference code copied and no reference model executed.",
+  "references": [
+    {
+      "id": "intern_atlas",
+      "paper": "https://arxiv.org/html/2604.28158v2",
+      "version": "2604.28158v2",
+      "sections": [
+        "3.2",
+        "A.1",
+        "A.2",
+        "A.3",
+        "F"
+      ],
+      "official_site": "https://intern-atlas.opendatalab.org.cn/",
+      "official_code": "No extraction-code release linked; official site says GitHub coming soon.",
+      "dataset_revision": "6859af5681045d9fb595f86f3cc5c004fbaa2271",
+      "dataset": "https://huggingface.co/datasets/OpenRaiser/Intern-Atlas/tree/6859af5681045d9fb595f86f3cc5c004fbaa2271",
+      "dataset_license": "MIT"
+    },
+    {
+      "id": "scicite",
+      "paper": "https://aclanthology.org/N19-1361/",
+      "commit": "b33a8cd0df5743c9d483b1d0fdce8ec62bc8f135",
+      "repository": "https://github.com/allenai/scicite",
+      "license": "Apache-2.0",
+      "inspected_files": [
+        "scicite/data.py",
+        "scicite/dataset_readers/citation_data_reader_scicite.py",
+        "LICENSE"
+      ],
+      "path_evidence": "DataReaderS2ExcerptJL/Citation -> SciciteDatasetReader._read -> text_to_instance -> citation_text tokens; citation-context intent object, not two-sided comparison."
+    },
+    {
+      "id": "robin",
+      "paper": "https://www.nature.com/articles/s41586-026-10652-y",
+      "commit": "4a5cce310f3bc7663a67117db88af43b84733ffe",
+      "repository": "https://github.com/Future-House/robin",
+      "license": "Apache-2.0",
+      "inspected_files": [
+        "robin/assays.py",
+        "robin/utils.py",
+        "LICENSE"
+      ],
+      "path_evidence": "experimental_assay -> query generation -> call_platform -> EdisonClient.create_task. Hosted literature-service internals are not exposed by this wrapper."
+    }
+  ]
+}
+

@@ -1,0 +1,63 @@
+The later reviews exposed preexisting scientific defects in both cases.
+Neither trajectory establishes that a correction introduced the scientific error.
+All three author versions and both transitions were compared field by field.
+
+Spatial NT-seq
+
+Original author 001 already says in measurement_goal: use new-to-total ratios and
+labeling duration to infer synthesis, degradation and half-life. Its decode_map
+transformation (/stages/7/transformation) and kinetics readout assignment
+(/readouts/2/assignment) already repeat that inference. Synthesis requires an
+abundance input; the original statement omits it. The original visual
+instruction also combines 'Total RNA / inferred turnover' into a shared motif.
+
+Review 002 accepts measurement and the scientific transformation, but asks the
+author to separate abundance maps from kinetic maps and explicitly connect ratio
+and pulse duration to inference. Author 003 changes six fields: image prompt,
+legend[6], readouts[2].evidence, stages[7].caption/evidence/illustration. It does
+NOT change measurement_goal, stages[7].transformation, or readouts[2].assignment.
+The revised illustration
+now explicitly routes R + tL to half-life, synthesis and degradation, elaborating
+the preexisting abundance omission. Review 004 catches that omission in goal,
+stage, readout and image prompt. The continuation author retains abundance n as
+an input to synthesis and receives a fresh all-accept review.
+
+Thus the omission predated the correction. The first correction made its visual
+manifestation more explicit, and the first review missed the older goal/stage
+claim. It is inaccurate to say the correction newly introduced the false
+scientific relationship.
+
+Author raw artifact SHA256, chronological order:
+001 original d4304e8f80fecea779baf067fb6738238b1f96dda13b3585f822fa53123fda82
+003 revised  09657cb228d902b2fbdb1812bc0920faf8ba6dff71f6d408d698df96ca28f088
+001 continued5872806ec0fb7e8a414bd68bc82f0b086978f5933b66ef1740b539072717c9b6
+
+Paired-Tag
+
+Original author 001 already depicts 'a barcoded cDNA amplicon with a small NotI
+cut symbol' in /stages/6/illustration and labels the lane 'cDNA: digest and
+tagment'. The source passage establishes NotI treatment of a mixed RNA-library
+aliquot, without establishing that cDNA-specific molecular cleavage relationship.
+
+Review 002 asks only that the image prompt include the wash already described in
+the target stage. Author 003 changes EXACTLY ONE FIELD: image_generation_prompt,
+adding the wash-away arrow. The cDNA-specific NotI stage and its illustration
+remain byte-identical. Review 004 catches that older unsupported depiction.
+The continuation changes six fields: image prompt, stages[6].caption,
+stages[6].illustration, stages[6].transformation, unknowns[0], unknowns[2]. It
+keeps NotI as an aliquot-level treatment and retains supported later cDNA
+tagmentation. Fresh review accepts all targets.
+
+The wash correction did not introduce the NotI defect. The later independent
+review exposed a preexisting error the first review had accepted.
+
+Author raw artifact SHA256, chronological order:
+001 original46bbe920205fd5b628a3fdf0231bf330a9beb5a00cb98255172e44964606917f
+003 revised 43d1464867519e18ca95345f7110b525c2152281659d72dd89854197802b38b1
+001 continued26656f12b0dc88f4137d0b299c11e3da1bcd6e94cdebabb60f7ad7ce847d8fea
+
+Full immutable-input snapshots and complete JSON Pointer field diffs remain on
+Sherlock: technology_atlas/v2/work/harness_execution_audit_20261113/results/
+scientific_trajectories.json. Curated review findings and author-version fields
+are in adjacent curated_trajectories.json. Input run paths and hashes are pinned
+in summary.json. Original run 52086711; continuation run 52091865.

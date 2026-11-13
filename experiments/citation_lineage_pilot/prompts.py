@@ -141,6 +141,9 @@ def build_prompt(role, context):
         instructions = CHANGE_COMMON + '\n' + CHANGE_ROLES[role]
     else:
         instructions = COMMON + '\n' + ROLES[role]
+    if context.get('reading_policy') == 'focused':
+        from experiments.history_contract_audit_20261113.focused_reading import focused_instructions
+        instructions = focused_instructions(role, instructions)
     if role == 'analyse' and context.get('previous_review'):
         instructions += '\n' + REVISION_INSTRUCTIONS
     if role == 'review' and context.get('previous_review'):

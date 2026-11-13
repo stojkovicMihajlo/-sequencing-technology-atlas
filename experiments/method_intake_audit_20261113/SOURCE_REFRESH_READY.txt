@@ -1,0 +1,99 @@
+SOURCE-ONLY BULK METADATA REFRESH — PREPARED FOR ROOT LAUNCH
+
+Archive: source_refresh_release_01.tar.gz
+SHA256: 7bed169b16e81a4446c1f6a87214c845a7fed3f3a847a3560ae77b7825a2f8d0
+Five mocked source-IO checks pass, including the isolated frozen support snapshot.
+source_refresh.sbatch passes bash-n. This worker submitted no job.
+
+The exact existing pool is at
+/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/technology_sources_20261105/source_library_release_01/post_2016_discovery/candidate_papers.json
+104630334bytes, SHA256fd625c3e843642ef22ec7f57cb125b146f014a4b8b4682723bf5462ff9d354c9.
+It has12040own-PMID records:11807with abstract text,233without,12008with own DOI;
+all12040are not_yet_screened. No key/own-PMID mismatches were observed. Raw PubMed
+metadata originals and per-record metadata_receipt pins remain beside that pool.
+The thin input manifest references it; the104MB JSON was not copied to the Mac.
+
+Original coverage:12190discovered PMIDs,180/181queries successful, no reported
+truncated queries. The150missing metadata records are exactly raw_metadata/
+batch-66.error.json (HTTP400). Fresh30-ID requests recover only those missing IDs,
+without rewriting failed receipts. The failed TARGET-seq+ query collided with
+TARGET-seq's slug-derived filename. New query filenames hash source ID, exact query
+and dates; neither old query receipt is overwritten.
+
+CORRECTION TO AN EARLIER ASSISTANT MESSAGE: CUT&RUN28079019 and SHARE-seq33098772
+are already in the pool, as is scNMT29472610. Tn5-05928095828 is absent. The earlier
+claim that only scNMT was present resulted from reading only the first printed
+sample; it is withdrawn. QUERY_RECALL_DIRECT_20261113.json contains a fresh exact
+remote check against the same pool hash and original query memberships. Only these
+four post2016assay/library-improvement positives enter query recall;2014Picelli,
+software and application papers are not part of that denominator.
+
+One bounded Qiu job performs two source-only stages:
+1. Probe: repair missing150metadata; sample20IDs per new request and retain complete
+   query counts/translation/receipts; obtain four positive metadata records when
+   absent, keeping direct control retrieval separate from search hits.
+2. Expand: reuse the probe overlay and acquire all new metadata returned by the
+   four supplemental queries,18existing-query Nov6–13date deltas and failed-query
+   repair. Truncated ESearch queries split recursively by date, with a persistent
+   incomplete marker if even a one-day query cannot return all IDs.
+No fulltext request or model call exists in either stage. No quota is imposed.
+
+The four supplemental Title/Abstract queries cover general library preparation
+and enzymes; RNA physical assays; chromatin physical assays; and single-cell/
+spatial library/barcoding architecture. They do not require new/novel/improved/
+performance terminology. Experimentally demonstrated enzyme-centered and library
+preparation improvements remain positive method/version/contribution candidates.
+They are not excluded just because their change concerns a reagent.
+
+Outputs are immutable new overlays and one own-PMID paper-source queue. Original
+pool records are referenced; new metadata has original raw XML/hash receipts.
+Own DOI collisions are explicit identity holds, not silent paper merges. Metadata
+availability, abstract screening, method identity and actual fulltext availability
+remain separate. An absent abstract is a source task, not a rejected assay.
+
+Current known fulltext cache index:
+/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_sources/illumina_task2_sources_20261105_08/collection.json
+SHA256b8f109794018399bfe345b1accf516c9506d39688986dd7922e12467759f1b21.
+It records307papers,252fulltext_acquired and55metadata_only;252article records.
+Fourteen own-PMID publications overlap the current12040pool and have article-file
+records. The thin inputs preserve those exact paths/hashes for reuse checks.
+The full252cache index remains available through the pinned collection pointer;
+validate newly expanded IDs against it before their later fulltext downloads.
+File records do not assert current byte presence or scientific applicability.
+
+Existing reusable acquisition code, not a replacement downloader:
+- illumina.sources.fetch and parse_pubmed supply rate-guarded TLS acquisition,
+  original receipts and own-PMID/DOI parsing. refresh_discovery_pool.py orchestrates
+  immutable query/metadata overlays and uses these exact frozen helpers.
+- scripts/illumina/technology_sources/literature_search.py is the original
+  discovery entry point. Its18queries+163seeds and existing receipts are reused.
+- illumina.sources.acquire_pmc_fulltext is the existing identity-aware PMC route.
+- scripts/illumina/technology_sources/recover_selected.py::acquire_one and
+  article_identity.xml_identity are existing public-article primitives. A later
+  selected fulltext job can reuse them with its explicit identity/access ledger;
+  PDF title-only checks are not sufficient grounds to claim a paper's own IDs.
+- located_documents.py::register handles scoped primary, supplement and cited
+  protocol registration when needed. No source-finder model is required for this
+  metadata refresh, and no fulltext routine is invoked now.
+
+Root launch, after required current Sherlock instructions and Qiu environment:
+stage=/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/method_intake_audit_20261113/source_refresh_release_01
+sbatch --export=ALL,ATLAS_SOURCE_REFRESH_STAGE="$stage" \
+  --output="$stage/slurm-%j.out" --error="$stage/slurm-%j.err" \
+  "$stage/source_refresh.sbatch"
+Partition normal,xiaojie,service;2CPUs,16GB,2hours. Qiu UNIX group/data stays xiaojie.
+Durable results use byte-only copying and a verified SHA manifest, not cp-a.
+
+Batch screening can consume the original pool plus results_JOB/expand/OVERLAY.json.
+The separately owned bulk_screen.py runner is prepared by the execution agent;
+this source payload intentionally contains no native model code or scientific
+expected labels. No mandatory second screen or reviewer pass is coupled to it.
+
+Curated web leads remain available for later identifier additions without installing
+a service: Teichlab/scg_lib_structs (https://github.com/Teichlab/scg_lib_structs),
+museumst::read_metadata and get_pubs_df
+(https://pachterlab.github.io/museumst/reference/read_metadata.html), and the direct
+study/protocol TSV documented at https://www.nxn.se/p/single-cell-studies.
+These were inspected as resource/code leads; they were not bulk-harvested in this
+refresh. Method, publication, dataset, protocol version and contribution counts
+must remain distinct.

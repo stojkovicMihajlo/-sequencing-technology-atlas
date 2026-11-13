@@ -1,0 +1,257 @@
+{
+  "annotation_status": "model_authored_source_checked_diagnostic_candidate_not_expert_gold",
+  "execution": "Specification only; no native/model execution and no admission change.",
+  "existing_contracts": {
+    "dataset": "protocol_grounding_cases/1.0",
+    "labels": "protocol_grounding_labels/1.0",
+    "host_gate": "genomics_discovery.protocols.extraction.verification_controls.control_gate",
+    "source_registration": "genomics_discovery.sources.packets.build_packet",
+    "custody_replay": "genomics_discovery.evaluation.grounding_diagnostic.verify_dataset"
+  },
+  "pairs": [
+    {
+      "id": "local_condition",
+      "method": "pseudo-seq",
+      "source_id": "paper:25192136",
+      "pointer": "/operations/12/information_effect",
+      "record_id": "minus_rt",
+      "context_pointers": [
+        "/operations/12",
+        "/states"
+      ],
+      "context_rule": "Keep the minus_rt Operation and only its input/output States; preserve roles, effects, description and mechanism. Do not show historical reviews.",
+      "bad_outcome": "contradicted",
+      "rationale": "The actual input is mock-treated minus-CMC RNA. Modification-dependent recording cannot be assigned to this arm; its cDNA endpoints supply background comparison.",
+      "anchors": [
+        "Mock-treated (−CMC) RNA fragments were processed in parallel to identify pseudouridine-independent RT stops.",
+        "In parallel mock-treated samples were incubated in BEU buffer without CMC.",
+        "Reverse transcription (RT) was carried out using AMV-RT"
+      ],
+      "witness": "/operations/12/effects/1/statement",
+      "registry": {
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/readability_audit_20261108/run_01/cards/pseudo-seq/attempt_001/source_registry.json",
+        "raw_sha256": "7fabf6722cc11872bbc88108c4a490066038217d33df51bc6b70bab50a02ea67"
+      },
+      "source": {
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_sources/illumina_20261105/shared/files/2e/2e1ad52026a4a6f96a0c03f9f82a2607d4159c8b73c32cafcc7052cd34c1d48b.txt",
+        "sha256": "2e1ad52026a4a6f96a0c03f9f82a2607d4159c8b73c32cafcc7052cd34c1d48b",
+        "title": "Pseudouridine profiling reveals regulated mRNA pseudouridylation in yeast and human cells.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25192136/",
+        "source_id": "paper:25192136",
+        "text_sha256": "2e1ad52026a4a6f96a0c03f9f82a2607d4159c8b73c32cafcc7052cd34c1d48b",
+        "anchor_matching": "Whitespace-normalized exact matching only; custody remains the original source-byte SHA256. Register full source bytes with build_packet, then retain all paragraphs needed to support and distinguish both judgments."
+      },
+      "versions": {
+        "bad": {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/readability_audit_20261108/run_01/cards/pseudo-seq/attempt_001/attempts/001_author/artifact.json",
+          "raw_sha256": "74774817e54adb8162c117db4b3cac4b4ad50554b983b64f78a2adacb884696a",
+          "document_canonical_sha256": "e1e3fde9b6bcce1bbbdebbe06b4b592f5df775ab5ab9faa3bb4f364b0eabbf6d",
+          "field_pointer": "/operations/12/information_effect",
+          "field_value_sha256": "e113e1d712ba37c72de16252a606859f0422afa7520316ff3074b77732e74c2f",
+          "field_value": "The original RNA modification is translated into the location of a cDNA termination boundary; it is not a CMC modification on the DNA reporter.",
+          "expected_grounding_outcome": "contradicted",
+          "expected_protocol_field_verdict": "unsupported",
+          "expected_plan_decision": "revise",
+          "expected_illumina_judgment": {
+            "verdict": "unsupported",
+            "action": "revise"
+          },
+          "context_value_sha256": {
+            "/operations/12": "64942f7d99d5f70e43118faebcc00971bdfb67dd5a6028227124efbd4e8bdbb7",
+            "/states": "ca9599a73042b59562f3959a2a67574839929554688ed2d2a78dfeb62876b25b"
+          }
+        },
+        "good": {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/readability_audit_20261108/run_01/cards/pseudo-seq/attempt_001/attempts/003_author/artifact.json",
+          "raw_sha256": "ac7ff1ff95810a0e5fc5c7440d4c70b2a244aad17ce599f363336584add3aa46",
+          "document_canonical_sha256": "d445f3ac107051851ad507b429a149bec513082c087aeec1b0fc949295bd618e",
+          "field_pointer": "/operations/12/information_effect",
+          "field_value_sha256": "e9cad815f9d035f543688437b4b54bf72d5ff4aa1adcf26a6215f25ce2fac098",
+          "field_value": "RNA-derived cDNA sequences and termination endpoints record pseudouridine-independent background RT stops. Keeping this product in the separately processed −CMC arm preserves its control identity for later comparison with +CMC.",
+          "expected_grounding_outcome": "supported",
+          "expected_protocol_field_verdict": "supported",
+          "expected_plan_decision": "accept",
+          "expected_illumina_judgment": {
+            "verdict": "supported",
+            "action": "accept"
+          },
+          "context_value_sha256": {
+            "/operations/12": "5f8a8f1bb8e1a87796a79a2787f7003162e42e32f7ac6df2b62a84ba732ad379",
+            "/states": "45a19b51e954b26ba7d64066ed848f00e0f8127a7b7c9b03191a17ad394bd048"
+          }
+        }
+      }
+    },
+    {
+      "id": "molecule_specific_cleavage",
+      "method": "paired-tag",
+      "source_id": "paper:33589836",
+      "pointer": "/stages/6/illustration",
+      "record_id": "rna_library",
+      "context_pointers": [
+        "/stages/6",
+        "/stages/4",
+        "/unknowns/2"
+      ],
+      "context_rule": "Keep RNA-library stage, preceding amplified-mixture split and unknown restriction-site map. No source-absence claim identifies which component is cut.",
+      "bad_outcome": "not_established",
+      "rationale": "NotI addition to the RNA-library aliquot of amplified mixed products is established; the cDNA-specific NotI cut is not. Narrow depiction to aliquot-level treatment rather than assert the cleavage is experimentally false.",
+      "anchors": [
+        "Transfer 17 µL each of purified amplified products into two tubes for DNA and RNA library construction, respectively.",
+        "Add 2 µL 10X Cutsmart buffer and 1 µL NotI-HF",
+        "For RNA libraries, N5 adaptor was added by tagmentation."
+      ],
+      "witness": "/stages/6/transformation",
+      "registry": {
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/release_02/run_52086711/methods/paired-tag/source_registry.json",
+        "raw_sha256": "3208e38e3f105543c48c22a6d2d2fe9c84fac83ffd81e068672d76989fad19b2"
+      },
+      "source": {
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/release_02/assembled_sources_52086711/methods/paired-tag/inputs/primary/reading.txt",
+        "sha256": "f6e3fadb25a248ba3def5ef9ac1b3c07b7877e15b333d5d96fdebb53ff2330ed",
+        "title": "Joint profiling of histone modifications and transcriptome in single cells from mouse brain.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/api/oai/v1/mh/?verb=GetRecord&identifier=oai%3Apubmedcentral.nih.gov%3A7954905&metadataPrefix=pmc",
+        "source_id": "paper:33589836",
+        "text_sha256": "f6e3fadb25a248ba3def5ef9ac1b3c07b7877e15b333d5d96fdebb53ff2330ed",
+        "original": {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/release_02/assembled_sources_52086711/methods/paired-tag/inputs/primary/original.xml",
+          "sha256": "8f3a5d9eb03b3cf54161105f7083c0443bbe04e730e53b2b601f32455d6aab78"
+        },
+        "anchor_matching": "Whitespace-normalized exact matching only; custody remains the original source-byte SHA256. Register full source bytes with build_packet, then retain all paragraphs needed to support and distinguish both judgments."
+      },
+      "versions": {
+        "bad": {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/release_02/run_52086711/methods/paired-tag/attempts/001_author/artifact.json",
+          "raw_sha256": "46bbe920205fd5b628a3fdf0231bf330a9beb5a00cb98255172e44964606917f",
+          "document_canonical_sha256": "0a0148e0e558ebe89ee1584f1714a26978bc5a99a8f46ad311b4625aa9cf6394",
+          "field_pointer": "/stages/6/illustration",
+          "field_value_sha256": "01555ae7b4e5fd5aa78ab8141fb19c6723f42c6ff94dbfd69304f3950982e242",
+          "field_value": "In the lower lane, show a barcoded cDNA amplicon with a small NotI cut symbol followed by free blue Tn5 adding an orange N5 adaptor. Label the strand 'RNA-derived cDNA'. Show the final barcode-retaining library template with its insert and new adaptor. This enzyme is drawn free in solution at the library stage.",
+          "expected_grounding_outcome": "not_established",
+          "expected_protocol_field_verdict": "not_established",
+          "expected_plan_decision": "revise",
+          "expected_illumina_judgment": {
+            "verdict": "unresolved",
+            "action": "revise"
+          },
+          "context_value_sha256": {
+            "/stages/6": "c4cc9aecd160f81cb95389f43330fced44403d1f01d0bf39df0782fa71e364a5",
+            "/stages/4": "1b07233839bc36ec4a945f3ca82606b6c90070242d590a064ab42c864a4be258",
+            "/unknowns/2": "0a7076d4e27b426012eca6b1cafe8c7c10612070b9e34a99c52f2b1d695f66ed"
+          }
+        },
+        "good": {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/continuation_03/run_52091865/methods/paired-tag/attempts/001_author/artifact.json",
+          "raw_sha256": "26656f12b0dc88f4137d0b299c11e3da1bcd6e94cdebabb60f7ad7ce847d8fea",
+          "document_canonical_sha256": "74eb6fed20d82fbc1daeeadfc47449af89d050598943a612d19e6c73ed8ef972",
+          "field_pointer": "/stages/6/illustration",
+          "field_value_sha256": "dc078cf73c1d1589aa33fba91a1bd1f66a8f249f84f2f9eafa9f558201c7e018",
+          "field_value": "In the lower lane, begin with the mixed RNA-library aliquot, showing both chromatin-DNA-derived and RNA-derived cDNA amplicons with their barcode tiles. Put the reagent label 'NotI' above the aliquot treatment arrow. Next show free blue Tn5 adding an orange N5 adaptor to a strand labelled 'RNA-derived cDNA', leading to the barcode-retaining cDNA library template. Reserve strand-cut marks for the later Tn5 tagmentation; keep the NotI treatment at the aliquot level.",
+          "expected_grounding_outcome": "supported",
+          "expected_protocol_field_verdict": "supported",
+          "expected_plan_decision": "accept",
+          "expected_illumina_judgment": {
+            "verdict": "supported",
+            "action": "accept"
+          },
+          "context_value_sha256": {
+            "/stages/6": "5cf42b0bd92d7e94523028028aa1b99f004044f8946b65ab92d2df7aeb6cdff7",
+            "/stages/4": "1b07233839bc36ec4a945f3ca82606b6c90070242d590a064ab42c864a4be258",
+            "/unknowns/2": "9859c886524afaa65b3af23ccba5d6fbf2400bd0bfa8201d91bc3c624f4e1c23"
+          }
+        }
+      }
+    },
+    {
+      "id": "inference_dependency",
+      "method": "spatial-nt-seq",
+      "source_id": "paper:42675226",
+      "pointer": "/readouts/2/assignment",
+      "record_id": "steady_state_kinetics",
+      "context_pointers": [
+        "/readouts/2",
+        "/stages/7",
+        "/measurement_goal"
+      ],
+      "context_rule": "Keep the kinetic readout, decoding-stage inputs/transformation/illustration and measurement goal. Judge declared synthesis dependency, not equation typography.",
+      "bad_outcome": "not_established",
+      "rationale": "The claimed complete assignment omits the source-established abundance dependency of synthesis estimation. Ratio and pulse time supply half-life/degradation but do not supply synthesis magnitude. Reject or qualify this incomplete account; do not infer an experimentally false abundance model from omission alone. Corrected assignment explicitly retains normalized labeled-RNA abundance.",
+      "anchors": [
+        "Using the RNA half-life and cell/spot matrix",
+        "where n is the average labeled RNA abundance",
+        "where R is the ratio of new to total RNA"
+      ],
+      "witness": "/readouts/2/read_fields",
+      "registry": {
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/release_02/run_52086711/methods/spatial-nt-seq/source_registry.json",
+        "raw_sha256": "b9d6c1f386edd0768a5b7538d908195aa7bf068c9f91106bd1933afbf3454c39"
+      },
+      "source": {
+        "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/release_02/assembled_sources_52086711/methods/spatial-nt-seq/inputs/primary/reading.txt",
+        "sha256": "1b0e3189df6e6642bef8680604b193548aef5d4616b2752463d531c953b4960a",
+        "title": "Spatial mapping of RNA turnover kinetics in the mouse brain",
+        "url": "https://www.nature.com/articles/s41593-026-02420-y.pdf",
+        "source_id": "paper:42675226",
+        "text_sha256": "1b0e3189df6e6642bef8680604b193548aef5d4616b2752463d531c953b4960a",
+        "original": {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/release_02/assembled_sources_52086711/methods/spatial-nt-seq/inputs/primary/original.pdf",
+          "sha256": "041a0a131e87b47cac95dec6d5bd1ac355b6f28bb4934e036af3dbebb4d2fd2b"
+        },
+        "anchor_matching": "Whitespace-normalized exact matching only; custody remains the original source-byte SHA256. Register full source bytes with build_packet, then retain all paragraphs needed to support and distinguish both judgments."
+      },
+      "versions": {
+        "bad": {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/release_02/run_52086711/methods/spatial-nt-seq/attempts/001_author/artifact.json",
+          "raw_sha256": "d4304e8f80fecea779baf067fb6738238b1f96dda13b3585f822fa53123fda82",
+          "document_canonical_sha256": "ff360ea27998b15e4710a279639a3f2493c4784286bea3b3171e8d326b2013e5",
+          "field_pointer": "/readouts/2/assignment",
+          "field_value_sha256": "af7254d5541476d59bae5c98e5928fad64fe4263b7f7f87ce8811b9b4492cfac",
+          "field_value": "Under the steady-state kinetic model, use the new-to-total fraction and pulse duration to estimate gene-specific half-life and derive synthesis/degradation rates. Aggregate by anatomical region, or use RNAkinetoScope's transcriptome-similarity neighbors within the same spatial cluster for spot-level inference. Map estimates back to the originating registered spots.",
+          "expected_grounding_outcome": "not_established",
+          "expected_protocol_field_verdict": "not_established",
+          "expected_plan_decision": "revise",
+          "expected_illumina_judgment": {
+            "verdict": "unresolved",
+            "action": "revise"
+          },
+          "context_value_sha256": {
+            "/readouts/2": "6a18bb2667bce7b0fdde8f53933b9400153f2ae1ab8e79ca5e7c09dc7a0e0102",
+            "/stages/7": "bfbc473261e0103229ae70d703eb2dea9809ef9439566543d61b26acbef3328f",
+            "/measurement_goal": "997ebfcaa164e53e8e0d7bc1a80b2205a249e47a304e235a2a1822b3c33607c5"
+          }
+        },
+        "good": {
+          "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/diagram_generation10_20261112/continuation_03/run_52091865/methods/spatial-nt-seq/attempts/001_author/artifact.json",
+          "raw_sha256": "5872806ec0fb7e8a414bd68bc82f0b086978f5933b66ef1740b539072717c9b6",
+          "document_canonical_sha256": "fd60a1fea3a0e46f2b2620055bb5f6a187c10efd736d7e0678f4de8b2ba5c691",
+          "field_pointer": "/readouts/2/assignment",
+          "field_value_sha256": "cf4b038bea68811248ae039cf70bb7ec641d5976fb21bf739b6c62bad02b5248",
+          "field_value": "Under the steady-state model, aggregate and normalize corrected counts by anatomical region, or use RNAkinetoScope's transcriptome-similarity neighbors within the same spatial cluster for spot-level inference. Retain normalized new-RNA abundance n separately from R = new/total. Estimate gene-specific half-life from R and pulse duration tL; calculate degradation γ from half-life. Estimate synthesis α using normalized labeled-RNA abundance n together with γ and tL, as α = nγ/(1 − exp(−γtL)). In the illustrated spot-level analysis, n is in CP10k and α in CP10k per minute; γ is in inverse minutes. RNAkinetoScope also imputes missing half-lives within clusters before rate estimation. Map inferred parameters back to the originating registered spots.",
+          "expected_grounding_outcome": "supported",
+          "expected_protocol_field_verdict": "supported",
+          "expected_plan_decision": "accept",
+          "expected_illumina_judgment": {
+            "verdict": "supported",
+            "action": "accept"
+          },
+          "context_value_sha256": {
+            "/readouts/2": "a67fddd826ce1826f7577debabd6f46c2db5276553b3e246ccaf78eabd969472",
+            "/stages/7": "5c6ef1dc453f51f6e092f60041372b17c153bcc7d8a1e24e6bd88e91a3d05537",
+            "/measurement_goal": "fd1e197c9de5e6ceeb68bd02cfde00c925b9cd7ec5ae9195186d4eac84bef9ef"
+          }
+        }
+      }
+    }
+  ],
+  "same_wording_positive": {
+    "parent_pair": "local_condition",
+    "path": "/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/readability_audit_20261108/run_01/cards/pseudo-seq/attempt_001/attempts/001_author/artifact.json",
+    "raw_sha256": "74774817e54adb8162c117db4b3cac4b4ad50554b983b64f78a2adacb884696a",
+    "record_id": "plus_rt",
+    "field_pointer": "/operations/5/information_effect",
+    "field_value_sha256": "e113e1d712ba37c72de16252a606859f0422afa7520316ff3074b77732e74c2f",
+    "expected_grounding_outcome": "supported",
+    "required_context": "Actual plus-CMC input and corresponding cDNA output, neighboring description/mechanism and treatment-arm identity. The treatment-specific chemical contribution is applicable here; identical words are not themselves the defect.",
+    "boundary": "Local claim-control only; this does not approve every claim in the original document."
+  }
+}

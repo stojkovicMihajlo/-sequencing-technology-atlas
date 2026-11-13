@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-13",
+  "commands": [
+    {
+      "command": "python -m unittest discover -s experiments/method_intake_audit_20261113 -p 'test_*.py' -v",
+      "result": "15 passed"
+    },
+    {
+      "command": "python experiments/method_intake_audit_20261113/audit_inventory.py",
+      "result": "273 named entries; 48 dated missing publication files; 33 dated checkpoint source holds; 12 targeted leads"
+    },
+    {
+      "command": "python experiments/method_intake_audit_20261113/intake.py --manifest experiments/method_intake_audit_20261113/fixtures.json --output experiments/method_intake_audit_20261113/staged_fixtures.json",
+      "result": "7 scientific fixture judgments validated and staged; 0 extraction authorizations"
+    }
+  ],
+  "input_pins": [
+    {
+      "path": "experiments/method_intake_audit_20261113/intake.py",
+      "sha256": "4513a9e0ebb842526e95f8e35433d96470279ae3ec620263d83bfc83636b73f3"
+    },
+    {
+      "path": "experiments/method_intake_audit_20261113/test_intake.py",
+      "sha256": "0d07a33bbb62ef4f3395493a503cd7c9270c99327f934ae4930d392362154f33"
+    },
+    {
+      "path": "experiments/method_intake_audit_20261113/fixtures.json",
+      "sha256": "d6278564e6e5dab8708c0299cf0cc229a7df4b17c76f2c57371887ef4e6cee50"
+    },
+    {
+      "path": "experiments/method_intake_audit_20261113/audit_inventory.py",
+      "sha256": "e3b12e925102cafe8f772ef9e78645ab7435dbd295d8d2acc92d77879fb60681"
+    },
+    {
+      "path": "experiments/method_intake_audit_20261113/staged_fixtures.json",
+      "sha256": "234d2a973e48fa41b108629183f0195183802af402babbecbdf99624285f091f"
+    }
+  ]
+}

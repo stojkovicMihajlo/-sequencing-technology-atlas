@@ -1,0 +1,433 @@
+Evolutionary-edge contract and focused retrieval audit — 13 November 2026
+
+Scope and custody
+
+This is a bounded audit of saved reviewed records and current code, plus primary
+reference-method research. It is not a fresh scientific re-review, a new native
+extraction, a repaired publication, or an exhaustive atlas audit. No model was
+launched and no production code, frozen runtime, source packet, running job or
+saved scientific result was changed. The audit owns this directory and the
+adjacent decision record docs/decisions/2026-11-13-history-contract.txt only.
+
+The persistent Illumina RESUME.txt and adjacent CHECKLIST.csv were read before
+work. Their historical per-card counting unit is unchanged. No card was acquired,
+extracted or re-reviewed, so no acquisition/extraction checklist status is changed.
+
+Input is the actual reviewed-final-52094468 explorer snapshot: 82 reviewed method
+investigations, 106 experimental relationships and 253 supporting relationships.
+collect_snapshot.py checks eight selected edge files against manifest hashes and
+writes saved_examples.json plus snapshot_pins.json. The original graph paths,
+source-registry hashes, publication IDs and available source metadata remain in
+saved_examples.json. Pins document what was inspected; they do not assert that
+historical remote document paths were freshly reopened.
+
+Local contract, stated before choosing a reference implementation
+
+Observable inputs: an accepted later workflow; the later primary publication,
+citation locations and consequential supplements; relevant earlier primary
+publications; and a pinned method catalogue with aliases, assigned publications
+and implementation scopes. Earlier operation graphs are optional.
+
+Target: a source-supported account of what the later assay actually uses from an
+earlier contribution, and how the same experimental feature differs or remains
+unchanged. The contribution can be a whole assay strategy or a physical/encoding
+component spanning parts of one or several Operations. The graph must also retain
+comparison, precedent and supporting-resource relationships without converting
+them into experimental inheritance.
+
+Required distinctions: chronological before/after fact, actual inheritance,
+method/version identity, and experimental consequence are separate judgments.
+A difference need not be inherited; use need not change the used feature; a
+reported comparison need not use the historical donor; and a new design can have
+no established donor. Computational measurement encoding can be experimental
+design; routine software use does not become experimental ancestry merely by
+appearing in an extracted Operation.
+
+Deployment: existing source acquisition -> nomination -> analysis -> independent
+review -> existing graph publication. Keep the author/reviewer separation. The
+proposed retrieval policy changes what they ask to read, not the scientific gate.
+
+Success: an informed reader can state the specific old arrangement, new
+arrangement and supported use, and can inspect the primary evidence for each.
+Negative controls are comparator-only edges, unchanged component reuse, unknown
+gain, whole-assay gain misattributed to a component, and known-family version
+mismatches. Token reduction is secondary to factual coverage.
+
+Not identifiable from the current evidence by default: global first invention,
+all molecular reagents being identical, interchangeability, compatibility beyond
+the demonstrated input interface, isolated causal gains without a relevant
+experiment, absence of a limit because none was reported, or absence of a method
+because one catalogue endpoint does not match its version.
+
+Material ambiguity
+
+This is a scientific-semantics ambiguity: a pipeline can produce equally valid
+JSON for a historical donor, a validation comparator, and a similar mechanism
+while assigning different ancestry. More taxonomy cannot determine which claim
+the sources support. Blanket complete-paper delivery and unbounded snippet-only
+reading are both inadequate defaults: the first is costly without measuring
+entailment, and the second can omit implementation-changing context. The selected
+alternative is question-directed retrieval with explicit escalation.
+
+What the existing record already represents
+
+src/genomics_discovery/illumina/change_records.py already supplies:
+
+* ExperimentalChange.compared_feature, before and after, with the same-boundary
+  and explicit-replacement wording in their field descriptions (lines 96–104).
+  These are sufficient to explain a concrete design change. Do not add synonymous
+  difference/mechanism/innovation classes or a required change-type label.
+* retained plus evidence.retained; retention is optional, contribution-scoped and
+  must cover both papers. It is not an assay similarity inventory (45–49, 101).
+* independent evidence.before, after and inheritance (45–49). Inheritance is a
+  later-source attribution of use; earlier and later facts require their own
+  sources. Quote presence is explicitly distinct from scientific entailment.
+* exact State/Operation/Flow anchors and optional JSON Pointers. Earlier scope can
+  be paper_only without invented donor operation IDs (WorkflowLocations).
+* optional reported effects, with unknown effects expressible as not_established
+  plus an empty list (80–93). No performance comparison is required for ancestry.
+* effect metric, reported_value, comparison_basis, actual comparator, context and
+  causal scope this_change/joint_changes/whole_assay (52–77). Comparator is the
+  actual baseline/condition, not the metric. Absolute capability has no baseline.
+* source-supported limits versus unresolved questions (80–93). Missing support
+  belongs in unresolved; it does not establish a measured drawback.
+
+experiments/citation_lineage_pilot/change_models.py already separates contribution
+kind, relationship, workflow scope and identity. MethodMatch supports resolved,
+not_in_atlas, unresolved, ambiguous and not_applicable; its rationale can state a
+known-family version mismatch. No new method-identity hierarchy is needed for
+this audit. Publication/name matches are hints, not proof of version equivalence.
+
+history_coverage.py already distinguishes omitted_supported_contribution, which
+needs evidence from both available primary papers, from research_lead, which
+names the missing decisive evidence and affected claims. Preserve this distinction
+under focused retrieval. A query that did not find an answer is not a supported
+omission; a source question is not a missing established ancestry edge.
+
+The current prompts already require the main scientific distinctions. A repair
+must therefore make the retrieval and review task more concrete, not merely add
+another prohibition or restate the fields.
+
+One genuine semantic coverage limitation remains: ChangeAnalysis stores structured
+changes only inside reference-bound ChangeClaim objects. A distinguishing later
+design with no established donor currently goes in the free-text summary. It has
+no separate structured address/evidence field or mandatory ChangeCheck of its
+own. The November12 contract explicitly treats that summary as not independently
+reviewed structured novelty; this audit has not solved method-level contribution
+coverage. Do not invent a donor reference to fill this gap. For a lean first retrieval
+pilot, source-question rows can target the relevant summary statement and review
+must explicitly check it. If downstream use requires machine-addressable complete
+design-change accounting, reuse ExperimentalChange in a method-level collection
+with separate per-change review IDs, and link claims to its IDs; do not create
+another mechanism class or duplicate
+the same change independently under every donor. That is an actual ownership/
+addressability issue, unlike renaming before/after or adding another change label.
+Absence of an established donor does not mean that the later implementation or
+chemistry is unknown. Keep those evidential questions separate. This is a bounded
+addition beyond field wording, to be evaluated with a reviewable fixture before
+introducing new production fields.
+
+The concrete reading bottleneck
+
+CHANGE_COMMON in experiments/citation_lineage_pilot/prompts.py (208–215) requires
+the complete seed and every acquired earlier full paper; it explicitly disallows
+query-only snippets. CHANGE_ROLES repeats this for analyse (241) and review (268).
+The native command always supplies --paper-read-log. run.py validate (269–279)
+requires the complete seed in each role, every acquired non-seed fulltext for the
+analyst (including false leads), and every claimed earlier fulltext for review.
+
+paper_reads.record_read (7–16) records registry and text hashes and delivered
+offsets. It drops query results whose start is null. check_full_reads (19–37)
+merges offsets only if they cover the whole string continuously from zero. This
+is tool delivery, as its own returned boundary correctly says. It cannot show
+which source resolved which implementation question or whether relevant figure
+and supplement content was missing. A prompt-only focused-reading change would
+still fail this host check; deleting the host check without replacement would
+lose useful custody evidence.
+
+Actual saved examples and targeted review questions
+
+1. iCLIP -> eCLIP, C_R6, edge 3f47bdd76f6f34ad2b68ba00
+
+R6_capture records unchanged UV capture, limited RNA digestion, RBP
+immunopurification, gel/membrane separation and RNA recovery. It correctly has
+no reported effects. Its before/after prose mixes this retained design with
+HeLa/HEK293T/K562/HepG2 demonstrations, which slows identification of the point.
+The improvement is editorial: lead both sides with the same capture route and
+state unchanged reuse; retain sample qualifications only where they affect the
+claim. Do not invent a capture innovation to make this edge interesting.
+
+R6_truncated_library is a stronger account. Earlier RT-truncated cDNA becomes
+amplifiable through self-circularization and BamHI reopening; eCLIP ligates a
+second ssDNA adapter directly to the cDNA 3-prime end after RT. RNA 3-prime
+adapter priming and endpoint recovery remain. This is an explicit replacement
+at a common boundary. The saved record correctly marks its reported complexity
+and usable-read differences as whole_assay. The actual baseline was a locally
+generated RBFOX2 iCLIP library, not the original König R6 dataset. The historical
+endpoint and the performance baseline must remain separate in the explanation.
+
+R6_molecule_tags moves the pre-PCR random tag from an N3 RT-primer design to N5/N10
+in the ligated ssDNA adapter and changes the endpoint/tag duplicate criterion.
+Its unknown isolated gain is correctly recorded with no effect. The review notes
+that a later iCLIP protocol already had five-base tags; a comparison against R6
+does not establish that eCLIP first introduced longer molecular tags.
+
+Focused evidence: later attribution to iCLIP and RNAtag-Seq; both library-route
+Methods and scheme/legend; earlier circularization/BamHI/RT-primer passages;
+later rand3Tr3 and duplicate criteria; the result paragraph and local-baseline
+description only if a performance statement is retained. Retrieve the later
+iCLIP protocol only for a version/first-introduction claim or consequential
+ambiguity. Unrelated RBP target biology is unnecessary for these questions.
+
+2. ATAC -> combinatorial scATAC, C1, edge 8662835f938f8be6cd916a20
+
+The meaningful change is the unit and routing of cell attribution. Earlier bulk
+ATAC produces one population library. The later assay tags nuclei in first-round
+wells, pools and redistributes intact nuclei, then lyses and PCR-indexes in
+second wells so fragments carry a probable cell-of-origin pair. Tn5 accessibility
+selection is retained. The record correctly does not call this new tagmentation
+chemistry. A good shorter account needs the order and material identity at the
+pool/split/lysis boundaries, not a list of all shared enzymatic steps.
+
+Its separate bulk-comparator claim C5, edge 56f9dc544e787e0302319e3e, reports
+13–55% of expected bulk molecular complexity, with high duplication as a limit.
+This is not an improvement. It validates the rule that the same cited paper can
+provide an inherited assay strategy in one claim and a result baseline in another.
+
+Focused evidence: earlier ATAC tagging-to-PCR description plus its low-input
+direct-to-PCR variant; later ordering of first tagging, intact-nucleus pooling,
+sorting, lysis and second indexing; cell-assignment interpretation/collision
+qualification; optional complexity paragraph. A nominal material mismatch at an
+intermediate boundary must trigger the relevant Methods/supplement lookup.
+
+3. ATAC -> microfluidic scATAC, R13.atac_assay, edge c0910b8e9eae5b51521a6c2e
+
+R13.single_cell_implementation compares a pooled nuclear preparation with
+individually captured C1 IFC cell-origin reactions, on-chip transposition/initial
+PCR, later cell-index PCR and pooling. The >500-fold input-sensitivity claim is
+whole-assay. The 7.3e4 fragments per passing chamber is an absolute capability,
+with no comparator and with the quality-filtered-chamber qualification.
+
+R13.post_transposition_handling is particularly useful: the earlier low-input
+ATAC variant already omitted MinElute purification, so omission alone cannot be
+called a new single-cell feature. The later release optimization has its own
+no-release/MinElute controls and qPCR readout. The saved review leaves the final
+on-chip reagent/condition unknown without unavailable supplementary Methods.
+Do not convert the gel-shift EDTA/SDS test into the implemented final chemistry.
+
+Focused evidence: the earlier low-input exception and later Extended Data
+Figure 1 caption/table and Methods. This small targeted check is more informative
+than complete unrelated Results delivery. If the caption lacks the adopted
+condition, preserve that narrow unknown; it need not erase the established
+single-cell implementation or its separately scoped result.
+
+4. Nextera -> scATAC, R15.tn5_library_design, edge 2dff44e9cb8e2ab32ec18a64
+
+This is a positive pure-component control. The earlier purified-DNA method uses
+Tn5 with free synthetic mosaic-end adapters for fragmentation/end joining and
+PCR library completion. The later assay uses this library-generation principle
+within a single-cell accessibility assay. Accessible-chromatin use comes through
+the ATAC contribution; it is not assigned as an invention of the purified-DNA
+library method. No isolated gain or exact reagent-sequence identity is claimed.
+
+Its earlier named Nextera implementation is not in the supplied catalogue. This
+is an absent implementation endpoint supported by a primary paper, rather than
+a missing read of a known grouped card. One need not extract a full Nextera
+workflow before preserving this supported named component contribution.
+
+5. FAIRE array version -> FAIRE-seq, C_R3_FAIRE, edge e5dbab18fb20c4f08429840b
+
+This is explicitly NOT a missing-card or extraction-failure example. The curated
+grouped FAIRE-Seq/Sono-Seq card exists, with sources 17002501, 19303047 and
+20118932. The target extraction selects the sequencing implementation scoped to
+20118932. The earlier cited 17002501 implementation uses fluorescent comparative
+microarrays; the existing reviewer already checked this distinction. The saved
+method_match is not_in_atlas for that exact earlier array implementation and
+explains why the sequencing endpoint and Sono-seq are not interchangeable.
+
+R3_readout already states the important change: FAIRE aqueous-phase DNA formerly
+amplified/labeled for comparative microarray hybridization instead supplies an
+adapter-ligated amplified Illumina library. FAIRE selection is retained; R3 is
+not thereby the donor of the sequencing-library design. The seed's concordance
+with tiling arrays of the same samples is validation, not improved sensitivity.
+R3_preparation and R3_fractionation do not have invented component benefits.
+
+Interpret this as a known-family earlier version pending identity/alias review.
+Do not automatically count it as an undiscovered assay, duplicate the grouped
+card, merge the versions, or overwrite the accepted scope. The unavailable
+immediate protocol donor R2 is a separate research lead. In contrast, M-SPA in
+example 7 has no known corresponding family/card in the pinned catalogue.
+
+Focused evidence: curated grouped-card assignment and focal scope; earlier
+selection/readout Methods; later FAIRE selection plus sequencing-library Methods;
+same-sample array validation. Retrieve R2 only for claims about the modifications
+to that immediate protocol. This resolves the version question without repeating
+the focal extraction or pretending that every cited reference is the same assay.
+
+6. Concurrent short-RNA readout vs GRO-seq, R14-concurrent-readout-comparison,
+edge 8b35f18462646040989855c3
+
+The saved claim is comparison, with historical_development_edge=false. Earlier
+in this displayed comparison means the compared paper side, not established
+temporal precedence: the studies were concurrent. Seila mapped an accumulated
+short-RNA pool around TSSs; GRO-seq extends pre-engaged polymerases with BrUTP,
+selects labeled run-on RNA and sequences fragmented RNA. Concordant divergent
+signals support an in-vivo interpretation but do not demonstrate molecular
+transfer, sensitivity superiority or exact comparator library chemistry.
+
+The source supplement is unavailable, and the record appropriately does not
+invent its isolation/adapters. Displaying a chronological ancestor arrow from
+this record would change the scientific meaning despite valid comparison JSON.
+
+Focused evidence: the two selected-material/readout descriptions, citation
+context, relevant supplement rationale and dates. The unavailable comparator
+supplement matters only if an exact library mechanism is claimed. Baseline
+context alone does not require constructing a complete ancestral workflow.
+
+7. M-SPA vs NOMe-seq, B9_M_SPA_precedent, edge 73882190a8e69fa7f70771ac
+
+The earlier method marks exposed CpGs in intact nuclei with M.SssI and reads
+individual promoters by bisulfite/PCR/cloning; NOMe uses M.CviPI/GpC accessibility
+and genome-wide bisulfite readout while retaining a distinct CpG methylation
+channel. The saved relation is mechanistic_precedent, not attributed enzyme
+replacement. This is the truly absent named-method control: no M-SPA alias/card
+or relevant publication is present in the pinned catalogue, and neither NOMe
+nor WGBS is the demonstrated earlier implementation. Preserve its named endpoint
+and provenance without manufacturing descent.
+
+Lean record and reading proposal
+
+Keep the existing scientific fields. Each displayed contribution should answer,
+in this order: feature; earlier arrangement; later arrangement explicitly stating
+what changes or is retained; why actual use/adaptation is established; remaining
+unknowns; and optional consequences. Where no use is established, display the
+comparison or precedent honestly. Explain baseline as 'Compared against' or
+'Comparison baseline' if a viewer needs clearer wording; leave metric as the
+quantity measured. No output should need a performance result to explain change.
+
+Do not repeat one whole-assay result under every unchanged component. The current
+eCLIP capture and tagging records already demonstrate the correct empty-effects
+case. A viewer can display a whole-assay result once while preserving its source
+record address; a new global Effects class is not justified by this audit.
+
+The missing operational information is an auditable link between a
+source question, the primary ranges delivered and the resulting evidence/unknown.
+Use one small stage sidecar, not another agent or a scientific ontology. A row
+can contain an existing record-field pointer or claim/change ID, a plain question,
+source ID, query/range IDs and hashes, and an outcome with a short unresolved or
+escalation reason. Reuse existing source/evidence IDs and read receipts. A source
+locator is useful provenance, not an independent confidence score or truth field.
+
+Suggested schedule within the existing three roles:
+
+1. Nomination inspects the later contribution account, relevant Methods,
+   figures/legends, limitations and every citation context/bibliography entry.
+   It records in-scope design questions and dispositions. This is broad enough
+   to find the later method's distinctions, without rereading every biological
+   result and every earlier cited full text. The full documents remain available.
+2. Analysis queries each relevant primary source for the stated feature, opens
+   its containing paragraph/section and referenced figure/supplement, and answers
+   the before/after/inheritance questions independently. Relevance ranking finds
+   candidate evidence; it is not a gate that suppresses null, negative or
+   contradictory findings. False leads can close with the decisive context and
+   no fabricated change record. Existing reference_dispositions is sufficient.
+3. Review receives the primary source index and field/question targets, checks
+   support independently, and can retrieve beyond the author's chosen windows.
+   It verifies earlier implementation and later attribution separately; then
+   checks later contribution sections/figure map for omissions. It does not
+   accept an author-generated summary as a primary evidence substitute.
+
+Open more context whenever a sentence refers to another protocol/version, a
+method-selection ambiguity, a consequential supplement/table, a routing/material
+boundary, or a contradiction. Full-section and full-paper reading remain available
+when focused queries fail, the source lacks useful structure, attribution is
+diffuse, or the decision cannot be made safely from the narrower material. If
+decisive content remains unavailable, keep the exact claim unknown/held.
+
+Completion is coverage of the factual questions, not a quota of bytes, positive
+edges or retrieved chunks. Seed contribution coverage and bibliography disposition
+remain a separate omission check, preventing citation-focused retrieval from
+missing a genuinely new design with no donor. Independently review source fixes
+through the existing revision loop. No extra planner/retriever/adjudicator workers
+are required for this schedule.
+
+Implementation surface, if adopted in a future frozen runtime
+
+* Replace the blanket text-delivery language in CHANGE_COMMON and role strings
+  with these obligations. Preserve scientific distinctions and independent review.
+* Update run.py validate at the read-coverage call site. Retain the old behavior
+  under its existing historical contract so old pinned records still validate.
+* Extend source-tool query responses/receipts to preserve actual delivered range
+  offsets and query metadata. record_read currently drops null-start queries;
+  do not forge a continuous 0..N receipt for search results.
+* Validate hash/range custody and required question dispositions. These checks
+  can establish delivery and accounting, not entailment or exhaustive knowledge.
+* Reuse ChangeCheck factual/evidence/workflow/consequence assessments for semantic
+  review. A source-exact quote can still support the wrong scope or baseline.
+* Keep historical graph/evidence structures and method-match findings unchanged
+  until a new independently reviewed attempt supersedes a particular record.
+
+Reference audit: what transfers and what does not
+
+Intern-Atlas, arXiv 2604.28158v2, §§3.2, A.1–A.3:
+https://arxiv.org/html/2604.28158v2
+Its citation-context classification and selected-section evidence completion are
+useful retrieval principles. Adapt those, but retain our two-sided implementation
+checks. Reject its fixed relation/bottleneck vocabulary and rule excluding
+uses_component from strong lineage as a direct transplant: component inheritance
+is within this atlas's target. Exact quoting does not establish entailment. Its
+official website showed code release pending, so no extraction-code commit was
+available to inspect; do not invent one. The linked dataset revision is
+6859af5681045d9fb595f86f3cc5c004fbaa2271 (MIT). Its displayed method-relations
+subset includes seed records with null evidence paper IDs, not a replacement for
+source-backed assay claims. This is a paper/data-level comparison, not executable
+verification of Intern-Atlas. No code/data was copied.
+
+SciCite, Cohan et al. NAACL 2019:
+https://aclanthology.org/N19-1361/
+Official code b33a8cd0df5743c9d483b1d0fdce8ec62bc8f135 (Apache-2.0):
+https://github.com/allenai/scicite/tree/b33a8cd0df5743c9d483b1d0fdce8ec62bc8f135
+scicite/data.py represents citation excerpts and contexts separately;
+dataset_readers/citation_data_reader_scicite.py:81–93 feeds citation.text/intent,
+then 118–122 tokenizes citation_text. This is context-based intent classification,
+not a two-paper method-comparison verifier. Adapt context-first triage, reject
+using a Method/Result/Background label as proof of experimental inheritance.
+Its code path illustrates that separate occurrences of a citation can have
+different functions; our inherited ATAC and bulk-comparator claims preserve that.
+No code was copied and no local model dependency is proposed.
+
+Robin primary paper:
+https://www.nature.com/articles/s41586-026-10652-y
+Official code 4a5cce310f3bc7663a67117db88af43b84733ffe (Apache-2.0):
+https://github.com/Future-House/robin/tree/4a5cce310f3bc7663a67117db88af43b84733ffe
+robin/assays.py:27–83 formulates task queries and calls the literature service;
+robin/utils.py:70–118 sends query/job-name tasks through EdisonClient and retains
+task context. This supports question-focused literature calls as a workflow
+principle. The released wrapper does not expose the hosted service's internal
+retrieval or prove evidence sufficiency for assay ancestry. Adapt question
+formulation and task provenance; reject adding Robin's multi-agent orchestration
+or an opaque hosted dependency to solve this bounded contract problem. No code
+was copied. PaperQA implementation is independently audited by the parent task;
+do not attribute an uninspected retrieval algorithm to the Robin wrapper.
+
+Proposed acceptance and falsification
+
+fixtures.json contains positive and adversarial cases grounded in the eight saved
+examples. It specifies human/independent-review expectations; it is not a set of
+new accepted model outputs. In particular, unsupported gain and unknown gain are
+different cases. The latter is a valid scientific record; the former needs
+revision even if its quote occurs in the source and its JSON validates.
+
+A bounded future comparison should give the same selected sources and existing
+scientific schema to the blanket-reading and focused-reading policies. Measure
+field-level factual support, readable matched differences, ancestry/comparator
+separation, version identity, relevant omissions, unsupported causal gains and
+delivered text/tokens. Have independent source reviewers judge the result. Do
+not declare success merely because focused retrieval uses fewer bytes. Failure
+to recover the prior low-input ATAC exception, an iCLIP version qualifier, or the
+FAIRE array readout is a kill criterion for the proposed retrieval policy.
+
+Verification performed: collect_snapshot.py verified eight edge hashes against
+the current manifest and pinned six code files. JSON/fixture reference validation
+is recorded separately. No native comparison has been run, so scientific
+equivalence and cost reduction remain unmeasured.

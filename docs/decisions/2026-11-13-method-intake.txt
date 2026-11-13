@@ -1,0 +1,214 @@
+13 November 2026 — sequencing assay intake and source organization
+
+LATEST USER STEERING: large-scale literature discovery/acquisition first, then
+agent abstract screening. Include experimentally demonstrated library-preparation
+improvements, including enzyme-centered work, as method/version/contribution
+candidates. Do not use the historical component-only Tn5 fixture as an exclusion
+rule. Representation and alias/version identity remain separate from eligibility.
+The prepared source-only refresh reuses the existing12040metadata records and
+their raw receipts, repairs missing150metadata, and expands source coverage with
+general library/enzymatic Title/Abstract queries plus Nov6–13deltas. It launches
+no models or unfiltered fulltext downloads. The root handles submission.
+
+The intake unit is a distinct, experimentally demonstrated sequencing assay or
+scoped assay implementation, not a paper. Cover post-2016 method introductions
+and demonstrated assay workflow improvements, plus specifically verified missing
+older predecessors needed to explain those methods. Do not promote every paper,
+engineered reagent, software package, dataset, or search result to an assay entry.
+Reagent/component papers can remain important sources for the mechanism, interface,
+bias, performance, or development of a retained assay.
+
+Screen abstracts before scheduling new full-text acquisition. Preserve the own
+paper title, PMID/DOI, dates and date basis, exact discovery query memberships,
+raw authoritative metadata receipt and hashes. Inspect the primary abstract for:
+1. A sequence-based experimental measurement workflow and its measured subject.
+2. An assay-level contribution: a new measurement/architecture or demonstrated
+   change to the assay workflow, including a consequential library preparation
+   improvement. Requiring a wholly novel architecture would be too restrictive.
+3. Experimental assay evidence, distinguished from a proposal or analysis only.
+Record yes/no/unclear, source passages, scientific rationale and reader/date for
+each criterion. Terms such as method, reagent, atlas, multiplexed, or single cell
+are discovery clues, never sufficient acceptance/rejection rules. An inconclusive
+abstract becomes unresolved with a focused Methods/figure/supplement question.
+It does not become a negative label. A focused document retrieval is justified
+only by that recorded question, with an explicit bounded target list.
+
+The scientific disposition is assay, component_only, application, review,
+software_only, or unresolved. Record the publication contribution role separately:
+primary_methods (including original software or reagent methods), later_protocol,
+application, review, or unresolved. An atlas component/dependency role describes
+how a paper is used for a particular method; record it on a separate method-source
+association. It is not a bibliographic paper role. Legacy v1 fixtures retained the
+older mixed field; v2 separates the concepts without changing the native judgments.
+A supplement is a publication-bound document role, not a separately invented
+assay or automatically interchangeable primary paper. A later protocol does not
+replace a missing original article. A Methods citation can establish a procedural
+dependency; its applicability and the implementation version still need review.
+
+Resolve method identity before scheduling a new-method acquisition/extraction.
+Use the existing canonical inventory/registry and original source bindings.
+Check names/aliases AND own publication IDs; then decide same method/alias,
+same implementation, supported distinct version, homonym conflict, or reviewed
+absence from the pinned inventory. Name/identifier absence is a bounded catalogue
+claim, not proof of semantic novelty or first invention. A distinct version needs
+an explicit consequential assay difference with source evidence, not a changed
+paper title or minor reagent substitution. One paper may propose several scoped
+methods; one method may have several publications. Keep those many-to-many links.
+For an older predecessor, also record which retained/newer method requires it and
+the source-supported contribution. A date exception alone does not verify need
+or absence. Keep unresolved older candidates outside new-assay acquisition.
+
+Place staged candidates outside the live canonical library. Reuse the existing
+publications and immutable source-vault bytes before new retrieval. Keep one
+publication record per resolved paper identity, one document record per original
+file/attachment, and a separately scoped method-paper association. Preserve exact
+requested/final URLs, identity/association checks, original-byte hashes and text
+conversion receipts. Keep raw metadata, abstract inspection, file availability,
+source applicability, extraction, and independent review as separate statuses.
+
+Proposed staged layout (new view; no historical path rewrites):
+  intake/<batch>/queries/                  original query/metadata receipts
+  intake/<batch>/publications/<paper-id>/   identity + abstract-screen decision
+  intake/<batch>/method-proposals/<id>/     scope + alias/version/absence review
+  intake/<batch>/focused-review/            exact questions and source targets
+  intake/<batch>/acquisition-selection.json reviewed bounded paper/document list
+Existing source vaults retain original bytes and receipts. After an identity and
+source-package review, publish the existing method-folder view:
+  methods/<Category>/<Subclassification>/<method-id>/
+Its method.json/source_package.json link publications/documents and retain the
+original Illumina source occurrences, raw bibliography, image scope limitations,
+and classifications. Use Genome/Transcriptome/Epigenome as multidomain tags;
+one canonical placement is administrative, with secondary links to that folder.
+New-paper assignments are attributed curator proposals, never invented original
+Illumina placements. An inadequate existing category becomes an explicit new
+category candidate with rationale; it does not silently alter the taxonomy.
+
+Reuse acquisition primitives rather than creating a downloader stack:
+  sources.retrieval and sources/acquisition/runtime.py for source discovery,
+  sources/acquisition/downloads.py for host retrieval,
+  experiments/card_methods_full_20261112/located_documents.py::register for
+    exact primary/supplement/cited-protocol registration and existing converters,
+  scripts/illumina/technology_sources/{curation,publish_curated,classification}.py
+    for reviewed source-package organization.
+The current local tree has no source_finder.py; the public_source_finder role is
+in sources/acquisition/runtime.py. src/genomics_discovery/curation has no Python
+implementation here; do not pretend it is the source-folder publisher. Existing
+experimental adapters remain experimental, with their own pins and runtime.
+
+Use one scientific extraction contract and existing State/Operation/Flow schema.
+source_mode=diagram uses a registered depiction to guide outline/granularity,
+with assigned paper confirmation and explicit depiction/version differences.
+source_mode=paper derives the workflow backbone from the relevant primary
+Methods, explanatory figures and consequential supplements. Neither mode needs
+an Illumina-style drawing to exist. The explanation preserves the measured
+quantity, physical signal, transformations, carriers, consequential interfaces,
+branches, independent fractions, routing and limitations, without prescribing
+an operation count or copying every recipe parameter. Attach actual target
+evidence. Few-shot examples teach fields, grouping and explanatory detail; they
+never supply target facts, chemistry, topology or new missing intermediates.
+Fresh independent scientific review and existing admission gates apply equally.
+This support already exists in illumina/extraction.py and paper_prompts.py;
+the intake prototype does not change the scientific schema or launch models.
+
+Dated coverage, not a claim of completed present-day holdings:
+- The 5–6 November library07 delivery has 273 named methods: 174 card-associated
+  and 99 poster-only; 172 have cards+posters and 2 only cards. Its 478 source
+  occurrences are 154 cards, 285 poster rows and 39 footer panels. The 25 other
+  resource entries are separate. 236 methods have an associated paper/protocol;
+  37 do not. The 48 missing assigned publication files include additional papers
+  for methods already possessing another text. These are not 48 missing methods.
+- The 12 November verify_02 audit reports 300 assigned publication records and
+  208 with verified ARTICLE bytes; 202 methods have verified assigned article
+  bytes; 625 file checks verify bytes and 82 report missing files. Its narrower
+  article-file predicate and changed record set are not interchangeable with
+  the earlier paper-or-protocol availability predicate. No subtraction between
+  snapshots establishes lost files or newly uncovered methods.
+- The local 12 November continuation checkpoint has 118 supported, 17 research
+  drafts, 33 source_recovery_needed, 2 intervention_required and 4 failed entries
+  among 174 targeted card methods. Subsequent normalized status notes and retries
+  supersede this raw checkpoint; current remote totals require the live ledger.
+  In its 17 drafts, 10 need sources and 7 need scope adjudication. An acquired
+  SI, a converted but unregistered attachment and unresolved applicability are
+  different cases. Do not repeatedly retrieve the same primary to resolve a
+  catalogue-versus-focal-implementation mismatch.
+- The November search cached 12,040 paper metadata records from 12,190 discovered
+  PMIDs, 180/181 queries; one 150-record metadata batch failed. The search code
+  explicitly marks records not_yet_screened and admits zero methods. The targeted
+  12-method November12 screen is not completion of that pool. No verified receipt
+  for 4,500 downloaded new technologies was found in the scoped local artifacts.
+  Raw download/search counts do not establish technologies even if later verified.
+- The catalogue extends beyond 2016: scNMT-seq (2018, PMID29472610) has an exact
+  poster-inventory identity/publication match. The November12 ten-method pilot
+  excluded it and substituted Paired-Tag. Do not schedule scNMT as a new identity
+  merely because its paper passes the post-2016 date filter.
+
+Implementation is isolated in experiments/method_intake_audit_20261113. It
+validates evidence-backed judgments and emits staging routes; it does not infer
+scientific truth from keywords. Seven primary-abstract examples include positive,
+component, software, application, unresolved and existing-identity controls.
+The supplied metadata files are explicitly short web-reading observations, not
+claimed raw full metadata/acquired-paper receipts. Production intake must retain
+the real cached authoritative response and its original acquisition receipt.
+The read-only inventory builder pins the actual dated inputs and emits exact
+historical missing-publication and source-hold lists. No production files, old
+checklists, active attempts, remote library pointers or frozen runtimes changed.
+No bulk acquisition, native model/extraction run or paper-count admission occurred.
+
+LIVE FOLLOW-UP — JOB52176596
+The initial audit above preceded the root-launched live pilot. All seven complete
+PubMed abstracts were acquired on Slurm with own PMID/DOI/title checks. A schema
+probe and two blinded independent abstract screens completed successfully, with
+6/7 classification agreements. The job then failed its EXIT preservation step:
+cp -a requested permission metadata unsupported by the GROUP_HOME destination.
+This is a copy-helper portability defect, not a failed scientific/native stage.
+Do not rerun successful models for this error. Preserve release02 and its results.
+
+Both screens classify Tn5-059 as an assay improvement, because the abstract reports
+measured library coverage/diversity/input-tolerance gains. This is defensible under
+the broad intake criterion; the earlier component fixture used extra selected
+Methods showing the standard Nextera preparation and must not be an abstract-only
+gold label. The assay-improvement screen does not decide the atlas entry level:
+retain Tn5-059 component support and hold distinct assay/version identity separately.
+Both screens find an assay contribution for Picelli2014 low-input tagmentation;
+its abstract states reaction/crowding changes and experimental library comparisons.
+That positive screen still does not verify a missing older-predecessor identity.
+
+ImmGen's author calls it an application; its independent screen holds assay novelty
+unclear. The disagreement concerns whether a biological-resource abstract without
+an assay-introduction claim is enough for an application screen, not disputed wet-lab
+facts. For atlas intake, use application/context provisionally, supported by the
+previous focused Results observation identifying existing fast-ATAC and low-input
+RNA profiling. Keep the actual independent unresolved judgment and its question.
+Absence of an assay claim in an abstract is not proof that no technical novelty
+exists anywhere in the article. Focused review is for a concrete competing method
+claim or ambiguity; otherwise every application could become a needless full-paper
+review. No native artifact or expected label was tailored after observing results.
+
+chromVAR is software_only and an original primary_methods publication in both
+screens. This combination is valid. The old class-to-role coupling was a schema
+error. v2 now accepts independent publication roles, stores atlas source-use roles
+on explicit associations, and checks imported abstract evidence against the pinned
+original PubMed XML. The deterministic importer preserves both seven-paper native
+judgments and their disagreement. It compares names/own IDs against all298 existing
+method/resource entries in canonical inventory SHA256f042e99b982d6b9c56eaa79b2c5aa3a4e3fa097111b4270dfe132e5391f53daf.
+Only scNMT has a concordant existing named-method+publication match. Other assay
+proposals stay identity-pending; no acquisition or admission is dispatched.
+
+Reported native usage is194525tokens for the two scientific screens, plus14000for
+the probe. Input179497for screens includes136192cached; output15028includes9260
+reasoning-output tokens as a subset. The101-byte probe still used13952input tokens.
+The two screens made4and6command attempts, read current governing/policy files,
+and repeated hostname/Slurm inspection after failed attempts. Native context/tool
+overhead and repeated in-turn context plausibly explain growth; aggregates do not
+identify every internal token source or imply unique context length or dollar cost.
+This seven-paper experiment is not evidence of production efficiency for12040papers.
+Use a compact first pass, reserve focused source review for real ambiguities and
+positive identity/version decisions, and validate efficiency on another bounded
+comparison only if requested. No token quota was added and no comparison was run.
+
+preserve_bytes.py replaces attribute-preserving copies with contents-only copies,
+source/destination SHA verification and an explicit manifest. Matching partial
+destinations may resume; differing bytes and symlinks fail without overwrite or
+dereference. An external receipt handles runtimes with their own original manifest.
+The root handles any bounded remote preservation repair. No logs are compressed
+or deleted, and the original source/model artifacts remain unchanged.

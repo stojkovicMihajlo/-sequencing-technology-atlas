@@ -1,0 +1,83 @@
+SEVEN-ABSTRACT LIVE PILOT — PREPARED, NOT LAUNCHED BY THIS WORKER
+
+CURRENT artifact: live_release_02.tar.gz
+SHA256: 1786ff0299680804fb381acfce7194f34d879e1ab3af71e5732996da5f38c253
+Release02 includes the existing atlas-account.sh, sourced after environment.sh.
+It requires the user's atlas-agent-runs CODEX_HOME and absence of API-key env
+variables, inspecting only presence flags and no credential content.
+Release01 is preserved with hash
+19ba58bd0d99907a3927f244a12d42d8807b5eaae72b375c6bb2f475bfe70891;
+it omitted account selection and must not be launched. The first02 package using
+nonportable Bash-v syntax is retained as live_release_02_failed_bash_syntax;
+it is not the current02 artifact/hash above.
+
+Validation: 23 local mocked/contract tests passed. The packaged support runtime
+alone passed its 8 mocked tests. bash -n passed for live_pilot.sbatch.
+No PubMed request or native model call was executed during preparation.
+
+The job uses Qiu Slurm, gpt-6.1-sol/xhigh, and Codex CLI0.163.0. It runs:
+1. One seven-PMID PubMed efetch via the existing sources.fetch NCBI rate guard.
+   Preserve raw XML and retrieval receipt; verify own PMID/DOI/title for every
+   target and require all seven returned abstracts before any native call.
+2. One tiny actual schema-final native probe ({ok:true}) to verify the CLI/model
+   can return the structured final response. Failure stops scientific screening.
+3. One initial seven-paper screen and one blinded independent seven-paper screen.
+   Neither receives expected labels, catalogue identity matches, or the other's
+   decisions. This is an agreement pilot, not an author-correction review loop.
+
+The existing CodexWorker supports response_schema_path (the actual parameter
+name), archives the native JSON stdout stream, and passes --output-schema.
+The experiment subclass calls the original _command and changes only --sandbox
+workspace-write to read-only. Managed approval-policy/auto-review flags, ephemeral
+execution, disabled multi-agent features, pinned shell and archive controls remain.
+Web search and sandbox network are disabled. This is a bounded read-only decision
+experiment, not a claim that the CLI offers only custom tools or that all possible
+tool activity has been formally confined. Read-only tools for governing instructions
+remain possible. The model need not write or script an artifact.
+
+The controller parses the final agent message from actual events.jsonl stdout,
+compares it with the CLI final.txt, verifies the archived native completion, checks
+all seven PMID results and exact abstract-quote membership, then writes artifact.json.
+The schema separates assay/component_only/application/review/software_only/unresolved,
+publication role, three yes/no/unclear criteria, scientific rationales, exact abstract
+quotes and focused questions. Assay calls need three positive criteria; uncertainty
+requires a focused Methods/figure question. No paper fulltext is downloaded.
+
+No token quota is set by default; usage is recorded. The explicitly requested Slurm
+walltime is 50minutes. Native attempts have a1200second failure deadline; input and
+final-message byte guards are transport controls, never scientific correctness
+criteria. There are at most3native calls, no automatic retry, and no new extraction,
+method registration or canonical admission. Publication/method identity is resolved
+separately using the existing registry against a pinned inventory after screening.
+
+The release contains a minimal frozen support snapshot of the existing worker,
+source fetch/parser, and Sherlock environment. It is not a full-atlas runtime release.
+It excludes the seven curated fixture decisions and expected-answer files. The
+minimal snapshot and every pilot source are pinned in PAYLOAD_MANIFEST.json.
+Durable job results are copied as ordinary files to GROUP_HOME; Codex session logs
+are not compressed or deleted. The code-only release archive contains no sessions.
+
+Root launch sequence, after reading current /etc/agents/AGENTS.md and relevant
+Sherlock topic instructions through the prescribed Qiu connection:
+
+Remote release parent:
+/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/method_intake_audit_20261113
+
+Transfer the code archive with scp -o RemoteCommand=none -o RequestTTY=no, verify
+the hash above remotely, and extract only into that fresh experiment parent.
+The archive creates live_release_02. Do not merge it over an existing release.
+
+Inside the noninteractive sg xiaojie Qiu shell, after sourcing the Qiu environment:
+
+stage=/scratch/groups/xiaojie/mstojkov/agents_snRNA/technology_atlas/v2/work/method_intake_audit_20261113/live_release_02
+sbatch --export=ALL,ATLAS_INTAKE_STAGE="$stage" \
+  --output="$stage/slurm-%j.out" --error="$stage/slurm-%j.err" \
+  "$stage/live_pilot.sbatch"
+
+Existing root invocation form:
+ssh -T -o RemoteCommand=none sherlock-qiu "sg xiaojie -c 'bash -s'"
+
+Inspect actual metadata/probe receipts before claiming schema execution succeeded.
+RESULTS.json reports independent-screen agreement; compare the returned scientific
+judgments with the curated controls outside model context. A positive screen still
+requires identity/source review and is never a newly admitted technology by itself.
