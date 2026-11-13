@@ -443,6 +443,69 @@
       ],
       "result": "output/state.json",
       "notes": "Pinned actual completed research checkpoints enter bounded existing recovery directly, with no preliminary author/reviewer. Cache and source custody precede any new extraction; same episode resumes without duplicate calls. Declare purpose and pinned inventories/curation inputs in the checkpoint manifest. Fresh scientific review remains mandatory; no canonical admission is implied."
+    },
+    "evolution.recover-sources": {
+      "stage": "evolution",
+      "native_models": true,
+      "entrypoint": [
+        "{python}",
+        "{repo}/experiments/citation_lineage_pilot/run.py",
+        "recover-sources"
+      ],
+      "code_patterns": [
+        "experiments/citation_lineage_pilot/*.py",
+        "experiments/history_contract_audit_20261113/focused_reading.py"
+      ],
+      "inputs": {
+        "previous_state": "",
+        "source_cache": ""
+      },
+      "parameters": {
+        "reason": "",
+        "reading_policy": "focused"
+      },
+      "arguments": [
+        "--previous-state",
+        "{previous_state}",
+        "--source-cache",
+        "{source_cache}",
+        "--reason",
+        "{reason}",
+        "--reading-policy",
+        "{reading_policy}",
+        "--output",
+        "{output}"
+      ],
+      "result": "output/graph.json",
+      "notes": "Explicit new-source continuation of a completed investigation. Exact nomination, seed, catalogue and bibliography remain fixed; only missing nominated earlier texts can upgrade from the pinned cache. Fresh analysis and independent review required; no new nomination."
+    },
+    "extraction.evaluate-reviewer": {
+      "stage": "extraction",
+      "native_models": true,
+      "entrypoint": [
+        "{python}",
+        "{repo}/scripts/evaluation/run_grounding_diagnostic.py"
+      ],
+      "code_patterns": [
+        "scripts/evaluation/run_grounding_diagnostic.py",
+        "benchmarks/protocol_grounding_v1/prompts/*.txt",
+        "experiments/harness_execution_audit_20261113/pin_reviewer_regression.py"
+      ],
+      "inputs": {
+        "cases": "",
+        "labels": ""
+      },
+      "parameters": {},
+      "arguments": [
+        "--cases",
+        "{cases}",
+        "--labels",
+        "{labels}",
+        "--output",
+        "{output}"
+      ],
+      "result": "output/state.json",
+      "notes": "Two fresh sequential source-grounding diagnostics on exactly pinned local claims and connected context. One native slot. Host labels remain separate from reader projection. This does not rerun extraction, validate whole workflows, change production prompts or admit graphs."
     }
   },
   "history": "provenance/ and dated experiments preserve earlier inputs, code and outcomes. They are not a menu of interchangeable current launchers.",

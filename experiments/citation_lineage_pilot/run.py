@@ -331,7 +331,8 @@ def validate_completed_citation(previous, _seen=None, _lineage_threads=None):
                             read(attempt / 'input_pins.json'))
         if row['thread_id'] in current_threads:raise ValueError('Native stages must use independent threads')
         current_threads.add(row['thread_id'])
-    reuse=prior.get('review_reuse')
+    reuse=prior.get('review_reuse');recovery=prior.get('source_recovery')
+    if reuse is not None and recovery is not None:raise ValueError('Unchanged review and changed-source recovery are separate provenance contracts')
     if reuse is not None:
         if reuse!=read(previous/'inputs/review_reuse.json'):
             raise ValueError('Review-only provenance differs from its input record')
@@ -354,6 +355,15 @@ def validate_completed_citation(previous, _seen=None, _lineage_threads=None):
             raise ValueError('Review-only copied analysis or nominations changed')
         if current_threads & lineage_threads:
             raise ValueError('Review-only stages must be fresh independent native threads')
+    elif recovery is not None:
+        source=Path(recovery['previous_run']).resolve()
+        source_state,source_analysis=validate_completed_citation(source,seen,lineage_threads)
+        validate_source_recovery(source,previous,recovery,source_state,source_analysis)
+        if (not any(row['role']=='analyse' for row in prior['stages'])
+                or not any(row['role']=='review' for row in prior['stages'])
+                or any(row['role']=='nominate' for row in prior['stages'])
+                or current_threads & lineage_threads):
+            raise ValueError('Source recovery requires fresh analysis/review without a new nomination')
     else:
         nominations=[x for x in prior['stages'] if x['role']=='nominate']
         if not nominations:raise ValueError('Completed research has no nomination or review-only provenance')
@@ -372,6 +382,8 @@ def validate_completed_citation(previous, _seen=None, _lineage_threads=None):
         raise ValueError('Previous review handoff differs from its native artifact')
     judged = validate('review', review_path, previous / 'inputs', original)
     analysis = parse_analysis(read(original))
+    if recovery is not None and (not isinstance(analysis,ChangeAnalysis) or not isinstance(judged,CoverageMethodReview)):
+        raise ValueError('Source recovery requires the current explicit-change analysis/review contract')
     previous_graph = read(previous / 'graph.json')
     expected = graph_overlay(analysis, judged, read(previous / 'inputs/sources.json'),
                              sha(original), read(previous / 'inputs/seed_binding.json'),
@@ -408,6 +420,80 @@ def prepare_review_reuse(previous, output):
     return inputs, analysis_path
 
 
+def recovered_sources(previous, cache_path):
+    """Upgrade only already nominated, identity-bound missing earlier texts."""
+    cache=validate_reference_cache(read(cache_path))
+    sources=read(previous/'inputs/sources.json');refs=read(previous/'inputs/bibliography.json')
+    nominations=CurrentNominations.model_validate(read(previous/'nominations.json'))
+    validate_nominations(nominations,sources,refs)
+    nominated=[row.reference_id for row in nominations.references]
+    upgrades={}
+    for sid in nominated:
+        current=sources[sid]
+        if current.get('content_level')=='fulltext':continue
+        pmid=refs[sid]['identifiers'].get('pmid') or current.get('pmid')
+        if current.get('pmid') and str(current['pmid'])!=str(pmid):
+            raise ValueError('Source recovery cannot change a nominated publication identity')
+        if not pmid or pmid not in cache:continue
+        cached=cache[pmid];validate_cached_reference(pmid,cached)
+        sources[sid]={**cached,'bibliographic_title_agreement':'review_required_against_seed_citation',
+            'cache_provenance':{'path':str(cache_path),'sha256':sha(cache_path),'lookup':'exact_pmid','pmid':pmid}}
+        upgrades[sid]={'pmid':pmid,'prior_content_level':current.get('content_level'),
+            'prior_text_sha256':hashlib.sha256(current.get('text','').encode()).hexdigest(),
+            'new_text_sha256':hashlib.sha256(cached['text'].encode()).hexdigest()}
+    if not upgrades:raise ValueError('Source recovery cache supplies no missing nominated primary text')
+    return sources,upgrades
+
+
+def prepare_source_recovery(previous, output, cache_path, reason):
+    """Keep nomination/seed fixed; new source inputs require new analysis/review."""
+    previous=previous.resolve();cache_path=cache_path.resolve()
+    prior,original=validate_completed_citation(previous)
+    if not reason.strip():raise ValueError('Source recovery requires its explicit evidence question/reason')
+    sources,upgrades=recovered_sources(previous,cache_path)
+    output=output.resolve();output.mkdir(parents=True,exist_ok=False);inputs=output/'inputs'
+    shutil.copytree(previous/'inputs',inputs)
+    shutil.copyfile(previous/'nominations.json',output/'nominations.json')
+    shutil.copyfile(original,inputs/'prior_analysis.json')
+    shutil.copyfile(previous/'review.json',inputs/'prior_review.json')
+    write(inputs/'sources.json',sources)
+    write(inputs/'source_recovery.json',{'previous_run':str(previous),
+        'state_sha256':sha(previous/'state.json'),'nominations_sha256':sha(previous/'nominations.json'),
+        'analysis_path':str(original),'analysis_sha256':sha(original),
+        'review_sha256':sha(previous/'review.json'),
+        'source_registry_sha256':sha(previous/'inputs/sources.json'),
+        'updated_source_registry_sha256':sha(inputs/'sources.json'),
+        'cache':{'path':str(cache_path),'sha256':sha(cache_path)},'upgrades':upgrades,
+        'prior_threads':[row['thread_id'] for row in prior['stages']],'reason':reason})
+    return inputs
+
+
+def validate_source_recovery(previous, current, record, prior, original):
+    """Recompute permissible source changes from the pinned cache, not assertions."""
+    if record!=read(current/'inputs/source_recovery.json') or not record.get('reason','').strip():
+        raise ValueError('Source-recovery provenance differs from its input record')
+    cache=Path(record['cache']['path'])
+    if (sha(cache)!=record['cache']['sha256'] or sha(previous/'state.json')!=record['state_sha256']
+            or sha(previous/'nominations.json')!=record['nominations_sha256']
+            or sha(original)!=record['analysis_sha256'] or Path(record['analysis_path']).resolve()!=original.resolve()
+            or sha(previous/'review.json')!=record['review_sha256']
+            or sha(previous/'inputs/sources.json')!=record['source_registry_sha256']
+            or record['prior_threads']!=[row['thread_id'] for row in prior['stages']]):
+        raise ValueError('Source-recovery provenance does not match validated prior research/cache')
+    for file in (previous/'inputs').rglob('*'):
+        if file.is_file() and str(file.relative_to(previous/'inputs')) not in {
+                'sources.json','prior_analysis.json','prior_review.json','source_recovery.json'}:
+            if sha(current/'inputs'/file.relative_to(previous/'inputs'))!=sha(file):
+                raise ValueError('Source recovery changed frozen seed/citation input: '+str(file.relative_to(previous/'inputs')))
+    expected,upgrades=recovered_sources(previous,cache)
+    if (read(current/'inputs/sources.json')!=expected or record['upgrades']!=upgrades
+            or sha(current/'inputs/sources.json')!=record['updated_source_registry_sha256']
+            or sha(current/'nominations.json')!=record['nominations_sha256']
+            or sha(current/'inputs/prior_analysis.json')!=record['analysis_sha256']
+            or sha(current/'inputs/prior_review.json')!=record['review_sha256']):
+        raise ValueError('Source recovery changed nomination, available sources, or its permitted upgrades')
+
+
 async def review_cycle(stage, author_role, initial_analysis=None):
     """One research/review pass and at most one correction, with issue continuity.
 
@@ -436,6 +522,10 @@ async def execute(args):
     reused_analysis = None
     if args.command == 'review-existing':
         inputs, reused_analysis = prepare_review_reuse(args.previous, args.output)
+    elif args.command=='recover-sources':
+        previous_state=args.previous_state.resolve()
+        if previous_state.name!='state.json':raise ValueError('Pin the actual previous state.json for source recovery')
+        inputs=prepare_source_recovery(previous_state.parent,args.output,args.source_cache,args.reason)
     else:
         inputs = prepare(args)
     root = inputs.parent
@@ -445,6 +535,10 @@ async def execute(args):
     if reused_analysis:
         state['review_reuse'] = read(inputs / 'review_reuse.json')
         prior_threads = state['review_reuse']['prior_threads']
+    source_recovery=args.command=='recover-sources'
+    if source_recovery:
+        state['source_recovery']=read(inputs/'source_recovery.json')
+        prior_threads=state['source_recovery']['prior_threads']
     if getattr(args, 'reading_policy', 'full') == 'focused':
         state['reading_policy'] = 'focused'
     write(root / "state.json", state)
@@ -462,6 +556,8 @@ async def execute(args):
                          web_search=False, network_access=False, pin_shell_environment=True)
 
     async def stage(role, *, analysis_path=None, feedback=None, previous_analysis_path=None):
+        if source_recovery and role=='analyse' and not state['stages']:
+            feedback=inputs/'prior_review.json';previous_analysis_path=inputs/'prior_analysis.json'
         attempt = root / "attempts" / f"{len(state['stages']) + 1:03d}_{role}"
         attempt.mkdir(parents=True)
         write(attempt / "schema.json", native_schema(role))
@@ -539,7 +635,7 @@ async def execute(args):
         return doc, attempt / 'artifact.json'
 
     try:
-        if reused_analysis:
+        if reused_analysis or source_recovery:
             nomination_data = read(root / 'nominations.json')
             schema = CurrentNominations if "excluded_references" in nomination_data else Nominations
             nominations = schema.model_validate(nomination_data)
@@ -552,6 +648,9 @@ async def execute(args):
             sources = acquire(inputs, nominations)
         initial = (validate('analyse', reused_analysis, inputs), reused_analysis) if reused_analysis else None
         analysis, analysis_path, review = await review_cycle(stage, 'analyse', initial)
+        if source_recovery:
+            record=state['source_recovery'];prior,original=validate_completed_citation(Path(record['previous_run']))
+            validate_source_recovery(Path(record['previous_run']),root,record,prior,original)
         overlay = graph_overlay(analysis, review, sources, sha(analysis_path), read(inputs / 'seed_binding.json'),
                                 catalogue=read(inputs / 'catalogue.json'), nominations=nominations)
         write(root / 'analysis.json', analysis.model_dump())
@@ -586,6 +685,12 @@ def main():
     reuse = sub.add_parser('review-existing', help='Fresh review of completed unchanged research; no failed-run resumption')
     reuse.add_argument('--previous', type=Path, required=True)
     reuse.add_argument('--output', type=Path, required=True)
+    recovery=sub.add_parser('recover-sources',help='Reuse completed nomination with newly available nominated primary texts; fresh analysis and review')
+    recovery.add_argument('--previous-state',type=Path,required=True)
+    recovery.add_argument('--source-cache',type=Path,required=True)
+    recovery.add_argument('--output',type=Path,required=True)
+    recovery.add_argument('--reason',required=True)
+    recovery.add_argument('--reading-policy',choices=('full','focused'),default='focused')
     run.add_argument('--reading-policy', choices=('full','focused'), default='focused',
                      help='New evolution runs use question-focused retrieval; full traversal remains an explicit fallback.')
     reuse.add_argument('--reading-policy', choices=('full','focused'), default='full',
@@ -610,7 +715,7 @@ def main():
     check.add_argument('--paper-read-log', type=Path)
     check.add_argument('--reading-policy', choices=('full', 'focused'), default='full')
     args = parser.parse_args()
-    if args.command in {'run', 'review-existing'}:
+    if args.command in {'run', 'review-existing','recover-sources'}:
         asyncio.run(execute(args))
     elif args.command == 'check':
         validate(args.role,args.artifact,args.inputs,args.analysis,args.paper_read_log,args.reading_policy)

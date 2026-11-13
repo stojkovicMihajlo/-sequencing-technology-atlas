@@ -662,18 +662,27 @@ def test_current_comparison_keeps_citation_context_without_becoming_history():
     assert g['links'][0]['claim']['citation_context'] == SOURCES['seed']['text']
 
 
-def review_only_completion_fixture(tmp_path, *, bad_provenance=False):
+def review_only_completion_fixture(tmp_path, *, bad_provenance=False, missing_reference=False, include_stage=False):
     """Synthetic archives exercising the real transport, science and graph checks."""
     import run as runner
     base = tmp_path / 'research'; inputs = base / 'inputs'; inputs.mkdir(parents=True)
-    runner.write(inputs / 'sources.json', SOURCES)
-    runner.write(inputs / 'seed_extraction.json', {'operations': [{'id': 'o1'}]})
+    sources=copy.deepcopy(SOURCES)
+    if missing_reference:
+        sources['R1'].update(content_level='abstract',pmid='123')
+        refs={'R1':{'reference_id':'R1','identifiers':{'pmid':'123'},'contexts':[SOURCES['seed']['text']]}}
+        sources['bibliography']={'content_level':'seed_reference_contexts','text':json.dumps(refs)}
+        runner.write(inputs/'bibliography.json',refs)
+        runner.write(inputs/'sources_initial.json',{'seed':sources['seed'],'bibliography':sources['bibliography']})
+        (inputs/'seed.xml').write_text('<article><body><p>Unchanged seed.</p></body></article>')
+    runner.write(inputs / 'sources.json', sources)
+    runner.write(inputs / 'seed_extraction.json', {'states':[],'operations': [{'id': 'o1'}],'flows':[]})
     runner.write(inputs / 'catalogue.json', [])
     runner.write(inputs / 'seed_binding.json', {'record_id': 'synthetic-seed'})
     nominations = {'references': [{'reference_id': 'R1', 'contribution': 'method',
         'reason_to_follow': 'Resolve the comparison baseline',
         'seed_evidence': [{'source_id': 'seed', 'quote': SOURCES['seed']['text']}]}],
         'selection_rationale': 'Synthetic fixture', 'unresolved_searches': []}
+    if missing_reference:nominations.update(format_version='citation_nomination/2',excluded_references={})
     analysis, review = case()
 
     def stage(root, role, document, thread):
@@ -701,7 +710,7 @@ def review_only_completion_fixture(tmp_path, *, bad_provenance=False):
     runner.write(base / 'nominations.json', nominations)
     runner.write(base / 'analysis.json', analysis.model_dump(mode='json'))
     runner.write(base / 'review.json', review.model_dump(mode='json'))
-    runner.write(base / 'graph.json', graph_overlay(analysis, review, SOURCES,
+    runner.write(base / 'graph.json', graph_overlay(analysis, review, sources,
         runner.sha(author), runner.read(inputs / 'seed_binding.json'), catalogue=[]))
     runner.write(base / 'state.json', {'status': 'completed', 'stages': rows})
     current = tmp_path / 'review-only'
@@ -716,7 +725,7 @@ def review_only_completion_fixture(tmp_path, *, bad_provenance=False):
     runner.write(current / 'graph.json', runner.read(base / 'graph.json'))
     runner.write(current / 'state.json', {'status': 'completed', 'stages': [fresh],
         'review_reuse': provenance})
-    return base, current
+    return (base,current,stage) if include_stage else (base,current)
 
 
 def test_review_only_completion_reopens_real_provenance_transport_and_graph_contract(tmp_path):
@@ -734,3 +743,124 @@ def test_review_only_completion_rejects_recorded_but_false_prior_source_pin(tmp_
     _, current = review_only_completion_fixture(tmp_path, bad_provenance=True)
     with pytest.raises(ValueError, match='does not match validated prior research'):
         runner.validate_completed_citation(current)
+
+
+def source_recovery_fixture(tmp_path):
+    import run as runner
+    from change_models import ChangeAnalysis,CoverageMethodReview
+    base,previous,stage=review_only_completion_fixture(tmp_path,missing_reference=True,include_stage=True)
+    original=tmp_path/'recovered.xml';original.write_text('<article><front><article-meta>'
+        '<article-id pub-id-type="pmid">123</article-id></article-meta></front><body><p>'
+        +SOURCES['R1']['text']+' Full molecular implementation is now available.</p></body></article>')
+    cached={'content_level':'fulltext','pmid':'123','text':runner.jats_text(original.read_bytes())[0],
+        'original':{'path':str(original),'sha256':runner.sha(original)}}
+    cache=tmp_path/'cache.json';runner.write(cache,{'format_version':'atlas_reference_cache/1','papers':{'123':cached}})
+    current=tmp_path/'source-recovery';inputs=runner.prepare_source_recovery(previous,current,cache,
+        'Resolve the nominated earlier library implementation from its newly available primary text.')
+    evidence=[{'source_id':'seed','quote':SOURCES['seed']['text']},{'source_id':'R1','quote':SOURCES['R1']['text']}]
+    analysis=ChangeAnalysis.model_validate({'format_version':'citation_analysis/4','seed_method':'Synthetic assay',
+        'claims':[{'id':'c1','reference_id':'R1','contributor':'Earlier comparator','contributor_kind':'assay',
+        'relation':'comparison','citation_context':SOURCES['seed']['text'],'claim_scope':'seed_workflow',
+        'seed_operation_ids':['o1'],'change_records':[{'id':'d1','compared_feature':'Comparator library preparation',
+        'before':'The earlier assay prepares a sequencing library.','after':'The seed compares this assay.',
+        'retained':[],'workflow_locations':{'earlier_scope':'paper_only','earlier':[],
+        'later':[{'kind':'operation','record_id':'o1','field':None}]},'evidence':{'before':[evidence[1]],'after':[evidence[0]],
+        'retained':[],'inheritance':[]},'consequence_and_limits':{'effect_status':'not_established',
+        'reported_effects':[],'limits':[],'limit_evidence':[],'unresolved':[]}}],
+        'catalogue_candidates':[],'unresolved':[]}],'reference_dispositions':{'R1':'Comparison only'},'summary':'Synthetic comparison, no ancestry.'})
+    author=stage(current,'analyse',analysis.model_dump(mode='json'),'source-recovery-analyse')
+    author_path=Path(author['path'])/'artifact.json'
+    review=CoverageMethodReview.model_validate({'format_version':'citation_change_review/3',
+        'analysis_sha256':runner.sha(author_path),'findings':[{'claim_id':'c1','decision':'accept',
+        'rationale':'Synthetic provenance contract fixture, not a scientific judgment.','evidence':evidence,
+        'unresolved_assessments':[],'change_checks':[{'change_id':'d1','decision':'accept',
+        'factual_assessment':'Fixture source quotation.','workflow_assessment':'Existing fixture operation.',
+        'evidence_assessment':'Both fixture sources supplied.','consequence_assessment':'No gain asserted.',
+        'evidence':evidence}],'method_match':{'status':'not_applicable','record_id':None,
+        'rationale':'Comparison fixture has no resolved ancestral endpoint.','evidence':[]}}],
+        'coverage_findings':[],'summary':'Synthetic contract fixture.'})
+    reviewer=stage(current,'review',review.model_dump(mode='json'),'source-recovery-review')
+    runner.write(current/'analysis.json',analysis.model_dump(mode='json'));runner.write(current/'review.json',review.model_dump(mode='json'))
+    runner.write(current/'graph.json',graph_overlay(analysis,review,runner.read(inputs/'sources.json'),
+        runner.sha(author_path),runner.read(inputs/'seed_binding.json'),catalogue=[],
+        nominations=CurrentNominations.model_validate(runner.read(current/'nominations.json'))))
+    runner.write(current/'state.json',{'status':'completed','stages':[author,reviewer],
+        'source_recovery':runner.read(inputs/'source_recovery.json')})
+    return previous,current,cache
+
+
+def test_source_recovery_reuses_real_validated_nomination_and_requires_fresh_analysis_review(tmp_path):
+    import run as runner
+    previous,current,_=source_recovery_fixture(tmp_path)
+    prior=(previous/'state.json').read_bytes();nomination=(previous/'nominations.json').read_bytes()
+    state,author=runner.validate_completed_citation(current)
+    assert [r['role'] for r in state['stages']]==['analyse','review']
+    assert author==current/'native/analyse/artifact.json'
+    assert (current/'nominations.json').read_bytes()==nomination
+    assert (previous/'state.json').read_bytes()==prior
+    assert runner.read(current/'inputs/sources.json')['R1']['content_level']=='fulltext'
+    assert runner.read(previous/'inputs/sources.json')['R1']['content_level']=='abstract'
+
+
+@pytest.mark.parametrize('defect',['seed','bibliography','catalogue','donor','provenance','missing_analysis'])
+def test_source_recovery_rejects_changed_seed_citation_donor_or_asserted_provenance(tmp_path,defect):
+    import run as runner
+    previous,current,cache=source_recovery_fixture(tmp_path)
+    if defect in {'seed','bibliography','catalogue'}:
+        name={'seed':'seed.xml','bibliography':'bibliography.json','catalogue':'catalogue.json'}[defect]
+        path=current/'inputs'/name;path.write_text(path.read_text()+' ')
+    elif defect=='donor':
+        value=runner.read(current/'inputs/sources.json');value['R1']['pmid']='999'
+        runner.write(current/'inputs/sources.json',value)
+        record=runner.read(current/'inputs/source_recovery.json');record['updated_source_registry_sha256']=runner.sha(current/'inputs/sources.json')
+        runner.write(current/'inputs/source_recovery.json',record)
+        state=runner.read(current/'state.json');state['source_recovery']=record;runner.write(current/'state.json',state)
+    elif defect=='provenance':
+        record=runner.read(current/'inputs/source_recovery.json');record['state_sha256']='0'*64
+        runner.write(current/'inputs/source_recovery.json',record)
+        state=runner.read(current/'state.json');state['source_recovery']=record;runner.write(current/'state.json',state)
+    else:
+        state=runner.read(current/'state.json');state['stages']=state['stages'][1:];runner.write(current/'state.json',state)
+    # Repin the alleged new transport inputs: inherited proof must still reject.
+    for row in runner.read(current/'state.json')['stages']:
+        attempt=Path(row['path']);runner.write(attempt/'input_pins.json',{
+            str(p):runner.sha(p) for p in (current/'inputs').rglob('*') if p.is_file()})
+    with pytest.raises(ValueError,match='Source recovery|Source-recovery'):
+        runner.validate_completed_citation(current)
+
+
+def test_source_recovery_cannot_replace_an_already_available_fulltext_or_download(tmp_path,monkeypatch):
+    import run as runner
+    previous,current,cache=source_recovery_fixture(tmp_path)
+    def no_network(*args,**kwargs):raise AssertionError('Recovery uses registered bytes only')
+    monkeypatch.setattr(runner,'fetch',no_network);monkeypatch.setattr(runner,'acquire_pmc_fulltext',no_network)
+    with pytest.raises(ValueError,match='no missing nominated'):
+        runner.recovered_sources(current,cache)
+
+
+def test_source_recovery_rejects_cache_that_labels_another_primary_as_the_nominated_donor(tmp_path):
+    import run as runner
+    previous,_,cache=source_recovery_fixture(tmp_path)
+    value=runner.read(cache);source=value['papers']['123'];original=Path(source['original']['path'])
+    original.write_bytes(original.read_bytes().replace(b'>123<',b'>999<'))
+    source['original']['sha256']=runner.sha(original);source['text']=runner.jats_text(original.read_bytes())[0]
+    runner.write(cache,value)
+    with pytest.raises(ValueError,match='original article PMID'):
+        runner.prepare_source_recovery(previous,tmp_path/'wrong-donor',cache,'Inspect the missing nominated source.')
+    assert not (tmp_path/'wrong-donor').exists()
+
+
+def test_source_recovery_pipeline_arguments_reach_real_parser_without_models(tmp_path,monkeypatch):
+    import run as runner
+    action=runner.read(Path(__file__).resolve().parents[2]/'pipeline.json')['actions']['evolution.recover-sources']
+    values={'previous_state':str(tmp_path/'state.json'),'source_cache':str(tmp_path/'cache.json'),
+        'reason':'Inspect the nominated implementation in the newly available primary.','reading_policy':'focused',
+        'output':str(tmp_path/'new')}
+    argv=['recover-sources',*[part.format_map(values) for part in action['arguments']]]
+    captured=[]
+    async def execute(args):captured.append(args)
+    monkeypatch.setattr(runner,'execute',execute);monkeypatch.setattr(sys,'argv',['citation-run',*argv])
+    runner.main()
+    assert len(captured)==1 and captured[0].command=='recover-sources'
+    assert captured[0].previous_state==Path(values['previous_state'])
+    assert captured[0].source_cache==Path(values['source_cache']) and captured[0].reason==values['reason']
