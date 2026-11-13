@@ -11,11 +11,11 @@ import copy
 import json
 import os
 from pathlib import Path
-import xml.etree.ElementTree as ET
 
 from genomics_discovery.illumina.extraction import read, sha, write
 from genomics_discovery.illumina.history_inputs import snapshot_accepted
 from experiments.pilot50_20261104.history_stage import prepare_index
+from genomics_discovery.illumina.citations import bibliography
 
 
 PILOT_METHODS = frozenset({'atac-seq', 'chipmentation', 'bischip-seq', 'dr-seq'})
@@ -121,7 +121,7 @@ def eligible_methods(index, cards, *, exclude_methods=()):
             excluded[mid] = 'no_declared_curated_primary'
             continue
         paper = method.get('selected_primary') or {}
-        if method.get('status') != 'ready' or paper.get('format') != 'JATS' or not paper.get('seed_eligible'):
+        if method.get('status') != 'ready' or paper.get('format') not in {'JATS','HTML'} or not paper.get('seed_eligible'):
             excluded[mid] = method.get('hold_reason') or 'not_source_ready_registered_JATS_primary'
             continue
         ready[mid] = method
@@ -160,11 +160,9 @@ def citation_hints(ready):
     hints = {}
     for mid, method in ready.items():
         paper = method['selected_primary']
-        tree = ET.parse(paper['article'])
-        cited = {''.join(element.itertext()).strip()
-                 for reference in tree.iter() if reference.tag.rsplit('}', 1)[-1] == 'ref'
-                 for element in reference.iter()
-                 if element.tag.rsplit('}', 1)[-1] == 'pub-id' and element.get('pub-id-type') == 'pmid'}
+        source=read(Path(method['source_registry']))[paper['source_id']]
+        cited={ref['identifiers']['pmid'] for ref in bibliography(Path(paper['article']).read_bytes(),
+            text=source['text'],pmid=paper.get('pmid')).values() if ref['identifiers'].get('pmid')}
         hints[mid] = sorted((cited & available) - {str(paper.get('pmid') or '')})
     return hints
 

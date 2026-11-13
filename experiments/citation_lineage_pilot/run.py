@@ -25,7 +25,7 @@ from genomics_discovery.illumina.extraction import (
 )
 from genomics_discovery.illumina.sources import acquire_pmc_fulltext, fetch, jats_text, parse_pubmed
 from genomics_discovery.illumina.citations import bibliography
-from genomics_discovery.illumina.history_inputs import resolve_article
+from genomics_discovery.illumina.history_inputs import resolve_article,is_html_article,html_article_text
 from genomics_discovery.illumina.paper_reads import record_read, check_full_reads
 from change_models import ChangeAnalysis, ChangeReview, CoverageChangeReview, CoverageMethodReview, parse_review
 from genomics_discovery.illumina.history_coverage import validate_coverage
@@ -73,7 +73,9 @@ def validate_cached_reference(pmid, source):
             raise ValueError('Cached text differs from its original JATS rendition')
     if not source.get('text', '').strip():
         raise ValueError('Cached full text cannot be empty')
-    if not raw.startswith(b'%PDF-'):
+    if is_html_article(raw):
+        html_article_text(source,raw)
+    elif not raw.startswith(b'%PDF-'):
         tree = ET.fromstring(raw)
         if local(tree) != 'article':
             raise ValueError('Cached primary XML is not a JATS article')
@@ -111,11 +113,16 @@ def prepare(args):
     if sha(args.article) != original["sha256"]:
         raise ValueError("Seed bibliography XML is not the registered article")
     raw = args.article.read_bytes()
-    text, _ = jats_text(raw)
-    if text != paper["text"]:
-        raise ValueError("Seed JATS rendition differs from the reviewed source")
-    (inputs / "seed.xml").write_bytes(raw)
-    refs = bibliography(raw)
+    if is_html_article(raw):
+        text=html_article_text(paper,raw)
+        filename='seed.html'
+    else:
+        text, _ = jats_text(raw)
+        if text != paper["text"]:
+            raise ValueError("Seed JATS rendition differs from the reviewed source")
+        filename='seed.xml'
+    (inputs / filename).write_bytes(raw)
+    refs = bibliography(raw,text=text,pmid=paper.get('pmid'))
     write(inputs / "bibliography.json", refs)
     seed = read(parent / "extraction.json")
     write(inputs / "seed_extraction.json", seed)

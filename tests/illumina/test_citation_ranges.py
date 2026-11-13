@@ -4,6 +4,40 @@ import pytest
 from genomics_discovery.illumina.citations import bibliography
 
 
+def html_article(separator='–'):
+    return ('<!DOCTYPE html><html><head><meta name="citation_pmid" content="123"></head><body>'
+        '<p id="method">We adapt methods <a href="#B1">1</a>'+separator+'<a href="#B3">3</a>.</p>'
+        '<section class="ref-list"><ul>'+''.join(
+            f'<li id="B{n}">{n}. Earlier paper {n}. <a href="https://pubmed.ncbi.nlm.nih.gov/{n}00/">PubMed</a></li>'
+            for n in range(1,4))+'</ul></section></body></html>').encode()
+
+
+def test_html_explicit_links_and_printed_range_map_to_exact_registered_text_offsets():
+    text='Title: Fixture\n\nWe adapt\n methods 1–3.\n'
+    refs=bibliography(html_article(),text=text,pmid='123')
+    assert set(refs)=={'B1','B2','B3'} and refs['B2']['identifiers']=={'pmid':'200'}
+    assert refs['B2']['contexts']==['We adapt\n methods 1–3.']
+    loc=refs['B2']['context_provenance'][0]
+    assert loc['basis']=='printed_numeric_range'
+    assert text[loc['registered_text_start']:loc['registered_text_end']]==refs['B2']['contexts'][0]
+
+
+@pytest.mark.parametrize('separator',[',',' and ','<a href="#figure">–</a>','<img>–','<unknown></unknown>–'])
+def test_html_does_not_guess_unlinked_references_across_nonranges(separator):
+    visible=separator.replace('<a href="#figure">','').replace('</a>','').replace('<img>','').replace('<unknown></unknown>','')
+    refs=bibliography(html_article(separator),text='We adapt methods 1'+visible+'3.',pmid='123')
+    assert refs['B2']['contexts']==[]
+
+
+def test_html_wrong_own_identity_or_unmapped_scientific_context_cannot_become_a_seed():
+    with pytest.raises(ValueError,match='citation_pmid'):
+        bibliography(html_article(),text='We adapt methods 1–3.',pmid='999')
+    with pytest.raises(ValueError,match='absent from registered text'):
+        bibliography(html_article(),text='We replace methods 1–3.',pmid='123')
+    with pytest.raises(ValueError,match='pinned registered text'):
+        bibliography(html_article())
+
+
 def article(paragraph, labels=(7, 8, 9, 10, 11)):
     refs = ''.join(f'<ref id="ref_{n}"><label>{n}</label><mixed-citation>Paper {n}</mixed-citation></ref>'
                    for n in labels)

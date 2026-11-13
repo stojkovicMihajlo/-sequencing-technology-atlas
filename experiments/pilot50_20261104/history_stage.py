@@ -20,7 +20,8 @@ from genomics_discovery.illumina.extraction import read, sha, write
 from genomics_discovery.illumina.graph import _load_card, build_graph
 from genomics_discovery.illumina.relationships import load_reviewed_pair, RELATIONS
 from genomics_discovery.illumina.sources import jats_text
-from genomics_discovery.illumina.history_inputs import resolve_article
+from genomics_discovery.illumina.history_inputs import resolve_article,is_html_article,html_article_text
+from genomics_discovery.illumina.citations import bibliography
 
 
 def key(value):
@@ -51,6 +52,14 @@ def _paper(source_id, source):
     if raw.startswith(b"%PDF-"):
         item.update(format="PDF", pair_eligible=True,
                     hold_reason="PDF_citation_context_parser_not_implemented")
+    elif is_html_article(raw):
+        item.update(format='HTML',pair_eligible=True)
+        try:
+            text=html_article_text(source,raw)
+            refs=bibliography(raw,text=text,pmid=source.get('pmid'))
+            item.update(seed_eligible=True,bibliography_references=len(refs))
+        except ValueError as exc:
+            item.update(hold_reason='registered_HTML_citation_context_unavailable',source_error=str(exc))
     else:
         try:
             tree = ET.fromstring(raw)
@@ -134,7 +143,8 @@ def prepare_index(batch, primary_selection=None):
                               "reviewed_source_aliases": [p["source_id"] for p in aliases],
                               "selection_basis": "Exact original bytes and registered rendition match a reviewed paper assignment"}
                 else:
-                    item["hold_reason"] = "explicit_primary_not_supported_by_reviewed_paper_assignment"
+                    reviewed=next((p for p in item['papers'] if p['source_id']==selected_id),None)
+                    item["hold_reason"] = (reviewed.get('hold_reason') if reviewed else None) or "explicit_primary_not_supported_by_reviewed_paper_assignment"
         elif len(eligible) == 1:
             chosen = eligible[0]
         else:

@@ -35,6 +35,26 @@ def test_reference_cache_reuses_registered_full_paper_and_records_corrupt_source
     assert not (attempt / 'state.json').exists()  # cache construction does not edit a workflow
 
 
+def test_prior_history_fulltexts_reach_cache_without_downloads_and_require_registry_pin(tmp_path):
+    snapshot,library,vault=(tmp_path/p for p in ('snapshot','library','vault'))
+    for p in (snapshot,library,vault):p.mkdir()
+    (snapshot/'state.json').write_text(json.dumps({'cards':{}}))
+    (library/'canonical_inventory.json').write_text(json.dumps({'methods':{}}))
+    original=tmp_path/'earlier.xml';original.write_text('<article><front><article-meta>'
+        '<article-id pub-id-type="pmid">987</article-id></article-meta></front>'
+        '<body><p>Earlier molecular implementation.</p></body></article>')
+    prior=tmp_path/'completed/inputs';prior.mkdir(parents=True)
+    source={'content_level':'fulltext','pmid':'987','text':jats_text(original.read_bytes())[0],
+        'original':{'path':str(original),'sha256':sha(original)}}
+    (prior/'sources.json').write_text(json.dumps({'R15':source}))
+    entry={'native_run':str(prior.parent),'source_registry_sha256':sha(prior/'sources.json')}
+    cache=reference_cache(snapshot,library,vault,tmp_path/'cache.json',completed_histories=[entry])
+    assert json.loads(cache.read_text())['papers']['987']['text']==source['text']
+    (prior/'sources.json').write_text('{}')
+    with pytest.raises(ValueError,match='source registry changed'):
+        reference_cache(snapshot,library,vault,tmp_path/'changed.json',completed_histories=[entry])
+
+
 def orchestration_fixture(monkeypatch, tmp_path, seeds, workers, *, holds=(), broken_primary=(), spawn_failures=(), wait_hook=None):
     """Mock native subprocesses only; no model, source research or science claims."""
     from genomics_discovery.illumina import history, history_view, history_method_identity

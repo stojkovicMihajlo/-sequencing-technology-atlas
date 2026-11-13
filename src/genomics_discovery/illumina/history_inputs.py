@@ -10,11 +10,29 @@ import copy
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from .extraction import checkpoint, now, read, sha, verify_registry_files, write
 from .graph import build_graph, load_reviewed_workflow
+
+
+def is_html_article(raw):
+    return re.match(br'\s*(?:<!doctype\s+html|<html\b)',raw,re.I) is not None
+
+
+def html_article_text(source, raw):
+    """Reopen a registered HTML rendition; never regenerate old source text."""
+    from genomics_discovery.sources.cached_documents import ArticleHTML
+    parser=ArticleHTML();parser.feed(raw.decode('utf-8'));parser.close()
+    if not source.get('pmid') or {p.strip() for p in parser.metadata.get('citation_pmid',[])}!={str(source['pmid'])}:
+        raise ValueError('Registered HTML original disagrees with its declared publication PMID')
+    path=Path(source.get('path',''))
+    if (not source.get('sha256') or not path.is_file() or sha(path)!=source['sha256']
+            or path.read_text()!=source.get('text') or not source.get('text','').strip()):
+        raise ValueError('HTML citation tracing requires the exact pinned registered text rendition')
+    return source['text']
 
 
 def resolve_article(source):

@@ -98,6 +98,28 @@ def test_pdf_is_valid_pair_source_but_not_silently_parsed_as_citation_seed(tmp_p
     assert entry["hold_reason"] == "PDF_citation_context_parser_not_implemented"
 
 
+def test_registered_html_with_projectable_citations_is_eligible_without_rewriting_text(tmp_path):
+    from tests.illumina.test_citation_ranges import html_article
+    path=tmp_path/'primary.html';path.write_bytes(html_article())
+    reading=tmp_path/'reading.txt';reading.write_text('Title: Fixture\n\nWe adapt methods 1–3.\n')
+    source={'content_level':'fulltext','pmid':'123','text':reading.read_text(),
+        'path':str(reading),'sha256':h.sha(reading),'original':{'path':str(path),'sha256':h.sha(path)}}
+    before=copy.deepcopy(source)
+    entry=h._paper('primary',source)
+    assert entry['format']=='HTML' and entry['seed_eligible'] and entry['bibliography_references']==3
+    assert source==before
+    reading.write_text('Changed bytes')
+    assert h._paper('primary',source)['hold_reason']=='registered_original_missing_or_changed'
+
+
+def test_explicit_reviewed_primary_reports_format_hold_separately_from_assignment(tmp_path,monkeypatch):
+    batch,registry,_=extraction_fixture(tmp_path,monkeypatch)
+    source=registry['paper0'];path=Path(source['original']['path']);path.write_bytes(b'%PDF-1.7\nOriginal')
+    source['original']['sha256']=h.sha(path)
+    selected=tmp_path/'selected.json';h.write(selected,{'later':'paper0'})
+    assert h.prepare_index(batch,selected)['methods']['later']['hold_reason']=='PDF_citation_context_parser_not_implemented'
+
+
 def candidates_fixture(tmp_path):
     index = {"methods": {}}
     for ident, pmid in (("earlier", "1"), ("later", "2"), ("unrelated", "3")):

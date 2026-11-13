@@ -16,7 +16,7 @@ from experiments.diagram_paper_pilot_20261106.run import checked_files, inside
 from experiments.pilot50_20261104.history_stage import prepare_index, pair_candidates
 
 
-def reference_cache(snapshot, library, vault, output):
+def reference_cache(snapshot, library, vault, output, *, completed_histories=()):
     """Reuse registered original full texts; cached evidence is still unreviewed."""
     from importlib.util import spec_from_file_location, module_from_spec
     scripts = Path(__file__).resolve().parents[1] / 'citation_lineage_pilot'
@@ -46,6 +46,14 @@ def reference_cache(snapshot, library, vault, output):
         for sid, source in read(Path(row['attempt_directory']) / 'source_registry.json').items():
             if source.get('content_level') == 'fulltext':
                 admit(source, str(row['attempt_directory']) + ':' + sid)
+    for history in completed_histories:
+        source_file=Path(history['native_run'])/'inputs/sources.json'
+        if sha(source_file)!=history['source_registry_sha256']:
+            raise ValueError('Validated history source registry changed before cache handoff')
+        for sid,source in read(source_file).items():
+            if source.get('content_level')!='fulltext':continue
+            original=source.get('original') or source.get('provenance',{}).get('original')
+            admit({**source,**({'original':original} if original else {})},str(source_file)+':'+sid)
     inventory_path = library / 'canonical_inventory.json'
     inventory = read(inventory_path)
     for method in inventory['methods'].values():
@@ -73,7 +81,7 @@ def reference_cache(snapshot, library, vault, output):
     write(output, {'format_version': 'atlas_reference_cache/1', 'papers': papers})
     write(output.with_name('reference_cache_receipt.json'), {
         'publications': len(papers), 'skipped': skipped, 'duplicate_registrations': duplicates,
-        'precedence': 'Existing admitted-workflow source first, then first verified curated publication assignment. Different renditions remain recorded, not merged.',
+        'precedence': 'Existing admitted-workflow source first, then validated completed-history primary sources, then first verified curated publication assignment. Different renditions remain recorded, not merged.',
         'boundary': 'Publication lookup only; no method-version identity, historical adoption or scientific acceptance is established.'})
     return output
 
@@ -132,7 +140,7 @@ async def execute(args):
     index = prepare_index(snapshot, output / 'primary_selection.json')
     write(output / 'methods.json', index)
     original_candidates=list(args.seed)
-    completion_decisions={}
+    completion_decisions={};registry=None
     completed_catalog=getattr(args,'completed_catalog',None)
     if completed_catalog:
         from experiments.history_parallel_20261112.merge_completed import completed_history_registry,select_uninvestigated_histories
@@ -160,7 +168,8 @@ async def execute(args):
         methods_requested=[*args.seed,*review_runs]
         if not methods_requested:
             raise ValueError('No source-ready registered JATS seed; see selection_eligibility.json')
-    cache = reference_cache(snapshot, args.library, args.vault, output / 'reference_cache.json')
+    cache = reference_cache(snapshot, args.library, args.vault, output / 'reference_cache.json',
+        **({'completed_histories':registry['entries']} if registry else {}))
     citation_runs = {}
     for mid in methods_requested:
         method = index['methods'].get(mid)
