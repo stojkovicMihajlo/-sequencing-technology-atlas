@@ -55,6 +55,9 @@ def test_actual_claim_context_and_source_custody_without_host_labels(tmp_path):
         assert len(states)==2 and all(s['id']!='irrelevant' for s in states)
     assert sorted(label.outcome for label in labels.cases)==['contradicted','supported','supported']
     with pytest.raises(FileExistsError):prepare_diagnostic(spec,out)
+    assert prepare_diagnostic(spec,tmp_path/'selected',pair_ids=['local_condition'])['cases']==3
+    with pytest.raises(ValueError,match='Unknown diagnostic pair'):
+        prepare_diagnostic(spec,tmp_path/'unknown',pair_ids=['not_recorded'])
 
 
 def test_changed_original_and_missing_anchor_are_not_silently_repaired(tmp_path):

@@ -15,7 +15,7 @@ def resolve(document,pointer):
     return document
 
 
-def prepare_diagnostic(spec_path, output):
+def prepare_diagnostic(spec_path, output, *, pair_ids=()):
     """Project pinned historical claims into the existing blinded diagnostic.
 
     This prepares data only. It neither relabels the source-checked specification
@@ -31,6 +31,11 @@ def prepare_diagnostic(spec_path, output):
         raise FileExistsError(output)
     spec_bytes = spec_path.read_bytes()
     spec = json.loads(spec_bytes)
+    selected = set(pair_ids)
+    if selected - {pair['id'] for pair in spec['pairs']}:
+        raise ValueError('Unknown diagnostic pair selection')
+    if selected:
+        spec['pairs'] = [pair for pair in spec['pairs'] if pair['id'] in selected]
     contexts, cases, labels, bindings = [], [], [], {}
 
     def pinned(path, expected):
@@ -115,15 +120,17 @@ def prepare_diagnostic(spec_path, output):
     bindings[str(spec_path)] = hashlib.sha256(spec_bytes).hexdigest()
     (output/'input_bindings.json').write_text(json.dumps(bindings,indent=2)+'\n')
     return {'cases':len(cases),'contexts':len(contexts),'output':str(output),
+            'selected_pairs':[pair['id'] for pair in spec['pairs']],
             'dataset_sha256':raw_sha(output/'cases.json'),'labels_sha256':raw_sha(output/'labels.json')}
 
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--work',type=Path);p.add_argument('--out',type=Path,required=True)
     p.add_argument('--diagnostic-spec',type=Path,help='Prepare existing grounding Dataset/Labels from the pinned specification; no model calls.')
+    p.add_argument('--pair',action='append',default=[],help='Prepare only selected pinned pairs, avoiding unrelated model reruns.')
     a=p.parse_args()
     if a.diagnostic_spec:
-        print(json.dumps(prepare_diagnostic(a.diagnostic_spec,a.out),indent=2));return
+        print(json.dumps(prepare_diagnostic(a.diagnostic_spec,a.out,pair_ids=a.pair),indent=2));return
     if a.work is None:p.error('--work is required unless --diagnostic-spec is supplied')
     w=a.work
     old=w/'diagram_generation10_20261112/release_02/run_52086711/methods'
@@ -170,7 +177,11 @@ def main():
         context_rule='Keep the kinetic readout, decoding-stage inputs/transformation/illustration and measurement goal. Judge declared synthesis dependency, not equation typography.',
         bad_outcome='not_established',
         rationale='The claimed complete assignment omits the source-established abundance dependency of synthesis estimation. Ratio and pulse time supply half-life/degradation but do not supply synthesis magnitude. Reject or qualify this incomplete account; do not infer an experimentally false abundance model from omission alone. Corrected assignment explicitly retains normalized labeled-RNA abundance.',
-        anchors=['Using the RNA half-life and cell/spot matrix',
+        anchors=['corrected new and old transcripts were aggregated by gene across each cell type or spatial region and normalized to CPM within each cluster.',
+                 'neighboring cells/spots within the same cluster (cell types or spatial region) were selected based on transcriptome similarity',
+                 'For each detectable gene, the counts per 10,000 (CP10k)-scaled mean of new and total RNAs from each neighborhood was assigned to the corresponding single cell or spatial spot.',
+                 'Spatial clusters identified through this workflow were mapped back to their original anatomical locations using Visium spatial barcodes',
+                 'Using the RNA half-life and cell/spot matrix',
                  'where n is the average labeled RNA abundance',
                  'where R is the ratio of new to total RNA'],
         witness='/readouts/2/read_fields')]
